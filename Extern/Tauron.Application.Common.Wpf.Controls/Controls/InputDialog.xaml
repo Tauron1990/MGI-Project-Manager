@@ -1,0 +1,16 @@
+﻿<Window x:Class="Tauron.Application.Controls.InputDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:hlp="http://schemas.Tauron-Hobby-Studio.org/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Style="{DynamicResource {x:Type Window}}"
+        SizeToContent="WidthAndHeight" WindowStyle="ToolWindow" ShowInTaskbar="False">
+    <DockPanel>
+        <TextBlock Name="MainTextBlock" DockPanel.Dock="Top" FontSize="18" Margin="10" />
+        <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
+            <Button Name="Cancelbutton" IsCancel="True" MinWidth="60" Content="Schließen" DockPanel.Dock="Right"
+                    Margin="7" />
+            <Button IsDefault="True" Click="OkClick" MinWidth="60" Content="Ok" DockPanel.Dock="Right" Margin="7" />
+        </DockPanel>
+        <TextBox Name="InputText" FontSize="13" Margin="5" DockPanel.Dock="Bottom" />
+        <TextBlock Name="InstructionTextBlock" FontSize="13" Margin="5" TextWrapping="WrapWithOverflow" MaxWidth="500" />
+    </DockPanel>
+</Window>

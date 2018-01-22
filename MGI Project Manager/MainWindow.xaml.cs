@@ -1,28 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Syncfusion.Windows.Controls.Input;
+using Tauron.Application.MgiProjectManager.UI.Model;
+using Tauron.Application.Models;
+using Tauron.Application.Views;
 
-namespace MGI_Project_Manager
+namespace Tauron.Application.MgiProjectManager
 {
     /// <summary>
-    /// Interaktionslogik für MainWindow.xaml
+    ///     Interaktionslogik für MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    [ExportWindow(AppConststands.MainWindowName)]
+    public partial class MainWindow
     {
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void MaskEditorVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (SfMaskedEdit) sender;
+
+            if (control.Visibility == Visibility.Visible) control.Focus();
+        }
+
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            ((WorkItemModel) ModelBase.ResolveModel(AppConststands.WorkItemModel)).CollectionView = ((CollectionViewSource) Resources["JobSource"]).View;
         }
     }
 }

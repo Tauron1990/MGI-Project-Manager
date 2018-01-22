@@ -1,0 +1,201 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"  
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF" 
+                    xmlns:tools_controls_shared="clr-namespace:Syncfusion.Windows.Tools.Controls;assembly=Syncfusion.Shared.WPF">
+	
+	<ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary.MergedDictionaries>
+
+<LinearGradientBrush x:Key="BackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FFEEEEF2" Offset="0" /><GradientStop Color="#FFEEEEF2" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="BorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="ForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="GlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="HeaderBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FFEEEEF2" Offset="0" /><GradientStop Color="#FFEEEEF2" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="HeaderBorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="HeaderForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="HeaderGlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="HoverBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FF7FBCE5" Offset="0" /><GradientStop Color="#FF7FBCE5" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="HoverBorderBrush" Color="#FF7FBCE5" />
+	<SolidColorBrush x:Key="HoverForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="HoverGlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="ActiveBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FF007ACC" Offset="0" /><GradientStop Color="#FF007ACC" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="ActiveBorderBrush" Color="#FF007ACC" />
+	<SolidColorBrush x:Key="ActiveForegroundBrush" Color="#FFFFFFFF" />
+	<SolidColorBrush x:Key="ActiveGlyphBrush" Color="#FFFFFFFF" />
+	<SolidColorBrush x:Key="ContentBackgroundBrush" Color="#FFF5F5F5" />
+	<SolidColorBrush x:Key="ContentBorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="ContentForegroundBrush" Color="#FF1E1E1E" />
+	<SolidColorBrush x:Key="ContentSelectionBrush" Color="#FFA5A5A5" />
+	<SolidColorBrush x:Key="SelectionInActiveBrush" Color="#FF99C9EA" />
+	<SolidColorBrush x:Key="ErrorBrush" Color="#FFFF0000" />
+	<SolidColorBrush x:Key="ActiveLightBackground" Color="#FF99C9EA" />
+	<SolidColorBrush x:Key="ActiveDarkBackground" Color="#FF003D66" />
+	<SolidColorBrush x:Key="ContentAlternativeBackground" Color="#FFDCDCDC" />
+	<SolidColorBrush x:Key="TickColor" Color="#FFBCBCBC" />
+	<SolidColorBrush x:Key="RangeColor1" Color="#FF61A301" />	
+	<SolidColorBrush x:Key="RangeColor2" Color="#FFF2E606" />	
+	<SolidColorBrush x:Key="RangeColor3" Color="#FFFF0000" />
+	<SolidColorBrush x:Key="LightBackgroundBrush" Color="#FFDDDDE5" />
+
+	
+    <FontFamily x:Key="ButtonAdv_FontFamily">Segoe UI</FontFamily>
+
+
+
+    <Style x:Key="MetroButtonAdvStyle" TargetType="tools_controls_shared:ButtonAdv">
+            <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+            <Setter Property="SmallIcon" Value="/Syncfusion.Shared.WPF;component//Controls/ButtonControls/Images/WordArt16.png"/>
+            <Setter Property="LargeIcon" Value="/Syncfusion.Shared.WPF;component//Controls/ButtonControls/Images/WordArt32.png"/>
+            <Setter Property="Label" Value="ButtonAdv"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="VerticalContentAlignment"  Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="FontFamily" Value="{StaticResource ButtonAdv_FontFamily}"/>
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="tools_controls_shared:ButtonAdv">
+                        <ControlTemplate.Triggers>
+                        <Trigger Property="shared:SkinStorage.EnableTouch" Value="true">
+
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Padding" Value="8"/>
+                            <Setter Property="IconHeight" Value="20"/>
+                            <Setter Property="IconWidth" Value="20"/>
+                            <Setter Property="Border.CornerRadius"  TargetName="ItemBorder" Value="0"/>
+                            <Setter Property="Border.CornerRadius" TargetName="ItemBorder1" Value="0"/>
+                       
+                            <Setter Property="Border.Margin" TargetName="smallImage" Value="0,2,2,2"/>
+
+                            <Setter Property="Image.Height" TargetName="LargeImage" Value="30"/>
+                            <Setter Property="Image.Width" TargetName="LargeImage" Value="30"/>
+                           
+                            <Setter Property="Border.Margin" TargetName="PART_Text" Value="5,0,0,0"/>
+
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IconHeight" Value="0"/>
+                                <Condition Property="IconWidth" Value="0"/>
+                                <Condition Property="shared:SkinStorage.EnableTouch" Value="true"/>
+                            </MultiTrigger.Conditions>
+
+                            <Setter Property="Border.Margin" TargetName="PART_Text" Value="0"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="true"/>
+                                <Condition Property="shared:SkinStorage.EnableTouch" Value="true"/>
+                            </MultiTrigger.Conditions>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="true"/>
+                                <Condition Property="shared:SkinStorage.EnableTouch" Value="false"/>
+                            </MultiTrigger.Conditions>
+
+                            <Setter Property="Border.Background" TargetName="ItemBorder" Value="{StaticResource HoverBackgroundBrush}"/>
+                            <Setter Property="Border.Background" TargetName="ItemBorder1" Value="{StaticResource HoverBackgroundBrush}"/>
+                            <Setter Property="Border.BorderBrush" TargetName="ItemBorder" Value="{StaticResource HoverBorderBrush}"/>
+                            <Setter Property="Border.BorderBrush" TargetName="ItemBorder1" Value="{StaticResource HoverBorderBrush}"/>
+                            <Setter Property="TextElement.Foreground" TargetName="PART_Text" Value="{StaticResource HoverForegroundBrush}"/>
+                            <Setter Property="TextElement.Foreground" TargetName="PART_TextAreaLarge" Value="{StaticResource HoverForegroundBrush}"/>
+
+
+
+                        </MultiTrigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Border.Background" TargetName="ItemBorder" Value="{StaticResource ActiveBackgroundBrush}"/>
+                            <Setter Property="Border.Background" TargetName="ItemBorder1" Value="{StaticResource ActiveBackgroundBrush}"/>
+                            <Setter Property="Border.BorderBrush" TargetName="ItemBorder" Value="{StaticResource ActiveBorderBrush}"/>
+                            <Setter Property="Border.BorderBrush" TargetName="ItemBorder1" Value="{StaticResource ActiveBorderBrush}"/>
+                            <Setter Property="TextElement.Foreground" TargetName="PART_Text" Value="{StaticResource ActiveForegroundBrush}"/>
+                            <Setter Property="TextElement.Foreground" TargetName="PART_TextAreaLarge" Value="{StaticResource ActiveForegroundBrush}"/>
+                            <Setter Property="Foreground"  Value="{StaticResource ActiveForegroundBrush}"/>
+
+                        </Trigger>
+                         <MultiTrigger>
+                            <MultiTrigger.Conditions>
+								<Condition Property="IsCheckable" Value="True"/>
+                                <Condition Property="IsChecked" Value="True"></Condition>
+                                <Condition Property="IsEnabled" Value="True"></Condition>
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter Property="Border.Background" TargetName="ItemBorder" Value="{StaticResource ActiveBackgroundBrush}"/>
+                                <Setter Property="Border.Background" TargetName="ItemBorder1" Value="{StaticResource ActiveBackgroundBrush}"/>
+                                <Setter Property="Border.BorderBrush" TargetName="ItemBorder" Value="{StaticResource ActiveBorderBrush}"/>
+                                <Setter Property="Border.BorderBrush" TargetName="ItemBorder1" Value="{StaticResource ActiveBorderBrush}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="PART_Text" Value="{StaticResource ActiveForegroundBrush}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="PART_TextAreaLarge" Value="{StaticResource ActiveForegroundBrush}"/>
+                                <Setter Property="Foreground"  Value="{StaticResource ActiveForegroundBrush}"/>
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Border.Opacity" TargetName="ItemBorder" Value="0.5"/>
+                                <Setter Property="Border.Opacity" TargetName="ItemBorder1" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                        <Grid >
+                            <Grid.Resources>
+                                <tools_controls_shared:MultiLineConverter x:Key="TextConverter"/>
+                            </Grid.Resources>
+                            <Border x:Name="ItemCheckedBorder"  Opacity="0"
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                Background="{StaticResource  BackgroundBrush}" 
+                                BorderBrush="{StaticResource  ActiveBorderBrush}"/>
+                            <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                MinHeight="22" Name="ItemBorder" SnapsToDevicePixels="True">
+                              
+                                    <Grid Margin="{TemplateBinding Padding}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <Border Name="PART_ImageBorder" Grid.Column="0">
+                                            <Image Margin="2" x:Name="smallImage"
+						            Width="{Binding Path=IconWidth, RelativeSource={RelativeSource AncestorType={x:Type tools_controls_shared:ButtonAdv}}}" Height="{Binding Path=IconHeight,RelativeSource={RelativeSource AncestorType={x:Type tools_controls_shared:ButtonAdv}}}"   
+						            Source="{Binding Path=SmallIcon, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                        </Border>
+                                        <AccessText Grid.Column="1" x:Name="PART_Text"
+                                           Text="{TemplateBinding Label}" 
+                                           Foreground="{TemplateBinding Foreground}"
+                                           FontFamily="{TemplateBinding FontFamily}"
+                                           FontSize="{TemplateBinding FontSize}"
+                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"                           
+                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                           Margin="2,0,4,0"/>
+                                    </Grid>
+                          
+                            </Border>
+                            <Border Background="{TemplateBinding Background}" Visibility="Collapsed"
+                                BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}"
+                                MinHeight="22" Name="ItemBorder1" SnapsToDevicePixels="True">
+                                
+                                    <StackPanel Margin="{TemplateBinding Padding}">
+                                        <Border Name="PART_ImageBorderLarge">
+                                            <Image Margin="2" x:Name="LargeImage"
+						            Width="{Binding Path=IconWidth, RelativeSource={RelativeSource AncestorType={x:Type tools_controls_shared:ButtonAdv}}}" Height="{Binding Path=IconWidth, RelativeSource={RelativeSource AncestorType={x:Type tools_controls_shared:ButtonAdv}}}"    
+						            Source="{Binding Path=LargeIcon, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                        </Border>
+                                        <ItemsControl x:Name="PART_TextAreaLarge" Foreground="{TemplateBinding Foreground}"
+                                               VerticalAlignment="{TemplateBinding VerticalAlignment}" IsTabStop="False"
+                                               HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                               Margin="2,0,4,0"/>
+                                    </StackPanel>
+                      
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style BasedOn="{StaticResource MetroButtonAdvStyle}" TargetType="tools_controls_shared:ButtonAdv"/>
+
+
+    
+
+</ResourceDictionary>

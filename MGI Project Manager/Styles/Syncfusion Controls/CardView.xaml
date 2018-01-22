@@ -1,0 +1,763 @@
+	<ResourceDictionary  
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:tools_controls="clr-namespace:Syncfusion.Windows.Tools.Controls;assembly=Syncfusion.Tools.WPF"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:tools_controls_shared="clr-namespace:Syncfusion.Windows.Tools.Controls;assembly=Syncfusion.Shared.WPF" >
+   <ResourceDictionary.MergedDictionaries>
+<ResourceDictionary Source="/Themes/CommonBrushes/CommonBrushes.xaml"/>
+</ResourceDictionary.MergedDictionaries>
+
+<LinearGradientBrush x:Key="BackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FFEEEEF2" Offset="0" /><GradientStop Color="#FFEEEEF2" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="BorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="ForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="GlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="HeaderBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FFEEEEF2" Offset="0" /><GradientStop Color="#FFEEEEF2" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="HeaderBorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="HeaderForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="HeaderGlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="HoverBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FF7FBCE5" Offset="0" /><GradientStop Color="#FF7FBCE5" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="HoverBorderBrush" Color="#FF7FBCE5" />
+	<SolidColorBrush x:Key="HoverForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="HoverGlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="ActiveBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FF007ACC" Offset="0" /><GradientStop Color="#FF007ACC" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="ActiveBorderBrush" Color="#FF007ACC" />
+	<SolidColorBrush x:Key="ActiveForegroundBrush" Color="#FFFFFFFF" />
+	<SolidColorBrush x:Key="ActiveGlyphBrush" Color="#FFFFFFFF" />
+	<SolidColorBrush x:Key="ContentBackgroundBrush" Color="#FFF5F5F5" />
+	<SolidColorBrush x:Key="ContentBorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="ContentForegroundBrush" Color="#FF1E1E1E" />
+	<SolidColorBrush x:Key="ContentSelectionBrush" Color="#FFA5A5A5" />
+	<SolidColorBrush x:Key="SelectionInActiveBrush" Color="#FF99C9EA" />
+	<SolidColorBrush x:Key="ErrorBrush" Color="#FFFF0000" />
+	<SolidColorBrush x:Key="ActiveLightBackground" Color="#FF99C9EA" />
+	<SolidColorBrush x:Key="ActiveDarkBackground" Color="#FF003D66" />
+	<SolidColorBrush x:Key="ContentAlternativeBackground" Color="#FFDCDCDC" />
+	<SolidColorBrush x:Key="TickColor" Color="#FFBCBCBC" />
+	<SolidColorBrush x:Key="RangeColor1" Color="#FF61A301" />	
+	<SolidColorBrush x:Key="RangeColor2" Color="#FFF2E606" />	
+	<SolidColorBrush x:Key="RangeColor3" Color="#FFFF0000" />
+	<SolidColorBrush x:Key="LightBackgroundBrush" Color="#FFDDDDE5" />
+
+
+    <FontFamily x:Key="CardView_FontFamily">Segoe UI</FontFamily>
+    
+    <BooleanToVisibilityConverter x:Key="Converter"/>
+    <tools_controls:SortDirectionToVisibilityConverter x:Key="SortDirectionToVisibilityConverter"></tools_controls:SortDirectionToVisibilityConverter>
+    <tools_controls:SortDirectionToAngleConverter x:Key="AngleConverter"/>                                
+
+    <!-- Expander Style -->
+    <Style x:Key="CardView_ExpanderRightHeaderStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border Padding="{TemplateBinding Padding}">
+                        <Grid Background="Transparent" SnapsToDevicePixels="False">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="19"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.LayoutTransform>
+                                    <TransformGroup>
+                                        <TransformGroup.Children>
+                                            <TransformCollection>
+                                                <RotateTransform Angle="-90"/>
+                                            </TransformCollection>
+                                        </TransformGroup.Children>
+                                    </TransformGroup>
+                                </Grid.LayoutTransform>
+                                <Ellipse x:Name="circle" HorizontalAlignment="Center" Height="19" Stroke="{StaticResource GlyphBrush}" VerticalAlignment="Center" Width="19"/>
+                                <Path x:Name="arrow" Data="M 1,1.5 L 4.5,5 L 8,1.5" HorizontalAlignment="Center" SnapsToDevicePixels="false" Stroke="{StaticResource GlyphBrush}" StrokeThickness="2" VerticalAlignment="Center"/>
+                            </Grid>
+                            <ContentPresenter HorizontalAlignment="Center" Margin="0,4,0,0" Grid.Row="1" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Top"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter Property="Data" TargetName="arrow" Value="M 1,4.5  L 4.5,1  L 8,4.5"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Stroke" TargetName="circle" Value="{StaticResource HoverGlyphBrush}"/>
+                            <Setter Property="Stroke" TargetName="arrow" Value="{StaticResource HoverGlyphBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Stroke" TargetName="circle" Value="{StaticResource ActiveGlyphBrush}"/>
+                            <Setter Property="StrokeThickness" TargetName="circle" Value="1.5"/>
+                            <Setter Property="Stroke" TargetName="arrow" Value="{StaticResource ActiveGlyphBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="CardView_ExpanderUpHeaderStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border Padding="{TemplateBinding Padding}">
+                        <Grid Background="Transparent" SnapsToDevicePixels="False">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="19"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid>
+                                <Grid.LayoutTransform>
+                                    <TransformGroup>
+                                        <TransformGroup.Children>
+                                            <TransformCollection>
+                                                <RotateTransform Angle="180"/>
+                                            </TransformCollection>
+                                        </TransformGroup.Children>
+                                    </TransformGroup>
+                                </Grid.LayoutTransform>
+                                <Ellipse x:Name="circle" HorizontalAlignment="Center" Height="19" Stroke="{StaticResource GlyphBrush}" VerticalAlignment="Center" Width="19"/>
+                                <Path x:Name="arrow" Data="M 1,1.5 L 4.5,5 L 8,1.5" HorizontalAlignment="Center" SnapsToDevicePixels="false" Stroke="{StaticResource GlyphBrush}" StrokeThickness="2" VerticalAlignment="Center"/>
+                            </Grid>
+                            <ContentPresenter Grid.Column="1" HorizontalAlignment="Left" Margin="4,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter Property="Data" TargetName="arrow" Value="M 1,4.5  L 4.5,1  L 8,4.5"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Stroke" TargetName="circle" Value="{StaticResource HoverGlyphBrush}"/>
+                            <Setter Property="Stroke" TargetName="arrow" Value="{StaticResource HoverGlyphBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Stroke" TargetName="circle" Value="{StaticResource ActiveGlyphBrush}"/>
+                            <Setter Property="StrokeThickness" TargetName="circle" Value="1.5"/>
+                            <Setter Property="Stroke" TargetName="arrow" Value="{StaticResource ActiveGlyphBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="CardView_ExpanderLeftHeaderStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border Padding="{TemplateBinding Padding}">
+                        <Grid Background="Transparent" SnapsToDevicePixels="False">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="19"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.LayoutTransform>
+                                    <TransformGroup>
+                                        <TransformGroup.Children>
+                                            <TransformCollection>
+                                                <RotateTransform Angle="90"/>
+                                            </TransformCollection>
+                                        </TransformGroup.Children>
+                                    </TransformGroup>
+                                </Grid.LayoutTransform>
+                                <Ellipse x:Name="circle" HorizontalAlignment="Center" Height="19" Stroke="{StaticResource GlyphBrush}" VerticalAlignment="Center" Width="19"/>
+                                <Path x:Name="arrow" Data="M 1,1.5 L 4.5,5 L 8,1.5" HorizontalAlignment="Center" SnapsToDevicePixels="false" Stroke="{StaticResource GlyphBrush}" StrokeThickness="2" VerticalAlignment="Center"/>
+                            </Grid>
+                            <ContentPresenter HorizontalAlignment="Center" Margin="0,4,0,0" Grid.Row="1" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Top"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter Property="Data" TargetName="arrow" Value="M 1,4.5  L 4.5,1  L 8,4.5"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Stroke" TargetName="circle" Value="{StaticResource HoverGlyphBrush}"/>
+                            <Setter Property="Stroke" TargetName="arrow" Value="{StaticResource HoverGlyphBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Stroke" TargetName="circle" Value="{StaticResource ActiveGlyphBrush}"/>
+                            <Setter Property="StrokeThickness" TargetName="circle" Value="1.5"/>
+                            <Setter Property="Stroke" TargetName="arrow" Value="{StaticResource ActiveGlyphBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="CardView_ExpanderHeaderFocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border>
+                        <Rectangle Margin="0" SnapsToDevicePixels="true" Stroke="{StaticResource GlyphBrush}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="CardView_ExpanderDownHeaderStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Margin" Value="5,0,0,0"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid Background="{StaticResource HeaderBackgroundBrush}" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="19"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Background="{StaticResource HeaderBackgroundBrush}" BorderBrush="{StaticResource HeaderBorderBrush}" >
+
+                            <Path x:Name="ExpandPath" Height="7" Width="9" Data="M437,100.33334 L455,100.33334 L445.6665,109.66684 z" Stretch="Fill"  
+							Fill="{StaticResource GlyphBrush}" Stroke="{StaticResource GlyphBrush}" RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <RotateTransform Angle="-90"></RotateTransform>
+                                </Path.RenderTransform>
+                            </Path>
+                        </Border>
+
+                        <ContentPresenter Grid.Column="1" HorizontalAlignment="Left" Margin="4,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ToggleButton.IsChecked" Value="True">
+
+                            <Setter Property="RenderTransform"  TargetName="ExpandPath" >
+                                <Setter.Value>
+                                    <RotateTransform Angle="0"></RotateTransform>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Data"
+                                    Value="M2731.8645,627.33295 L2737.5835,621.33301 L2737.5835,627.33295 z"
+                                    TargetName="ExpandPath"/>
+                            <Setter Property="Fill"
+                                    Value="{StaticResource GlyphBrush}"
+                                    TargetName="ExpandPath"/>
+                            <Setter Property="Stroke"
+                                    Value="{StaticResource GlyphBrush}"
+                                    TargetName="ExpandPath"/>
+                            <Setter Property="Width"
+                                    Value="7"
+                                    TargetName="ExpandPath"/>
+                        </Trigger>
+                        
+                        <!--<Trigger Property="IsMouseOver"
+                                 Value="true">
+                            <Setter Property="Fill"
+                                    Value="#FF41B1E1"
+                                    TargetName="ExpandPath"/>
+                            <Setter Property="Stroke"
+                                    Value="#FFB8BBBC"
+                                    TargetName="ExpandPath"/>
+                        </Trigger>-->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="ToggleButton.IsChecked" Value="False"/>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Fill"
+                                    Value="{StaticResource HoverGlyphBrush}"
+                                    TargetName="ExpandPath"/>
+                            <Setter Property="Stroke"
+                                    Value="{StaticResource HoverGlyphBrush}"
+                                    TargetName="ExpandPath"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="ToggleButton.IsChecked" Value="True"/>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Fill"
+                                    Value="{StaticResource HoverGlyphBrush}"
+                                    TargetName="ExpandPath"/>
+                            <Setter Property="Stroke"
+                                    Value="{StaticResource HoverGlyphBrush}"
+                                    TargetName="ExpandPath"/>
+                        </MultiTrigger>
+                      
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ExpanderStyle1" TargetType="{x:Type Expander}">
+        <Setter Property="Foreground" Value="{StaticResource HeaderForegroundBrush}"/>
+        <Setter Property="Background" Value="{StaticResource HeaderBackgroundBrush}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="BorderBrush" Value="{StaticResource HeaderBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Expander}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="3" SnapsToDevicePixels="true">
+                        <DockPanel Margin="0,0,0,0">
+                            <ToggleButton x:Name="HeaderSite" ContentTemplate="{TemplateBinding HeaderTemplate}" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" Content="{TemplateBinding Header}" DockPanel.Dock="Top" Foreground="{TemplateBinding Foreground}" FontWeight="{TemplateBinding FontWeight}" FocusVisualStyle="{StaticResource CardView_ExpanderHeaderFocusVisual}" FontStyle="{TemplateBinding FontStyle}" FontStretch="{TemplateBinding FontStretch}" FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" MinWidth="0" MinHeight="0" Padding="{TemplateBinding Padding}" Style="{StaticResource CardView_ExpanderDownHeaderStyle}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            <ContentPresenter x:Name="ExpandSite" DockPanel.Dock="Bottom" Focusable="false" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Visibility="Collapsed" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </DockPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="true">
+                            <Setter Property="Visibility" TargetName="ExpandSite" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="ExpandDirection" Value="Right">
+                            <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Right"/>
+                            <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Left"/>
+                            <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource CardView_ExpanderRightHeaderStyle}"/>
+                        </Trigger>
+                        <Trigger Property="ExpandDirection" Value="Up">
+                            <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Top"/>
+                            <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Bottom"/>
+                            <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource CardView_ExpanderUpHeaderStyle}"/>
+                        </Trigger>
+                        <Trigger Property="ExpandDirection" Value="Left">
+                            <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Left"/>
+                            <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Right"/>
+                            <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource CardView_ExpanderLeftHeaderStyle}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- GroupItem Style-->
+
+    <ControlTemplate TargetType="{x:Type GroupItem}" x:Key="GroupStyle12">
+
+        <HeaderedContentControl>
+            <HeaderedContentControl.Header>
+                <ToggleButton>
+                    <ToggleButton.Template>
+                        <ControlTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}"/>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </ToggleButton.Template>
+                </ToggleButton>
+            </HeaderedContentControl.Header>
+            <HeaderedContentControl.Content>
+
+                <tools_controls:CardGroupControl ItemsSource="{Binding Items}" ItemsPanel="{Binding ItemsPanel, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:CardView}}}"
+															ItemContainerStyle="{Binding ItemContainerStyle, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:CardView}}}">
+                </tools_controls:CardGroupControl>
+
+            </HeaderedContentControl.Content>
+        </HeaderedContentControl>
+    </ControlTemplate>
+
+    <ControlTemplate TargetType="{x:Type GroupItem}" x:Key="GroupStyle1">
+        <Expander x:Name="PART_Expander"  IsExpanded="True" Style="{StaticResource ExpanderStyle1}" HorizontalAlignment="Stretch" Margin="5,0,0,0">
+            <Expander.Header>
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}"/>
+                </StackPanel>
+            </Expander.Header>
+            <Expander.Content>
+                <tools_controls:CardGroupControl ItemsSource="{Binding Items}" ItemsPanel="{Binding ItemsPanel, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:CardView}}}"
+															ItemContainerStyle="{Binding ItemContainerStyle, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:CardView}}}">
+                </tools_controls:CardGroupControl>
+            </Expander.Content>
+        </Expander>
+    </ControlTemplate>
+
+    <GroupStyle x:Key="GroupStyle">
+        <GroupStyle.ContainerStyle>
+            <Style TargetType="{x:Type GroupItem}">
+                <!--<Setter Property="Margin" Value="3"/>-->
+                <Setter Property="Template" Value="{StaticResource GroupStyle1}"/>
+            </Style>
+        </GroupStyle.ContainerStyle>
+        <GroupStyle.Panel>
+            <ItemsPanelTemplate>
+                <tools_controls:CardViewPanel Orientation="{Binding Path=Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools_controls:CardView}}}"/>
+            </ItemsPanelTemplate>
+        </GroupStyle.Panel>
+    </GroupStyle>
+    
+    <Geometry x:Key="CardView_DownArrowGeometry">M 0 0 L 3.5 4 L 7 0 Z</Geometry>
+
+    <SolidColorBrush x:Key="PathFill" Color="Black"/>
+
+    <Style x:Key="SortButtonStyle1" TargetType="{x:Type tools_controls:SortButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type tools_controls:SortButton}">
+                    <Border Background="{StaticResource ContentBackgroundBrush}" BorderBrush="{StaticResource ContentBorderBrush}"  x:Name="bg">
+                        <Grid x:Name="grid" Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ContentControl x:Name="content" Content="{TemplateBinding Content}" TextBlock.Foreground="{StaticResource ContentForegroundBrush}"/>
+                            <Border x:Name="Arrow" Grid.Column="1" Visibility="{Binding Path=SortButtonState,RelativeSource={RelativeSource AncestorType={x:Type tools_controls:SortButton}},Converter={StaticResource SortDirectionToVisibilityConverter}}">
+                                <Path x:Name="path" Margin="2,2,1,0"
+								Fill="{StaticResource GlyphBrush}"
+								Data="{StaticResource CardView_DownArrowGeometry}"
+								HorizontalAlignment="Center" 
+								VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                                    <Path.RenderTransform>
+                                        <TransformGroup>
+                                            <RotateTransform Angle="{Binding Path=SortButtonState,RelativeSource={RelativeSource AncestorType={x:Type tools_controls:SortButton}}, Converter={StaticResource AngleConverter}}"/>
+                                        </TransformGroup>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Border>
+
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background"  TargetName="bg" Value="{StaticResource HoverBackgroundBrush}"/>
+                            <Setter Property="BorderBrush"  TargetName="bg" Value="{StaticResource HoverBorderBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Background"  TargetName="bg" Value="{StaticResource ActiveBackgroundBrush}"/>
+                            <Setter Property="BorderBrush"  TargetName="bg" Value="{StaticResource ActiveBorderBrush}"/>
+                            <Setter Property="Foreground"  TargetName="content" Value="{StaticResource ActiveForegroundBrush}"/>
+                            <Setter Property="Fill"  TargetName="path" Value="{StaticResource ActiveGlyphBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ToggleButtonStyle1" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border BorderBrush="{StaticResource ContentBorderBrush}" Margin="-1" x:Name="bg" Background="{StaticResource ContentBackgroundBrush}" >
+                        <Grid x:Name="grid" Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ContentControl x:Name="content" Content="{TemplateBinding Content}"/>
+                            <Border x:Name="Arrow" Grid.Column="1" >
+                                <Path x:Name="path" Margin="0,2,2,0"
+								Fill="{StaticResource GlyphBrush}"
+								Data="{StaticResource CardView_DownArrowGeometry}" 
+								HorizontalAlignment="Center"
+								VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                                </Path>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+							<Setter Property="Background"  TargetName="bg" Value="{StaticResource ActiveBackgroundBrush}"/>
+                            <Setter Property="BorderBrush"  TargetName="bg" Value="{StaticResource ActiveBorderBrush}"/>
+                            <Setter Property="Foreground"  TargetName="content" Value="{StaticResource ActiveForegroundBrush}"/>
+                            <Setter Property="Fill"  TargetName="path" Value="{StaticResource ActiveGlyphBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <!--<Setter Property="Visibility" Value="Visible" TargetName="Arrow"></Setter>-->
+                            <Setter Property="Background"  TargetName="bg" Value="{StaticResource HoverBackgroundBrush}"/>
+                            <Setter Property="BorderBrush"  TargetName="bg" Value="{StaticResource HoverBorderBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Background"  TargetName="bg" Value="{StaticResource ActiveBackgroundBrush}"/>
+                            <Setter Property="BorderBrush"  TargetName="bg" Value="{StaticResource ActiveBorderBrush}"/>
+                            <Setter Property="Foreground"  TargetName="content" Value="{StaticResource ActiveForegroundBrush}"/>
+                            <Setter Property="Fill"  TargetName="path" Value="{StaticResource ActiveGlyphBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{StaticResource BackgroundBrush}" x:Name="bg" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                        <Grid x:Name="grid" Background="{StaticResource BackgroundBrush}" >
+                            <ContentControl x:Name="content" HorizontalContentAlignment="Center" Content="{TemplateBinding Content}" Margin="5"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background"  TargetName="bg" Value="{StaticResource HoverBackgroundBrush}"/>
+                            <Setter Property="BorderBrush"  TargetName="bg" Value="{StaticResource HoverBorderBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Background"  TargetName="bg" Value="{StaticResource ActiveBackgroundBrush}"/>
+                            <Setter Property="BorderBrush"  TargetName="bg" Value="{StaticResource ActiveBorderBrush}"/>
+                            <Setter Property="Foreground"  TargetName="content" Value="{StaticResource ActiveForegroundBrush}"/>                            
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- CardViewItem Template-->
+
+    <Style TargetType="{x:Type tools_controls:CardViewItem}" x:Key="MetroCardViewItemStyle">
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Width" Value="200"/>
+        <Setter Property="Foreground" Value="{StaticResource HeaderForegroundBrush}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource CardView_FontFamily}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type tools_controls:CardViewItem}">
+                    <Border BorderBrush="{StaticResource ContentBorderBrush}" x:Name="bg" Background="{StaticResource ContentBackgroundBrush}" BorderThickness="1" >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Border x:Name="headerBackground" Background="{StaticResource HeaderBackgroundBrush}" Grid.Row="0">
+                                <ContentPresenter TextBlock.Foreground="{TemplateBinding Foreground}" x:Name="PART_HeaderPresenter" Margin="2,5,2,5" Content="{TemplateBinding Header}" ContentTemplate="{Binding Path=HeaderTemplate, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:CardView}}}" >
+                                </ContentPresenter>
+                            </Border>
+                            <ContentPresenter Margin="2,0,2,2" x:Name="PART_ContentPresenter" ContentSource="Content" ContentTemplate="{Binding Path=ItemTemplate, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:CardView}}}" Grid.Row="1"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="bg" Value="{StaticResource HoverBackgroundBrush}"></Setter>
+                            <Setter Property="BorderBrush" TargetName="bg" Value="{StaticResource HoverBorderBrush}"></Setter>
+                            <Setter Property="Background" TargetName="headerBackground" Value="{StaticResource HoverBackgroundBrush}"></Setter>                            
+                        </Trigger>
+
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" TargetName="bg" Value="{StaticResource ActiveBackgroundBrush}"></Setter>
+                            <Setter Property="BorderBrush" TargetName="bg" Value="{StaticResource ActiveBorderBrush}"></Setter>
+                            <Setter Property="Background" TargetName="headerBackground" Value="{StaticResource ActiveBackgroundBrush}"></Setter>
+                            <Setter Property="Foreground" Value="{StaticResource ActiveForegroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style BasedOn="{StaticResource MetroCardViewItemStyle}" TargetType="{x:Type tools_controls:CardViewItem}"/>
+ <Style x:Key="CheckListBoxItemStyle" TargetType="{x:Type tools_controls:CheckListBoxItem}">
+        <Setter  Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="{StaticResource ContentBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ContentBorderBrush}" />
+        <Setter Property="FontFamily" Value="{DynamicResource CardView_FontFamily}" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="tools_controls:CheckListBox.CheckBoxAlignment" Value="Left" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type tools_controls:CheckListBoxItem}">
+                    <Grid>
+                        <Border Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="true" Margin="1">
+                            <Grid KeyboardNavigation.DirectionalNavigation="None">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Name="firstColumn" Width="Auto" />
+                                    <ColumnDefinition Name="secondColumn" Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <CheckBox Focusable="False" Name="PART_CheckBox" IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource TemplatedParent}}"  VerticalAlignment="Center"  Margin="3,1,3,1" />
+                                <Border Name="contentBd" Grid.Column="1">
+                                    <ContentPresenter Margin="3,2,3,3" ContentSource="Content" />
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <Rectangle x:Name="BottomBorder" Fill="{StaticResource GlyphBrush}" Height="1" Visibility="Collapsed" VerticalAlignment="Bottom" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger
+                    Binding="{Binding Path=(tools_controls:CheckListBox.CheckBoxAlignment), RelativeSource={RelativeSource AncestorType={x:Type tools_controls:CheckListBox}}}" Value="Right">
+                            <Setter TargetName="PART_CheckBox"
+                                    Property="Grid.Column"
+                                    Value="1" />
+                            <Setter TargetName="contentBd" Property="Grid.Column"
+                                    Value="0" />
+                            <Setter TargetName="firstColumn" Property="Width"
+                                    Value="*" />
+                            <Setter TargetName="secondColumn" Property="Width"
+                                    Value="Auto" />
+                            <Setter TargetName="PART_CheckBox" Property="Margin"
+                                    Value="5,1,1,1" />
+                        </DataTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd"
+                                    Property="Background"
+                                    Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bd"
+                                    Property="Background"
+                                    Value="{StaticResource ActiveBackgroundBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{StaticResource ActiveForegroundBrush}" />
+                            <Setter Property="Margin" TargetName="Bd" Value="0" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsFocused" Value="True" />
+                                <Condition Property="IsSelected" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{StaticResource ActiveBackgroundBrush}" />
+                            <Setter Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                        </MultiTrigger>
+                        
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- CardView Template-->
+   
+
+    <Style x:Key="MetroCardViewStyle" TargetType="{x:Type tools_controls:CardView}">
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <tools_controls:CardViewPanel Orientation="{Binding Path=Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools_controls:CardView}}}"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type tools_controls:CardView}">
+                    <Border Background="{TemplateBinding Background}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border Height="50" BorderThickness="1" BorderBrush="{StaticResource HeaderBorderBrush}" Background="{StaticResource HeaderBackgroundBrush}" Visibility="{Binding ShowHeader, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource Converter}}">
+                                <Grid AllowDrop="True" x:Name="GroupPanel" Background="{StaticResource ActiveBackgroundBrush}" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock x:Name="grouptext" HorizontalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Text="Drag a column header here to group by that column" Foreground="{StaticResource ActiveForegroundBrush}"/>
+                                    <ListBox x:Name="GroupBox" Background="Transparent" Grid.ColumnSpan="2" BorderBrush="{StaticResource ActiveBorderBrush}" ItemsSource="{TemplateBinding GroupboxCollection}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel  Orientation="Horizontal">
+                                                    <Border Width="4" Height="10" Background="{StaticResource ContentBackgroundBrush}" VerticalAlignment="Top" Visibility="{Binding CanInsert, Converter={StaticResource Converter}}"/>
+                                                    <ToggleButton Content="{Binding Name}" 
+																  Command="{Binding Sort, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:CardView}}}" 
+																  CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3">
+                                                    </ToggleButton>
+                                                    <Border Width="4" Height="10" Background="{StaticResource ContentBackgroundBrush}" VerticalAlignment="Top" Visibility="{Binding CanInsertAfterThis, Converter={StaticResource Converter}}"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ListBoxItem">
+                                                            <ContentPresenter/>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+                                        <ListBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ListBox.ItemsPanel>
+                                    </ListBox>
+
+                                    <ListBox Background="{StaticResource HeaderBackgroundBrush}" BorderBrush="{StaticResource HeaderBorderBrush}" Grid.Column="2" ItemsSource="{TemplateBinding GroupNames}" x:Name="Group" >
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Border Background="{StaticResource ContentBackgroundBrush}" Width="1"></Border>
+                                                    <ToggleButton IsTabStop="False" Margin="3,2,3,2" Grid.Column="1" Width="10" x:Name="PART_Toggle" Style="{StaticResource ToggleButtonStyle1}"  >
+                                                        <Popup StaysOpen="False" x:Name="PART_FilterPopup" Placement="MousePoint" IsOpen="{Binding ElementName=PART_Toggle, Path=IsChecked}" AllowsTransparency="True">
+                                                            <Grid Background="{StaticResource ContentBackgroundBrush}" >
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="*"></RowDefinition>
+                                                                    <RowDefinition Height="Auto"></RowDefinition>
+                                                                </Grid.RowDefinitions>
+                                                                <tools_controls:CheckListBox Tag="{Binding Name}" ItemContainerStyle="{StaticResource CheckListBoxItemStyle}" Padding="5" x:Name="PART_FilterBox" ItemsSource="{Binding FilterValues}" BorderBrush="{StaticResource ContentBorderBrush}">
+                                                                </tools_controls:CheckListBox>
+                                                                <Button Style="{StaticResource ButtonStyle1}" Content="Clear Filter"  Command="{Binding ClearFilter, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:CardView}}}" CommandParameter="{Binding Path=DataContext, ElementName=PART_FilterBox}"  Grid.Row="1" HorizontalContentAlignment="Center"></Button>
+                                                            </Grid>
+                                                        </Popup>
+                                                    </ToggleButton>
+                                                    <Border Background="{StaticResource ContentBackgroundBrush}" Grid.Column="2" Width="1"></Border>
+                                                    <tools_controls:SortButton IsTabStop="False" Grid.Column="3" Margin="2" Style="{StaticResource SortButtonStyle1}" x:Name="normalSort"   Command="{Binding NormalSort, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:CardView}}}" Content="{Binding Name}"></tools_controls:SortButton>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ListBoxItem">
+                                                            <ContentPresenter/>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+												<Setter Property="IsTabStop" Value="False"/>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+                                    </ListBox>
+                                </Grid>
+                            </Border>
+                          <ScrollViewer x:Name="scroll" HorizontalScrollBarVisibility="Auto" Grid.Row="1" VerticalScrollBarVisibility="Disabled" >
+                            <Grid>
+                              <ItemsPresenter  x:Name="PART_Host">
+                              </ItemsPresenter>
+                            </Grid>
+                          </ScrollViewer>
+                        </Grid>
+
+                      </Border>
+
+                      <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="IsEnabled" Value="false" TargetName="PART_Host"/>
+                            <Setter Property="Opacity" Value="0.5" TargetName="PART_Host"/>
+                        </Trigger>
+                        <Trigger Property="IsGrouping" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed" TargetName="grouptext"/>
+                        </Trigger>
+                            <Trigger Property="tools_controls:CardView.Orientation" Value="Horizontal">
+                          <Setter Property="HorizontalScrollBarVisibility" TargetName="scroll" Value="Disabled"/>
+                          <Setter Property="VerticalScrollBarVisibility" TargetName="scroll" Value="Auto"/>
+                        </Trigger>
+                      </ControlTemplate.Triggers>
+                    </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+    <Style BasedOn="{StaticResource MetroCardViewStyle}" TargetType="{x:Type tools_controls:CardView}"/>
+    
+</ResourceDictionary>

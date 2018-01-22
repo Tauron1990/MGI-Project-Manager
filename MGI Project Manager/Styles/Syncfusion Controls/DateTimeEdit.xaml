@@ -1,0 +1,1024 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"  
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
+		xmlns:Sync_Shared_Resources="clr-namespace:Syncfusion.Windows.Shared.Resources;assembly=Syncfusion.Shared.WPF"
+                    xmlns:shared_controls="clr-namespace:Syncfusion.Windows.Controls;assembly=Syncfusion.Shared.WPF"
+       xmlns:shared_controls_Primitives="clr-namespace:Syncfusion.Windows.Controls.Primitives;assembly=Syncfusion.Shared.WPF">
+	   
+	
+	<ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary.MergedDictionaries>
+
+<LinearGradientBrush x:Key="BackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FFEEEEF2" Offset="0" /><GradientStop Color="#FFEEEEF2" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="BorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="ForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="GlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="HeaderBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FFEEEEF2" Offset="0" /><GradientStop Color="#FFEEEEF2" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="HeaderBorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="HeaderForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="HeaderGlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="HoverBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FF7FBCE5" Offset="0" /><GradientStop Color="#FF7FBCE5" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="HoverBorderBrush" Color="#FF7FBCE5" />
+	<SolidColorBrush x:Key="HoverForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="HoverGlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="ActiveBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FF007ACC" Offset="0" /><GradientStop Color="#FF007ACC" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="ActiveBorderBrush" Color="#FF007ACC" />
+	<SolidColorBrush x:Key="ActiveForegroundBrush" Color="#FFFFFFFF" />
+	<SolidColorBrush x:Key="ActiveGlyphBrush" Color="#FFFFFFFF" />
+	<SolidColorBrush x:Key="ContentBackgroundBrush" Color="#FFF5F5F5" />
+	<SolidColorBrush x:Key="ContentBorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="ContentForegroundBrush" Color="#FF1E1E1E" />
+	<SolidColorBrush x:Key="ContentSelectionBrush" Color="#FFA5A5A5" />
+	<SolidColorBrush x:Key="SelectionInActiveBrush" Color="#FF99C9EA" />
+	<SolidColorBrush x:Key="ErrorBrush" Color="#FFFF0000" />
+	<SolidColorBrush x:Key="ActiveLightBackground" Color="#FF99C9EA" />
+	<SolidColorBrush x:Key="ActiveDarkBackground" Color="#FF003D66" />
+	<SolidColorBrush x:Key="ContentAlternativeBackground" Color="#FFDCDCDC" />
+	<SolidColorBrush x:Key="TickColor" Color="#FFBCBCBC" />
+	<SolidColorBrush x:Key="RangeColor1" Color="#FF61A301" />	
+	<SolidColorBrush x:Key="RangeColor2" Color="#FFF2E606" />	
+	<SolidColorBrush x:Key="RangeColor3" Color="#FFFF0000" />
+	<SolidColorBrush x:Key="LightBackgroundBrush" Color="#FFDDDDE5" />
+
+	   
+    <FontFamily x:Key="DateTimeFontFamily">Segoe UI</FontFamily>
+    <!-- Resource Wrapper-->
+    <Sync_Shared_Resources:ResourceWrapper x:Key="DateTimeResourceWrapperKey" />
+
+    <BooleanToVisibilityConverter x:Key="DateTimeBooleanToVisibilityConverter" />
+
+    <!-- Toggle Button Style-->
+
+    <ControlTemplate x:Key="ToggleButtonTemplate" TargetType="{x:Type ToggleButton}">
+        <Border Name="Chrome"
+                                        Background="{TemplateBinding Panel.Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="0"
+                                        SnapsToDevicePixels="true">
+
+            <ContentPresenter Margin="{TemplateBinding Padding}"   x:Name="contentpresenter"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Chrome" Property="Background" Value="{StaticResource  HoverBackgroundBrush}" />
+                <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource  HoverBorderBrush}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="Chrome" Property="Background" Value="{StaticResource  ActiveBackgroundBrush}" />
+                <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource  ActiveBorderBrush}" />
+                <Setter TargetName="contentpresenter" Property="TextBlock.Foreground" Value="{StaticResource  ActiveForegroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Chrome" Property="Opacity" Value="0.5" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="ToggleButtonStyle"
+           TargetType="{x:Type ToggleButton}">
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Background"
+                Value="{StaticResource  BackgroundBrush}" />
+        <Setter Property="BorderBrush"
+                Value="{StaticResource  BorderBrush}" />
+        <Setter Property="Foreground"
+                Value="{StaticResource  ForegroundBrush}" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="Template" Value="{StaticResource ToggleButtonTemplate}" />
+    </Style>
+
+    <ControlTemplate x:Key="ToggleButtonTemplate1" TargetType="{x:Type ToggleButton}">
+        <Border Name="Chrome"
+                                        Background="{TemplateBinding Panel.Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="0"
+                                        SnapsToDevicePixels="true">
+
+            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+        </Border>
+        <ControlTemplate.Triggers>
+
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Chrome" Property="Opacity" Value="0.5" />
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="DateTimeToggleButtonStyle1"
+           TargetType="{x:Type ToggleButton}">
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Background"
+                Value="{StaticResource  BackgroundBrush}" />
+        <Setter Property="BorderBrush"
+                Value="{StaticResource  BorderBrush}" />
+        <Setter Property="Foreground"
+                Value="{StaticResource  ForegroundBrush}" />
+        <Setter Property="BorderThickness"
+                Value="1,1,0,1" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="Template" Value="{StaticResource ToggleButtonTemplate1}" />
+    </Style>
+
+    <!-- Repeat Button Style-->
+
+    <ControlTemplate x:Key="RepeatButtonTemplate" TargetType="{x:Type RepeatButton}">
+        <Border Name="Chrome"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                             BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="0"
+                                        SnapsToDevicePixels="true">
+
+            <ContentPresenter Margin="{TemplateBinding Padding}"       x:Name="contentpresenter"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Chrome" Property="Background" Value="{StaticResource  HoverBackgroundBrush}" />
+                <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource  HoverBorderBrush}" />
+                <Setter TargetName="contentpresenter" Property="TextBlock.Foreground" Value="{StaticResource  HoverForegroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="Chrome" Property="Background" Value="{StaticResource  ActiveBackgroundBrush}" />
+                <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource  ActiveBorderBrush}" />
+                <Setter TargetName="contentpresenter" Property="TextBlock.Foreground" Value="{StaticResource  ActiveForegroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Chrome" Property="Opacity" Value="0.5" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- Calendar Style-->
+
+    <Style x:Key="MetroCalendarButtonStyle" TargetType="{x:Type shared_controls_Primitives:CalendarButton}">
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
+        <Setter Property="MinWidth" Value="40" />
+        <Setter Property="MinHeight" Value="42" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type shared_controls_Primitives:CalendarButton}">
+                    <Grid>
+
+                        <Rectangle x:Name="SelectedBackground" Stroke="{StaticResource  ActiveBorderBrush}" Fill="{StaticResource ActiveBackgroundBrush}" Opacity="0" SnapsToDevicePixels="True" />
+                        <Rectangle x:Name="Background" Fill="{StaticResource  HoverBackgroundBrush}" Stroke="{StaticResource HoverBorderBrush}" Opacity="0" RadiusY="0" RadiusX="0" />
+                        <ContentPresenter x:Name="NormalText" TextElement.Foreground="{StaticResource  ContentForegroundBrush}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1,0,1,1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        <Rectangle x:Name="CalendarButtonFocusVisual" IsHitTestVisible="false" RadiusY="1" RadiusX="1" Stroke="{StaticResource BorderBrush}"  Visibility="Collapsed" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Visibility" TargetName="CalendarButtonFocusVisual" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="False">
+                            <Setter TargetName="CalendarButtonFocusVisual" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition  Property="IsPressed" Value="False" />
+                                <Condition  Property="HasSelectedDays" Value="False" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Background" Property="Opacity" Value="1" />
+                            <Setter TargetName="NormalText" Property="TextElement.Foreground" Value="{StaticResource HoverForegroundBrush}" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition  Property="IsPressed" Value="True" />
+                                <Condition  Property="HasSelectedDays" Value="False" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="SelectedBackground" Property="Opacity" Value="1" />
+                            <Setter TargetName="NormalText" Property="TextElement.Foreground" Value="{StaticResource ActiveForegroundBrush}" />
+                        </MultiTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Background" Property="Opacity" Value="0" />
+                            <Setter TargetName="NormalText" Property="Opacity" Value="0.35" />
+                        </Trigger>
+                        <Trigger Value="True" Property="HasSelectedDays">
+                            <Setter TargetName="SelectedBackground" Property="Opacity" Value="1" />
+                            <Setter TargetName="NormalText" Property="TextElement.Foreground" Value="{StaticResource ActiveForegroundBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsInactive" Value="True">
+                            <Setter TargetName="NormalText" Property="TextElement.Foreground" Value="{StaticResource ContentSelectionBrush}" />
+                        </Trigger>
+                        <Trigger Property="shared:SkinStorage.EnableTouch" Value="True">
+                            <Setter Property="FontSize" Value="18" />
+                            <Setter Property="MinWidth" Value="100" />
+                            <Setter Property="MinHeight" Value="102" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MetroCalendarDayButtonStyle" TargetType="{x:Type shared_controls_Primitives:CalendarDayButton}">
+        <Setter Property="MinWidth" Value="5" />
+        <Setter Property="MinHeight" Value="5" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type shared_controls_Primitives:CalendarDayButton}">
+                    <Grid>
+
+                        <Rectangle x:Name="TodayBackground" Fill="{StaticResource BackgroundBrush}" Stroke="{StaticResource  BorderBrush}" Opacity="0"  SnapsToDevicePixels="True" StrokeThickness="1" />
+                        <Rectangle x:Name="SelectedBackground" Fill="{StaticResource  ActiveBackgroundBrush}" Stroke="{StaticResource  ActiveBorderBrush}" Opacity="0" RadiusY="0" RadiusX="0" SnapsToDevicePixels="True" />
+                        <Rectangle x:Name="HighlightBackground" Fill="{StaticResource  HoverBackgroundBrush}" Stroke="{StaticResource  HoverBorderBrush}" Opacity="0" RadiusY="0" RadiusX="0" />
+                        <ContentPresenter x:Name="NormalText" TextElement.Foreground="{StaticResource  ContentForegroundBrush}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="5,2,5,1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        <Path x:Name="Blackout" Data="M8.1772461,11.029181 L10.433105,11.029181 L11.700684,12.801641 L12.973633,11.029181 L15.191895,11.029181 L12.844727,13.999395 L15.21875,17.060919 L12.962891,17.060919 L11.673828,15.256231 L10.352539,17.060919 L8.1396484,17.060919 L10.519043,14.042364 z" Fill="{StaticResource GlyphBrush}" HorizontalAlignment="Stretch" Margin="3" Opacity="0" RenderTransformOrigin="0.5,0.5" Stretch="Fill" VerticalAlignment="Stretch" />
+                        <Rectangle x:Name="DayButtonFocusVisual" IsHitTestVisible="false" RadiusY="0" RadiusX="0" Stroke="{StaticResource BorderBrush}" Visibility="Collapsed" SnapsToDevicePixels="True" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition  Property="IsPressed" Value="False" />
+                                <Condition  Property="IsSelected" Value="False" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="HighlightBackground" Property="Opacity" Value="1" />
+                            <Setter TargetName="NormalText" Property="TextElement.Foreground" Value="{StaticResource HoverForegroundBrush}" />
+                        </MultiTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="HighlightBackground" Property="Opacity" Value="0" />
+                            <Setter TargetName="NormalText" Property="Opacity" Value="0.35" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="SelectedBackground" Property="Opacity" Value="1" />
+                            <Setter TargetName="NormalText" Property="TextElement.Foreground" Value="{StaticResource ActiveForegroundBrush}" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition  Property="IsSelected" Value="true" />
+                                <Condition Property="IsToday" Value="true" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="SelectedBackground" Property="Opacity" Value="1" />
+                        </MultiTrigger>
+                        <Trigger Value="True" Property="IsToday">
+                            <Setter TargetName="TodayBackground" Property="Opacity" Value="1" />
+                            <!--<Setter TargetName="NormalText" Property="TextElement.Foreground" Value="#FF3B3B3B" />-->
+                        </Trigger>
+                        <Trigger Value="True" Property="IsBlackedOut">
+                            <Setter TargetName="Blackout" Property="Opacity" Value="0.2" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="DayButtonFocusVisual" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="False">
+                            <Setter TargetName="DayButtonFocusVisual" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsInactive" Value="True">
+                            <Setter TargetName="NormalText" Property="TextElement.Foreground" Value="{StaticResource ContentSelectionBrush}" />
+                        </Trigger>
+                        <Trigger Property="shared:SkinStorage.EnableTouch" Value="True">
+                            <Setter Property="FontSize" Value="18" />
+                            <Setter Property="MinHeight" Value="45" />
+                            <Setter Property="MinWidth" Value="45" />
+                            <Setter Property="Margin" Value="6,1" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MetroCalendarItemStyle" TargetType="{x:Type shared_controls_Primitives:CalendarItem}">
+        <Setter Property="Margin" Value="0,3,0,3" />
+        <Setter Property="BorderBrush" Value="{StaticResource ContentBorderBrush}" />
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type shared_controls_Primitives:CalendarItem}">
+                    <ControlTemplate.Resources>
+                        <DataTemplate x:Key="DayTitleTemplate">
+                            <TextBlock Foreground="{StaticResource  ForegroundBrush}" FontWeight="Bold"  FontSize="11" FontFamily="Segoe UI" HorizontalAlignment="Center" Margin="0,6,0,6" Text="{Binding}" VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </ControlTemplate.Resources>
+                    <Grid x:Name="PART_Root">
+
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="1">
+
+                            <Grid>
+                                <Grid.Resources>
+                                    <ControlTemplate x:Key="PreviousButtonTemplate" TargetType="{x:Type Button}">
+                                        <Grid Cursor="Hand">
+
+                                            <!--<Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="19" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>-->
+                                            <Ellipse x:Name="circle"
+                                     Width="19"
+                                     Height="19"
+                                     Stroke="{StaticResource BorderBrush}"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Fill="{StaticResource BackgroundBrush}" />
+                                            <Path x:Name="path" Data="M288.75,232.25 L288.75,240.625 L283,236.625 z" Fill="{StaticResource GlyphBrush}" Margin="0,0,2,0"  HorizontalAlignment="Center"  Height="9"  Stretch="Fill" VerticalAlignment="Center" Width="6" />
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="shared:SkinStorage.EnableTouch" Value="False" />
+                                                    <Condition Property="IsMouseOver" Value="True" />
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="Stroke" TargetName="circle" Value="{StaticResource HoverBorderBrush}" />
+                                                <Setter Property="Fill" TargetName="circle" Value="{StaticResource HoverBackgroundBrush}" />
+                                                <Setter Property="Stroke" Value="{StaticResource HoverGlyphBrush}" TargetName="path" />
+                                                <Setter Property="Fill" Value="{StaticResource HoverGlyphBrush}" TargetName="path" />
+                                            </MultiTrigger>
+                                            <Trigger Property="shared:SkinStorage.EnableTouch" Value="True">
+                                                <Setter Property="Width" Value="40" TargetName="circle" />
+                                                <Setter Property="Height" Value="40" TargetName="circle" />
+                                                <Setter Property="Height" Value="19" TargetName="path" />
+                                                <Setter Property="Width" Value="16" TargetName="path" />
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter Property="Stroke" TargetName="circle" Value="{StaticResource ActiveBorderBrush}" />
+                                                <Setter Property="Fill" TargetName="circle" Value="{StaticResource ActiveBackgroundBrush}" />
+                                                <Setter Property="Stroke" Value="{StaticResource ActiveGlyphBrush}" TargetName="path" />
+                                                <Setter Property="Fill" Value="{StaticResource ActiveGlyphBrush}" TargetName="path" />
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Opacity" Value="0.5" TargetName="path" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                    <ControlTemplate x:Key="NextButtonTemplate" TargetType="{x:Type Button}">
+                                        <Grid Cursor="Hand">
+
+                                            <!--<Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="19" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>-->
+                                            <Ellipse x:Name="circle"
+                                     Width="19"
+                                     Height="19"
+                                     Stroke="{StaticResource BorderBrush}"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Fill="{StaticResource BackgroundBrush}" />
+                                            <Path x:Name="path1" Data="M282.875,231.875 L282.875,240.375 L288.625,236 z" Fill="{StaticResource GlyphBrush}" HorizontalAlignment="Center" Margin="2,0,0,0" Height="9" Stretch="Fill" VerticalAlignment="Center" Width="6"/>
+                                        </Grid>
+
+                                        <ControlTemplate.Triggers>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="shared:SkinStorage.EnableTouch" Value="False" />
+                                                    <Condition Property="IsMouseOver" Value="True" />
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="Stroke" TargetName="circle" Value="{StaticResource HoverBorderBrush}" />
+                                                <Setter Property="Fill" TargetName="circle" Value="{StaticResource HoverBackgroundBrush}" />
+                                                <Setter Property="Stroke" Value="{StaticResource HoverGlyphBrush}" TargetName="path1" />
+                                                <Setter Property="Fill" Value="{StaticResource HoverGlyphBrush}" TargetName="path1" />
+                                            </MultiTrigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter Property="Stroke" TargetName="circle" Value="{StaticResource ActiveBorderBrush}" />
+                                                <Setter Property="Fill" TargetName="circle" Value="{StaticResource ActiveBackgroundBrush}" />
+                                                <Setter Property="Stroke" Value="{StaticResource ActiveGlyphBrush}" TargetName="path1" />
+                                                <Setter Property="Fill" Value="{StaticResource ActiveGlyphBrush}" TargetName="path1" />
+                                            </Trigger>
+                                            <Trigger Property="shared:SkinStorage.EnableTouch" Value="True">
+                                                <Setter Property="Width" Value="40" TargetName="circle" />
+                                                <Setter Property="Height" Value="40" TargetName="circle" />
+                                                <Setter Property="Height" Value="19" TargetName="path1" />
+                                                <Setter Property="Width" Value="16" TargetName="path1" />
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Opacity" Value="0.5" TargetName="path1" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                    <ControlTemplate x:Key="HeaderButtonTemplate" TargetType="{x:Type Button}">
+                                        <Grid Cursor="Hand">
+                                            <ContentPresenter TextElement.FontWeight="Bold"  TextElement.FontSize="{TemplateBinding FontSize}" x:Name="buttonContent" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" TextElement.Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <!--<Setter Property="TextElement.Foreground" Value="#FF3B3B3B" TargetName="buttonContent" />-->
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Opacity" Value="0.5" TargetName="buttonContent" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Grid.Resources>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid Background="Transparent" Grid.ColumnSpan="3"  Margin="0,6,0,0">
+                                    <Button x:Name="PART_PreviousButton" Margin="8,0,0,0" Grid.Column="0" Focusable="False" HorizontalAlignment="Left" Height="20" Grid.Row="0" Template="{StaticResource PreviousButtonTemplate}" Width="28" />
+                                    <Button x:Name="PART_HeaderButton" Grid.Column="1" FontWeight="Normal"  Focusable="False" FontFamily="{TemplateBinding FontFamily}" FontSize="11" HorizontalAlignment="Center" Grid.Row="0" Template="{StaticResource HeaderButtonTemplate}" VerticalAlignment="Center" />
+                                    <Button x:Name="PART_NextButton" Margin="0,0,3,0" Grid.Column="2" Focusable="False" HorizontalAlignment="Right" Height="20" Grid.Row="0" Template="{StaticResource NextButtonTemplate}" Width="28" />
+                                </Grid>
+                                <Grid x:Name="PART_MonthView" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Stretch"  Margin="6,2,6,6" Grid.Row="1" Visibility="Visible">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                </Grid>
+                                <Grid x:Name="PART_YearView" Grid.ColumnSpan="3" HorizontalAlignment="Center" Margin="6,-3,7,6" Grid.Row="1" Visibility="Hidden">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                        <Rectangle x:Name="PART_DisabledVisual" Fill="{StaticResource ContentSelectionBrush}" Opacity="0" RadiusY="2" RadiusX="2" Stretch="Fill" Stroke="{StaticResource ContentSelectionBrush}" StrokeThickness="1" Visibility="Collapsed" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Visibility" TargetName="PART_DisabledVisual" Value="Visible" />
+                            <Setter Property="Opacity" TargetName="PART_DisabledVisual" Value="1" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding DisplayMode, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type shared_controls:Calendar}}}" Value="Year">
+                            <Setter Property="Visibility" TargetName="PART_MonthView" Value="Collapsed" />
+                            <Setter Property="Visibility" TargetName="PART_YearView" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding DisplayMode, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type shared_controls:Calendar}}}" Value="Decade">
+                            <Setter Property="Visibility" TargetName="PART_MonthView" Value="Collapsed" />
+                            <Setter Property="Visibility" TargetName="PART_YearView" Value="Visible" />
+                        </DataTrigger>
+                        <Trigger Property="shared:SkinStorage.EnableTouch" Value="True">
+                            <Setter Property="FontSize" TargetName="PART_HeaderButton" Value="18" />
+                            <Setter Property="Height" TargetName="PART_PreviousButton" Value="48" />
+                            <Setter Property="Width" TargetName="PART_PreviousButton" Value="40" />
+                            <Setter Property="Height" TargetName="PART_NextButton" Value="48" />
+                            <Setter Property="Width" TargetName="PART_NextButton" Value="40" />
+                            <Setter Property="TextBlock.FontSize" TargetName="PART_MonthView" Value="18" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MetroCalendarStyle" TargetType="shared_controls:Calendar">
+        <Setter Property="CalendarButtonStyle" Value="{StaticResource MetroCalendarButtonStyle}" />
+        <Setter Property="CalendarDayButtonStyle" Value="{StaticResource MetroCalendarDayButtonStyle}" />
+        <Setter Property="CalendarItemStyle" Value="{StaticResource MetroCalendarItemStyle}" />
+        <Setter Property="Foreground" Value="{StaticResource ContentForegroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource  ContentBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource  ContentBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="shared_controls:Calendar">
+                    <StackPanel x:Name="PART_Root" HorizontalAlignment="Center">
+                        <shared_controls_Primitives:CalendarItem x:Name="PART_CalendarItem" BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Style="{TemplateBinding CalendarItemStyle}" />
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="shared:SkinStorage.EnableTouch" Value="False">
+                            <Setter Property="Height" Value="166.98" TargetName="PART_CalendarItem" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style BasedOn="{StaticResource MetroCalendarStyle}" TargetType="shared_controls:Calendar" />
+
+    <!-- DateTimeEdit Style-->
+
+    <Style x:Key="MetroDateTimeEditStyle" TargetType="{x:Type shared:DateTimeEdit}">
+        <Setter Property="Background" Value="{StaticResource  ContentBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource  ContentBorderBrush}" />
+        <Setter Property="FocusedBorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource  ContentForegroundBrush}" />
+        <Setter Property="RepeatButtonBackground" Value="{StaticResource BackgroundBrush}" />
+        <Setter Property="RepeatButtonBorderBrush" Value="{StaticResource  BorderBrush}" />
+        <Setter Property="DropDownButtonTemplate" Value="{StaticResource ToggleButtonTemplate1}" />
+        <Setter Property="UpRepeatButtonTemplate" Value="{StaticResource RepeatButtonTemplate}" />
+        <Setter Property="DownRepeatButtonTemplate" Value="{StaticResource RepeatButtonTemplate}" />
+        <Setter Property="CalendarStyle" Value="{StaticResource MetroCalendarStyle}" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="1" />
+        <Setter Property="AllowDrop" Value="true" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+
+                <ControlTemplate TargetType="{x:Type shared:DateTimeEdit}">
+                    <Grid>
+                        <Border x:Name="Border" Opacity="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="0" SnapsToDevicePixels="True">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="0" />
+                                    </Grid.RowDefinitions>
+
+                                    <ScrollViewer  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Visibility="{TemplateBinding ContentElementVisibility}" />
+
+                                    <ContentControl  x:Name="PART_EmptyContent" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        Visibility="{TemplateBinding WatermarkVisibility}" Content="{TemplateBinding NoneDateText}"
+                        IsTabStop="False" IsHitTestVisible="False"
+                        FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}"
+                        FontStretch="{TemplateBinding FontStretch}" FontStyle="{TemplateBinding FontStyle}" FontWeight="{TemplateBinding FontWeight}"
+                        Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}"
+                        Foreground="{TemplateBinding Foreground}"
+                        Opacity="0.5" />
+
+                                    <ToggleButton x:Name="PART_DropDown" IsTabStop="False" Grid.Column="2" BorderThickness="1" Padding="1" Margin="0,-1,-1,-1"	Style="{StaticResource DateTimeToggleButtonStyle1}" Width="20"   HorizontalAlignment="Stretch" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsButtonPopUpEnabled, Converter={StaticResource DateTimeBooleanToVisibilityConverter}}">
+                                        <ToggleButton.Content>
+                                            <Path Stretch="Uniform" x:Name="path1" Fill="{StaticResource  GlyphBrush}" Height="4" Width="7" Data="F1 M 531.107,321.943L 541.537,321.943L 536.322,328.042L 531.107,321.943 Z " HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </ToggleButton.Content>
+                                    </ToggleButton>
+
+                                    <Grid Grid.Column="3">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="5*" />
+                                            <RowDefinition Height="5*" />
+                                        </Grid.RowDefinitions>
+
+                                        <RepeatButton x:Name="PART_UpArrow" IsTabStop="False"
+									Template="{TemplateBinding UpRepeatButtonTemplate}"
+                                                BorderThickness="1"
+                                                Margin="0,-1,-1,-0.5"
+                                                BorderBrush="{TemplateBinding RepeatButtonBorderBrush}"
+                                                Background="{TemplateBinding RepeatButtonBackground}"
+                                                          IsEnabled="{TemplateBinding IsEnabledRepeatButton}"
+                                                    Grid.Row="0" Grid.Column="1"  Padding="1" Width="20"
+                                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsVisibleRepeatButton, Converter={StaticResource DateTimeBooleanToVisibilityConverter}}">
+                                            <RepeatButton.Content>
+                                                <Path x:Name="upbuttonpath" Stretch="Uniform" Height="8" Width="6" Stroke="{StaticResource  GlyphBrush}" StrokeThickness="1" Margin="3,2,3,2" Fill="{StaticResource  GlyphBrush}"  Data="F1 M 541.537,173.589L 531.107,173.589L 536.322,167.49L 541.537,173.589 Z " HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                                </Path>
+                                            </RepeatButton.Content>
+                                        </RepeatButton>
+
+                                        <RepeatButton x:Name="PART_DownArrow" IsTabStop="False"
+									Template="{TemplateBinding DownRepeatButtonTemplate}"
+                                                                BorderThickness="1"
+                                                Margin="0,-0.5,-1,-1"
+                                                BorderBrush="{TemplateBinding RepeatButtonBorderBrush}"
+                                                Background="{TemplateBinding RepeatButtonBackground}"
+                                                      IsEnabled="{TemplateBinding IsEnabledRepeatButton}"
+                                                    Grid.Row="1" Grid.Column="1"  Padding="1" Width="20"
+                                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsVisibleRepeatButton, Converter={StaticResource DateTimeBooleanToVisibilityConverter}}">
+                                            <RepeatButton.Content>
+                                                <Path Stretch="Uniform" x:Name="downbuttonpath" Fill="{StaticResource  GlyphBrush}" Stroke="{StaticResource  GlyphBrush}" StrokeThickness="1" Height="8" Width="6" Data="F1 M 531.107,321.943L 541.537,321.943L 536.322,328.042L 531.107,321.943 Z " Margin="3,2,3,2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                                </Path>
+                                            </RepeatButton.Content>
+                                        </RepeatButton>
+                                    </Grid>
+
+                                    <Popup x:Name="PART_Popup" Grid.Row="1" IsOpen="False" StaysOpen="False" AllowsTransparency="True">
+                                        <Grid Background="{StaticResource ContentBackgroundBrush}">
+                                            <Grid x:Name="PART_PopupGrid" Background="{StaticResource ContentBackgroundBrush}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="5*" />
+                                                    <ColumnDefinition Width="5*" />
+                                                    <ColumnDefinition Width="5*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <ToggleButton BorderThickness="1" Content="{Binding Source={StaticResource DateTimeResourceWrapperKey}, Path=AccessCalendarText}" Style="{StaticResource ToggleButtonStyle}" Width="60" FontSize="12"  Grid.Row="0" Grid.Column="0" x:Name="Button_Calender" Margin="0,0,0,0"
+                                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsCalendarEnabled, Converter={StaticResource DateTimeBooleanToVisibilityConverter}}" />
+
+                                                <ToggleButton BorderThickness="1" Content="{Binding Source={StaticResource DateTimeResourceWrapperKey}, Path=AccessClockText}" Style="{StaticResource ToggleButtonStyle}" Width="60" FontSize="12" Grid.Row="0" Grid.Column="1" x:Name="Button_Clock" Margin="0,0,0,0"
+                                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsWatchEnabled, Converter={StaticResource DateTimeBooleanToVisibilityConverter}}" />
+
+                                                <ToggleButton BorderThickness="1" Content="{Binding Source={StaticResource DateTimeResourceWrapperKey}, Path=AccessEmptyDateText}" Style="{StaticResource ToggleButtonStyle}" Width="60" FontSize="12" Grid.Row="0" Grid.Column="2" x:Name="Button_NoDate"  Margin="0,0,0,0"
+                                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsEmptyDateEnabled, Converter={StaticResource DateTimeBooleanToVisibilityConverter}}" />
+
+                                                <Popup x:Name="PART_CalenderPopup" IsOpen="False" StaysOpen="False" Grid.ColumnSpan="3" Grid.Row="1">
+                                                    <StackPanel Visibility="Visible">
+                                                        <shared_controls:Calendar Culture="{TemplateBinding shared:DateTimeEdit.CultureInfo}" Style="{TemplateBinding shared:DateTimeEdit.CalendarStyle}"  x:Name="Calendar" Margin="0,-3,0,0" />
+                                                        <ToggleButton x:Name="Button_Today" BorderThickness="1" Style="{StaticResource ToggleButtonStyle}" Content="{Binding Source={StaticResource DateTimeResourceWrapperKey}, Path=TodayLabel}" Margin="0,-4,0,0" />
+                                                    </StackPanel>
+                                                </Popup>
+
+                                                <Popup x:Name="PART_WatchPopup" IsOpen="False" Grid.ColumnSpan="3" Grid.Row="1" StaysOpen="False">
+                                                    <Border BorderBrush="{StaticResource  ContentBorderBrush}" Background="{StaticResource ContentBackgroundBrush}" BorderThickness="1">
+                                                        <shared:Clock x:Name="Clock" />
+                                                    </Border>
+                                                </Popup>
+                                            </Grid>
+                                            <Grid x:Name="PART_PopupGrid_Classic" Background="Transparent">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="5*" />
+                                                    <ColumnDefinition Width="5*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <shared_controls:Calendar Culture="{TemplateBinding shared:DateTimeEdit.CultureInfo}" x:Name="Calendar_Classic" Margin="0,-2.5,0,0" Grid.ColumnSpan="2"  Style="{TemplateBinding shared:DateTimeEdit.CalendarStyle}" />
+
+                                                <ToggleButton x:Name="Button_Today_Classic" BorderThickness="1" Style="{StaticResource ToggleButtonStyle}" Content="{Binding Source={StaticResource DateTimeResourceWrapperKey}, Path=TodayLabel}" Margin="0,-4,0,0"
+                                                          FontSize="12" Grid.Column="0" Grid.Row="1" SnapsToDevicePixels="True" />
+                                                <ToggleButton Content="{Binding Source={StaticResource DateTimeResourceWrapperKey}, Path=AccessEmptyDateText}" Style="{StaticResource ToggleButtonStyle}" FontSize="12" x:Name="Button_NoDate_Classic"  Margin="0,-4,0,0"
+                                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsEmptyDateEnabled, Converter={StaticResource DateTimeBooleanToVisibilityConverter}}"
+                                                    Grid.Row="1" Grid.Column="1" />
+                                            </Grid>
+                                        </Grid>
+                                    </Popup>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <Border x:Name="MouseOverBorder" CornerRadius="1" BorderThickness="{TemplateBinding BorderThickness}" Visibility="Collapsed" Opacity="1" BorderBrush="{StaticResource HoverBorderBrush}" />
+                        <Border x:Name="FocusBorder" CornerRadius="1" BorderThickness="{TemplateBinding BorderThickness}" Visibility="Collapsed" Opacity="1" BorderBrush="{TemplateBinding FocusedBorderBrush}" />
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsOpen" SourceName="PART_CalenderPopup" Value="true">
+                            <Setter Property="Margin" TargetName="Button_Calender" Value="0,0,-1,-1" />
+                            <Setter Property="Margin" TargetName="Button_Clock" Value="0,0,0,-1" />
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver"  Value="True">
+                            <Setter TargetName="PART_DropDown" Property="Background" Value="{StaticResource  HoverBackgroundBrush}" />
+                            <Setter TargetName="PART_DropDown" Property="BorderBrush" Value="{StaticResource  HoverBorderBrush}" />
+                            <Setter TargetName="MouseOverBorder" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="FocusBorder" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="path1" Property="Fill" Value="{StaticResource  HoverGlyphBrush}" />
+                            <Setter TargetName="path1" Property="Stroke" Value="{StaticResource  HoverGlyphBrush}" />
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" SourceName="PART_UpArrow" Value="True">
+                            <Setter TargetName="PART_UpArrow" Property="Background" Value="{StaticResource  HoverBackgroundBrush}" />
+                            <Setter TargetName="PART_UpArrow" Property="BorderBrush" Value="{StaticResource  HoverBorderBrush}" />
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" SourceName="PART_UpArrow" Value="True">
+                            <Setter TargetName="PART_UpArrow" Property="Background" Value="{StaticResource  ActiveBackgroundBrush}" />
+                            <Setter TargetName="PART_UpArrow" Property="BorderBrush" Value="{StaticResource  ActiveBorderBrush}" />
+                            <Setter TargetName="upbuttonpath" Property="Fill" Value="{StaticResource  ActiveGlyphBrush}" />
+                            <Setter TargetName="upbuttonpath" Property="Stroke" Value="{StaticResource  ActiveGlyphBrush}" />
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" SourceName="PART_DownArrow" Value="True">
+                            <Setter TargetName="PART_DownArrow" Property="Background" Value="{StaticResource  HoverBackgroundBrush}" />
+                            <Setter TargetName="PART_DownArrow" Property="BorderBrush" Value="{StaticResource  HoverBorderBrush}" />
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" SourceName="PART_DownArrow" Value="True">
+                            <Setter TargetName="PART_DownArrow" Property="Background" Value="{StaticResource  ActiveBackgroundBrush}" />
+                            <Setter TargetName="PART_DownArrow" Property="BorderBrush" Value="{StaticResource  ActiveBorderBrush}" />
+                            <Setter TargetName="downbuttonpath" Property="Fill" Value="{StaticResource  ActiveGlyphBrush}" />
+                            <Setter TargetName="downbuttonpath" Property="Stroke" Value="{StaticResource  ActiveGlyphBrush}" />
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" SourceName="PART_DropDown"  Value="True">
+                            <Setter TargetName="PART_DropDown" Property="Background" Value="{StaticResource  HoverBackgroundBrush}" />
+                            <Setter TargetName="PART_DropDown" Property="BorderBrush" Value="{StaticResource  HoverBorderBrush}" />
+                            <Setter TargetName="path1" Property="Fill" Value="{StaticResource  HoverGlyphBrush}" />
+                            <Setter TargetName="path1" Property="Stroke" Value="{StaticResource  HoverGlyphBrush}" />
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" SourceName="PART_DropDown"  Value="True">
+                            <Setter TargetName="PART_DropDown" Property="Background" Value="{StaticResource  ActiveBackgroundBrush}" />
+                            <Setter TargetName="PART_DropDown" Property="BorderBrush" Value="{StaticResource  ActiveBorderBrush}" />
+                            <Setter TargetName="path1" Property="Fill" Value="{StaticResource  ActiveGlyphBrush}" />
+                            <Setter TargetName="path1" Property="Stroke" Value="{StaticResource  ActiveGlyphBrush}" />
+                        </Trigger>
+
+                        <Trigger Property="IsChecked" SourceName="PART_DropDown"  Value="True">
+                            <Setter TargetName="PART_DropDown" Property="Background" Value="{StaticResource  ActiveBackgroundBrush}" />
+                            <Setter TargetName="PART_DropDown" Property="BorderBrush" Value="{StaticResource  ActiveBorderBrush}" />
+                            <Setter TargetName="path1" Property="Fill" Value="{StaticResource  ActiveGlyphBrush}" />
+                            <Setter TargetName="path1" Property="Stroke" Value="{StaticResource  ActiveGlyphBrush}" />
+                        </Trigger>
+
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="MouseOverBorder" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="FocusBorder" Property="Visibility" Value="Visible" />
+                        </Trigger>
+
+                        <Trigger Property="IsReadOnly" Value="True">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Foreground" Value="{StaticResource ContentSelectionBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Border" Property="Opacity" Value="0.6" />
+                        </Trigger>
+
+                        <Trigger Property="shared:SkinStorage.EnableTouch" Value="True">
+                            <Setter Property="Padding" Value="16,10,23,10" />
+                            <Setter Property="FontSize" Value="18" />
+                            <Setter Property="Width" Value="25" TargetName="PART_DropDown" />
+                            <Setter Property="Height" Value="45" TargetName="Button_Today" />
+                            <Setter Property="Height" Value="45" TargetName="Button_Today_Classic" />
+                            <Setter Property="Height" Value="45" TargetName="Button_NoDate_Classic" />
+                            <Setter Property="Height" Value="45" TargetName="Button_Calender" />
+                            <Setter Property="Height" Value="45" TargetName="Button_Clock" />
+                            <Setter Property="Height" Value="45" TargetName="Button_NoDate" />
+                            <Setter Property="FontSize" Value="18" TargetName="Button_Today" />
+                            <Setter Property="FontSize" Value="18" TargetName="Button_Today_Classic" />
+                            <Setter Property="FontSize" Value="18" TargetName="Button_NoDate_Classic" />
+                            <Setter Property="FontSize" Value="18" TargetName="Button_Calender" />
+                            <Setter Property="FontSize" Value="18" TargetName="Button_Clock" />
+                            <Setter Property="FontSize" Value="18" TargetName="Button_NoDate" />
+                            <Setter Property="Width" Value="80" TargetName="Button_Calender" />
+                            <Setter Property="Width" Value="80" TargetName="Button_Clock" />
+                            <Setter Property="Width" Value="80" TargetName="Button_NoDate" />
+                            <Setter Property="Effect" TargetName="Border">
+                                <Setter.Value>
+                                    <DropShadowEffect Direction="315" ShadowDepth="2" Opacity="0.3" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="EnableCombinedStyle" Value="True">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type shared:DateTimeEdit}">
+                            <Grid>
+                                <Border x:Name="Border" SnapsToDevicePixels="true" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="0">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="0" />
+                                            </Grid.RowDefinitions>
+
+                                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Visibility="{TemplateBinding ContentElementVisibility}" />
+
+                                            <ContentControl  x:Name="PART_EmptyContent"
+                                                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        Visibility="{TemplateBinding WatermarkVisibility}" Content="{TemplateBinding NoneDateText}"
+                        IsTabStop="False" IsHitTestVisible="False"
+                        FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}"
+                        FontStretch="{TemplateBinding FontStretch}" FontStyle="{TemplateBinding FontStyle}" FontWeight="{TemplateBinding FontWeight}"
+                        Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}"
+                        Foreground="{TemplateBinding Foreground}"
+                        Opacity="0.5" />
+
+                                            <ToggleButton x:Name="PART_DropDown" IsTabStop="False" Grid.Column="2" BorderThickness="1" Padding="1" Template="{TemplateBinding DropDownButtonTemplate}" Style="{StaticResource DateTimeToggleButtonStyle1}"
+                                            Width="20" HorizontalAlignment="Stretch"    Margin="0,-1,-1,-1"
+                                            Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsButtonPopUpEnabled, Converter={StaticResource DateTimeBooleanToVisibilityConverter}}">
+                                                <ToggleButton.Content>
+                                                    <Path Stretch="Uniform" x:Name="path1" Fill="{StaticResource  GlyphBrush}" Stroke="{StaticResource  GlyphBrush}" Height="7" Width="5" Data="M 0 0 L 3.5 4 L 7 0 Z" HorizontalAlignment="Center" StrokeThickness="1" VerticalAlignment="Center">
+                                                    </Path>
+                                                </ToggleButton.Content>
+                                            </ToggleButton>
+
+                                            <Grid Grid.Column="3" Grid.RowSpan="2">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="5*" />
+                                                    <RowDefinition Height="5*" />
+                                                </Grid.RowDefinitions>
+
+                                                <RepeatButton x:Name="PART_UpArrow" IsTabStop="False" Template="{TemplateBinding UpRepeatButtonTemplate}"
+                                                BorderThickness="1"
+                                                Margin="1,-1,-1,-1"
+                                                BorderBrush="{TemplateBinding RepeatButtonBorderBrush}"
+                                                Background="{TemplateBinding RepeatButtonBackground}"
+                                                IsEnabled="{TemplateBinding IsEnabledRepeatButton}"
+                                                Grid.Row="0" Grid.Column="1"  Width="20" Padding="1"
+                                                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsVisibleRepeatButton, Converter={StaticResource DateTimeBooleanToVisibilityConverter}}">
+                                                    <RepeatButton.Content>
+                                                        <Path x:Name="upbuttonpath" Margin="-2" Stretch="Uniform" Height="7" Width="5" Stroke="{StaticResource  GlyphBrush}"   Fill="{StaticResource  GlyphBrush}"  Data="F1 M 541.537,173.589L 531.107,173.589L 536.322,167.49L 541.537,173.589 Z " HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                                        </Path>
+                                                    </RepeatButton.Content>
+                                                </RepeatButton>
+
+                                                <RepeatButton x:Name="PART_DownArrow" IsTabStop="False" Template="{TemplateBinding DownRepeatButtonTemplate}"
+                                                BorderThickness="1"
+                                                Margin="1,-1,-1,-1"
+                                                BorderBrush="{TemplateBinding RepeatButtonBorderBrush}"
+                                                Background="{TemplateBinding RepeatButtonBackground}"
+                                                IsEnabled="{TemplateBinding IsEnabledRepeatButton}"
+                                                Grid.Row="1" Grid.Column="1"  Width="20" Padding="1"
+                                                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsVisibleRepeatButton, Converter={StaticResource DateTimeBooleanToVisibilityConverter}}">
+                                                    <RepeatButton.Content>
+                                                        <Path Stretch="Uniform" Margin="-2" x:Name="downbuttonpath" Fill="{StaticResource  GlyphBrush}" Stroke="{StaticResource  GlyphBrush}"  Height="8" Width="6" Data="F1 M 531.107,321.943L 541.537,321.943L 536.322,328.042L 531.107,321.943 Z " HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                                        </Path>
+                                                    </RepeatButton.Content>
+                                                </RepeatButton>
+                                            </Grid>
+
+                                            <Popup x:Name="PART_Popup" Grid.Row="1" VerticalOffset="2" IsOpen="False" StaysOpen="False">
+                                                <Border Background="White" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                                                    <Grid x:Name="PART_PopupGrid" Background="{TemplateBinding Background}">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="*" />
+                                                            <RowDefinition Height="Auto" />
+                                                        </Grid.RowDefinitions>
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="5*" />
+                                                                <ColumnDefinition Width="5*" />
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <Border Grid.Row="0" x:Name="CalendarBorder" Grid.Column="0" Height="190">
+                                                                <StackPanel Visibility="Visible">
+                                                                    <shared_controls:Calendar Culture="{TemplateBinding shared:DateTimeEdit.CultureInfo}" Style="{TemplateBinding shared:DateTimeEdit.CalendarStyle}"  x:Name="Calendar" />
+                                                                    <ToggleButton Margin="0,-2,0,0" x:Name="Button_Today" BorderThickness="1" Style="{StaticResource ToggleButtonStyle}" Content="{Binding Source={StaticResource DateTimeResourceWrapperKey}, Path=TodayLabel}"  FontSize="12" />
+                                                                </StackPanel>
+                                                            </Border>
+
+                                                            <Border x:Name="ClockBorder"  Grid.Row="0" Grid.Column="1" Height="190" Margin="2,2,2,2">
+                                                                <shared:Clock x:Name="Clock" />
+                                                            </Border>
+                                                        </Grid>
+                                                        <Grid Grid.Row="1" Margin="4,4,0,0" Background="{TemplateBinding Background}" x:Name="PART_OptionGrid" HorizontalAlignment="Center">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="70" />
+                                                                <ColumnDefinition Width="50" />
+                                                                <ColumnDefinition Width="50" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <CheckBox Content="{Binding Source={StaticResource DateTimeResourceWrapperKey}, Path=AccessCalendarText}"  Width="70" FontSize="12"  Grid.Column="0" x:Name="Button_Calender" Margin="0,0,0,2"
+                                                    IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsCalendarEnabled}"  Foreground="{StaticResource  ForegroundBrush}" />
+
+                                                            <CheckBox Content="{Binding Source={StaticResource DateTimeResourceWrapperKey}, Path=AccessClockText}"  Width="50" FontSize="12" Grid.Column="1" x:Name="Button_Clock" Margin="0,0,0,2"
+                                                    IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsWatchEnabled}" Foreground="{StaticResource  ForegroundBrush}" />
+
+                                                            <ToggleButton Content="{Binding Source={StaticResource DateTimeResourceWrapperKey}, Path=AccessEmptyDateText}" Style="{StaticResource ToggleButtonStyle}" Width="50" FontSize="12" Grid.Column="2" x:Name="Button_NoDate"  Margin="0,0,2,4"
+                                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsEmptyDateEnabled, Converter={StaticResource DateTimeBooleanToVisibilityConverter}}" />
+                                                        </Grid>
+                                                    </Grid>
+                                                </Border>
+                                            </Popup>
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+
+                                <Border x:Name="MouseOverBorder" CornerRadius="1" BorderThickness="{TemplateBinding BorderThickness}" Visibility="Collapsed" Opacity="1" BorderBrush="{StaticResource HoverBorderBrush}" />
+                                <Border x:Name="FocusBorder" CornerRadius="1" BorderThickness="{TemplateBinding BorderThickness}" Visibility="Collapsed" Opacity="1" BorderBrush="{StaticResource ActiveBorderBrush}" />
+                            </Grid>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver"  Value="True">
+                                    <Setter TargetName="PART_DropDown" Property="Background" Value="{StaticResource  HoverBackgroundBrush}" />
+                                    <Setter TargetName="PART_DropDown" Property="BorderBrush" Value="{StaticResource  HoverBorderBrush}" />
+                                    <Setter TargetName="path1" Property="Fill" Value="{StaticResource  HoverGlyphBrush}" />
+                                    <Setter TargetName="path1" Property="Stroke" Value="{StaticResource  HoverGlyphBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" SourceName="PART_UpArrow" Value="True">
+                                    <Setter TargetName="PART_UpArrow" Property="Background" Value="{StaticResource  HoverBackgroundBrush}" />
+                                    <Setter TargetName="PART_UpArrow" Property="BorderBrush" Value="{StaticResource  HoverBorderBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" SourceName="PART_UpArrow" Value="True">
+                                    <Setter TargetName="PART_UpArrow" Property="Background" Value="{StaticResource  ActiveBackgroundBrush}" />
+                                    <Setter TargetName="PART_UpArrow" Property="BorderBrush" Value="{StaticResource  ActiveBorderBrush}" />
+
+                                    <Setter TargetName="upbuttonpath" Property="Fill" Value="{StaticResource  ActiveGlyphBrush}" />
+                                    <Setter TargetName="upbuttonpath" Property="Stroke" Value="{StaticResource  ActiveGlyphBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" SourceName="PART_DownArrow" Value="True">
+                                    <Setter TargetName="PART_DownArrow" Property="Background" Value="{StaticResource  HoverBackgroundBrush}" />
+                                    <Setter TargetName="PART_DownArrow" Property="BorderBrush" Value="{StaticResource  HoverBorderBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" SourceName="PART_DownArrow" Value="True">
+                                    <Setter TargetName="PART_DownArrow" Property="Background" Value="{StaticResource  ActiveBackgroundBrush}" />
+                                    <Setter TargetName="PART_DownArrow" Property="BorderBrush" Value="{StaticResource  ActiveBorderBrush}" />
+
+                                    <Setter TargetName="downbuttonpath" Property="Fill" Value="{StaticResource  ActiveGlyphBrush}" />
+                                    <Setter TargetName="downbuttonpath" Property="Stroke" Value="{StaticResource  ActiveGlyphBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" SourceName="PART_DropDown"  Value="True">
+                                    <Setter TargetName="PART_DropDown" Property="Background" Value="{StaticResource  HoverBackgroundBrush}" />
+                                    <Setter TargetName="PART_DropDown" Property="BorderBrush" Value="{StaticResource  HoverBorderBrush}" />
+                                    <Setter TargetName="path1" Property="Fill" Value="{StaticResource  HoverGlyphBrush}" />
+                                    <Setter TargetName="path1" Property="Stroke" Value="{StaticResource  HoverGlyphBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" SourceName="PART_DropDown"  Value="True">
+                                    <Setter TargetName="PART_DropDown" Property="Background" Value="{StaticResource  ActiveBackgroundBrush}" />
+                                    <Setter TargetName="PART_DropDown" Property="BorderBrush" Value="{StaticResource  ActiveBorderBrush}" />
+                                    <Setter TargetName="path1" Property="Fill" Value="{StaticResource  ActiveGlyphBrush}" />
+                                    <Setter TargetName="path1" Property="Stroke" Value="{StaticResource  ActiveGlyphBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsChecked" SourceName="PART_DropDown"  Value="True">
+                                    <Setter TargetName="PART_DropDown" Property="Background" Value="{StaticResource  ActiveBackgroundBrush}" />
+                                    <Setter TargetName="PART_DropDown" Property="BorderBrush" Value="{StaticResource  ActiveBorderBrush}" />
+                                    <Setter TargetName="path1" Property="Fill" Value="{StaticResource  ActiveGlyphBrush}" />
+                                    <Setter TargetName="path1" Property="Stroke" Value="{StaticResource  ActiveGlyphBrush}" />
+                                </Trigger>
+
+                                <Trigger Property="IsReadOnly" Value="True">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Foreground" Value="{StaticResource ContentSelectionBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="Border" Property="Opacity" Value="0.6" />
+                                </Trigger>
+                                <Trigger Property="shared:SkinStorage.EnableTouch" Value="True">
+                                    <Setter Property="Padding" Value="16,10,23,10" />
+                                    <Setter Property="FontSize" Value="18" />
+                                    <Setter Property="Width" Value="25" TargetName="PART_DropDown" />
+                                    <Setter Property="Height" Value="45" TargetName="Button_Today" />
+                                    <Setter Property="Height" Value="45" TargetName="Button_Calender" />
+                                    <Setter Property="Height" Value="45" TargetName="Button_Clock" />
+                                    <Setter Property="Height" Value="45" TargetName="Button_NoDate" />
+                                    <Setter Property="FontSize" Value="18" TargetName="Button_Today" />
+                                    <Setter Property="FontSize" Value="18" TargetName="Button_Calender" />
+                                    <Setter Property="FontSize" Value="18" TargetName="Button_Clock" />
+                                    <Setter Property="FontSize" Value="18" TargetName="Button_NoDate" />
+                                    <Setter Property="Width" Value="80" TargetName="Button_Calender" />
+                                    <Setter Property="Width" Value="80" TargetName="Button_Clock" />
+                                    <Setter Property="Width" Value="80" TargetName="Button_NoDate" />
+                                    <Setter Property="Effect" TargetName="Border">
+                                        <Setter.Value>
+                                            <DropShadowEffect Direction="315" ShadowDepth="2" Opacity="0.3" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style BasedOn="{StaticResource MetroDateTimeEditStyle}" TargetType="{x:Type shared:DateTimeEdit}" />
+</ResourceDictionary>

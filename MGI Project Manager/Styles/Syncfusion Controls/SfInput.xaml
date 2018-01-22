@@ -1,0 +1,1868 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Microsoft_Windows_Aero="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:input="clr-namespace:Syncfusion.Windows.Controls.Input;assembly=Syncfusion.SfInput.WPF"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sfshared_controls="clr-namespace:Syncfusion.Windows.Controls;assembly=Syncfusion.SfShared.Wpf"
+    xmlns:sfshared_primitives="clr-namespace:Syncfusion.Windows.Primitives;assembly=Syncfusion.SfShared.Wpf"
+    xmlns:shared_converters="clr-namespace:Syncfusion.Windows.Converters;assembly=Syncfusion.SfShared.Wpf"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    
+    mc:Ignorable="d">
+
+    <ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary.MergedDictionaries>
+
+<LinearGradientBrush x:Key="BackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FFEEEEF2" Offset="0" /><GradientStop Color="#FFEEEEF2" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="BorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="ForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="GlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="HeaderBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FFEEEEF2" Offset="0" /><GradientStop Color="#FFEEEEF2" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="HeaderBorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="HeaderForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="HeaderGlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="HoverBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FF7FBCE5" Offset="0" /><GradientStop Color="#FF7FBCE5" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="HoverBorderBrush" Color="#FF7FBCE5" />
+	<SolidColorBrush x:Key="HoverForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="HoverGlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="ActiveBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FF007ACC" Offset="0" /><GradientStop Color="#FF007ACC" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="ActiveBorderBrush" Color="#FF007ACC" />
+	<SolidColorBrush x:Key="ActiveForegroundBrush" Color="#FFFFFFFF" />
+	<SolidColorBrush x:Key="ActiveGlyphBrush" Color="#FFFFFFFF" />
+	<SolidColorBrush x:Key="ContentBackgroundBrush" Color="#FFF5F5F5" />
+	<SolidColorBrush x:Key="ContentBorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="ContentForegroundBrush" Color="#FF1E1E1E" />
+	<SolidColorBrush x:Key="ContentSelectionBrush" Color="#FFA5A5A5" />
+	<SolidColorBrush x:Key="SelectionInActiveBrush" Color="#FF99C9EA" />
+	<SolidColorBrush x:Key="ErrorBrush" Color="#FFFF0000" />
+	<SolidColorBrush x:Key="ActiveLightBackground" Color="#FF99C9EA" />
+	<SolidColorBrush x:Key="ActiveDarkBackground" Color="#FF003D66" />
+	<SolidColorBrush x:Key="ContentAlternativeBackground" Color="#FFDCDCDC" />
+	<SolidColorBrush x:Key="TickColor" Color="#FFBCBCBC" />
+	<SolidColorBrush x:Key="RangeColor1" Color="#FF61A301" />	
+	<SolidColorBrush x:Key="RangeColor2" Color="#FFF2E606" />	
+	<SolidColorBrush x:Key="RangeColor3" Color="#FFFF0000" />
+	<SolidColorBrush x:Key="LightBackgroundBrush" Color="#FFDDDDE5" />
+
+
+    <Thickness x:Key="SyncfusionUpDownBorderThemeThickness">1</Thickness>
+
+    <SolidColorBrush x:Key="SyncfusionRatingItemPointerOverThemeBrush" Color="#FF8152EF" />
+
+    <Thickness x:Key="SyncfusionTransitionContentCotnrolThemePadding">5 0 0 0</Thickness>
+
+    <sys:Double x:Key="TextControlThemeMinHeight">32</sys:Double>
+
+    <sys:Double x:Key="TextControlThemeMinWidth">64</sys:Double>
+
+    <FontFamily x:Key="ContentControlThemeFontFamily">Segoe UI</FontFamily>
+
+    <sys:Double x:Key="ControlContentThemeFontSize">14.667</sys:Double>
+
+    <Thickness x:Key="TextControlBorderThemeThickness">2</Thickness>
+
+    <Thickness x:Key="TextControlThemePadding">10 3 10 5</Thickness>
+
+    <shared_converters:PrecisionToVisibilityConverter x:Key="VisibilityConverter" />
+
+    <shared_converters:BooleanToVisibilityConverter x:Key="BooleanVisibilityConverter" />
+
+    <shared_converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanVisibilityConverter" />
+
+    <shared_converters:BrushToColorConverter x:Key="BrushConverter" />
+
+
+    <FontFamily x:Key="SyncfusionUpDownThemeFontFamily">Segoe UI</FontFamily>
+    <FontWeight x:Key="SyncfusionUpDownThemeFontWeight">SemiBold</FontWeight>
+
+    <sys:Double x:Key="SyncfusionUpDownThemeFontSize">14.667</sys:Double>
+    <Thickness x:Key="SyncfusionUpDownThemePadding">12 4 12 4</Thickness>
+
+    <Style TargetType="sfshared_controls:TransitionContentControl">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Background" Value="{StaticResource ContentBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource ContentForegroundBrush}" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="sfshared_controls:TransitionContentControl">
+                    <Grid x:Name="PART_LayoutRoot" Background="{TemplateBinding Background}">
+                        <ContentControl
+                            x:Name="PART_TempContent"
+                            HorizontalContentAlignment="{Binding HorizontalAlignment, ElementName=PART_Content}"
+                            VerticalContentAlignment="{Binding VerticalAlignment, ElementName=PART_Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                            IsTabStop="False" />
+                        <ContentPresenter
+                            x:Name="PART_Content"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="PART_LayoutRoot" Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <sfshared_controls:RotateTransition
+        x:Key="RotateTransition"
+        Easing="{x:Null}"
+        Duration="0:0:0.4" />
+
+    <ControlTemplate x:Key="UpRepeatButtonTemplate" TargetType="{x:Type RepeatButton}">
+        <Border
+            Name="Chrome"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="1"
+            CornerRadius="0"
+            SnapsToDevicePixels="true">
+            <Border
+                Name="innerBorder"
+                BorderBrush="{TemplateBinding Background}"
+                BorderThickness="1"
+                CornerRadius="0"
+                SnapsToDevicePixels="True">
+                <ContentPresenter
+                    x:Name="ContentPresenter"
+                    Margin="{TemplateBinding Padding}"
+                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                    ContentTemplate="{TemplateBinding ContentTemplate}">
+                    <ContentPresenter.Content>
+                        <Path
+                            x:Name="path"
+                            Width="12"
+                            Height="12"
+                            Margin="0,0,0,0"
+                            Data="F1M181.297,177.841L181.205,177.746 181.385,177.563 202.804,156.146 202.804,135.07 178.497,159.373 170.847,167.026 170.666,167.205 163.107,159.653 138.804,135.345 138.804,156.42 160.219,177.841 170.76,188.379 181.297,177.841z"
+                            Fill="{StaticResource GlyphBrush}"
+                            RenderTransformOrigin=".5,.5"
+                            Stretch="Uniform">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform />
+                                    <SkewTransform />
+                                    <RotateTransform Angle="180" />
+                                    <TranslateTransform />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                    </ContentPresenter.Content>
+                </ContentPresenter>
+            </Border>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                <Setter TargetName="innerBorder" Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                <Setter TargetName="path" Property="Fill" Value="{StaticResource ActiveGlyphBrush}" />
+                <Setter TargetName="Chrome" Property="Background" Value="{StaticResource ActiveBackgroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                <Setter TargetName="innerBorder" Property="BorderBrush" Value="Transparent" />
+                <Setter TargetName="path" Property="Fill" Value="{StaticResource HoverGlyphBrush}" />
+                <Setter TargetName="Chrome" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Chrome" Property="Opacity" Value="0.5" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="UpRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Template" Value="{StaticResource UpRepeatButtonTemplate}" />
+    </Style>
+
+    <ControlTemplate x:Key="DownRepeatButtonTemplate" TargetType="{x:Type RepeatButton}">
+        <Border
+            Name="Chrome"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="1"
+            CornerRadius="0"
+            SnapsToDevicePixels="true">
+            <Border
+                Name="innerBorder"
+                BorderBrush="{TemplateBinding Background}"
+                BorderThickness="1"
+                CornerRadius="0"
+                SnapsToDevicePixels="True">
+                <ContentPresenter
+                    x:Name="ContentPresenter"
+                    Margin="{TemplateBinding Padding}"
+                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                    ContentTemplate="{TemplateBinding ContentTemplate}">
+                    <ContentPresenter.Content>
+                        <Path
+                            x:Name="path"
+                            Width="12"
+                            Height="12"
+                            Margin="0,0,0,0"
+                            Data="F1M181.297,177.841L181.205,177.746 181.385,177.563 202.804,156.146 202.804,135.07 178.497,159.373 170.847,167.026 170.666,167.205 163.107,159.653 138.804,135.345 138.804,156.42 160.219,177.841 170.76,188.379 181.297,177.841z"
+                            Fill="{StaticResource GlyphBrush}"
+                            Stretch="Uniform" />
+                    </ContentPresenter.Content>
+                </ContentPresenter>
+            </Border>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                <Setter TargetName="innerBorder" Property="BorderBrush" Value="Transparent" />
+                <Setter TargetName="path" Property="Fill" Value="{StaticResource ActiveGlyphBrush}" />
+                <Setter TargetName="Chrome" Property="Background" Value="{StaticResource ActiveBackgroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                <Setter TargetName="innerBorder" Property="BorderBrush" Value="Transparent" />
+                <Setter TargetName="path" Property="Fill" Value="{StaticResource HoverGlyphBrush}" />
+                <Setter TargetName="Chrome" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Chrome" Property="Opacity" Value="0.5" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="DownRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Template" Value="{StaticResource DownRepeatButtonTemplate}" />
+    </Style>
+
+    <Style x:Key="UpDownStyle" TargetType="sfshared_controls:SfUpDown">
+        <Setter Property="AccentBrush" Value="{StaticResource ActiveBackgroundBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="sfshared_controls:SfUpDown">
+                    <Grid x:Name="PART_OuterGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <ContentControl
+                            x:Name="PART_Content"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch"
+                            Content="{TemplateBinding UpDownContent}" />
+                        <RepeatButton
+                            x:Name="PART_DownButton"
+                            Grid.Column="1"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Background="{TemplateBinding AccentBrush}"
+                            Command="{TemplateBinding DownCommand}"
+                            IsTabStop="False"
+                            Style="{StaticResource DownRepeatButtonStyle}" />
+                        <RepeatButton
+                            x:Name="PART_UpButton"
+                            Grid.Column="2"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Background="{TemplateBinding AccentBrush}"
+                            Command="{TemplateBinding UpCommand}"
+                            IsTabStop="False"
+                            Style="{StaticResource UpRepeatButtonStyle}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style BasedOn="{StaticResource UpDownStyle}" TargetType="sfshared_controls:SfUpDown" />
+
+    <Style x:Key="TextBoxStyle" TargetType="{x:Type input:SfTextBoxExt}">
+        <Setter Property="Foreground" Value="{StaticResource ContentForegroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource ContentBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ContentBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="-1" />
+        <Setter Property="AllowDrop" Value="true" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst" />
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type input:SfTextBoxExt}">
+                    <Grid>
+                        <!--<Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="1">
+
+                        </Grid>-->
+                        <Border
+                            x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="true">
+                            <Grid>
+                                <ScrollViewer
+                                    x:Name="PART_ContentHost"
+                                    VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+
+                                <ContentControl
+                                    x:Name="PART_Watermark"
+                                    Grid.Row="0"
+                                    Margin="2,0,0,0"
+                                    Padding="{TemplateBinding Padding}"
+                                    VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    Background="{TemplateBinding Background}"
+                                    Content="{TemplateBinding Watermark}"
+                                    ContentTemplate="{TemplateBinding WatermarkTemplate}"
+                                    ContentTemplateSelector="{TemplateBinding WatermarkTemplateSelector}"
+                                    FontFamily="{TemplateBinding FontFamily}"
+                                    FontSize="{TemplateBinding FontSize}"
+                                    FontStretch="{TemplateBinding FontStretch}"
+                                    FontStyle="{TemplateBinding FontStyle}"
+                                    FontWeight="{TemplateBinding FontWeight}"
+                                    Foreground="{StaticResource ContentSelectionBrush}"
+                                    IsHitTestVisible="False"
+                                    IsTabStop="False"
+                                    Opacity="0.5"
+                                    Visibility="{TemplateBinding Visibility}" />
+                            </Grid>
+                        </Border>
+                        <Popup
+                            x:Name="PART_Popup"
+                            IsOpen="{TemplateBinding IsSuggestionOpen}"
+                            StaysOpen="False">
+                            <Grid Background="{TemplateBinding Background}">
+
+                                <input:SuggestionBox
+                                    x:Name="PART_SuggestionBox"
+                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    ItemsSource="{TemplateBinding Suggestions}"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    SelectedIndex="{Binding SuggestionIndex, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                            <Setter Property="Foreground" Value="{StaticResource HoverForegroundBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style BasedOn="{StaticResource TextBoxStyle}" TargetType="{x:Type input:SfTextBoxExt}" />
+
+    <Style x:Key="HeaderStyle" TargetType="sfshared_controls:TransitionContentControl">
+        <Setter Property="Height" Value="50" />
+        <Setter Property="Margin" Value="10,0,0,0" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Foreground" Value="#000000" />
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Transition">
+            <Setter.Value>
+                <sfshared_controls:FadeTransition />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="input:SfRating">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="ToolTipForeground" Value="{StaticResource ContentForegroundBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="input:SfRating">
+                    <Grid RenderTransformOrigin="0.5, 0.5">
+                        <Grid x:Name="PART_ToolTip" HorizontalAlignment="Left">
+                            <Popup x:Name="PART_Popup" VerticalOffset="-65">
+                                <Border
+                                    Height="37"
+                                    Padding="10,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="{StaticResource ContentBackgroundBrush}"
+                                    BorderBrush="{StaticResource ContentBorderBrush}"
+                                    BorderThickness="2">
+
+                                    <ContentPresenter
+                                        x:Name="PART_Border"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Content="{Binding PreviewValue, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <Border
+                            x:Name="PART_Host"
+                            Grid.Row="1"
+                            Margin="0,0,0,0"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                            <ItemsPresenter
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="PART_Host" Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="input:SfRatingItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="UnratedFill" Value="{StaticResource ContentBackgroundBrush}" />
+        <Setter Property="PointerOverFill" Value="{StaticResource HoverBackgroundBrush}" />
+        <Setter Property="PointerOverStroke" Value="{StaticResource HoverBorderBrush}" />
+        <Setter Property="Width" Value="30" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="RatedFill" Value="{StaticResource ActiveBackgroundBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="input:SfRatingItem">
+                    <Grid Background="{TemplateBinding Background}">
+                        <Grid x:Name="PART_RatingGrid" Margin="{TemplateBinding Padding}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <Path
+                                x:Name="Unrated"
+                                Height="{TemplateBinding Height}"
+                                VerticalAlignment="Stretch"
+                                Data="M1540.22,2082.07L1546.95,2102.78 1568.73,2102.78 1551.11,2115.58 1557.84,2136.29 1540.22,2123.49 1522.6,2136.29 1529.33,2115.58 1511.71,2102.78 1533.49,2102.78 1540.22,2082.07z"
+                                Fill="{TemplateBinding UnratedFill}"
+                                Opacity="1"
+                                Stretch="Uniform"
+                                Stroke="{TemplateBinding UnratedStroke}"
+                                StrokeLineJoin="Round"
+                                StrokeThickness="{TemplateBinding UnratedStrokeThickness}" />
+
+                            <Path
+                                x:Name="MouseOverPath"
+                                Height="{TemplateBinding Height}"
+                                VerticalAlignment="Stretch"
+                                Data="M1540.22,2082.07L1546.95,2102.78 1568.73,2102.78 1551.11,2115.58 1557.84,2136.29 1540.22,2123.49 1522.6,2136.29 1529.33,2115.58 1511.71,2102.78 1533.49,2102.78 1540.22,2082.07z"
+                                Fill="{TemplateBinding PointerOverFill}"
+                                Opacity="0"
+                                Stretch="Uniform"
+                                Stroke="{TemplateBinding PointerOverStroke}"
+                                StrokeLineJoin="Round"
+                                StrokeThickness="{TemplateBinding PointerOverStrokeThickness}"
+                                Visibility="{Binding InternalPrecision, Converter={StaticResource VisibilityConverter}, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+
+
+                            <Path
+                                x:Name="RatedPath"
+                                Height="{TemplateBinding Height}"
+                                VerticalAlignment="Stretch"
+                                Data="M1540.22,2082.07L1546.95,2102.78 1568.73,2102.78 1551.11,2115.58 1557.84,2136.29 1540.22,2123.49 1522.6,2136.29 1529.33,2115.58 1511.71,2102.78 1533.49,2102.78 1540.22,2082.07z"
+                                Fill="{TemplateBinding RatedFill}"
+                                Opacity="0"
+                                Stretch="Uniform"
+                                Stroke="{TemplateBinding RatedStroke}"
+                                StrokeLineJoin="Round"
+                                StrokeThickness="{TemplateBinding RatedStrokeThickness}" />
+
+                            <sfshared_primitives:LinearClipper ExpandDirection="Right" RatioVisible="{TemplateBinding InternalValue}">
+                                <Path
+                                    x:Name="LinearCliperPath"
+                                    Height="{TemplateBinding Height}"
+                                    VerticalAlignment="Stretch"
+                                    Data="M1540.22,2082.07L1546.95,2102.78 1568.73,2102.78 1551.11,2115.58 1557.84,2136.29 1540.22,2123.49 1522.6,2136.29 1529.33,2115.58 1511.71,2102.78 1533.49,2102.78 1540.22,2082.07z"
+                                    Fill="{TemplateBinding RatedFill}"
+                                    Stretch="Uniform"
+                                    Stroke="{TemplateBinding RatedStroke}"
+                                    StrokeLineJoin="Round"
+                                    StrokeThickness="{TemplateBinding RatedStrokeThickness}" />
+                            </sfshared_primitives:LinearClipper>
+
+                            <Border Grid.Row="1" Margin="{TemplateBinding Margin}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Border>
+                        </Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="MouseOverPath"
+                                            Storyboard.TargetProperty="(UIElement.Opacity)"
+                                            To="1"
+                                            Duration="0:0:0" />
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="Unrated"
+                                            Storyboard.TargetProperty="(UIElement.Opacity)"
+                                            To="0"
+                                            Duration="0:0:0" />
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="RatedPath"
+                                            Storyboard.TargetProperty="(UIElement.Opacity)"
+                                            To="0"
+                                            Duration="0:0:0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="Rated">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="RatedPath"
+                                            Storyboard.TargetProperty="(UIElement.Opacity)"
+                                            To="1"
+                                            Duration="0:0:0" />
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="Unrated"
+                                            Storyboard.TargetProperty="(UIElement.Opacity)"
+                                            To="1"
+                                            Duration="0:0:0" />
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="MouseOverPath"
+                                            Storyboard.TargetProperty="(UIElement.Opacity)"
+                                            To="0"
+                                            Duration="0:0:0" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+    <Style x:Key="SliderThumbStyle" TargetType="Thumb">
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="input:TickBar">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="input:TickBar">
+                    <Grid x:Name="PART_Layout" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="input:TickBarItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="input:TickBarItem">
+                    <Grid x:Name="PART_TickBarItem">
+                        <Grid x:Name="BottomPanel" Visibility="Collapsed">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="10" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Line
+                                x:Name="PART_Line"
+                                VerticalAlignment="Bottom"
+                                Opacity="{TemplateBinding LineOpacity}"
+                                Stroke="{TemplateBinding Fill}"
+                                StrokeThickness="1"
+                                X1="{TemplateBinding StartPointX}"
+                                X2="{TemplateBinding EndPointX}"
+                                Y1="{TemplateBinding StartPointY}"
+                                Y2="{TemplateBinding EndPointY}" />
+                            <TextBlock
+                                x:Name="PART_Text"
+                                Grid.Row="1"
+                                Margin="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Text="{TemplateBinding Tick}"
+                                TextTrimming="WordEllipsis"
+                                Visibility="Collapsed" />
+                        </Grid>
+                        <Grid x:Name="RightPanel" Visibility="Collapsed">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Line
+                                x:Name="PART_LineRight"
+                                HorizontalAlignment="Right"
+                                Opacity="{TemplateBinding LineOpacity}"
+                                Stroke="{TemplateBinding Fill}"
+                                StrokeThickness="1"
+                                X1="{TemplateBinding StartPointX}"
+                                X2="{TemplateBinding EndPointX}"
+                                Y1="{TemplateBinding StartPointY}"
+                                Y2="{TemplateBinding EndPointY}" />
+                            <TextBlock
+                                x:Name="PART_TextRight"
+                                Grid.Column="1"
+                                Margin="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Text="{TemplateBinding Tick}"
+                                TextTrimming="WordEllipsis"
+                                Visibility="Collapsed" />
+                        </Grid>
+                        <Grid x:Name="TopPanel" Visibility="Collapsed">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="10" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                x:Name="PART_TextTop"
+                                Margin="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Text="{TemplateBinding Tick}"
+                                TextTrimming="WordEllipsis"
+                                Visibility="Collapsed" />
+                            <Line
+                                x:Name="PART_LineTop"
+                                Grid.Row="1"
+                                VerticalAlignment="Top"
+                                Opacity="{TemplateBinding LineOpacity}"
+                                Stroke="{TemplateBinding Fill}"
+                                StrokeThickness="1"
+                                X1="{TemplateBinding StartPointX}"
+                                X2="{TemplateBinding EndPointX}"
+                                Y1="{TemplateBinding StartPointY}"
+                                Y2="{TemplateBinding EndPointY}" />
+                        </Grid>
+                        <Grid x:Name="LeftPanel" Visibility="Collapsed">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="10" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                x:Name="PART_TextLeft"
+                                Margin="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Text="{TemplateBinding Tick}"
+                                TextTrimming="WordEllipsis"
+                                Visibility="Collapsed" />
+                            <Line
+                                x:Name="PART_LineLeft"
+                                Grid.Column="1"
+                                Opacity="{TemplateBinding LineOpacity}"
+                                Stroke="{TemplateBinding Fill}"
+                                StrokeThickness="1"
+                                X1="{TemplateBinding StartPointX}"
+                                X2="{TemplateBinding EndPointX}"
+                                Y1="{TemplateBinding StartPointY}"
+                                Y2="{TemplateBinding EndPointY}" />
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="input:SfRangeSlider">
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+        <!--<Setter Property="ManipulationMode" Value="None"/>-->
+        <Setter Property="Maximum" Value="100" />
+        <Setter Property="SmallChange" Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="input:SfRangeSlider">
+                    <Grid Margin="{TemplateBinding Padding}">
+                        <Grid x:Name="HorizontalTemplate" Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Rectangle
+                                x:Name="HorizontalTrackRect"
+                                Grid.Row="1"
+                                Grid.ColumnSpan="3"
+                                Fill="{StaticResource ContentBackgroundBrush}" />
+                            <Rectangle
+                                x:Name="HorizontalDecreaseRect"
+                                Grid.Row="1"
+                                Grid.ColumnSpan="3"
+                                Width="{TemplateBinding ActualWidth}"
+                                Fill="{StaticResource ActiveBackgroundBrush}" />
+                            <input:TickBar
+                                x:Name="TopTickBar"
+                                Grid.ColumnSpan="3"
+                                Margin="0,0,0,2"
+                                VerticalAlignment="Bottom"
+                                CustomLabels="{TemplateBinding CustomLabels}"
+                                Fill="{StaticResource GlyphBrush}"
+                                IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                                IsEnabled="False"
+                                IsHitTestVisible="False"
+                                LabelOrientation="{TemplateBinding LabelOrientation}"
+                                LabelPlacement="{TemplateBinding LabelPlacement}"
+                                Maximum="{TemplateBinding Maximum}"
+                                Minimum="{TemplateBinding Minimum}"
+                                Orientation="{TemplateBinding Orientation}"
+                                ShowCustomLabels="{TemplateBinding ShowCustomLabels}"
+                                ShowValueLabels="{TemplateBinding ShowValueLabels}"
+                                TickFrequency="{TemplateBinding TickFrequency}"
+                                TickPlacement="{TemplateBinding TickPlacement}"
+                                ValuePlacement="{TemplateBinding ValuePlacement}"
+                                Visibility="Collapsed" />
+                            <input:TickBar
+                                x:Name="HorizontalInlineTickBar"
+                                Grid.Row="1"
+                                Grid.ColumnSpan="3"
+                                CustomLabels="{TemplateBinding CustomLabels}"
+                                Fill="{StaticResource GlyphBrush}"
+                                IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                                IsEnabled="False"
+                                IsHitTestVisible="False"
+                                LabelOrientation="{TemplateBinding LabelOrientation}"
+                                LabelPlacement="{TemplateBinding LabelPlacement}"
+                                Maximum="{TemplateBinding Maximum}"
+                                Minimum="{TemplateBinding Minimum}"
+                                Orientation="{TemplateBinding Orientation}"
+                                ShowCustomLabels="{TemplateBinding ShowCustomLabels}"
+                                ShowValueLabels="{TemplateBinding ShowValueLabels}"
+                                TickFrequency="{TemplateBinding TickFrequency}"
+                                TickPlacement="{TemplateBinding TickPlacement}"
+                                ValuePlacement="{TemplateBinding ValuePlacement}"
+                                Visibility="Collapsed" />
+                            <input:TickBar
+                                x:Name="BottomTickBar"
+                                Grid.Row="2"
+                                Grid.ColumnSpan="3"
+                                Margin="0,2,0,0"
+                                VerticalAlignment="Top"
+                                CustomLabels="{TemplateBinding CustomLabels}"
+                                Fill="{StaticResource GlyphBrush}"
+                                IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                                IsEnabled="False"
+                                IsHitTestVisible="False"
+                                LabelOrientation="{TemplateBinding LabelOrientation}"
+                                LabelPlacement="{TemplateBinding LabelPlacement}"
+                                Maximum="{TemplateBinding Maximum}"
+                                Minimum="{TemplateBinding Minimum}"
+                                Orientation="{TemplateBinding Orientation}"
+                                ShowCustomLabels="{TemplateBinding ShowCustomLabels}"
+                                ShowValueLabels="{TemplateBinding ShowValueLabels}"
+                                TickFrequency="{TemplateBinding TickFrequency}"
+                                TickPlacement="{TemplateBinding TickPlacement}"
+                                ValuePlacement="{TemplateBinding ValuePlacement}"
+                                Visibility="Collapsed" />
+                            <Rectangle
+                                x:Name="HorizontalBorder"
+                                Grid.Row="1"
+                                Grid.ColumnSpan="3"
+                                Stroke="{TemplateBinding BorderBrush}"
+                                StrokeThickness="{TemplateBinding BorderThickness}" />
+                            <Thumb
+                                x:Name="HorizontalRangeStartThumb"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Width="10"
+                                Height="10"
+                                Background="{DynamicResource BackgroundBrush}"
+                                DataContext="{TemplateBinding Value}"
+                                Style="{StaticResource SliderThumbStyle}"
+                                Visibility="Collapsed" />
+                            <Thumb
+                                x:Name="HorizontalRangeEndThumb"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Width="10"
+                                Height="10"
+                                Background="{DynamicResource BackgroundBrush}"
+                                DataContext="{TemplateBinding Value}"
+                                Style="{StaticResource SliderThumbStyle}" />
+                            <Rectangle
+                                x:Name="FocusVisualWhiteHorizontal"
+                                Grid.RowSpan="3"
+                                Grid.ColumnSpan="3"
+                                IsHitTestVisible="False"
+                                Opacity="0"
+                                StrokeDashArray="1,1"
+                                StrokeDashOffset="1.5"
+                                StrokeEndLineCap="Square" />
+                            <Rectangle
+                                x:Name="FocusVisualBlackHorizontal"
+                                Grid.RowSpan="3"
+                                Grid.ColumnSpan="3"
+                                IsHitTestVisible="False"
+                                Opacity="0"
+                                StrokeDashArray="1,1"
+                                StrokeDashOffset="0.5"
+                                StrokeEndLineCap="Square" />
+                        </Grid>
+                        <Grid
+                            x:Name="VerticalTemplate"
+                            Background="Transparent"
+                            Visibility="Collapsed">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Rectangle
+                                x:Name="VerticalTrackRect"
+                                Grid.RowSpan="3"
+                                Grid.Column="1"
+                                Fill="{StaticResource ContentBackgroundBrush}" />
+                            <Rectangle
+                                x:Name="VerticalDecreaseRect"
+                                Grid.RowSpan="3"
+                                Grid.Column="1"
+                                Fill="{StaticResource ActiveBackgroundBrush}" />
+                            <input:TickBar
+                                x:Name="LeftTickBar"
+                                Grid.RowSpan="3"
+                                Margin="0,0,2,0"
+                                HorizontalAlignment="Right"
+                                CustomLabels="{TemplateBinding CustomLabels}"
+                                Fill="{StaticResource GlyphBrush}"
+                                IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                                IsEnabled="False"
+                                IsHitTestVisible="False"
+                                LabelOrientation="{TemplateBinding LabelOrientation}"
+                                LabelPlacement="{TemplateBinding LabelPlacement}"
+                                Maximum="{TemplateBinding Maximum}"
+                                Minimum="{TemplateBinding Minimum}"
+                                Orientation="{TemplateBinding Orientation}"
+                                ShowCustomLabels="{TemplateBinding ShowCustomLabels}"
+                                ShowValueLabels="{TemplateBinding ShowValueLabels}"
+                                TickFrequency="{TemplateBinding TickFrequency}"
+                                TickPlacement="{TemplateBinding TickPlacement}"
+                                ValuePlacement="{TemplateBinding ValuePlacement}"
+                                Visibility="Collapsed" />
+                            <input:TickBar
+                                x:Name="VerticalInlineTickBar"
+                                Grid.RowSpan="3"
+                                Grid.Column="1"
+                                CustomLabels="{TemplateBinding CustomLabels}"
+                                Fill="{StaticResource GlyphBrush}"
+                                IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                                IsEnabled="False"
+                                IsHitTestVisible="False"
+                                LabelOrientation="{TemplateBinding LabelOrientation}"
+                                LabelPlacement="{TemplateBinding LabelPlacement}"
+                                Maximum="{TemplateBinding Maximum}"
+                                Minimum="{TemplateBinding Minimum}"
+                                Orientation="{TemplateBinding Orientation}"
+                                ShowCustomLabels="{TemplateBinding ShowCustomLabels}"
+                                ShowValueLabels="{TemplateBinding ShowValueLabels}"
+                                TickFrequency="{TemplateBinding TickFrequency}"
+                                TickPlacement="{TemplateBinding TickPlacement}"
+                                ValuePlacement="{TemplateBinding ValuePlacement}"
+                                Visibility="Collapsed" />
+                            <input:TickBar
+                                x:Name="RightTickBar"
+                                Grid.RowSpan="3"
+                                Grid.Column="2"
+                                Margin="2,0,0,0"
+                                HorizontalAlignment="Left"
+                                CustomLabels="{TemplateBinding CustomLabels}"
+                                Fill="{StaticResource GlyphBrush}"
+                                IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                                IsEnabled="False"
+                                IsHitTestVisible="False"
+                                LabelOrientation="{TemplateBinding LabelOrientation}"
+                                LabelPlacement="{TemplateBinding LabelPlacement}"
+                                Maximum="{TemplateBinding Maximum}"
+                                Minimum="{TemplateBinding Minimum}"
+                                Orientation="{TemplateBinding Orientation}"
+                                ShowCustomLabels="{TemplateBinding ShowCustomLabels}"
+                                ShowValueLabels="{TemplateBinding ShowValueLabels}"
+                                TickFrequency="{TemplateBinding TickFrequency}"
+                                TickPlacement="{TemplateBinding TickPlacement}"
+                                ValuePlacement="{TemplateBinding ValuePlacement}"
+                                Visibility="Collapsed" />
+                            <Rectangle
+                                x:Name="VerticalBorder"
+                                Grid.RowSpan="3"
+                                Grid.Column="1"
+                                Stroke="{TemplateBinding BorderBrush}"
+                                StrokeThickness="{TemplateBinding BorderThickness}" />
+                            <Thumb
+                                x:Name="VerticalRangeStartThumb"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Width="10"
+                                Height="10"
+                                Background="{DynamicResource BackgroundBrush}"
+                                DataContext="{TemplateBinding Value}"
+                                Style="{StaticResource SliderThumbStyle}"
+                                Visibility="Collapsed" />
+                            <Thumb
+                                x:Name="VerticalRangeEndThumb"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Width="10"
+                                Height="10"
+                                Background="{DynamicResource BackgroundBrush}"
+                                DataContext="{TemplateBinding Value}"
+                                Style="{StaticResource SliderThumbStyle}" />
+                            <Rectangle
+                                x:Name="FocusVisualWhiteVertical"
+                                Grid.RowSpan="3"
+                                Grid.ColumnSpan="3"
+                                IsHitTestVisible="False"
+                                Opacity="0"
+                                Stroke="{StaticResource GlyphBrush}"
+                                StrokeDashArray="1,1"
+                                StrokeDashOffset="1.5"
+                                StrokeEndLineCap="Square" />
+                            <Rectangle
+                                x:Name="FocusVisualBlackVertical"
+                                Grid.RowSpan="3"
+                                Grid.ColumnSpan="3"
+                                IsHitTestVisible="False"
+                                Opacity="0"
+                                Stroke="{StaticResource GlyphBrush}"
+                                StrokeDashArray="1,1"
+                                StrokeDashOffset="0.5"
+                                StrokeEndLineCap="Square" />
+                        </Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ColorAnimation
+                                            Storyboard.TargetName="HorizontalDecreaseRect"
+                                            Storyboard.TargetProperty="Fill.Color"
+                                            To="{TemplateBinding Foreground}" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="HorizontalTrackRect"
+                                            Storyboard.TargetProperty="Fill.Color"
+                                            To="{TemplateBinding Background}" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="VerticalDecreaseRect"
+                                            Storyboard.TargetProperty="Fill.Color"
+                                            To="{TemplateBinding Foreground}" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="VerticalTrackRect"
+                                            Storyboard.TargetProperty="Fill.Color"
+                                            To="{TemplateBinding Background}" />
+
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <ColorAnimation
+                                            Storyboard.TargetName="HorizontalDecreaseRect"
+                                            Storyboard.TargetProperty="Fill.Color"
+                                            To="{TemplateBinding Foreground}" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="HorizontalTrackRect"
+                                            Storyboard.TargetProperty="Fill.Color"
+                                            To="{TemplateBinding Background}" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="VerticalDecreaseRect"
+                                            Storyboard.TargetProperty="Fill.Color"
+                                            To="{TemplateBinding Foreground}" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="VerticalTrackRect"
+                                            Storyboard.TargetProperty="Fill.Color"
+                                            To="{TemplateBinding Background}" />
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.5" />
+
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ColorAnimation
+                                            Storyboard.TargetName="HorizontalDecreaseRect"
+                                            Storyboard.TargetProperty="Fill.Color"
+                                            To="{TemplateBinding Foreground}"
+                                            Duration="0" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="HorizontalTrackRect"
+                                            Storyboard.TargetProperty="Fill.Color"
+                                            To="{TemplateBinding Background}"
+                                            Duration="0" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="VerticalDecreaseRect"
+                                            Storyboard.TargetProperty="Fill.Color"
+                                            To="{TemplateBinding Foreground}"
+                                            Duration="0" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="VerticalTrackRect"
+                                            Storyboard.TargetProperty="Fill.Color"
+                                            To="{TemplateBinding Background}"
+                                            Duration="0" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="HorizontalRangeEndThumb" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource HoverBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="HorizontalRangeStartThumb" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource HoverBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="HorizontalRangeEndThumb" Storyboard.TargetProperty="BorderBrush">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource HoverBorderBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="HorizontalRangeStartThumb" Storyboard.TargetProperty="BorderBrush">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource HoverBorderBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="VerticalRangeEndThumb" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource HoverBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="VerticalRangeStartThumb" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource HoverBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="VerticalRangeEndThumb" Storyboard.TargetProperty="BorderBrush">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource HoverBorderBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="VerticalRangeStartThumb" Storyboard.TargetProperty="BorderBrush">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource HoverBorderBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <!--<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusVisualWhiteHorizontal"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusVisualBlackHorizontal"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusVisualWhiteVertical"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusVisualBlackVertical"/>-->
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+    <Style x:Key="Editors_HeaderStyle" TargetType="sfshared_controls:TransitionContentControl">
+        <Setter Property="Height" Value="{StaticResource TextControlThemeMinHeight}" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Transition">
+            <Setter.Value>
+                <sfshared_controls:FadeTransition />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="DomainUpDownStyle" TargetType="input:SfDomainUpDown">
+        <Setter Property="AccentBrush" Value="{StaticResource ActiveBackgroundBrush}" />
+        <Setter Property="MinWidth" Value="{StaticResource TextControlThemeMinWidth}" />
+        <Setter Property="MinHeight" Value="{StaticResource TextControlThemeMinHeight}" />
+        <Setter Property="Foreground" Value="{StaticResource ContentForegroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource ContentBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ContentBorderBrush}" />
+        <Setter Property="BorderThickness" Value="{StaticResource TextControlBorderThemeThickness}" />
+        <Setter Property="FontFamily" Value="{StaticResource ContentControlThemeFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource ControlContentThemeFontSize}" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
+        <Setter Property="Padding" Value="{StaticResource TextControlThemePadding}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="input:SfDomainUpDown">
+                    <Grid>
+                        <sfshared_controls:SfUpDown
+                            x:Name="PART_UpDown"
+                            Grid.Column="1"
+                            AccentBrush="{Binding AccentBrush, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                            DownCommand="{Binding DecrementCommand, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                            IsTabStop="False"
+                            SpinButtonsAlignment="{Binding SpinButtonsAlignment, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                            Style="{StaticResource UpDownStyle}"
+                            UpCommand="{Binding IncrementCommand, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                            <sfshared_controls:SfUpDown.UpDownContent>
+                                <Grid
+                                    x:Name="InnerGrid"
+                                    MinWidth="{StaticResource TextControlThemeMinWidth}"
+                                    Background="{TemplateBinding Background}">
+                                    <Border
+                                        x:Name="Border"
+                                        Padding="{TemplateBinding Padding}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                        <sfshared_controls:TransitionContentControl
+                                            x:Name="PART_Content"
+                                            Margin="{StaticResource SyncfusionTransitionContentCotnrolThemePadding}"
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            Content="{TemplateBinding Value}"
+                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                            EnableAnimation="{TemplateBinding EnableSpinAnimation}">
+                                            <sfshared_controls:TransitionContentControl.Transition>
+                                                <sfshared_controls:SlideTransition Direction="Up" />
+                                            </sfshared_controls:TransitionContentControl.Transition>
+                                        </sfshared_controls:TransitionContentControl>
+                                    </Border>
+                                </Grid>
+                            </sfshared_controls:SfUpDown.UpDownContent>
+                        </sfshared_controls:SfUpDown>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style BasedOn="{StaticResource DomainUpDownStyle}" TargetType="input:SfDomainUpDown" />
+
+    <!--  Calculator  -->
+
+    <input:MemoryConverter x:Key="MemoryConverter" />
+
+    <Style x:Key="FunctionsPaneStyle" TargetType="input:FunctionsPane">
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="input:FunctionsPane">
+                    <Grid x:Name="PART_Root">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <input:CalculatorButton
+                            x:Name="PART_Button1"
+                            Grid.Column="0"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Content="MC"
+                            Focusable="False"
+                            FontSize="15"
+                            Foreground="{TemplateBinding Foreground}"
+                            Function="MemoryClear"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            x:Name="PART_Button2"
+                            Grid.Column="1"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Content="MR"
+                            Focusable="False"
+                            FontSize="15"
+                            Foreground="{TemplateBinding Foreground}"
+                            Function="MemoryRecall"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            x:Name="PART_Button3"
+                            Grid.Column="2"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Content="MS"
+                            Focusable="False"
+                            FontSize="15"
+                            Foreground="{TemplateBinding Foreground}"
+                            Function="Memory"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            x:Name="PART_Button4"
+                            Grid.Column="3"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Content="M+"
+                            Focusable="False"
+                            FontSize="15"
+                            Foreground="{TemplateBinding Foreground}"
+                            Function="MemoryAdd"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            x:Name="PART_Button5"
+                            Grid.Column="4"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Content="M-"
+                            Focusable="False"
+                            FontSize="15"
+                            Foreground="{TemplateBinding Foreground}"
+                            Function="MemorySubract"
+                            IsTabStop="False" />
+
+                        <input:CalculatorButton
+                            Key="Back"
+                            x:Name="PART_Button6"
+                            Grid.Row="1"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Focusable="False"
+                            FontSize="15"
+                            Function="Back"
+                            IsTabStop="False">
+                            <input:CalculatorButton.Content>
+                                <Path
+                                    Width="20"
+                                    Height="20"
+                                    Margin="0,0,0,0"
+                                    Data="M55.59375,47.9995803833008L69.890625,62.2964553833008 84.09375,48.0933303833008 89.953125,53.9527053833008 75.703125,68.1558303833008 89.625,82.0777053833008 83.8125,87.8902053833008 69.890625,73.9683303833008 55.640625,88.2652053833008 49.78125,82.3589553833008 63.609375,67.9214553833008 49.734375,53.8589553833008 55.59375,47.9995803833008z M31.265625,40.0308303833008L30.28125,40.5933303833008 29.25,41.4370803833008 2.43749928474426,68.1558303833008 29.203125,94.8277053833008 30.28125,95.6948928833008 31.265625,96.2808303833008 119.34375,96.2808303833008 119.34375,40.0308303833008 31.265625,40.0308303833008z M30.984375,32.5308303833008L121.546875,32.5308303833008 123.5859375,32.9527053833008 125.2734375,34.1245803833008 126.421875,35.8589553833008 126.84375,37.9683303833008 126.84375,98.3433303833008 126.421875,100.452705383301 125.2734375,102.187080383301 123.5859375,103.358955383301 121.546875,103.780830383301 30.984375,103.780830383301 28.359375,103.218330383301 26.109375,101.952705383301 23.90625,100.124580383301 -8.203125,68.1558303833008 23.90625,36.1870803833008 26.109375,34.3589553833008 28.359375,33.1167678833008 30.984375,32.5308303833008z"
+                                    Fill="{TemplateBinding Foreground}"
+                                    RenderTransformOrigin="0.5,0.5"
+                                    Stretch="Uniform">
+                                    <Path.RenderTransform>
+                                        <TransformGroup>
+                                            <TransformGroup.Children>
+                                                <RotateTransform Angle="0" />
+                                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                                            </TransformGroup.Children>
+                                        </TransformGroup>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </input:CalculatorButton.Content>
+                        </input:CalculatorButton>
+                        <input:CalculatorButton
+                            x:Name="PART_Button7"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Content="C"
+                            Focusable="False"
+                            FontSize="15"
+                            Foreground="{TemplateBinding Foreground}"
+                            Function="Clear"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            x:Name="PART_Button8"
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Content="CE"
+                            Focusable="False"
+                            FontSize="15"
+                            Foreground="{TemplateBinding Foreground}"
+                            Function="ClearEntry"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            x:Name="PART_Button9"
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Content="±"
+                            Focusable="False"
+                            FontSize="15"
+                            Foreground="{TemplateBinding Foreground}"
+                            Function="Sign"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            x:Name="PART_Button10"
+                            Grid.Row="1"
+                            Grid.Column="4"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Content="√"
+                            Focusable="False"
+                            FontSize="15"
+                            Foreground="{TemplateBinding Foreground}"
+                            Function="SquareRoot"
+                            IsTabStop="False" />
+
+                        <input:CalculatorButton
+                            x:Name="PART_Button11"
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Content="/"
+                            Focusable="False"
+                            FontSize="15"
+                            Foreground="{TemplateBinding Foreground}"
+                            Function="Divide"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            x:Name="PART_Button12"
+                            Grid.Row="3"
+                            Grid.Column="3"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Focusable="False"
+                            FontSize="15"
+                            Function="Multiply"
+                            IsTabStop="False">
+                            <input:CalculatorButton.Content>
+                                <Path
+                                    Width="15"
+                                    Height="15"
+                                    Margin="0,0,0,0"
+                                    Data="M28.03125,48.5152053833008L48,68.5308303833008 67.96875,48.5152053833008 75.515625,56.1089553833008 55.546875,76.0777053833008 75.515625,96.0464553833008 67.96875,103.593330383301 48,83.6245803833008 28.03125,103.593330383301 20.484375,96.0464553833008 40.453125,76.0777053833008 20.484375,56.1089553833008 28.03125,48.5152053833008z"
+                                    Fill="{TemplateBinding Foreground}"
+                                    RenderTransformOrigin="0.5,0.5"
+                                    Stretch="Uniform">
+                                    <Path.RenderTransform>
+                                        <TransformGroup>
+                                            <TransformGroup.Children>
+                                                <RotateTransform Angle="0" />
+                                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                                            </TransformGroup.Children>
+                                        </TransformGroup>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </input:CalculatorButton.Content>
+                        </input:CalculatorButton>
+                        <input:CalculatorButton
+                            x:Name="PART_Button13"
+                            Grid.Row="4"
+                            Grid.Column="3"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Focusable="False"
+                            FontSize="15"
+                            Function="Subract"
+                            IsTabStop="False">
+                            <input:CalculatorButton.Content>
+                                <Path
+                                    Width="15"
+                                    Height="15"
+                                    Margin="0,0,0,0"
+                                    Data="M13.078125,59.8120803833008L82.96875,59.8120803833008 82.96875,75.9370803833008 13.078125,75.9370803833008 13.078125,59.8120803833008z"
+                                    Fill="{TemplateBinding Foreground}"
+                                    RenderTransformOrigin="0.5,0.5"
+                                    Stretch="Uniform">
+                                    <Path.RenderTransform>
+                                        <TransformGroup>
+                                            <TransformGroup.Children>
+                                                <RotateTransform Angle="0" />
+                                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                                            </TransformGroup.Children>
+                                        </TransformGroup>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </input:CalculatorButton.Content>
+                        </input:CalculatorButton>
+                        <input:CalculatorButton
+                            x:Name="PART_Button14"
+                            Grid.Row="5"
+                            Grid.Column="3"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Focusable="False"
+                            FontSize="15"
+                            Function="Add"
+                            IsTabStop="False">
+                            <input:CalculatorButton.Content>
+                                <Path
+                                    Width="15"
+                                    Height="15"
+                                    Margin="0,0,0,0"
+                                    Data="M39.9375,32.9527053833008L56.0625,32.9527053833008 56.0625,59.8120803833008 82.96875,59.8120803833008 82.96875,75.9370803833008 56.0625,75.9370803833008 56.0625,102.796455383301 39.9375,102.796455383301 39.9375,75.9370803833008 13.078125,75.9370803833008 13.078125,59.8120803833008 39.9375,59.8120803833008 39.9375,32.9527053833008z"
+                                    Fill="{TemplateBinding Foreground}"
+                                    RenderTransformOrigin="0.5,0.5"
+                                    Stretch="Uniform">
+                                    <Path.RenderTransform>
+                                        <TransformGroup>
+                                            <TransformGroup.Children>
+                                                <RotateTransform Angle="0" />
+                                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                                            </TransformGroup.Children>
+                                        </TransformGroup>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </input:CalculatorButton.Content>
+                        </input:CalculatorButton>
+                        <input:CalculatorButton
+                            x:Name="PART_Button15"
+                            Grid.Row="2"
+                            Grid.Column="4"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Content="%"
+                            Focusable="False"
+                            FontSize="15"
+                            Foreground="{TemplateBinding Foreground}"
+                            Function="Percentage"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            x:Name="PART_Button16"
+                            Grid.Row="3"
+                            Grid.Column="4"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Content="1/x"
+                            FlowDirection="LeftToRight"
+                            Focusable="False"
+                            FontSize="15"
+                            Foreground="{TemplateBinding Foreground}"
+                            Function="Reciproc"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            x:Name="PART_Button17"
+                            Grid.Row="4"
+                            Grid.RowSpan="2"
+                            Grid.Column="4"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BrushOpacity="0.3"
+                            Content="="
+                            Focusable="False"
+                            FontSize="35"
+                            Foreground="{TemplateBinding Foreground}"
+                            Function="Return"
+                            IsTabStop="False" />
+                        <input:InputPane
+                            x:Name="PART_Input"
+                            Grid.Row="2"
+                            Grid.RowSpan="5"
+                            Grid.ColumnSpan="3"
+                            Focusable="False"
+                            IsTabStop="False" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="input:SfCalculator">
+        <Setter Property="FunctionsPaneStyle" Value="{StaticResource FunctionsPaneStyle}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="input:SfCalculator">
+                    <Border
+                        x:Name="Chrome"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <input:DisplayPane
+                                x:Name="PART_Display"
+                                Grid.ColumnSpan="2"
+                                Margin="3"
+                                DisplayText="{Binding DisplayText, RelativeSource={RelativeSource TemplatedParent}}"
+                                Expression="{Binding Expression, RelativeSource={RelativeSource TemplatedParent}}"
+                                IsTabStop="False"
+                                Memory="{Binding Memory, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <input:FunctionsPane
+                                x:Name="PART_Functions"
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                IsTabStop="False"
+                                Style="{TemplateBinding FunctionsPaneStyle}" />
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Chrome" Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="input:InputPane">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="input:InputPane">
+                    <Grid x:Name="PART_Root">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <input:CalculatorButton
+                            Key="NumPad7"
+                            x:Name="PART_Digit7"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Content="7"
+                            Focusable="False"
+                            Foreground="{TemplateBinding Foreground}"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            Key="NumPad8"
+                            x:Name="PART_Digit8"
+                            Grid.Column="1"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Content="8"
+                            Focusable="False"
+                            Foreground="{TemplateBinding Foreground}"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            Key="NumPad9"
+                            x:Name="PART_Digit9"
+                            Grid.Column="2"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Content="9"
+                            Focusable="False"
+                            Foreground="{TemplateBinding Foreground}"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            Key="NumPad4"
+                            x:Name="PART_Digit4"
+                            Grid.Row="1"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Content="4"
+                            Focusable="False"
+                            Foreground="{TemplateBinding Foreground}"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            Key="NumPad5"
+                            x:Name="PART_Digit5"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Content="5"
+                            Focusable="False"
+                            Foreground="{TemplateBinding Foreground}"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            Key="NumPad6"
+                            x:Name="PART_Digit6"
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Content="6"
+                            Focusable="False"
+                            Foreground="{TemplateBinding Foreground}"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            Key="NumPad1"
+                            x:Name="PART_Digit1"
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Content="1"
+                            Focusable="False"
+                            Foreground="{TemplateBinding Foreground}"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            Key="NumPad2"
+                            x:Name="PART_Digit2"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Content="2"
+                            Focusable="False"
+                            Foreground="{TemplateBinding Foreground}"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            Key="NumPad3"
+                            x:Name="PART_Digit3"
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Content="3"
+                            Focusable="False"
+                            Foreground="{TemplateBinding Foreground}"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            Key="NumPad0"
+                            x:Name="PART_Digit0"
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Content="0"
+                            Focusable="False"
+                            Foreground="{TemplateBinding Foreground}"
+                            IsTabStop="False" />
+                        <input:CalculatorButton
+                            Key="Decimal"
+                            x:Name="PART_Decimal"
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Content="."
+                            Focusable="False"
+                            Foreground="{TemplateBinding Foreground}"
+                            IsTabStop="False" />
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="input:DisplayPane">
+        <Setter Property="BorderBrush" Value="{StaticResource ContentBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Background" Value="{StaticResource ContentBackgroundBrush}" />
+        <Setter Property="Height" Value="70" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="input:DisplayPane">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Border
+                            Grid.RowSpan="2"
+                            Grid.ColumnSpan="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" />
+                        <TextBlock
+                            Grid.ColumnSpan="2"
+                            Margin="8"
+                            HorizontalAlignment="Right"
+                            FontSize="14"
+                            FontWeight="ExtraLight"
+                            Text="{TemplateBinding Expression}"
+                            TextAlignment="Right"
+                            TextWrapping="Wrap" />
+                        <Viewbox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom">
+                            <TextBlock
+                                Margin="8"
+                                VerticalAlignment="Center"
+                                FontSize="50"
+                                FontWeight="ExtraLight"
+                                Text="{Binding DisplayText, RelativeSource={RelativeSource TemplatedParent}}" />
+                        </Viewbox>
+                        <TextBlock
+                            x:Name="PART_MemorySign"
+                            Grid.Row="1"
+                            Margin="8"
+                            VerticalAlignment="Bottom"
+                            Text="M"
+                            Visibility="{Binding Path=Memory, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource MemoryConverter}}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MaskedEditStyle" TargetType="input:SfMaskedEdit">
+        <Setter Property="Foreground" Value="{StaticResource ContentForegroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource ContentBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ContentBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="AllowDrop" Value="true" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst" />
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type input:SfMaskedEdit}">
+                    <Grid>
+                        <Border
+                            x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="true">
+                            <Grid>
+                                <ScrollViewer
+                                    x:Name="PART_ContentHost"
+                                    VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                <ContentControl
+                                    x:Name="PART_Watermark"
+                                    Grid.Row="0"
+                                    Margin="2,0,0,0"
+                                    Padding="{TemplateBinding Padding}"
+                                    VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    Background="{TemplateBinding Background}"
+                                    Content="{TemplateBinding Watermark}"
+                                    ContentTemplate="{TemplateBinding WatermarkTemplate}"
+                                    ContentTemplateSelector="{TemplateBinding WatermarkTemplateSelector}"
+                                    FontFamily="{TemplateBinding FontFamily}"
+                                    FontSize="{TemplateBinding FontSize}"
+                                    FontStretch="{TemplateBinding FontStretch}"
+                                    FontStyle="{TemplateBinding FontStyle}"
+                                    FontWeight="{TemplateBinding FontWeight}"
+                                    Foreground="{StaticResource ContentSelectionBrush}"
+                                    IsHitTestVisible="False"
+                                    IsTabStop="False"
+                                    Opacity="0.5"
+                                    Visibility="{TemplateBinding Visibility}" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                        <Trigger Property="HasError" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource ErrorBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                            <Setter Property="Foreground" Value="{StaticResource HoverForegroundBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style BasedOn="{StaticResource MaskedEditStyle}" TargetType="input:SfMaskedEdit" />
+
+</ResourceDictionary>

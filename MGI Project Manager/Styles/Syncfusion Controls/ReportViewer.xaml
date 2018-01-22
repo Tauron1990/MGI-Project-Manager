@@ -1,0 +1,2215 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"  
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:tools_shared="clr-namespace:Syncfusion.Windows.Tools;assembly=Syncfusion.Shared.Wpf"
+    xmlns:report_utils="clr-namespace:Syncfusion.Windows.Reports.Viewer.Utils;assembly=Syncfusion.ReportViewer.WPF"
+    xmlns:report_properties="clr-namespace:Syncfusion.ReportViewer.WPF.Properties;assembly=Syncfusion.ReportViewer.WPF"
+    xmlns:reports="clr-namespace:Syncfusion.Windows.Reports.Viewer;assembly=Syncfusion.ReportViewer.WPF">
+
+    <ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary.MergedDictionaries>
+
+<LinearGradientBrush x:Key="BackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FFEEEEF2" Offset="0" /><GradientStop Color="#FFEEEEF2" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="BorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="ForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="GlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="HeaderBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FFEEEEF2" Offset="0" /><GradientStop Color="#FFEEEEF2" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="HeaderBorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="HeaderForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="HeaderGlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="HoverBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FF7FBCE5" Offset="0" /><GradientStop Color="#FF7FBCE5" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="HoverBorderBrush" Color="#FF7FBCE5" />
+	<SolidColorBrush x:Key="HoverForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="HoverGlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="ActiveBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FF007ACC" Offset="0" /><GradientStop Color="#FF007ACC" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="ActiveBorderBrush" Color="#FF007ACC" />
+	<SolidColorBrush x:Key="ActiveForegroundBrush" Color="#FFFFFFFF" />
+	<SolidColorBrush x:Key="ActiveGlyphBrush" Color="#FFFFFFFF" />
+	<SolidColorBrush x:Key="ContentBackgroundBrush" Color="#FFF5F5F5" />
+	<SolidColorBrush x:Key="ContentBorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="ContentForegroundBrush" Color="#FF1E1E1E" />
+	<SolidColorBrush x:Key="ContentSelectionBrush" Color="#FFA5A5A5" />
+	<SolidColorBrush x:Key="SelectionInActiveBrush" Color="#FF99C9EA" />
+	<SolidColorBrush x:Key="ErrorBrush" Color="#FFFF0000" />
+	<SolidColorBrush x:Key="ActiveLightBackground" Color="#FF99C9EA" />
+	<SolidColorBrush x:Key="ActiveDarkBackground" Color="#FF003D66" />
+	<SolidColorBrush x:Key="ContentAlternativeBackground" Color="#FFDCDCDC" />
+	<SolidColorBrush x:Key="TickColor" Color="#FFBCBCBC" />
+	<SolidColorBrush x:Key="RangeColor1" Color="#FF61A301" />	
+	<SolidColorBrush x:Key="RangeColor2" Color="#FFF2E606" />	
+	<SolidColorBrush x:Key="RangeColor3" Color="#FFFF0000" />
+	<SolidColorBrush x:Key="LightBackgroundBrush" Color="#FFDDDDE5" />
+
+	
+	<Style x:Key="MetroButtonStyle"  TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="MyBackgroundElement" BorderThickness="0" Background="Transparent">
+                        <ContentPresenter x:Name="ButtonContentPresenter" VerticalAlignment="Center" HorizontalAlignment="Center"/>                        
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="MyBackgroundElement" Property="Border.BorderBrush" Value="{StaticResource HoverBorderBrush}"/>
+                            <Setter TargetName="MyBackgroundElement" Property="Background" Value="{StaticResource HoverBackgroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter TargetName="MyBackgroundElement" Property="Border.BorderBrush" Value="{StaticResource BorderBrush}"/>
+                            <Setter TargetName="MyBackgroundElement" Property="Background" Value="{StaticResource BackgroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="MyBackgroundElement" Property="Border.BorderBrush" Value="{StaticResource ActiveBorderBrush}"/>
+                            <Setter TargetName="MyBackgroundElement" Property="Background" Value="{StaticResource ActiveBackgroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="ButtonContentPresenter" Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>	
+
+    <Geometry x:Key="MetroDownArrowGeometry">M 0 0 L 3.5 4 L 7 0 Z</Geometry>
+
+    <ControlTemplate x:Key="MetroToggleButtonStyle" TargetType="ToggleButton">        
+        <Grid FocusVisualStyle="{x:Null}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="ButtonBorder" FocusVisualStyle="{x:Null}" Background="{TemplateBinding Background}" BorderBrush="Transparent" Grid.ColumnSpan="2" CornerRadius="0" BorderThickness="1" />
+            <Path x:Name="ToggleButtonArrow" Grid.Column="1" HorizontalAlignment="Center" Margin="3,1,0,0" VerticalAlignment="Center" Fill="#FF333333" Data="{StaticResource MetroDownArrowGeometry}"/>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition  Property="ToggleButton.IsMouseOver" Value="True"/>
+                    <Condition Property="IsPressed" Value="False"/>
+                </MultiTrigger.Conditions>
+                <Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="{StaticResource HoverBorderBrush}"/>
+                <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource HoverBackgroundBrush}"/>
+                <Setter TargetName="ToggleButtonArrow" Property="Fill" Value="{StaticResource  HoverGlyphBrush}"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition  Property="ToggleButton.IsMouseOver" Value="True"/>
+                    <Condition Property="IsPressed" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="{StaticResource ActiveBorderBrush}"/>
+                <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource ActiveBackgroundBrush}"/>
+                <Setter TargetName="ToggleButtonArrow" Property="Fill" Value="{StaticResource ActiveGlyphBrush}"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition  Property="IsChecked" Value="True"/>
+                    <Condition Property="IsMouseOver" Value="False"/>
+                </MultiTrigger.Conditions>
+                <Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="{StaticResource ActiveBorderBrush}"/>
+                <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource ActiveBackgroundBrush}"/>
+                <Setter TargetName="ToggleButtonArrow" Property="Fill" Value="{StaticResource ActiveGlyphBrush}"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition  Property="IsChecked" Value="False"/>
+                    <Condition Property="IsMouseOver" Value="False"/>
+                </MultiTrigger.Conditions>
+                <Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="{StaticResource BorderBrush}"/>
+                <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource BackgroundBrush}"/>
+                <Setter TargetName="ToggleButtonArrow" Property="Fill" Value="{StaticResource GlyphBrush}"/>
+            </MultiTrigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="ToggleButtonArrow" Property="Opacity" Value="0.5"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+	
+	<ControlTemplate x:Key="MetroZoomToggleButtonStyle" TargetType="ToggleButton">        
+        <Grid FocusVisualStyle="{x:Null}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="ButtonBorder" FocusVisualStyle="{x:Null}" Background="{TemplateBinding Background}" BorderBrush="Transparent" Grid.ColumnSpan="2" CornerRadius="0" BorderThickness="1" >
+                <Border x:Name="splitBorder" FocusVisualStyle="{x:Null}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" HorizontalAlignment="Right" SnapsToDevicePixels="true" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}">
+                    <Path x:Name="ToggleButtonArrow" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="#FF333333" Data="{StaticResource MetroDownArrowGeometry}"/>
+			</Border>
+            </Border>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition  Property="ToggleButton.IsMouseOver" Value="True"/>
+                    <Condition Property="IsPressed" Value="False"/>
+                </MultiTrigger.Conditions>
+                <Setter TargetName="splitBorder" Property="Border.BorderBrush" Value="{StaticResource HoverBorderBrush}"/>
+                <Setter TargetName="splitBorder" Property="Background" Value="{StaticResource HoverBackgroundBrush}"/>
+                <Setter TargetName="ToggleButtonArrow" Property="Fill" Value="{StaticResource  HoverGlyphBrush}"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition  Property="ToggleButton.IsMouseOver" Value="True"/>
+                    <Condition Property="IsPressed" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter TargetName="splitBorder" Property="Border.BorderBrush" Value="{StaticResource ActiveBorderBrush}"/>
+                <Setter TargetName="splitBorder" Property="Background" Value="{StaticResource ActiveBackgroundBrush}"/>
+                <Setter TargetName="ToggleButtonArrow" Property="Fill" Value="{StaticResource ActiveGlyphBrush}"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition  Property="IsChecked" Value="True"/>
+                    <Condition Property="IsMouseOver" Value="False"/>
+                </MultiTrigger.Conditions>
+                <Setter TargetName="splitBorder" Property="Border.BorderBrush" Value="{StaticResource ActiveBorderBrush}"/>
+                <Setter TargetName="splitBorder" Property="Background" Value="{StaticResource ActiveBackgroundBrush}"/>
+                <Setter TargetName="ToggleButtonArrow" Property="Fill" Value="{StaticResource ActiveGlyphBrush}"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition  Property="IsChecked" Value="False"/>
+                    <Condition Property="IsMouseOver" Value="False"/>
+                </MultiTrigger.Conditions>
+                <Setter TargetName="splitBorder" Property="Border.BorderBrush" Value="{StaticResource BorderBrush}"/>
+                <Setter TargetName="splitBorder" Property="Background" Value="{StaticResource BackgroundBrush}"/>
+                <Setter TargetName="ToggleButtonArrow" Property="Fill" Value="{StaticResource GlyphBrush}"/>
+            </MultiTrigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="ToggleButtonArrow" Property="Opacity" Value="0.5"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="MetroItemTemplate" BasedOn="{StaticResource {x:Type ComboBoxItem}}"
+           TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBoxItem">
+                    <Border Name="Border" SnapsToDevicePixels="true" FocusVisualStyle="{x:Null}" BorderThickness="0" Padding="0" Visibility="{Binding Visibility}">
+                        <Grid Name="Panel" Width="60" FocusVisualStyle="{x:Null}" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                 <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="60"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{Binding ExportImage}" Width="Auto" Height="16" HorizontalAlignment="Left" Margin="2,0,0,0" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Padding="8,3,3,3" FocusVisualStyle="{x:Null}" Text="{Binding Export}" TextAlignment="Left" FontSize="14"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsHighlighted" Value="true">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                            <Setter TargetName="Panel" Property="Background" Value="{StaticResource ActiveBackgroundBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource ActiveForegroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource HoverBackgroundBrush}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource HoverForegroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MetroExportComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid FocusVisualStyle="{x:Null}">
+                        <ToggleButton x:Name="MetroTogg" Background="Transparent" Focusable="False" IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}" Template="{StaticResource MetroToggleButtonStyle}"/>
+                        <Path Name="MetroPath" Data="M12.720993,5.1740319 L15.998993,8.3070474 12.720993,11.440032 12.720993,9.2730036 7.9499941,9.2730036 7.9499941,7.3410103 12.720993,7.3410103 z M0,0 L11.077997,0 11.077997,5.8950018 9.4339972,5.8950018 9.4339972,1.6120007 1.6429996,1.6120007 1.6429996,13.160004 9.4339972,13.160004 9.4339972,10.646003 11.077997,10.646003 11.077997,14.771004 0,14.771004 z" Fill="{StaticResource GlyphBrush}" Margin="4,0,0,0" HorizontalAlignment="Left" Height="16" Stretch="Fill" VerticalAlignment="Center" Width="16">                           
+                            </Path>
+                        <Popup Name="DropDownPopUp" FocusVisualStyle="{x:Null}" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" Focusable="False" PopupAnimation="Slide">
+                            <Grid SnapsToDevicePixels="True" FocusVisualStyle="{x:Null}" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <Border BorderBrush="White" Background="White" FocusVisualStyle="{x:Null}" BorderThickness="1,1,1,1"/>
+                                <ScrollViewer BorderBrush="Transparent" FocusVisualStyle="{x:Null}" Padding="1" BorderThickness="0">
+                                    <ItemsPresenter x:Name="ItemsPresenter" FocusVisualStyle="{x:Null}" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Width="60"/>
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="MetroPath" Property="Path.Fill" Value="{StaticResource GlyphBrush}"></Setter>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="MetroPath" Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding IsPressed, ElementName=MetroTogg}" Value="True">
+                            <Setter TargetName="MetroPath" Property="Fill" Value="{StaticResource ActiveGlyphBrush}"/>
+                        </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsPressed, ElementName=MetroTogg}" Value="True"/>
+                                <Condition Binding="{Binding IsChecked, ElementName=MetroTogg}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="MetroPath" Property="Fill" Value="{StaticResource ActiveGlyphBrush}"/>
+                        </MultiDataTrigger>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=MetroTogg}" Value="True">
+                            <Setter TargetName="MetroPath" Property="Fill" Value="{StaticResource ActiveGlyphBrush}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsMouseOver, ElementName=MetroTogg}" Value="True">
+                            <Setter TargetName="MetroPath" Property="Fill" Value="{StaticResource HoverGlyphBrush}"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>                
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MetroZoomComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <ToggleButton Background="{StaticResource BackgroundBrush}" Foreground="{StaticResource ForegroundBrush}"  Focusable="False" IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}" Template="{StaticResource MetroZoomToggleButtonStyle}"/>
+                        <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"/>
+                        <ContentPresenter Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="3,3,23,3" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                        <Popup Name="DropDownPopUp" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" Focusable="False" PopupAnimation="Slide">
+                            <Grid SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}" Background="{StaticResource BackgroundBrush}">
+                                <Border BorderBrush="{StaticResource ContentBorderBrush}" BorderThickness="1,0,1,1"/>
+                                <ScrollViewer BorderBrush="{StaticResource ContentBorderBrush}" Padding="1" BorderThickness="0">
+                                    <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Width="68"/>
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--ParameterTextBox-->
+    <Style x:Key="PART_ParamTextBox" TargetType="TextBox">
+        <Setter Property="Width" Value="160"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5,0,20,0"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <!--ParameterComboBox-->
+    <Style x:Key="PART_ParamComboBox" TargetType="ComboBox">
+        <Setter Property="Width" Value="160"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Padding" Value="5,0,0,0"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="5,0,20,0"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <!--<Setter Property="Template">          
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid FocusVisualStyle="{x:Null}">
+                        <ToggleButton Background="{StaticResource BackgroundBrush}" FocusVisualStyle="{x:Null}" Foreground="{StaticResource ForegroundBrush}" Focusable="False" IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}" Template="{StaticResource MetroZoomToggleButtonStyle}"/>
+                        <Border BorderBrush="{StaticResource BorderBrush}" FocusVisualStyle="{x:Null}" Height="23" Width="142" Margin="-18,0,0,0" BorderThickness="1,1,0,1">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource HoverBackgroundBrush}"></Setter>
+                                            <Setter Property="BorderBrush" Value="{StaticResource HoverBorderBrush}"></Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                        <ContentPresenter Name="ContentSite" FocusVisualStyle="{x:Null}" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="3,3,23,3" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                        <Popup Name="DropDownPopUp" FocusVisualStyle="{x:Null}" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" Focusable="False" PopupAnimation="Slide">
+                            <Grid SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}" Background="{StaticResource BackgroundBrush}">
+                                <Border BorderBrush="{StaticResource BorderBrush}" FocusVisualStyle="{x:Null}" BorderThickness="1,0,1,1">
+                                    <ScrollViewer BorderBrush="{StaticResource BorderBrush}" Padding="1" FocusVisualStyle="{x:Null}" BorderThickness="0">
+                                        <ItemsPresenter x:Name="BlendItemsPresenter" FocusVisualStyle="{x:Null}" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    </ScrollViewer>
+                                </Border>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource HoverBackgroundBrush}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource HoverBorderBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource HoverForegroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>-->
+    </Style>
+
+    <!--ParameterTextBlock-->
+    <Style x:Key="PART_ParamTextBlock" TargetType="TextBlock">
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="10,0,5,0"/>
+        <Setter Property="MinWidth" Value="100"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+
+    <!--ParameterCheckBox-->
+    <Style x:Key="PART_ParamCheckBox" TargetType="CheckBox">
+        <Setter Property="MinWidth" Value="100"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5,0,20,0"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <!--ParameterRadioButton-->
+    <Style x:Key="PART_ParamRadioButton" TargetType="RadioButton">
+        <Setter Property="MinWidth" Value="70"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5,0,5,0"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <!--ParameterDateTime--><!--
+    <Style x:Key="PART_ParamDateTime" TargetType="shared:DateTimeEdit" BasedOn="{StaticResource {x:Type shared:DateTimeEdit}}">
+        <Setter Property="MinWidth" Value="150"/>
+        <Setter Property="Height" Value="22"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>-->
+
+    <!--Print Lauout-->
+    <DrawingImage x:Key="MetroPrintLayoutX">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource GlyphBrush}" Geometry="M2.0000001,12 L11,12 11,13 2.0000001,13 z M2.0000001,9.0000002 L11,9.0000002 11,10 2.0000001,10 z M2.0000001,5.9999995 L11,5.9999995 11,6.9999995 2.0000001,6.9999995 z M2.0000001,3.0000002 L11,3.0000002 11,4.0000001 2.0000001,4.0000001 z M1.0000001,1 L1.0000001,15 12,15 12,1 z M0,0 L13,0 13,16 0,16 z" />
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroPrintLayoutXHover">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource  HoverGlyphBrush}" Geometry="M2.0000001,12 L11,12 11,13 2.0000001,13 z M2.0000001,9.0000002 L11,9.0000002 11,10 2.0000001,10 z M2.0000001,5.9999995 L11,5.9999995 11,6.9999995 2.0000001,6.9999995 z M2.0000001,3.0000002 L11,3.0000002 11,4.0000001 2.0000001,4.0000001 z M1.0000001,1 L1.0000001,15 12,15 12,1 z M0,0 L13,0 13,16 0,16 z"/>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroPrintLayoutXActive">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource ActiveGlyphBrush}" Geometry="M2.0000001,12 L11,12 11,13 2.0000001,13 z M2.0000001,9.0000002 L11,9.0000002 11,10 2.0000001,10 z M2.0000001,5.9999995 L11,5.9999995 11,6.9999995 2.0000001,6.9999995 z M2.0000001,3.0000002 L11,3.0000002 11,4.0000001 2.0000001,4.0000001 z M1.0000001,1 L1.0000001,15 12,15 12,1 z M0,0 L13,0 13,16 0,16 z"/>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <!--Document Map-->
+    <DrawingImage x:Key="MetroDocumentMap">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource GlyphBrush}" Geometry="M1.9989994,13 L5,13 5,14 1.9989994,14 z M1.9989994,10.998999 L5,10.998999 5,12 1.9989994,12 z M1.9989994,8.9989994 L5,8.9989994 5,9.9989991 1.9989994,9.9989991 z M1.9989994,6.9989994 L5,6.9989994 5,7.9989994 1.9989994,7.9989994 z M1.9990018,4.9999995 L5.0000019,4.9999995 5.0000019,5.9999995 1.9990018,5.9999995 z M7.0000002,3.9999995 L7.0000002,14.999998 15,14.999998 15,3.9999995 z M1,3.9999995 L1,14.999998 6.0000002,14.999998 6.0000002,3.9999995 z M0,0 L16,0 16,3.9999995 16,15.999998 0,15.999998 0,3.9999995 z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroDocumentMapHover">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource HoverGlyphBrush}" Geometry="M1.9989994,13 L5,13 5,14 1.9989994,14 z M1.9989994,10.998999 L5,10.998999 5,12 1.9989994,12 z M1.9989994,8.9989994 L5,8.9989994 5,9.9989991 1.9989994,9.9989991 z M1.9989994,6.9989994 L5,6.9989994 5,7.9989994 1.9989994,7.9989994 z M1.9990018,4.9999995 L5.0000019,4.9999995 5.0000019,5.9999995 1.9990018,5.9999995 z M7.0000002,3.9999995 L7.0000002,14.999998 15,14.999998 15,3.9999995 z M1,3.9999995 L1,14.999998 6.0000002,14.999998 6.0000002,3.9999995 z M0,0 L16,0 16,3.9999995 16,15.999998 0,15.999998 0,3.9999995 z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroDocumentMapActive">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource ActiveGlyphBrush}" Geometry="M1.9989994,13 L5,13 5,14 1.9989994,14 z M1.9989994,10.998999 L5,10.998999 5,12 1.9989994,12 z M1.9989994,8.9989994 L5,8.9989994 5,9.9989991 1.9989994,9.9989991 z M1.9989994,6.9989994 L5,6.9989994 5,7.9989994 1.9989994,7.9989994 z M1.9990018,4.9999995 L5.0000019,4.9999995 5.0000019,5.9999995 1.9990018,5.9999995 z M7.0000002,3.9999995 L7.0000002,14.999998 15,14.999998 15,3.9999995 z M1,3.9999995 L1,14.999998 6.0000002,14.999998 6.0000002,3.9999995 z M0,0 L16,0 16,3.9999995 16,15.999998 0,15.999998 0,3.9999995 z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <!--Page Setup-->
+    <DrawingImage x:Key="MetroPageSetup">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource  GlyphBrush}" Geometry="M9.4249976,9.2439945 C8.3619988,9.2439945 7.4969991,10.108994 7.4969991,11.171994 7.4969991,12.234993 8.3619988,13.098992 9.4249976,13.098992 10.487997,13.098992 11.352997,12.234993 11.352997,11.171994 11.352997,10.108994 10.487997,9.2439945 9.4249976,9.2439945 z M8.8799985,6.3429964 L9.9699977,6.3429964 C10.096998,6.3429964 10.199997,6.4469965 10.199997,6.5729964 L10.199997,7.7949956 C10.578997,7.8819954 10.935997,8.0299957 11.264997,8.2369955 L12.128996,7.3719957 C12.171996,7.3289959 12.230996,7.3049958 12.291996,7.3049958 12.352996,7.3049958 12.410996,7.3289959 12.453996,7.3719957 L13.224996,8.1429956 C13.313996,8.2319953 13.313996,8.3779953 13.224996,8.4679954 L12.360996,9.3319948 C12.567996,9.6609943 12.715996,10.017995 12.801996,10.396994 L14.022995,10.396994 C14.149995,10.396994 14.252995,10.499994 14.252995,10.626994 L14.252995,11.716993 C14.252995,11.842994 14.149995,11.945993 14.022995,11.945993 L12.801996,11.945993 C12.715996,12.325993 12.567996,12.681992 12.360996,13.010993 L13.224996,13.874992 C13.267995,13.917992 13.291995,13.976992 13.291995,14.037992 13.291995,14.098992 13.267995,14.157992 13.224996,14.200991 L12.453996,14.970991 C12.408996,15.015991 12.350996,15.037991 12.291996,15.037991 12.232996,15.037991 12.173996,15.015991 12.128996,14.970991 L11.264997,14.106992 C10.936997,14.313991 10.579997,14.461992 10.199997,14.548992 L10.199997,15.769991 C10.199997,15.895991 10.096998,15.998991 9.9699977,15.998991 L8.8799985,15.998991 C8.7539981,15.998991 8.6509984,15.895991 8.6509984,15.769991 L8.6509984,14.548992 C8.2709983,14.461992 7.9139989,14.313991 7.5849989,14.106992 L6.7219994,14.970991 C6.6789997,15.012992 6.6199997,15.037991 6.5589993,15.037991 6.4979995,15.037991 6.4389995,15.012992 6.3969996,14.970991 L5.6260002,14.200991 C5.537,14.110992 5.537,13.964992 5.6260002,13.874992 L6.4899996,13.010993 C6.2829998,12.682993 6.135,12.325993 6.0479997,11.945993 L4.8270004,11.945993 C4.7000006,11.945993 4.5970009,11.842994 4.5970009,11.716993 L4.5970009,10.626994 C4.5970009,10.499994 4.7000006,10.396994 4.8270004,10.396994 L6.0490001,10.396994 C6.135,10.017995 6.2829998,9.6609943 6.4899996,9.3319948 L5.6260002,8.4679954 C5.583,8.4249952 5.5590003,8.3669956 5.5590003,8.3049953 5.5590003,8.2439954 5.583,8.1859958 5.6260002,8.1429956 L6.3969996,7.3719957 C6.4409998,7.327996 6.4999998,7.3049958 6.5589993,7.3049958 6.6179994,7.3049958 6.6759994,7.327996 6.7219994,7.3719957 L7.5859988,8.2369955 C7.9139989,8.0299957 8.2709983,7.8819954 8.6509984,7.7949956 L8.6509984,6.5729964 C8.6509984,6.4469965 8.7539981,6.3429964 8.8799985,6.3429964 z M0,0 L8.0379918,0 12.033,3.2290075 12.033,5.2439935 10.775001,5.2439935 10.775001,3.9379926 7.5710099,3.9379926 7.5710099,1.1959852 1.2349894,1.1959852 1.2349894,13.526015 3.4979978,13.514998 3.4979978,14.754014 0,14.765 z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MatroPageSetupHover">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource  HoverGlyphBrush}" Geometry="M9.4249976,9.2439945 C8.3619988,9.2439945 7.4969991,10.108994 7.4969991,11.171994 7.4969991,12.234993 8.3619988,13.098992 9.4249976,13.098992 10.487997,13.098992 11.352997,12.234993 11.352997,11.171994 11.352997,10.108994 10.487997,9.2439945 9.4249976,9.2439945 z M8.8799985,6.3429964 L9.9699977,6.3429964 C10.096998,6.3429964 10.199997,6.4469965 10.199997,6.5729964 L10.199997,7.7949956 C10.578997,7.8819954 10.935997,8.0299957 11.264997,8.2369955 L12.128996,7.3719957 C12.171996,7.3289959 12.230996,7.3049958 12.291996,7.3049958 12.352996,7.3049958 12.410996,7.3289959 12.453996,7.3719957 L13.224996,8.1429956 C13.313996,8.2319953 13.313996,8.3779953 13.224996,8.4679954 L12.360996,9.3319948 C12.567996,9.6609943 12.715996,10.017995 12.801996,10.396994 L14.022995,10.396994 C14.149995,10.396994 14.252995,10.499994 14.252995,10.626994 L14.252995,11.716993 C14.252995,11.842994 14.149995,11.945993 14.022995,11.945993 L12.801996,11.945993 C12.715996,12.325993 12.567996,12.681992 12.360996,13.010993 L13.224996,13.874992 C13.267995,13.917992 13.291995,13.976992 13.291995,14.037992 13.291995,14.098992 13.267995,14.157992 13.224996,14.200991 L12.453996,14.970991 C12.408996,15.015991 12.350996,15.037991 12.291996,15.037991 12.232996,15.037991 12.173996,15.015991 12.128996,14.970991 L11.264997,14.106992 C10.936997,14.313991 10.579997,14.461992 10.199997,14.548992 L10.199997,15.769991 C10.199997,15.895991 10.096998,15.998991 9.9699977,15.998991 L8.8799985,15.998991 C8.7539981,15.998991 8.6509984,15.895991 8.6509984,15.769991 L8.6509984,14.548992 C8.2709983,14.461992 7.9139989,14.313991 7.5849989,14.106992 L6.7219994,14.970991 C6.6789997,15.012992 6.6199997,15.037991 6.5589993,15.037991 6.4979995,15.037991 6.4389995,15.012992 6.3969996,14.970991 L5.6260002,14.200991 C5.537,14.110992 5.537,13.964992 5.6260002,13.874992 L6.4899996,13.010993 C6.2829998,12.682993 6.135,12.325993 6.0479997,11.945993 L4.8270004,11.945993 C4.7000006,11.945993 4.5970009,11.842994 4.5970009,11.716993 L4.5970009,10.626994 C4.5970009,10.499994 4.7000006,10.396994 4.8270004,10.396994 L6.0490001,10.396994 C6.135,10.017995 6.2829998,9.6609943 6.4899996,9.3319948 L5.6260002,8.4679954 C5.583,8.4249952 5.5590003,8.3669956 5.5590003,8.3049953 5.5590003,8.2439954 5.583,8.1859958 5.6260002,8.1429956 L6.3969996,7.3719957 C6.4409998,7.327996 6.4999998,7.3049958 6.5589993,7.3049958 6.6179994,7.3049958 6.6759994,7.327996 6.7219994,7.3719957 L7.5859988,8.2369955 C7.9139989,8.0299957 8.2709983,7.8819954 8.6509984,7.7949956 L8.6509984,6.5729964 C8.6509984,6.4469965 8.7539981,6.3429964 8.8799985,6.3429964 z M0,0 L8.0379918,0 12.033,3.2290075 12.033,5.2439935 10.775001,5.2439935 10.775001,3.9379926 7.5710099,3.9379926 7.5710099,1.1959852 1.2349894,1.1959852 1.2349894,13.526015 3.4979978,13.514998 3.4979978,14.754014 0,14.765 z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroPageSetupActive">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource  ActiveGlyphBrush}" Geometry="M9.4249976,9.2439945 C8.3619988,9.2439945 7.4969991,10.108994 7.4969991,11.171994 7.4969991,12.234993 8.3619988,13.098992 9.4249976,13.098992 10.487997,13.098992 11.352997,12.234993 11.352997,11.171994 11.352997,10.108994 10.487997,9.2439945 9.4249976,9.2439945 z M8.8799985,6.3429964 L9.9699977,6.3429964 C10.096998,6.3429964 10.199997,6.4469965 10.199997,6.5729964 L10.199997,7.7949956 C10.578997,7.8819954 10.935997,8.0299957 11.264997,8.2369955 L12.128996,7.3719957 C12.171996,7.3289959 12.230996,7.3049958 12.291996,7.3049958 12.352996,7.3049958 12.410996,7.3289959 12.453996,7.3719957 L13.224996,8.1429956 C13.313996,8.2319953 13.313996,8.3779953 13.224996,8.4679954 L12.360996,9.3319948 C12.567996,9.6609943 12.715996,10.017995 12.801996,10.396994 L14.022995,10.396994 C14.149995,10.396994 14.252995,10.499994 14.252995,10.626994 L14.252995,11.716993 C14.252995,11.842994 14.149995,11.945993 14.022995,11.945993 L12.801996,11.945993 C12.715996,12.325993 12.567996,12.681992 12.360996,13.010993 L13.224996,13.874992 C13.267995,13.917992 13.291995,13.976992 13.291995,14.037992 13.291995,14.098992 13.267995,14.157992 13.224996,14.200991 L12.453996,14.970991 C12.408996,15.015991 12.350996,15.037991 12.291996,15.037991 12.232996,15.037991 12.173996,15.015991 12.128996,14.970991 L11.264997,14.106992 C10.936997,14.313991 10.579997,14.461992 10.199997,14.548992 L10.199997,15.769991 C10.199997,15.895991 10.096998,15.998991 9.9699977,15.998991 L8.8799985,15.998991 C8.7539981,15.998991 8.6509984,15.895991 8.6509984,15.769991 L8.6509984,14.548992 C8.2709983,14.461992 7.9139989,14.313991 7.5849989,14.106992 L6.7219994,14.970991 C6.6789997,15.012992 6.6199997,15.037991 6.5589993,15.037991 6.4979995,15.037991 6.4389995,15.012992 6.3969996,14.970991 L5.6260002,14.200991 C5.537,14.110992 5.537,13.964992 5.6260002,13.874992 L6.4899996,13.010993 C6.2829998,12.682993 6.135,12.325993 6.0479997,11.945993 L4.8270004,11.945993 C4.7000006,11.945993 4.5970009,11.842994 4.5970009,11.716993 L4.5970009,10.626994 C4.5970009,10.499994 4.7000006,10.396994 4.8270004,10.396994 L6.0490001,10.396994 C6.135,10.017995 6.2829998,9.6609943 6.4899996,9.3319948 L5.6260002,8.4679954 C5.583,8.4249952 5.5590003,8.3669956 5.5590003,8.3049953 5.5590003,8.2439954 5.583,8.1859958 5.6260002,8.1429956 L6.3969996,7.3719957 C6.4409998,7.327996 6.4999998,7.3049958 6.5589993,7.3049958 6.6179994,7.3049958 6.6759994,7.327996 6.7219994,7.3719957 L7.5859988,8.2369955 C7.9139989,8.0299957 8.2709983,7.8819954 8.6509984,7.7949956 L8.6509984,6.5729964 C8.6509984,6.4469965 8.7539981,6.3429964 8.8799985,6.3429964 z M0,0 L8.0379918,0 12.033,3.2290075 12.033,5.2439935 10.775001,5.2439935 10.775001,3.9379926 7.5710099,3.9379926 7.5710099,1.1959852 1.2349894,1.1959852 1.2349894,13.526015 3.4979978,13.514998 3.4979978,14.754014 0,14.765 z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <!--<DrawingImage x:Key="MetroPageSetupDis">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Geometry="M9.4249976,9.2439945 C8.3619988,9.2439945 7.4969991,10.108994 7.4969991,11.171994 7.4969991,12.234993 8.3619988,13.098992 9.4249976,13.098992 10.487997,13.098992 11.352997,12.234993 11.352997,11.171994 11.352997,10.108994 10.487997,9.2439945 9.4249976,9.2439945 z M8.8799985,6.3429964 L9.9699977,6.3429964 C10.096998,6.3429964 10.199997,6.4469965 10.199997,6.5729964 L10.199997,7.7949956 C10.578997,7.8819954 10.935997,8.0299957 11.264997,8.2369955 L12.128996,7.3719957 C12.171996,7.3289959 12.230996,7.3049958 12.291996,7.3049958 12.352996,7.3049958 12.410996,7.3289959 12.453996,7.3719957 L13.224996,8.1429956 C13.313996,8.2319953 13.313996,8.3779953 13.224996,8.4679954 L12.360996,9.3319948 C12.567996,9.6609943 12.715996,10.017995 12.801996,10.396994 L14.022995,10.396994 C14.149995,10.396994 14.252995,10.499994 14.252995,10.626994 L14.252995,11.716993 C14.252995,11.842994 14.149995,11.945993 14.022995,11.945993 L12.801996,11.945993 C12.715996,12.325993 12.567996,12.681992 12.360996,13.010993 L13.224996,13.874992 C13.267995,13.917992 13.291995,13.976992 13.291995,14.037992 13.291995,14.098992 13.267995,14.157992 13.224996,14.200991 L12.453996,14.970991 C12.408996,15.015991 12.350996,15.037991 12.291996,15.037991 12.232996,15.037991 12.173996,15.015991 12.128996,14.970991 L11.264997,14.106992 C10.936997,14.313991 10.579997,14.461992 10.199997,14.548992 L10.199997,15.769991 C10.199997,15.895991 10.096998,15.998991 9.9699977,15.998991 L8.8799985,15.998991 C8.7539981,15.998991 8.6509984,15.895991 8.6509984,15.769991 L8.6509984,14.548992 C8.2709983,14.461992 7.9139989,14.313991 7.5849989,14.106992 L6.7219994,14.970991 C6.6789997,15.012992 6.6199997,15.037991 6.5589993,15.037991 6.4979995,15.037991 6.4389995,15.012992 6.3969996,14.970991 L5.6260002,14.200991 C5.537,14.110992 5.537,13.964992 5.6260002,13.874992 L6.4899996,13.010993 C6.2829998,12.682993 6.135,12.325993 6.0479997,11.945993 L4.8270004,11.945993 C4.7000006,11.945993 4.5970009,11.842994 4.5970009,11.716993 L4.5970009,10.626994 C4.5970009,10.499994 4.7000006,10.396994 4.8270004,10.396994 L6.0490001,10.396994 C6.135,10.017995 6.2829998,9.6609943 6.4899996,9.3319948 L5.6260002,8.4679954 C5.583,8.4249952 5.5590003,8.3669956 5.5590003,8.3049953 5.5590003,8.2439954 5.583,8.1859958 5.6260002,8.1429956 L6.3969996,7.3719957 C6.4409998,7.327996 6.4999998,7.3049958 6.5589993,7.3049958 6.6179994,7.3049958 6.6759994,7.327996 6.7219994,7.3719957 L7.5859988,8.2369955 C7.9139989,8.0299957 8.2709983,7.8819954 8.6509984,7.7949956 L8.6509984,6.5729964 C8.6509984,6.4469965 8.7539981,6.3429964 8.8799985,6.3429964 z M0,0 L8.0379918,0 12.033,3.2290075 12.033,5.2439935 10.775001,5.2439935 10.775001,3.9379926 7.5710099,3.9379926 7.5710099,1.1959852 1.2349894,1.1959852 1.2349894,13.526015 3.4979978,13.514998 3.4979978,14.754014 0,14.765 z">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0.5,1" EndPoint="0.5,0">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Color="white" Offset="1"/>
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>-->
+
+    <!--ReportBack Button-->
+
+	<DrawingImage x:Key="MetroReportBack">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource GlyphBrush}" Geometry="M8,0 L8,3 10,3 C13.309,3 16,5.6909995 16,8.999999 16,12.308999 13.309,14.999998 10,14.999998 L0,14.999998 0,12.999998 2,12.999998 3,12.999998 10,12.999998 C12.206,12.999998 14,11.205998 14,8.999999 14,6.7939997 12.206,5 10,5 L8,5 8,5.0060005 8,8 1,4 z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+	
+    <DrawingImage x:Key="MetroReportBackHover">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource HoverGlyphBrush}" Geometry="M8,0 L8,3 10,3 C13.309,3 16,5.6909995 16,8.999999 16,12.308999 13.309,14.999998 10,14.999998 L0,14.999998 0,12.999998 2,12.999998 3,12.999998 10,12.999998 C12.206,12.999998 14,11.205998 14,8.999999 14,6.7939997 12.206,5 10,5 L8,5 8,5.0060005 8,8 1,4 z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroReportBackActive">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource ActiveGlyphBrush}" Geometry="M8,0 L8,3 10,3 C13.309,3 16,5.6909995 16,8.999999 16,12.308999 13.309,14.999998 10,14.999998 L0,14.999998 0,12.999998 2,12.999998 3,12.999998 10,12.999998 C12.206,12.999998 14,11.205998 14,8.999999 14,6.7939997 12.206,5 10,5 L8,5 8,5.0060005 8,8 1,4 z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <!--Print Button-->
+    <DrawingImage x:Key="MetroPrintButton">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource GlyphBrush}" Geometry="F1M98.509,287.876L92.101,287.876L92.101,282.763L98.509,282.763z M98.563,294.555L92.048,294.555L92.048,292.4L98.563,292.4z M101.137,286.376L99.874,286.376L99.874,281.436L90.74,281.436L90.74,286.376L89.473,286.376C88.278,286.376,87.306,287.345,87.306,288.544L87.306,294.069L90.74,294.069L90.74,295.776L99.874,295.776L99.874,294.069L103.306,294.069L103.306,288.544C103.306,287.345,102.336,286.376,101.137,286.376">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>	
+
+    <DrawingImage x:Key="MetroPrintButtonHover">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource HoverGlyphBrush}" Geometry="F1M98.509,287.876L92.101,287.876L92.101,282.763L98.509,282.763z M98.563,294.555L92.048,294.555L92.048,292.4L98.563,292.4z M101.137,286.376L99.874,286.376L99.874,281.436L90.74,281.436L90.74,286.376L89.473,286.376C88.278,286.376,87.306,287.345,87.306,288.544L87.306,294.069L90.74,294.069L90.74,295.776L99.874,295.776L99.874,294.069L103.306,294.069L103.306,288.544C103.306,287.345,102.336,286.376,101.137,286.376">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroPrintButtonActive">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource ActiveGlyphBrush}" Geometry="F1M98.509,287.876L92.101,287.876L92.101,282.763L98.509,282.763z M98.563,294.555L92.048,294.555L92.048,292.4L98.563,292.4z M101.137,286.376L99.874,286.376L99.874,281.436L90.74,281.436L90.74,286.376L89.473,286.376C88.278,286.376,87.306,287.345,87.306,288.544L87.306,294.069L90.74,294.069L90.74,295.776L99.874,295.776L99.874,294.069L103.306,294.069L103.306,288.544C103.306,287.345,102.336,286.376,101.137,286.376">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <!--Navigate First Button-->
+    <DrawingImage x:Key="MetroNavFirst">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource GlyphBrush}" Geometry="M0,2.9504396E-05 L1.1870035,2.9504396E-05 1.1870035,9.0000295 0,9.0000295 z M9.0000175,0 L9.0000175,8.9390001 1.187017,4.4700036 z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroNavFirstHover">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource HoverGlyphBrush}" Geometry="M0,2.9504396E-05 L1.1870035,2.9504396E-05 1.1870035,9.0000295 0,9.0000295 z M9.0000175,0 L9.0000175,8.9390001 1.187017,4.4700036 z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="MetroNavFirstActive">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource ActiveGlyphBrush}" Geometry="M0,2.9504396E-05 L1.1870035,2.9504396E-05 1.1870035,9.0000295 0,9.0000295 z M9.0000175,0 L9.0000175,8.9390001 1.187017,4.4700036 z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <!--Navigate Previous Button-->
+    <DrawingImage x:Key="MetroNavPrevious">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource GlyphBrush}" Geometry="F1M223.9237,293.1061L214.9237,288.6061L223.9237,284.1061z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroNavPreviousHover">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource HoverGlyphBrush}" Geometry="F1M223.9237,293.1061L214.9237,288.6061L223.9237,284.1061z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+
+    <DrawingImage x:Key="MetroNavPreviousActive">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource ActiveGlyphBrush}" Geometry="F1M223.9237,293.1061L214.9237,288.6061L223.9237,284.1061z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <!--Navigate Next Button-->
+    <DrawingImage x:Key="MetroNavNext">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource GlyphBrush}" Geometry="F1M349.1619,284.1061L358.1619,288.6061L349.1619,293.1061z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroNavNextHover">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource HoverGlyphBrush}" Geometry="F1M349.1619,284.1061L358.1619,288.6061L349.1619,293.1061z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroNavNextActive">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource ActiveGlyphBrush}" Geometry="F1M349.1619,284.1061L358.1619,288.6061L349.1619,293.1061z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <!--Navigate Last Button-->
+    <DrawingImage x:Key="MetroNavLast">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource GlyphBrush}" Geometry="M7.8129936,0 L8.9999815,0 8.9999815,8.9999997 7.8129936,8.9999997 7.8129936,4.5309707 0,9.0009705 0,0.061970404 7.8129936,4.5309631 z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroNavLastHover">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource HoverGlyphBrush}" Geometry="M7.8129936,0 L8.9999815,0 8.9999815,8.9999997 7.8129936,8.9999997 7.8129936,4.5309707 0,9.0009705 0,0.061970404 7.8129936,4.5309631 z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroNavLastActive">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource ActiveGlyphBrush}" Geometry="M7.8129936,0 L8.9999815,0 8.9999815,8.9999997 7.8129936,8.9999997 7.8129936,4.5309707 0,9.0009705 0,0.061970404 7.8129936,4.5309631 z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <!--Navigate Refresh Button-->
+    <DrawingImage x:Key="MetroRefreshButton">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource GlyphBrush}" Geometry="F1M670.4352,287.2537C670.2962,283.5597,667.2672,280.6057,663.5402,280.6057C659.7242,280.6057,656.6302,283.6997,656.6302,287.5137C656.6302,291.1617,659.4582,294.1407,663.0382,294.3977L663.7232,296.6057L668.6032,291.3317L661.5942,289.7427L662.3692,292.2377C660.2452,291.7137,658.6682,289.8027,658.6682,287.5137C658.6682,284.8237,660.8492,282.6427,663.5402,282.6427C666.1982,282.6427,668.3552,284.7727,668.4072,287.4197C668.4052,287.4407,668.4012,287.4607,668.4012,287.4837C668.4012,288.0527,668.8632,288.5137,669.4322,288.5137C670.0002,288.5137,670.4642,288.0527,670.4642,287.4837C670.4642,287.4027,670.4512,287.3267,670.4352,287.2537">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroRefreshButtonHover">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource HoverGlyphBrush}" Geometry="F1M670.4352,287.2537C670.2962,283.5597,667.2672,280.6057,663.5402,280.6057C659.7242,280.6057,656.6302,283.6997,656.6302,287.5137C656.6302,291.1617,659.4582,294.1407,663.0382,294.3977L663.7232,296.6057L668.6032,291.3317L661.5942,289.7427L662.3692,292.2377C660.2452,291.7137,658.6682,289.8027,658.6682,287.5137C658.6682,284.8237,660.8492,282.6427,663.5402,282.6427C666.1982,282.6427,668.3552,284.7727,668.4072,287.4197C668.4052,287.4407,668.4012,287.4607,668.4012,287.4837C668.4012,288.0527,668.8632,288.5137,669.4322,288.5137C670.0002,288.5137,670.4642,288.0527,670.4642,287.4837C670.4642,287.4027,670.4512,287.3267,670.4352,287.2537">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroRefreshButtonActive">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource ActiveGlyphBrush}" Geometry="F1M670.4352,287.2537C670.2962,283.5597,667.2672,280.6057,663.5402,280.6057C659.7242,280.6057,656.6302,283.6997,656.6302,287.5137C656.6302,291.1617,659.4582,294.1407,663.0382,294.3977L663.7232,296.6057L668.6032,291.3317L661.5942,289.7427L662.3692,292.2377C660.2452,291.7137,658.6682,289.8027,658.6682,287.5137C658.6682,284.8237,660.8492,282.6427,663.5402,282.6427C666.1982,282.6427,668.3552,284.7727,668.4072,287.4197C668.4052,287.4407,668.4012,287.4607,668.4012,287.4837C668.4012,288.0527,668.8632,288.5137,669.4322,288.5137C670.0002,288.5137,670.4642,288.0527,670.4642,287.4837C670.4642,287.4027,670.4512,287.3267,670.4352,287.2537">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+
+    <!--Navigate Refresh Button-->
+    <DrawingImage x:Key="MetroParameterButton">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource GlyphBrush}" Geometry="F1M705.5483,281.1061L691.7993,281.1061L697.3373,288.1231L697.3373,296.1061L700.0113,293.6891L700.0113,288.1231z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroParameterButtonHover">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource HoverGlyphBrush}" Geometry="F1M705.5483,281.1061L691.7993,281.1061L697.3373,288.1231L697.3373,296.1061L700.0113,293.6891L700.0113,288.1231z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroParameterButtonActive">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="{StaticResource ActiveGlyphBrush}" Geometry="F1M705.5483,281.1061L691.7993,281.1061L697.3373,288.1231L697.3373,296.1061L700.0113,293.6891L700.0113,288.1231z">
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MetroException">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Geometry="F1 M 28.3349,28.6713C 28.3349,29.405 22.0674,30.0004 14.3357,30.0004C 6.60295,30.0004 0.336442,29.405 0.336442,28.6713C 0.336442,27.9379 6.60295,27.3429 14.3357,27.3429C 22.0674,27.3429 28.3349,27.9379 28.3349,28.6713 Z ">
+                        <GeometryDrawing.Brush>
+                            <RadialGradientBrush RadiusX="0.500164" RadiusY="0.499825" Center="0.497157,0.593297" GradientOrigin="0.497157,0.593297">
+                                <RadialGradientBrush.GradientStops>
+                                    <GradientStop Color="#FF96A6B2" Offset="0"/>
+                                    <GradientStop Color="#FFFFFFFF" Offset="0.967567"/>
+                                </RadialGradientBrush.GradientStops>
+                                <RadialGradientBrush.RelativeTransform>
+                                    <TransformGroup/>
+                                </RadialGradientBrush.RelativeTransform>
+                            </RadialGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                    <GeometryDrawing Brush="#FF7B0003" Geometry="F1 M 29.9925,14.6807C 29.9925,22.9633 23.2773,29.6777 14.9956,29.6777C 6.71212,29.6777 -0.00256905,22.9633 -0.00256905,14.6807C -0.00256905,6.3981 6.71212,-0.317114 14.9956,-0.317114C 23.2773,-0.317114 29.9925,6.3981 29.9925,14.6807 Z "/>
+                    <GeometryDrawing Geometry="F1 M 29.6458,14.6807C 29.6458,22.772 23.0866,29.3306 14.9956,29.3306C 6.90337,29.3306 0.344745,22.772 0.344745,14.6807C 0.344745,6.58962 6.90337,0.0298901 14.9956,0.0298901C 23.0866,0.0298901 29.6458,6.58962 29.6458,14.6807 Z ">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0.536848,0.961341" EndPoint="0.536848,0.0664572">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Color="#FFF03337" Offset="0"/>
+                                    <GradientStop Color="#FF921616" Offset="0.991453"/>
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="F1 M 27.04,9.57622C 28.1426,14.5939 21.7245,16.0963 15.1681,16.0963C 8.61166,16.0963 2.25148,14.8253 3.29607,9.57622C 4.26132,4.7347 8.61166,0.637077 15.1681,0.637077C 21.7245,0.637077 25.9795,4.75424 27.04,9.57622 Z ">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0.499999,0" EndPoint="0.499999,1">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Color="#A6FF6565" Offset="0"/>
+                                    <GradientStop Color="#A6FBF0EE" Offset="0.991453"/>
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                    <GeometryDrawing Brush="#FF8B0404" Geometry="F1 M 21.8152,19.0356L 21.8152,19.0356C 21.8143,18.3447 21.5474,17.6975 21.061,17.2115C 21.061,17.2115 18.7669,14.9175 18.5296,14.6805C 18.576,14.6332 21.061,12.1491 21.061,12.1491C 21.5466,11.6626 21.8152,11.0146 21.8152,10.325C 21.8152,9.63461 21.5474,8.98658 21.061,8.501C 20.5736,8.01364 19.9255,7.74496 19.2365,7.74496C 18.5474,7.74496 17.8993,8.01364 17.412,8.50056C 17.412,8.50056 15.1189,10.7941 14.8806,11.0315C 14.8341,10.9851 12.3509,8.50056 12.3509,8.50056C 11.8635,8.01364 11.2147,7.74496 10.5255,7.74496C 9.8364,7.74496 9.18926,8.01364 8.70189,8.501C 8.21453,8.98836 7.94591,9.6355 7.94591,10.325C 7.9468,11.0141 8.21453,11.6617 8.70109,12.1491C 8.70109,12.1491 11.186,14.6337 11.2325,14.6801C 11.186,14.7269 8.70109,17.2111 8.70109,17.2111C 8.21372,17.6975 7.94591,18.3456 7.94591,19.0351C 7.94591,19.7251 8.21453,20.3736 8.70189,20.86C 9.18753,21.3465 9.83464,21.6143 10.5255,21.6143C 11.2155,21.6143 11.8635,21.3461 12.35,20.8596C 12.35,20.8596 14.8341,18.3755 14.8806,18.3286C 14.9279,18.375 17.4129,20.86 17.4129,20.86C 17.8993,21.3465 18.5465,21.6152 19.2365,21.6152C 19.9255,21.6156 20.5736,21.3465 21.061,20.8596C 21.5474,20.3736 21.8152,19.7255 21.8152,19.0356 Z "/>
+                    <GeometryDrawing Brush="#FFFFFFFF" Geometry="F1 M 20.9047,17.3673C 20.9047,17.3673 18.5947,15.0572 18.218,14.6801C 18.5947,14.303 20.9047,11.9929 20.9047,11.9929C 21.8242,11.073 21.8242,9.57659 20.9047,8.65721C 20.4584,8.2109 19.8667,7.96588 19.2365,7.96588L 19.2356,7.96588C 18.6054,7.96588 18.0136,8.2109 17.5682,8.65676C 17.5682,8.65676 15.2582,10.9664 14.8806,11.344C 14.5039,10.9664 12.1947,8.65676 12.1947,8.65676C 11.7484,8.2109 11.1557,7.96588 10.5255,7.96588L 10.5255,7.96588C 9.89534,7.96588 9.30351,8.2109 8.8581,8.65676C 8.41177,9.10217 8.16636,9.69486 8.16636,10.325C 8.16636,10.9552 8.41177,11.5475 8.8581,11.9929C 8.8581,11.9929 11.1673,14.303 11.5449,14.6805C 11.1673,15.0572 8.8581,17.3673 8.8581,17.3673C 8.41177,17.8127 8.16636,18.4049 8.16636,19.0351L 8.16636,19.0351C 8.16636,19.6657 8.41177,20.258 8.8581,20.7038C 9.31785,21.1635 9.92122,21.3929 10.5255,21.3929C 11.1298,21.3934 11.7332,21.1635 12.1938,20.7034C 12.1938,20.7034 14.5039,18.3938 14.8806,18.0166C 15.2582,18.3938 17.5691,20.7038 17.5691,20.7038C 18.0136,21.1497 18.6063,21.3947 19.2365,21.3943C 19.8667,21.3947 20.4594,21.1497 20.9047,20.7034C 21.8242,19.7836 21.8242,18.2876 20.9047,17.3673 Z "/>
+                    <GeometryDrawing Geometry="F1 M 14.8806,17.5744L 17.7886,20.4825C 18.5884,21.2823 19.8845,21.2823 20.6834,20.4829C 21.4823,19.6831 21.4823,18.3875 20.6834,17.5882L 17.7753,14.6805L 20.6834,11.772C 21.4823,10.9726 21.4823,9.67657 20.6834,8.87768C 19.8845,8.07835 18.5884,8.07835 17.7886,8.87768L 14.8806,11.7858L 11.9733,8.87768C 11.1735,8.07835 9.87751,8.0779 9.07857,8.87768C 8.2788,9.67657 8.2788,10.9726 9.07857,11.7724L 11.9858,14.6805L 9.07857,17.5882C 8.2788,18.3875 8.2788,19.6831 9.07857,20.4829C 9.87751,21.2823 11.1735,21.2823 11.9725,20.4829L 14.8806,17.5744 Z ">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0.0714241,0.500006" EndPoint="1.07144,0.500006">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Color="#FFF4F4F4" Offset="0.005618"/>
+                                    <GradientStop Color="#FFC7C7C7" Offset="0.505618"/>
+                                    <GradientStop Color="#FFF9F9F9" Offset="0.977528"/>
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+	
+	<Geometry x:Key="DownArrowGeometry">M 0 0 L 3.5 4 L 7 0 Z</Geometry>
+    
+    <Style x:Key="CheckBoxListBoxItemStyle" TargetType="ListBoxItem">
+        <Setter Property="Foreground" Value="#FF000000" />
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="IsSelected" Value="{Binding Path=IsSelected}"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Grid>
+                        <CheckBox  Content="{Binding Path=DisplayField}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" ClickMode="Press"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="ToggleButtonStyle" TargetType="ToggleButton">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="ButtonBorder" Background="{TemplateBinding Background}" Grid.ColumnSpan="2" BorderBrush=" # FF707070" SnapsToDevicePixels="True" BorderThickness="1">                
+            </Border>
+            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="{TemplateBinding Content}"  ToolTip="{TemplateBinding Content}"></TextBlock>
+            <Path x:Name="ToggleButtonArrow" Grid.Column="1" HorizontalAlignment="Center" Margin="3,0,0,0" VerticalAlignment="Center" Fill="Black" Data="{StaticResource DownArrowGeometry}"/>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Fill" TargetName="ToggleButtonArrow" Value="#AFAFAF"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#99C1E2"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#C0A776"/>
+            </Trigger>            
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <LinearGradientBrush x:Key="ButtonNormalBackground" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#F3F3F3" Offset="0"/>
+        <GradientStop Color="#EBEBEB" Offset="0.5"/>
+        <GradientStop Color="#DDDDDD" Offset="0.5"/>
+        <GradientStop Color="#CDCDCD" Offset="1"/>
+    </LinearGradientBrush>
+
+    <Style x:Key="PART_comboboxStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="Width" Value="160"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="5,0,5,0"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"></Setter>
+        <Setter Property="Background" Value="{StaticResource ButtonNormalBackground}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <ToggleButton Background="{TemplateBinding Background}" Content="{TemplateBinding Tag}" Focusable="False" IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}" Template="{StaticResource ToggleButtonStyle}"/> 
+                        <Popup Name="DropDownPopUp" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" Focusable="False" PopupAnimation="Slide">
+                            <Grid SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <Border BorderBrush="Black" BorderThickness="1"/>
+                                <ScrollViewer BorderBrush="Black" Padding="1" BorderThickness="1">
+                                    <ListBox x:Name="PART_comboListBox" SelectionMode="Multiple" ItemsSource="{TemplateBinding ItemsSource}" ItemContainerStyle="{StaticResource CheckBoxListBoxItemStyle}" HorizontalAlignment="Stretch" />
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PART_comboboxStyle_Metro" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="Width" Value="160"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="5,0,5,0"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="Background" Value="#FFFFFFFF"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid FocusVisualStyle="{x:Null}">
+                        <ToggleButton Background="{TemplateBinding Background}" Content="{TemplateBinding Tag}" Focusable="False" IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}" Template="{DynamicResource ToggleButtonStyle_Metro}"/>
+                        <Popup Name="DropDownPopUp" AllowsTransparency="True" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" Focusable="False" PopupAnimation="Slide">
+                            <Border BorderBrush="#C0BFBF" BorderThickness="0">
+                            <Grid SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                  <ListBox x:Name="PART_comboListBox_Metro" BorderBrush="#C0BFBF" BorderThickness="1,1,2,1" SelectionMode="Multiple" ItemsSource="{TemplateBinding ItemsSource}" ItemContainerStyle="{DynamicResource CheckBoxListBoxItemStyle_Metro}" HorizontalAlignment="Stretch" VerticalContentAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <LinearGradientBrush x:Key="ButtonNormalBackground_Metro" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#FFFFFFFF" Offset="1"/>       
+    </LinearGradientBrush>
+
+    <ControlTemplate x:Key="ToggleButtonStyle_Metro" TargetType="ToggleButton">
+
+        <Grid FocusVisualStyle="{x:Null}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="ButtonBorder" FocusVisualStyle="{x:Null}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True" Grid.ColumnSpan="2" BorderBrush="#bfbfbf" BorderThickness="1">
+            </Border>
+            <TextBlock Name="Text" Height="24" FontSize="14" FocusVisualStyle="{x:Null}" Padding="5,2,0,0" VerticalAlignment="Center" Text="{TemplateBinding Content}"  ToolTip="{TemplateBinding Content}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="LightGray"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <Border x:Name="splitBorder" FocusVisualStyle="{x:Null}" Grid.Column="1" BorderBrush="#bfbfbf" BorderThickness="1,0,0,0" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="20">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <Trigger Property="ToggleButton.IsMouseOver" Value="True">
+                                <Setter  Property="Background" Value="LightGray"/>
+                                <Setter Property="Background" Value="LightGray"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            <Path x:Name="ToggleButtonArrow"  HorizontalAlignment="Center" VerticalAlignment="Center" Fill="#FF333333" Data="{StaticResource DownArrowGeometry}"/>
+            </Border>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Fill" TargetName="ToggleButtonArrow" Value="#AFAFAF"/>
+            </Trigger>
+            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                <Setter TargetName="splitBorder" Property="Background" Value="#00a0d8"/>
+                <Setter TargetName="splitBorder" Property="BorderBrush" Value="#00a0d8"/>
+                <Setter TargetName="ToggleButtonArrow" Property="Fill" Value="Black "/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="CheckBoxListBoxItemStyle_Metro" TargetType="ListBoxItem">
+        <Setter Property="Foreground" Value="#FF505050" />
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="5,3,3,5"/>
+        <Setter Property="IsSelected" Value="{Binding Path=IsSelected}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Grid>
+                        <!--<Grid.Style>
+                            <Style TargetType="Grid">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#00a0d8"></Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>-->
+                        <CheckBox x:Name="Box" Content="{Binding Path=DisplayField}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" ClickMode="Press">                            
+                        </CheckBox>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PART_comboboxStyle_Blend" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="Width" Value="160"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="5,0,5,0"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="Background" Value="#FF333333"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid FocusVisualStyle="{x:Null}">
+                        <ToggleButton Background="{TemplateBinding Background}" Content="{TemplateBinding Tag}" Focusable="False" IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}" Template="{DynamicResource ToggleButtonStyle_Blend}"/>
+                        <Popup Name="DropDownPopUp" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" Focusable="False" PopupAnimation="Slide">
+                            <Grid SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <ScrollViewer BorderBrush="#6b6b6b" BorderThickness="1">
+                                    <ListBox x:Name="PART_comboListBox_Blend" BorderBrush="#6b6b6b" SelectionMode="Multiple" ItemsSource="{TemplateBinding ItemsSource}" ItemContainerStyle="{DynamicResource CheckBoxListBoxItemStyle_Blend}" HorizontalAlignment="Stretch" />
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="ToggleButtonStyle_Blend" TargetType="ToggleButton">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="ButtonBorder" Background="{TemplateBinding Background}" Grid.ColumnSpan="2" BorderBrush="#FFABABAB" SnapsToDevicePixels="True" BorderThickness="1">
+            </Border>
+            <TextBlock Name="Text" Height="24" Margin="1,0,0,0" FontSize="14" Width="150" FocusVisualStyle="{x:Null}" Padding="5,2,0,0" VerticalAlignment="Center" Text="{TemplateBinding Content}"  ToolTip="{TemplateBinding Content}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#BDBDBD">                                   
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <Border x:Name="splitBorder" Grid.Column="1" BorderBrush="#FFABABAB" BorderThickness="1" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="20">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#BDBDBD">                                   
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Path x:Name="ToggleButtonArrow"  HorizontalAlignment="Center" VerticalAlignment="Center" Fill="White" Data="{StaticResource DownArrowGeometry}"/>
+            </Border>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Fill" TargetName="ToggleButtonArrow" Value="White"/>
+            </Trigger>           
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="splitBorder" Property="Background" Value="#AAAAAA"/>
+                <Setter TargetName="splitBorder" Property="BorderBrush" Value="#AAAAAA"/>
+                <Setter TargetName="ToggleButtonArrow" Property="Fill" Value="White"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="CheckBoxListBoxItemStyle_Blend" TargetType="ListBoxItem">
+        <Setter Property="Foreground" Value="#FFFFFAEE" />
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="5,3,3,5"/>
+        <Setter Property="IsSelected" Value="{Binding Path=IsSelected}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Grid>
+                        <CheckBox x:Name="Box" Content="{Binding Path=DisplayField}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" ClickMode="Press"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+   
+    <Style x:Key="PART_comboboxStyle_Silver" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="Width" Value="160"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="5,0,5,0"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="Background" Value="#FFFFFFFF"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <ToggleButton Background="{TemplateBinding Background}" Content="{TemplateBinding Tag}" Focusable="False" IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}" Template="{DynamicResource ToggleButtonStyle_Silver}"/>
+                        <Popup Name="DropDownPopUp" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" Focusable="False" PopupAnimation="Slide">
+                            <Grid SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <ScrollViewer BorderBrush="#FFB6BABF" BorderThickness="1">
+                                    <ListBox x:Name="PART_comboListBox_Silver" BorderBrush="#FFB6BABF" SelectionMode="Multiple" ItemsSource="{TemplateBinding ItemsSource}" ItemContainerStyle="{DynamicResource CheckBoxListBoxItemStyle_Silver}" HorizontalAlignment="Stretch" />
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="ToggleButtonStyle_Silver" TargetType="ToggleButton">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="ButtonBorder" Background="{TemplateBinding Background}" Grid.ColumnSpan="2" BorderBrush="#FFB6BABF" SnapsToDevicePixels="True" BorderThickness="1">
+            </Border>
+            <TextBlock Name="Text" Height="24" Margin="1,0,0,0" FontSize="14" Width="150" FocusVisualStyle="{x:Null}" Padding="5,2,0,0" VerticalAlignment="Center" Text="{TemplateBinding Content}"  ToolTip="{TemplateBinding Content}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter  Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FFFFE072" Offset="0.101"/>
+                                            <GradientStop Color="#FFFFD86C" Offset="0.449"/>
+                                            <GradientStop Color="#FFFFF480" Offset="0.96"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <Border x:Name="splitBorder" Grid.Column="1" BorderBrush="#FFB6BABF" BorderThickness="1" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="20">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter  Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FFFFE072" Offset="0.101"/>
+                                            <GradientStop Color="#FFFFD86C" Offset="0.449"/>
+                                            <GradientStop Color="#FFFFF480" Offset="0.96"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Path x:Name="ToggleButtonArrow"  HorizontalAlignment="Center" VerticalAlignment="Center" Fill="#818284" Data="{StaticResource DownArrowGeometry}"/>
+            </Border>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Fill" TargetName="ToggleButtonArrow" Value="#AFAFAF"/>
+            </Trigger>            
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="splitBorder" Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFFBEDBE" Offset="0.099" />
+                            <GradientStop Color="#FFFAE9B6" Offset="0.317" />
+                            <GradientStop Color="#FFFBDE89" Offset="0.337" />
+                            <GradientStop Color="#FFFBDE89" Offset="0.397" />
+                            <GradientStop Color="#FFFED04F" Offset="0.417" />
+                            <GradientStop Color="#FFFED976" Offset="0.96" />
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="CheckBoxListBoxItemStyle_Silver" TargetType="ListBoxItem">
+        <Setter Property="Foreground" Value="#FFFFFAEE" />
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="5,3,3,5"/>
+        <Setter Property="IsSelected" Value="{Binding Path=IsSelected}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Grid>
+                        <CheckBox x:Name="Box" Content="{Binding Path=DisplayField}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" ClickMode="Press"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PART_comboboxStyle_Black" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="Width" Value="160"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="5,0,5,0"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="Background" Value="#FFC6C6C6"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <ToggleButton Foreground="#444444" FocusVisualStyle="{x:Null}" Background="{TemplateBinding Background}" Content="{TemplateBinding Tag}" Focusable="False" IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}" Template="{DynamicResource ToggleButtonStyle_Black}"/>
+                        <Popup Name="DropDownPopUp" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" Focusable="False" PopupAnimation="Slide">
+                            <Grid SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <ScrollViewer BorderBrush="#FF939393" BorderThickness="1">
+                                    <ListBox x:Name="PART_comboListBox_Black" BorderBrush="#FF939393" SelectionMode="Multiple" ItemsSource="{TemplateBinding ItemsSource}" ItemContainerStyle="{DynamicResource CheckBoxListBoxItemStyle_Black}" HorizontalAlignment="Stretch" />
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="ToggleButtonStyle_Black" TargetType="ToggleButton">
+        <Grid FocusVisualStyle="{x:Null}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="ButtonBorder" FocusVisualStyle="{x:Null}" Background="{TemplateBinding Background}" Grid.ColumnSpan="2" BorderBrush="#FF939393" SnapsToDevicePixels="True" BorderThickness="1">
+            </Border>
+            <TextBlock Name="Text" Height="24" Margin="1,0,0,0" FontSize="14" Width="150" FocusVisualStyle="{x:Null}" Padding="5,2,0,0" VerticalAlignment="Center" Text="{TemplateBinding Content}"  ToolTip="{TemplateBinding Content}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FFFFE072" Offset="0.101"/>
+                                            <GradientStop Color="#FFFFD86C" Offset="0.449"/>
+                                            <GradientStop Color="#FFFFF480" Offset="0.96"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <Border x:Name="splitBorder" Grid.Column="1" BorderBrush="#FF939393" BorderThickness="1" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="20">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FFFFE072" Offset="0.101"/>
+                                            <GradientStop Color="#FFFFD86C" Offset="0.449"/>
+                                            <GradientStop Color="#FFFFF480" Offset="0.96"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Path x:Name="ToggleButtonArrow"  HorizontalAlignment="Center" VerticalAlignment="Center" Fill="#818284" Data="{StaticResource DownArrowGeometry}"/>
+            </Border>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Fill" TargetName="ToggleButtonArrow" Value="#AFAFAF"/>
+            </Trigger>           
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="splitBorder" Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFFBEDBE" Offset="0.099" />
+                            <GradientStop Color="#FFFAE9B6" Offset="0.317" />
+                            <GradientStop Color="#FFFBDE89" Offset="0.337" />
+                            <GradientStop Color="#FFFBDE89" Offset="0.397" />
+                            <GradientStop Color="#FFFED04F" Offset="0.417" />
+                            <GradientStop Color="#FFFED976" Offset="0.96" />
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="CheckBoxListBoxItemStyle_Black" TargetType="ListBoxItem">
+        <Setter Property="Foreground" Value="#FF444444" />
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="5,3,3,5"/>
+        <Setter Property="IsSelected" Value="{Binding Path=IsSelected}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Grid>
+                        <CheckBox x:Name="Box" Content="{Binding Path=DisplayField}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" ClickMode="Press"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PART_comboboxStyle_Blue" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="Width" Value="160"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="5,0,5,0"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="#FFEDF5FD"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <ToggleButton Foreground="#FF1E395B" Background="{TemplateBinding Background}" Content="{TemplateBinding Tag}" Focusable="False" IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}" Template="{DynamicResource ToggleButtonStyle_Blue}"/>
+                        <Popup Name="DropDownPopUp" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" Focusable="False" PopupAnimation="Slide">
+                            <Grid SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <ScrollViewer BorderBrush="#b1c0d6" Padding="1" BorderThickness="1">
+                                    <ListBox x:Name="PART_comboListBox_Blue" BorderBrush="#b1c0d6" SelectionMode="Multiple" ItemsSource="{TemplateBinding ItemsSource}" ItemContainerStyle="{DynamicResource CheckBoxListBoxItemStyle_Blue}" HorizontalAlignment="Stretch" />
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="ToggleButtonStyle_Blue" TargetType="ToggleButton">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="ButtonBorder" Background="{TemplateBinding Background}" Grid.ColumnSpan="2" BorderBrush="#b1c0d6" SnapsToDevicePixels="True" BorderThickness="1">
+            </Border>
+            <TextBlock Name="Text" Height="24" Margin="1,0,0,0" FontSize="14" Width="150" FocusVisualStyle="{x:Null}" Padding="5,2,0,0" VerticalAlignment="Center" Text="{TemplateBinding Content}"  ToolTip="{TemplateBinding Content}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FFFFE072" Offset="0.101"/>
+                                            <GradientStop Color="#FFFFD86C" Offset="0.449"/>
+                                            <GradientStop Color="#FFFFF480" Offset="0.96"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <Border x:Name="splitBorder" Grid.Column="1" BorderBrush="#b1c0d6" BorderThickness="1" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="20">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FFFFE072" Offset="0.101"/>
+                                            <GradientStop Color="#FFFFD86C" Offset="0.449"/>
+                                            <GradientStop Color="#FFFFF480" Offset="0.96"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Path x:Name="ToggleButtonArrow"  HorizontalAlignment="Center" VerticalAlignment="Center" Fill="#858990" Data="{StaticResource DownArrowGeometry}"/>
+            </Border>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Fill" TargetName="ToggleButtonArrow" Value="#AFAFAF"/>
+            </Trigger>           
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="splitBorder" Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFFBEDBE" Offset="0.099" />
+                            <GradientStop Color="#FFFAE9B6" Offset="0.317" />
+                            <GradientStop Color="#FFFBDE89" Offset="0.337" />
+                            <GradientStop Color="#FFFBDE89" Offset="0.397" />
+                            <GradientStop Color="#FFFED04F" Offset="0.417" />
+                            <GradientStop Color="#FFFED976" Offset="0.96" />
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="CheckBoxListBoxItemStyle_Blue" TargetType="ListBoxItem">
+        <Setter Property="Foreground" Value="#FF1E395B" />
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="5,3,3,5"/>
+        <Setter Property="IsSelected" Value="{Binding Path=IsSelected}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Grid>
+                        <CheckBox x:Name="Box" Content="{Binding Path=DisplayField}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" ClickMode="Press"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PART_comboboxStyle_2013" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="Width" Value="160"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="5,0,5,0"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="Background" Value="#FFFFFFFF"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid FocusVisualStyle="{x:Null}">
+                        <ToggleButton Foreground="#FF6D6D6D" Background="{TemplateBinding Background}" Content="{TemplateBinding Tag}" Focusable="False" IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}" Template="{DynamicResource ToggleButtonStyle_2013}"/>
+                        <Popup Name="DropDownPopUp" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" Focusable="False" PopupAnimation="Slide">
+                            <Grid SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <ListBox x:Name="PART_comboListBox_2013" BorderThickness="1,1,1,1" BorderBrush="#FFABABAB" SelectionMode="Multiple" ItemsSource="{TemplateBinding ItemsSource}" ItemContainerStyle="{DynamicResource CheckBoxListBoxItemStyle_2013}" HorizontalAlignment="Stretch" />
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="ToggleButtonStyle_2013" TargetType="ToggleButton">
+        <Grid FocusVisualStyle="{x:Null}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="ButtonBorder" FocusVisualStyle="{x:Null}" Background="{TemplateBinding Background}" Grid.ColumnSpan="2" BorderBrush="#FFABABAB" SnapsToDevicePixels="True" BorderThickness="1">
+            </Border>
+            <TextBlock Name="Text" Height="24" Margin="1,0,0,0" FontSize="14" Width="150" FocusVisualStyle="{x:Null}" Padding="5,2,0,0" VerticalAlignment="Center" Text="{TemplateBinding Content}"  ToolTip="{TemplateBinding Content}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FFCDE6F7" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+                </TextBlock>
+                <Border x:Name="splitBorder" Grid.Column="1" BorderBrush="#FFABABAB" BorderThickness="1" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="20">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">                                
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FFCDE6F7" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Path x:Name="ToggleButtonArrow"  HorizontalAlignment="Center" VerticalAlignment="Center" Fill="#777777" Data="{StaticResource DownArrowGeometry}"/>
+            </Border>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Fill" TargetName="ToggleButtonArrow" Value="#AFAFAF"/>
+            </Trigger>           
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="splitBorder" Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFCDE6F7" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="CheckBoxListBoxItemStyle_2013" TargetType="ListBoxItem">
+        <Setter Property="Foreground" Value="#FF6D6D6D" />
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="5,3,3,5"/>
+        <Setter Property="IsSelected" Value="{Binding Path=IsSelected}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Grid>
+                        <CheckBox x:Name="Box" Content="{Binding Path=DisplayField}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" ClickMode="Press"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="reports:ReportViewer">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="reports:ReportViewer">
+                    <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Background="{StaticResource BackgroundBrush}">
+                        <Grid x:Name="PART_MainGrid" Height="Auto" Background="Transparent">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Name="PART_toolBarGridRow" Height="40"/>
+                                <RowDefinition Name="PART_dsCredentialRow" Height="Auto"/>
+                                <RowDefinition Name="PART_parameterGridRow" Height="Auto"/>
+                                <RowDefinition Name="PART_viewerContentRow" Height="*" />
+                                <RowDefinition Name="PART_gridExceptionRow" Height="0"/>
+                                <RowDefinition Name="PART_loadingIndicatorRow" Height="0"/>
+                            </Grid.RowDefinitions>
+
+                            <!--Toolbar-->
+                            <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1">
+                                <StackPanel Name="PART_toolBar" Background="{StaticResource BackgroundBrush}" Height="40" Orientation="Horizontal" Grid.ColumnSpan="2" Margin="0">
+                                    
+                                    <!--Print-->
+                                    <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MetroButtonStyle}" BorderThickness="0"  Name="PART_buttonPrint" Width="30" Height="30" ToolTip="{x:Static report_properties:Resources.menuItemPrint}" IsEnabled="False" Margin="5,0,5,0" >
+                                        <Image Stretch="None" Width="16" Height="16">
+                                            <Image.Style>
+                                                <Style>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Button.IsEnabled" Value="False">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroPrintButton}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="Button.IsEnabled" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroPrintButton}"/>
+                                                        </Trigger>
+                                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroPrintButtonHover}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroPrintButtonActive}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                        <!--PrintDisabled-->
+                                    </Button>
+
+                                    <ComboBox FocusVisualStyle="{x:Null}" Name="PART_exportControl" BorderThickness="0" Height="30" Width="40"  Style="{StaticResource MetroExportComboBox}" Margin="0,0,5,0" ItemContainerStyle="{StaticResource MetroItemTemplate}" IsEnabled="False" ToolTip="Export" SnapsToDevicePixels="True" />
+
+                                    <Rectangle HorizontalAlignment="Center" Fill="{StaticResource BorderBrush}" Height="30" VerticalAlignment="Center" Width="1" Margin="0,0,5,0"/>
+
+                                    <!--Navigate to First-->
+                                    <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MetroButtonStyle}" Name="PART_buttonFirst" BorderThickness="0" ToolTip="{x:Static report_properties:Resources.menuItemFirst}" Width="30" Height="30" IsEnabled="False" Margin="0,0,5,0" >
+                                        <Image Stretch="Fill" Width="11" Height="11">
+                                            <Image.Style>
+                                                <Style>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Button.IsEnabled" Value="False">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavFirst}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="Button.IsEnabled" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavFirst}"/>
+                                                        </Trigger>
+                                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavFirstHover}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavFirstActive}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                        <!--First_NavDisabled-->
+                                    </Button>
+
+                                    <!--Navigate to Previous-->
+                                    <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MetroButtonStyle}" Name="PART_buttonPrevious" BorderThickness="0" Width="30" Height="30" ToolTip="{x:Static report_properties:Resources.menuItemPrevious}" IsEnabled="False" Margin="0,0,5,0" >
+                                        <Image Stretch="Fill" Width="11" Height="11">
+                                            <Image.Style>
+                                                <Style>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Button.IsEnabled" Value="False">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavPrevious}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="Button.IsEnabled" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavPrevious}"/>
+                                                        </Trigger>
+                                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavPreviousHover}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavPreviousActive}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                        <!--Previous_NavDisabled-->
+                                    </Button>
+
+                                    <!--Current Page-->
+                                    <TextBox FocusVisualStyle="{x:Null}" Name="PART_textBoxCurrentPage" VerticalContentAlignment="Center" BorderThickness="1" MinWidth="30" Padding="0" TextAlignment="Center" Height="25" FontSize="14" IsReadOnly="False" IsEnabled="False" BorderBrush="{StaticResource BorderBrush}" Margin="0,0,5,0" >
+                                    </TextBox>
+                                    <TextBlock FocusVisualStyle="{x:Null}" Name="PART_labelOf"  Width="Auto" VerticalAlignment="Center" Foreground="{StaticResource ForegroundBrush}" FontSize="14" Margin="0,0,5,0">of</TextBlock>
+
+                                    <!--Totla number of pages-->
+                                    <TextBlock Name="PART_textBoxTotalPages" Width="Auto"  xml:space="preserve" IsEnabled="false" FontSize="14" Margin="0,0,5,0" VerticalAlignment="Center" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center"/>
+
+                                    <!--Navigate to Next-->
+                                    <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MetroButtonStyle}" Name="PART_buttonNext" BorderThickness="0" Width="30" Height="30" ToolTip="{x:Static report_properties:Resources.menuItemNext}" IsEnabled="False" Margin="0,0,5,0" >
+                                        <Image Stretch="Fill" Width="11" Height="11">
+                                            <Image.Style>
+                                                <Style>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Button.IsEnabled" Value="False">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavNext}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="Button.IsEnabled" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavNext}"/>
+                                                        </Trigger>
+                                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavNextHover}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavNextActive}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                        <!--Next_NavDisabled-->
+                                    </Button>
+
+                                    <!--Navigate to Last-->
+                                    <Button FocusVisualStyle="{x:Null}"  Style="{StaticResource MetroButtonStyle}" Name="PART_buttonLast" BorderThickness="0" Width="30" Height="30" ToolTip="{x:Static report_properties:Resources.menuItemLast}" IsEnabled="False" Margin="0,0,5,0" >
+                                        <Image Stretch="Fill" Width="11" Height="11">
+                                            <Image.Style>
+                                                <Style>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Button.IsEnabled" Value="False">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavLast}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="Button.IsEnabled" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavLast}"/>
+                                                        </Trigger>
+                                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavLastHover}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroNavLastActive}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                        <!--Last_NavDisabled-->
+                                    </Button>
+
+                                    <!--Back Parent Report-->
+                                    <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MetroButtonStyle}" Name="PART_btnback" BorderThickness="0" Width="30" Height="30" ToolTip="{x:Static report_properties:Resources.toolTipBack}" IsEnabled="True" Margin="0,0,5,0" Visibility="Collapsed">
+                                        <Image Stretch="None" Width="16" Height="16">
+                                            <Image.Style>
+                                                <Style>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Button.IsEnabled" Value="False">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroReportBack}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="Button.IsEnabled" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroReportBack}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="Button.IsMouseOver" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroReportBackHover}"/>
+                                                        </Trigger>
+                                                        <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroReportBackActive}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                    </Button>
+
+                                    <Rectangle HorizontalAlignment="Center" Fill="{StaticResource BorderBrush}" Height="30" VerticalAlignment="Center" Width="1" Margin="0,0,5,0"/>
+
+
+                                    <!--Zooming-->
+                                    <ComboBox Name="PART_comboBoxPageZoom" FocusVisualStyle="{x:Null}" Margin="2,0,0,0" VerticalContentAlignment="Center" BorderBrush="{StaticResource BorderBrush}"  Width="70" BorderThickness="1" Height="25" FontSize="14" SelectedIndex="2" IsEnabled="False">
+                                        <ComboBoxItem FocusVisualStyle="{x:Null}" Content="25%"/>
+                                        <ComboBoxItem FocusVisualStyle="{x:Null}" Content="50%"/>
+                                        <ComboBoxItem FocusVisualStyle="{x:Null}" Content="100%"/>
+                                        <ComboBoxItem FocusVisualStyle="{x:Null}" Content="200%"/>
+                                        <ComboBoxItem FocusVisualStyle="{x:Null}" Content="300%"/>
+                                        <ComboBoxItem FocusVisualStyle="{x:Null}" Content="400%"/>
+                                        <ComboBoxItem Content="500%"/>
+                                    </ComboBox>
+
+                                    <!--Print Layout-->
+                                    <ToggleButton FocusVisualStyle="{x:Null}" Name="PART_buttonPrintLayout" Width="30" Height="30" ToolTip="{x:Static report_properties:Resources.menuItemPrintLayout}" IsEnabled="False" Margin="5,0,5,0">
+                                        <ToggleButton.Style>
+                                            <Style TargetType="ToggleButton">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                            <Border x:Name="MyBackgroundElement" BorderThickness="0">
+                                                                <Image Name="ParameterImage" Stretch="None" Width="16" Height="16"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <MultiTrigger>
+                                                                    <MultiTrigger.Conditions>
+                                                                        <Condition  Property="ToggleButton.IsMouseOver" Value="True"/>
+                                                                        <Condition Property="IsPressed" Value="False"/>
+                                                                    </MultiTrigger.Conditions>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Border.BorderBrush" Value="{StaticResource HoverBorderBrush}"/>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Background" Value="{StaticResource HoverBackgroundBrush}"/>
+                                                                    <Setter TargetName="ParameterImage" Property="Source" Value="{StaticResource MetroPrintLayoutXHover}"/>
+                                                                </MultiTrigger>
+                                                                <MultiTrigger>
+                                                                    <MultiTrigger.Conditions>
+                                                                        <Condition  Property="ToggleButton.IsMouseOver" Value="True"/>
+                                                                        <Condition Property="IsPressed" Value="True"/>
+                                                                    </MultiTrigger.Conditions>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Border.BorderBrush" Value="{StaticResource ActiveBorderBrush}"/>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Background" Value="{StaticResource ActiveBackgroundBrush}"/>
+                                                                    <Setter TargetName="ParameterImage" Property="Source" Value="{StaticResource MetroPrintLayoutXActive}"/>
+                                                                </MultiTrigger>
+                                                                <MultiTrigger>
+                                                                    <MultiTrigger.Conditions>
+                                                                        <Condition  Property="IsChecked" Value="True"/>
+                                                                        <Condition Property="IsMouseOver" Value="False"/>
+                                                                    </MultiTrigger.Conditions>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Border.BorderBrush" Value="{StaticResource ActiveBorderBrush}"/>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Background" Value="{StaticResource ActiveBackgroundBrush}"/>
+                                                                    <Setter TargetName="ParameterImage" Property="Source" Value="{StaticResource MetroPrintLayoutXActive}"/>
+                                                                </MultiTrigger>
+                                                                <MultiTrigger>
+                                                                    <MultiTrigger.Conditions>
+                                                                        <Condition  Property="IsChecked" Value="False"/>
+                                                                        <Condition Property="IsMouseOver" Value="False"/>
+                                                                    </MultiTrigger.Conditions>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Border.BorderBrush" Value="{StaticResource BorderBrush}"/>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Background" Value="{StaticResource BackgroundBrush}"/>
+                                                                    <Setter TargetName="ParameterImage" Property="Source" Value="{StaticResource MetroPrintLayoutX}"/>
+                                                                </MultiTrigger>
+                                                                <Trigger Property="IsEnabled" Value="False">
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Opacity" Value="0.5"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                        <!--PrintLayoutXDisabled-->
+                                    </ToggleButton>
+
+                                    <!--Print Setup-->
+                                    <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MetroButtonStyle}" BorderThickness="0" Background="Transparent" Name="PART_buttonPageSetup" Width="30" Height="30" ToolTip="{x:Static report_properties:Resources.toolTipPageSetUp}" IsEnabled="False" Margin="0,0,5,0" Visibility="Visible" >
+                                        <Image Stretch="None" Width="16" Height="16">
+                                            <Image.Style>
+                                                <Style>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Button.IsEnabled" Value="False">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroPageSetup}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="Button.IsEnabled" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroPageSetup}"/>
+                                                        </Trigger>
+                                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MatroPageSetupHover}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroPageSetupActive}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                        <!--PrintSetupDisabled-->
+                                    </Button>
+
+                                    <Rectangle HorizontalAlignment="Center" Fill="{StaticResource BorderBrush}" Height="30" VerticalAlignment="Center" Width="1"/>
+
+                                    <!--Refresh -->
+                                    <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MetroButtonStyle}" BorderThickness="0" Height="30" Width="30" Name="PART_buttonRefresh" ToolTip="{x:Static report_properties:Resources.menuItemRefresh}" IsEnabled="False" Margin="5,0,5,0">
+                                        <Image HorizontalAlignment="Center" VerticalAlignment="Center" Height="16" Width="16" Stretch="None" >
+                                            <Image.Style>
+                                                <Style>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Button.IsEnabled" Value="False">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroRefreshButton}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="Button.IsEnabled" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroRefreshButton}"/>
+                                                        </Trigger>
+                                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroRefreshButtonHover}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" Value="True">
+                                                            <Setter Property="Image.Source" Value="{StaticResource MetroRefreshButtonActive}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                        <!--RefreshDisabled-->
+                                    </Button>
+
+                                    <!--Show/Hide Document map-->
+                                    <ToggleButton FocusVisualStyle="{x:Null}" Name="PART_buttonShowOrHideDocumentMap" Width="30" ToolTip="{x:Static report_properties:Resources.menuItemShowHide}" IsEnabled="False" Visibility="Collapsed" Margin="0,0,5,0">
+                                        <!--<Image Source="{StaticResource MetroDocumentMap}" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Center" Height="16" Width="16"/>-->
+                                        <ToggleButton.Style>
+                                            <Style TargetType="ToggleButton">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                            <Border x:Name="MyBackgroundElement" BorderThickness="0">
+                                                                <Image Name="ParameterImage" Stretch="None" Width="16" Height="16"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <MultiTrigger>
+                                                                    <MultiTrigger.Conditions>
+                                                                        <Condition  Property="ToggleButton.IsMouseOver" Value="True"/>
+                                                                        <Condition Property="IsPressed" Value="False"/>
+                                                                    </MultiTrigger.Conditions>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Border.BorderBrush" Value="{StaticResource HoverBorderBrush}"/>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Background" Value="{StaticResource HoverBackgroundBrush}"/>
+                                                                    <Setter TargetName="ParameterImage" Property="Source" Value="{StaticResource MetroDocumentMapHover}"/>
+                                                                </MultiTrigger>
+                                                                <MultiTrigger>
+                                                                    <MultiTrigger.Conditions>
+                                                                        <Condition  Property="ToggleButton.IsMouseOver" Value="True"/>
+                                                                        <Condition Property="IsPressed" Value="True"/>
+                                                                    </MultiTrigger.Conditions>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Border.BorderBrush" Value="{StaticResource ActiveBorderBrush}"/>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Background" Value="{StaticResource ActiveBackgroundBrush}"/>
+                                                                    <Setter TargetName="ParameterImage" Property="Source" Value="{StaticResource MetroDocumentMapActive}"/>
+                                                                </MultiTrigger>
+                                                                <Trigger Property="IsEnabled" Value="False">
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Opacity" Value="0.5"/>
+                                                                </Trigger>
+                                                                <MultiTrigger>
+                                                                    <MultiTrigger.Conditions>
+                                                                        <Condition  Property="IsChecked" Value="False"/>
+                                                                        <Condition Property="IsMouseOver" Value="False"/>
+                                                                    </MultiTrigger.Conditions>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Border.BorderBrush" Value="{StaticResource BorderBrush}"/>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Background" Value="{StaticResource BackgroundBrush}"/>
+                                                                    <Setter TargetName="ParameterImage" Property="Source" Value="{StaticResource MetroDocumentMap}"/>
+                                                                </MultiTrigger>
+                                                                <MultiTrigger>
+                                                                    <MultiTrigger.Conditions>
+                                                                        <Condition  Property="IsChecked" Value="True"/>
+                                                                        <Condition Property="IsMouseOver" Value="False"/>
+                                                                    </MultiTrigger.Conditions>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Border.BorderBrush" Value="{StaticResource ActiveBorderBrush}"/>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Background" Value="{StaticResource ActiveBackgroundBrush}"/>
+                                                                    <Setter TargetName="ParameterImage" Property="Source" Value="{StaticResource MetroDocumentMapActive}"/>
+                                                                </MultiTrigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                        <!--ShowHideDisabled-->
+                                    </ToggleButton>
+
+                                    <!--Parameterised query-->
+                                    <ToggleButton FocusVisualStyle="{x:Null}" Name="PART_buttonParameters" Width="30" Height="30" ToolTip="{x:Static report_properties:Resources.toolTipParameters}" IsEnabled="False" Visibility="Collapsed" Margin="0,0,5,0" Background="Transparent" >
+                                        <ToggleButton.Style>
+                                            <Style TargetType="ToggleButton">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                            <Border x:Name="MyBackgroundElement" BorderThickness="0">
+                                                                <Image Name="ParameterImage" Stretch="None" Width="16" Height="16"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <MultiTrigger>
+                                                                    <MultiTrigger.Conditions>
+                                                                        <Condition  Property="ToggleButton.IsMouseOver" Value="True"/>
+                                                                        <Condition Property="IsPressed" Value="False"/>
+                                                                    </MultiTrigger.Conditions>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Border.BorderBrush" Value="{StaticResource HoverBorderBrush}"/>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Background" Value="{StaticResource HoverBackgroundBrush}"/>
+                                                                    <Setter TargetName="ParameterImage" Property="Source" Value="{StaticResource MetroParameterButtonHover}"/>
+                                                                </MultiTrigger>
+                                                                <MultiTrigger>
+                                                                    <MultiTrigger.Conditions>
+                                                                        <Condition  Property="ToggleButton.IsMouseOver" Value="True"/>
+                                                                        <Condition Property="IsPressed" Value="True"/>
+                                                                    </MultiTrigger.Conditions>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Border.BorderBrush" Value="{StaticResource ActiveBorderBrush}"/>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Background" Value="{StaticResource ActiveBackgroundBrush}"/>
+                                                                    <Setter TargetName="ParameterImage" Property="Source" Value="{StaticResource MetroParameterButtonActive}"/>
+                                                                </MultiTrigger>
+                                                                <Trigger Property="IsEnabled" Value="False">
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Opacity" Value="0.5"/>
+                                                                </Trigger>
+                                                                <MultiTrigger>
+                                                                    <MultiTrigger.Conditions>
+                                                                        <Condition  Property="IsChecked" Value="False"/>
+                                                                        <Condition Property="IsMouseOver" Value="False"/>
+                                                                    </MultiTrigger.Conditions>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Border.BorderBrush" Value="{StaticResource BorderBrush}"/>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Background" Value="{StaticResource BackgroundBrush}"/>
+                                                                    <Setter TargetName="ParameterImage" Property="Source" Value="{StaticResource MetroParameterButton}"/>
+                                                                </MultiTrigger>
+                                                                <MultiTrigger>
+                                                                    <MultiTrigger.Conditions>
+                                                                        <Condition  Property="IsChecked" Value="True"/>
+                                                                        <Condition Property="IsMouseOver" Value="False"/>
+                                                                    </MultiTrigger.Conditions>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Border.BorderBrush" Value="{StaticResource ActiveBorderBrush}"/>
+                                                                    <Setter TargetName="MyBackgroundElement" Property="Background" Value="{StaticResource ActiveBackgroundBrush}"/>
+                                                                    <Setter TargetName="ParameterImage" Property="Source" Value="{StaticResource MetroParameterButtonActive}"/>
+                                                                </MultiTrigger>
+                                                                <Trigger Property="IsPressed" Value="True">
+                                                                    <Setter Property="Image.Source" Value="{StaticResource MetroParameterButtonActive}"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                        <!--ParametersDisabled-->
+                                    </ToggleButton>
+
+                                    <Rectangle HorizontalAlignment="Center" Fill="{StaticResource BorderBrush}"  Height="30" VerticalAlignment="Center" Width="1" Visibility="Hidden"/>
+
+                                    <TextBox Name="PART_textBoxFind" Width="60" Height="22" xml:space="preserve" IsEnabled="False" BorderBrush="{StaticResource BorderBrush}" ToolTip="{x:Static report_properties:Resources.toolTipFindTextBox}" Margin="0,0,5,0" Visibility="Collapsed"/>
+            
+            <!--Find-->
+            <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MetroButtonStyle}" Name="PART_buttonFind" BorderThickness="0" Width="30" Height="30" ToolTip="{x:Static report_properties:Resources.toolTipFind}" IsEnabled="False" Visibility="Collapsed" Margin="0,0,5,0">
+                <Image Stretch="None" Width="16" Height="16">
+                    <Image.Style>
+                        <Style>
+                            <Style.Triggers>
+                              <Trigger Property="Button.IsEnabled" Value="False">
+                                   <Setter Property="Image.Source" Value="{StaticResource MetroFindDisabled}"/>
+                              </Trigger>
+                              <Trigger Property="Button.IsEnabled" Value="True">
+                                   <Setter Property="Image.Source" Value="{StaticResource MetroFind}"/>
+                              </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                 </Image>
+                <!--FindDisabled-->
+            </Button>
+        </StackPanel>
+                            </Border>
+
+                            <!-- DataSoruce Credential Prompt -->
+                            <Grid Grid.Row="1" FlowDirection="LeftToRight">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" x:Name="PART_rowDefinitionFordsCredentialBlock"/>
+                                </Grid.RowDefinitions>
+                                <ScrollViewer Name="PART_scorllDSCredentialBlock" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto"  HorizontalScrollBarVisibility="Disabled" Visibility="Collapsed">
+                                    <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1">
+                                        <StackPanel Name="PART_stackPaneldsCredential" Grid.Row="0" Background="{StaticResource BackgroundBrush}" Width="Auto" Height="Auto">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="300*"/>
+                                                    <ColumnDefinition Width="100*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid Background="{StaticResource BackgroundBrush}" x:Name="PART_grid_DsCredentialblock" Grid.Column="0" Width="Auto">
+                                                    <StackPanel Width="Auto" Name="PART_sPanel_Head">
+                                                    </StackPanel>
+                                                </Grid>
+                                                <StackPanel Grid.Column="1" Background="{StaticResource BackgroundBrush}">
+                                                    <Button Content="{x:Static report_properties:Resources.btnViewReport}" BorderBrush="{StaticResource BorderBrush}" Background="{StaticResource BackgroundBrush}" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Right" x:Name="PART_btnViewReport1" Width="70" Height="22" Margin="0,5,20,5">
+                                                    </Button>
+                                                </StackPanel>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Border>
+                                </ScrollViewer>
+                            </Grid>
+
+
+                            <Grid Grid.Row="2" FlowDirection="LeftToRight">
+                                <!--Parameter prompt panel-->
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" x:Name="PART_rowDefinitionForParameterBlock"/>
+                                </Grid.RowDefinitions>
+                                <ScrollViewer x:Name="PART_scrollViewerParamBlock" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto"  HorizontalScrollBarVisibility="Disabled" Visibility="Collapsed">
+                                    <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1">
+                                        <StackPanel Name="PART_stackPanelParameters" Grid.Row="0" Width="Auto" Height="Auto" Background="{StaticResource BackgroundBrush}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="100*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <Grid Background="{StaticResource BackgroundBrush}" x:Name="PART_grid_ReportParameterBlock" Grid.Column="0" Margin="5">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                </Grid>
+
+                                                <StackPanel x:Name="MetroViewReportPanel" Grid.Column="1" Background="{StaticResource BackgroundBrush}">
+                                                    <Grid HorizontalAlignment="Right" Width="120" Height="{Binding ElementName=MetroViewReportPanel, Path=ActualHeight}" >
+                                                        <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1,0,0,0" Opacity="0.5" Margin="0,8,0,8" Height="{Binding ElementName=MetroViewReportPanel, Path=ActualHeight}"/>
+                                                        <Button Content="{x:Static report_properties:Resources.btnViewReport}" Foreground="{StaticResource ForegroundBrush}" FontSize="14" HorizontalAlignment="Center" x:Name="PART_btnViewReport" Width="90" Height="27" VerticalContentAlignment="Center">
+                                                            <Button.Style>
+                                                                <Style TargetType="{x:Type Button}">
+                                                                    <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+                                                                    <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+                                                                    <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+                                                                    <Setter Property="Template">
+                                                                        <Setter.Value>
+                                                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                                                <Border Name="ViewReportButtonBorder" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0.5">
+                                                                                    <ContentPresenter x:Name="ViewReportButtonContentPresenter" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                                                </Border>
+                                                                                <ControlTemplate.Triggers>
+                                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                                        <Setter TargetName="ViewReportButtonBorder" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                                                                                        <Setter TargetName="ViewReportButtonBorder" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                                                                                        <Setter TargetName="ViewReportButtonBorder" Property="Button.Foreground" Value="{StaticResource HoverForegroundBrush}" />
+                                                                                    </Trigger>
+                                                                                    <Trigger Property="IsPressed" Value="True">
+                                                                                        <Setter TargetName="ViewReportButtonBorder" Property="Background" Value="{StaticResource ActiveBackgroundBrush}" />
+                                                                                        <Setter TargetName="ViewReportButtonBorder" Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                                                                                        <Setter TargetName="ViewReportButtonBorder" Property="Button.Foreground" Value="{StaticResource ActiveForegroundBrush}" />
+                                                                                    </Trigger>
+                                                                                </ControlTemplate.Triggers>
+                                                                            </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Style>
+                                                            </Button.Style>
+                                                        </Button>
+                                                    </Grid>
+                                                </StackPanel>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Border>
+                                </ScrollViewer>
+                            </Grid>
+
+                            <Grid Name="PART_gridRenderingRegion" Grid.Row="3" Height="Auto" Margin="0,0,0,0" FlowDirection="LeftToRight">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                        <RowDefinition Height="*"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <Grid Name="PART_ExceptionGrid" Grid.Row="0" Visibility="Collapsed" Background="{StaticResource BackgroundBrush}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="24"></ColumnDefinition>
+                                            <ColumnDefinition Width="749"></ColumnDefinition>
+                                            <ColumnDefinition Width="0" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Height="24" Width="24" Margin="5,5,5,5" Grid.ColumnSpan="2" HorizontalAlignment="Left"></Image>
+                                        <TextBlock Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="23" Margin="10,7,10,0" Width="730">
+                        Report Viewer has encountered some issues while loading this report. Click <Hyperlink x:Name="PART_hyperlink">here </Hyperlink> to view issue details.
+                                        </TextBlock>
+                                    </Grid>
+                                    <Grid Grid.Row="1" x:Name="PART_renderArea">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0" Height="Auto" Width="Auto" x:Name="PART_treeItemArea" Visibility="Collapsed">
+                                            <TreeView Name="PART_DocumentMap" Height="Auto" Width="Auto" BorderThickness="0"/>
+                                        </Grid>
+                                        <GridSplitter x:Name="PART_viewerSpliter" Visibility="Collapsed" Grid.Column="1" ShowsPreview="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext" Width="5" Background="{StaticResource BackgroundBrush}"/>
+                                        <!--Viewer Page-->
+                                        <ScrollViewer x:Name="PART_scrollViewer" FocusVisualStyle="{x:Null}" Grid.Column="2" Height="Auto" Width="Auto" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                            <ScrollViewer.Resources>
+                                                <DataTemplate x:Key="MetroReportViewerCellTeamplate">
+                                                    <ContentControl Content="{Binding Path=CellBoundValue}"></ContentControl>
+                                                </DataTemplate>
+                                            </ScrollViewer.Resources>
+                                            <StackPanel Orientation="Vertical" Name="PART_PageView" Height="Auto" Width="Auto" Background="White">
+                                                <StackPanel.LayoutTransform>
+                                                    <ScaleTransform x:Name="PART_Zoom"></ScaleTransform>
+                                                </StackPanel.LayoutTransform>
+                                                <Border x:Name="PART_PageViewBody" Background="Transparent" Height="Auto" Width="Auto">
+                                                    <StackPanel x:Name="PART_PageViewContainer" Background="Transparent" Height="Auto" Width="Auto">
+                                                        <Border Name="PART_PageHeaderBorder" Height="Auto" Width="Auto" Background="Transparent">
+                                                            <Canvas x:Name="PART_CanvasHeader" Visibility="Collapsed" Background="Transparent"/>
+                                                        </Border>
+                                                        <Border Name="PART_PageBodyBorder" Height="Auto" Width="Auto" Background="Transparent">
+                                                            <Canvas x:Name="PART_canvasContentPage" Grid.Row="2" Background="Transparent" Width="Auto" Height="Auto"/>
+                                                        </Border>
+                                                        <Border Name="PART_PageFooterBorder" Height="Auto" Width="Auto" Background="Transparent">
+                                                            <Canvas x:Name="PART_CanvasFooter" Visibility="Collapsed" Background="Transparent"/>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+
+                            <Grid x:Name="PART_gridException" Margin="20,10,0,0"  Grid.Row="4" Background="White" Visibility="Collapsed" FlowDirection="LeftToRight">
+                                <StackPanel  Orientation="Vertical" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                                        <Image Name="PART_imageException" Source="{StaticResource MetroException}" Width="48" HorizontalAlignment="Center"/>
+                                        <TextBlock Name="PART_textBlockException"></TextBlock>
+                                    </StackPanel>
+                                    <ScrollViewer Name="PART_groupBoxExpandedExceptionScroll" Grid.Row="3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Height="400">
+                                        <GroupBox Name="PART_groupBoxExpandedException" Width="420" Margin="5,0,5,0" FlowDirection="RightToLeft" BorderThickness="0">
+                                            <GroupBox.Header>
+                                                <ToggleButton Name="PART_toggleShowDetails" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Bottom">Show Details</ToggleButton>
+                                            </GroupBox.Header>
+                                            <WrapPanel Name="PART_ShowError" Visibility="Collapsed" Width="auto">
+                                                <TextBox Name="PART_textBlockStackTrace" TextWrapping="Wrap" FlowDirection="LeftToRight" Width="390" IsReadOnly="True" ></TextBox>
+                                                <TextBox Name="PART_textBlockStackTraceMessage" TextWrapping="Wrap" FlowDirection="LeftToRight" Width="390" IsReadOnly="True" ></TextBox>
+                                            </WrapPanel>
+                                        </GroupBox>
+                                    </ScrollViewer>
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid x:Name="PART_gridLoadingIndicator" Grid.Row="5" Background="White" Visibility="Collapsed" FlowDirection="LeftToRight">
+                                <report_utils:LoadingIndicator></report_utils:LoadingIndicator>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="reports:ReportViewer.ViewMode" Value="Normal">
+                            <Setter TargetName="PART_gridRenderingRegion" Property="Background" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="reports:ReportViewer.ViewMode" Value="Print">
+                            <Setter TargetName="PART_gridRenderingRegion" Property="Background" Value="{StaticResource BackgroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

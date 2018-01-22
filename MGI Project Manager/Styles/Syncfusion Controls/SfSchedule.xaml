@@ -1,0 +1,323 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"  
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:radialmenu="clr-namespace:Syncfusion.Windows.Controls.Navigation;assembly=Syncfusion.SfRadialMenu.Wpf"
+                    xmlns:sfschedule="clr-namespace:Syncfusion.UI.Xaml.Schedule;assembly=Syncfusion.SfSchedule.WPF">
+
+     <ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary.MergedDictionaries>
+
+<LinearGradientBrush x:Key="BackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FFEEEEF2" Offset="0" /><GradientStop Color="#FFEEEEF2" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="BorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="ForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="GlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="HeaderBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FFEEEEF2" Offset="0" /><GradientStop Color="#FFEEEEF2" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="HeaderBorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="HeaderForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="HeaderGlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="HoverBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FF7FBCE5" Offset="0" /><GradientStop Color="#FF7FBCE5" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="HoverBorderBrush" Color="#FF7FBCE5" />
+	<SolidColorBrush x:Key="HoverForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="HoverGlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="ActiveBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FF007ACC" Offset="0" /><GradientStop Color="#FF007ACC" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="ActiveBorderBrush" Color="#FF007ACC" />
+	<SolidColorBrush x:Key="ActiveForegroundBrush" Color="#FFFFFFFF" />
+	<SolidColorBrush x:Key="ActiveGlyphBrush" Color="#FFFFFFFF" />
+	<SolidColorBrush x:Key="ContentBackgroundBrush" Color="#FFF5F5F5" />
+	<SolidColorBrush x:Key="ContentBorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="ContentForegroundBrush" Color="#FF1E1E1E" />
+	<SolidColorBrush x:Key="ContentSelectionBrush" Color="#FFA5A5A5" />
+	<SolidColorBrush x:Key="SelectionInActiveBrush" Color="#FF99C9EA" />
+	<SolidColorBrush x:Key="ErrorBrush" Color="#FFFF0000" />
+	<SolidColorBrush x:Key="ActiveLightBackground" Color="#FF99C9EA" />
+	<SolidColorBrush x:Key="ActiveDarkBackground" Color="#FF003D66" />
+	<SolidColorBrush x:Key="ContentAlternativeBackground" Color="#FFDCDCDC" />
+	<SolidColorBrush x:Key="TickColor" Color="#FFBCBCBC" />
+	<SolidColorBrush x:Key="RangeColor1" Color="#FF61A301" />	
+	<SolidColorBrush x:Key="RangeColor2" Color="#FFF2E606" />	
+	<SolidColorBrush x:Key="RangeColor3" Color="#FFFF0000" />
+	<SolidColorBrush x:Key="LightBackgroundBrush" Color="#FFDDDDE5" />
+
+
+    <sfschedule:BoolToVisibilityConverter x:Key="BooltoVis"/>
+    <sfschedule:BoolToBoolConverter x:Key="BooltoBool"/>
+    <sfschedule:ResourceWrapper x:Key="ResourceWrapper"/>
+   
+    <!-- Region Button Styles -->
+    <Style x:Key="prevButton" TargetType="Button">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                   
+                    <Border x:Name="border" BorderThickness="1" Width="25" Height="25" >
+                            <Path x:Name="path" Data="M197,153.5 L197,138 186.75,145.5 z" Height="14.5" Width="9.5" Fill="{StaticResource GlyphBrush}" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Border.IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Border.BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                            <Setter  TargetName="border" Property="Border.Background" Value="{StaticResource HoverBackgroundBrush}"/>
+                            <Setter TargetName="path" Property="Fill" Value="{StaticResource HoverGlyphBrush}"></Setter>
+                        </Trigger>
+                        <Trigger Property="Button.IsPressed" Value="True">
+                            <Setter TargetName="path" Property="Fill" Value="{StaticResource ActiveGlyphBrush}" />
+                            <Setter TargetName="border" Property="Border.BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                            <Setter  TargetName="border" Property="Border.Background" Value="{StaticResource ActiveBackgroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="nextButton" TargetType="Button">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                
+                     <Border x:Name="border" Width="25" Height="25" BorderThickness="1">
+                         <Path x:Name="path" Data="M197,153.5 L197,138 186.75,145.5 z" Height="14.5" Width="9.5" Fill="{StaticResource GlyphBrush}" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <RotateTransform Angle="180"/>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Border.IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Border.BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                            <Setter  TargetName="border" Property="Border.Background" Value="{StaticResource HoverBackgroundBrush}"/>
+                            <Setter TargetName="path" Property="Fill" Value="{StaticResource HoverGlyphBrush}"></Setter>
+                        </Trigger>
+                        <Trigger Property="Button.IsPressed" Value="True">
+                            <Setter TargetName="path" Property="Fill" Value="{StaticResource ActiveGlyphBrush}" />
+                            <Setter TargetName="border" Property="Border.BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                            <Setter  TargetName="border" Property="Border.Background" Value="{StaticResource ActiveBackgroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- EndRegion Button Styles-->
+
+	<Style TargetType="sfschedule:ScheduleDaysView" >
+        <Setter Property="Background" Value="{StaticResource ContentBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource HeaderForegroundBrush}"/>
+    </Style>	
+
+    <Style TargetType="sfschedule:ScheduleTimeLineView" >
+        <Setter Property="Background" Value="{StaticResource ContentBackgroundBrush}"/>
+    </Style>
+ 
+    <Style TargetType="sfschedule:ScheduleMonthViewHeaderControl" >
+        <Setter Property="Foreground" Value="{StaticResource HeaderForegroundBrush}"/>
+    </Style>
+ 
+    <Style TargetType="sfschedule:ScheduleHorizontalDaysHeaderViewItemsControl">
+        <Setter  Property="BorderBrush" Value="{StaticResource HeaderBorderBrush}"></Setter>
+    </Style>
+
+
+    <Style TargetType="sfschedule:ScheduleAllDaysAppointmentItemsControl">
+        <Setter Property="BorderBrush" Value="{StaticResource HeaderBorderBrush}"></Setter>
+    </Style>
+    <Style TargetType="sfschedule:ScheduleDaysHeaderViewItemsControl" >
+        <Setter Property="Foreground" Value="{StaticResource HeaderForegroundBrush}"/>
+    </Style>
+    <!-- Region Schedule -->
+
+    <Style TargetType="sfschedule:SfSchedule">
+        <Setter Property="Background" Value="{StaticResource ContentBorderBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource ContentForegroundBrush}"/>
+        <Setter Property="CellSelectionBrush" Value="{StaticResource HoverBackgroundBrush}" />
+        <Setter Property="MajorTickLabelStroke" Value="{StaticResource HeaderForegroundBrush}"></Setter>
+        <Setter Property="MajorTickStroke" Value="{StaticResource HeaderBorderBrush}"></Setter>
+        <Setter Property="MinorTickLabelStroke" Value="{StaticResource HeaderForegroundBrush}"></Setter>
+        <Setter Property="MinorTickStroke" Value="{StaticResource HeaderBorderBrush}"></Setter>
+        <Setter Property="FocusedMonth" Value="{StaticResource ContentBackgroundBrush}"></Setter>
+        <Setter Property="NonFocusedMonth" Value="{StaticResource ContentAlternativeBackground}"></Setter>
+        <Setter Property="MonthViewLineStroke" Value="{StaticResource ContentBorderBrush}"></Setter>
+        <Setter Property="DayViewVerticalLineStroke" Value="{StaticResource HeaderBorderBrush}"></Setter>
+        <Setter Property="HeaderBackground" Value="{StaticResource HeaderBackgroundBrush}"></Setter>
+        <Setter Property="CurrentDateBackground" Value="{StaticResource ActiveDarkBackground}"></Setter>
+        <!--<Setter Property="CurrentDateForeground" Value="{StaticResource ActiveForegroundBrush}"></Setter>-->
+        <Setter Property="AppointmentSelectionBrush" Value="{StaticResource ActiveBorderBrush}"></Setter>
+        <Setter Property="NonWorkingHourBrush" Value="{StaticResource ContentAlternativeBackground}"></Setter>
+
+        <Setter Property="PreviousNavigationButtonTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Grid Height="30" Width="250" VerticalAlignment="Center" Tag="PreviousAppointment">
+                        <Grid.RenderTransform>
+                            <TransformGroup>
+                                <RotateTransform Angle="-90" CenterX="125" CenterY="15"/>
+                                <TranslateTransform X="-90"/>
+                            </TransformGroup>
+                        </Grid.RenderTransform>
+                        <Rectangle x:Name="rect" Fill="{StaticResource BackgroundBrush}" Height="30" Width="250" />
+                        <TextBlock x:Name="text" Text="Previous Appointment" FontSize="14" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                    <DataTemplate.Triggers>
+                        <Trigger Property="Border.IsMouseOver" Value="True">
+                            <Setter  TargetName="rect" Property="Fill" Value="{StaticResource HoverBackgroundBrush}"/>
+                            <Setter TargetName="text" Property="TextBlock.Foreground" Value="{StaticResource HoverForegroundBrush}"></Setter>
+                        </Trigger>
+                        <Trigger Property="Button.IsPressed" Value="True">
+                            <Setter  TargetName="text" Property="TextBlock.Foreground" Value="{StaticResource ActiveGlyphBrush}" />
+                            <Setter  TargetName="rect" Property="Fill" Value="{StaticResource ActiveBackgroundBrush}"/>
+                        </Trigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="NextNavigationButtonTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Grid Height="30" Width="250" VerticalAlignment="Center" Tag="NextAppointment">
+                        <Grid.RenderTransform>
+                            <TransformGroup>
+                                <RotateTransform Angle="-90" CenterX="125" CenterY="15"/>
+                                <TranslateTransform X="90"/>
+                            </TransformGroup>
+                        </Grid.RenderTransform>
+                        <Rectangle x:Name="rect" Fill="{StaticResource BackgroundBrush}" Height="30" Width="250"/>
+                        <TextBlock x:Name="text" Text="Next Appointment" Foreground="{StaticResource ForegroundBrush}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                    <DataTemplate.Triggers>
+                        <Trigger Property="Border.IsMouseOver" Value="True">
+                            <Setter  TargetName="rect" Property="Fill" Value="{StaticResource HoverBackgroundBrush}"/>
+                            <Setter TargetName="text" Property="TextBlock.Foreground" Value="{StaticResource HoverForegroundBrush}"></Setter>
+                        </Trigger>
+                        <Trigger Property="Button.IsPressed" Value="True">
+                            <Setter  TargetName="text" Property="TextBlock.Foreground" Value="{StaticResource ActiveGlyphBrush}" />
+                            <Setter  TargetName="rect" Property="Fill" Value="{StaticResource ActiveBackgroundBrush}"/>
+                        </Trigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="CurrentTimeIndicatorTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Rectangle Fill="{StaticResource HoverBorderBrush}"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <Setter Property="AppointmentToolTipTemplate" >
+            <Setter.Value>
+                <ControlTemplate >
+                    <Border x:Name="ToolTipBorder" Height="160" Width="250" BorderBrush="{StaticResource ContentBorderBrush}" BorderThickness="1.5"  >
+                        <Grid Background="{StaticResource ContentBackgroundBrush}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1.5*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Margin="10" Grid.Row="0" Background="{Binding AppointmentBackground}">
+                                <Rectangle Height="50" Width="5" HorizontalAlignment="Left" Fill="{Binding Status.Brush}"/>
+                                <TextBlock Text="{Binding Subject}" Height="30" Width="auto" Margin="30,10,0,0" Foreground="{StaticResource ContentForegroundBrush}" VerticalAlignment="Center"/>
+                            </Grid>
+                            <Grid Margin="10,0,10,10" Grid.Row="1" >
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock  Grid.Column="0" Foreground="{StaticResource ContentForegroundBrush}" Text="Start"  VerticalAlignment="Bottom"/>
+                                        <TextBlock  Grid.Column="1" Foreground="{StaticResource ContentForegroundBrush}" Text="{Binding StartTime}"  VerticalAlignment="Bottom"/>
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock  Grid.Column="0" Foreground="{StaticResource ContentForegroundBrush}" Text="End"  VerticalAlignment="Bottom"/>
+                                        <TextBlock  Grid.Column="1" Foreground="{StaticResource ContentForegroundBrush}" Text="{Binding EndTime}"  VerticalAlignment="Bottom"/>
+                                    </Grid>
+
+                                </Grid>
+                            </Grid>
+                            <Grid Margin="10,0,10,10" Grid.Row="2" >
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Row="0" Foreground="{StaticResource ContentForegroundBrush}" Text="Location"  VerticalAlignment="Bottom"/>
+                                        <TextBlock  Grid.Column="1"  Foreground="{StaticResource ContentForegroundBrush}" Text="{Binding Location}"  VerticalAlignment="Bottom"/>
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Row="0" Text="Reminder" Foreground="{StaticResource ContentForegroundBrush}" VerticalAlignment="Bottom"/>
+                                        <TextBlock  Grid.Column="1"  Foreground="{StaticResource ContentForegroundBrush}" Text="{Binding ReminderTime}"  VerticalAlignment="Bottom"/>
+                                    </Grid>
+
+
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
+    </Style>
+
+    <!-- EndRegion Schedule-->
+
+    <!-- Region HeaderTitleBarView -->
+
+    <Style TargetType="sfschedule:HeaderTitleBarView">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+      
+<Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="sfschedule:HeaderTitleBarView">
+                    <Border BorderBrush="{StaticResource BorderBrush}" Background="{StaticResource BackgroundBrush}" BorderThickness="1.5,1.5,1.5,0" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" >
+                        <Grid x:Name="Header_Grid"  Visibility="{TemplateBinding Visibility}" Margin="10,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Name="PART_PrevButton" Style="{StaticResource prevButton}"   VerticalAlignment="Center" Visibility="{Binding HeaderNavigationButtonVisibility,RelativeSource={RelativeSource TemplatedParent}}" />
+
+                            <Button Name="PART_NextButton" Style="{StaticResource nextButton}" Grid.Column="1"  VerticalAlignment="Center" Visibility="{Binding HeaderNavigationButtonVisibility,RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                            <TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="10 0"
+                                   Text="{TemplateBinding HeaderText}" Foreground="{TemplateBinding Foreground}"
+                                   FontWeight="ExtraLight" FontSize="30" FontFamily="Segoe UI"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+
+    <!-- EndRegion HeaderTitleBarView-->
+
+    
+
+</ResourceDictionary>

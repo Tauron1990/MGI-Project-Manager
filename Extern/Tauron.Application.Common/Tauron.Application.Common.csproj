@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0D50EE98-A718-41B2-A1B6-57D23FDF5223}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tauron</RootNamespace>
+    <AssemblyName>Tauron.Application.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>CS0649</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>CommonKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release Debug|AnyCPU'">
+    <OutputPath>bin\Release Debug\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\Release\Tauron.Application.Common.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NLog.4.5.0-rc03\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Application\Aop\AspectBaseAttribute.cs" />
+    <Compile Include="Application\Aop\Model\SecuredOperationAttribute.cs" />
+    <Compile Include="Application\CommonConstants.cs" />
+    <Compile Include="Application\Content\ApplicationManagment\ExportModuleAttribute.cs" />
+    <Compile Include="Application\Content\CommandLine\IFileCommand.cs" />
+    <Compile Include="Application\Content\CommonElements\ISecurable.cs" />
+    <Compile Include="Application\Aop\Model\INotifyPropertyChangedMethod.cs" />
+    <Compile Include="Application\Aop\Model\NotifyPropertyChangedAttribute.cs" />
+    <Compile Include="Application\Aop\Threading\BarrierSync.cs" />
+    <Compile Include="Application\Aop\Threading\BaseHolder.cs" />
+    <Compile Include="Application\Aop\Threading\ContextPropertyAttributeBase.cs" />
+    <Compile Include="Application\Aop\Threading\CountdownSync.cs" />
+    <Compile Include="Application\Aop\Threading\ManualResetEventSync.cs" />
+    <Compile Include="Application\Aop\Threading\MonitorSync.cs" />
+    <Compile Include="Application\Aop\Threading\ReaderWriterLockSync.cs" />
+    <Compile Include="Application\Aop\Threading\SemaphoreSync.cs" />
+    <Compile Include="Application\Aop\Threading\ThreadingBaseAspect.cs" />
+    <Compile Include="Application\Content\CommonElements\BaseObject.cs" />
+    <Compile Include="Application\Content\CommonElements\UISyncObservableCollection.cs" />
+    <Compile Include="Application\Content\UI\UiSynchronize.cs" />
+    <Compile Include="Application\Ioc\AggregareExportProvider.cs" />
+    <Compile Include="Application\Ioc\BuildParameter.cs" />
+    <Compile Include="Application\Ioc\BuildUpException.cs" />
+    <Compile Include="Application\Ioc\BuildUp\IImportInterceptorFactory.cs" />
+    <Compile Include="Application\Ioc\BuildUp\IInterceptImport.cs" />
+    <Compile Include="Application\Ioc\BuildUp\RsolverExtension.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Policys\ExternalImportInterceptorPolicy.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Policys\ObjectContextPolicy.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\ArrayResolver.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\CompositeInterceptor.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\ImportInterceptorHelper.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\InjectorBaseConstants.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\IResolver.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\LazyResolver.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\ListResolver.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\Injectorbase.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\SimpleResolver.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\Steps\ArrayResolverStep.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\Steps\ExportEinuerableHelper.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\Steps\InitializeStep.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\Steps\InjectorContext.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\Steps\InjectorStep.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\Steps\IsGenericStep.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\Steps\LazyResolverStep.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\Steps\ListResolverStep.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\Steps\ManyResolverStep.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\Steps\ReflectionContext.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\Steps\ResolverCreationStep.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\Steps\ResolverFactory.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\Steps\SimpleResolverStep.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\Steps\StepIds.cs" />
+    <Compile Include="Application\Ioc\ContextScopeAttribute.cs" />
+    <Compile Include="Application\Ioc\ErrorTracer.cs" />
+    <Compile Include="Application\Ioc\ExportDescriptor.cs" />
+    <Compile Include="Application\Ioc\InstanceResolver.cs" />
+    <Compile Include="Application\Ioc\ExportLevelAttribute.cs" />
+    <Compile Include="Application\Ioc\LevelSpecificImport.cs" />
+    <Compile Include="Application\Ioc\LevelSpecificInject.cs" />
+    <Compile Include="Application\Ioc\LifeTime\ObjectContext.cs" />
+    <Compile Include="Application\Ioc\LifeTime\ContextManager.cs" />
+    <Compile Include="Application\Aop\Threading\ScheduleAttribute.cs" />
+    <Compile Include="Application\Aop\Model\TraceAttribute.cs" />
+    <Compile Include="Application\Aop\EventAspectAttribute.cs" />
+    <Compile Include="Application\Ioc\IContextHolder.cs" />
+    <Compile Include="Application\Aop\MethodAspectAttribute.cs" />
+    <Compile Include="Application\Aop\PropertyAspectAttrebute.cs" />
+    <Compile Include="Application\Composition\CatalogCollection.cs" />
+    <Compile Include="Application\Composition\XamlCatalog.cs" />
+    <Compile Include="Application\Composition\XamlCatalogs.cs" />
+    <Compile Include="Application\Content\ApplicationManagment\ActiveProgress.cs" />
+    <Compile Include="Application\Content\ApplicationManagment\Factory.cs" />
+    <Compile Include="Application\Content\ApplicationManagment\TaskScheduler.cs" />
+    <Compile Include="Application\Content\ApplicationManagment\UserTask.cs" />
+    <Compile Include="Application\Content\CommandLine\CommandLineCommandBase.cs" />
+    <Compile Include="Application\Content\ApplicationManagment\IModule.cs" />
+    <Compile Include="Application\Content\CommonElements\EventListManager.cs" />
+    <Compile Include="Application\Content\CommonElements\ITask.cs" />
+    <Compile Include="Application\Content\CommonElements\ObservableObject.cs" />
+    <Compile Include="Application\Content\CommonElements\GroupDirectory.cs" />
+    <Compile Include="Application\Content\UI\IDialogFactory.cs" />
+    <Compile Include="Application\Content\UI\IProgressDialog.cs" />
+    <Compile Include="Application\Implement\CommandLineProcessor.cs" />
+    <Compile Include="Application\Implement\CommandLineService.cs" />
+    <Compile Include="Application\Content\CommandLine\DefaultShellFactory.cs" />
+    <Compile Include="Application\Content\CommandLine\ICommandLineCommand.cs" />
+    <Compile Include="Application\Content\CommandLine\ICommandLineService.cs" />
+    <Compile Include="Application\Implement\ApplicationHelper.cs" />
+    <Compile Include="Application\Content\CommonElements\ClipboardViewer.cs" />
+    <Compile Include="Application\Content\CommonElements\IClipboardManager.cs" />
+    <Compile Include="Application\Content\CommonElements\IWindow.cs" />
+    <Compile Include="Application\Content\ApplicationManagment\IApplicationHelper.cs" />
+    <Compile Include="Application\Implement\ClipboardManager.cs" />
+    <Compile Include="Application\Content\CommandLine\IShellFactory.cs" />
+    <Compile Include="Application\Content\ApplicationManagment\ISingleThreadScheduler.cs" />
+    <Compile Include="Application\Content\ApplicationManagment\ISingleInstanceApp.cs" />
+    <Compile Include="Application\Implement\SingleThreadScheduler.cs" />
+    <Compile Include="Application\Content\ApplicationManagment\CommonApplication.cs" />
+    <Compile Include="Application\Content\CommonElements\WeakAction.cs" />
+    <Compile Include="Application\Content\CommonElements\WeakCleanUp.cs" />
+    <Compile Include="Application\Content\CommonElements\WeakCollection.cs" />
+    <Compile Include="Application\Content\CommonElements\LimitedList.cs" />
+    <Compile Include="Application\Content\CommonElements\ObservableDictionary.cs" />
+    <Compile Include="Application\Content\CommonElements\ShearedEvent.cs" />
+    <Compile Include="Application\Implement\SingleInstanceApp.cs" />
+    <Compile Include="Application\Content\CommonElements\ITauronEnviroment.cs" />
+    <Compile Include="Application\Content\CommonElements\KnownFolder.cs" />
+    <Compile Include="Application\Implement\TauronEnviroment.cs" />
+    <Compile Include="Application\Content\CommonElements\TauronProfile.cs" />
+    <Compile Include="Application\Ioc\BuildUp\BuildEngine.cs" />
+    <Compile Include="Application\Ioc\BuildUp\BuildMode.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\DefaultExports\DefaultExport.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\DefaultExports\DefaultExportFactory.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\DefaultExports\EventImportSelector.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\DefaultExports\FieldImportSelector.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\DefaultExports\IImportSelector.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\DefaultExports\IImportSelectorChain.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\DefaultExports\ImportSelectorChain.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\DefaultExports\MetadataFactory.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\DefaultExports\MethodImportSelector.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\DefaultExports\PropertyImportSelector.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\ExportMetadata.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\ExternalExportInfo.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\IExport.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\IExportFactory.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\IMetadataFactory.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Exports\ImportMetadata.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Helper.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Pipeline.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Policys\ConstructorPolicy.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Policys\InjectMemberPolicy.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Policys\InterceptionPolicy.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Policys\LifetimeTimePolicy.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\BuildContextExtensions.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\BuildCache.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\EventManager.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\EventMemberInjector.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\FieldInjector.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\IEventManager.cs" />
+    <Compile Include="Application\Ioc\BuildUp\IProxyService.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\MemberInjector.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\MethodInjector.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\PropertyInjector.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Services\ProxyService.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Strategys\CacheStrategy.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Strategys\InjectionStrategy.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Strategys\InstantiationStrategy.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Strategys\InterceptionStrategy.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Strategys\InternalInterceptorSelector.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Strategys\LiftimeStrategy.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DafaultStrategys\Strategys\NodifyBuildCompledStrategy.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\DefaultBuildContext.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\IBuildContext.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\ICache.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\IPolicy.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\IStrategy.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\PolicyList.cs" />
+    <Compile Include="Application\Ioc\BuildUp\Strategy\StrategyBase.cs" />
+    <Compile Include="Application\Ioc\Components\ComponentRegistry.cs" />
+    <Compile Include="Application\Ioc\Components\DefaultExtension.cs" />
+    <Compile Include="Application\Ioc\Components\ExportProviderRegistry.cs" />
+    <Compile Include="Application\Ioc\Components\ExportRegistry.cs" />
+    <Compile Include="Application\Ioc\Components\IInitializeable.cs" />
+    <Compile Include="Application\Ioc\Components\PartManager.cs" />
+    <Compile Include="Application\Ioc\AopConstants.cs" />
+    <Compile Include="Application\Ioc\DefaultContainer.cs" />
+    <Compile Include="Application\Ioc\ExportAttribute.cs" />
+    <Compile Include="Application\Ioc\ExportMetadataAttribute.cs" />
+    <Compile Include="Application\Ioc\ExportMetadataBaseAttribute.cs" />
+    <Compile Include="Application\Ioc\ExportProvider.cs" />
+    <Compile Include="Application\Ioc\ExportResolver.cs" />
+    <Compile Include="Application\Ioc\IContainer.cs" />
+    <Compile Include="Application\Ioc\IContainerExtension.cs" />
+    <Compile Include="Application\Ioc\InjectAttribute.cs" />
+    <Compile Include="Application\Ioc\InjectEventAttribute.cs" />
+    <Compile Include="Application\Ioc\INotifyBuildCompled.cs" />
+    <Compile Include="Application\Ioc\InterceptAttribute.cs" />
+    <Compile Include="Application\Ioc\ISpecificInterceptor.cs" />
+    <Compile Include="Application\Ioc\LifeTime\ILifeTimeContext.cs" />
+    <Compile Include="Application\Ioc\LifeTime\LifetimeContextAttribute.cs" />
+    <Compile Include="Application\Ioc\LifeTime\NotSharedLifetime.cs" />
+    <Compile Include="Application\Ioc\LifeTime\SharedLifetime.cs" />
+    <Compile Include="Application\Ioc\LifeTime\ThreadSharedLifetime.cs" />
+    <Compile Include="Application\Ioc\LifeTime\WeakSharedLifetime.cs" />
+    <Compile Include="Application\Ioc\MemberInterceptionAttribute.cs" />
+    <Compile Include="Application\Ioc\NotSharedAttribute.cs" />
+    <Compile Include="Application\Ioc\ObjectContextPropertyattribute.cs" />
+    <Compile Include="Application\Ioc\SharedAttribute.cs" />
+    <Compile Include="Application\Ioc\SimpleBuildPrameter.cs" />
+    <Compile Include="Application\Ioc\ThreadSharedAttribute.cs" />
+    <Compile Include="Application\Ioc\WeakSharedAttribute.cs" />
+    <Compile Include="Application\Models\EditableDictionary.cs" />
+    <Compile Include="Application\Models\IModel.cs" />
+    <Compile Include="Application\Models\ModelBase.cs" />
+    <Compile Include="Application\Models\ModelRule.cs" />
+    <Compile Include="Application\Models\ObservableProperty.cs" />
+    <Compile Include="Application\Models\PropertyIssue.cs" />
+    <Compile Include="Application\Models\Rules\RequiredRule.cs" />
+    <Compile Include="Application\Models\Rules\ResourceMessages.cs" />
+    <Compile Include="Application\Models\Rules\TimeSpanParsingRule.cs" />
+    <Compile Include="Application\Models\ValidatorContext.cs" />
+    <Compile Include="Application\Modules\AddinAttribute.cs" />
+    <Compile Include="Application\Modules\AddinDescription.cs" />
+    <Compile Include="Application\Modules\AddInDescriptionAttribute.cs" />
+    <Compile Include="Application\Modules\AddInListner.cs" />
+    <Compile Include="Application\Modules\ModuleHandlerRegistry.cs" />
+    <Compile Include="Application\SimpleWorkflow\ICondition.cs" />
+    <Compile Include="Application\SimpleWorkflow\IStep.cs" />
+    <Compile Include="Application\SimpleWorkflow\Producer.cs" />
+    <Compile Include="Application\SimpleWorkflow\SimpleCondition.cs" />
+    <Compile Include="Application\SimpleWorkflow\StepId.cs" />
+    <Compile Include="AssemblyNameScpaces.cs" />
+    <Compile Include="ContainerExtensions.cs" />
+    <Compile Include="EditableValueMap.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Resources\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Application\Content\UI\IUiControllerFactory.cs" />
+    <Compile Include="Application\Content\UI\IUiController.cs" />
+    <Compile Include="Application\Content\UI\SplashServices.cs" />
+    <Compile Include="Async.cs" />
+    <Compile Include="CollectionExtensions.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="ExceptionServices.cs" />
+    <Compile Include="Interop\nativemethods.cs" />
+    <Compile Include="IOExtensions.cs" />
+    <Compile Include="IWeakReference.cs" />
+    <Compile Include="ObjectExtension.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadOnlyEnumerator.cs" />
+    <Compile Include="ReflectionExtensions.cs" />
+    <Compile Include="SecurityHelper.cs" />
+    <Compile Include="SerializationExtensions.cs" />
+    <Compile Include="XCopy.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CommonKey.snk" />
+    <None Include="packages.config" />
+    <None Include="Tauron.Application.Common.nuspec">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Resources.de.resx" />
+    <EmbeddedResource Include="Resources\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!--To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+    <!--<CreateItem Include="$(ProjectDir)$(OutputPath)**\*.*">
+      <Output TaskParameter="Include" ItemName="BinFiles" />
+    </CreateItem>
+    <Copy SkipUnchangedFiles="True" OverWriteReadOnlyFiles="true" SourceFiles="@(BinFiles)" DestinationFiles="@(BinFiles->'$(SolutionDir)\NugetBuilder\$(ProjectName)\%(RecursiveDir)%(Filename)%(Extension)')" />
+  -->
+  </Target>
+</Project>

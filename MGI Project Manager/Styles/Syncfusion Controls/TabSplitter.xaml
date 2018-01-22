@@ -1,0 +1,1186 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Microsoft_Windows_Luna="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Luna"
+    xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
+    xmlns:themetools_controls="clr-namespace:WPFThemeStudio"
+    xmlns:tools_controls="clr-namespace:Syncfusion.Windows.Tools.Controls;assembly=Syncfusion.Tools.WPF">
+
+    <ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary.MergedDictionaries>
+
+<LinearGradientBrush x:Key="BackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FFEEEEF2" Offset="0" /><GradientStop Color="#FFEEEEF2" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="BorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="ForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="GlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="HeaderBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FFEEEEF2" Offset="0" /><GradientStop Color="#FFEEEEF2" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="HeaderBorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="HeaderForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="HeaderGlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="HoverBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FF7FBCE5" Offset="0" /><GradientStop Color="#FF7FBCE5" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="HoverBorderBrush" Color="#FF7FBCE5" />
+	<SolidColorBrush x:Key="HoverForegroundBrush" Color="#FF404040" />
+	<SolidColorBrush x:Key="HoverGlyphBrush" Color="#FF404040" />
+<LinearGradientBrush x:Key="ActiveBackgroundBrush" StartPoint="0,0" EndPoint="1,1" ><GradientStop Color="#FF007ACC" Offset="0" /><GradientStop Color="#FF007ACC" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="ActiveBorderBrush" Color="#FF007ACC" />
+	<SolidColorBrush x:Key="ActiveForegroundBrush" Color="#FFFFFFFF" />
+	<SolidColorBrush x:Key="ActiveGlyphBrush" Color="#FFFFFFFF" />
+	<SolidColorBrush x:Key="ContentBackgroundBrush" Color="#FFF5F5F5" />
+	<SolidColorBrush x:Key="ContentBorderBrush" Color="#FFCCCEDB" />
+	<SolidColorBrush x:Key="ContentForegroundBrush" Color="#FF1E1E1E" />
+	<SolidColorBrush x:Key="ContentSelectionBrush" Color="#FFA5A5A5" />
+	<SolidColorBrush x:Key="SelectionInActiveBrush" Color="#FF99C9EA" />
+	<SolidColorBrush x:Key="ErrorBrush" Color="#FFFF0000" />
+	<SolidColorBrush x:Key="ActiveLightBackground" Color="#FF99C9EA" />
+	<SolidColorBrush x:Key="ActiveDarkBackground" Color="#FF003D66" />
+	<SolidColorBrush x:Key="ContentAlternativeBackground" Color="#FFDCDCDC" />
+	<SolidColorBrush x:Key="TickColor" Color="#FFBCBCBC" />
+	<SolidColorBrush x:Key="RangeColor1" Color="#FF61A301" />	
+	<SolidColorBrush x:Key="RangeColor2" Color="#FFF2E606" />	
+	<SolidColorBrush x:Key="RangeColor3" Color="#FFFF0000" />
+	<SolidColorBrush x:Key="LightBackgroundBrush" Color="#FFDDDDE5" />
+
+
+
+    <FontFamily x:Key="TabSplitterFontFamily">Segoe UI</FontFamily>
+
+    <tools_controls:CloseButtonTypeToVisibilityConverter x:Key="CloseButtonTypeToVisibilityConverter" />
+    <shared:BooleanToVisibilityConverterEx x:Key="BooleanToVisibilityConverterEx" />
+
+    <DataTemplate x:Key="HeaderDataTemplate" DataType="{x:Type tools_controls:TabSplitterItem}">
+        <TextBlock
+            Padding="5,0,5,0"
+            Focusable="False"
+            IsHitTestVisible="False"
+            Text="{Binding}"
+            TextTrimming="CharacterEllipsis" />
+    </DataTemplate>
+
+
+    <Style x:Key="{x:Type tools_controls:TabSplitterItem}" TargetType="{x:Type tools_controls:TabSplitterItem}">
+
+        <!--<Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />-->
+        <Setter Property="FrameworkElement.FocusVisualStyle">
+            <Setter.Value>
+                <Style TargetType="IFrameworkInputElement">
+                    <Setter Property="Control.Template">
+                        <Setter.Value>
+                            <!--<ControlTemplate>
+                                <Rectangle Stroke="#FF000000" StrokeThickness="1" StrokeDashArray="1 2" Margin="3,3,3,1" SnapsToDevicePixels="True" />
+                            </ControlTemplate>-->
+                            <x:Null />
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+        <Setter Property="FontFamily" Value="{StaticResource TabSplitterFontFamily}" />
+        <Setter Property="Margin" Value="0,0,3,0" />
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="2,2,2,0" />
+        <Setter Property="Control.HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Control.VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type tools_controls:TabSplitterItem}">
+                    <Border
+                        Name="Bd"
+                        MinHeight="18"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="1">
+
+
+                        <DockPanel x:Name="PART_DockPanel" LastChildFill="True">
+                            <Image
+                                x:Name="PART_Image"
+                                Margin="0,0,0,4"
+                                VerticalAlignment="Center"
+                                DockPanel.Dock="Left"
+                                SnapsToDevicePixels="True"
+                                Source="{TemplateBinding tools_controls:TabSplitter.Image}"
+                                Stretch="None" />
+
+                            <ContentPresenter
+                                x:Name="Content"
+                                Margin="6,2,10,2"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding HeaderedContentControl.Header}"
+                                ContentSource="Header"
+                                ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}"
+                                RecognizesAccessKey="True"
+                                SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                TextBlock.Foreground="{TemplateBinding Foreground}" />
+                        </DockPanel>
+
+
+                    </Border>
+                    <ControlTemplate.Triggers>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="9999" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="2,0,0,0" />
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Panel.Background" Value="{StaticResource ActiveBackgroundBrush}" />
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsMouseOver, ElementName=Bd}" Value="True" />
+                                <Condition Binding="{Binding Path=HotTrackingEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools_controls:TabControlExt}}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Panel.Background" Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter TargetName="Bd" Property="TextElement.Foreground" Value="{StaticResource HoverForegroundBrush}" />
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsMouseOver, ElementName=Bd}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+
+
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                        </MultiDataTrigger>
+
+                        <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True">
+
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource ActiveBackgroundBrush}" />
+
+
+                            <Setter TargetName="Content" Property="TextElement.Foreground" Value="{StaticResource ActiveForegroundBrush}" />
+                            <Setter TargetName="Content" Property="TextElement.FontWeight" Value="{Binding Path=SelectedItemFontWeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools_controls:TabControlExt}}}" />
+                            <!--  Value="SemiBold"/>  -->
+                        </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource ActiveBackgroundBrush}" />
+                            <Setter TargetName="Content" Property="TextElement.Foreground" Value="{StaticResource ActiveForegroundBrush}" />
+                            <Setter TargetName="Content" Property="TextElement.FontWeight" Value="{Binding Path=SelectedItemFontWeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools_controls:TabControlExt}}}" />
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsMouseOver, ElementName=Bd}" Value="True" />
+                                <Condition Binding="{Binding Path=HotTrackingEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools_controls:TabControlExt}}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                            <Setter TargetName="Content" Property="TextElement.Foreground" Value="{StaticResource HoverForegroundBrush}" />
+                        </MultiDataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type tools_controls:SplitterPage}">
+        <Setter Property="FrameworkElement.FocusVisualStyle">
+            <Setter.Value>
+                <Style TargetType="IFrameworkInputElement">
+                    <Setter Property="Control.Template" Value="{x:Null}" />
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
+        <Setter Property="MinHeight" Value="18" />
+        <Setter Property="Margin" Value="0,2,0,0" />
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type tools_controls:SplitterPage}">
+                    <tools_controls:VS2008SplitterItemBorder
+                        Name="Bd"
+                        Margin="0,0,0,-1"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        ToolTip="{TemplateBinding HeaderedContentControl.Header}">
+                        <DockPanel x:Name="PART_DockPanel" LastChildFill="True">
+                            <Image
+                                x:Name="PART_Image"
+                                Width="11"
+                                Height="11"
+                                Margin="0,0,0,4"
+                                VerticalAlignment="Center"
+                                DockPanel.Dock="Left"
+                                SnapsToDevicePixels="True"
+                                Source="{TemplateBinding Image}" />
+                            <ContentPresenter
+                                x:Name="Content"
+                                Margin="5,0,10,0"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding HeaderedContentControl.Header}"
+                                ContentSource="Header"
+                                ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}"
+                                RecognizesAccessKey="True"
+                                SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                TextBlock.Foreground="{TemplateBinding Foreground}" />
+
+                        </DockPanel>
+                    </tools_controls:VS2008SplitterItemBorder>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Bottom">
+                            <Setter TargetName="Bd" Property="Border.BorderThickness" Value="1,1,1,0" />
+                            <Setter TargetName="Content" Property="Margin" Value="5,0,0,1" />
+                            <Setter TargetName="PART_Image" Property="Margin" Value="5,0,0,0" />
+                            <Setter TargetName="PART_DockPanel" Property="VerticalAlignment" Value="Top" />
+                            <Setter Property="FlowDirection" Value="LeftToRight" />
+                            <Setter TargetName="Bd" Property="Margin" Value="0,0,0,-0.7" />
+                            <Setter TargetName="PART_DockPanel" Property="LayoutTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="-180" />
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <Trigger Property="Image" Value="{x:Null}">
+                            <Setter TargetName="PART_Image" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <!--<DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True">
+
+                            <Setter Property="TextElement.Foreground"    Value="{StaticResource ActiveForegroundBrush}"/>
+
+                            <Setter Property="BottomBorderBrush" TargetName="Bd" Value="red"/>
+                            <Setter Property="TextElement.FontWeight" TargetName="Content" Value="Thin"/>
+                        </DataTrigger>-->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Right" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="PART_DockPanel" Property="VerticalAlignment" Value="Top" />
+                            <Setter TargetName="Content" Property="Margin" Value="6,-2,10,0" />
+
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Left" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Margin" Value="0,0.5,0,0" />
+                            <Setter TargetName="Bd" Property="Border.BorderThickness" Value="1,1,1,0" />
+                            <Setter Property="FlowDirection" Value="LeftToRight" />
+                            <Setter TargetName="PART_DockPanel" Property="VerticalAlignment" Value="Bottom" />
+                            <Setter TargetName="Bd" Property="Height" Value="18" />
+                            <Setter TargetName="Content" Property="Margin" Value="6,4,10,1" />
+                            <Setter TargetName="PART_Image" Property="Margin" Value="10,10,0,0" />
+                            <Setter TargetName="Content" Property="VerticalAlignment" Value="Bottom" />
+                            <Setter TargetName="PART_DockPanel" Property="LayoutTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="-180" />
+                                </Setter.Value>
+                            </Setter>
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Right" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Border.BorderThickness" Value="1,1,1,0" />
+                            <!--<Setter Property="Margin" Value="-2,1,-8,0"/>-->
+                            <Setter TargetName="Content" Property="Content" Value=" " />
+                        </MultiDataTrigger>
+                        <!--  RotateTextWhenVertical = FALSE  -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Bottom" />
+                            </MultiDataTrigger.Conditions>
+                            <!--<Setter Property="Margin" Value="0,2,-10,0"/>-->
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Left" />
+                            </MultiDataTrigger.Conditions>
+                            <!--<Setter Property="Margin" Value="-2,0,-8,0"/>-->
+                            <Setter TargetName="Content" Property="Content" Value=" " />
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="9999" />
+                                <Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Top" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="2,2,0,0" />
+                        </MultiDataTrigger>
+
+                        <!--<MultiDataTrigger>
+				<MultiDataTrigger.Conditions>
+					<Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="9999"/>
+					<Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement),RelativeSource={RelativeSource Self}}" Value="Right"/>
+				</MultiDataTrigger.Conditions>
+				<Setter Property="FrameworkElement.Margin" Value="2,0,0,0"/>
+			</MultiDataTrigger>-->
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="9999" />
+                                <Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Bottom" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="0,2,2,0" />
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="9999" />
+                                <Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Left" />
+                            </MultiDataTrigger.Conditions>
+                            <!--<Setter Property="FrameworkElement.Margin" Value="-2,0,0,0"/>-->
+                        </MultiDataTrigger>
+
+                        <!--  IsSelected Section  -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Top" />
+                            </MultiDataTrigger.Conditions>
+                            <!--<Setter Property="FrameworkElement.Margin" Value="-12,2,0,-1"/>-->
+                            <Setter TargetName="Content" Property="TextElement.Foreground" Value="{StaticResource ActiveForegroundBrush}" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="9999" />
+                                <Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Top" />
+                            </MultiDataTrigger.Conditions>
+                            <!--<Setter Property="FrameworkElement.Margin" Value="0,2,1,-1"/>-->
+                            <Setter TargetName="Content" Property="TextElement.Foreground" Value="{StaticResource ActiveForegroundBrush}" />
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Right" />
+                            </MultiDataTrigger.Conditions>
+                            <!--<Setter Property="FrameworkElement.Margin" Value="-2,0,-12,-1"/>-->
+                            <Setter TargetName="Content" Property="TextElement.Foreground" Value="{StaticResource ActiveForegroundBrush}" />
+
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Bottom" />
+                            </MultiDataTrigger.Conditions>
+                            <!--<Setter Property="FrameworkElement.Margin" Value="2,2,-12,-1"/>-->
+                            <Setter TargetName="Content" Property="TextElement.Foreground" Value="{StaticResource ActiveForegroundBrush}" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Bottom" />
+                            </MultiDataTrigger.Conditions>
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Left" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="{Binding Path=SelectedBackground, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:TabSplitter}}}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                            <Setter TargetName="Content" Property="TextElement.Foreground" Value="{StaticResource ActiveForegroundBrush}" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="0" />
+                                <Condition Binding="{Binding Path=(tools_controls:SplitterPage.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Left" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="{Binding Path=SelectedBackground, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:TabSplitter}}}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                            <Setter TargetName="Content" Property="TextElement.Foreground" Value="{StaticResource ActiveForegroundBrush}" />
+                        </MultiDataTrigger>
+
+                        <DataTrigger Binding="{Binding Path=IsSelectedPage, RelativeSource={RelativeSource Self}}" Value="True">
+
+                            <Setter TargetName="Bd" Property="Background" Value="{Binding Path=SelectedBackground, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:TabSplitter}}}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                            <Setter TargetName="Content" Property="TextElement.Foreground" Value="{StaticResource ActiveForegroundBrush}" />
+                        </DataTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                            <Setter TargetName="Content" Property="TextElement.Foreground" Value="{StaticResource HoverForegroundBrush}" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True" />
+                                <Condition Property="IsMouseOver" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource ActiveBackgroundBrush}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                            <Setter TargetName="Content" Property="TextElement.Foreground" Value="{StaticResource ActiveForegroundBrush}" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="False" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                            <Setter TargetName="Content" Property="TextElement.Foreground" Value="{StaticResource HoverForegroundBrush}" />
+                        </MultiTrigger>
+                        <!--<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Background" TargetName="Bd"  Value="{Binding Path=SelectedBackground, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:TabSplitter}}}"/>
+							<Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource ActiveBorderBrush}"/>
+							<Setter Property="TextElement.Foreground" TargetName="Content" Value="{StaticResource ActiveForegroundBrush}"/>
+						</Trigger>-->
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
+    <Style x:Key="MetroTabPanelStyle" TargetType="{x:Type tools_controls:TabPanelAdv}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type tools_controls:TabPanelAdv}">
+                    <Border
+                        Padding="{TemplateBinding Padding}"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                        <DockPanel LastChildFill="True">
+                            <Border
+                                Name="BottomBorder"
+                                Height="0"
+                                Background="{TemplateBinding Background}"
+                                DockPanel.Dock="Bottom" />
+                            <!--  This is using onlyin Office2003 style  -->
+                            <ContentPresenter
+                                x:Name="PART_CustomItems"
+                                MaxHeight="{Binding Path=ActualHeight, ElementName=PART_TabItems}"
+                                Margin="2,0,0,0"
+                                AllowDrop="False"
+                                Content="{Binding Path=TabPanelItem, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools_controls:TabControlExt}}}"
+                                ContentSource="TabPanelItem"
+                                DockPanel.Dock="Right" />
+                            <ToggleButton
+                                Name="PART_CloseButton"
+                                Width="17"
+                                Height="17"
+                                AllowDrop="False"
+                                Command="tools_controls:TabSplitterCommands.CloseCurrentTabSplitterItem"
+                                DockPanel.Dock="Right"
+                                Focusable="False"
+                                Visibility="{Binding Path=CloseButtonType, Converter={StaticResource CloseButtonTypeToVisibilityConverter}, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools_controls:TabControlExt}}}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="{x:Type ButtonBase}">
+                                        <shared:Border3D
+                                            x:Name="brdBack"
+                                            Margin="1"
+                                            Background="{StaticResource BackgroundBrush}"
+                                            BorderBrush="Transparent"
+                                            BorderThickness="1">
+                                            <Path
+                                                Name="pathButton"
+                                                Width="9"
+                                                Height="8"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Data="M109,51 L216,142 M215,52 L109,142"
+                                                SnapsToDevicePixels="False"
+                                                Stretch="Fill"
+                                                Stroke="{StaticResource GlyphBrush}"
+                                                StrokeThickness="1.5" />
+                                        </shared:Border3D>
+                                        <ControlTemplate.Triggers>
+
+
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="brdBack" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                                                <Setter TargetName="brdBack" Property="Border.BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="brdBack" Property="IsInverted" Value="True" />
+
+                                                <Setter TargetName="brdBack" Property="Background" Value="{StaticResource ActiveBackgroundBrush}" />
+                                                <Setter TargetName="brdBack" Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                                                <Setter TargetName="pathButton" Property="Fill" Value="{StaticResource ActiveGlyphBrush}" />
+
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <ToggleButton
+                                Name="PART_MenuButton"
+                                Width="15"
+                                Height="15"
+                                AllowDrop="False"
+                                Command="tools_controls:TabSplitterCommands.OpenContextMenu"
+                                DockPanel.Dock="Right"
+                                Focusable="False"
+                                Visibility="{Binding Path=ShowTabListContextMenu, Converter={StaticResource BooleanToVisibilityConverterEx}, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools_controls:TabControlExt}}}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                        <shared:Border3D
+                                            x:Name="brdBack"
+                                            Background="{StaticResource BackgroundBrush}"
+                                            BorderBrush="{StaticResource BorderBrush}"
+                                            BorderThickness="1">
+                                            <Path
+                                                Name="pathButton"
+                                                Width="8"
+                                                Height="8"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Fill="{StaticResource GlyphBrush}"
+                                                SnapsToDevicePixels="True">
+                                                <Path.Data>
+                                                    <GeometryGroup>
+                                                        <PathGeometry>
+                                                            <PathFigure
+                                                                IsClosed="True"
+                                                                IsFilled="True"
+                                                                StartPoint="0,1">
+                                                                <LineSegment Point="8,1" />
+                                                                <LineSegment Point="8,3" />
+                                                                <LineSegment Point="0,3" />
+                                                            </PathFigure>
+                                                        </PathGeometry>
+                                                        <PathGeometry>
+                                                            <PathFigure
+                                                                IsClosed="True"
+                                                                IsFilled="True"
+                                                                StartPoint="0,4">
+                                                                <LineSegment Point="4,8" />
+                                                                <LineSegment Point="8,4" />
+                                                            </PathFigure>
+                                                        </PathGeometry>
+                                                    </GeometryGroup>
+                                                </Path.Data>
+                                            </Path>
+                                        </shared:Border3D>
+                                        <ControlTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Path=IsAllItemsVisible, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                                                <Setter TargetName="pathButton" Property="Data" Value="M0,4 L4,8 L8,4 z" />
+                                            </DataTrigger>
+
+
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="brdBack" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                                                <Setter TargetName="brdBack" Property="Border.BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+
+
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="brdBack" Property="IsInverted" Value="True" />
+
+                                                <Setter TargetName="brdBack" Property="Background" Value="{StaticResource ActiveBackgroundBrush}" />
+                                                <Setter TargetName="brdBack" Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                                                <Setter TargetName="pathButton" Property="Fill" Value="{StaticResource ActiveGlyphBrush}" />
+
+                                            </Trigger>
+
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <ContentPresenter
+                                x:Name="PART_TabItems"
+                                Content="{TemplateBinding Content}"
+                                ContentSource="TabItems"
+                                DockPanel.Dock="Right" />
+                        </DockPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Path=TabStripPlacement, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}}" Value="Bottom">
+                            <Setter TargetName="PART_CustomItems" Property="LayoutTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="-180" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="PART_CloseButton" Property="LayoutTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="-180" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="PART_MenuButton" Property="LayoutTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="-180" />
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=IsAllTabsClosed, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools_controls:TabControlExt}}}" Value="True">
+                            <Setter TargetName="PART_CloseButton" Property="Visibility" Value="Hidden" />
+                            <Setter TargetName="PART_MenuButton" Property="Visibility" Value="Hidden" />
+                            <Setter TargetName="BottomBorder" Property="Height" Value="0" />
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="{x:Type tools_controls:TabSplitter}" TargetType="{x:Type tools_controls:TabSplitter}">
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type tools_controls:TabSplitter}">
+                    <Border
+                        Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid
+                            Background="{StaticResource BackgroundBrush}"
+                            ClipToBounds="False"
+                            KeyboardNavigation.TabNavigation="Local"
+                            SnapsToDevicePixels="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Name="ColumnDefinition0" />
+                                <ColumnDefinition Name="ColumnDefinition1" Width="0" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Name="RowDefinition0" Height="Auto" />
+                                <RowDefinition Name="RowDefinition1" Height="*" />
+                            </Grid.RowDefinitions>
+                            <tools_controls:LayoutPanel
+                                Name="HeaderPanel"
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Panel.ZIndex="1"
+                                Focusable="False">
+                                <tools_controls:TabPanelAdv
+                                    x:Name="PART_TabPanel"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    DockPanel.Dock="Right"
+                                    Focusable="False"
+                                    Style="{StaticResource MetroTabPanelStyle}">
+                                    <tools_controls:TabSplitterItemPanel
+                                        x:Name="PART_TabLayoutPanel"
+                                        Margin="0,0,2,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        AllowDrop="False"
+                                        IsItemsHost="True"
+                                        KeyboardNavigation.TabIndex="1" />
+                                </tools_controls:TabPanelAdv>
+                            </tools_controls:LayoutPanel>
+                            <shared:Border3D
+                                Name="ContentPanel"
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                AllowDrop="False"
+                                Background="{StaticResource BackgroundBrush}"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="2"
+                                KeyboardNavigation.DirectionalNavigation="Contained"
+                                KeyboardNavigation.TabIndex="2"
+                                KeyboardNavigation.TabNavigation="Local">
+                                <Border
+                                    x:Name="PART_ContentPanelBorder"
+                                    Background="White"
+                                    BorderBrush="{StaticResource BorderBrush}"
+                                    BorderThickness="0"
+                                    CornerRadius="2">
+
+                                    <Grid Name="ResizedContentGrid">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <tools_controls:LayoutPanel
+                                            x:Name="PART_TopPanel"
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Background="{StaticResource ContentBackgroundBrush}">
+                                            <ScrollContentPresenter
+                                                x:Name="PART_TopScrollContent"
+                                                Margin="{Binding Path=Padding, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:TabSplitter}}}"
+                                                Content="{TemplateBinding TopSelectedContent}"
+                                                ContentSource="TopSelectedContent" />
+                                        </tools_controls:LayoutPanel>
+                                        <tools_controls:CustomGridSplitter
+                                            x:Name="PART_Splitter"
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Panel.ZIndex="1"
+                                            Background="{StaticResource BackgroundBrush}"
+                                            ResizeDirection="Rows"
+                                            ShowsPreview="True">
+                                            <tools_controls:CustomGridSplitter.Style>
+                                                <Style TargetType="{x:Type tools_controls:CustomGridSplitter}">
+                                                    <Setter Property="Height" Value="22" />
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type tools_controls:CustomGridSplitter}">
+                                                                <tools_controls:LayoutPanel
+                                                                    x:Name="PART_SplitHeaderPanel"
+                                                                    Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:CustomGridSplitter}}}"
+                                                                    Panel.ZIndex="1">
+                                                                    <Border
+                                                                        x:Name="PART_SplitBorder"
+                                                                        Background="{StaticResource BackgroundBrush}"
+                                                                        BorderBrush="{StaticResource BorderBrush}"
+                                                                        BorderThickness="0.75">
+                                                                        <tools_controls:SplitHeaderPanel>
+                                                                            <ItemsControl x:Name="PART_TopPages" DockPanel.Dock="Left">
+                                                                                <ItemsControl.ItemsPanel>
+                                                                                    <ItemsPanelTemplate>
+                                                                                        <tools_controls:PagesLayoutPanel>
+                                                                                            <tools_controls:PagesLayoutPanel.LayoutTransform>
+                                                                                                <RotateTransform Angle="-180" />
+                                                                                            </tools_controls:PagesLayoutPanel.LayoutTransform>
+                                                                                        </tools_controls:PagesLayoutPanel>
+                                                                                    </ItemsPanelTemplate>
+                                                                                </ItemsControl.ItemsPanel>
+                                                                            </ItemsControl>
+                                                                            <Button
+                                                                                x:Name="PART_SplitButton"
+                                                                                Margin="10,0,0,0"
+                                                                                DockPanel.Dock="Left"
+                                                                                ToolTip="Swap Panes">
+                                                                                <Button.Style>
+                                                                                    <Style TargetType="{x:Type Button}">
+                                                                                        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+                                                                                        <Setter Property="Template">
+                                                                                            <Setter.Value>
+                                                                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                                                                    <Border
+                                                                                                        x:Name="PART_Border"
+                                                                                                        Width="16"
+                                                                                                        Height="16"
+                                                                                                        Margin="1,0,1,0"
+                                                                                                        HorizontalAlignment="Center"
+                                                                                                        VerticalAlignment="Center"
+                                                                                                        Background="{StaticResource BackgroundBrush}"
+                                                                                                        BorderBrush="{StaticResource BorderBrush}"
+                                                                                                        BorderThickness="1"
+                                                                                                        CornerRadius="0"
+                                                                                                        SnapsToDevicePixels="True">
+                                                                                                        <Canvas
+                                                                                                            Width="13"
+                                                                                                            Height="13"
+                                                                                                            SnapsToDevicePixels="True">
+                                                                                                            <Path
+                                                                                                                HorizontalAlignment="Center"
+                                                                                                                VerticalAlignment="Center"
+                                                                                                                Data="M3,11L3,5"
+                                                                                                                Fill="{TemplateBinding Foreground}"
+                                                                                                                Stroke="{TemplateBinding Foreground}" />
+                                                                                                            <Path
+                                                                                                                HorizontalAlignment="Center"
+                                                                                                                VerticalAlignment="Center"
+                                                                                                                Data="M 1,5L4.5,5 3,3 1.5,5"
+                                                                                                                Fill="{TemplateBinding Foreground}"
+                                                                                                                Stroke="{TemplateBinding Foreground}" />
+                                                                                                            <Path
+                                                                                                                HorizontalAlignment="Center"
+                                                                                                                VerticalAlignment="Center"
+                                                                                                                Data="M9,8L9,1"
+                                                                                                                Fill="{TemplateBinding Foreground}"
+                                                                                                                Stroke="{TemplateBinding Foreground}" />
+                                                                                                            <Path
+                                                                                                                HorizontalAlignment="Center"
+                                                                                                                VerticalAlignment="Center"
+                                                                                                                Data="M 7,8L10.5,8 9,10 7.5,8"
+                                                                                                                Fill="{TemplateBinding Foreground}"
+                                                                                                                Stroke="{TemplateBinding Foreground}" />
+                                                                                                        </Canvas>
+                                                                                                    </Border>
+                                                                                                    <ControlTemplate.Triggers>
+                                                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                                                            <Setter TargetName="PART_Border" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                                                                                                            <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                                                                                                            <Setter Property="Foreground" Value="{StaticResource HoverForegroundBrush}" />
+                                                                                                        </Trigger>
+                                                                                                        <Trigger Property="IsPressed" Value="True">
+                                                                                                            <Setter TargetName="PART_Border" Property="Background" Value="{StaticResource ActiveBackgroundBrush}" />
+                                                                                                            <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                                                                                                            <Setter Property="Foreground" Value="{StaticResource ActiveForegroundBrush}" />
+                                                                                                        </Trigger>
+                                                                                                    </ControlTemplate.Triggers>
+                                                                                                </ControlTemplate>
+                                                                                            </Setter.Value>
+                                                                                        </Setter>
+                                                                                    </Style>
+                                                                                </Button.Style>
+                                                                            </Button>
+                                                                            <ItemsControl x:Name="PART_BottomPages" DockPanel.Dock="Left">
+                                                                                <ItemsControl.ItemsPanel>
+                                                                                    <ItemsPanelTemplate>
+                                                                                        <tools_controls:PagesLayoutPanel />
+                                                                                    </ItemsPanelTemplate>
+                                                                                </ItemsControl.ItemsPanel>
+                                                                            </ItemsControl>
+                                                                            <DockPanel
+                                                                                x:Name="PART_SplitterMunuPanel"
+                                                                                Margin="0,1,0,0"
+                                                                                HorizontalAlignment="Right"
+                                                                                DockPanel.Dock="Right">
+                                                                                <Button x:Name="PART_VerticalButton" ToolTip="Vertical Split">
+                                                                                    <Button.Style>
+                                                                                        <Style TargetType="{x:Type Button}">
+                                                                                            <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
+                                                                                            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+                                                                                            <Setter Property="BorderThickness" Value="1" />
+                                                                                            <Setter Property="Template">
+                                                                                                <Setter.Value>
+                                                                                                    <ControlTemplate TargetType="{x:Type Button}">
+                                                                                                        <Border
+                                                                                                            x:Name="PART_Border"
+                                                                                                            Width="15"
+                                                                                                            Height="15"
+                                                                                                            Margin="0,0,0,0"
+                                                                                                            HorizontalAlignment="Center"
+                                                                                                            VerticalAlignment="Center"
+                                                                                                            Background="{TemplateBinding Background}"
+                                                                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                                                                            CornerRadius="0"
+                                                                                                            SnapsToDevicePixels="True">
+                                                                                                            <Canvas
+                                                                                                                Width="11"
+                                                                                                                Height="11"
+                                                                                                                HorizontalAlignment="Center"
+                                                                                                                VerticalAlignment="Center"
+                                                                                                                SnapsToDevicePixels="True">
+                                                                                                                <Rectangle
+                                                                                                                    x:Name="rect"
+                                                                                                                    Width="11"
+                                                                                                                    Height="11"
+                                                                                                                    Fill="{StaticResource BackgroundBrush}" />
+                                                                                                                <Path
+                                                                                                                    Name="VericalLine"
+                                                                                                                    HorizontalAlignment="Center"
+                                                                                                                    VerticalAlignment="Center"
+                                                                                                                    Data="M5.5,8.8L5.5,2.5"
+                                                                                                                    Fill="{StaticResource GlyphBrush}"
+                                                                                                                    Stroke="{StaticResource BorderBrush}" />
+                                                                                                            </Canvas>
+                                                                                                        </Border>
+                                                                                                        <ControlTemplate.Triggers>
+                                                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                                                <Setter TargetName="PART_Border" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                                                                                                                <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                                                                                                                <Setter TargetName="VericalLine" Property="Fill" Value="{StaticResource HoverGlyphBrush}" />
+                                                                                                                <Setter TargetName="VericalLine" Property="Stroke" Value="{StaticResource HoverGlyphBrush}" />
+                                                                                                                <Setter TargetName="rect" Property="Stroke" Value="{StaticResource HoverBorderBrush}" />
+                                                                                                                <Setter TargetName="rect" Property="Fill" Value="{StaticResource HoverBackgroundBrush}" />
+                                                                                                            </Trigger>
+                                                                                                            <Trigger Property="IsPressed" Value="True">
+                                                                                                                <Setter TargetName="PART_Border" Property="Background" Value="{StaticResource ActiveBackgroundBrush}" />
+                                                                                                                <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                                                                                                                <Setter TargetName="VericalLine" Property="Fill" Value="{StaticResource ActiveGlyphBrush}" />
+                                                                                                                <Setter TargetName="VericalLine" Property="Stroke" Value="{StaticResource ActiveGlyphBrush}" />
+                                                                                                                <Setter TargetName="rect" Property="Stroke" Value="{StaticResource ActiveBorderBrush}" />
+                                                                                                                <Setter TargetName="rect" Property="Fill" Value="{StaticResource ActiveBackgroundBrush}" />
+                                                                                                            </Trigger>
+                                                                                                        </ControlTemplate.Triggers>
+                                                                                                    </ControlTemplate>
+                                                                                                </Setter.Value>
+                                                                                            </Setter>
+                                                                                        </Style>
+                                                                                    </Button.Style>
+                                                                                </Button>
+                                                                                <Button
+                                                                                    x:Name="PART_HorizontalButton"
+                                                                                    BorderThickness="1"
+                                                                                    ToolTip="Horizontal Split">
+                                                                                    <Button.Style>
+                                                                                        <Style TargetType="{x:Type Button}">
+                                                                                            <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
+                                                                                            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+                                                                                            <Setter Property="BorderThickness" Value="1" />
+                                                                                            <Setter Property="Template">
+                                                                                                <Setter.Value>
+                                                                                                    <ControlTemplate TargetType="{x:Type Button}">
+                                                                                                        <Border
+                                                                                                            x:Name="PART_Border"
+                                                                                                            Width="15"
+                                                                                                            Height="15"
+                                                                                                            Margin="0,0,0,0"
+                                                                                                            HorizontalAlignment="Center"
+                                                                                                            VerticalAlignment="Center"
+                                                                                                            Background="{TemplateBinding Background}"
+                                                                                                            BorderBrush="{StaticResource BorderBrush}"
+                                                                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                                                                            CornerRadius="0"
+                                                                                                            SnapsToDevicePixels="True">
+                                                                                                            <Canvas
+                                                                                                                Width="11"
+                                                                                                                Height="11"
+                                                                                                                HorizontalAlignment="Center"
+                                                                                                                VerticalAlignment="Center"
+                                                                                                                SnapsToDevicePixels="True">
+                                                                                                                <Rectangle
+                                                                                                                    x:Name="rect"
+                                                                                                                    Width="11"
+                                                                                                                    Height="11"
+                                                                                                                    Fill="{StaticResource BackgroundBrush}" />
+                                                                                                                <Path
+                                                                                                                    x:Name="HorizontalLine"
+                                                                                                                    HorizontalAlignment="Center"
+                                                                                                                    VerticalAlignment="Center"
+                                                                                                                    Data="M2,5.5L9,5.5"
+                                                                                                                    Fill="{StaticResource GlyphBrush}"
+                                                                                                                    Stroke="{StaticResource BorderBrush}" />
+                                                                                                            </Canvas>
+                                                                                                        </Border>
+                                                                                                        <ControlTemplate.Triggers>
+                                                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                                                <Setter TargetName="PART_Border" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                                                                                                                <Setter TargetName="rect" Property="Stroke" Value="{StaticResource HoverBorderBrush}" />
+                                                                                                                <Setter TargetName="rect" Property="Fill" Value="{StaticResource HoverBackgroundBrush}" />
+                                                                                                                <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                                                                                                                <Setter TargetName="HorizontalLine" Property="Fill" Value="{StaticResource HoverGlyphBrush}" />
+                                                                                                                <Setter TargetName="HorizontalLine" Property="Stroke" Value="{StaticResource HoverGlyphBrush}" />
+                                                                                                            </Trigger>
+                                                                                                            <Trigger Property="IsPressed" Value="True">
+                                                                                                                <Setter TargetName="PART_Border" Property="Background" Value="{StaticResource ActiveBackgroundBrush}" />
+                                                                                                                <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                                                                                                                <Setter TargetName="HorizontalLine" Property="Fill" Value="{StaticResource ActiveGlyphBrush}" />
+                                                                                                                <Setter TargetName="rect" Property="Stroke" Value="{StaticResource ActiveBorderBrush}" />
+                                                                                                                <Setter TargetName="rect" Property="Fill" Value="{StaticResource ActiveBackgroundBrush}" />
+                                                                                                                <Setter TargetName="HorizontalLine" Property="Stroke" Value="{StaticResource ActiveGlyphBrush}" />
+                                                                                                            </Trigger>
+                                                                                                        </ControlTemplate.Triggers>
+                                                                                                    </ControlTemplate>
+                                                                                                </Setter.Value>
+                                                                                            </Setter>
+                                                                                        </Style>
+                                                                                    </Button.Style>
+                                                                                </Button>
+                                                                                <ToggleButton
+                                                                                    x:Name="PART_Expand_ColapseButtons"
+                                                                                    Command="tools_controls:TabSplitterCommands.CollapseBottomSelectedItem"
+                                                                                    ToolTip="Collapse Pane">
+                                                                                    <ToggleButton.Template>
+                                                                                        <ControlTemplate TargetType="{x:Type ButtonBase}">
+                                                                                            <Border
+                                                                                                x:Name="PART_Border"
+                                                                                                Width="15"
+                                                                                                Height="15"
+                                                                                                Margin="0,0,0,0"
+                                                                                                HorizontalAlignment="Stretch"
+                                                                                                VerticalAlignment="Stretch"
+                                                                                                Background="{StaticResource BackgroundBrush}"
+                                                                                                BorderBrush="{StaticResource BorderBrush}"
+                                                                                                BorderThickness="1"
+                                                                                                CornerRadius="0"
+                                                                                                SnapsToDevicePixels="True">
+                                                                                                <Canvas
+                                                                                                    Width="11"
+                                                                                                    Height="11"
+                                                                                                    HorizontalAlignment="Center"
+                                                                                                    VerticalAlignment="Center"
+                                                                                                    SnapsToDevicePixels="True">
+                                                                                                    <Rectangle
+                                                                                                        x:Name="rect"
+                                                                                                        Width="11"
+                                                                                                        Height="11" />
+                                                                                                    <Polyline
+                                                                                                        x:Name="path1"
+                                                                                                        Fill="{StaticResource GlyphBrush}"
+                                                                                                        Points="2,5 5.5,8.5 8.5,5"
+                                                                                                        Stroke="{StaticResource BorderBrush}"
+                                                                                                        StrokeThickness="1.3" />
+                                                                                                    <Polyline
+                                                                                                        x:Name="path2"
+                                                                                                        Fill="{StaticResource GlyphBrush}"
+                                                                                                        Points="2.2,2.2 5.5,5.5 8.5,2.2"
+                                                                                                        Stroke="{StaticResource BorderBrush}"
+                                                                                                        StrokeThickness="1.3" />
+                                                                                                </Canvas>
+                                                                                            </Border>
+                                                                                            <ControlTemplate.Triggers>
+                                                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                                                    <Setter TargetName="PART_Border" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                                                                                                    <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                                                                                                    <Setter TargetName="path1" Property="Fill" Value="{StaticResource HoverGlyphBrush}" />
+                                                                                                    <Setter TargetName="path1" Property="Stroke" Value="{StaticResource HoverGlyphBrush}" />
+                                                                                                    <Setter TargetName="path2" Property="Fill" Value="{StaticResource HoverGlyphBrush}" />
+                                                                                                    <Setter TargetName="path2" Property="Stroke" Value="{StaticResource HoverGlyphBrush}" />
+                                                                                                </Trigger>
+                                                                                                <Trigger Property="IsPressed" Value="True">
+                                                                                                    <Setter TargetName="PART_Border" Property="Background" Value="{StaticResource ActiveBackgroundBrush}" />
+                                                                                                    <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+                                                                                                    <Setter TargetName="path1" Property="Fill" Value="{StaticResource ActiveGlyphBrush}" />
+                                                                                                    <Setter TargetName="path1" Property="Stroke" Value="{StaticResource ActiveGlyphBrush}" />
+                                                                                                    <Setter TargetName="path2" Property="Fill" Value="{StaticResource ActiveGlyphBrush}" />
+                                                                                                    <Setter TargetName="path2" Property="Stroke" Value="{StaticResource ActiveGlyphBrush}" />
+                                                                                                </Trigger>
+                                                                                            </ControlTemplate.Triggers>
+                                                                                        </ControlTemplate>
+                                                                                    </ToggleButton.Template>
+                                                                                </ToggleButton>
+                                                                            </DockPanel>
+                                                                            <Border Name="PART_HorizContainerBorder" HorizontalAlignment="Left">
+                                                                                <Border
+                                                                                    Name="ResizedOptionLine"
+                                                                                    Width="40"
+                                                                                    Height="4"
+                                                                                    HorizontalAlignment="Center"
+                                                                                    BorderBrush="{StaticResource BorderBrush}"
+                                                                                    BorderThickness="0,1,0,1" />
+                                                                            </Border>
+                                                                        </tools_controls:SplitHeaderPanel>
+                                                                    </Border>
+                                                                    <Canvas
+                                                                        Name="DragPreviewLine"
+                                                                        Height="3"
+                                                                        Visibility="Collapsed">
+                                                                        <Line
+                                                                            Name="Line1"
+                                                                            HorizontalAlignment="Stretch"
+                                                                            Fill="{StaticResource BackgroundBrush}"
+                                                                            Stroke="{StaticResource BorderBrush}"
+                                                                            StrokeDashArray="1,1"
+                                                                            StrokeThickness="1"
+                                                                            X2="{TemplateBinding ActualWidth}" />
+                                                                        <Line
+                                                                            Name="Line2"
+                                                                            HorizontalAlignment="Stretch"
+                                                                            Fill="{StaticResource BackgroundBrush}"
+                                                                            Stroke="{StaticResource BorderBrush}"
+                                                                            StrokeDashArray="1,1"
+                                                                            StrokeThickness="1"
+                                                                            X1="1"
+                                                                            X2="{TemplateBinding ActualWidth}"
+                                                                            Y1="1"
+                                                                            Y2="1" />
+                                                                        <Line
+                                                                            Name="Line3"
+                                                                            HorizontalAlignment="Stretch"
+                                                                            Fill="{StaticResource BackgroundBrush}"
+                                                                            Stroke="{StaticResource BorderBrush}"
+                                                                            StrokeDashArray="1,1"
+                                                                            StrokeThickness="1"
+                                                                            X2="{TemplateBinding ActualWidth}"
+                                                                            Y1="2"
+                                                                            Y2="2" />
+                                                                    </Canvas>
+                                                                </tools_controls:LayoutPanel>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="ResizeDirection" Value="Columns">
+                                                                        <Setter TargetName="PART_SplitHeaderPanel" Property="LayoutTransform">
+                                                                            <Setter.Value>
+                                                                                <RotateTransform Angle="90" />
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                        <Setter TargetName="Line1" Property="X2" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools_controls:CustomGridSplitter}}}" />
+                                                                        <Setter TargetName="Line2" Property="X2" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools_controls:CustomGridSplitter}}}" />
+                                                                        <Setter TargetName="Line3" Property="X2" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools_controls:CustomGridSplitter}}}" />
+                                                                        <Setter TargetName="PART_VerticalButton" Property="LayoutTransform">
+                                                                            <Setter.Value>
+                                                                                <RotateTransform Angle="90" />
+                                                                            </Setter.Value>
+                                                                        </Setter>
+
+
+                                                                        <Setter TargetName="PART_HorizontalButton" Property="BorderBrush" Value="{StaticResource HeaderBorderBrush}" />
+                                                                        <Setter TargetName="PART_HorizontalButton" Property="LayoutTransform">
+                                                                            <Setter.Value>
+                                                                                <RotateTransform Angle="90" />
+                                                                            </Setter.Value>
+                                                                        </Setter>
+
+                                                                    </Trigger>
+
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </tools_controls:CustomGridSplitter.Style>
+                                        </tools_controls:CustomGridSplitter>
+                                        <tools_controls:LayoutPanel
+                                            x:Name="PART_BottomPanel"
+                                            Grid.Row="2"
+                                            Grid.Column="1"
+                                            Background="{StaticResource ContentBackgroundBrush}">
+                                            <ScrollContentPresenter
+                                                x:Name="PART_BottomScrollContent"
+                                                Margin="{Binding Path=Padding, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:TabSplitter}}}"
+                                                Content="{TemplateBinding BottomSelectedContent}"
+                                                ContentSource="BottomSelectedContent" />
+                                        </tools_controls:LayoutPanel>
+                                    </Grid>
+
+                                </Border>
+                            </shared:Border3D>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="UIElement.IsEnabled" Value="False">
+                            <Setter Property="TextElement.Foreground" Value="{DynamicResource ResourceKey={x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding Path=SelectedItem.(tools_controls:TabSplitterItem.Orientation), RelativeSource={RelativeSource Self}}" Value="Vertical">
+
+                            <Setter TargetName="PART_TopPanel" Property="Grid.Row" Value="1" />
+                            <Setter TargetName="PART_TopPanel" Property="Grid.Column" Value="0" />
+
+                            <Setter TargetName="PART_Splitter" Property="Grid.Row" Value="1" />
+                            <Setter TargetName="PART_Splitter" Property="Grid.Column" Value="1" />
+
+                            <Setter TargetName="PART_BottomPanel" Property="Grid.Row" Value="1" />
+                            <Setter TargetName="PART_BottomPanel" Property="Grid.Column" Value="2" />
+
+                            <Setter TargetName="PART_Splitter" Property="ResizeDirection" Value="Columns" />
+                            <Setter TargetName="PART_Splitter" Property="Grid.ColumnSpan" Value="1" />
+                        </DataTrigger>
+                        <Trigger Property="HasItems" Value="False">
+                            <Setter TargetName="PART_Splitter" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource ResourceKey={x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter Property="Control.Padding" Value="4" />
+        <Setter Property="AllowDrop" Value="False" />
+        <Setter Property="Panel.Background" Value="{StaticResource BackgroundBrush}" />
+        <Setter Property="MinHeight" Value="150" />
+        <Setter Property="tools_controls:TabSplitter.SelectedBackground" Value="{StaticResource ActiveBackgroundBrush}" />
+        <Setter Property="tools_controls:TabSplitter.SelectedForeground" Value="{StaticResource ActiveForegroundBrush}" />
+        <Setter Property="tools_controls:TabSplitter.MouseOverBackground" Value="{StaticResource HoverBackgroundBrush}" />
+        <Setter Property="tools_controls:TabSplitter.MouseOverForeground" Value="{StaticResource HoverForegroundBrush}" />
+    </Style>
+</ResourceDictionary>
