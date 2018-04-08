@@ -72,18 +72,15 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             [CanBeNull] Type metadataType, [CanBeNull] InterceptorCallback interceptor, bool isDescriptor,
             [NotNull] IResolverExtension[] extensions)
         {
-            if (metadata == null) throw new ArgumentNullException(nameof(metadata));
-            if (container == null) throw new ArgumentNullException(nameof(container));
-            if (extensions == null) throw new ArgumentNullException(nameof(extensions));
-            Metadata = metadata;
-            Container = container;
+            Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
+            Container = container ?? throw new ArgumentNullException(nameof(container));
             _isExportFactory = isExportFactory;
             _factoryType = factoryType;
             _metadataObject = metadataObject;
             _metadataType = metadataType;
             _interceptor = interceptor;
             _isDescriptor = isDescriptor;
-            _extensions = extensions;
+            _extensions = extensions ?? throw new ArgumentNullException(nameof(extensions));
         }
 
         #endregion

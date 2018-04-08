@@ -5,14 +5,23 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
 {
     public sealed class SimpleResolverStep : InjectorStep
     {
+        private string _error;
+        public override string ErrorMessage => _error;
+
         public override StepId Id => StepIds.SimpleResolver;
 
         public override StepId OnExecute(InjectorContext context)
         {
+            _error = nameof(SimpleResolverStep);
+
             var export = context.ReflectionContext.FindExport();
             var reflectionContext = context.ReflectionContext;
 
-            if (export == null) return StepId.Invalid;
+            if (export == null)
+            {
+                _error += " - No Export Found for " + context.Metadata; 
+                return StepId.Invalid;
+            }
 
             var currentType = reflectionContext.CurrentType;
             var isExportFactory = currentType.IsGenericType &&

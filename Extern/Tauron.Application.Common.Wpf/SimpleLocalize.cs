@@ -84,9 +84,7 @@ namespace Tauron.Application
 
             if (provider?.RootObject == null) return Name; // "IRootObjectProvider oder das RootObject existieren nicht!";
 
-            ResourceManager manager;
-
-            return Resources.TryGetValue(provider.RootObject.GetType().Assembly, out manager)
+            return Resources.TryGetValue(provider.RootObject.GetType().Assembly, out var manager)
                 ? manager.GetObject(Name)
                 : Name;
         }

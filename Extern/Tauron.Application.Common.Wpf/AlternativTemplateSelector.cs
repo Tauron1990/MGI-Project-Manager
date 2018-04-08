@@ -34,9 +34,8 @@ namespace Tauron.Application
             // ReSharper restore ConditionIsAlwaysTrueOrFalse
             var key = item.GetType().Name;
             var ele = container.As<FrameworkElement>();
-            if (ele == null) return null;
 
-            var temp = ele.TryFindResource(key).As<DataTemplate>();
+            var temp = ele?.TryFindResource(key).As<DataTemplate>();
             return temp;
         }
 

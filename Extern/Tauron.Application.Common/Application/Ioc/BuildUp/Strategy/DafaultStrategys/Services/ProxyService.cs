@@ -1,8 +1,6 @@
 ﻿#region
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Castle.Core.Logging;
 using Castle.DynamicProxy;
 using NLog;

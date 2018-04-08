@@ -50,11 +50,9 @@ namespace Tauron.Application.Views.Core
 
         public IWindow CreateWindow(string name, object[] parameters)
         {
-            ExportNameHelper export;
-            if (!_views.TryGetValue(name, out export)) return CreateWindowImpl(name, parameters);
+            if (!_views.TryGetValue(name, out var export)) return CreateWindowImpl(name, parameters);
 
-            var win = export.GetValue() as Window;
-            return win != null ? new WpfWindow(win) : CreateWindowImpl(name, parameters);
+            return export.GetValue() is Window win ? new WpfWindow(win) : CreateWindowImpl(name, parameters);
         }
 
         public abstract Type GetViewType(string name);

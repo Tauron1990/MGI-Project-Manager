@@ -33,6 +33,8 @@ namespace Tauron.Application.MgiProjectManager.Data.Entitys
 
         public int? IterationTime { get; set; }
 
-        public bool IsValid { get; set; }
+        public bool IsSaved { get; set; }
+
+        public bool IsCompleted { get; set; }
     }
 }

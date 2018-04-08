@@ -7,6 +7,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
     {
         private Type _lazyType;
 
+        public override string ErrorMessage { get; } = nameof(LazyResolverStep);
+
         public override StepId Id => StepIds.LazyResolver;
 
         public override StepId OnExecute(InjectorContext context)
@@ -20,8 +22,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
 
         public override void OnExecuteFinish(InjectorContext context)
         {
-            var resolver = context.Resolver as SimpleResolver;
-            if (resolver == null)
+            if (!(context.Resolver is SimpleResolver resolver))
                 return;
 
             context.Resolver = new LazyResolver(resolver, _lazyType, context.ReflectionContext.MetadataFactory);

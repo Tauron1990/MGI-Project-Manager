@@ -29,5 +29,7 @@ namespace Tauron.Application.Common.BaseLayer.Core
         public void Add<TEntity>(TEntity entity) where TEntity : BaseEntity => Context.Add(entity);
 
         public void SaveChanges() => Context.SaveChanges();
+
+        public TEntity Find<TEntity, TKey>(TKey key) where TEntity : GenericBaseEntity<TKey> => Context.Find<TEntity>(key);
     }
 }

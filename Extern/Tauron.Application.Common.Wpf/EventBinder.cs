@@ -180,8 +180,9 @@ namespace Tauron.Application
                 private bool _isDirty;
 
                 private MemberInfo _member;
-
                 private bool _sync;
+
+                //private bool _sync;
 
                 #endregion
 
@@ -388,7 +389,7 @@ namespace Tauron.Application
                             DataContext,
                             pair.Value,
                             Source,
-                            TaskScheduler));
+                            TaskScheduler ?? throw new InvalidOperationException()));
                 }
             }
 
@@ -427,8 +428,6 @@ namespace Tauron.Application
                     linker.Bind();
                     return;
                 }
-
-            if (newValue == null) return;
 
             var temp = new EventLinker(newValue, d, simpleMode);
             EventLinkerCollection.Add(temp);

@@ -55,7 +55,7 @@ namespace Tauron.Application.Common.BaseLayer.Data
         [Inject]
         private List<IRepositoryExtender> _extenders;
 
-        private Dictionary<Type, IDatabaseFactory> _databaseFactories;
+        private Dictionary<Type, (IDatabaseFactory, Type)> _databaseFactories;
         private GroupDictionary<IDatabaseIdentifer, object> _repositorys;
         private DatabaseDisposer _databaseDisposer;
         private bool _compositeMode;
@@ -82,38 +82,23 @@ namespace Tauron.Application.Common.BaseLayer.Data
         public TRepo GetRepository<TRepo>()
             where TRepo : class
         {
-            if (!_databaseFactories.TryGetValue(typeof(TRepo), out var fac)) throw new InvalidOperationException("No Repository Registrated");
-
-            var dbEnt = _repositorys.FirstOrDefault(p => p.Key.Id == fac.Id);
-
-            var repo = dbEnt.Value?.FirstOrDefault(obj => obj.GetType() == typeof(TRepo));
-
-            if (repo is TRepo typedRepo) return typedRepo;
-
-            var db = dbEnt.Key ?? fac.CreateDatabase();
-
-
-            var robj = Activator.CreateInstance(typeof(TRepo), db);
-            if (dbEnt.Key == null)
-                _repositorys.Add(db, robj);
-
-            return (TRepo) robj;
+            return (TRepo) GetRepository(typeof(TRepo));
         }
 
         public object GetRepository(Type repoType)
         {
             if (!_databaseFactories.TryGetValue(repoType, out var fac)) throw new InvalidOperationException("No Repository Registrated");
 
-            var dbEnt = _repositorys.FirstOrDefault(p => p.Key.Id == fac.Id);
+            var dbEnt = _repositorys.FirstOrDefault(p => p.Key.Id == fac.Item1.Id);
 
             var repo = dbEnt.Value?.FirstOrDefault(obj => obj.GetType() == repoType);
 
             if (repo != null) return repo;
 
-            var db = dbEnt.Key ?? fac.CreateDatabase();
+            var db = dbEnt.Key ?? fac.Item1.CreateDatabase();
 
 
-            var robj = Activator.CreateInstance(repoType, db);
+            var robj = Activator.CreateInstance(fac.Item2, db);
             if (dbEnt.Key == null)
                 _repositorys.Add(db, robj);
 
@@ -129,14 +114,14 @@ namespace Tauron.Application.Common.BaseLayer.Data
 
         void INotifyBuildCompled.BuildCompled()
         {
-            _databaseFactories = new Dictionary<Type, IDatabaseFactory>();
+            _databaseFactories = new Dictionary<Type, (IDatabaseFactory, Type)>();
 
             foreach (var repositoryExtender in _extenders)
             {
                 var fac = repositoryExtender.DatabaseFactory;
 
                 foreach (var repositoryType in repositoryExtender.GetRepositoryTypes())
-                    _databaseFactories.Add(repositoryType, fac);
+                    _databaseFactories.Add(repositoryType.Item1, (fac, repositoryType.Item2));
             }
 
             _extenders = null;

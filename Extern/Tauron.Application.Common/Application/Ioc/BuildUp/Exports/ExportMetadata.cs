@@ -1,28 +1,4 @@
-﻿// The file ExportMetadata.cs is part of Tauron.Application.Common.
-// 
-// CoreEngine is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// CoreEngine is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//  
-// You should have received a copy of the GNU General Public License
-//  along with Tauron.Application.Common If not, see <http://www.gnu.org/licenses/>.
-
-#region
-
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExportMetadata.cs" company="Tauron Parallel Works">
-//   Tauron Application © 2013
-// </copyright>
-// <summary>
-//   The export metadata.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿#region
 
 using System;
 using System.Collections.Generic;
@@ -61,13 +37,11 @@ namespace Tauron.Application.Ioc.BuildUp.Exports
         {
             if (interfaceType == null) throw new ArgumentNullException(nameof(interfaceType));
             if (lifetime == null) throw new ArgumentNullException(nameof(lifetime));
-            if (metadata == null) throw new ArgumentNullException(nameof(metadata));
-            if (export == null) throw new ArgumentNullException(nameof(export));
             InterfaceType = interfaceType;
             ContractName = contractName;
             Lifetime = lifetime;
-            Metadata = metadata;
-            Export = export;
+            Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
+            Export = export ?? throw new ArgumentNullException(nameof(export));
         }
 
         #endregion
@@ -81,7 +55,7 @@ namespace Tauron.Application.Ioc.BuildUp.Exports
         /// <summary>Gets the contract name.</summary>
         /// <value>The contract name.</value>
         [CanBeNull]
-        public string ContractName { get; private set; }
+        public string ContractName { get; }
 
         /// <summary>Gets or sets the export.</summary>
         /// <value>The export.</value>
@@ -91,16 +65,16 @@ namespace Tauron.Application.Ioc.BuildUp.Exports
         /// <summary>Gets the interface type.</summary>
         /// <value>The interface type.</value>
         [NotNull]
-        public Type InterfaceType { get; private set; }
+        public Type InterfaceType { get; }
 
         /// <summary>Gets the lifetime.</summary>
         /// <value>The lifetime.</value>
         [NotNull]
-        public Type Lifetime { get; private set; }
+        public Type Lifetime { get; }
 
         /// <summary>Gets the metadata.</summary>
         /// <value>The metadata.</value>
-        [NotNull]
+        [CanBeNull]
         public Dictionary<string, object> Metadata { get; private set; }
 
         #endregion
@@ -116,14 +90,14 @@ namespace Tauron.Application.Ioc.BuildUp.Exports
         /// <returns>
         ///     The <see cref="bool" />.
         /// </returns>
-        public bool Equals([CanBeNull] ExportMetadata other)
+        public bool Equals(ExportMetadata other)
         {
             if (ReferenceEquals(null, other)) return false;
 
             if (ReferenceEquals(this, other)) return true;
 
             return InterfaceType == other.InterfaceType && string.Equals(ContractName, other.ContractName)
-                   && Lifetime == other.Lifetime && Export.Equals(other);
+                   && Lifetime == other.Lifetime && Export.Equals(other.Export);
         }
 
         /// <summary>The ==.</summary>
@@ -153,7 +127,7 @@ namespace Tauron.Application.Ioc.BuildUp.Exports
         /// <returns>
         ///     The <see cref="bool" />.
         /// </returns>
-        public override bool Equals([CanBeNull] object obj)
+        public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
 
@@ -185,8 +159,7 @@ namespace Tauron.Application.Ioc.BuildUp.Exports
         /// </returns>
         public override string ToString()
         {
-            object name;
-            if (!Metadata.TryGetValue("DebugName", out name)) name = ContractName;
+            if (Metadata == null || !Metadata.TryGetValue("DebugName", out var name)) name = ContractName;
             return ErrorTracer.FormatExport(InterfaceType, name);
         }
 

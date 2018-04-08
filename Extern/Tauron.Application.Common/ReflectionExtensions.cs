@@ -520,6 +520,21 @@ namespace Tauron
             return (TEnum) Enum.Parse(typeof(TEnum), value);
         }
 
+        public static TEnum TryParseEnum<TEnum>(this string value, TEnum defaultValue)
+            where TEnum : struct 
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(value)) return defaultValue;
+
+                return Enum.TryParse<TEnum>(value, out var e) ? e : defaultValue;
+            }
+            catch (ArgumentException)
+            {
+                return defaultValue;
+            }
+        }
+
         /// <summary>
         ///     The set invoke member.
         /// </summary>

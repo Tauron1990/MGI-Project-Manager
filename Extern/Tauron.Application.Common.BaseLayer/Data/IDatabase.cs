@@ -16,5 +16,7 @@ namespace Tauron.Application.Common.BaseLayer.Data
 
         void SaveChanges();
 
+        TEntity Find<TEntity, TKey>(TKey key) 
+            where TEntity : GenericBaseEntity<TKey>;
     }
 }

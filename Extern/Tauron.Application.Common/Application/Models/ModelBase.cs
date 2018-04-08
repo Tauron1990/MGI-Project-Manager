@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using JetBrains.Annotations;
 using Tauron.Application.Ioc;
 using PropertyDescriptor = System.ComponentModel.PropertyDescriptor;
@@ -45,12 +46,17 @@ namespace Tauron.Application.Models
         protected virtual bool HasErrorOverride => false;
         public bool HasNoErrors => !HasErrors;
 
+        public bool ConvertPropertyIssuesToString { get; set; }
+
         [CanBeNull]
         public IEnumerable GetErrors([CanBeNull] string propertyName)
         {
             if (propertyName == null) return null;
 
-            return !_propertyIssues.ContainsKey(propertyName) ? GetErrorsOverride(propertyName) : _propertyIssues[propertyName];
+            var enumerable = !_propertyIssues.ContainsKey(propertyName) ? GetErrorsOverride(propertyName) : _propertyIssues[propertyName];
+            if (enumerable == null) return null;
+
+            return ConvertPropertyIssuesToString ? enumerable.Cast<object>().Select(o => o.ToString()) : enumerable;
         }
 
         public bool HasErrors => _propertyIssues.Count != 0 || HasErrorOverride;
@@ -164,8 +170,10 @@ namespace Tauron.Application.Models
             var getter = property.Metadata.CustomGetter;
             if (getter != null) return getter(property);
 
-            return _values.TryGetValue(property.Name, out var value) ? value : property.Metadata.DefaultValue;
+            return _values.TryGetValue(property.Name, out var value) ? value : property.Metadata.DefaultValue ?? GetDefaultValue(property.Type);
         }
+
+        public static object GetDefaultValue(Type type) => type.GetTypeInfo().IsValueType ? Activator.CreateInstance(type) : null;
 
         protected void SetValue([NotNull] string property, [NotNull] object value)
         {
@@ -258,7 +266,7 @@ namespace Tauron.Application.Models
             return _propertyIssues;
         }
 
-        private void SetIssues([NotNull] string propertyName, [NotNull] PropertyIssue[] issues)
+        protected void SetIssues([NotNull] string propertyName, [NotNull] PropertyIssue[] issues)
         {
             if (_propertyIssues.ContainsKey(propertyName))
                 _propertyIssues.Remove(propertyName);

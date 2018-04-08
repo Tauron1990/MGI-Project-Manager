@@ -37,18 +37,18 @@
                 <sync:IntegerTextBox Grid.Column="1" Grid.Row="0" Margin="2" UseNullOption="True"
                                      WatermarkTextIsVisible="True"
                                      WatermarkText="{hlp:SimpleLocalize WaterLabelTimeMikron}"
-                                     Value="{Binding CalcDrops, UpdateSourceTrigger=PropertyChanged}" />
+                                     Value="{Binding TimeCalculationModel.CalcMikron, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBlock Text="{hlp:SimpleLocalize LabelTimeSpeed}" Grid.Column="2" Grid.Row="0" Margin="2"
                            VerticalAlignment="Center" />
                 <sync:DoubleTextBox Grid.Column="3" Grid.Row="0" Margin="2" UseNullOption="True"
                                     WatermarkTextIsVisible="True"
                                     WatermarkText="{hlp:SimpleLocalize WaterLabelTimeSpeed}"
-                                    Value="{Binding CalcSpeed, UpdateSourceTrigger=PropertyChanged}" />
+                                    Value="{Binding TimeCalculationModel.CalcSpeed, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBlock Text="{hlp:SimpleLocalize LabelTimePaperFormat}" Grid.Column="0" Grid.Row="2" Margin="2"
                            VerticalAlignment="Center" HorizontalAlignment="Center" />
                 <sync:SfMaskedEdit Grid.Column="1" Grid.Row="2" Margin="2" MaskType="RegEx"
                                    Mask="{x:Static bl:PaperFormat.UIFormat}"
-                                   Value="{Binding CalcPaperFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                   Value="{Binding TimeCalculationModel.CalcPaperFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                    ToolTip="{hlp:SimpleLocalize TimeFormatToolTip}"
                                    Watermark="{hlp:SimpleLocalize WaterLabelPaperFormat}" />
                 <TextBlock Text="{hlp:SimpleLocalize LabelTimeRuns}" Grid.Column="2" Grid.Row="2"
@@ -56,14 +56,14 @@
                 <sync:IntegerTextBox Grid.Column="3" Grid.Row="2" Margin="2" UseNullOption="True"
                                      WatermarkTextIsVisible="True"
                                      WatermarkText="{hlp:SimpleLocalize WaterLabelRuns}"
-                                     Value="{Binding CalcIterations, UpdateSourceTrigger=PropertyChanged}" />
+                                     Value="{Binding TimeCalculationModel.CalcIterations, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBlock Text="{hlp:SimpleLocalize LabelTimeNumber}" Margin="2" VerticalAlignment="Center"
                            Grid.Column="0" Grid.Row="4" />
                 <sync:IntegerTextBox Margin="2" Grid.Column="1" Grid.Row="4"
                                      WatermarkText="{hlp:SimpleLocalize WaterLabelTimeNumber}"
                                      WatermarkTextIsVisible="True"
-                                     Value="{Binding CalcAmount, UpdateSourceTrigger=PropertyChanged}" />
-                <Button Grid.Row="4" Grid.Column="3" VerticalAlignment="Center"
+                                     Value="{Binding TimeCalculationModel.CalcAmount, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Grid.Row="4" Grid.Column="3" VerticalAlignment="Center" hlp:CommandBinder.Command="CalculateTime"
                         Content="{hlp:SimpleLocalize BtnTimeCalculate}" />
             </Grid>
         </GroupBox>
@@ -84,13 +84,13 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock Text="{hlp:SimpleLocalize LabelTimeCalcRuntime}" />
-                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding CalculatetRunTime}" Margin="10,0" />
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding TimeCalculationModel.CalculatetRunTime}" Margin="10,0" />
                 <TextBlock Text="{hlp:SimpleLocalize LabelTimeSetupTime}" Grid.Column="0" Grid.Row="2" />
-                <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding CalculatetSetupTime}" Margin="10,0" />
+                <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding TimeCalculationModel.CalculatetSetupTime}" Margin="10,0" />
                 <TextBlock Text="{hlp:SimpleLocalize LabelTimeCompled}" Grid.Column="0" Grid.Row="4" />
-                <TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding CalculatetFullTime}" Margin="10,0" />
+                <TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding TimeCalculationModel.CalculatetFullTime}" Margin="10,0" />
                 <TextBlock Text="{hlp:SimpleLocalize LabelTimeStatus}" Grid.Column="0" Grid.Row="6" />
-                <TextBlock Grid.Column="1" Grid.Row="6" Text="{Binding CalculationStatus}" Margin="10,0" />
+                <TextBlock Grid.Column="1" Grid.Row="6" Text="{Binding TimeCalculationModel.Status}" Margin="10,0" />
             </Grid>
         </GroupBox>
     </Grid>

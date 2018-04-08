@@ -7,6 +7,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
 {
     public sealed class InitializeStep : InjectorStep
     {
+        public override string ErrorMessage { get; } = nameof(InitializeStep);
+
         public override StepId Id => StepIds.Initialize;
 
         public override StepId OnExecute(InjectorContext context)
@@ -25,8 +27,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
                     new ImportInterceptorHelper(context.ImportInterceptor, (MemberInfo) context.MemberInfo,
                         context.Metadata, context.Target).Intercept;
 
-            object val;
-            if (context.Metadata.Metadata.TryGetValue(LevelSpecificImport.LevelMetadata, out val))
+            if (context.Metadata.Metadata.TryGetValue(LevelSpecificImport.LevelMetadata, out var val))
                 try
                 {
                     context.ReflectionContext.Level = (int) val;

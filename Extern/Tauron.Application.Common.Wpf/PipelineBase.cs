@@ -9,13 +9,6 @@ namespace Tauron.Application
     {
         #region Constructors and Destructors
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="PipelineBase" /> class.
-        ///     Initialisiert eine neue Instanz der <see cref="PipelineBase" /> Klasse.
-        /// </summary>
-        /// <param name="target">
-        ///     The target.
-        /// </param>
         protected PipelineBase([NotNull] DependencyObject target, bool simpleMode)
         {
             if (target == null) throw new ArgumentNullException(nameof(target));
@@ -75,23 +68,20 @@ namespace Tauron.Application
 
         /// <summary>Gets the target.</summary>
         [CanBeNull]
-        public DependencyObject Target => Source.TypedTarget();
+        public DependencyObject Target => Source?.TypedTarget();
 
         /// <summary>Gets or sets the data context.</summary>
         public WeakReference DataContext { get; set; }
+        
 
-        /// <summary>Gets a value indicating whether is alive.</summary>
-        public bool IsAlive => Source.IsAlive();
+        public bool IsAlive => Source?.IsAlive() ?? false;
 
-        /// <summary>Gets or sets the task scheduler.</summary>
-        [NotNull]
+
         public TaskScheduler TaskScheduler { get; set; }
-
-        /// <summary>Gets a value indicating whether synchronize.</summary>
+        
         public virtual bool Synchronize => true;
 
-        /// <summary>Gets the task.</summary>
-        [NotNull]
+
         public Task Task => _task.Task;
 
         #endregion

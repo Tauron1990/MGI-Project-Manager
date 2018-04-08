@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Tauron.Application.Common.BaseLayer.Data
 {
@@ -9,6 +10,16 @@ namespace Tauron.Application.Common.BaseLayer.Data
         public Repository(IDatabase database) => _database = database;
 
         public IQueryable<TEntity> Query() => _database.Query<TEntity>();
+
+        public IQueryable<TEntity> QueryAsNoTracking()
+        {
+            return Query().AsNoTracking();
+        }
+
+        public TEntity Find(TKey key)
+        {
+            return _database.Find<TEntity, TKey>(key);
+        }
 
         public void Update(TEntity entity) => _database.Update(entity);
 

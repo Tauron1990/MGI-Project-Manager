@@ -29,6 +29,8 @@ namespace Tauron.Application.Composition
             set => _container = value;
         }
 
+        public static BuildParameter[] BuildParameters { get; set; }
+
         #endregion
 
         #region Static Fields
@@ -146,7 +148,7 @@ namespace Tauron.Application.Composition
             // ReSharper disable once ObjectCreationAsStatement
             new FrameworkObject(d, false)
             {
-                DataContext = Container.Resolve(typeof(ViewModelBase), name, true, null)
+                DataContext = Container.Resolve(typeof(ViewModelBase), name, true, BuildParameters)
             };
         }
 

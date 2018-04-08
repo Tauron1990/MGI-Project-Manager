@@ -2,6 +2,8 @@
 {
     public interface IStep<in TContext>
     {
+        string ErrorMessage { get; }
+
         StepId Id { get; }
 
         StepId OnExecute(TContext context);

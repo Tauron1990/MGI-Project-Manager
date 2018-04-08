@@ -1,28 +1,4 @@
-﻿// The file EventMemberInjector.cs is part of Tauron.Application.Common.
-// 
-// CoreEngine is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// CoreEngine is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//  
-// You should have received a copy of the GNU General Public License
-//  along with Tauron.Application.Common If not, see <http://www.gnu.org/licenses/>.
-
-#region
-
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EventMemberInjector.cs" company="Tauron Parallel Works">
-//   Tauron Application © 2013
-// </copyright>
-// <summary>
-//   The event member injector.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿#region
 
 using System;
 using System.Reflection;
@@ -53,10 +29,9 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         public EventMemberInjector([NotNull] ImportMetadata metadata, [NotNull] IEventManager manager, [NotNull] MemberInfo member)
         {
             if (metadata == null) throw new ArgumentNullException(nameof(metadata));
-            if (manager == null) throw new ArgumentNullException(nameof(manager));
             if (member == null) throw new ArgumentNullException(nameof(member));
             _metadata = metadata;
-            _manager = manager;
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _member = member;
         }
 

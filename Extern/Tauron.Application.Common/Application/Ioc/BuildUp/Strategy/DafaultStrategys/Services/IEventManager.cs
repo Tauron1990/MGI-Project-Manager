@@ -1,28 +1,4 @@
-﻿// The file IEventManager.cs is part of Tauron.Application.Common.
-// 
-// CoreEngine is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// CoreEngine is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//  
-// You should have received a copy of the GNU General Public License
-//  along with Tauron.Application.Common If not, see <http://www.gnu.org/licenses/>.
-
-#region
-
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IEventManager.cs" company="Tauron Parallel Works">
-//   Tauron Application © 2013
-// </copyright>
-// <summary>
-//   The EventManager interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿#region
 
 using System;
 using System.Reflection;
@@ -47,6 +23,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         /// <param name="handler">
         ///     The handler.
         /// </param>
+        /// <param name="errorTracer"></param>
         void AddEventHandler(string topic, Delegate handler, ErrorTracer errorTracer);
 
         /// <summary>
@@ -61,6 +38,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         /// <param name="target">
         ///     The target.
         /// </param>
+        /// <param name="errorTracer"></param>
         void AddEventHandler(string topic, MethodInfo handler, object target, ErrorTracer errorTracer);
 
         /// <summary>
@@ -75,6 +53,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         /// <param name="publisher">
         ///     The publisher.
         /// </param>
+        /// <param name="errorTracer"></param>
         void AddPublisher(string topic, EventInfo eventInfo, object publisher, ErrorTracer errorTracer);
 
         #endregion

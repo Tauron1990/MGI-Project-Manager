@@ -1,30 +1,4 @@
-﻿// The file DialogFactory.cs is part of Tauron.Application.Common.Wpf.Controls.
-// 
-// CoreEngine is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// CoreEngine is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//  
-// You should have received a copy of the GNU General Public License
-//  along with Tauron.Application.Common.Wpf.Controls If not, see <http://www.gnu.org/licenses/>.
-
-#region
-
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DialogFactory.cs" company="Tauron Parallel Works">
-//   Tauron Application © 2013
-// </copyright>
-// <summary>
-//   The dialog factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -33,8 +7,6 @@ using JetBrains.Annotations;
 using Ookii.Dialogs.Wpf;
 using Tauron.Application.Controls;
 using Tauron.Application.Ioc;
-
-#endregion
 
 namespace Tauron.Application
 {
@@ -68,7 +40,7 @@ namespace Tauron.Application
             IWindow owner,
             Action<IProgress<ActiveProgress>> worker)
         {
-            return new SimpleProgressDialog(text, title, owner, worker);
+            return new SimpleProgressDialog(text, title, owner ?? throw new ArgumentNullException(nameof(owner)), worker);
         }
 
         /// <summary>
@@ -84,7 +56,7 @@ namespace Tauron.Application
         {
             ShowMessageBox(
                 owner,
-                string.Format("Type: {0} \n {1}", exception.GetType(), exception.Message),
+                $"Type: {exception.GetType()} \n {exception.Message}",
                 "Error",
                 MsgBoxButton.Ok,
                 MsgBoxImage.Error,
@@ -126,7 +98,7 @@ namespace Tauron.Application
             return ObservableObject.CurrentDispatcher.Invoke(
                 () =>
                 {
-                    var realWindow = owner == null ? null : (Window) owner.TranslateForTechnology();
+                    var realWindow = (Window) owner?.TranslateForTechnology();
                     var diag = new InputDialog
                     {
                         Owner = realWindow,
@@ -150,7 +122,7 @@ namespace Tauron.Application
             MsgBoxImage icon,
             Icon custumIcon)
         {
-            var realWindow = owner == null ? null : (Window) owner.TranslateForTechnology();
+            var realWindow = (Window) owner?.TranslateForTechnology();
 
             return
                 ObservableObject.CurrentDispatcher.Invoke(
@@ -158,7 +130,7 @@ namespace Tauron.Application
                         !TaskDialog.OSSupportsTaskDialogs
                             ? (MsgBoxResult)
                             MessageBox.Show(
-                                realWindow,
+                                realWindow ?? throw new ArgumentNullException(nameof(owner), "No WPF Window or Window Null"),
                                 text,
                                 caption,
                                 (MessageBoxButton) button,

@@ -1,16 +1,20 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
 namespace Tauron.Application.Common.BaseLayer.Data
 {
+    [Serializable]
     public abstract class BaseEntity :INotifyPropertyChanged, INotifyPropertyChanging
     {
+        [field:NonSerialized]
         public event PropertyChangedEventHandler  PropertyChanged;
+        [field:NonSerialized]
         public event PropertyChangingEventHandler PropertyChanging;
 
-        protected void SetWithNotify<T>(T value, ref T field, [CallerMemberName] string propertyName = "")
+        protected void SetWithNotify<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
         {
             if (Equals(field, value)) return;
 
@@ -20,7 +24,7 @@ namespace Tauron.Application.Common.BaseLayer.Data
         }
     }
 
-    [PublicAPI]
+    [PublicAPI, Serializable]
     public abstract class GenericBaseEntity<TId> : BaseEntity
     {
         private TId _id;
@@ -29,7 +33,7 @@ namespace Tauron.Application.Common.BaseLayer.Data
         public TId Id
         {
             get => _id;
-            set => SetWithNotify(value, ref _id);
+            set => SetWithNotify(ref _id, value);
         }
     }
 }

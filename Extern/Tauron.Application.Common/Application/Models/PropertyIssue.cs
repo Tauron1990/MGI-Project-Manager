@@ -23,5 +23,10 @@ namespace Tauron.Application.Models
 
         [NotNull]
         public string Message { get; }
+
+        public override string ToString()
+        {
+            return Message;
+        }
     }
 }

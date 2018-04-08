@@ -64,10 +64,13 @@ namespace Tauron.Application.Implementation
         /// <returns>
         ///     The <see cref="Task" />.
         /// </returns>
-        [NotNull]
-        public Task BeginInvoke([NotNull] Action action)
+        public Task BeginInvoke(Action action) => _dispatcher.BeginInvoke(action).Task;
+
+        public Task<TResult> BeginInvoke<TResult>(Func<TResult> action)
         {
-            return _dispatcher.BeginInvoke(action).Task;
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            return (Task<TResult>) _dispatcher.BeginInvoke(action).Task;
         }
 
         /// <summary>
@@ -76,10 +79,7 @@ namespace Tauron.Application.Implementation
         /// <param name="action">
         ///     The action.
         /// </param>
-        public void Invoke([NotNull] Action action)
-        {
-            _dispatcher.Invoke(action);
-        }
+        public void Invoke(Action action) => _dispatcher.Invoke(action);
 
         /// <summary>
         ///     The invoke.
@@ -92,10 +92,7 @@ namespace Tauron.Application.Implementation
         /// <returns>
         ///     The <see cref="TReturn" />.
         /// </returns>
-        public TReturn Invoke<TReturn>([NotNull] Func<TReturn> action)
-        {
-            return _dispatcher.Invoke(action);
-        }
+        public TReturn Invoke<TReturn>(Func<TReturn> action) => _dispatcher.Invoke(action);
 
         #endregion
     }

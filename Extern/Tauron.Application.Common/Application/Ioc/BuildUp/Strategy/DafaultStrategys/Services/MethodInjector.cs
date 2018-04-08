@@ -1,28 +1,4 @@
-﻿// The file MethodInjector.cs is part of Tauron.Application.Common.
-// 
-// CoreEngine is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// CoreEngine is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//  
-// You should have received a copy of the GNU General Public License
-//  along with Tauron.Application.Common If not, see <http://www.gnu.org/licenses/>.
-
-#region
-
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MethodInjector.cs" company="Tauron Parallel Works">
-//   Tauron Application © 2013
-// </copyright>
-// <summary>
-//   The method injector.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿#region
 
 using System;
 using System.Collections.Generic;
@@ -101,9 +77,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             {
                 if (metadataFactory == null) throw new ArgumentNullException(nameof(metadataFactory));
                 if (parameter == null) throw new ArgumentNullException(nameof(parameter));
-                if (parameters == null) throw new ArgumentNullException(nameof(parameters));
                 if (resolverExtensions == null) throw new ArgumentNullException(nameof(resolverExtensions));
-                _parameters = parameters;
+                _parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
             }
 
             #endregion
@@ -154,16 +129,13 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         /// <param name="eventManager">
         ///     The event manager.
         /// </param>
+        /// <param name="resolverExtensions"></param>
         public MethodInjector([NotNull] MethodInfo method, [NotNull] IMetadataFactory metadataFactory, [NotNull] IEventManager eventManager, [NotNull] [ItemNotNull] IResolverExtension[] resolverExtensions)
         {
-            if (method == null) throw new ArgumentNullException(nameof(method));
-            if (metadataFactory == null) throw new ArgumentNullException(nameof(metadataFactory));
-            if (eventManager == null) throw new ArgumentNullException(nameof(eventManager));
-            if (resolverExtensions == null) throw new ArgumentNullException(nameof(resolverExtensions));
-            _method = method;
-            _metadataFactory = metadataFactory;
-            _eventManager = eventManager;
-            _resolverExtensions = resolverExtensions;
+            _method = method ?? throw new ArgumentNullException(nameof(method));
+            _metadataFactory = metadataFactory ?? throw new ArgumentNullException(nameof(metadataFactory));
+            _eventManager = eventManager ?? throw new ArgumentNullException(nameof(eventManager));
+            _resolverExtensions = resolverExtensions ?? throw new ArgumentNullException(nameof(resolverExtensions));
         }
 
         #endregion
@@ -189,8 +161,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         {
             if (metadata.Metadata != null)
             {
-                object obj;
-                if (metadata.Metadata.TryGetValue(AopConstants.EventMetodMetadataName, out obj))
+                if (metadata.Metadata.TryGetValue(AopConstants.EventMetodMetadataName, out var obj))
                     if ((bool) obj)
                     {
                         var topic = (string) metadata.Metadata[AopConstants.EventTopicMetadataName];

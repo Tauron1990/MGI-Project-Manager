@@ -1,14 +1,5 @@
 ﻿#region
 
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ListResolver.cs" company="Tauron Parallel Works">
-//   Tauron Application © 2013
-// </copyright>
-// <summary>
-//   The list resolver.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Linq;

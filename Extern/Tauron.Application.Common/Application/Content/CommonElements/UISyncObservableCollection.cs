@@ -49,6 +49,12 @@ namespace Tauron.Application
                 return null;
             }
 
+            public Task<TResult> BeginInvoke<TResult>(Func<TResult> action)
+            {
+                // ReSharper disable once AssignNullToNotNullAttribute
+                return null;
+            }
+
             public void Invoke(Action action)
             {
                 action();
@@ -116,7 +122,7 @@ namespace Tauron.Application
         /// <param name="e">
         ///     The e.
         /// </param>
-        protected override void OnPropertyChanged([NotNull] PropertyChangedEventArgs e)
+        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             if (_isBlocked) return;
             InternalUISynchronize.Invoke(() => base.OnPropertyChanged(e));

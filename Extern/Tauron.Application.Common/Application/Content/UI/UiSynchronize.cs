@@ -27,6 +27,9 @@ namespace Tauron.Application
         [NotNull]
         Task BeginInvoke([NotNull] Action action);
 
+        [NotNull]
+        Task<TResult> BeginInvoke<TResult>([NotNull] Func<TResult> action);
+
         /// <summary>
         ///     The invoke.
         /// </summary>

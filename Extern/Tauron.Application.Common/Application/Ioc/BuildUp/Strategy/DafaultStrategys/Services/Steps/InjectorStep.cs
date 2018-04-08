@@ -6,6 +6,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
 {
     public abstract class InjectorStep : IStep<InjectorContext>
     {
+        public abstract string ErrorMessage { get; }
+
         public abstract StepId Id { get; }
 
         [DebuggerStepThrough]

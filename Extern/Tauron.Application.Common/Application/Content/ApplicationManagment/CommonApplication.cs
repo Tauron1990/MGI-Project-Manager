@@ -165,6 +165,12 @@ namespace Tauron.Application
             return Scheduler.QueueTask(new UserTask(action, withDispatcher));
         }
 
+        public static Task QueueWorkitemAsync<TResult>([NotNull] Func<TResult> action, bool withDispatcher)
+        {
+            if (action == null) throw new ArgumentNullException(nameof(action));
+            return Scheduler.QueueTask(new UserResultTask<TResult>(action, withDispatcher));
+        }
+
         /// <summary>The get args.</summary>
         /// <returns>
         ///     The <see cref="string" />.

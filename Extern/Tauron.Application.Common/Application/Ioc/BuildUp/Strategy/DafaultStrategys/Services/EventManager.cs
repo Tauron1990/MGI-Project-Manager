@@ -1,28 +1,4 @@
-﻿// The file EventManager.cs is part of Tauron.Application.Common.
-// 
-// CoreEngine is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// CoreEngine is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//  
-// You should have received a copy of the GNU General Public License
-//  along with Tauron.Application.Common If not, see <http://www.gnu.org/licenses/>.
-
-#region
-
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EventManager.cs" company="Tauron Parallel Works">
-//   Tauron Application © 2013
-// </copyright>
-// <summary>
-//   The event manager.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿#region
 
 using System;
 using System.Linq;
@@ -59,6 +35,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
 
                 #endregion
 
+                [UsedImplicitly]
                 private readonly Delegate _dDelegate;
 
                 #region Public Properties
@@ -124,8 +101,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
                 /// </param>
                 public HandlerEntry([NotNull] Delegate dDelegate)
                 {
-                    if (dDelegate == null) throw new ArgumentNullException(nameof(dDelegate));
-                    _dDelegate = dDelegate;
+                    _dDelegate = dDelegate ?? throw new ArgumentNullException(nameof(dDelegate));
                     _type = (InvokeType) dDelegate.Method.GetParameters().Length;
                     _delegate = new WeakDelegate(dDelegate);
                 }
@@ -233,6 +209,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             /// <param name="publisher">
             ///     The publisher.
             /// </param>
+            /// <param name="errorTracer"></param>
             public void AddPublisher([NotNull] EventInfo info, [NotNull] object publisher, [NotNull] ErrorTracer errorTracer)
             {
                 if (info == null) throw new ArgumentNullException(nameof(info));
@@ -249,6 +226,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             /// <param name="dDelegate">
             ///     The d delegate.
             /// </param>
+            /// <param name="errorTracer"></param>
             public void Addhandler([NotNull] Delegate dDelegate, [NotNull] ErrorTracer errorTracer)
             {
                 if (dDelegate == null) throw new ArgumentNullException(nameof(dDelegate));
@@ -266,6 +244,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             /// <param name="target">
             ///     The target.
             /// </param>
+            /// <param name="errorTracer"></param>
             public void Addhandler([NotNull] MethodInfo dDelegate, [NotNull] object target, [NotNull] ErrorTracer errorTracer)
             {
                 if (dDelegate == null) throw new ArgumentNullException(nameof(dDelegate));
@@ -329,6 +308,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         /// <param name="handler">
         ///     The handler.
         /// </param>
+        /// <param name="errorTracer"></param>
         public void AddEventHandler([NotNull] string topic, [NotNull] Delegate handler, [NotNull] ErrorTracer errorTracer)
         {
             if (handler == null) throw new ArgumentNullException(nameof(handler));
@@ -352,6 +332,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         /// <param name="target">
         ///     The target.
         /// </param>
+        /// <param name="errorTracer"></param>
         public void AddEventHandler(string topic, MethodInfo handler, object target, ErrorTracer errorTracer)
         {
             EventAction(topic, entry => entry.Addhandler(handler, target, errorTracer), errorTracer);
@@ -369,6 +350,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         /// <param name="publisher">
         ///     The publisher.
         /// </param>
+        /// <param name="errorTracer"></param>
         public void AddPublisher(string topic, EventInfo eventInfo, object publisher, ErrorTracer errorTracer)
         {
             lock (this)

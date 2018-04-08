@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using JetBrains.Annotations;
@@ -15,6 +16,8 @@ namespace Tauron.Application.Models
     [PublicAPI]
     public abstract class ViewModelBase : ModelBase, IShowInformation
     {
+        private static bool? _isInDesignMode;
+
         [PublicAPI]
         protected class LinkedProperty : IDisposable
         {
@@ -62,6 +65,17 @@ namespace Tauron.Application.Models
             ModelList = new Dictionary<string, ModelBase>();
         }
 
+        public static bool IsInDesignMode
+        {
+            get
+            {
+                if (_isInDesignMode.HasValue) return _isInDesignMode.Value;
+                DependencyPropertyDescriptor dependencyPropertyDescriptor = DependencyPropertyDescriptor.FromProperty(DesignerProperties.IsInDesignModeProperty, typeof(FrameworkElement));
+                _isInDesignMode = (bool)dependencyPropertyDescriptor.Metadata.DefaultValue;
+                return _isInDesignMode.Value;
+            }
+        }
+
         [NotNull]
         protected Dictionary<string, ModelBase> ModelList { get; private set; }
 
@@ -78,7 +92,7 @@ namespace Tauron.Application.Models
 
         [NotNull]
         public Dispatcher SystemDispatcher => CurrentApplication.Dispatcher;
-
+        
         [CanBeNull]
         public IWindow MainWindow => CommonApplication.Current.MainWindow;
 

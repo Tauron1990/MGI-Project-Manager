@@ -92,6 +92,8 @@ namespace Tauron.Application.SimpleWorkflow
 
         private StepId _lastId;
 
+        private string _errorMessage = string.Empty;
+
         protected Producer()
         {
             _states = new Dictionary<StepId, StepRev>();
@@ -101,7 +103,7 @@ namespace Tauron.Application.SimpleWorkflow
         {
             Process(id, context);
 
-            if (_lastId.Name == StepId.Invalid.Name) throw new InvalidOperationException();
+            if (_lastId.Name == StepId.Invalid.Name) throw new InvalidOperationException(_errorMessage);
         }
 
         [DebuggerStepThrough]
@@ -125,6 +127,7 @@ namespace Tauron.Application.SimpleWorkflow
             switch (sId.Name)
             {
                 case "Invalid":
+                    _errorMessage = rev.State.ErrorMessage;
                     return SetLastId(sId);
                 case "None":
                     result = ProgressConditions(rev, context);

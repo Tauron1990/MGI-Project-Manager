@@ -8,7 +8,9 @@ namespace Tauron.Application.Common.BaseLayer.Data
         where TEntity : class
     {
         IQueryable<TEntity> Query();
+        IQueryable<TEntity> QueryAsNoTracking();
 
+        TEntity Find(TKey key);
         void Update(TEntity entity);
         void Remove(TEntity entity);
         void Add(TEntity entity);

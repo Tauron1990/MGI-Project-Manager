@@ -1,0 +1,19 @@
+﻿using System.Runtime.Serialization;
+
+namespace Tauron.Application.ProjectManager.Services.DTO
+{
+    [DataContract]
+    public class GenericServiceResult
+    {
+        [DataMember]
+        public bool SuccededSuccessful { get; }
+        [DataMember]
+        public string Reason { get; }
+
+        public GenericServiceResult(bool succededSuccessful, string reason)
+        {
+            SuccededSuccessful = succededSuccessful;
+            Reason = reason;
+        }
+    }
+}

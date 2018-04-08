@@ -370,7 +370,7 @@ namespace Tauron.Application
 
         private static void MarkControl([NotNull] DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            SetLinker(d, e.OldValue.As<string>(), e.NewValue.As<string>(), (obj, str) => new ControlLinker(str, obj));
+            SetLinker(d, e.OldValue.As<string>() ?? throw new InvalidOperationException(), e.NewValue.As<string>() ?? throw new InvalidOperationException(), (obj, str) => new ControlLinker(str, obj));
         }
 
         // Using a DependencyProperty as the backing store for MarkWindow.  This enables animation, styling, binding, etc...
@@ -379,7 +379,7 @@ namespace Tauron.Application
             SetLinker(d, e.OldValue.As<string>(), e.NewValue.As<string>(), (obj, str) => new WindowLinker(str, obj));
         }
 
-        private static void SetLinker([NotNull] DependencyObject obj, [NotNull] string oldName, [NotNull] string newName, [NotNull] Func<DependencyObject, string, LinkerBase> factory)
+        private static void SetLinker([NotNull] DependencyObject obj, [CanBeNull] string oldName, [CanBeNull] string newName, [NotNull] Func<DependencyObject, string, LinkerBase> factory)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
             if (factory == null) throw new ArgumentNullException(nameof(factory));

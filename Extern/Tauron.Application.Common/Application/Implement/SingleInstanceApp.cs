@@ -84,7 +84,8 @@ namespace Tauron.Application.Implement
 
         #endregion
 
-        public static void InitializeAsFirstInstance(Mutex mutex, string channelName, TApplication app)
+        public static void 
+            InitializeAsFirstInstance(Mutex mutex, string channelName, TApplication app)
         {
             _app = app;
             singleInstanceMutex = mutex;
@@ -171,8 +172,7 @@ namespace Tauron.Application.Implement
             var channelName = string.Concat(applicationIdentifier, Delimiter, ChannelNameSuffix);
 
             // Create mutex based on unique application Id to check if this is the first instance of the application.
-            bool firstInstance;
-            singleInstanceMutex = new Mutex(true, applicationIdentifier, out firstInstance);
+            singleInstanceMutex = new Mutex(true, applicationIdentifier, out var firstInstance);
             if (firstInstance)
             {
                 CreateRemoteService(channelName);

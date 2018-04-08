@@ -57,9 +57,6 @@ namespace Tauron.Application.Ioc.LifeTime
 
         #endregion
 
-        #region Fields
-
-        #endregion
 
         #region Public Properties
 
