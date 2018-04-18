@@ -11,9 +11,9 @@ namespace Tauron.Application.ProjectManager.Generic
 {
     public abstract class ClientViewModel : ViewModelBase, IDisposable
     {
-        private bool            _statusOk;
-        private Exception       _openException;
         private ClientException _clientException;
+        private Exception       _openException;
+        private bool            _statusOk;
 
         protected Dictionary<Type, ClientObjectBase> ClientObjects = new Dictionary<Type, ClientObjectBase>();
 
@@ -38,15 +38,32 @@ namespace Tauron.Application.ProjectManager.Generic
         [Inject]
         public IClientFactory ClientFactory { get; set; }
 
+        public void Dispose()
+        {
+            foreach (var clientObject in ClientObjects)
+            {
+                (clientObject.Value.CommunicationObject as IDisposable)?.Dispose();
+            }
+        }
+
+        protected void ResetClients()
+        {
+            foreach (var clientObjectBase in ClientObjects)
+            {
+                if(clientObjectBase.Value.State == CommunicationState.Opened || clientObjectBase.Value.State == CommunicationState.Opening)
+                    clientObjectBase.Value.CommunicationObject.Close();
+            }
+
+            ClientObjects.Clear();
+        }
+
         protected TClient CreateClint<TClient>() where TClient : class
         {
-            Type key = typeof(TClient);
+            var key = typeof(TClient);
 
             if (ClientObjects.TryGetValue(key, out var clientObjectBase))
-            {
-                if (clientObjectBase is ClientObject<TClient> tempClient)
+                if (clientObjectBase.State != CommunicationState.Faulted && clientObjectBase is ClientObject<TClient> tempClient)
                     return tempClient.Client;
-            }
 
             var client = ClientFactory.CreateClient<TClient>();
             if (client == null) return null;
@@ -58,15 +75,12 @@ namespace Tauron.Application.ProjectManager.Generic
         protected void Close(params Type[] clients)
         {
             if (clients == null)
-            {
                 foreach (var clientObject in ClientObjects)
                 {
                     if (clientObject.Value.State != CommunicationState.Closed)
                         clientObject.Value.Close();
                 }
-            }
             else
-            {
                 foreach (var client in clients)
                 {
                     if (!ClientObjects.TryGetValue(client, out var clientObjectBase)) continue;
@@ -74,7 +88,6 @@ namespace Tauron.Application.ProjectManager.Generic
                     if (clientObjectBase.State != CommunicationState.Closed)
                         clientObjectBase.Close();
                 }
-            }
         }
 
         protected bool EnsureOpen(params Type[] clients)
@@ -83,12 +96,13 @@ namespace Tauron.Application.ProjectManager.Generic
             {
                 var clientTypes = new List<Type>();
                 if (clients == null) clientTypes.AddRange(ClientObjects.Keys);
-                else clientTypes.AddRange(clientTypes);
+                else clientTypes.AddRange(clients);
 
                 foreach (var clientType in clientTypes)
                 {
                     if (!ClientObjects.TryGetValue(clientType, out var objectBase) || objectBase.State == CommunicationState.Opened) continue;
 
+                    BeginOpen();
                     objectBase.Open();
                     ConnectionEstablished(clientType, objectBase);
                 }
@@ -99,8 +113,14 @@ namespace Tauron.Application.ProjectManager.Generic
             {
                 if (CriticalExceptions.IsCriticalApplicationException(e)) throw;
 
+                if (e.InnerException != null)
+                    e = e.InnerException;
+
                 OpenException = e;
                 StatusOk      = false;
+
+                OpenFailed();
+
                 return false;
             }
         }
@@ -124,9 +144,9 @@ namespace Tauron.Application.ProjectManager.Generic
 
         protected string ProcessDefaultErrors()
         {
-            if(ClientException == null) return string.Empty;
+            if (ClientException == null) return string.Empty;
 
-            Exception inner = ClientException.InnerException;
+            var inner = ClientException.InnerException;
 
             switch (inner)
             {
@@ -144,14 +164,17 @@ namespace Tauron.Application.ProjectManager.Generic
             return inner?.Message ?? string.Empty;
         }
 
-        protected virtual void ConnectionEstablished(Type type, ClientObjectBase clientObjectBase)
+        protected virtual void OpenFailed()
         {
 
         }
-        public void Dispose()
+
+        protected virtual void BeginOpen()
         {
-            foreach (var clientObject in ClientObjects)
-                (clientObject.Value.CommunicationObject as IDisposable)?.Dispose();
+        }
+
+        protected virtual void ConnectionEstablished(Type type, ClientObjectBase clientObjectBase)
+        {
         }
     }
 }

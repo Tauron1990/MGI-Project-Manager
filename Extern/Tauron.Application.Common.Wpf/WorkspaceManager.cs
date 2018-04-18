@@ -10,7 +10,6 @@ using JetBrains.Annotations;
 
 namespace Tauron.Application
 {
-
     [PublicAPI]
     public sealed class WorkspaceManager<TWorkspace> : UISyncObservableCollection<TWorkspace>
         where TWorkspace : class, ITabWorkspace
@@ -77,7 +76,7 @@ namespace Tauron.Application
         #region Fields
 
         private readonly IWorkspaceHolder _holder;
-        private ITabWorkspace _activeItem;
+        private          ITabWorkspace    _activeItem;
 
         #endregion
 

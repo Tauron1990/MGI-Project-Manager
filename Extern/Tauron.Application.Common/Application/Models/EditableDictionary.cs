@@ -17,7 +17,7 @@ namespace Tauron.Application.Models
         }
 
         public bool BlockIsNotEditing { get; set; }
-        public bool IsEditing { get; private set; }
+        public bool IsEditing         { get; private set; }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
@@ -107,7 +107,7 @@ namespace Tauron.Application.Models
             }
         }
 
-        public ICollection<TKey> Keys => _primary.Keys;
+        public ICollection<TKey>   Keys   => _primary.Keys;
         public ICollection<TValue> Values => _primary.Values;
 
         public void BeginEdit()
@@ -115,7 +115,7 @@ namespace Tauron.Application.Models
             if (IsEditing) return;
 
             IsEditing = true;
-            _backup = new Dictionary<TKey, TValue>(_primary);
+            _backup   = new Dictionary<TKey, TValue>(_primary);
         }
 
         public void EndEdit()
@@ -123,7 +123,7 @@ namespace Tauron.Application.Models
             if (!IsEditing) return;
 
             IsEditing = false;
-            _backup = null;
+            _backup   = null;
         }
 
         public void CancelEdit()
@@ -133,7 +133,7 @@ namespace Tauron.Application.Models
             IsEditing = false;
 
             _primary = _backup;
-            _backup = null;
+            _backup  = null;
         }
 
         private bool EnsureState()

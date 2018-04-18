@@ -42,12 +42,12 @@ namespace Tauron.Application
         {
             if (name == null) return null;
 
-            if(_singletons == null) _singletons = new Dictionary<string, object>();
+            if (_singletons == null) _singletons = new Dictionary<string, object>();
 
-            var result =_singletons.TryGetAndCast<T>(name);
+            var result = _singletons.TryGetAndCast<T>(name);
             if (result != null) return result;
 
-            T value = factory();
+            var value = factory();
             _singletons[name] = factory;
             return value;
         }

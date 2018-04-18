@@ -38,19 +38,19 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             return ResolverFactory.StartId;
         }
 
-        public override void Inject(object target, IContainer container, ImportMetadata metadata,
-            IImportInterceptor interceptor, ErrorTracer errorTracer, BuildParameter[] parameters)
+        public override void Inject(object             target,      IContainer  container,   ImportMetadata   metadata,
+                                    IImportInterceptor interceptor, ErrorTracer errorTracer, BuildParameter[] parameters)
         {
             try
             {
                 errorTracer.Phase = "Creating Resolver for " + target.GetType().Name + "(" + metadata + ")";
 
-                InjectorContext.Tracer = errorTracer;
-                InjectorContext.Metadata = metadata;
+                InjectorContext.Tracer            = errorTracer;
+                InjectorContext.Metadata          = metadata;
                 InjectorContext.ImportInterceptor = interceptor;
-                InjectorContext.BuildParameters = parameters;
-                InjectorContext.Container = container;
-                InjectorContext.Target = target;
+                InjectorContext.BuildParameters   = parameters;
+                InjectorContext.Container         = container;
+                InjectorContext.Target            = target;
 
                 var start = InitializeMachine(out var fac);
 
@@ -69,7 +69,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             catch (Exception e)
             {
                 errorTracer.Exceptional = true;
-                errorTracer.Exception = e;
+                errorTracer.Exception   = e;
             }
         }
 

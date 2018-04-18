@@ -18,12 +18,12 @@ namespace Tauron.Application.Common.BaseLayer.Core
             }
         }
 
-        public abstract void ActionImpl();
-
         public override object GenericAction(object input)
         {
             Action();
             return RuleNull.Null;
         }
+
+        public abstract void ActionImpl();
     }
 }

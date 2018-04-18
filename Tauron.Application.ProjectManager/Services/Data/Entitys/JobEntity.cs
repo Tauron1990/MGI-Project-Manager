@@ -4,7 +4,8 @@ using Tauron.Application.Common.BaseLayer.Data;
 
 namespace Tauron.Application.ProjectManager.Data.Entitys
 {
-    [Serializable, PublicAPI]
+    [Serializable]
+    [PublicAPI]
     public class JobEntity : GenericBaseEntity<string>
     {
         //public int JobRunId { get; set; }

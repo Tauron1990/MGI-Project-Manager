@@ -52,8 +52,8 @@ namespace Tauron.Application.Ioc.Components
                 if (implement == null) throw new ArgumentNullException(nameof(implement));
                 if (registry == null) throw new ArgumentNullException(nameof(registry));
                 _implement = implement;
-                _registry = registry;
-                _object = instance;
+                _registry  = registry;
+                _object    = instance;
             }
 
             #endregion
@@ -144,7 +144,7 @@ namespace Tauron.Application.Ioc.Components
         {
             lock (_dictionary)
             {
-                var type = typeof(TInterface);
+                var                   type = typeof(TInterface);
                 ICollection<LazyLoad> list;
                 if (_dictionary.TryGetValue(type, out list))
                     return (TInterface) list.Single().Object;
@@ -162,7 +162,7 @@ namespace Tauron.Application.Ioc.Components
         {
             lock (_dictionary)
             {
-                var type = typeof(TInterface);
+                var                   type = typeof(TInterface);
                 ICollection<LazyLoad> list;
                 if (!_dictionary.TryGetValue(type, out list)) yield break;
 
@@ -175,10 +175,7 @@ namespace Tauron.Application.Ioc.Components
         /// <typeparam name="TImplement"></typeparam>
         public void Register<TInterface, TImplement>() where TImplement : TInterface, new()
         {
-            lock (_dictionary)
-            {
-                _dictionary[typeof(TInterface)].Add(new LazyLoad(typeof(TImplement), this, null));
-            }
+            lock (_dictionary) _dictionary[typeof(TInterface)].Add(new LazyLoad(typeof(TImplement), this, null));
         }
 
         public void Register<TInterface, TImplement>(bool single) where TImplement : TInterface, new()
@@ -192,6 +189,7 @@ namespace Tauron.Application.Ioc.Components
                     temp.Add(new LazyLoad(typeof(TImplement), this, null));
                     return;
                 }
+
                 _dictionary[typeof(TInterface)].Add(new LazyLoad(typeof(TImplement), this, null));
             }
         }
@@ -209,10 +207,7 @@ namespace Tauron.Application.Ioc.Components
         public void Register<T, T1>([NotNull] T1 instance)
         {
             if (instance == null) throw new ArgumentNullException(nameof(instance));
-            lock (_dictionary)
-            {
-                _dictionary[typeof(T)].Add(new LazyLoad(typeof(T1), this, instance));
-            }
+            lock (_dictionary) _dictionary[typeof(T)].Add(new LazyLoad(typeof(T1), this, instance));
         }
 
         public void Register<T, T1>([NotNull] T1 instance, bool isSingle)

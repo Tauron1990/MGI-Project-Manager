@@ -70,19 +70,19 @@ namespace Tauron.Application.Ioc.BuildUp.Exports
         ///     The extenal component name.
         /// </param>
         public ExternalExportInfo(
-            bool external,
-            bool handlesLiftime,
-            bool canUseBuildup,
-            bool handlesDispose,
+            bool                                        external,
+            bool                                        handlesLiftime,
+            bool                                        canUseBuildup,
+            bool                                        handlesDispose,
             Func<IBuildContext, ProxyGenerator, object> createInstance,
-            string extenalComponentName)
+            string                                      extenalComponentName)
         {
-            External = external;
-            HandlesLiftime = handlesLiftime;
-            CanUseBuildup = canUseBuildup;
-            HandlesDispose = handlesDispose;
+            External             = external;
+            HandlesLiftime       = handlesLiftime;
+            CanUseBuildup        = canUseBuildup;
+            HandlesDispose       = handlesDispose;
             ExtenalComponentName = extenalComponentName;
-            _createInstance = createInstance;
+            _createInstance      = createInstance;
         }
 
         #endregion

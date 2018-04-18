@@ -103,4 +103,16 @@
   <data name="Label_Common_Error" xml:space="preserve">
     <value>Error:</value>
   </data>
+  <data name="Text_IpExport_Ok" xml:space="preserve">
+    <value>Export Ok</value>
+  </data>
+  <data name="Text_Login_Faild" xml:space="preserve">
+    <value>No Login Provided</value>
+  </data>
+  <data name="Label_AdminPasswordChange" xml:space="preserve">
+    <value>Admin Password need to Changed</value>
+  </data>
+  <data name="Label_ReConnect" xml:space="preserve">
+    <value>ReConnect</value>
+  </data>
 </root>

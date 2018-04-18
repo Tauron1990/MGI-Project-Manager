@@ -4,9 +4,9 @@ using Tauron.Application.ProjectManager.ApplicationServer;
 
 namespace ServerStartHelper
 {
-    class Program
+    public class Program
     {
-        static void Main()
+        public static void Main()
         {
             if (!Bootstrapper.Start(true, IpSettings.CreateDefault())) return;
 

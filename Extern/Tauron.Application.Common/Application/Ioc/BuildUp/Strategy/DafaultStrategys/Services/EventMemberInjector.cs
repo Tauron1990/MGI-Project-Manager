@@ -31,8 +31,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             if (metadata == null) throw new ArgumentNullException(nameof(metadata));
             if (member == null) throw new ArgumentNullException(nameof(member));
             _metadata = metadata;
-            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
-            _member = member;
+            _manager  = manager ?? throw new ArgumentNullException(nameof(manager));
+            _member   = member;
         }
 
         #endregion
@@ -54,7 +54,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             catch (Exception e)
             {
                 errorTracer.Exceptional = true;
-                errorTracer.Exception = e;
+                errorTracer.Exception   = e;
             }
         }
 

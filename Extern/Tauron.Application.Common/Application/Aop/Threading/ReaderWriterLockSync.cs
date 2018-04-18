@@ -64,13 +64,13 @@ namespace Tauron.Application.Aop.Threading
         protected internal override void Register(ObjectContext context, MemberInfo info, object target)
         {
             context.Register<ReaderWriterLockHolder, ReaderWriterLockHolder>(
-                new ReaderWriterLockHolder(
-                    info
-                        .GetInvokeMember
-                        <ReaderWriterLockSlim>(target))
-                {
-                    Name = HolderName
-                });
+                                                                             new ReaderWriterLockHolder(
+                                                                                                        info
+                                                                                                            .GetInvokeMember
+                                                                                                                <ReaderWriterLockSlim>(target))
+                                                                             {
+                                                                                 Name = HolderName
+                                                                             });
         }
 
         #endregion
@@ -136,21 +136,21 @@ namespace Tauron.Application.Aop.Threading
         protected internal override void Initialize(object target, ObjectContext context, string contextName)
         {
             _holder = BaseHolder.GetOrAdd<ReaderWriterLockHolder, ReaderWriterLockHolder>(
-                context,
-                () =>
-                    new ReaderWriterLockHolder(),
-                HolderName);
+                                                                                          context,
+                                                                                          () =>
+                                                                                              new ReaderWriterLockHolder(),
+                                                                                          HolderName);
             switch (LockBehavior)
             {
                 case ReaderWriterLockBehavior.Read:
                     _enter = () => _holder.Value.TryEnterReadLock(-1);
-                    _exit = _holder.Value.ExitReadLock;
-                    _skip = () => _holder.Value.IsReadLockHeld;
+                    _exit  = _holder.Value.ExitReadLock;
+                    _skip  = () => _holder.Value.IsReadLockHeld;
                     break;
                 case ReaderWriterLockBehavior.Write:
                     _enter = () => _holder.Value.TryEnterWriteLock(-1);
-                    _exit = _holder.Value.ExitWriteLock;
-                    _skip = () => _holder.Value.IsWriteLockHeld;
+                    _exit  = _holder.Value.ExitWriteLock;
+                    _skip  = () => _holder.Value.IsWriteLockHeld;
                     break;
                 default:
                     CommonConstants.LogCommon(false, "AOP Module: Invalid Reader WriterLogBahavior: {0}", target);
@@ -174,7 +174,7 @@ namespace Tauron.Application.Aop.Threading
             if (_skip == null) return;
 
             var skipping = _skip();
-            var taken = false;
+            var taken    = false;
 
             try
             {

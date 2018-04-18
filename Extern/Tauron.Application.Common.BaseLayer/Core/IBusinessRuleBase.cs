@@ -18,15 +18,15 @@ namespace Tauron.Application.Common.BaseLayer.Core
             }
         }
 
-        public abstract void ActionImpl(TType input);
-
         public override object GenericAction(object input)
         {
-            if(input == null)
+            if (input == null)
                 Action(default(TType));
             Action((TType) input);
 
             return RuleNull.Null;
         }
+
+        public abstract void ActionImpl(TType input);
     }
 }

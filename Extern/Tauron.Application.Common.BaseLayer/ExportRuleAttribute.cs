@@ -1,11 +1,12 @@
-﻿using Tauron.Application.Common.BaseLayer.BusinessLayer;
+﻿using JetBrains.Annotations;
+using Tauron.Application.Common.BaseLayer.BusinessLayer;
 using Tauron.Application.Common.BaseLayer.Core;
 using Tauron.Application.Ioc;
 using Tauron.Application.Ioc.LifeTime;
 
 namespace Tauron.Application.Common.BaseLayer
 {
-    [JetBrains.Annotations.BaseTypeRequired(typeof(IRuleBase))]
+    [BaseTypeRequired(typeof(IRuleBase))]
     public sealed class ExportRuleAttribute : ExportAttribute, IRuleMetadata
     {
         public ExportRuleAttribute(string name)

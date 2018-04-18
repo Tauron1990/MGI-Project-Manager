@@ -16,20 +16,18 @@ namespace Tauron.Application.Models
     [PublicAPI]
     public abstract class ViewModelBase : ModelBase, IShowInformation
     {
-        private static bool? _isInDesignMode;
-
         [PublicAPI]
         protected class LinkedProperty : IDisposable
         {
-            private readonly string _custom;
-            private ObservableObject _host;
-            private string _name;
-            private INotifyPropertyChanged _target;
+            private readonly string                 _custom;
+            private          ObservableObject       _host;
+            private          string                 _name;
+            private          INotifyPropertyChanged _target;
 
             public LinkedProperty(ObservableObject host, string name, INotifyPropertyChanged target, string custom)
             {
-                _host = host;
-                _name = name;
+                _host   = host;
+                _name   = name;
                 _target = target;
                 _custom = custom;
 
@@ -54,11 +52,13 @@ namespace Tauron.Application.Models
 
                 _target.PropertyChanged -= PropertyChangedMethod;
 
-                _host = null;
-                _name = null;
+                _host   = null;
+                _name   = null;
                 _target = null;
             }
         }
+
+        private static bool? _isInDesignMode;
 
         protected ViewModelBase()
         {
@@ -70,8 +70,8 @@ namespace Tauron.Application.Models
             get
             {
                 if (_isInDesignMode.HasValue) return _isInDesignMode.Value;
-                DependencyPropertyDescriptor dependencyPropertyDescriptor = DependencyPropertyDescriptor.FromProperty(DesignerProperties.IsInDesignModeProperty, typeof(FrameworkElement));
-                _isInDesignMode = (bool)dependencyPropertyDescriptor.Metadata.DefaultValue;
+                var dependencyPropertyDescriptor = DependencyPropertyDescriptor.FromProperty(DesignerProperties.IsInDesignModeProperty, typeof(FrameworkElement));
+                _isInDesignMode = (bool) dependencyPropertyDescriptor.Metadata.DefaultValue;
                 return _isInDesignMode.Value;
             }
         }
@@ -92,7 +92,7 @@ namespace Tauron.Application.Models
 
         [NotNull]
         public Dispatcher SystemDispatcher => CurrentApplication.Dispatcher;
-        
+
         [CanBeNull]
         public IWindow MainWindow => CommonApplication.Current.MainWindow;
 
@@ -107,6 +107,10 @@ namespace Tauron.Application.Models
         {
         }
 
+        public virtual void AfterShow(IWindow window)
+        {
+        }
+
         [NotNull]
         public static ViewModelBase ResolveViewModel([NotNull] string name)
         {
@@ -118,7 +122,7 @@ namespace Tauron.Application.Models
             if (model == null) throw new ArgumentNullException(nameof(model));
 
             model.PropertyChanged += ModelOnPropertyChanged;
-            
+
             ModelList.Add(name, model);
         }
 
@@ -164,7 +168,10 @@ namespace Tauron.Application.Models
         {
             if (EditingInheritedModel)
                 foreach (var value in ModelList.Values)
+                {
                     value.BeginEdit();
+                }
+
             base.BeginEdit();
         }
 
@@ -172,7 +179,10 @@ namespace Tauron.Application.Models
         {
             if (EditingInheritedModel)
                 foreach (var value in ModelList.Values)
+                {
                     value.EndEdit();
+                }
+
             base.EndEdit();
         }
 
@@ -180,7 +190,10 @@ namespace Tauron.Application.Models
         {
             if (EditingInheritedModel)
                 foreach (var value in ModelList.Values)
+                {
                     value.CancelEdit();
+                }
+
             base.CancelEdit();
         }
 
@@ -194,7 +207,7 @@ namespace Tauron.Application.Models
         protected void InvalidateRequerySuggested()
         {
             CommonApplication.Scheduler.QueueTask(
-                new UserTask(() => CurrentDispatcher.BeginInvoke(CommandManager.InvalidateRequerySuggested), false));
+                                                  new UserTask(() => CurrentDispatcher.BeginInvoke(CommandManager.InvalidateRequerySuggested), false));
         }
 
         protected override void OnErrorsChanged(string propertyName)

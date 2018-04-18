@@ -49,7 +49,9 @@ namespace Tauron.Application.Views.Core
                 {
                     buildParameters = new BuildParameter[parameters.Length];
                     for (var i = 0; i < parameters.Length; i++)
+                    {
                         buildParameters[i] = new SimpleBuildPrameter(parameters[i]);
+                    }
                 }
 
                 CompositionServices.BuildParameters = buildParameters;
@@ -70,7 +72,7 @@ namespace Tauron.Application.Views.Core
 
         protected virtual IWindow CastToWindow(object objWindow, string name)
         {
-            Window window = (Window) objWindow;
+            var window = (Window) objWindow;
 
             UiSynchronize.Synchronize.Invoke(() => window.Name = name);
 

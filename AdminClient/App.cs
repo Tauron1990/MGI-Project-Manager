@@ -61,7 +61,7 @@ namespace Tauron.Application.ProjectManager.AdminClient
 
         protected override IWindow DoStartup(CommandLineProcessor prcessor)
         {
-            var temp   = ViewManager.Manager.CreateWindow(AppConststands.MainWindowName);
+            var temp = ViewManager.Manager.CreateWindow(AppConststands.MainWindowName);
             MainWindow = temp;
 
             CurrentWpfApplication.Dispatcher.Invoke(() =>
@@ -135,11 +135,11 @@ namespace Tauron.Application.ProjectManager.AdminClient
                                  FileName         = GetdefaultFileLocation().CombinePath("Logs\\AdminClient.log"),
                                  ArchiveNumbering = ArchiveNumberingMode.Rolling
                              };
-            
+
 
             config.AddTarget(filetarget);
             config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, filetarget));
-            
+
             #if DEBUG
             LogManager.ThrowExceptions = true;
             LogManager.GlobalThreshold = LogLevel.Trace;

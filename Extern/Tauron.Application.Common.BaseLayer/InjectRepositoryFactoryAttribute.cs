@@ -10,7 +10,6 @@ namespace Tauron.Application.Common.BaseLayer
         public InjectRepositoryFactoryAttribute()
             : base(typeof(RepositoryFactory))
         {
-            
         }
     }
 }

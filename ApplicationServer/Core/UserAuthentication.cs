@@ -11,10 +11,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
         {
             try
             {
-                if (UserManager.Validate(userName, password, out var reason))
-                {
-                    return;
-                }
+                if (UserManager.Validate(userName, password, out var reason)) return;
 
                 throw new FaultException<LogInFault>(new LogInFault(reason));
             }

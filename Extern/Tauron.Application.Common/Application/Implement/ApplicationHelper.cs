@@ -124,7 +124,7 @@ namespace Tauron.Application.Implement
         public void RunAnonymousApplication(IWindow window)
         {
             var app = _factory.CreateController();
-            app.MainWindow = window;
+            app.MainWindow   = window;
             app.ShutdownMode = ShutdownMode.OnMainWindowClose;
             app.Run(window);
         }

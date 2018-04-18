@@ -53,7 +53,7 @@ namespace Tauron.Application
         protected class LogHelper
         {
             private readonly string _name;
-            private Logger _logger;
+            private          Logger _logger;
 
             public LogHelper(string name)
             {
@@ -81,7 +81,7 @@ namespace Tauron.Application
 
         protected ObservableObject()
         {
-            LogName = GetType().Name;
+            LogName     = GetType().Name;
             LogCategory = GetType().ToString();
         }
 

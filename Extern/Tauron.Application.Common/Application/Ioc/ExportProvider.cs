@@ -109,7 +109,7 @@ namespace Tauron.Application.Ioc
             [NotNull] IEnumerable<ExportMetadata> addedExport,
             [NotNull] IEnumerable<ExportMetadata> removedExport)
         {
-            Added = addedExport ?? throw new ArgumentNullException(nameof(addedExport));
+            Added   = addedExport ?? throw new ArgumentNullException(nameof(addedExport));
             Removed = removedExport ?? throw new ArgumentNullException(nameof(removedExport));
         }
 

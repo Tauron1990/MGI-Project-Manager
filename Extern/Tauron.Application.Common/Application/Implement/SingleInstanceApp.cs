@@ -80,15 +80,15 @@ namespace Tauron.Application.Implement
         /// <value>The command line args.</value>
         [NotNull]
         [SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes")]
-        public static IList<string> CommandLineArgs => commandLineArgs;
+        public static IList<string> CommandLineArgs => _commandLineArgs ?? throw new InvalidOperationException();
 
         #endregion
 
-        public static void 
+        public static void
             InitializeAsFirstInstance(Mutex mutex, string channelName, TApplication app)
         {
-            _app = app;
-            singleInstanceMutex = mutex;
+            _app                 = app;
+            _singleInstanceMutex = mutex;
             CreateRemoteService(channelName);
         }
 
@@ -116,15 +116,15 @@ namespace Tauron.Application.Implement
 
         /// <summary>IPC channel for communications.</summary>
         [CanBeNull]
-        private static IpcServerChannel channel;
+        private static IpcServerChannel _channel;
 
         /// <summary>List of command line arguments for the application.</summary>
         [CanBeNull]
-        private static IList<string> commandLineArgs;
+        private static IList<string> _commandLineArgs;
 
         /// <summary>Application mutex.</summary>
         [CanBeNull]
-        private static Mutex singleInstanceMutex;
+        private static Mutex _singleInstanceMutex;
 
         #endregion
 
@@ -135,16 +135,16 @@ namespace Tauron.Application.Implement
         public static void Cleanup()
         {
             _app = null;
-            if (singleInstanceMutex != null)
+            if (_singleInstanceMutex != null)
             {
-                singleInstanceMutex.Close();
-                singleInstanceMutex = null;
+                _singleInstanceMutex.Close();
+                _singleInstanceMutex = null;
             }
 
-            if (channel == null) return;
+            if (_channel == null) return;
 
-            ChannelServices.UnregisterChannel(channel);
-            channel = null;
+            ChannelServices.UnregisterChannel(_channel);
+            _channel = null;
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace Tauron.Application.Implement
         public static bool InitializeAsFirstInstance([NotNull] string uniqueName, TApplication application)
         {
             if (string.IsNullOrWhiteSpace(uniqueName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(uniqueName));
-            commandLineArgs = GetCommandLineArgs(uniqueName);
+            _commandLineArgs = GetCommandLineArgs(uniqueName);
 
             // Build unique application Id and the IPC channel name.
             var applicationIdentifier = uniqueName + Environment.UserName;
@@ -172,7 +172,7 @@ namespace Tauron.Application.Implement
             var channelName = string.Concat(applicationIdentifier, Delimiter, ChannelNameSuffix);
 
             // Create mutex based on unique application Id to check if this is the first instance of the application.
-            singleInstanceMutex = new Mutex(true, applicationIdentifier, out var firstInstance);
+            _singleInstanceMutex = new Mutex(true, applicationIdentifier, out var firstInstance);
             if (firstInstance)
             {
                 CreateRemoteService(channelName);
@@ -180,7 +180,7 @@ namespace Tauron.Application.Implement
             }
             else
             {
-                SignalFirstInstance(channelName, commandLineArgs);
+                SignalFirstInstance(channelName, _commandLineArgs);
             }
 
             return firstInstance;
@@ -226,17 +226,18 @@ namespace Tauron.Application.Implement
         public static void CreateRemoteService([NotNull] string channelName)
         {
             var serverProvider = new BinaryServerFormatterSinkProvider {TypeFilterLevel = TypeFilterLevel.Full};
-            IDictionary props = new Dictionary<string, string>();
-
-            props["name"] = channelName;
-            props["portName"] = channelName;
-            props["exclusiveAddressUse"] = "false";
+            IDictionary props = new Dictionary<string, string>
+                                {
+                                    ["name"]                = channelName,
+                                    ["portName"]            = channelName,
+                                    ["exclusiveAddressUse"] = "false"
+                                };
 
             // Create the IPC Server channel with the channel properties
-            channel = new IpcServerChannel(props, serverProvider);
+            _channel = new IpcServerChannel(props, serverProvider);
 
             // Register the channel with the channel services
-            ChannelServices.RegisterChannel(channel, true);
+            ChannelServices.RegisterChannel(_channel, true);
 
             // Expose the remote service with the REMOTE_SERVICE_NAME
             var remoteService = new IpcRemoteService();
@@ -271,17 +272,14 @@ namespace Tauron.Application.Implement
                 // shared location
                 var appFolderPath =
                     Path.Combine(
-                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                        uniqueApplicationName);
+                                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                                 uniqueApplicationName);
 
                 var cmdLinePath = Path.Combine(appFolderPath, "cmdline.txt");
                 if (File.Exists(cmdLinePath))
                     try
                     {
-                        using (TextReader reader = new StreamReader(cmdLinePath, Encoding.Unicode))
-                        {
-                            args = NativeMethods.CommandLineToArgvW(reader.ReadToEnd());
-                        }
+                        using (TextReader reader = new StreamReader(cmdLinePath, Encoding.Unicode)) args = NativeMethods.CommandLineToArgvW(reader.ReadToEnd());
 
                         File.Delete(cmdLinePath);
                     }

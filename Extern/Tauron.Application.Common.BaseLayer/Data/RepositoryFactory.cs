@@ -11,36 +11,38 @@ namespace Tauron.Application.Common.BaseLayer.Data
         void SaveChanges();
     }
 
-    [Export(typeof(RepositoryFactory)), PublicAPI]
+    [Export(typeof(RepositoryFactory))]
+    [PublicAPI]
     public class RepositoryFactory : INotifyBuildCompled
     {
         private class NullDispose : IDatabaseAcess
         {
             public void Dispose()
             {
-                
             }
 
             public void SaveChanges()
             {
-                
             }
         }
+
         private class DatabaseDisposer : IDatabaseAcess
         {
             private readonly GroupDictionary<IDatabaseIdentifer, object> _databases;
-            private readonly Action _exitAction;
+            private readonly Action                                      _exitAction;
 
             public DatabaseDisposer(GroupDictionary<IDatabaseIdentifer, object> databases, Action exitAction)
             {
-                _databases = databases;
+                _databases  = databases;
                 _exitAction = exitAction;
             }
 
             public void Dispose()
             {
                 foreach (var database in _databases.Keys)
+                {
                     database.Dispose();
+                }
 
                 _exitAction();
             }
@@ -48,17 +50,38 @@ namespace Tauron.Application.Common.BaseLayer.Data
             public void SaveChanges()
             {
                 foreach (var database in _databases.Keys.OfType<IDatabase>())
+                {
                     database.SaveChanges();
+                }
             }
         }
+
+        private bool             _compositeMode;
+        private DatabaseDisposer _databaseDisposer;
+
+        private Dictionary<Type, (IDatabaseFactory, Type)> _databaseFactories;
 
         [Inject]
         private List<IRepositoryExtender> _extenders;
 
-        private Dictionary<Type, (IDatabaseFactory, Type)> _databaseFactories;
         private GroupDictionary<IDatabaseIdentifer, object> _repositorys;
-        private DatabaseDisposer _databaseDisposer;
-        private bool _compositeMode;
+
+        void INotifyBuildCompled.BuildCompled()
+        {
+            _databaseFactories = new Dictionary<Type, (IDatabaseFactory, Type)>();
+
+            foreach (var repositoryExtender in _extenders)
+            {
+                var fac = repositoryExtender.DatabaseFactory;
+
+                foreach (var repositoryType in repositoryExtender.GetRepositoryTypes())
+                {
+                    _databaseFactories.Add(repositoryType.Item1, (fac, repositoryType.Item2));
+                }
+            }
+
+            _extenders = null;
+        }
 
         public IDatabaseAcess EnterCompositeMode()
         {
@@ -69,11 +92,11 @@ namespace Tauron.Application.Common.BaseLayer.Data
 
         public IDatabaseAcess Enter()
         {
-            if(_compositeMode) return new NullDispose();
+            if (_compositeMode) return new NullDispose();
 
-            if(_databaseDisposer != null) throw new InvalidOperationException("Only One Database Acess Alowed");
+            if (_databaseDisposer != null) throw new InvalidOperationException("Only One Database Acess Alowed");
 
-            _repositorys = new GroupDictionary<IDatabaseIdentifer, object>();
+            _repositorys      = new GroupDictionary<IDatabaseIdentifer, object>();
             _databaseDisposer = new DatabaseDisposer(_repositorys, Exit);
 
             return _databaseDisposer;
@@ -107,24 +130,9 @@ namespace Tauron.Application.Common.BaseLayer.Data
 
         private void Exit()
         {
-            _repositorys = null;
+            _repositorys      = null;
             _databaseDisposer = null;
-            _compositeMode = false;
-        }
-
-        void INotifyBuildCompled.BuildCompled()
-        {
-            _databaseFactories = new Dictionary<Type, (IDatabaseFactory, Type)>();
-
-            foreach (var repositoryExtender in _extenders)
-            {
-                var fac = repositoryExtender.DatabaseFactory;
-
-                foreach (var repositoryType in repositoryExtender.GetRepositoryTypes())
-                    _databaseFactories.Add(repositoryType.Item1, (fac, repositoryType.Item2));
-            }
-
-            _extenders = null;
+            _compositeMode    = false;
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Tauron
         ///     Der Wert, der entwerder erstellt wurde oder schon enthalten war.
         /// </returns>
         public static TValue AddIfNotExis<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> dic,
-            [NotNull] TKey key, [NotNull] Func<TValue> creator)
+                                                        [NotNull]      TKey                      key, [NotNull] Func<TValue> creator)
         {
             if (dic == null) throw new ArgumentNullException(nameof(dic));
             if (key == null) throw new ArgumentNullException(nameof(key));
@@ -56,7 +56,7 @@ namespace Tauron
             }
             else
             {
-                temp = creator();
+                temp     = creator();
                 dic[key] = temp;
             }
 

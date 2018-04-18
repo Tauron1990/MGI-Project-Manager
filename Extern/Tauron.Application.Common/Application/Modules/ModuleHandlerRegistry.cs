@@ -41,9 +41,15 @@ namespace Tauron.Application.Modules
             var type = module.GetType();
 
             foreach (var info in type.GetMembers(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
-            foreach (var attribute in info.GetCustomAttributes(true))
-            foreach (var action in GetHandler(attribute.GetType()))
-                action(info, (Attribute) attribute, module);
+            {
+                foreach (var attribute in info.GetCustomAttributes(true))
+                {
+                    foreach (var action in GetHandler(attribute.GetType()))
+                    {
+                        action(info, (Attribute) attribute, module);
+                    }
+                }
+            }
         }
     }
 }

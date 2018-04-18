@@ -7,11 +7,12 @@ using JetBrains.Annotations;
 namespace Tauron.Application.Common.BaseLayer.Data
 {
     [Serializable]
-    public abstract class BaseEntity :INotifyPropertyChanged, INotifyPropertyChanging
+    public abstract class BaseEntity : INotifyPropertyChanged, INotifyPropertyChanging
     {
-        [field:NonSerialized]
-        public event PropertyChangedEventHandler  PropertyChanged;
-        [field:NonSerialized]
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [field: NonSerialized]
         public event PropertyChangingEventHandler PropertyChanging;
 
         protected void SetWithNotify<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
@@ -24,7 +25,8 @@ namespace Tauron.Application.Common.BaseLayer.Data
         }
     }
 
-    [PublicAPI, Serializable]
+    [PublicAPI]
+    [Serializable]
     public abstract class GenericBaseEntity<TId> : BaseEntity
     {
         private TId _id;

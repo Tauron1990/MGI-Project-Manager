@@ -16,10 +16,6 @@ namespace Tauron.Application.Aop.Model
     [PublicAPI]
     public sealed class SecuredOperationAttribute : AspectBaseAttribute
     {
-        #region Fields
-
-        #endregion
-
         #region Constructors and Destructors
 
         public SecuredOperationAttribute([NotNull] string roles)
@@ -57,10 +53,14 @@ namespace Tauron.Application.Aop.Model
 
             if (!able?.IsUserInRole(Thread.CurrentPrincipal.Identity, Roles) == true)
                 throw new SecurityException(
-                    $"The user {Thread.CurrentPrincipal.Identity.Name} does not have the required permissions.");
+                                            $"The user {Thread.CurrentPrincipal.Identity.Name} does not have the required permissions.");
 
             invocation.Proceed();
         }
+
+        #endregion
+
+        #region Fields
 
         #endregion
     }

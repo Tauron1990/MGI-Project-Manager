@@ -35,6 +35,27 @@ namespace Tauron.Application
     [PublicAPI]
     public class WpfApplication : CommonApplication
     {
+        #region Public Methods and Operators
+
+        /// <summary>The run.</summary>
+        public static void Run<TApp>(Action<TApp> runBeforStart = null, CultureInfo info = null) where TApp : WpfApplication, new()
+        {
+            WpfApplicationController.Initialize(info);
+
+            if (info != null && !info.Equals(CultureInfo.InvariantCulture))
+            {
+                Thread.CurrentThread.CurrentCulture   = info;
+                Thread.CurrentThread.CurrentUICulture = info;
+            }
+
+            var app = new TApp();
+            runBeforStart?.Invoke(app);
+            UiSynchronize.Synchronize.Invoke(app.ConfigSplash);
+            app.OnStartup(Environment.GetCommandLineArgs());
+        }
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -49,31 +70,11 @@ namespace Tauron.Application
         {
             CatalogList = "Catalogs.xaml";
         }
+
         public WpfApplication(bool doStartup, System.Windows.Application app)
             : base(doStartup, new SplashService(), new WpfIuiControllerFactory(app))
         {
             CatalogList = "Catalogs.xaml";
-        }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>The run.</summary>
-        public static void Run<TApp>(Action<TApp> runBeforStart = null, CultureInfo info = null) where TApp : WpfApplication, new()
-        {
-            WpfApplicationController.Initialize(info);
-
-            if (info != null && !info.Equals(CultureInfo.InvariantCulture))
-            {
-                Thread.CurrentThread.CurrentCulture = info;
-                Thread.CurrentThread.CurrentUICulture = info;
-            }
-
-            var app = new TApp();
-            runBeforStart?.Invoke(app);
-            UiSynchronize.Synchronize.Invoke(app.ConfigSplash);
-            app.OnStartup(Environment.GetCommandLineArgs());
         }
 
         #endregion
@@ -110,19 +111,19 @@ namespace Tauron.Application
             if (string.IsNullOrEmpty(ThemeDictionary)) return;
 
             QueueWorkitemAsync(
-                () =>
-                    WpfApplicationController.Application.Resources.MergedDictionaries.Add(
-                        System.Windows.Application
-                            .LoadComponent(
-                                new Uri
-                                (
-                                    $@"/{SourceAssembly};component/{ThemeDictionary}",
-                                    UriKind
-                                        .Relative))
-                            .CastObj
-                            <ResourceDictionary>
-                            ()),
-                true);
+                               () =>
+                                   WpfApplicationController.Application.Resources.MergedDictionaries.Add(
+                                                                                                         System.Windows.Application
+                                                                                                               .LoadComponent(
+                                                                                                                              new Uri
+                                                                                                                                  (
+                                                                                                                                   $@"/{SourceAssembly};component/{ThemeDictionary}",
+                                                                                                                                   UriKind
+                                                                                                                                       .Relative))
+                                                                                                               .CastObj
+                                                                                                                   <ResourceDictionary>
+                                                                                                                   ()),
+                               true);
         }
 
 
@@ -141,15 +142,15 @@ namespace Tauron.Application
         protected override void ConfigurateLagging(LoggingConfiguration config)
         {
             var filetarget = new FileTarget
-            {
-                Name = "CommonFile",
-                Layout = "${log4jxmlevent}",
-                ArchiveAboveSize = 10485760,
-                MaxArchiveFiles = 10,
-                ArchiveFileName = GetdefaultFileLocation().CombinePath("Logs\\Tauron.Application.Common.{##}.log"),
-                FileName = GetdefaultFileLocation().CombinePath("Logs\\Tauron.Application.Common.log"),
-                ArchiveNumbering = ArchiveNumberingMode.Rolling
-            };
+                             {
+                                 Name             = "CommonFile",
+                                 Layout           = "${log4jxmlevent}",
+                                 ArchiveAboveSize = 10485760,
+                                 MaxArchiveFiles  = 10,
+                                 ArchiveFileName  = GetdefaultFileLocation().CombinePath("Logs\\Tauron.Application.Common.{##}.log"),
+                                 FileName         = GetdefaultFileLocation().CombinePath("Logs\\Tauron.Application.Common.log"),
+                                 ArchiveNumbering = ArchiveNumberingMode.Rolling
+                             };
             config.AddTarget(filetarget);
 
             config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, filetarget));

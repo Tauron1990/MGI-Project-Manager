@@ -3,23 +3,32 @@ using Tauron.Application.ProjectManager.Services.DTO;
 
 namespace Tauron.Application.ProjectManager.Services
 {
-    [ServiceContract(SessionMode = SessionMode.Allowed)]
+    [ServiceContract(SessionMode = SessionMode.Required)]
     public interface IAdminService
     {
         [OperationContract(IsInitiating = true)]
-        [FaultContract(typeof(GenericServiceFault)), FaultContract(typeof(LogInFault))]
+        [FaultContract(typeof(GenericServiceFault))]
+        [FaultContract(typeof(LogInFault))]
         void AdminLogin(string password);
 
         [OperationContract]
-        [FaultContract(typeof(GenericServiceFault)), FaultContract(typeof(LogInFault))]
+        [FaultContract(typeof(GenericServiceFault))]
+        [FaultContract(typeof(LogInFault))]
+        bool IsAdminPasswordNull();
+
+        [OperationContract]
+        [FaultContract(typeof(GenericServiceFault))]
+        [FaultContract(typeof(LogInFault))]
         GenericServiceResult CreateUser(string userName, string password);
 
         [OperationContract]
-        [FaultContract(typeof(GenericServiceFault)), FaultContract(typeof(LogInFault))]
+        [FaultContract(typeof(GenericServiceFault))]
+        [FaultContract(typeof(LogInFault))]
         GenericServiceResult DeleteUser(string userName);
 
         [OperationContract(IsTerminating = true)]
-        [FaultContract(typeof(GenericServiceFault)), FaultContract(typeof(LogInFault))]
+        [FaultContract(typeof(GenericServiceFault))]
+        [FaultContract(typeof(LogInFault))]
         void AdminLogout();
     }
 }

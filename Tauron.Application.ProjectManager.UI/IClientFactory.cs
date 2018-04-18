@@ -1,4 +1,6 @@
-﻿namespace Tauron.Application.ProjectManager.UI
+﻿using System.Threading.Tasks;
+
+namespace Tauron.Application.ProjectManager.UI
 {
     public interface IClientFactory
     {
@@ -6,8 +8,8 @@
 
         string Name { get; }
 
-        ClientObject<TClient> CreateClient<TClient>()  where TClient : class;
+        ClientObject<TClient> CreateClient<TClient>() where TClient : class;
 
-        bool ShowLoginWindow(IWindow mainWindow, bool asAdmin);
+        Task<bool> ShowLoginWindow(IWindow mainWindow, bool asAdmin);
     }
 }

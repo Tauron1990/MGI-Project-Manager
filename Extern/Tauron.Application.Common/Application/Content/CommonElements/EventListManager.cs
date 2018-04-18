@@ -50,7 +50,7 @@ namespace Tauron.Application
             if (handler == null) throw new ArgumentNullException(nameof(handler));
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             if (Handlers.ContainsKey(name)) Handlers[name] = Delegate.Combine(Handlers[name], handler);
-            else Handlers[name] = handler;
+            else Handlers[name]                            = handler;
         }
 
         /// <summary>

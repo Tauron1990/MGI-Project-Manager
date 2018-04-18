@@ -15,17 +15,19 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
         {
             if (context.BuildParameters != null)
                 foreach (var export in from buildParameter in context.BuildParameters
-                    where buildParameter != null
-                    select buildParameter.CreateExport()
-                    into export
-                    where export != null
-                    select export)
+                                       where buildParameter != null
+                                       select buildParameter.CreateExport()
+                                       into export
+                                       where export != null
+                                       select export)
+                {
                     context.ReflectionContext.BuildParametersRegistry.Register(export, int.MaxValue);
+                }
 
             if (context.ImportInterceptor != null)
                 context.ReflectionContext.InterceptorCallback =
                     new ImportInterceptorHelper(context.ImportInterceptor, (MemberInfo) context.MemberInfo,
-                        context.Metadata, context.Target).Intercept;
+                                                context.Metadata, context.Target).Intercept;
 
             if (context.Metadata.Metadata.TryGetValue(LevelSpecificImport.LevelMetadata, out var val))
                 try

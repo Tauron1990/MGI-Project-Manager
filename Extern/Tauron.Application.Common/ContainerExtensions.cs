@@ -239,7 +239,9 @@ namespace Tauron
                 if (tracer.Exceptional) yield break;
 
                 foreach (var tempBuild in temp.Select(exportMetadata => con.BuildUp(exportMetadata, tracer, buildParameters)).TakeWhile(tempBuild => !tracer.Exceptional))
+                {
                     yield return tempBuild;
+                }
             }
             finally
             {

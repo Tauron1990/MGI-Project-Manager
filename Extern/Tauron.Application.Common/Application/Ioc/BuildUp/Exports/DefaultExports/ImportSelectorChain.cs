@@ -67,7 +67,10 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
         {
             var metadatas = new HashSet<ImportMetadata>();
             foreach (var importMetadata in
-                _selectors.SelectMany(selector => selector.SelectImport(exportType))) metadatas.Add(importMetadata);
+                _selectors.SelectMany(selector => selector.SelectImport(exportType)))
+            {
+                metadatas.Add(importMetadata);
+            }
 
             return metadatas;
         }

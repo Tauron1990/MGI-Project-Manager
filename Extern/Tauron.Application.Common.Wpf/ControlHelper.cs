@@ -213,18 +213,18 @@ namespace Tauron.Application
             /// <summary>The scan.</summary>
             public override void Scan()
             {
-                var realName = Name;
+                var    realName   = Name;
                 string windowName = null;
 
                 if (realName.Contains(":"))
                 {
                     var nameSplit = realName.Split(new[] {':'}, 2);
-                    realName = nameSplit[0];
+                    realName   = nameSplit[0];
                     windowName = nameSplit[1];
                 }
 
                 object context;
-                var priTarget = Target;
+                var    priTarget = Target;
                 if (DataContext == null || (context = DataContext.Target) == null || priTarget == null)
                 {
                     CommonConstants.LogCommon(false, "ControlHelper: No Context Found");
@@ -251,14 +251,15 @@ namespace Tauron.Application
 
                 foreach (var member in
                     MemberInfoAttribute.GetMembers<WindowTargetAttribute>(context.GetType())
-                        .Where(mem => mem.Item1 == realName))
+                                       .Where(mem => mem.Item1 == realName))
+                {
                     try
                     {
                         var targetType = member.Item2.GetSetInvokeType();
 
                         object arg;
                         if (targetType == typeof(IWindow)) arg = new WpfWindow((Window) priTarget);
-                        else arg = priTarget;
+                        else arg                               = priTarget;
 
                         member.Item2.SetInvokeMember(context, arg);
                     }
@@ -268,6 +269,7 @@ namespace Tauron.Application
 
                         throw;
                     }
+                }
             }
 
             #endregion
@@ -277,21 +279,21 @@ namespace Tauron.Application
 
         public static readonly DependencyProperty MarkControlProperty =
             DependencyProperty.RegisterAttached(
-                "MarkControl",
-                typeof(string),
-                typeof(ControlHelper),
-                new UIPropertyMetadata(string.Empty, MarkControl));
+                                                "MarkControl",
+                                                typeof(string),
+                                                typeof(ControlHelper),
+                                                new UIPropertyMetadata(string.Empty, MarkControl));
 
         public static readonly DependencyProperty MarkWindowProperty = DependencyProperty.RegisterAttached(
-            "MarkWindow",
-            typeof(
-                string),
-            typeof(
-                ControlHelper
-            ),
-            new UIPropertyMetadata
-            (null,
-                MarkWindowChanged));
+                                                                                                           "MarkWindow",
+                                                                                                           typeof(
+                                                                                                               string),
+                                                                                                           typeof(
+                                                                                                                   ControlHelper
+                                                                                                               ),
+                                                                                                           new UIPropertyMetadata
+                                                                                                               (null,
+                                                                                                                MarkWindowChanged));
 
         private static readonly WeakReferenceCollection<LinkerBase> LinkerCollection =
             new WeakReferenceCollection<LinkerBase>();

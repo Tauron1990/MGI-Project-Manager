@@ -38,15 +38,15 @@ namespace Tauron.Interop
         /// <param name="lpData">The lp data.</param>
         /// <returns>The CopyProgressResult.</returns>
         public delegate CopyProgressResult CopyProgressRoutine(
-            long totalFileSize,
-            long totalBytesTransferred,
-            long streamSize,
-            long streamBytesTransferred,
-            uint dwStreamNumber,
+            long                       totalFileSize,
+            long                       totalBytesTransferred,
+            long                       streamSize,
+            long                       streamBytesTransferred,
+            uint                       dwStreamNumber,
             CopyProgressCallbackReason dwCallbackReason,
-            IntPtr hSourceFile,
-            IntPtr hDestinationFile,
-            IntPtr lpData);
+            IntPtr                     hSourceFile,
+            IntPtr                     hDestinationFile,
+            IntPtr                     lpData);
 
         /// <summary>The copy progress callback reason.</summary>
         public enum CopyProgressCallbackReason : uint
@@ -164,7 +164,7 @@ namespace Tauron.Interop
         [DllImport("shell32.dll", EntryPoint = "CommandLineToArgvW", CharSet = CharSet.Unicode)]
         private static extern IntPtr _CommandLineToArgvW(
             [MarshalAs(UnmanagedType.LPWStr)] string cmdLine,
-            out int numArgs);
+            out                               int    numArgs);
 
         /// <summary>
         ///     The _ local free.
@@ -243,15 +243,15 @@ namespace Tauron.Interop
         ///     The <see cref="bool" />.
         /// </returns>
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false,
-            ThrowOnUnmappableChar = true)]
+            ThrowOnUnmappableChar               = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool CopyFileEx(
-            string lpExistingFileName,
-            string lpNewFileName,
+            string              lpExistingFileName,
+            string              lpNewFileName,
             CopyProgressRoutine lpProgressRoutine,
-            IntPtr lpData,
-            ref int pbCancel,
-            CopyFileFlags dwCopyFlags);
+            IntPtr              lpData,
+            ref int             pbCancel,
+            CopyFileFlags       dwCopyFlags);
 
         /// <summary>
         ///     The sh get known folder path.
@@ -274,8 +274,8 @@ namespace Tauron.Interop
         [DllImport("shell32.dll")]
         internal static extern int SHGetKnownFolderPath(
             [MarshalAs(UnmanagedType.LPStruct)] Guid rfid,
-            uint dwFlags,
-            IntPtr hToken,
-            out IntPtr pszPath);
+            uint                                     dwFlags,
+            IntPtr                                   hToken,
+            out IntPtr                               pszPath);
     }
 }

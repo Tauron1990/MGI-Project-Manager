@@ -6,10 +6,11 @@ namespace Tauron.Application.ProjectManager.Generic.Windows
     [ExportViewModel(Consts.LoginWindowName)]
     public sealed class LogInWindowViewModel : ViewModelBase
     {
-        private IWindow _window;
         private LogInWindowSettings _logInSettings;
+        private IWindow             _window;
 
-        public LogInWindowViewModel([Inject]LogInWindowSettings settings)
+        [Inject]
+        public LogInWindowViewModel(LogInWindowSettings settings)
         {
             _logInSettings = settings;
 
@@ -25,13 +26,19 @@ namespace Tauron.Application.ProjectManager.Generic.Windows
 
         public bool ShowUserName { get; set; }
 
-        public override void OnShow(IWindow window) => _window = window;
+        public override void OnShow(IWindow window)
+        {
+            _window = window;
+        }
 
         [CommandTarget]
-        public void Cancel() => _window.DialogResult = false;
+        public void Cancel()
+        {
+            _window.DialogResult = false;
+        }
 
         [CommandTarget]
-        public void Login()
+        public void ComLogin()
         {
             _logInSettings.UserName = UserName;
             _logInSettings.Password = Password;
@@ -40,6 +47,9 @@ namespace Tauron.Application.ProjectManager.Generic.Windows
         }
 
         [CommandTarget]
-        public bool CanLogin() => !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(Password);
+        public bool CanLogin()
+        {
+            return !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(Password);
+        }
     }
 }

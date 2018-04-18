@@ -35,7 +35,7 @@ namespace Tauron.Application.Aop
         /// </param>
         protected override void Intercept(IInvocation invocation, ObjectContext context)
         {
-            var name = invocation.Method.Name;
+            var name   = invocation.Method.Name;
             var getter = name.StartsWith(AopConstants.PropertyGetter, StringComparison.Ordinal);
             if (_propertyInfo == null)
             {

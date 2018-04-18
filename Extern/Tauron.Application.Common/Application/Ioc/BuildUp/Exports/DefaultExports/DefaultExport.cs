@@ -63,50 +63,52 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
             if (anonym)
             {
                 _exports = new[]
-                {
-                    new ExportMetadata(
-                        _exportetType,
-                        ExternalInfo.ExtenalComponentName,
-                        typeof(NotSharedLifetime),
-                        new Dictionary<string, object>(Globalmetadata),
-                        this)
-                };
+                           {
+                               new ExportMetadata(
+                                                  _exportetType,
+                                                  ExternalInfo.ExtenalComponentName,
+                                                  typeof(NotSharedLifetime),
+                                                  new Dictionary<string, object>(Globalmetadata),
+                                                  this)
+                           };
                 return;
             }
 
             _exports = _attributeProvider.GetAllCustomAttributes<ExportAttribute>()
-                .Select(
-                    attribute =>
-                    {
-                        var temp = new Dictionary<string, object>(Globalmetadata);
+                                         .Select(
+                                                 attribute =>
+                                                 {
+                                                     var temp = new Dictionary<string, object>(Globalmetadata);
 
-                        Type realLifetime;
+                                                     Type realLifetime;
 
-                        if (attr == null)
-                        {
-                            var customLifeTime = attribute.GetOverrideDefaultPolicy();
-                            if (customLifeTime != null)
-                            {
-                                realLifetime = customLifeTime.LifeTimeType;
-                                attr = customLifeTime;
-                            }
-                            else
-                            {
-                                realLifetime = lifetime;
-                            }
-                        }
-                        else
-                        {
-                            realLifetime = lifetime;
-                        }
+                                                     if (attr == null)
+                                                     {
+                                                         var customLifeTime = attribute.GetOverrideDefaultPolicy();
+                                                         if (customLifeTime != null)
+                                                         {
+                                                             realLifetime = customLifeTime.LifeTimeType;
+                                                             attr         = customLifeTime;
+                                                         }
+                                                         else
+                                                         {
+                                                             realLifetime = lifetime;
+                                                         }
+                                                     }
+                                                     else
+                                                     {
+                                                         realLifetime = lifetime;
+                                                     }
 
-                        foreach (var tuple in attribute.Metadata)
-                            temp.Add(tuple.Item1,
-                                tuple.Item2);
+                                                     foreach (var tuple in attribute.Metadata)
+                                                     {
+                                                         temp.Add(tuple.Item1,
+                                                                  tuple.Item2);
+                                                     }
 
-                        return new ExportMetadata(attribute.Export, attribute.ContractName, realLifetime, temp, this);
-                    })
-                .ToArray();
+                                                     return new ExportMetadata(attribute.Export, attribute.ContractName, realLifetime, temp, this);
+                                                 })
+                                         .ToArray();
 
             ShareLifetime = attr == null || attr.ShareLiftime;
         }
@@ -148,10 +150,10 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
             if (exportetType == null) throw new ArgumentNullException(nameof(exportetType));
             if (externalInfo == null) throw new ArgumentNullException(nameof(externalInfo));
 
-            Globalmetadata = new Dictionary<string, object>();
-            _exportetType = exportetType;
+            Globalmetadata     = new Dictionary<string, object>();
+            _exportetType      = exportetType;
             _attributeProvider = exportetType;
-            ExternalInfo = externalInfo;
+            ExternalInfo       = externalInfo;
             Initialize(asAnonym);
         }
 
@@ -173,9 +175,9 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
         {
             if (info == null) throw new ArgumentNullException(nameof(info));
             if (externalInfo == null) throw new ArgumentNullException(nameof(externalInfo));
-            Globalmetadata = new Dictionary<string, object>();
+            Globalmetadata     = new Dictionary<string, object>();
             _attributeProvider = info;
-            ExternalInfo = externalInfo;
+            ExternalInfo       = externalInfo;
             Initialize(asAnonym);
         }
 

@@ -32,8 +32,8 @@ namespace Tauron.Application.Views.Core
             if (name == null) return null;
 
             var temp = NamingHelper.CreatePossibilyNames(name)
-                .Select(Match)
-                .FirstOrDefault(view => view != null);
+                                   .Select(Match)
+                                   .FirstOrDefault(view => view != null);
 
             if (temp != null) return temp;
 

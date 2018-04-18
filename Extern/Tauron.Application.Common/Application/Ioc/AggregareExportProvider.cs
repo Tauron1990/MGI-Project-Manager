@@ -71,9 +71,9 @@ namespace Tauron.Application.Ioc
 
             if (factory != null)
                 OnExportsChanged(
-                    new ExportChangedEventArgs(
-                        export.CreateExports(factory).SelectMany(ex => ex.Item1.ExportMetadata),
-                        Enumerable.Empty<ExportMetadata>()));
+                                 new ExportChangedEventArgs(
+                                                            export.CreateExports(factory).SelectMany(ex => ex.Item1.ExportMetadata),
+                                                            Enumerable.Empty<ExportMetadata>()));
         }
 
         /// <summary>
@@ -92,10 +92,10 @@ namespace Tauron.Application.Ioc
 
             if (factory != null)
                 OnExportsChanged(
-                    new ExportChangedEventArgs(
-                        temp.SelectMany(prov => prov.CreateExports(factory))
-                            .SelectMany(ex => ex.Item1.ExportMetadata),
-                        Enumerable.Empty<ExportMetadata>()));
+                                 new ExportChangedEventArgs(
+                                                            temp.SelectMany(prov => prov.CreateExports(factory))
+                                                                .SelectMany(ex => ex.Item1.ExportMetadata),
+                                                            Enumerable.Empty<ExportMetadata>()));
         }
 
         /// <summary>
@@ -136,9 +136,9 @@ namespace Tauron.Application.Ioc
 
             if (factory != null && export != null)
                 OnExportsChanged(
-                    new ExportChangedEventArgs(
-                        Enumerable.Empty<ExportMetadata>(),
-                        export.CreateExports(factory).SelectMany(ex => ex.Item1.ExportMetadata)));
+                                 new ExportChangedEventArgs(
+                                                            Enumerable.Empty<ExportMetadata>(),
+                                                            export.CreateExports(factory).SelectMany(ex => ex.Item1.ExportMetadata)));
         }
 
         /// <summary>
@@ -166,10 +166,10 @@ namespace Tauron.Application.Ioc
 
             if (factory != null)
                 OnExportsChanged(
-                    new ExportChangedEventArgs(
-                        Enumerable.Empty<ExportMetadata>(),
-                        temp.SelectMany(prov => prov.CreateExports(factory))
-                            .SelectMany(ex => ex.Item1.ExportMetadata)));
+                                 new ExportChangedEventArgs(
+                                                            Enumerable.Empty<ExportMetadata>(),
+                                                            temp.SelectMany(prov => prov.CreateExports(factory))
+                                                                .SelectMany(ex => ex.Item1.ExportMetadata)));
         }
 
         #endregion

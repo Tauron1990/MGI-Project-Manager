@@ -12,23 +12,32 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
     internal static class UserManager
     {
         private static readonly Dictionary<string, UserEntity> UserEntities = new Dictionary<string, UserEntity>();
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger                         Logger       = LogManager.GetCurrentClassLogger();
 
         public static void AddInitial(DatabaseImpl db)
         {
             if (db.Users.Find("admin") == null)
             {
-                UserEntity entity = new UserEntity {Id = "admin", Password = string.Empty, Salt = string.Empty};
+                var entity = new UserEntity {Id = "admin", Password = string.Empty, Salt = string.Empty};
                 db.Users.Add(entity);
+                UserEntities[entity.Id] = entity;
             }
 
             foreach (var userEntity in db.Users)
-                UserEntities.Add(userEntity.Id, userEntity);
+            {
+                UserEntities[userEntity.Id] = userEntity;
+            }
+        }
+
+        public static bool HasNoPassword(string userName)
+        {
+            return UserEntities.TryGetValue(userName, out var ent) && string.IsNullOrWhiteSpace(ent.Password);
         }
 
         public static bool Validate(string userName, string password, out string reason)
         {
             UserEntities.TryGetValue(userName, out var entity);
+            Logger.Info($"Validate User: {userName}");
             return Validate(entity, password, out reason);
         }
 
@@ -46,7 +55,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
                 return true;
             }
 
-            string pass = GenerateHash(password, entity.Salt);
+            var pass = GenerateHash(password, entity.Salt);
 
             if (entity.Password != pass)
             {
@@ -68,7 +77,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
 
             using (var db = new DatabaseImpl())
             {
-                UserEntity entity = db.Users.Find(userName);
+                var entity = db.Users.Find(userName);
                 if (!Validate(entity, oldPassword, out reason)) return false;
 
                 CreateHash(entity, newPassword);
@@ -95,7 +104,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
                     return false;
                 }
 
-                UserEntity entity = new UserEntity { Id = userName };
+                var entity = new UserEntity {Id = userName};
                 CreateHash(entity, password);
 
                 db.Users.Add(entity);
@@ -113,7 +122,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
         {
             using (var db = new DatabaseImpl())
             {
-                UserEntity entity = db.Users.Find(userName);
+                var entity = db.Users.Find(userName);
                 if (entity == null)
                 {
                     reason = ServiceMessages.UserManager_Reason_NoUser;
@@ -132,18 +141,18 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
 
         private static void CreateHash(UserEntity entity, string password)
         {
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-            byte[] salt = GenerateSalt(20);
-            byte[] hash = GenerateHash(passwordBytes, salt, 20, 50);
+            var passwordBytes = Encoding.UTF8.GetBytes(password);
+            var salt          = GenerateSalt(20);
+            var hash          = GenerateHash(passwordBytes, salt, 20, 50);
 
             entity.Password = Convert.ToBase64String(hash);
-            entity.Salt = Convert.ToBase64String(salt);
+            entity.Salt     = Convert.ToBase64String(salt);
         }
 
         private static string GenerateHash(string password, string salt)
         {
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-            byte[] saltBytes = Convert.FromBase64String(salt);
+            var passwordBytes = Encoding.UTF8.GetBytes(password);
+            var saltBytes     = Convert.FromBase64String(salt);
 
             return Convert.ToBase64String(GenerateHash(passwordBytes, saltBytes, 20, 50));
         }

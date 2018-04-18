@@ -26,8 +26,8 @@ namespace Tauron.Application
     [DebuggerNonUserCode]
     [Serializable]
     public sealed class ObservableDictionary<TKey, TValue> : ObservableObject,
-        IDictionary<TKey, TValue>,
-        INotifyCollectionChanged
+                                                             IDictionary<TKey, TValue>,
+                                                             INotifyCollectionChanged
     {
         /// <summary>The block helper.</summary>
         [DebuggerNonUserCode]
@@ -184,8 +184,8 @@ namespace Tauron.Application
         [Serializable]
         [DebuggerNonUserCode]
         private abstract class NotifyCollectionChangedBase<TTarget> : ObservableObject,
-            ICollection<TTarget>,
-            INotifyCollectionChanged
+                                                                      ICollection<TTarget>,
+                                                                      INotifyCollectionChanged
         {
             #region Fields
 
@@ -308,7 +308,7 @@ namespace Tauron.Application
             /// <exception cref="InvalidOperationException"></exception>
             public IEnumerator<TTarget> GetEnumerator()
             {
-                var ver = Dictionary._version;
+                var ver   = Dictionary._version;
                 var count = 0;
                 foreach (var entry in Dictionary._entrys)
                 {
@@ -348,8 +348,8 @@ namespace Tauron.Application
             public void OnCollectionAdd(TTarget target, int index)
             {
                 InvokeCollectionChanged(
-                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, target,
-                        index));
+                                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, target,
+                                                                             index));
             }
 
             /// <summary>
@@ -364,8 +364,8 @@ namespace Tauron.Application
             public void OnCollectionRemove(TTarget target, int index)
             {
                 InvokeCollectionChanged(
-                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
-                        target, index));
+                                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
+                                                                             target, index));
             }
 
             /// <summary>
@@ -383,8 +383,8 @@ namespace Tauron.Application
             public void OnCollectionReplace(TTarget newItem, TTarget oldItem, int index)
             {
                 InvokeCollectionChanged(
-                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace,
-                        newItem, oldItem, index));
+                                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace,
+                                                                             newItem, oldItem, index));
             }
 
             /// <summary>The on collection reset.</summary>
@@ -431,10 +431,10 @@ namespace Tauron.Application
             private void InvokeCollectionChanged([NotNull] NotifyCollectionChangedEventArgs e)
             {
                 CurrentDispatcher.Invoke(() =>
-                {
-                    InvokePropertyChanged();
-                    CollectionChanged?.Invoke(this, e);
-                });
+                                         {
+                                             InvokePropertyChanged();
+                                             CollectionChanged?.Invoke(this, e);
+                                         });
             }
 
             /// <summary>The invoke property changed.</summary>
@@ -521,12 +521,12 @@ namespace Tauron.Application
         /// </summary>
         public ObservableDictionary()
         {
-            _helper = new BlockHelper();
-            _version = 1;
-            _entrys = new Entry[4];
+            _helper    = new BlockHelper();
+            _version   = 1;
+            _entrys    = new Entry[4];
             _keyEquals = EqualityComparer<TKey>.Default;
-            _keys = new KeyCollection(this);
-            _values = new ValueCollection(this);
+            _keys      = new KeyCollection(this);
+            _values    = new ValueCollection(this);
         }
 
         #endregion
@@ -908,22 +908,19 @@ namespace Tauron.Application
         {
             _version++;
 
-            CurrentDispatcher.Invoke(() =>
-            {
-                CollectionChanged?.Invoke(this, e);
-            });
+            CurrentDispatcher.Invoke(() => { CollectionChanged?.Invoke(this, e); });
         }
 
         /// <summary>The invoke property changed.</summary>
         private void InvokePropertyChanged()
         {
             CurrentDispatcher.Invoke(() =>
-            {
-                OnPropertyChangedExplicit("Item[]");
-                OnPropertyChangedExplicit("Count");
-                OnPropertyChangedExplicit("Keys");
-                OnPropertyChangedExplicit("Values");
-            });
+                                     {
+                                         OnPropertyChangedExplicit("Item[]");
+                                         OnPropertyChangedExplicit("Count");
+                                         OnPropertyChangedExplicit("Keys");
+                                         OnPropertyChangedExplicit("Values");
+                                     });
         }
 
         /// <summary>
@@ -940,8 +937,8 @@ namespace Tauron.Application
             using (BlockCollection())
             {
                 InvokeCollectionChanged(
-                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, changed,
-                        index));
+                                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, changed,
+                                                                             index));
                 _keys.OnCollectionAdd(changed.Key, index);
                 _values.OnCollectionAdd(changed.Value, index);
                 InvokePropertyChanged();
@@ -962,8 +959,8 @@ namespace Tauron.Application
             using (BlockCollection())
             {
                 InvokeCollectionChanged(
-                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
-                        changed, index));
+                                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
+                                                                             changed, index));
                 _keys.OnCollectionRemove(changed.Key, index);
                 _values.OnCollectionRemove(changed.Value, index);
                 InvokePropertyChanged();
@@ -985,13 +982,13 @@ namespace Tauron.Application
         private void OnCollectionReplace(
             KeyValuePair<TKey, TValue> newItem,
             KeyValuePair<TKey, TValue> oldItem,
-            int index)
+            int                        index)
         {
             using (BlockCollection())
             {
                 InvokeCollectionChanged(
-                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace,
-                        newItem, oldItem, index));
+                                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace,
+                                                                             newItem, oldItem, index));
                 _values.OnCollectionReplace(newItem.Value, oldItem.Value, index);
                 InvokePropertyChanged();
             }
@@ -1018,11 +1015,11 @@ namespace Tauron.Application
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            _helper = new BlockHelper();
-            _version = 1;
+            _helper    = new BlockHelper();
+            _version   = 1;
             _keyEquals = EqualityComparer<TKey>.Default;
-            _keys = new KeyCollection(this);
-            _values = new ValueCollection(this);
+            _keys      = new KeyCollection(this);
+            _values    = new ValueCollection(this);
         }
 
         #endregion

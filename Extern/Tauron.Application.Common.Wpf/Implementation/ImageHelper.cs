@@ -26,7 +26,7 @@ namespace Tauron.Application.Implementation
 
             public KeyedImage([NotNull] Uri key, [NotNull] ImageSource source)
             {
-                Key = key;
+                Key     = key;
                 _source = new WeakReference(source);
             }
 
@@ -84,7 +84,7 @@ namespace Tauron.Application.Implementation
                 if (temp != null) return temp;
             }
 
-            var flag = target.IsAbsoluteUri && target.Scheme == Uri.UriSchemeFile && target.OriginalString.ExisFile();
+            var flag        = target.IsAbsoluteUri && target.Scheme == Uri.UriSchemeFile && target.OriginalString.ExisFile();
             if (!flag) flag = target.IsAbsoluteUri;
 
             if (!flag) flag = target.OriginalString.ExisFile();

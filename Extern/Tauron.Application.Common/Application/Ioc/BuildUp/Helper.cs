@@ -83,7 +83,7 @@ namespace Tauron.Application.Ioc.BuildUp
             if (context == null) throw new ArgumentNullException(nameof(context));
             var type = context.Metadata.Export.ImplementType;
 
-            var construcors = type.GetConstructors(AopConstants.DefaultBindingFlags);
+            var             construcors = type.GetConstructors(AopConstants.DefaultBindingFlags);
             ConstructorInfo constructor = null;
             foreach (var constructorInfo in
                 construcors.Where(constructorInfo => constructorInfo.GetCustomAttribute<InjectAttribute>() != null))
@@ -98,36 +98,36 @@ namespace Tauron.Application.Ioc.BuildUp
             context.ErrorTracer.Phase = "Returning Default Creation for " + context.Metadata;
 
             return (build, service) =>
-            {
-                if (build == null)
-                    throw new ArgumentNullException(nameof(build));
-                //CContract.Requires<ArgumentNullException>(build != null, "build");
-                //CContract.Requires<ArgumentNullException>(service != null, "service");
-                //CContract.Ensures(CContract.Result<object>() != null);
+                   {
+                       if (build == null)
+                           throw new ArgumentNullException(nameof(build));
+                       //CContract.Requires<ArgumentNullException>(build != null, "build");
+                       //CContract.Requires<ArgumentNullException>(service != null, "service");
+                       //CContract.Ensures(CContract.Result<object>() != null);
 
-                var parameters = from parm in MapParameters(constructor)
-                    select TryResolveConstructorParameter(parm, build);
-                    
+                       var parameters = from parm in MapParameters(constructor)
+                                        select TryResolveConstructorParameter(parm, build);
 
-                var policy = build.Policys.Get<InterceptionPolicy>();
 
-                if (policy == null) return constructor.Invoke(parameters.ToArray());
+                       var policy = build.Policys.Get<InterceptionPolicy>();
 
-                build.ErrorTracer.Phase = "Creating Direct Proxy for " + build.Metadata;
+                       if (policy == null) return constructor.Invoke(parameters.ToArray());
 
-                return service.CreateClassProxy(
-                    build.ExportType,
-                    null,
-                    new ProxyGenerationOptions
-                    {
-                        Selector =
-                            new InternalInterceptorSelector
-                                ()
-                    },
-                    parameters.ToArray(),
-                    policy.MemberInterceptor.Select(mem => mem.Value)
-                        .ToArray());
-            };
+                       build.ErrorTracer.Phase = "Creating Direct Proxy for " + build.Metadata;
+
+                       return service.CreateClassProxy(
+                                                       build.ExportType,
+                                                       null,
+                                                       new ProxyGenerationOptions
+                                                       {
+                                                           Selector =
+                                                               new InternalInterceptorSelector
+                                                                   ()
+                                                       },
+                                                       parameters.ToArray(),
+                                                       policy.MemberInterceptor.Select(mem => mem.Value)
+                                                             .ToArray());
+                   };
         }
 
 
@@ -137,10 +137,12 @@ namespace Tauron.Application.Ioc.BuildUp
             if (temp != null) return temp;
             if (context.Parameters == null) return null;
 
-            ExportRegistry tempRegistry = new ExportRegistry();
+            var tempRegistry = new ExportRegistry();
 
             foreach (var parameter in context.Parameters)
+            {
                 tempRegistry.Register(parameter.CreateExport() ?? throw new InvalidOperationException(), 0);
+            }
 
             var data = tempRegistry.FindOptional(parm.Item1, parm.Item2, context.ErrorTracer);
             if (data == null) return null;

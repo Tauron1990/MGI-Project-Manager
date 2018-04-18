@@ -69,10 +69,7 @@ namespace Tauron.Application.Ioc.LifeTime
         /// <summary>The dispose all.</summary>
         public void DisposeAll()
         {
-            lock (_registry)
-            {
-                _registry.Dispose();
-            }
+            lock (_registry) _registry.Dispose();
         }
 
         /// <summary>The get.</summary>

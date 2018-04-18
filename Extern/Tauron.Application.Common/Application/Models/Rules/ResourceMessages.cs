@@ -9,9 +9,9 @@ namespace Tauron.Application.Models.Rules
 
         public static ResourceManager ResourceManager => _resourceManager ??
                                                          (_resourceManager =
-                                                             new ResourceManager(
-                                                                 "System.ComponentModel.DataAnnotations.Resources.DataAnnotationsResources",
-                                                                 typeof(Validator).Assembly));
+                                                              new ResourceManager(
+                                                                                  "System.ComponentModel.DataAnnotations.Resources.DataAnnotationsResources",
+                                                                                  typeof(Validator).Assembly));
 
         internal static string RequireRuleError => ResourceManager.GetString("RequiredAttribute_ValidationError");
     }

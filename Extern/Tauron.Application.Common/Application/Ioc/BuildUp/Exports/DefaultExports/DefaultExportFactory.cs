@@ -86,11 +86,11 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
             if (!DefaultExport.IsExport(type)) return null;
 
             var export = new DefaultExport(
-                type,
-                new ExternalExportInfo(false, false, true, true, null, string.Empty),
-                false);
+                                           type,
+                                           new ExternalExportInfo(false, false, true, true, null, string.Empty),
+                                           false);
 
-            var attr = type.GetCustomAttribute<ExportLevelAttribute>();
+            var attr                = type.GetCustomAttribute<ExportLevelAttribute>();
             if (attr != null) level = attr.Level;
 
 
@@ -115,15 +115,15 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             var export = new DefaultExport(
-                type,
-                new ExternalExportInfo(
-                    true,
-                    true,
-                    true,
-                    true,
-                    (con, ps) => Activator.CreateInstance(type, args),
-                    type.Name),
-                true);
+                                           type,
+                                           new ExternalExportInfo(
+                                                                  true,
+                                                                  true,
+                                                                  true,
+                                                                  true,
+                                                                  (con, ps) => Activator.CreateInstance(type, args),
+                                                                  type.Name),
+                                           true);
 
             export.ImportMetadata = _chain.SelectImport(export);
             return export;
@@ -169,13 +169,13 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
             if (info == null) throw new ArgumentNullException(nameof(info));
             if (!info.IsStatic || !DefaultExport.IsExport(info)) return null;
 
-            var attr = info.GetCustomAttribute<ExportLevelAttribute>();
+            var attr                       = info.GetCustomAttribute<ExportLevelAttribute>();
             if (attr != null) currentLevel = attr.Level;
 
             return new DefaultExport(
-                info,
-                new ExternalExportInfo(true, false, true, false, (arg1, arg2) => info.Invoke(null, null), info.Name),
-                false);
+                                     info,
+                                     new ExternalExportInfo(true, false, true, false, (arg1, arg2) => info.Invoke(null, null), info.Name),
+                                     false);
         }
 
         #endregion

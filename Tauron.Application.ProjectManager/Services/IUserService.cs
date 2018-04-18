@@ -7,11 +7,13 @@ namespace Tauron.Application.ProjectManager.Services
     public interface IUserService
     {
         [OperationContract]
-        [FaultContract(typeof(GenericServiceFault)), FaultContract(typeof(LogInFault))]
+        [FaultContract(typeof(GenericServiceFault))]
+        [FaultContract(typeof(LogInFault))]
         string[] GetUsers();
 
         [OperationContract]
-        [FaultContract(typeof(GenericServiceFault)), FaultContract(typeof(LogInFault))]
+        [FaultContract(typeof(GenericServiceFault))]
+        [FaultContract(typeof(LogInFault))]
         GenericServiceResult ChangePassword(string name, string newPassword, string oldPassword);
     }
 }

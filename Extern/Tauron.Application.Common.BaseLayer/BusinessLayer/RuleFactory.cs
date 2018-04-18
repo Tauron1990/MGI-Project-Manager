@@ -8,16 +8,17 @@ using Tauron.Application.Ioc;
 
 namespace Tauron.Application.Common.BaseLayer.BusinessLayer
 {
-    [Export(typeof(RuleFactory)), PublicAPI]
+    [Export(typeof(RuleFactory))]
+    [PublicAPI]
     public sealed class RuleFactory
     {
-        [Inject(typeof(IRuleBase))]
-        private InstanceResolver<IRuleBase, IRuleMetadata>[] _rules;
+        private readonly IDictionary<string, IRuleBase> _cache = new Dictionary<string, IRuleBase>();
 
         [InjectRepositoryFactory]
         private RepositoryFactory _repositoryFactory;
 
-        private readonly IDictionary<string, IRuleBase> _cache = new Dictionary<string, IRuleBase>();
+        [Inject(typeof(IRuleBase))]
+        private InstanceResolver<IRuleBase, IRuleMetadata>[] _rules;
 
         private IRuleBase GetOrCreate(string name)
         {
@@ -39,32 +40,48 @@ namespace Tauron.Application.Common.BaseLayer.BusinessLayer
             return rule;
         }
 
-        public IBusinessRule CreateBusinessRule(string name) => (IBusinessRule) Create(name);
-        public IIBusinessRule<TType> CreateIiBusinessRule<TType>(string name) => (IIBusinessRule<TType>) Create(name);
-        public IIOBusinessRule<TInput, TOutput> CreateIioBusinessRule<TInput, TOutput>(string name) 
+        public IBusinessRule CreateBusinessRule(string name)
+        {
+            return (IBusinessRule) Create(name);
+        }
+
+        public IIBusinessRule<TType> CreateIiBusinessRule<TType>(string name)
+        {
+            return (IIBusinessRule<TType>) Create(name);
+        }
+
+        public IIOBusinessRule<TInput, TOutput> CreateIioBusinessRule<TInput, TOutput>(string name)
             where TOutput : class where TInput : class
         {
             return (IIOBusinessRule<TInput, TOutput>) Create(name);
         }
+
         public IOBussinesRule<TOutput> CreateOBussinesRule<TOutput>(string name)
-                                                where TOutput : class => (IOBussinesRule<TOutput>) Create(name);
+            where TOutput : class
+        {
+            return (IOBussinesRule<TOutput>) Create(name);
+        }
 
         public CompositeRule<TInput, TOutput> CreateComposite<TInput, TOutput>(params string[] names)
         {
-            StringBuilder keyBuilder = new StringBuilder();
+            var keyBuilder = new StringBuilder();
 
             foreach (var name in names)
+            {
                 keyBuilder.Append(name);
+            }
 
-            string key = keyBuilder.ToString();
+            var                            key = keyBuilder.ToString();
             CompositeRule<TInput, TOutput> compositeule;
 
             if (_cache.TryGetValue(key, out var cache))
+            {
                 compositeule = (CompositeRule<TInput, TOutput>) cache;
+            }
             else
             {
                 compositeule = new CompositeRule<TInput, TOutput>(names.Select(GetOrCreate));
-                _cache[key] = compositeule;
+                _cache[key]  = compositeule;
             }
 
             DatalayerHelper.InitializeRule(compositeule, _repositoryFactory);

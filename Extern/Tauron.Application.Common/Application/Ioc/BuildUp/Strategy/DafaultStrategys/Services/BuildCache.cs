@@ -29,6 +29,26 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
 
         #endregion
 
+        #region Methods
+
+        /// <summary>The on clean up.</summary>
+        private void OnCleanUp()
+        {
+            lock (this)
+            {
+                IEnumerable<IExport> deadKeysOne =
+                    _global.Where(ent => ent.Value.IsAlive).Select(ent => ent.Key).ToArray();
+                IEnumerable<ExportMetadata> deadkeysTwo =
+                    (from ent in _local where ent.Value.IsAlive select ent.Key).ToArray();
+
+                foreach (var export in deadKeysOne) _global.Remove(export);
+
+                foreach (var exportMetadata in deadkeysTwo) _local.Remove(exportMetadata);
+            }
+        }
+
+        #endregion
+
         #region Fields
 
         /// <summary>The _global.</summary>
@@ -59,7 +79,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             lock (this)
             {
                 if (shareLifetime) _global[metadata.Export] = context;
-                else _local[metadata] = context;
+                else _local[metadata]                       = context;
             }
         }
 
@@ -91,31 +111,14 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             {
                 foreach (var disposable in
                     _global.Values.Concat(_local.Values)
-                        .Select(lifetimeContext => lifetimeContext.GetValue())
-                        .OfType<IDisposable>()) disposable.Dispose();
+                           .Select(lifetimeContext => lifetimeContext.GetValue())
+                           .OfType<IDisposable>())
+                {
+                    disposable.Dispose();
+                }
 
                 _global.Clear();
                 _local.Clear();
-            }
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>The on clean up.</summary>
-        private void OnCleanUp()
-        {
-            lock (this)
-            {
-                IEnumerable<IExport> deadKeysOne =
-                    _global.Where(ent => ent.Value.IsAlive).Select(ent => ent.Key).ToArray();
-                IEnumerable<ExportMetadata> deadkeysTwo =
-                    (from ent in _local where ent.Value.IsAlive select ent.Key).ToArray();
-
-                foreach (var export in deadKeysOne) _global.Remove(export);
-
-                foreach (var exportMetadata in deadkeysTwo) _local.Remove(exportMetadata);
             }
         }
 

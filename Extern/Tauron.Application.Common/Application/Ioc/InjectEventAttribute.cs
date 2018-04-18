@@ -36,10 +36,6 @@ namespace Tauron.Application.Ioc
     [PublicAPI]
     public sealed class InjectEventAttribute : Attribute
     {
-        #region Fields
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -62,6 +58,10 @@ namespace Tauron.Application.Ioc
         /// <summary>Gets the topic.</summary>
         /// <value>The topic.</value>
         public string Topic { get; }
+
+        #endregion
+
+        #region Fields
 
         #endregion
     }

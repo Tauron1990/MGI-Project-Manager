@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using JetBrains.Annotations;
 
 #endregion
@@ -30,25 +29,18 @@ namespace Tauron.Application.Implement
             public Command([NotNull] string name)
             {
                 if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
-                Name = name;
+                Name  = name;
                 Parms = new List<string>();
             }
 
             #endregion
 
-            #region Public Properties
-
-            /// <summary>Gets the name.</summary>
-            /// <value>The name.</value>
-            [NotNull]
-            public string Name { get; }
-
-            /// <summary>Gets the parms.</summary>
-            /// <value>The parms.</value>
-            [NotNull]
-            public List<string> Parms { get; }
-
-            #endregion
+            public bool Equals(Command other)
+            {
+                if (ReferenceEquals(null, other)) return false;
+                if (ReferenceEquals(this, other)) return true;
+                return string.Equals(Name, other.Name);
+            }
 
             public override bool Equals(object obj)
             {
@@ -56,13 +48,6 @@ namespace Tauron.Application.Implement
                 if (ReferenceEquals(this, obj)) return true;
                 if (obj.GetType() != GetType()) return false;
                 return Equals((Command) obj);
-            }
-
-            public bool Equals(Command other)
-            {
-                if (ReferenceEquals(null, other)) return false;
-                if (ReferenceEquals(this, other)) return true;
-                return string.Equals(Name, other.Name);
             }
 
             public override int GetHashCode()
@@ -79,6 +64,20 @@ namespace Tauron.Application.Implement
             {
                 return !Equals(left, right);
             }
+
+            #region Public Properties
+
+            /// <summary>Gets the name.</summary>
+            /// <value>The name.</value>
+            [NotNull]
+            public string Name { get; }
+
+            /// <summary>Gets the parms.</summary>
+            /// <value>The parms.</value>
+            [NotNull]
+            public List<string> Parms { get; }
+
+            #endregion
         }
 
         #region Constructors and Destructors
@@ -144,7 +143,7 @@ namespace Tauron.Application.Implement
                 _application.Container.Resolve<ICommandLineService>().Commands)
             {
                 var command1 = command;
-                var temp = _commands.FirstOrDefault(arg => arg.Name == command1.CommandName);
+                var temp     = _commands.FirstOrDefault(arg => arg.Name == command1.CommandName);
                 if (temp == null) continue;
 
                 command.Execute(temp.Parms.ToArray(), _application.Container);
@@ -166,7 +165,7 @@ namespace Tauron.Application.Implement
         public static IEnumerable<Command> ParseCommandLine(IEnumerable<string> args, bool skipfirst = true)
         {
             Command current = null;
-            var first = skipfirst;
+            var     first   = skipfirst;
             foreach (var arg in args)
             {
                 if (first)
@@ -203,12 +202,15 @@ namespace Tauron.Application.Implement
             if (_factory != null) return;
 
             foreach (var command in
-                _application.Container.Resolve<ICommandLineService>()
-                    .Commands.Where(
-                        command =>
-                            command.Factory != null &&
-                            _commands.Any(com => com.Name == command.CommandName))
-            ) _factory = command.Factory;
+                    _application.Container.Resolve<ICommandLineService>()
+                                .Commands.Where(
+                                                command =>
+                                                    command.Factory != null &&
+                                                    _commands.Any(com => com.Name == command.CommandName))
+                )
+            {
+                _factory = command.Factory;
+            }
         }
 
         #endregion

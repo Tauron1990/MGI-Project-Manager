@@ -44,7 +44,6 @@ namespace Tauron.Application.Implementation
 
         public WpfIuiControllerFactory()
         {
-            
         }
 
         public WpfIuiControllerFactory(App app)

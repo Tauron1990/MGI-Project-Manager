@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
+using System.ServiceModel.Security;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using NLog;
 using Tauron.Application.Ioc;
@@ -14,21 +16,15 @@ using Tauron.Application.Views;
 
 namespace Tauron.Application.ProjectManager.Generic
 {
-    [PublicAPI, Export(typeof(IClientFactory))]
+    [PublicAPI]
+    [Export(typeof(IClientFactory))]
     public class ClientFactory : IClientFactory
     {
+        private static WeakCollection<ClientObjectBase> _clientObjectBases = new WeakCollection<ClientObjectBase>();
+
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         private static Dictionary<Type, (bool, Type, string, Func<object>)> _clients = Initialize();
-
-        private static Dictionary<Type, (bool, Type, string, Func<object>)> Initialize()
-        {
-            return new Dictionary<Type, (bool, Type, string, Func<object>)>
-                   {
-                       {typeof(IAdminService), (false, typeof(AdminClient), ServiceNames.AdminService, null)},
-                       {typeof(IUserService), (false, typeof(UserClient), ServiceNames.UserService, null)}
-                   };
-        }
 
         public string Password { get; private set; }
 
@@ -39,7 +35,7 @@ namespace Tauron.Application.ProjectManager.Generic
         {
             if (!_clients.TryGetValue(typeof(TClient), out var entry)) return null;
 
-            IpSettings settings = IpSettings.ReadIpSettings();
+            var settings = IpSettings.ReadIpSettings();
 
             try
             {
@@ -52,12 +48,18 @@ namespace Tauron.Application.ProjectManager.Generic
                 var client = Activator.CreateInstance(entry.Item2, parms.ToArray());
 
                 var credinals = (client as ClientBase<TClient>)?.ClientCredentials;
-                if (credinals == null) return new ClientObject<TClient>(client as TClient);
+                if (credinals != null)
+                {
+                    credinals.UserName.UserName = Name;
+                    credinals.UserName.Password = Password;
 
-                credinals.UserName.UserName = Name;
-                credinals.UserName.Password = Password;
+                    credinals.ClientCertificate.Certificate                               = new X509Certificate2(Properties.Resources.ee, "tauron");
+                    credinals.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
+                }
 
-                return new ClientObject<TClient>(client as TClient);
+                var temp = new ClientObject<TClient>(client as TClient);
+                _clientObjectBases.Add(temp);
+                return temp;
             }
             catch (Exception e)
             {
@@ -69,21 +71,52 @@ namespace Tauron.Application.ProjectManager.Generic
             }
         }
 
-        public bool ShowLoginWindow(IWindow mainWindow, bool asAdmin)
+        public Task<bool> ShowLoginWindow(IWindow mainWindow, bool asAdmin)
         {
-            var settings = new LogInWindowSettings(Password, asAdmin ? Name : "admin");
+            Name = Properties.Settings.Default.UserName;
+
+            var settings = new LogInWindowSettings(Password, asAdmin ? "admin" : Name);
 
             var window = UiSynchronize.Synchronize.Invoke(() => ViewManager.Manager.CreateWindow(Consts.LoginWindowName, settings));
 
-            window.ShowDialogAsync(mainWindow).Wait();
+            return window.ShowDialogAsync(mainWindow).ContinueWith(t =>
+                                                                   {
+                                                                       if (window.DialogResult != true) return false;
 
-            if (window.DialogResult != true) return false;
+                                                                       Name     = settings.UserName;
+                                                                       Password = settings.Password;
 
-            Name     = settings.UserName;
-            Password = settings.Password;
+                                                                       foreach (var clientObjectBase in _clientObjectBases)
+                                                                       {
+                                                                           if(clientObjectBase.State == CommunicationState.Faulted) continue;
 
-            return true;
+                                                                           if(clientObjectBase.CommunicationObject.State == CommunicationState.Opened 
+                                                                              || clientObjectBase.CommunicationObject.State == CommunicationState.Opening)
+                                                                               clientObjectBase.Close();
 
+                                                                           var cred = clientObjectBase.ClientCredentials;
+                                                                           if (cred == null) continue;
+
+                                                                           cred.UserName.Password = Password;
+                                                                           cred.UserName.UserName = Name;
+                                                                       }
+
+                                                                       Properties.Settings.Default.UserName = Name;
+                                                                       Properties.Settings.Default.Save();
+                                                                       return true;
+                                                                   });
+        }
+
+        private static Dictionary<Type, (bool, Type, string, Func<object>)> Initialize()
+        {
+            ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, errors) => true;
+            ServicePointManager.CheckCertificateRevocationList      =  false;
+
+            return new Dictionary<Type, (bool, Type, string, Func<object>)>
+                   {
+                       {typeof(IAdminService), (false, typeof(AdminClient), ServiceNames.AdminService, null)},
+                       {typeof(IUserService), (false, typeof(UserClient), ServiceNames.UserService, null)}
+                   };
         }
     }
 }

@@ -10,10 +10,6 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
     /// <summary>The interception policy.</summary>
     public class InterceptionPolicy : IPolicy
     {
-        #region Fields
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -25,6 +21,10 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         {
             MemberInterceptor = new List<KeyValuePair<MemberInterceptionAttribute, IInterceptor>>();
         }
+
+        #endregion
+
+        #region Fields
 
         #endregion
 

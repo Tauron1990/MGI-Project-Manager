@@ -110,7 +110,7 @@ namespace Tauron.Application.Ioc.LifeTime
             if (contextName != null)
             {
                 var weakHolder = AspectContexts[contextName];
-                var context = weakHolder.Context;
+                var context    = weakHolder.Context;
                 return context;
             }
 

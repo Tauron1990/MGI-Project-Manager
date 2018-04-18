@@ -106,8 +106,7 @@ namespace Tauron
         public static bool IsAlive<TType>([NotNull] this WeakReference<TType> reference) where TType : class
         {
             if (reference == null) throw new ArgumentNullException(nameof(reference));
-            TType o;
-            return reference.TryGetTarget(out o);
+            return reference.TryGetTarget(out _);
         }
 
         /// <summary>
@@ -146,15 +145,15 @@ namespace Tauron
         /// </returns>
         public static DateTime Round(this DateTime source, double type)
         {
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (type == 0)
                 throw new ArgumentNullException(nameof(type));
 
             var result = source;
 
             var minutes = type;
-            int modulo;
 
-            Math.DivRem(source.Minute, (int) minutes, out modulo);
+            Math.DivRem(source.Minute, (int) minutes, out var modulo);
 
             if (modulo <= 0) return result;
 
@@ -201,8 +200,7 @@ namespace Tauron
         public static TType TypedTarget<TType>([NotNull] this WeakReference<TType> reference) where TType : class
         {
             if (reference == null) throw new ArgumentNullException(nameof(reference));
-            TType obj;
-            return reference.TryGetTarget(out obj) ? obj : null;
+            return reference.TryGetTarget(out var obj) ? obj : null;
         }
 
         #endregion

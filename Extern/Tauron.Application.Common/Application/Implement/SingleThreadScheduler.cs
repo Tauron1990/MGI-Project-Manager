@@ -58,7 +58,7 @@ namespace Tauron.Application.Implement
         /// </summary>
         public SingleThreadScheduler()
         {
-            _thread = new Thread(EnterLoop);
+            _thread      = new Thread(EnterLoop);
             IsBackground = true;
 
             _thread.Start();

@@ -63,7 +63,7 @@ namespace Tauron.Application
         protected virtual bool TryGetTargetItems([CanBeNull] IServiceProvider provider, out DependencyObject target, out DependencyProperty dp)
         {
             target = null;
-            dp = null;
+            dp     = null;
 
             //create a binding and assign it to the target
             var service = (IProvideValueTarget) provider?.GetService(typeof(IProvideValueTarget));
@@ -71,7 +71,7 @@ namespace Tauron.Application
 
             //we need dependency objects / properties
             target = service.TargetObject as DependencyObject;
-            dp = service.TargetProperty as DependencyProperty;
+            dp     = service.TargetProperty as DependencyProperty;
             return target != null && dp != null;
         }
 

@@ -64,13 +64,13 @@ namespace Tauron.Application.Aop.Threading
         protected internal override void Register(ObjectContext context, MemberInfo info, object target)
         {
             context.Register<ManualResetEventHolder, ManualResetEventHolder>(
-                new ManualResetEventHolder(
-                    info
-                        .GetInvokeMember
-                        <ManualResetEventSlim>(target))
-                {
-                    Name = HolderName
-                });
+                                                                             new ManualResetEventHolder(
+                                                                                                        info
+                                                                                                            .GetInvokeMember
+                                                                                                                <ManualResetEventSlim>(target))
+                                                                             {
+                                                                                 Name = HolderName
+                                                                             });
         }
 
         #endregion
@@ -118,7 +118,7 @@ namespace Tauron.Application.Aop.Threading
         /// </summary>
         public ManualResetEventAttribute()
         {
-            Position = MethodInvocationPosition.Before;
+            Position      = MethodInvocationPosition.Before;
             EventBehavior = ManualResetEventBehavior.Wait;
         }
 
@@ -153,10 +153,10 @@ namespace Tauron.Application.Aop.Threading
         protected internal override void Initialize(object target, ObjectContext context, string contextName)
         {
             _holder = BaseHolder.GetOrAdd<ManualResetEventHolder, ManualResetEventHolder>(
-                context,
-                () =>
-                    new ManualResetEventHolder(),
-                HolderName);
+                                                                                          context,
+                                                                                          () =>
+                                                                                              new ManualResetEventHolder(),
+                                                                                          HolderName);
 
             base.Initialize(target, context, contextName);
         }

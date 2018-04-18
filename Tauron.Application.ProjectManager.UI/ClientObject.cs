@@ -1,32 +1,41 @@
 ﻿using System;
 using System.ServiceModel;
+using System.ServiceModel.Description;
 
 namespace Tauron.Application.ProjectManager.UI
 {
-    public class ClientObject<TClient> : ClientObjectBase
+    public class ClientObject<TClient> : ClientObjectBase where TClient : class
     {
-        public TClient Client { get; }
-
         public ClientObject(TClient client)
-            :base(client as ICommunicationObject)
+            : base(client as ICommunicationObject, (client as ClientBase<TClient>)?.ClientCredentials, typeof(TClient))
         {
-            if (client == null) throw new ArgumentNullException(nameof(client));
-
-            Client = client;
+            Client = client ?? throw new ArgumentNullException(nameof(client));
         }
+
+
+
+        public TClient Client { get; }
     }
 
     public abstract class ClientObjectBase
     {
-        protected ClientObjectBase(ICommunicationObject client)
+        protected ClientObjectBase(ICommunicationObject client, ClientCredentials clientCredentials, Type clientType)
         {
             CommunicationObject = client ?? throw new ArgumentNullException(nameof(client));
+            ClientCredentials   = clientCredentials;
+            ClientType = clientType;
         }
 
+        public Type ClientType { get; }
+        public ClientCredentials    ClientCredentials   { get; }
         public ICommunicationObject CommunicationObject { get; }
 
         public CommunicationState State => CommunicationObject.State;
+
+        
+
         public void Open() => CommunicationObject.Open();
+
         public void Close() => CommunicationObject.Close();
     }
 }

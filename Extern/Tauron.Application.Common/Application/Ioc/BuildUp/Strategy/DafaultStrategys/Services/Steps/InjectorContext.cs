@@ -6,11 +6,11 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
 {
     public class InjectorContext
     {
-        public InjectorContext([NotNull] IMetadataFactory metadataFactory, [NotNull] object memberInfo,
-            [NotNull] Type memberType, [CanBeNull] IResolverExtension[] resolverExtensions)
+        public InjectorContext([NotNull] IMetadataFactory metadataFactory, [NotNull]   object               memberInfo,
+                               [NotNull] Type             memberType,      [CanBeNull] IResolverExtension[] resolverExtensions)
         {
             ReflectionContext = new ReflectionContext(metadataFactory, memberType, this, resolverExtensions ?? new IResolverExtension[0]);
-            MemberInfo = memberInfo;
+            MemberInfo        = memberInfo;
         }
 
         [NotNull]

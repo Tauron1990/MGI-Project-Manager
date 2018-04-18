@@ -24,15 +24,15 @@ namespace Tauron.Application
         /// </param>
         public ActiveProgress([NotNull] string message, double percent, double overAllProgress)
         {
-            if (percent < 0) percent = 0;
+            if (percent < 0) percent                 = 0;
             if (overAllProgress < 0) overAllProgress = 0;
 
             if (percent > 100 || double.IsNaN(percent)) percent = 100;
 
             if (overAllProgress > 100 || double.IsNaN(overAllProgress)) overAllProgress = 100;
 
-            Message = message;
-            Percent = percent;
+            Message         = message;
+            Percent         = percent;
             OverAllProgress = overAllProgress;
         }
 

@@ -11,7 +11,7 @@ namespace Tauron.Application.Models
     {
         public ExportViewModelAttribute([NotNull] string name) : base(typeof(ViewModelBase))
         {
-            ContractName = name ?? throw new ArgumentNullException(nameof(name));
+            ContractName      = name ?? throw new ArgumentNullException(nameof(name));
             IgnoreIntercepion = true;
         }
 

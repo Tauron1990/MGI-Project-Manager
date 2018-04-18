@@ -11,7 +11,10 @@ namespace Tauron.Application.Converter
 {
     internal static class ImageSourceHelper
     {
-        private static Logger GetLogger() => LogManager.GetLogger(nameof(ImageSourceHelper), typeof(ImageSourceHelper));
+        private static Logger GetLogger()
+        {
+            return LogManager.GetLogger(nameof(ImageSourceHelper), typeof(ImageSourceHelper));
+        }
 
         #region Public Methods and Operators
 
@@ -20,7 +23,7 @@ namespace Tauron.Application.Converter
             if (imageSource != null) return false;
 
             GetLogger().Warn("InmageSource are null. {0}",
-                provider.GetService<IProvideValueTarget>().TargetObject);
+                             provider.GetService<IProvideValueTarget>().TargetObject);
 
 
             return true;

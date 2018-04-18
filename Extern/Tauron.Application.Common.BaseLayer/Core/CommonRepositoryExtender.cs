@@ -13,7 +13,6 @@ namespace Tauron.Application.Common.BaseLayer.Core
         protected CommonRepositoryExtender()
             : this(new CommonFactory<TDbContext>())
         {
-            
         }
 
         protected CommonRepositoryExtender(IDatabaseFactory factory)

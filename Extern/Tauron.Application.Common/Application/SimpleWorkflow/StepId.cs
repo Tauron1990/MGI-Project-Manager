@@ -8,11 +8,11 @@ namespace Tauron.Application.SimpleWorkflow
         //public static readonly StepId Null = new StepId();
 
         public static readonly StepId Invalid = new StepId("Invalid");
-        public static readonly StepId None = new StepId("None");
-        public static readonly StepId Finish = new StepId("Finish");
-        public static readonly StepId Loop = new StepId("Loop");
+        public static readonly StepId None    = new StepId("None");
+        public static readonly StepId Finish  = new StepId("Finish");
+        public static readonly StepId Loop    = new StepId("Loop");
         public static readonly StepId LoopEnd = new StepId("LoopEnd");
-        public static readonly StepId Skip = new StepId("Skip");
+        public static readonly StepId Skip    = new StepId("Skip");
 
         [DebuggerStepThrough]
         public override int GetHashCode()

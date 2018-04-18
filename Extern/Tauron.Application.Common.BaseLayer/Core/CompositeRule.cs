@@ -15,6 +15,26 @@ namespace Tauron.Application.Common.BaseLayer.Core
 
         public override string InitializeMethod { get; } = nameof(Initialize);
 
+        public override object GenericAction(object input)
+        {
+            return input == null ? Run(default(TInput)) : Run((TInput) input);
+        }
+
+        void IBusinessRule.Action()
+        {
+            Run(default(TInput));
+        }
+
+        void IIBusinessRule<TInput>.Action(TInput input)
+        {
+            Run(input);
+        }
+
+        public TOutput Action(TInput input)
+        {
+            return Run(input);
+        }
+
         public void Initialize(RepositoryFactory factory)
         {
             SetError(null);
@@ -22,24 +42,9 @@ namespace Tauron.Application.Common.BaseLayer.Core
             RepositoryFactory = factory;
 
             foreach (var rule in _rules)
+            {
                 DatalayerHelper.InitializeRule(rule, factory);
-        }
-
-        public TOutput Action(TInput input)
-        {
-            return Run(input);
-        }
-        public override object GenericAction(object input)
-        {
-            return input == null ? Run(default(TInput)) : Run((TInput)input);
-        }
-        void IIBusinessRule<TInput>.Action(TInput input)
-        {
-            Run(input);
-        }
-        void IBusinessRule.Action()
-        {
-            Run(default(TInput));
+            }
         }
 
         private TOutput Run(TInput input)
@@ -47,11 +52,11 @@ namespace Tauron.Application.Common.BaseLayer.Core
             using (var db = RepositoryFactory.EnterCompositeMode())
             {
                 object output = input;
-                bool   change = false;
+                var    change = false;
 
                 foreach (var ruleBase in _rules)
                 {
-                    object tempObj = ruleBase.GenericAction(output);
+                    var tempObj = ruleBase.GenericAction(output);
                     if (ruleBase.Error)
                     {
                         SetError(ruleBase.Errors);

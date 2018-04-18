@@ -205,11 +205,11 @@ namespace Tauron.Application.Ioc
             /// </param>
             public PathExportProvider([NotNull] string path, [NotNull] string searchpattern, SearchOption option, bool discoverChanges)
             {
-                _path = path ?? throw new ArgumentNullException(nameof(path));
-                _searchpattern = searchpattern ?? throw new ArgumentNullException(nameof(searchpattern));
-                _option = option;
+                _path            = path ?? throw new ArgumentNullException(nameof(path));
+                _searchpattern   = searchpattern ?? throw new ArgumentNullException(nameof(searchpattern));
+                _option          = option;
                 _discoverChanges = discoverChanges;
-                _files = new List<string>(Directory.EnumerateFiles(path, searchpattern, option));
+                _files           = new List<string>(Directory.EnumerateFiles(path, searchpattern, option));
             }
 
             /// <summary>
@@ -276,13 +276,13 @@ namespace Tauron.Application.Ioc
                 if (!_discoverChanges) return _providers.SelectMany(pro => pro.CreateExports(factory));
 
                 _watcher = new FileSystemWatcher(_path, _searchpattern)
-                {
-                    EnableRaisingEvents = true,
-                    IncludeSubdirectories =
-                        _option
-                        == SearchOption
-                            .AllDirectories
-                };
+                           {
+                               EnableRaisingEvents = true,
+                               IncludeSubdirectories =
+                                   _option
+                                == SearchOption
+                                       .AllDirectories
+                           };
                 _watcher.Created += Created;
                 _watcher.Deleted += Deleted;
 
@@ -315,9 +315,9 @@ namespace Tauron.Application.Ioc
                     _providers.Add(pro);
 
                     OnExportsChanged(
-                        new ExportChangedEventArgs(
-                            pro.CreateExports(_factory).SelectMany(exp => exp.Item1.ExportMetadata),
-                            new ExportMetadata[0]));
+                                     new ExportChangedEventArgs(
+                                                                pro.CreateExports(_factory).SelectMany(exp => exp.Item1.ExportMetadata),
+                                                                new ExportMetadata[0]));
                 }
                 catch (BadImageFormatException)
                 {
@@ -342,7 +342,7 @@ namespace Tauron.Application.Ioc
 
                 try
                 {
-                    var pro = new AssemblyExportProvider(Assembly.LoadFrom(e.FullPath));
+                    var pro   = new AssemblyExportProvider(Assembly.LoadFrom(e.FullPath));
                     var index = _providers.IndexOf(pro);
                     if (index == -1) return;
 
@@ -350,9 +350,9 @@ namespace Tauron.Application.Ioc
 
                     _providers.RemoveAt(index);
                     OnExportsChanged(
-                        new ExportChangedEventArgs(
-                            new ExportMetadata[0],
-                            pro.CreateExports(_factory).SelectMany(exp => exp.Item1.ExportMetadata)));
+                                     new ExportChangedEventArgs(
+                                                                new ExportMetadata[0],
+                                                                pro.CreateExports(_factory).SelectMany(exp => exp.Item1.ExportMetadata)));
                 }
                 catch (BadImageFormatException)
                 {
@@ -394,10 +394,10 @@ namespace Tauron.Application.Ioc
                     if (ex1 != null) exports.Add(Tuple.Create(ex1, currentLevel));
 
                     exports.AddRange(
-                        type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
-                            .Select(methodInfo => fac.CreateMethodExport(methodInfo, ref currentLevel))
-                            .Where(ex2 => ex2 != null)
-                            .Select(exp => Tuple.Create(exp, currentLevel)));
+                                     type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
+                                         .Select(methodInfo => fac.CreateMethodExport(methodInfo, ref currentLevel))
+                                         .Where(ex2 => ex2 != null)
+                                         .Select(exp => Tuple.Create(exp, currentLevel)));
                 }
 
                 _exports = exports.ToArray();
@@ -589,20 +589,22 @@ namespace Tauron.Application.Ioc
         ///     The export provider registry.
         /// </param>
         public void Fill(
-            [NotNull] ComponentRegistry componentRegistry,
-            [NotNull] ExportRegistry exportRegistry,
+            [NotNull] ComponentRegistry      componentRegistry,
+            [NotNull] ExportRegistry         exportRegistry,
             [NotNull] ExportProviderRegistry exportProviderRegistry)
         {
             if (componentRegistry == null) throw new ArgumentNullException(nameof(componentRegistry));
             if (exportRegistry == null) throw new ArgumentNullException(nameof(exportRegistry));
             if (exportProviderRegistry == null) throw new ArgumentNullException(nameof(exportProviderRegistry));
-            var factorys = new Dictionary<string, IExportFactory>();
+            var factorys                                                                                         = new Dictionary<string, IExportFactory>();
             foreach (var factory in componentRegistry.GetAll<IExportFactory>()) factorys[factory.TechnologyName] = factory;
 
             foreach (var exportProvider in _providers)
             {
                 foreach (var export in exportProvider.CreateExports(factorys[exportProvider.Technology]))
+                {
                     exportRegistry.Register(export.Item1, export.Item2);
+                }
 
                 if (exportProvider.BroadcastChanges) exportProviderRegistry.Add(exportProvider);
             }

@@ -24,7 +24,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Services
         {
             return Secure(() =>
                           {
-                              bool ok = UserManager.ChangePassword(name, oldPassword, newPassword, out var reason);
+                              var ok = UserManager.ChangePassword(name, oldPassword, newPassword, out var reason);
 
                               return new GenericServiceResult(ok, reason);
                           });

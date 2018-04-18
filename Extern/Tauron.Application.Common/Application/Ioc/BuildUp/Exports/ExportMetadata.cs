@@ -32,16 +32,16 @@ namespace Tauron.Application.Ioc.BuildUp.Exports
         /// <param name="export">
         ///     The export.
         /// </param>
-        public ExportMetadata([NotNull] Type interfaceType, [CanBeNull] string contractName, [NotNull] Type lifetime,
-            [NotNull] Dictionary<string, object> metadata, [NotNull] IExport export)
+        public ExportMetadata([NotNull] Type                       interfaceType, [CanBeNull] string  contractName, [NotNull] Type lifetime,
+                              [NotNull] Dictionary<string, object> metadata,      [NotNull]   IExport export)
         {
             if (interfaceType == null) throw new ArgumentNullException(nameof(interfaceType));
             if (lifetime == null) throw new ArgumentNullException(nameof(lifetime));
             InterfaceType = interfaceType;
-            ContractName = contractName;
-            Lifetime = lifetime;
-            Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
-            Export = export ?? throw new ArgumentNullException(nameof(export));
+            ContractName  = contractName;
+            Lifetime      = lifetime;
+            Metadata      = metadata ?? throw new ArgumentNullException(nameof(metadata));
+            Export        = export ?? throw new ArgumentNullException(nameof(export));
         }
 
         #endregion
@@ -97,7 +97,7 @@ namespace Tauron.Application.Ioc.BuildUp.Exports
             if (ReferenceEquals(this, other)) return true;
 
             return InterfaceType == other.InterfaceType && string.Equals(ContractName, other.ContractName)
-                   && Lifetime == other.Lifetime && Export.Equals(other.Export);
+                                                        && Lifetime == other.Lifetime && Export.Equals(other.Export);
         }
 
         /// <summary>The ==.</summary>

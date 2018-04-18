@@ -29,7 +29,7 @@ namespace Tauron.Application
 
             public DispoableBlocker(UISyncObservableCollection<TType> collection)
             {
-                _collection = collection;
+                _collection            = collection;
                 _collection._isBlocked = true;
             }
 

@@ -7,17 +7,17 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
     public class ImportInterceptorHelper
     {
         private readonly IImportInterceptor _interceptor;
-        private readonly MemberInfo _member;
-        private readonly ImportMetadata _metadata;
-        private readonly object _target;
+        private readonly MemberInfo         _member;
+        private readonly ImportMetadata     _metadata;
+        private readonly object             _target;
 
         public ImportInterceptorHelper([NotNull] IImportInterceptor interceptor, [NotNull] MemberInfo member,
-            [NotNull] ImportMetadata metadata, [NotNull] object target)
+                                       [NotNull] ImportMetadata     metadata,    [NotNull] object     target)
         {
             _interceptor = interceptor;
-            _member = member;
-            _metadata = metadata;
-            _target = target;
+            _member      = member;
+            _metadata    = metadata;
+            _target      = target;
         }
 
         public bool Intercept([CanBeNull] ref object value)

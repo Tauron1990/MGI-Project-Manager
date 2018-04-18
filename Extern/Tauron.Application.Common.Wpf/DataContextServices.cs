@@ -103,10 +103,10 @@ namespace Tauron.Application
                 /// </param>
                 public DataChangingCompledTask([NotNull] MethodInfo info, [NotNull] object dataContext, bool sync)
                 {
-                    Synchronize = sync;
-                    _info = info;
+                    Synchronize  = sync;
+                    _info        = info;
                     _dataContext = dataContext;
-                    _task = new TaskCompletionSource<object>();
+                    _task        = new TaskCompletionSource<object>();
                     _task.SetResult(null);
                 }
 
@@ -154,7 +154,7 @@ namespace Tauron.Application
             /// </param>
             public ObjectReference([NotNull] DependencyObject obj)
             {
-                _pips = new List<IPipeLine>();
+                _pips   = new List<IPipeLine>();
                 _target = new WeakReference<DependencyObject>(obj);
             }
 
@@ -195,7 +195,7 @@ namespace Tauron.Application
                 var context = FindDataContext(DependencyObject);
                 if (context != null)
                 {
-                    pipline.DataContext = new WeakReference(context);
+                    pipline.DataContext   = new WeakReference(context);
                     pipline.TaskScheduler = schedule;
                 }
 
@@ -246,8 +246,8 @@ namespace Tauron.Application
                 if (memInfo == null) return;
 
                 scheduler.QueueTask(
-                    new DataChangingCompledTask(memInfo.Item1.CastObj<MethodInfo>(), dataContext,
-                        memInfo.Item2.Sync));
+                                    new DataChangingCompledTask(memInfo.Item1.CastObj<MethodInfo>(), dataContext,
+                                                                memInfo.Item2.Sync));
             }
 
             #endregion
@@ -269,7 +269,7 @@ namespace Tauron.Application
             /// </param>
             public RequestingElement([CanBeNull] DependencyObject obj, [NotNull] IPipeLine pipline)
             {
-                _depObj = new FrameworkObject(obj);
+                _depObj  = new FrameworkObject(obj);
                 _pipline = pipline;
 
                 _depObj.LoadedEvent += LoadedEventHandler;
@@ -288,7 +288,7 @@ namespace Tauron.Application
             private void LoadedEventHandler([NotNull] object sender, [NotNull] RoutedEventArgs e)
             {
                 _depObj.LoadedEvent -= LoadedEventHandler;
-                _isClear = true;
+                _isClear            =  true;
                 if (RegisterHandler(_depObj.Original, _pipline)) TriggerRebind(_depObj.Original, _pipline);
             }
 
@@ -308,23 +308,23 @@ namespace Tauron.Application
         #region Static Fields
 
         public static readonly DependencyProperty ActivateProperty = DependencyProperty.RegisterAttached(
-            "Activate",
-            typeof(bool),
-            typeof(
-                DataContextServices
-            ),
-            new UIPropertyMetadata
-            (false,
-                OnActivateChanged));
+                                                                                                         "Activate",
+                                                                                                         typeof(bool),
+                                                                                                         typeof(
+                                                                                                                 DataContextServices
+                                                                                                             ),
+                                                                                                         new UIPropertyMetadata
+                                                                                                             (false,
+                                                                                                              OnActivateChanged));
 
         public static readonly DependencyProperty DataContextProperty =
             DependencyProperty.RegisterAttached(
-                "DataContext",
-                typeof(object),
-                typeof(DataContextServices),
-                new FrameworkPropertyMetadata(null,
-                    FrameworkPropertyMetadataOptions.Inherits,
-                    BeginDataContextChanging));
+                                                "DataContext",
+                                                typeof(object),
+                                                typeof(DataContextServices),
+                                                new FrameworkPropertyMetadata(null,
+                                                                              FrameworkPropertyMetadataOptions.Inherits,
+                                                                              BeginDataContextChanging));
 
         private static readonly WeakReferenceCollection<ObjectReference> Objects =
             new WeakReferenceCollection<ObjectReference>();
@@ -505,7 +505,7 @@ namespace Tauron.Application
         {
             if (DesignerProperties.GetIsInDesignMode(d)) return;
 
-            var after = e.NewValue.CastObj<bool>();
+            var after  = e.NewValue.CastObj<bool>();
             var before = e.OldValue.CastObj<bool>();
             if (after && before) return;
 
@@ -533,8 +533,8 @@ namespace Tauron.Application
             if (dataContext == null) return;
 
             CommonApplication.Scheduler.QueueTask(
-                pipline.Generate(new WeakReference(dataContext),
-                    CommonApplication.Scheduler));
+                                                  pipline.Generate(new WeakReference(dataContext),
+                                                                   CommonApplication.Scheduler));
         }
 
         #endregion

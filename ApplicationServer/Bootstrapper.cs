@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Tauron.Application.Implement;
 
 namespace Tauron.Application.ProjectManager.ApplicationServer
@@ -8,24 +9,23 @@ namespace Tauron.Application.ProjectManager.ApplicationServer
         private static Core.Application _app;
 
         public static bool Start(bool console, IpSettings settings)
-        { 
-            if(_app != null) throw new InvalidOperationException("Application already Started");
+        {
+            if (_app != null) throw new InvalidOperationException("Application already Started");
 
             _app = new Core.Application(console, settings);
 
-            string name = "MGI-Project-Manager";
+            var name = "MGI-Project-Manager";
 
             if (!SingleInstance<Core.Application>.InitializeAsFirstInstance(name, _app)) return false;
 
-            _app.Run();
+            Task.Run(() => _app.Run());
 
             return true;
-
         }
 
         public static void Stop()
         {
-            if(_app == null) return;
+            if (_app == null) return;
 
             _app.Shutdown();
 

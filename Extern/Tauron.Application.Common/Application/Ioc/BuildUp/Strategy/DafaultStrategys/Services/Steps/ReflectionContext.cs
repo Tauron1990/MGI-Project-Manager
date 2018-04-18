@@ -25,14 +25,14 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
 
         private readonly InjectorContext _parentContext;
 
-        public ReflectionContext([NotNull] IMetadataFactory metadataFactory, [NotNull] Type memberType,
-            [NotNull] InjectorContext parentContext, [NotNull] IResolverExtension[] resolverExtensions)
+        public ReflectionContext([NotNull] IMetadataFactory metadataFactory, [NotNull] Type                 memberType,
+                                 [NotNull] InjectorContext  parentContext,   [NotNull] IResolverExtension[] resolverExtensions)
         {
-            _parentContext = parentContext;
-            MetadataFactory = metadataFactory;
-            MemberType = memberType;
-            ResolverExtensions = resolverExtensions;
-            CurrentType = memberType;
+            _parentContext          = parentContext;
+            MetadataFactory         = metadataFactory;
+            MemberType              = memberType;
+            ResolverExtensions      = resolverExtensions;
+            CurrentType             = memberType;
             BuildParametersRegistry = new ExportRegistry();
         }
 
@@ -91,9 +91,9 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
 
             return
                 BuildParametersRegistry.FindAll(type, name, new ErrorTracer())
-                    .Union(
-                        _parentContext.Container.FindExports(type, name, _parentContext.Tracer, Level),
-                        new UionExportMetatdataEqualityComparer());
+                                       .Union(
+                                              _parentContext.Container.FindExports(type, name, _parentContext.Tracer, Level),
+                                              new UionExportMetatdataEqualityComparer());
         }
 
         [CanBeNull]
@@ -113,7 +113,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
             if (temp != null) return temp;
 
             return _parentContext.Container.FindExport(_parentContext.Metadata.InterfaceType ?? ExtractRealType(CurrentType), _parentContext.Metadata.ContractName,
-                _parentContext.Tracer, _parentContext.Metadata.Optional, Level);
+                                                       _parentContext.Tracer, _parentContext.Metadata.Optional, Level);
         }
 
         [NotNull]

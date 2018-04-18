@@ -72,9 +72,9 @@ namespace Tauron.Application.Aop.Threading
         protected internal override void Initialize(object target, ObjectContext context, string contextName)
         {
             _holder = BaseHolder.GetOrAdd<MonitorHolder, MonitorHolder>(
-                context,
-                () => new MonitorHolder(),
-                HolderName);
+                                                                        context,
+                                                                        () => new MonitorHolder(),
+                                                                        HolderName);
 
             base.Initialize(target, context, contextName);
         }
@@ -129,12 +129,12 @@ namespace Tauron.Application.Aop.Threading
         protected internal override void Register(ObjectContext context, MemberInfo info, object target)
         {
             context.Register<MonitorHolder, MonitorHolder>(
-                new MonitorHolder(info.GetInvokeMember<object>(target))
-                {
-                    Name
-                        =
-                        HolderName
-                });
+                                                           new MonitorHolder(info.GetInvokeMember<object>(target))
+                                                           {
+                                                               Name
+                                                                   =
+                                                                   HolderName
+                                                           });
         }
 
         #endregion

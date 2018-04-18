@@ -46,9 +46,9 @@ namespace Tauron.Application.Implementation
         {
             var win = window as WpfWindow;
             Application.Dispatcher.BeginInvoke(
-                win == null
-                    ? new Action(() => Application.Run())
-                    : (() => Application.Run((Window) win.TranslateForTechnology())));
+                                               win == null
+                                                   ? new Action(() => Application.Run())
+                                                   : () => Application.Run((Window) win.TranslateForTechnology()));
         }
 
         #endregion
@@ -112,14 +112,14 @@ namespace Tauron.Application.Implementation
 
         internal static void Initialize([CanBeNull] CultureInfo info)
         {
-            if(Application != null) return;
+            if (Application != null) return;
 
             _waiter = new ManualResetEventSlim();
             var runner = new Thread(RunApplication) {IsBackground = false};
 
             if (info != null && !info.Equals(CultureInfo.InvariantCulture))
             {
-                runner.CurrentCulture = info;
+                runner.CurrentCulture   = info;
                 runner.CurrentUICulture = info;
             }
 
@@ -147,6 +147,7 @@ namespace Tauron.Application.Implementation
                 _waiter.Dispose();
                 _waiter = null;
             }
+
             Application.Run();
 
             Debug.Print("WPF Application Exited");

@@ -11,32 +11,36 @@ using Tauron.Application.ProjectManager.ApplicationServer.Data;
 
 namespace Tauron.Application.ProjectManager.ApplicationServer.Core
 {
-    internal sealed class UIControllerFactoryFake : IUIControllerFactory
-    {
-        public IUIController CreateController() => new UIControllerFake();
-
-        public void SetSynchronizationContext() => UiSynchronize.Synchronize = new UISyncFace();
-    }
-
     internal sealed class Application : CommonApplication, ISingleInstanceApp
     {
-        private readonly bool _enableConsole;
-        private readonly IpSettings _settings;
+        private readonly bool             _enableConsole;
         private readonly ServiceContainer _serviceContainer = new ServiceContainer();
+        private readonly IpSettings       _settings;
 
         /// <inheritdoc />
         public Application(bool enableConsole, IpSettings settings) : base(true, null, new UIControllerFactoryFake())
         {
             _enableConsole = enableConsole;
-            _settings = settings;
+            _settings      = settings;
         }
 
         public override IContainer Container { get; set; }
 
-        public override string GetdefaultFileLocation() => GetDicPath();
+        public bool SignalExternalCommandLineArgs(IList<string> args)
+        {
+            return true;
+        }
 
-        private static string GetDicPath() => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
-                                                         .CombinePath("Tauron\\MGIProjectManager");
+        public override string GetdefaultFileLocation()
+        {
+            return GetDicPath();
+        }
+
+        private static string GetDicPath()
+        {
+            return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
+                              .CombinePath("Tauron\\MGIProjectManager");
+        }
 
         protected override void Fill(IContainer container)
         {
@@ -47,6 +51,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
             resolver.AddAssembly(typeof(Application).Assembly);
             resolver.AddAssembly(typeof(CommonApplication).Assembly);
             resolver.AddAssembly(typeof(RuleFactory).Assembly);
+            resolver.AddAssembly(typeof(ServiceContainer).Assembly);
 
             container.Register(resolver);
         }
@@ -63,24 +68,27 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
                                  FileName         = GetdefaultFileLocation().CombinePath("Logs\\ApplicationServer.log"),
                                  ArchiveNumbering = ArchiveNumberingMode.Rolling
                              };
-            
+
 
             config.AddTarget(filetarget);
             config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, filetarget));
 
-            if(!_enableConsole) return;
+            if (!_enableConsole) return;
 
-            var consoleTarget = new ConsoleTarget { DetectConsoleAvailable = true };
+            var consoleTarget = new ConsoleTarget {DetectConsoleAvailable = true, Name = "Console"};
             config.AddTarget(consoleTarget);
             config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
         }
 
-        protected override void OnStartupError(Exception e) => MessageBox.Show($"{e.GetType()} : {e.Message}", e.GetType().Name);
+        protected override void OnStartupError(Exception e)
+        {
+            MessageBox.Show($"{e.GetType()} : {e.Message}", e.GetType().Name);
+        }
 
         protected override IWindow DoStartup(CommandLineProcessor args)
         {
             DatabaseImpl.UpdateSchema();
-        
+
             _serviceContainer.Start(_settings);
 
             return null;
@@ -94,8 +102,9 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
             base.Shutdown();
         }
 
-        public bool SignalExternalCommandLineArgs(IList<string> args) => true;
-
-        public void Run() => OnStartup(new string[0]);
+        public void Run()
+        {
+            OnStartup(new string[0]);
+        }
     }
 }

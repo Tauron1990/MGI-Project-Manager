@@ -11,8 +11,14 @@ namespace Tauron.Application.ProjectManager.Generic.Clients
         {
         }
 
-        public string[] GetUsers() => Secure(() => Channel.GetUsers());
+        public string[] GetUsers()
+        {
+            return Secure(() => Channel.GetUsers());
+        }
 
-        public GenericServiceResult ChangePassword(string name, string newPassword, string oldPassword) => Secure(() => Channel.ChangePassword(name, newPassword, oldPassword));
+        public GenericServiceResult ChangePassword(string name, string newPassword, string oldPassword)
+        {
+            return Secure(() => Channel.ChangePassword(name, newPassword, oldPassword));
+        }
     }
 }

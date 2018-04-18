@@ -52,12 +52,12 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
                 if (attr != null)
                     yield return
                         new ImportMetadata(
-                            eventInfo.EventHandlerType,
-                            attr.Topic,
-                            exportType,
-                            eventInfo.Name,
-                            true,
-                            null);
+                                           eventInfo.EventHandlerType,
+                                           attr.Topic,
+                                           exportType,
+                                           eventInfo.Name,
+                                           true,
+                                           null);
             }
 
             foreach (var methodInfo in exportType.ImplementType.GetMethods(AopConstants.DefaultBindingFlags))
@@ -67,16 +67,16 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
 
                 yield return
                     new ImportMetadata(
-                        methodInfo.GetType(),
-                        attr.Topic,
-                        exportType,
-                        methodInfo.Name,
-                        true,
-                        new Dictionary<string, object>
-                        {
-                            {AopConstants.EventMetodMetadataName, true},
-                            {AopConstants.EventTopicMetadataName, attr.Topic}
-                        });
+                                       methodInfo.GetType(),
+                                       attr.Topic,
+                                       exportType,
+                                       methodInfo.Name,
+                                       true,
+                                       new Dictionary<string, object>
+                                       {
+                                           {AopConstants.EventMetodMetadataName, true},
+                                           {AopConstants.EventTopicMetadataName, attr.Topic}
+                                       });
             }
         }
 

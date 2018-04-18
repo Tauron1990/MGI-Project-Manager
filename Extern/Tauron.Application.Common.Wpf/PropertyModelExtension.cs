@@ -50,8 +50,8 @@ namespace Tauron.Application
 
                 var targetImports =
                     imports.Where(meta => meta.Metadata.ContainsKey(EnablePropertyInheritanceMetadataName))
-                        .Where(m => (bool) m.Metadata[EnablePropertyInheritanceMetadataName])
-                        .ToArray();
+                           .Where(m => (bool) m.Metadata[EnablePropertyInheritanceMetadataName])
+                           .ToArray();
 
                 if (targetImports.Length == 0) return GenericGenerator;
 

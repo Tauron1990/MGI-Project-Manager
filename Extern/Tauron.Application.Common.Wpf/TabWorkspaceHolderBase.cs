@@ -2,7 +2,7 @@
 
 namespace Tauron.Application
 {
-    public abstract class TabWorkspaceHolderBase<TWorkspace> : ViewModelBase, IWorkspaceHolder 
+    public abstract class TabWorkspaceHolderBase<TWorkspace> : ViewModelBase, IWorkspaceHolder
         where TWorkspace : class, ITabWorkspace
     {
         protected TabWorkspaceHolderBase()
@@ -14,7 +14,6 @@ namespace Tauron.Application
 
         public virtual void Register(ITabWorkspace workspace)
         {
-            
         }
 
         public virtual void UnRegister(ITabWorkspace workspace)

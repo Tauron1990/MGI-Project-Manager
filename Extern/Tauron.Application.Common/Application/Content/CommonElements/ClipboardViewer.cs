@@ -160,8 +160,8 @@ namespace Tauron.Application
             {
                 _target.AddHook(WinProc); // start processing window messages
                 _hWndNextViewer = new ViewerSafeHandle(
-                    NativeMethods.SetClipboardViewer(_target.Handle),
-                    _target); // set this window as a viewer
+                                                       NativeMethods.SetClipboardViewer(_target.Handle),
+                                                       _target); // set this window as a viewer
             }
 
             _isViewing = true;

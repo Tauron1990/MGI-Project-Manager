@@ -109,7 +109,7 @@ namespace Tauron.Application
         /// <param name="item">
         ///     The item.
         /// </param>
-        public void Add([CanBeNull] TType item)
+        public void Add(TType item)
         {
             if (item == null) return;
 
@@ -131,7 +131,7 @@ namespace Tauron.Application
         /// <returns>
         ///     The <see cref="bool" />.
         /// </returns>
-        public bool Contains([CanBeNull] TType item)
+        public bool Contains(TType item)
         {
             return item != null && _internalCollection.Any(it => it.TypedTarget() == item);
         }
@@ -171,8 +171,8 @@ namespace Tauron.Application
         {
             return
                 _internalCollection.Select(reference => reference.TypedTarget())
-                    .Where(target => target != null)
-                    .GetEnumerator();
+                                   .Where(target => target != null)
+                                   .GetEnumerator();
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace Tauron.Application
         /// <returns>
         ///     The <see cref="int" />.
         /// </returns>
-        public int IndexOf([CanBeNull] TType item)
+        public int IndexOf(TType item)
         {
             if (item == null) return -1;
 
@@ -207,7 +207,7 @@ namespace Tauron.Application
         /// <param name="item">
         ///     The item.
         /// </param>
-        public void Insert(int index, [CanBeNull] TType item)
+        public void Insert(int index, TType item)
         {
             if (item == null) return;
 
@@ -223,7 +223,7 @@ namespace Tauron.Application
         /// <returns>
         ///     The <see cref="bool" />.
         /// </returns>
-        public bool Remove([CanBeNull] TType item)
+        public bool Remove(TType item)
         {
             if (item == null) return false;
 
@@ -262,7 +262,7 @@ namespace Tauron.Application
         /// <summary>The on cleaned.</summary>
         private void OnCleaned()
         {
-            if (CleanedEvent != null) CleanedEvent(this, EventArgs.Empty);
+            CleanedEvent?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion
@@ -296,10 +296,7 @@ namespace Tauron.Application
         /// <summary>The clear items.</summary>
         protected override void ClearItems()
         {
-            lock (this)
-            {
-                base.ClearItems();
-            }
+            lock (this) base.ClearItems();
         }
 
         /// <summary>
@@ -329,10 +326,7 @@ namespace Tauron.Application
         /// </param>
         protected override void RemoveItem(int index)
         {
-            lock (this)
-            {
-                base.RemoveItem(index);
-            }
+            lock (this) base.RemoveItem(index);
         }
 
         /// <summary>
@@ -346,10 +340,7 @@ namespace Tauron.Application
         /// </param>
         protected override void SetItem(int index, TType item)
         {
-            lock (this)
-            {
-                base.SetItem(index, item);
-            }
+            lock (this) base.SetItem(index, item);
         }
 
         /// <summary>The clean up method.</summary>
@@ -358,16 +349,15 @@ namespace Tauron.Application
             lock (this)
             {
                 Items.ToArray()
-                    .Where(it => !it.IsAlive)
-                    .ToArray()
-                    .Foreach(
-                        it =>
-                        {
-                            var dis = it as IDisposable;
-                            if (dis != null) dis.Dispose();
+                     .Where(it => !it.IsAlive)
+                     .ToArray()
+                     .Foreach(
+                              it =>
+                              {
+                                  if (it is IDisposable dis) dis.Dispose();
 
-                            Items.Remove(it);
-                        });
+                                  Items.Remove(it);
+                              });
             }
         }
 

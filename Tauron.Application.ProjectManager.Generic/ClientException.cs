@@ -7,7 +7,6 @@ namespace Tauron.Application.ProjectManager.Generic
         public ClientException(string message, Exception source)
             : base(message, source)
         {
-            
         }
     }
 }

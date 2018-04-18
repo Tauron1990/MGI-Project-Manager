@@ -61,6 +61,15 @@ namespace Tauron.Application.ProjectManager.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Admin Password need to Changed ähnelt.
+        /// </summary>
+        public static string Label_AdminPasswordChange {
+            get {
+                return ResourceManager.GetString("Label_AdminPasswordChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Error: ähnelt.
         /// </summary>
         public static string Label_Common_Error {
@@ -75,6 +84,33 @@ namespace Tauron.Application.ProjectManager.Resources {
         public static string Label_NewUser_Instruction_Text {
             get {
                 return ResourceManager.GetString("Label_NewUser_Instruction_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ReConnect ähnelt.
+        /// </summary>
+        public static string Label_ReConnect {
+            get {
+                return ResourceManager.GetString("Label_ReConnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Export Ok ähnelt.
+        /// </summary>
+        public static string Text_IpExport_Ok {
+            get {
+                return ResourceManager.GetString("Text_IpExport_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No Login Provided ähnelt.
+        /// </summary>
+        public static string Text_Login_Faild {
+            get {
+                return ResourceManager.GetString("Text_Login_Faild", resourceCulture);
             }
         }
     }

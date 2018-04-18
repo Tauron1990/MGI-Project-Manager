@@ -15,7 +15,7 @@ namespace Tauron.Application.Views
         public ExportViewAttribute([NotNull] string viewName) : base(typeof(Control))
         {
             if (viewName == null) throw new ArgumentNullException(nameof(viewName));
-            Name = viewName;
+            Name  = viewName;
             Order = int.MaxValue;
         }
 

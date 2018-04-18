@@ -68,7 +68,7 @@ namespace Tauron.Application.Converter
             public Converter(bool isHidden, bool reverse)
             {
                 _isHidden = isHidden;
-                _reverse = reverse;
+                _reverse  = reverse;
             }
 
             #endregion

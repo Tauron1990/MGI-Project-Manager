@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.ExceptionServices;
 using System.Security;
@@ -47,6 +48,12 @@ namespace Tauron.Application.ProjectManager.AdminClient
             }
         }
 
+        [Conditional("DEBUG")]
+        public static void DEBUGSTART()
+        {
+            WpfApplication.Run<App>(null, new CultureInfo("de-de"));
+        }
+
         private static void SignalFirstInstance([NotNull] string channelName, [NotNull] string applicationIdentifier)
         {
             if (channelName == null) throw new ArgumentNullException(nameof(channelName));
@@ -56,13 +63,22 @@ namespace Tauron.Application.ProjectManager.AdminClient
                                                     SingleInstance<App>.GetCommandLineArgs(applicationIdentifier));
         }
 
-        private static void CleanUp() => SingleInstance<App>.Cleanup();
+        private static void CleanUp()
+        {
+            SingleInstance<App>.Cleanup();
+        }
 
 
-        private static void StartApp([NotNull] Mutex mutex, [NotNull] string channelName) => App.Setup(mutex, channelName);
+        private static void StartApp([NotNull] Mutex mutex, [NotNull] string channelName)
+        {
+            App.Setup(mutex, channelName);
+        }
 
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
-        private static void OnUnhandledException([NotNull] object sender, [NotNull] UnhandledExceptionEventArgs args) => CommonConstants.LogCommon(true, args.ExceptionObject.ToString());
+        private static void OnUnhandledException([NotNull] object sender, [NotNull] UnhandledExceptionEventArgs args)
+        {
+            CommonConstants.LogCommon(true, args.ExceptionObject.ToString());
+        }
     }
 }

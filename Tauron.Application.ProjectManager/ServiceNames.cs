@@ -3,6 +3,6 @@
     public static class ServiceNames
     {
         public const string AdminService = "Admin-Service";
-        public const string UserService = "User-Service";
+        public const string UserService  = "User-Service";
     }
 }

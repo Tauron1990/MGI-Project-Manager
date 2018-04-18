@@ -54,7 +54,7 @@ namespace Tauron.Application.Controls
             public DialogReporter([NotNull] ProgressDialog dialog, [NotNull] string text)
             {
                 _dialog = dialog;
-                _text = text;
+                _text   = text;
             }
 
             #endregion
@@ -70,9 +70,9 @@ namespace Tauron.Application.Controls
             public void Report([NotNull] ActiveProgress value)
             {
                 _dialog.ReportProgress(
-                    (int) value.OverAllProgress,
-                    _text,
-                    string.Format("{0} : {1}%", value.Message, (int) value.Percent));
+                                       (int) value.OverAllProgress,
+                                       _text,
+                                       string.Format("{0} : {1}%", value.Message, (int) value.Percent));
             }
 
             #endregion
@@ -106,16 +106,16 @@ namespace Tauron.Application.Controls
         /// </param>
         public SimpleProgressDialog([NotNull] string text, [NotNull] string title, [NotNull] IWindow owner, [NotNull] Action<IProgress<ActiveProgress>> worker)
         {
-            _owner = owner;
+            _owner  = owner;
             _worker = worker;
             _dialog = new ProgressDialog
-            {
-                Text = text,
-                ShowTimeRemaining = false,
-                WindowTitle = title,
-                ShowCancelButton = false
-            };
-            _dialog.DoWork += DoWork;
+                      {
+                          Text              = text,
+                          ShowTimeRemaining = false,
+                          WindowTitle       = title,
+                          ShowCancelButton  = false
+                      };
+            _dialog.DoWork             += DoWork;
             _dialog.RunWorkerCompleted += RunWorkerCompleted;
         }
 
@@ -162,14 +162,14 @@ namespace Tauron.Application.Controls
         public void Start()
         {
             ObservableObject.CurrentDispatcher.Invoke(
-                () =>
-                {
-                    if (_owner == null) _dialog.ShowDialog();
-                    else
-                        _dialog.ShowDialog(
-                            (Window)
-                            _owner.TranslateForTechnology());
-                });
+                                                      () =>
+                                                      {
+                                                          if (_owner == null) _dialog.ShowDialog();
+                                                          else
+                                                              _dialog.ShowDialog(
+                                                                                 (Window)
+                                                                                 _owner.TranslateForTechnology());
+                                                      });
         }
 
         #endregion

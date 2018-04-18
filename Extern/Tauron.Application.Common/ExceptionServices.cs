@@ -31,7 +31,7 @@ namespace Tauron
             if (ex == null) throw new ArgumentNullException(nameof(ex));
             ex = Unwrap(ex);
             return ex is StackOverflowException || ex is OutOfMemoryException || ex is ThreadAbortException
-                   || ex is SecurityException;
+                || ex is SecurityException;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Tauron
             if (ex == null) throw new ArgumentNullException(nameof(ex));
             ex = Unwrap(ex);
             return ex is NullReferenceException || ex is StackOverflowException || ex is OutOfMemoryException
-                   || ex is ThreadAbortException || ex is SEHException || ex is SecurityException;
+                || ex is ThreadAbortException || ex is SEHException || ex is SecurityException;
         }
 
         /// <summary>

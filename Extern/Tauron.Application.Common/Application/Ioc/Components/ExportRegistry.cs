@@ -130,14 +130,14 @@ namespace Tauron.Application.Ioc.Components
             }
             catch (Exception e)
             {
-                errorTracer.Exception = e;
+                errorTracer.Exception   = e;
                 errorTracer.Exceptional = true;
-                errorTracer.Export = ErrorTracer.FormatExport(type, contractName);
+                errorTracer.Export      = ErrorTracer.FormatExport(type, contractName);
 
                 return Enumerable.Empty<ExportMetadata>();
             }
         }
-        
+
         [CanBeNull]
         public ExportMetadata FindOptional([NotNull] Type type, [CanBeNull] string contractName, [NotNull] ErrorTracer errorTracer, int level = int.MaxValue)
         {
@@ -154,8 +154,8 @@ namespace Tauron.Application.Ioc.Components
                 if (arr.Length <= 1) return arr.Length == 0 ? null : arr[0];
 
                 errorTracer.Exceptional = true;
-                errorTracer.Exception = new InvalidOperationException("More then One Export Found");
-                errorTracer.Export = ErrorTracer.FormatExport(type, contractName);
+                errorTracer.Exception   = new InvalidOperationException("More then One Export Found");
+                errorTracer.Export      = ErrorTracer.FormatExport(type, contractName);
 
                 return arr.Length == 0 ? null : arr[0];
             }
@@ -172,8 +172,8 @@ namespace Tauron.Application.Ioc.Components
             if (temp != null) return temp;
 
             errorTracer.Exceptional = true;
-            errorTracer.Exception = new InvalidOperationException("No Export Found");
-            errorTracer.Export = ErrorTracer.FormatExport(type, contractName);
+            errorTracer.Exception   = new InvalidOperationException("No Export Found");
+            errorTracer.Export      = ErrorTracer.FormatExport(type, contractName);
 
             return null;
         }
@@ -182,18 +182,14 @@ namespace Tauron.Application.Ioc.Components
         {
             if (export == null) throw new ArgumentNullException(nameof(export));
             lock (this)
-            {
-                foreach (var type in export.Exports) _registrations.Add(level, type, export);
-            }
+                foreach (var type in export.Exports)
+                    _registrations.Add(level, type, export);
         }
 
         public void Remove([NotNull] IExport export)
         {
             if (export == null) throw new ArgumentNullException(nameof(export));
-            lock (this)
-            {
-                _registrations.RemoveValue(export);
-            }
+            lock (this) _registrations.RemoveValue(export);
         }
 
         #endregion

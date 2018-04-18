@@ -123,4 +123,16 @@
   <data name="Label_Common_Error" xml:space="preserve">
     <value>Fehler:</value>
   </data>
+  <data name="Text_IpExport_Ok" xml:space="preserve">
+    <value>Export Erfolgreich</value>
+  </data>
+  <data name="Text_Login_Faild" xml:space="preserve">
+    <value>Login Passwort Nicht Festgelegt</value>
+  </data>
+  <data name="Label_AdminPasswordChange" xml:space="preserve">
+    <value>Admin Password sollte geändert werden</value>
+  </data>
+  <data name="Label_ReConnect" xml:space="preserve">
+    <value>Neu Verbinden</value>
+  </data>
 </root>

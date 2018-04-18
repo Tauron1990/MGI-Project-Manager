@@ -35,7 +35,7 @@ namespace Tauron.Application.Ioc
     /// <summary>The inject attribute.</summary>
     [AttributeUsage(
         AttributeTargets.Constructor | AttributeTargets.Field | AttributeTargets.Method | AttributeTargets.Parameter
-        | AttributeTargets.Property)]
+      | AttributeTargets.Property)]
     [PublicAPI]
     [MeansImplicitUse(ImplicitUseKindFlags.Assign)]
     public class InjectAttribute : Attribute
@@ -50,7 +50,7 @@ namespace Tauron.Application.Ioc
         public InjectAttribute()
         {
             ContractName = null;
-            Optional = false;
+            Optional     = false;
         }
 
         public InjectAttribute(string contractName)

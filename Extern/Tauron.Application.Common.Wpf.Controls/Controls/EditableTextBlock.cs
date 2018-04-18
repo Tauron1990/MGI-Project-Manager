@@ -48,23 +48,23 @@ namespace Tauron.Application.Controls
         #region Static Fields
 
         public static readonly DependencyProperty IsInEditModeProperty = DependencyProperty.Register(
-            "IsInEditMode",
-            typeof(bool),
-            typeof(
-                EditableTextBlock
-            ),
-            new UIPropertyMetadata
-            (false,
-                IsInEditModeUpdate));
+                                                                                                     "IsInEditMode",
+                                                                                                     typeof(bool),
+                                                                                                     typeof(
+                                                                                                             EditableTextBlock
+                                                                                                         ),
+                                                                                                     new UIPropertyMetadata
+                                                                                                         (false,
+                                                                                                          IsInEditModeUpdate));
 
         // Using a DependencyProperty as the backing store for MaxLength.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MaxLengthProperty = DependencyProperty.Register(
-            "MaxLength",
-            typeof(int),
-            typeof(
-                EditableTextBlock),
-            new UIPropertyMetadata
-                (0));
+                                                                                                  "MaxLength",
+                                                                                                  typeof(int),
+                                                                                                  typeof(
+                                                                                                      EditableTextBlock),
+                                                                                                  new UIPropertyMetadata
+                                                                                                      (0));
 
         #endregion
 
@@ -110,7 +110,7 @@ namespace Tauron.Application.Controls
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             if (e.MiddleButton == MouseButtonState.Pressed) IsInEditMode = true;
-            else if (e.ClickCount == 2) IsInEditMode = true;
+            else if (e.ClickCount == 2) IsInEditMode                     = true;
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace Tauron.Application.Controls
                     textBlock._adorner = new EditableTextBlockAdorner(textBlock);
 
                     // Events wired to exit edit mode when the user presses Enter key or leaves the control.
-                    textBlock._adorner.TextBoxKeyUp += textBlock.TextBoxKeyUp;
+                    textBlock._adorner.TextBoxKeyUp     += textBlock.TextBoxKeyUp;
                     textBlock._adorner.TextBoxLostFocus += textBlock.TextBoxLostFocus;
                 }
 
@@ -149,7 +149,9 @@ namespace Tauron.Application.Controls
             {
                 // Remove the adorner from the adorner layer.
                 var adorners = layer.GetAdorners(textBlock);
-                if (adorners != null) foreach (var adorner in adorners.OfType<EditableTextBlockAdorner>()) layer.Remove(adorner);
+                if (adorners != null)
+                    foreach (var adorner in adorners.OfType<EditableTextBlockAdorner>())
+                        layer.Remove(adorner);
 
                 // Update the textblock's text binding.
                 var expression = textBlock.GetBindingExpression(TextProperty);

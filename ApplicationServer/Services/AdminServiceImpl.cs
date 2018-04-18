@@ -22,12 +22,21 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Services
             Logger.Log(LogLevel.Info, $"Admin Login - {DateTime.Today}");
         }
 
+        public bool IsAdminPasswordNull()
+        {
+            return Secure(() =>
+                          {
+                              CheckAdmin();
+                              return UserManager.HasNoPassword("admin");
+                          });
+        }
+
         public GenericServiceResult CreateUser(string userName, string password)
         {
             return Secure(() =>
                           {
                               CheckAdmin();
-                              bool ok = UserManager.CreateUser(userName, password, out var reason);
+                              var ok = UserManager.CreateUser(userName, password, out var reason);
 
                               return new GenericServiceResult(ok, reason);
                           });
@@ -39,13 +48,17 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Services
                           {
                               CheckAdmin();
 
-                              bool ok = UserManager.DeleteUser(userName, out var reason);
+                              var ok = UserManager.DeleteUser(userName, out var reason);
 
                               return new GenericServiceResult(ok, reason);
                           });
         }
 
-        public void AdminLogout() => _adminGrandet = false;
+        public void AdminLogout()
+        {
+            _adminGrandet = false;
+            Logger.Info("Admin - Logout");
+        }
 
         private void CheckAdmin()
         {

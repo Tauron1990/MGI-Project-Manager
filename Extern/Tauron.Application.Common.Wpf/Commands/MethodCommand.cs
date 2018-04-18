@@ -15,7 +15,7 @@ namespace Tauron.Application.Commands
         internal EventData([NotNull] object sender, [NotNull] EventArgs eventArgs)
         {
             if (sender == null) throw new ArgumentNullException(nameof(sender));
-            Sender = sender;
+            Sender    = sender;
             EventArgs = eventArgs;
         }
 
@@ -76,7 +76,7 @@ namespace Tauron.Application.Commands
         {
             if (method == null) throw new ArgumentNullException(nameof(method));
             if (context == null) throw new ArgumentNullException(nameof(context));
-            _method = method;
+            _method  = method;
             _context = context;
 
             _methodType = (MethodType) method.GetParameters().Length;
@@ -126,7 +126,7 @@ namespace Tauron.Application.Commands
                     args = new object[0];
                     break;
             }
-            
+
             _method.Invoke(Context, args);
         }
 

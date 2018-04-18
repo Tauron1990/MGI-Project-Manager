@@ -90,7 +90,10 @@ namespace Tauron.Application.Ioc
                 if (!HasMetadata) yield break;
 
                 foreach (var property in
-                    GetType().GetProperties().Where(property => property.Name != "Metadata")) yield return Tuple.Create(property.Name, property.GetValue(this));
+                    GetType().GetProperties().Where(property => property.Name != "Metadata"))
+                {
+                    yield return Tuple.Create(property.Name, property.GetValue(this));
+                }
             }
         }
 

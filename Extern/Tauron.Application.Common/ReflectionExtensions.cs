@@ -76,14 +76,14 @@ namespace Tauron
             return
                 (TValue)
                 domain.CreateInstanceAndUnwrap(
-                    targetType.Assembly.FullName,
-                    targetType.FullName,
-                    false,
-                    BindingFlags.Default,
-                    null,
-                    args,
-                    null,
-                    null);
+                                               targetType.Assembly.FullName,
+                                               targetType.FullName,
+                                               false,
+                                               BindingFlags.Default,
+                                               null,
+                                               args,
+                                               null,
+                                               null);
         }
 
         /// <summary>
@@ -107,8 +107,8 @@ namespace Tauron
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public static IEnumerable<Tuple<MemberInfo, TAttribute>> FindMemberAttributes<TAttribute>(
             [NotNull] this Type type,
-            bool nonPublic,
-            BindingFlags bindingflags) where TAttribute : Attribute
+            bool                nonPublic,
+            BindingFlags        bindingflags) where TAttribute : Attribute
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             bindingflags |= BindingFlags.Public;
@@ -116,14 +116,14 @@ namespace Tauron
 
             if (!Enum.IsDefined(typeof(BindingFlags), BindingFlags.FlattenHierarchy))
                 return from mem in type.GetMembers(bindingflags)
-                    let attr = CustomAttributeExtensions.GetCustomAttribute<TAttribute>(mem)
-                    where attr != null
-                    select Tuple.Create(mem, attr);
+                       let attr = CustomAttributeExtensions.GetCustomAttribute<TAttribute>(mem)
+                       where attr != null
+                       select Tuple.Create(mem, attr);
 
             return from mem in type.GetHieratichialMembers(bindingflags)
-                let attr = mem.GetCustomAttribute<TAttribute>()
-                where attr != null
-                select Tuple.Create(mem, attr);
+                   let attr = mem.GetCustomAttribute<TAttribute>()
+                   where attr != null
+                   select Tuple.Create(mem, attr);
         }
 
         [NotNull]
@@ -155,13 +155,13 @@ namespace Tauron
         [NotNull]
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public static IEnumerable<Tuple<MemberInfo, TAttribute>> FindMemberAttributes<TAttribute>([NotNull] this Type type,
-            bool nonPublic) where TAttribute : Attribute
+                                                                                                  bool                nonPublic) where TAttribute : Attribute
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             return FindMemberAttributes<TAttribute>(
-                type,
-                nonPublic,
-                BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                                                    type,
+                                                    nonPublic,
+                                                    BindingFlags.Instance | BindingFlags.FlattenHierarchy);
         }
 
         [NotNull]
@@ -269,7 +269,7 @@ namespace Tauron
             {
                 if (info is PropertyInfo)
                 {
-                    var property = info.CastObj<PropertyInfo>();
+                    var property                                              = info.CastObj<PropertyInfo>();
                     if (parameter != null && parameter.Length == 0) parameter = null;
 
                     return (TType) property.GetValue(instance, parameter);
@@ -341,18 +341,18 @@ namespace Tauron
             if (!method.IsSpecialName || method.Name.Length < 4) return null;
 
             var isGetMethod = method.Name.Substring(0, 4) == "get_";
-            var returnType = isGetMethod ? method.ReturnType : method.GetParameterTypes().Last();
+            var returnType  = isGetMethod ? method.ReturnType : method.GetParameterTypes().Last();
             var indexerTypes = isGetMethod
-                ? method.GetParameterTypes()
-                : method.GetParameterTypes().SkipLast(1);
+                                   ? method.GetParameterTypes()
+                                   : method.GetParameterTypes().SkipLast(1);
 
             return implementingType.GetProperty(
-                method.Name.Substring(4),
-                DefaultBindingFlags,
-                null,
-                returnType,
-                indexerTypes.ToArray(),
-                null);
+                                                method.Name.Substring(4),
+                                                DefaultBindingFlags,
+                                                null,
+                                                returnType,
+                                                indexerTypes.ToArray(),
+                                                null);
         }
 
         /// <summary>
@@ -521,7 +521,7 @@ namespace Tauron
         }
 
         public static TEnum TryParseEnum<TEnum>(this string value, TEnum defaultValue)
-            where TEnum : struct 
+            where TEnum : struct
         {
             try
             {
@@ -552,9 +552,9 @@ namespace Tauron
             if (info == null) throw new ArgumentNullException(nameof(info));
             if (info is PropertyInfo)
             {
-                var property = info.CastObj<PropertyInfo>();
-                object value = null;
-                object[] indexes = null;
+                var      property = info.CastObj<PropertyInfo>();
+                object   value    = null;
+                object[] indexes  = null;
                 if (parameter != null)
                 {
                     if (parameter.Length >= 1) value = parameter[0];
@@ -566,7 +566,7 @@ namespace Tauron
             }
             else if (info is FieldInfo)
             {
-                object value = null;
+                object value                 = null;
                 if (parameter != null) value = parameter.FirstOrDefault();
 
                 info.CastObj<FieldInfo>().SetValue(instance, value);

@@ -81,11 +81,11 @@ namespace Tauron.Application
         /// </param>
         protected CommonApplication(bool doStartup, [CanBeNull] ISplashService service, [NotNull] IUIControllerFactory factory)
         {
-            Factory = factory ?? throw new ArgumentNullException(nameof(factory));
-            Current = this;
-            _scheduler = new TaskScheduler(UiSynchronize.Synchronize);
-            _splash = service ?? new NullSplash();
-            _doStartup = doStartup;
+            Factory        = factory ?? throw new ArgumentNullException(nameof(factory));
+            Current        = this;
+            _scheduler     = new TaskScheduler(UiSynchronize.Synchronize);
+            _splash        = service ?? new NullSplash();
+            _doStartup     = doStartup;
             SourceAssembly = new AssemblyName(Assembly.GetAssembly(GetType()).FullName).Name;
         }
 
@@ -99,6 +99,11 @@ namespace Tauron.Application
         protected static string SourceAssembly { get; set; }
 
         #endregion
+
+        public virtual string GetdefaultFileLocation()
+        {
+            return AppDomain.CurrentDomain.BaseDirectory;
+        }
 
         #region Fields
 
@@ -187,7 +192,6 @@ namespace Tauron.Application
 
         protected virtual void ConfigurateLagging(LoggingConfiguration config)
         {
-            
         }
 
         /// <summary>The create container.</summary>
@@ -313,7 +317,7 @@ namespace Tauron.Application
 
                 listner.ReceiveMessage(Resources.Resources.Init_Msg_Step1);
 
-                LoggingConfiguration config = new LoggingConfiguration();
+                var config = new LoggingConfiguration();
                 ConfigurateLagging(config);
                 LogManager.Configuration = config;
 
@@ -322,9 +326,11 @@ namespace Tauron.Application
 
                 listner.ReceiveMessage(Resources.Resources.Init_Msg_Step2);
                 foreach (var module in Container.ResolveAll(typeof(IModule), null)
-                    .Cast<IModule>()
-                    .OrderBy(m => m.Order))
+                                                .Cast<IModule>()
+                                                .OrderBy(m => m.Order))
+                {
                     InitializeModule(module);
+                }
 
                 listner.ReceiveMessage(Resources.Resources.Init_Msg_Step3);
                 LoadResources();
@@ -337,11 +343,11 @@ namespace Tauron.Application
 
                 if (win != null)
                     UiSynchronize.Synchronize.Invoke(
-                        () =>
-                        {
-                            win.Show();
-                            win.Closed += MainWindowClosed;
-                        });
+                                                     () =>
+                                                     {
+                                                         win.Show();
+                                                         win.Closed += MainWindowClosed;
+                                                     });
 
                 _splash.CloseSplash();
                 _args = null;
@@ -364,10 +370,5 @@ namespace Tauron.Application
         }
 
         #endregion
-
-        public virtual string GetdefaultFileLocation()
-        {
-            return AppDomain.CurrentDomain.BaseDirectory;
-        }
     }
 }

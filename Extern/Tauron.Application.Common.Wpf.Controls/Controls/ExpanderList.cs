@@ -90,17 +90,17 @@ namespace Tauron.Application.Controls
         #region Static Fields
 
         public static readonly DependencyProperty HeaderProperty = DependencyProperty.RegisterAttached(
-            "Header",
-            typeof(object),
-            typeof(
-                ExpanderList),
-            new FrameworkPropertyMetadata
-            (
-                null,
-                FrameworkPropertyMetadataOptions
-                    .AffectsRender |
-                FrameworkPropertyMetadataOptions
-                    .AffectsMeasure));
+                                                                                                       "Header",
+                                                                                                       typeof(object),
+                                                                                                       typeof(
+                                                                                                           ExpanderList),
+                                                                                                       new FrameworkPropertyMetadata
+                                                                                                           (
+                                                                                                            null,
+                                                                                                            FrameworkPropertyMetadataOptions
+                                                                                                                .AffectsRender |
+                                                                                                            FrameworkPropertyMetadataOptions
+                                                                                                                .AffectsMeasure));
 
         #endregion
 
@@ -113,8 +113,8 @@ namespace Tauron.Application.Controls
         static ExpanderList()
         {
             DefaultStyleKeyProperty.OverrideMetadata(
-                typeof(ExpanderList),
-                new FrameworkPropertyMetadata(typeof(ExpanderList)));
+                                                     typeof(ExpanderList),
+                                                     new FrameworkPropertyMetadata(typeof(ExpanderList)));
         }
 
         #endregion

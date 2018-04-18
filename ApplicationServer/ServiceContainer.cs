@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using System.ServiceModel.Security;
 using Tauron.Application.ProjectManager.ApplicationServer.Core;
@@ -14,25 +16,38 @@ namespace Tauron.Application.ProjectManager.ApplicationServer
         {
             (typeof(AdminServiceImpl), typeof(IAdminService), ServiceNames.AdminService),
             (typeof(UserServiceImpl), typeof(IUserService), ServiceNames.UserService)
-        }; 
+        };
 
         private readonly List<ServiceHost> _services = new List<ServiceHost>();
 
         public void Start(IpSettings settings)
         {
+            var str = new SecureString();
+            foreach (var c in "tauron")
+            {
+                str.AppendChar(c);
+            }
+
             IpSettings.WriteIpSettings(settings);
 
-            Uri baseAddress = LocationHelper.GetBaseAdress(settings.NetworkTarget);
+            var baseAddress = LocationHelper.GetBaseAdress(settings.NetworkTarget);
 
             foreach (var serviceType in ServiceTypes)
             {
-                ServiceHost host = new ServiceHost(serviceType.Item1, baseAddress);
+                var host = new ServiceHost(serviceType.Item1, baseAddress);
 
-                host.Credentials.UserNameAuthentication.UserNamePasswordValidationMode = UserNamePasswordValidationMode.Custom;
-                host.Credentials.UserNameAuthentication.CustomUserNamePasswordValidator = new UserAuthentication();
+                host.Credentials.UserNameAuthentication.UserNamePasswordValidationMode       = UserNamePasswordValidationMode.Custom;
+                host.Credentials.UserNameAuthentication.CustomUserNamePasswordValidator      = new UserAuthentication();
+                host.Credentials.ServiceCertificate.Certificate                              = new X509Certificate2(Properties.Resources.local, str);
+                host.Credentials.ClientCertificate.Certificate                               = new X509Certificate2(Properties.Resources.local2, str);
+                host.Credentials.ClientCertificate.Authentication.CertificateValidationMode  = X509CertificateValidationMode.Custom;
+                host.Credentials.ClientCertificate.Authentication.CustomCertificateValidator = new CertificateValidator();
 
                 host.AddServiceEndpoint(serviceType.Item2, LocationHelper.CreateBinding(), serviceType.Item3);
-                
+                //var endpoint = host.AddServiceEndpoint(serviceType.Item2, LocationHelper.CreateBinding(), string.Empty);
+                //var endpointAdress = new EndpointAddress(new Uri(baseAddress, serviceType.Item3), EndpointIdentity.CreateDnsIdentity("MGI-Certificate-Authority"));
+                //endpoint.Address = endpointAdress;
+
                 host.Open();
                 _services.Add(host);
             }
@@ -41,7 +56,9 @@ namespace Tauron.Application.ProjectManager.ApplicationServer
         public void Stop()
         {
             foreach (var serviceHost in _services)
+            {
                 serviceHost.Close();
+            }
 
             _services.Clear();
         }

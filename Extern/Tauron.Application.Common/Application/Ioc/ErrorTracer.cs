@@ -8,7 +8,7 @@ namespace Tauron.Application.Ioc
     public sealed class ErrorTracer
     {
         private readonly StringBuilder _internalPhase = new StringBuilder();
-        private int _ident;
+        private          int           _ident;
 
         public bool Exceptional { get; set; }
 
@@ -19,7 +19,10 @@ namespace Tauron.Application.Ioc
             set
             {
                 for (var i = 0; i < _ident; i++)
+                {
                     _internalPhase.Append('\t');
+                }
+
                 _internalPhase.AppendLine(value);
             }
         }

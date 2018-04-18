@@ -112,7 +112,7 @@ namespace Tauron.Application.Implementation
         public Uri GetUri(string pack, string assembly, bool full)
         {
             var compledpack = GetString(pack, assembly, full);
-            var uriKind = full ? UriKind.Absolute : UriKind.Relative;
+            var uriKind     = full ? UriKind.Absolute : UriKind.Relative;
 
             return new Uri(compledpack, uriKind);
         }

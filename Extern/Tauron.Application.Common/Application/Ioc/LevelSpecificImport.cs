@@ -6,7 +6,7 @@ namespace Tauron.Application.Ioc
 {
     [AttributeUsage(
         AttributeTargets.Constructor | AttributeTargets.Field | AttributeTargets.Method | AttributeTargets.Parameter
-        | AttributeTargets.Property)]
+      | AttributeTargets.Property)]
     [PublicAPI]
     [MeansImplicitUse(ImplicitUseKindFlags.Assign)]
     public class LevelSpecificImport : InjectAttribute

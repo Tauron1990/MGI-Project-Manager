@@ -56,7 +56,7 @@ namespace Tauron.Application.Aop.Model
             public LoggerHelper(bool value, bool type)
             {
                 _value = value;
-                _type = type;
+                _type  = type;
             }
 
             #endregion
@@ -85,16 +85,15 @@ namespace Tauron.Application.Aop.Model
                 if (entry == null) throw new ArgumentNullException(nameof(entry));
                 if (invocation == null) throw new ArgumentNullException(nameof(invocation));
                 lock (this)
-                {
-                    if (!_initialized) Initialize(invocation.Method);
-                }
-                
-                entry.Properties["Parameters"] = _stringNmes;
+                    if (!_initialized)
+                        Initialize(invocation.Method);
+
+                entry.Properties["Parameters"]     = _stringNmes;
                 entry.Properties["ParameterTypes"] = _types;
 
                 if (!_value) return;
 
-                var args = invocation.Arguments;
+                var args                                                                                 = invocation.Arguments;
                 for (var i = 0; i < ParmNames.Length; i++) entry.Properties["Parameter:" + ParmNames[i]] = args[i];
             }
 
@@ -112,11 +111,11 @@ namespace Tauron.Application.Aop.Model
             {
                 if (info == null) throw new ArgumentNullException(nameof(info));
                 var parms = info.GetParameters();
-                ParmNames = parms.Select(parm => parm.Name).ToArray();
+                ParmNames   = parms.Select(parm => parm.Name).ToArray();
                 _stringNmes = ParmNames.Aggregate((working, next) => working + ", " + next);
                 if (_type)
                     _types = parms.Select(parm => parm.ParameterType)
-                        .Aggregate("Types: ", (s, type1) => s + type1.ToString() + ", ");
+                                  .Aggregate("Types: ", (s, type1) => s + type1.ToString() + ", ");
 
                 _initialized = true;
             }
@@ -152,10 +151,10 @@ namespace Tauron.Application.Aop.Model
         /// </summary>
         public TraceAttribute()
         {
-            Order = 100;
+            Order          = 100;
             TraceEventType = LogLevel.Info;
-            LogOptions = TraceAspectOptions.ParameterName;
-            LogTitle = string.Empty;
+            LogOptions     = TraceAspectOptions.ParameterName;
+            LogTitle       = string.Empty;
         }
 
         #endregion
@@ -167,7 +166,6 @@ namespace Tauron.Application.Aop.Model
 
         /// <summary>The _log return.</summary>
         private bool _logReturn;
-
 
         #endregion
 
@@ -185,7 +183,6 @@ namespace Tauron.Application.Aop.Model
         /// <summary>Gets or sets the trace event type.</summary>
         /// <value>The trace event type.</value>
         public LogLevel TraceEventType { get; set; }
-
 
         #endregion
 
@@ -207,8 +204,8 @@ namespace Tauron.Application.Aop.Model
         {
             base.Initialize(target, context, contextName);
 
-            var logParameterName = LogOptions.HasFlag(TraceAspectOptions.ParameterName);
-            var logParameterType = LogOptions.HasFlag(TraceAspectOptions.ParameterType);
+            var logParameterName  = LogOptions.HasFlag(TraceAspectOptions.ParameterName);
+            var logParameterType  = LogOptions.HasFlag(TraceAspectOptions.ParameterType);
             var logparameterValue = LogOptions.HasFlag(TraceAspectOptions.ParameterValue);
 
             _logReturn = LogOptions.HasFlag(TraceAspectOptions.ReturnValue);
@@ -230,12 +227,12 @@ namespace Tauron.Application.Aop.Model
         protected override void Intercept(IInvocation invocation, ObjectContext context)
         {
             var logger = LogManager.GetLogger(LogTitle, invocation.TargetType);
-            
+
             var isLoggingEnabled = LogManager.IsLoggingEnabled();
             if (isLoggingEnabled)
             {
                 var entry = LogEventInfo.Create(TraceEventType, LogTitle, $"Enter Method: {invocation.Method.Name}");
-                
+
                 _helper?.Log(entry, invocation);
 
                 logger.Log(entry);
@@ -253,11 +250,11 @@ namespace Tauron.Application.Aop.Model
 
             if (!isLoggingEnabled) return;
 
-            var entry2 = LogEventInfo.Create(TraceEventType, LogTitle, $"Exit Method: {invocation.Method.Name}"); 
-            
+            var entry2 = LogEventInfo.Create(TraceEventType, LogTitle, $"Exit Method: {invocation.Method.Name}");
+
             entry2.Properties["ReturnValue"] = invocation.ReturnValue;
 
-           logger.Log(entry2);
+            logger.Log(entry2);
         }
 
         #endregion

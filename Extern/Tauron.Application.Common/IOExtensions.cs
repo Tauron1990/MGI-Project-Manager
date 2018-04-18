@@ -25,8 +25,8 @@ namespace Tauron
         {
             var pathParts = path.Split('\\');
             var pathBuild = new StringBuilder(path.Length);
-            var lastPart = pathParts[pathParts.Length - 1];
-            var prevPath = "";
+            var lastPart  = pathParts[pathParts.Length - 1];
+            var prevPath  = "";
 
             //Erst prüfen ob der komplette String evtl. bereits kürzer als die Maximallänge ist
             if (path.Length >= length) return path;
@@ -37,6 +37,7 @@ namespace Tauron
                 if ((pathBuild + @"...\" + lastPart).Length >= length) return prevPath;
                 prevPath = pathBuild + @"...\" + lastPart;
             }
+
             return prevPath;
         }
 
@@ -191,11 +192,18 @@ namespace Tauron
         public static bool CreateDirectoryIfNotExis([NotNull] this string path)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
-            if (!Path.HasExtension(path)) return CreateDirectoryIfNotExis(new DirectoryInfo(path));
+            try
+            {
+                if (!Path.HasExtension(path)) return CreateDirectoryIfNotExis(new DirectoryInfo(path));
 
-            var temp = Path.GetDirectoryName(path);
+                var temp = Path.GetDirectoryName(path);
 
-            return CreateDirectoryIfNotExis(new DirectoryInfo(temp));
+                return CreateDirectoryIfNotExis(new DirectoryInfo(temp ?? throw new InvalidOperationException()));
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -900,7 +908,9 @@ namespace Tauron
             var flag = Uri.TryCreate(str, UriKind.RelativeOrAbsolute, out target);
 
 // ReSharper disable once AccessToModifiedClosure
-            if (flag) foreach (var s in scheme.Where(s => flag)) flag = target.Scheme != s;
+            if (flag)
+                foreach (var s in scheme.Where(s => flag))
+                    flag = target.Scheme != s;
 
             uri = flag ? target : null;
 

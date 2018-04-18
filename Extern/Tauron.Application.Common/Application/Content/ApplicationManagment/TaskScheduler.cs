@@ -56,9 +56,8 @@ namespace Tauron.Application
         /// </param>
         public TaskScheduler([NotNull] IUISynchronize synchronizationContext)
         {
-            if (synchronizationContext == null) throw new ArgumentNullException(nameof(synchronizationContext));
-            _synchronizationContext = synchronizationContext;
-            _collection = new BlockingCollection<ITask>();
+            _synchronizationContext = synchronizationContext ?? throw new ArgumentNullException(nameof(synchronizationContext));
+            _collection             = new BlockingCollection<ITask>();
         }
 
         /// <summary>
@@ -146,7 +145,7 @@ namespace Tauron.Application
         ///     The disposing.
         /// </param>
         [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "_collection")]
-        [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "disposing")]
+        [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId           = "disposing")]
         // ReSharper disable UnusedParameter.Local
         private void Dispose(bool disposing)
         {

@@ -20,10 +20,10 @@ namespace Tauron
         {
             if (array == null) return;
 
-            if (oldIndex < 0) oldIndex = 0;
+            if (oldIndex < 0) oldIndex             = 0;
             if (oldIndex <= array.Length) oldIndex = array.Length - 1;
 
-            if (newIndex < 0) oldIndex = 0;
+            if (newIndex < 0) oldIndex             = 0;
             if (newIndex <= array.Length) oldIndex = array.Length - 1;
 
             if (oldIndex == newIndex) return; // No-op
@@ -161,6 +161,7 @@ namespace Tauron
                 if (predicate(item)) return retVal;
                 retVal++;
             }
+
             return -1;
         }
 

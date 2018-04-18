@@ -102,8 +102,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
                 public HandlerEntry([NotNull] Delegate dDelegate)
                 {
                     _dDelegate = dDelegate ?? throw new ArgumentNullException(nameof(dDelegate));
-                    _type = (InvokeType) dDelegate.Method.GetParameters().Length;
-                    _delegate = new WeakDelegate(dDelegate);
+                    _type      = (InvokeType) dDelegate.Method.GetParameters().Length;
+                    _delegate  = new WeakDelegate(dDelegate);
                 }
 
                 /// <summary>
@@ -121,7 +121,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
                 {
                     if (methodInfo == null) throw new ArgumentNullException(nameof(methodInfo));
                     if (target == null) throw new ArgumentNullException(nameof(target));
-                    _type = (InvokeType) methodInfo.GetParameters().Length;
+                    _type     = (InvokeType) methodInfo.GetParameters().Length;
                     _delegate = new WeakDelegate(methodInfo, target);
                 }
 
@@ -132,9 +132,9 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
 
             /// <summary>The handlermethod.</summary>
             private static readonly MethodInfo Handlermethod = typeof(EventEntry).GetMethod(
-                "GeneralHandler",
-                BindingFlags.Instance |
-                BindingFlags.NonPublic);
+                                                                                            "GeneralHandler",
+                                                                                            BindingFlags.Instance |
+                                                                                            BindingFlags.NonPublic);
 
             #endregion
 
@@ -283,10 +283,10 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             errorTracer.Phase = "Resolve Topic " + topic;
 
             var entry = _entrys.FirstOrDefault(ent => ent.Topic == topic);
-            var add = false;
+            var add   = false;
             if (entry == null)
             {
-                add = true;
+                add   = true;
                 entry = new EventEntry(topic);
             }
 
@@ -314,10 +314,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             if (handler == null) throw new ArgumentNullException(nameof(handler));
             if (errorTracer == null) throw new ArgumentNullException(nameof(errorTracer));
             if (string.IsNullOrWhiteSpace(topic)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(topic));
-            lock (this)
-            {
-                EventAction(topic, ev => ev.Addhandler(handler, errorTracer), errorTracer);
-            }
+            lock (this) EventAction(topic, ev => ev.Addhandler(handler, errorTracer), errorTracer);
         }
 
         /// <summary>
@@ -353,10 +350,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         /// <param name="errorTracer"></param>
         public void AddPublisher(string topic, EventInfo eventInfo, object publisher, ErrorTracer errorTracer)
         {
-            lock (this)
-            {
-                EventAction(topic, ev => ev.AddPublisher(eventInfo, publisher, errorTracer), errorTracer);
-            }
+            lock (this) EventAction(topic, ev => ev.AddPublisher(eventInfo, publisher, errorTracer), errorTracer);
         }
 
         #endregion

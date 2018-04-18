@@ -13,8 +13,8 @@ namespace Tauron.Application.Views
         {
             if (string.IsNullOrEmpty(name)) throw new ArgumentException("Value cannot be null or empty.", nameof(name));
             _dependencyObject = dependencyObject;
-            Name = name;
-            Order = ViewManager.GetSortOrder(dependencyObject);
+            Name              = name;
+            Order             = ViewManager.GetSortOrder(dependencyObject);
         }
 
         public string Name { get; }

@@ -13,9 +13,9 @@ namespace Tauron.Application
         {
             if (target == null) throw new ArgumentNullException(nameof(target));
 
-            Source = new WeakReference<DependencyObject>(target);
+            Source     = new WeakReference<DependencyObject>(target);
             SimpleMode = simpleMode;
-            _task = new TaskCompletionSource<object>();
+            _task      = new TaskCompletionSource<object>();
             _task.SetResult(null);
         }
 
@@ -33,7 +33,7 @@ namespace Tauron.Application
                 {
                     DataContextServices.UnregisterHandler(target, this);
                     var cont = new FrameworkObject(target, false).DataContext;
-                    DataContext = cont == null ? null : new WeakReference(cont);
+                    DataContext   = cont == null ? null : new WeakReference(cont);
                     TaskScheduler = CommonApplication.Scheduler;
                 }
                 else
@@ -56,7 +56,7 @@ namespace Tauron.Application
         #region Fields
 
         private readonly TaskCompletionSource<object> _task;
-        private bool _simpleMode;
+        private          bool                         _simpleMode;
 
         #endregion
 
@@ -72,13 +72,13 @@ namespace Tauron.Application
 
         /// <summary>Gets or sets the data context.</summary>
         public WeakReference DataContext { get; set; }
-        
+
 
         public bool IsAlive => Source?.IsAlive() ?? false;
 
 
         public TaskScheduler TaskScheduler { get; set; }
-        
+
         public virtual bool Synchronize => true;
 
 
@@ -90,7 +90,7 @@ namespace Tauron.Application
 
         ITask IPipeLine.Generate(WeakReference dataContext, TaskScheduler scheduler)
         {
-            DataContext = dataContext;
+            DataContext   = dataContext;
             TaskScheduler = scheduler;
             return this;
         }

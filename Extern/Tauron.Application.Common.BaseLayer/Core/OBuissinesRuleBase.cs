@@ -18,12 +18,12 @@ namespace Tauron.Application.Common.BaseLayer.Core
                 return default(TOutput);
             }
         }
-        
-        public abstract TOutput ActionImpl();
 
         public override object GenericAction(object input)
         {
             return Action();
         }
+
+        public abstract TOutput ActionImpl();
     }
 }

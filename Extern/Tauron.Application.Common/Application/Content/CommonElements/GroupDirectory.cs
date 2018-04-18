@@ -266,7 +266,7 @@ namespace Tauron.Application
         public GroupDictionary(GroupDictionary<TKey, TValue> groupDictionary)
             : base(groupDictionary)
         {
-            _listType = groupDictionary._listType;
+            _listType    = groupDictionary._listType;
             _genericTemp = groupDictionary._genericTemp;
         }
 
@@ -323,7 +323,7 @@ namespace Tauron.Application
                 if (generic.Length == 0) _genericTemp = _listType;
 
                 if (_genericTemp == null && generic[0] == typeof(TValue)) _genericTemp = _listType;
-                else _genericTemp = _listType.GetGenericTypeDefinition().MakeGenericType(typeof(TValue));
+                else _genericTemp                                                      = _listType.GetGenericTypeDefinition().MakeGenericType(typeof(TValue));
             }
 
             if (_genericTemp == null) throw new InvalidOperationException();
@@ -482,7 +482,7 @@ namespace Tauron.Application
                 var vals = Values.ToArray().GetEnumerator();
                 while (keys.MoveNext() && vals.MoveNext())
                 {
-                    var coll = (ICollection<TValue>) vals.Current;
+                    var coll    = (ICollection<TValue>) vals.Current;
                     var currkey = (TKey) keys.Current;
                     ok |= RemoveList(coll, val);
                     if (removeEmpty && coll.Count == 0) ok |= Remove(currkey);
@@ -523,7 +523,7 @@ namespace Tauron.Application
         {
             if (vals == null) throw new ArgumentNullException(nameof(vals));
             if (val == null) throw new ArgumentNullException(nameof(val));
-            var ok = false;
+            var ok                      = false;
             while (vals.Remove(val)) ok = true;
 
             return ok;
@@ -558,7 +558,7 @@ namespace Tauron.Application
             base.GetObjectData(info, context);
         }
 
-#pragma warning disable 628
+        #pragma warning disable 628
 
         /// <summary>
         ///     Initialisiert eine neue Instanz der <see cref="GroupDictionary{TKey,TValue}" /> Klasse.
@@ -569,10 +569,10 @@ namespace Tauron.Application
         /// </param>
         [SuppressMessage("Microsoft.Design", "CA1047:DoNotDeclareProtectedMembersInSealedTypes")]
         protected GroupDictionary([NotNull] SerializationInfo info, StreamingContext context)
-#pragma warning restore 628
+            #pragma warning restore 628
             : base(info, context)
         {
-            _info = info;
+            _info     = info;
             _listType = (Type) info.GetValue("listType", typeof(Type));
         }
 

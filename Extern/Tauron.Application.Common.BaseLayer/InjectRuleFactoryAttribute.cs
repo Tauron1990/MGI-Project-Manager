@@ -8,7 +8,6 @@ namespace Tauron.Application.Common.BaseLayer
         public InjectRuleFactoryAttribute()
             : base(typeof(RuleFactory))
         {
-            
         }
     }
 }

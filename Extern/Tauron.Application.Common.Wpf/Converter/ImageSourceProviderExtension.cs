@@ -29,7 +29,7 @@ namespace Tauron.Application.Converter
             Assembly = ImageSourceHelper.ResolveAssembly(Assembly, serviceProvider);
 
             var temp = CompositionServices.Container.Resolve<IImageHelper>()
-                .Convert(ImageSource, Assembly);
+                                          .Convert(ImageSource, Assembly);
 
             return ImageSourceHelper.Exit(ImageSource, temp == null) ? null : temp;
         }

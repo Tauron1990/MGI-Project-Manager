@@ -101,8 +101,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         public LazyResolver(SimpleResolver resolver, Type lazy, IMetadataFactory factory)
         {
             _resolver = resolver;
-            _lazy = lazy;
-            _factory = factory;
+            _lazy     = lazy;
+            _factory  = factory;
         }
 
         #endregion
@@ -116,10 +116,10 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         public object Create(ErrorTracer errorTracer)
         {
             return CreateLazy(
-                _lazy,
-                _factory,
-                _resolver.Metadata.Metadata ?? new Dictionary<string, object>(),
-                _resolver, errorTracer);
+                              _lazy,
+                              _factory,
+                              _resolver.Metadata.Metadata ?? new Dictionary<string, object>(),
+                              _resolver, errorTracer);
         }
 
         #endregion
@@ -127,10 +127,10 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         #region Methods
 
         private static object CreateLazy(
-            [NotNull] Type lazytype,
-            [NotNull] IMetadataFactory metadataFactory,
+            [NotNull] Type                        lazytype,
+            [NotNull] IMetadataFactory            metadataFactory,
             [NotNull] IDictionary<string, object> metadataValue,
-            [NotNull] SimpleResolver creator, [NotNull] ErrorTracer errorTracer)
+            [NotNull] SimpleResolver              creator, [NotNull] ErrorTracer errorTracer)
         {
             if (lazytype == null) throw new ArgumentNullException(nameof(lazytype));
             if (metadataFactory == null) throw new ArgumentNullException(nameof(metadataFactory));
@@ -143,26 +143,26 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             {
                 var openGeneric = lazytype.GetGenericTypeDefinition();
 
-                var trampolineBase = typeof(LazyTrampoline<>);
+                var trampolineBase     = typeof(LazyTrampoline<>);
                 var trampolineGenerics = new Type[1];
                 trampolineGenerics[0] = lazytype.GenericTypeArguments[0];
 
                 var trampoline = trampolineBase.MakeGenericType(trampolineGenerics);
 
                 var trampolineImpl = (LazyTrampolineBase) Activator.CreateInstance(trampoline, creator);
-                var metadata = openGeneric == InjectorBaseConstants.Lazy ? null : lazytype.GenericTypeArguments[1];
+                var metadata       = openGeneric == InjectorBaseConstants.Lazy ? null : lazytype.GenericTypeArguments[1];
 
                 if (metadata == null) return Activator.CreateInstance(lazytype, trampolineImpl.CreateFunc());
 
                 return Activator.CreateInstance(
-                    lazytype,
-                    trampolineImpl.CreateFunc(),
-                    metadataFactory.CreateMetadata(metadata, metadataValue));
+                                                lazytype,
+                                                trampolineImpl.CreateFunc(),
+                                                metadataFactory.CreateMetadata(metadata, metadataValue));
             }
             catch (Exception e)
             {
                 errorTracer.Exceptional = true;
-                errorTracer.Exception = e;
+                errorTracer.Exception   = e;
                 return null;
             }
         }

@@ -15,10 +15,6 @@ namespace Tauron.Application
     [PublicAPI]
     public abstract class MemberInfoAttribute : Attribute
     {
-        #region Fields
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -33,6 +29,10 @@ namespace Tauron.Application
         {
             MemberName = memberName;
         }
+
+        #endregion
+
+        #region Fields
 
         #endregion
 
@@ -74,9 +74,9 @@ namespace Tauron.Application
         {
             return
                 targetType.FindMemberAttributes<TAttribute>(true)
-                    .Select(
-                        attribute =>
-                            Tuple.Create(attribute.Item2.ProvideMemberName(attribute.Item1), attribute.Item1));
+                          .Select(
+                                  attribute =>
+                                      Tuple.Create(attribute.Item2.ProvideMemberName(attribute.Item1), attribute.Item1));
         }
 
         /// <summary>
@@ -101,7 +101,10 @@ namespace Tauron.Application
             if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             if (string.IsNullOrEmpty(targetMember)) throw new ArgumentException("Value cannot be null or empty.", nameof(targetMember));
             foreach (var member in
-                GetMembers<TAttribute>(instance.GetType()).Where(member => member.Item1 == targetMember)) member.Item2.SetInvokeMember(instance, parameters);
+                GetMembers<TAttribute>(instance.GetType()).Where(member => member.Item1 == targetMember))
+            {
+                member.Item2.SetInvokeMember(instance, parameters);
+            }
         }
 
         /// <summary>

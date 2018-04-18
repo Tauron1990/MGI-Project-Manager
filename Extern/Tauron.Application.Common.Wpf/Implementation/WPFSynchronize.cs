@@ -64,7 +64,10 @@ namespace Tauron.Application.Implementation
         /// <returns>
         ///     The <see cref="Task" />.
         /// </returns>
-        public Task BeginInvoke(Action action) => _dispatcher.BeginInvoke(action).Task;
+        public Task BeginInvoke(Action action)
+        {
+            return _dispatcher.BeginInvoke(action).Task;
+        }
 
         public Task<TResult> BeginInvoke<TResult>(Func<TResult> action)
         {
@@ -79,7 +82,10 @@ namespace Tauron.Application.Implementation
         /// <param name="action">
         ///     The action.
         /// </param>
-        public void Invoke(Action action) => _dispatcher.Invoke(action);
+        public void Invoke(Action action)
+        {
+            _dispatcher.Invoke(action);
+        }
 
         /// <summary>
         ///     The invoke.
@@ -92,7 +98,10 @@ namespace Tauron.Application.Implementation
         /// <returns>
         ///     The <see cref="TReturn" />.
         /// </returns>
-        public TReturn Invoke<TReturn>(Func<TReturn> action) => _dispatcher.Invoke(action);
+        public TReturn Invoke<TReturn>(Func<TReturn> action)
+        {
+            return _dispatcher.Invoke(action);
+        }
 
         #endregion
     }

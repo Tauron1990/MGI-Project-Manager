@@ -71,8 +71,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
 
             #region Constructors and Destructors
 
-            public ParameterHelper([NotNull] IMetadataFactory metadataFactory, [NotNull] ParameterMemberInfo parameter,
-                [NotNull] List<object> parameters, [NotNull] IResolverExtension[] resolverExtensions)
+            public ParameterHelper([NotNull] IMetadataFactory metadataFactory, [NotNull] ParameterMemberInfo  parameter,
+                                   [NotNull] List<object>     parameters,      [NotNull] IResolverExtension[] resolverExtensions)
                 : base(metadataFactory, parameter, resolverExtensions)
             {
                 if (metadataFactory == null) throw new ArgumentNullException(nameof(metadataFactory));
@@ -130,11 +130,12 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         ///     The event manager.
         /// </param>
         /// <param name="resolverExtensions"></param>
-        public MethodInjector([NotNull] MethodInfo method, [NotNull] IMetadataFactory metadataFactory, [NotNull] IEventManager eventManager, [NotNull] [ItemNotNull] IResolverExtension[] resolverExtensions)
+        public MethodInjector([NotNull]               MethodInfo           method, [NotNull] IMetadataFactory metadataFactory, [NotNull] IEventManager eventManager,
+                              [NotNull] [ItemNotNull] IResolverExtension[] resolverExtensions)
         {
-            _method = method ?? throw new ArgumentNullException(nameof(method));
-            _metadataFactory = metadataFactory ?? throw new ArgumentNullException(nameof(metadataFactory));
-            _eventManager = eventManager ?? throw new ArgumentNullException(nameof(eventManager));
+            _method             = method ?? throw new ArgumentNullException(nameof(method));
+            _metadataFactory    = metadataFactory ?? throw new ArgumentNullException(nameof(metadataFactory));
+            _eventManager       = eventManager ?? throw new ArgumentNullException(nameof(eventManager));
             _resolverExtensions = resolverExtensions ?? throw new ArgumentNullException(nameof(resolverExtensions));
         }
 
@@ -160,7 +161,6 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         public override void Inject(object target, IContainer container, ImportMetadata metadata, IImportInterceptor interceptor, ErrorTracer errorTracer, BuildParameter[] parameters)
         {
             if (metadata.Metadata != null)
-            {
                 if (metadata.Metadata.TryGetValue(AopConstants.EventMetodMetadataName, out var obj))
                     if ((bool) obj)
                     {
@@ -168,13 +168,14 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
                         _eventManager.AddEventHandler(topic, _method, target, errorTracer);
                         return;
                     }
-            }
 
             var parms = _method.GetParameters();
-            var args = new List<object>();
+            var args  = new List<object>();
 
             foreach (var parameterInfo in parms.Select(p => new ParameterMemberInfo(p)))
+            {
                 new ParameterHelper(_metadataFactory, parameterInfo, args, _resolverExtensions).Inject(target, container, metadata, interceptor, errorTracer, parameters);
+            }
 
             _method.Invoke(target, args.ToArray());
         }
