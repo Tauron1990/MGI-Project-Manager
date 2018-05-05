@@ -296,6 +296,10 @@
       <Project>{1a155d20-cf25-4bc5-a76d-a9323dbdbd20}</Project>
       <Name>ApplicationServer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tauron.Application.ProjectManager.Generic\Tauron.Application.ProjectManager.Generic.csproj">
+      <Project>{a50329fe-f913-4df7-98b4-0112bfbfc31f}</Project>
+      <Name>Tauron.Application.ProjectManager.Generic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tauron.Application.ProjectManager\Tauron.Application.ProjectManager.csproj">
       <Project>{9112ec18-699d-45f0-ab8b-710358d1c094}</Project>
       <Name>Tauron.Application.ProjectManager</Name>

@@ -135,4 +135,61 @@
   <data name="Label_ReConnect" xml:space="preserve">
     <value>Neu Verbinden</value>
   </data>
+  <data name="Label_IPSettings" xml:space="preserve">
+    <value>IP Einstellungen</value>
+  </data>
+  <data name="Label_IP_Text" xml:space="preserve">
+    <value>IP:</value>
+  </data>
+  <data name="Label_IP_Export" xml:space="preserve">
+    <value>Exportieren</value>
+  </data>
+  <data name="Label_IP_Save" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="Text_WrongIPSetting" xml:space="preserve">
+    <value>Falsche IP Eingegeben</value>
+  </data>
+  <data name="Label_IP_Reload" xml:space="preserve">
+    <value>Neu Laden</value>
+  </data>
+  <data name="Label_AdminPassword" xml:space="preserve">
+    <value>Admin Passwort</value>
+  </data>
+  <data name="Label_Admin_OldPassword" xml:space="preserve">
+    <value>Altes Passwort</value>
+  </data>
+  <data name="Label_Admin_NewPassword" xml:space="preserve">
+    <value>Neues Passwort</value>
+  </data>
+  <data name="Label_Admin_ChangePassword" xml:space="preserve">
+    <value>Ändern</value>
+  </data>
+  <data name="Label_User" xml:space="preserve">
+    <value>Benutzer</value>
+  </data>
+  <data name="Text_UserRighs_Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Text_UserRighs_Operator" xml:space="preserve">
+    <value>Operator</value>
+  </data>
+  <data name="Text_UserRighs_Manager" xml:space="preserve">
+    <value>Manager</value>
+  </data>
+  <data name="Text_UserRighs_Error" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <data name="Label_DeleteUser" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Label_UserName" xml:space="preserve">
+    <value>Benutzer Name:</value>
+  </data>
+  <data name="Label_CreateUser" xml:space="preserve">
+    <value>Erstellen</value>
+  </data>
+  <data name="Text_PassordChange_Timeout" xml:space="preserve">
+    <value>Keine Antwort vom Server Erhalten.</value>
+  </data>
 </root>

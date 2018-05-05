@@ -115,4 +115,61 @@
   <data name="Label_ReConnect" xml:space="preserve">
     <value>ReConnect</value>
   </data>
+  <data name="Label_IPSettings" xml:space="preserve">
+    <value>IP Settings</value>
+  </data>
+  <data name="Label_IP_Text" xml:space="preserve">
+    <value>IP:</value>
+  </data>
+  <data name="Label_IP_Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="Label_IP_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Text_WrongIPSetting" xml:space="preserve">
+    <value>Wrong IP</value>
+  </data>
+  <data name="Label_IP_Reload" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="Label_AdminPassword" xml:space="preserve">
+    <value>Admin Password</value>
+  </data>
+  <data name="Label_Admin_OldPassword" xml:space="preserve">
+    <value>Old Password</value>
+  </data>
+  <data name="Label_Admin_NewPassword" xml:space="preserve">
+    <value>New Password</value>
+  </data>
+  <data name="Label_Admin_ChangePassword" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="Label_User" xml:space="preserve">
+    <value>Useres</value>
+  </data>
+  <data name="Text_UserRighs_Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Text_UserRighs_Operator" xml:space="preserve">
+    <value>Operator</value>
+  </data>
+  <data name="Text_UserRighs_Manager" xml:space="preserve">
+    <value>Manager</value>
+  </data>
+  <data name="Text_UserRighs_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Label_DeleteUser" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Label_UserName" xml:space="preserve">
+    <value>User Name:</value>
+  </data>
+  <data name="Label_CreateUser" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Text_PassordChange_Timeout" xml:space="preserve">
+    <value>No Anser was send From Server</value>
+  </data>
 </root>

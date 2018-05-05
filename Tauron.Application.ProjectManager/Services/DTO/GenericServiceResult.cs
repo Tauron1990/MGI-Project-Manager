@@ -12,9 +12,9 @@ namespace Tauron.Application.ProjectManager.Services.DTO
         }
 
         [DataMember]
-        public bool SuccededSuccessful { get; }
+        public bool SuccededSuccessful { get; set; }
 
         [DataMember]
-        public string Reason { get; }
+        public string Reason { get; set; }
     }
 }

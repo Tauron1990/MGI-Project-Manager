@@ -8,6 +8,16 @@ namespace ServerStartHelper
     {
         public static void Main()
         {
+            Console.Title = "Server";
+            try
+            {
+                Console.WindowWidth = 180;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
             if (!Bootstrapper.Start(true, IpSettings.CreateDefault())) return;
 
             Console.ReadKey();

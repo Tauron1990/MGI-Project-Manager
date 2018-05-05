@@ -320,6 +320,7 @@ namespace Tauron.Application
                 var config = new LoggingConfiguration();
                 ConfigurateLagging(config);
                 LogManager.Configuration = config;
+                LogManager.ReconfigExistingLoggers();
 
                 Container = CreateContainer();
                 Fill(Container);

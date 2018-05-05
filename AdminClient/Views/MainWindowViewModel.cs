@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -8,6 +9,7 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using Tauron.Application.Models;
 using Tauron.Application.ProjectManager.Generic;
+using Tauron.Application.ProjectManager.Generic.Extensions;
 using Tauron.Application.ProjectManager.Resources;
 using Tauron.Application.ProjectManager.Services;
 using Tauron.Application.ProjectManager.Services.DTO;
@@ -18,9 +20,14 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
     [ExportViewModel(AppConststands.MainWindowName)]
     public sealed class MainWindowViewModel : ClientViewModel
     {
+        private ResultAwaiter<GenericServiceResult> _passwordChangeResult = new ResultAwaiter<GenericServiceResult>
+                                                                            {
+                                                                                TimeOut = TimeSpan.FromMilliseconds(5000), 
+                                                                                DefaultValue = new GenericServiceResult(false, AdminClientLabels.Text_PassordChange_Timeout)
+                                                                            };
         private IAdminService _adminService;
         private string        _currentPassword;
-        private string        _currentUser;
+        private ServerUser        _currentUser;
         private string        _errorText;
         private IpSettings    _ipSettings;
         private bool          _isBusy;
@@ -28,10 +35,11 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
         private string        _networkTarget;
         private string        _newPassword;
         private IUserService  _userService;
+        private string _newUserName;
 
-        public UISyncObservableCollection<string> Users { get; } = new UISyncObservableCollection<string>();
+        public UISyncObservableCollection<ServerUser> Users { get; } = new UISyncObservableCollection<ServerUser>();
 
-        public string CurrentUser
+        public ServerUser CurrentUser
         {
             get => _currentUser;
             set => SetProperty(ref _currentUser, value);
@@ -52,7 +60,29 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
         public string NetworkTarget
         {
             get => _networkTarget;
-            set => SetProperty(ref _networkTarget, value);
+            set => SetProperty(ref _networkTarget, value, () =>
+                                                          {
+                                                              try
+                                                              {
+                                                                  if (NetworkTarget == "localhost" || IPAddress.TryParse(NetworkTarget, out _))
+                                                                  {
+                                                                      ErrorText = "OK";
+                                                                      return;
+                                                                  }
+
+                                                                  ErrorText = AdminClientLabels.Text_WrongIPSetting;
+                                                              }
+                                                              finally
+                                                              {
+                                                                  InvalidateRequerySuggested();
+                                                              }
+                                                          });
+        }
+
+        public string NewUserName
+        {
+            get => _newUserName;
+            set => SetProperty(ref _newUserName, value);
         }
 
         public string CurrentPassword
@@ -88,7 +118,10 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
                              };
         }
 
-        public override void AfterShow(IWindow window) => InitalLoad();
+        public override void AfterShow(IWindow window)
+        {
+            InitalLoad();
+        }
 
         public override void BuildCompled()
         {
@@ -101,37 +134,70 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
         }
 
         [CommandTarget]
-        public void Connect() => InitalLoad();
+        public void Connect()
+        {
+            InitalLoad();
+        }
 
         [CommandTarget]
         public void ChangeAdminPassword()
         {
-            if (!EnsureOpen(typeof(IUserService)))
-            {
-                ProcessOpenException();
-                return;
-            }
+            IsBusy = true;
 
-            var result = Secure(() => _userService.ChangePassword("admin", NewPassword, CurrentPassword), out var isok);
+                Task.Run(() =>
+                         {
+                             if(!OpenAdmin()) 
+                                 _adminService.AdminLogout();
+                             if (!EnsureOpen(typeof(IUserService)))
+                             {
+                                 ProcessOpenException();
+                                 return;
+                             }
 
-            if (!isok)
-            {
-                ErrorText = ProcessDefaultErrors();
-                return;
-            }
+                             bool isok = Secure(() => _userService.ChangePassword("admin", NewPassword, CurrentPassword));
 
-            if (!result.SuccededSuccessful)
-            {
-                ErrorText = $"{AdminClientLabels.Label_Common_Error} {result.Reason}";
-                return;
-            }
+                             if (!isok)
+                             {
+                                 ErrorText = ProcessDefaultErrors();
+                                 return;
+                             }
 
-            ErrorText          = result.Reason;
-            NeedPasswordChange = false;
+                             var result = _passwordChangeResult.Result;
+                             _passwordChangeResult.Reset();
+
+
+                             if (!result.SuccededSuccessful)
+                             {
+                                 ErrorText = $"{AdminClientLabels.Label_Common_Error} {result.Reason}";
+                                 return;
+                             }
+
+                             
+                             ClientFactory.ChangePassword(NewPassword);
+                             if (OpenAdmin())
+                                 return;
+
+                             _adminService.AdminLogin(NewPassword);
+
+                             ErrorText          = result.Reason;
+                             NeedPasswordChange = false;
+                             CurrentPassword = string.Empty;
+                             NewPassword     = string.Empty;
+                            
+                         }).ContinueWith(t => IsBusy = false);
         }
 
         [CommandTarget]
-        public bool CanChangeAdminPassword() => !string.IsNullOrWhiteSpace(CurrentPassword) && !string.IsNullOrWhiteSpace(NewPassword);
+        public bool CanChangeAdminPassword()
+        {
+            return !string.IsNullOrWhiteSpace(NewPassword);
+        }
+
+        [CommandTarget]
+        public bool CanSaveIpSettings()
+        {
+            return NetworkTarget == "localhost" || IPAddress.TryParse(NetworkTarget, out _);
+        }
 
         [CommandTarget]
         public void SaveIpSettings()
@@ -141,27 +207,38 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
         }
 
         [CommandTarget]
-        public void ReloadIpSettings() => NetworkTarget = _ipSettings.NetworkTarget;
+        public void ReloadIpSettings()
+        {
+            NetworkTarget = _ipSettings.NetworkTarget;
+        }
+
+        [CommandTarget]
+        public bool CanExportIpSettings()
+        {
+            return CanSaveIpSettings();
+        }
 
         [CommandTarget]
         public void ExportIpSettings()
         {
-            string localIp = null;
+            var    settings = _ipSettings;
+            string localIp  = null;
+
             try
             {
-                using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
-                {
-                    socket.Connect("8.8.8.8", 65530);
-                    var endPoint = socket.LocalEndPoint as IPEndPoint;
-                    localIp = endPoint?.Address.ToString();
-                }
+                if (settings.NetworkTarget == "localhost")
+                    using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
+                    {
+                        socket.Connect("8.8.8.8", 65530);
+                        var endPoint = socket.LocalEndPoint as IPEndPoint;
+                        localIp = endPoint?.Address.ToString();
+                    }
             }
             catch (Exception e)
             {
                 if (CriticalExceptions.IsCriticalException(e)) throw;
             }
 
-            var settings = IpSettings.ReadIpSettings();
             if (localIp != null)
                 settings.NetworkTarget = localIp;
 
@@ -180,7 +257,11 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
             if (OpenAdmin())
                 return;
 
-            var name = Dialogs.GetText(MainWindow, AdminClientLabels.Label_NewUser_Instruction_Text, null, "User Name", false, string.Empty);
+            var name = string.IsNullOrWhiteSpace(NewUserName) ? 
+                           Dialogs.GetText(MainWindow, AdminClientLabels.Label_NewUser_Instruction_Text, null, "User Name", false, string.Empty) :
+                           NewUserName;
+
+            NewUserName = string.Empty;
 
             if (string.IsNullOrWhiteSpace(name)) return;
 
@@ -198,15 +279,27 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
                 return;
             }
 
-            Users.Add(name);
+            Users.Add(new ServerUser(name, UserRights.Manager, UserRightsChanged));
             ErrorText = result.Reason;
         }
 
-        [CommandTarget]
-        public bool CanDeleteUser()
+        private void UserRightsChanged(UserRights newR,  ServerUser user)
         {
-            return !string.IsNullOrWhiteSpace(CurrentUser);
+            if (!OpenAdmin())
+            {
+                if (Secure(() => _adminService.SetUserRights(user.User, newR))) return;
+
+                ErrorText = ProcessDefaultErrors();
+                user.Revert();
+            }
+            else
+            {
+                user.Revert();
+            }
         }
+
+        [CommandTarget]
+        public bool CanDeleteUser() => !string.IsNullOrWhiteSpace(CurrentUser?.User);
 
         [CommandTarget]
         public void DeleteUser()
@@ -214,9 +307,9 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
             if (OpenAdmin()) return;
 
             var name = CurrentUser;
-            CurrentUser = string.Empty;
+            CurrentUser = null;
 
-            var result = Secure(() => _adminService.DeleteUser(name), out var isok);
+            var result = Secure(() => _adminService.DeleteUser(name.User), out var isok);
 
             if (!isok)
             {
@@ -262,6 +355,11 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
 
                     IsBusy = true;
                     var users = Secure(() => _userService.GetUsers(), out var isOk);
+                    List<ServerUser> usersList = new List<ServerUser>();
+
+                    #if DEBUG
+                    Debug.Print($"User Count: {users.Length}");
+                    #endif
 
                     if (!isOk)
                     {
@@ -272,7 +370,25 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
                         continue;
                     }
 
-                    Users.AddRange(users.Where(str => str != "admin"));
+                    foreach (var user in users)
+                    {
+                        if (user == "admin") continue;
+
+                        var right = Secure(() => _userService.GetUserRights(user), out isOk);
+                        if (isOk)
+                            usersList.Add(new ServerUser(user, right, UserRightsChanged));
+                        else
+                            break;
+                    }
+
+                    if (!isOk)
+                    {
+                        ErrorText = ProcessDefaultErrors();
+                        return false;
+                    }
+
+                    Users.Clear();
+                    Users.AddRange(usersList);
                     ErrorText = "OK";
                     break;
                 }
@@ -309,6 +425,7 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
             ResetClients();
             _adminService = CreateClint<IAdminService>();
             _userService  = CreateClint<IUserService>();
+            ((IUserServiceExtension) _userService).PasswordChanged += result => _passwordChangeResult.SetResult(result);
 
             InteralLogIn().ContinueWith(t =>
                                         {
@@ -317,7 +434,7 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
                                                 LogIn();
                                                 StatusOk  = false;
                                                 ErrorText = AdminClientLabels.Text_Login_Faild;
-                                                IsBusy = false;
+                                                IsBusy    = false;
                                                 return;
                                             }
 
@@ -333,7 +450,7 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
 
         protected override void OpenFailed()
         {
-            IsBusy = false;
+            IsBusy             = false;
             NeedPasswordChange = false;
         }
 

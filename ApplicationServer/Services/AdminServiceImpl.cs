@@ -54,6 +54,15 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Services
                           });
         }
 
+        public void SetUserRights(string name, UserRights rights)
+        {
+            Secure(() =>
+                   {
+                       CheckAdmin();
+                       UserManager.SetUserRights(name, rights);
+                   });
+        }
+
         public void AdminLogout()
         {
             _adminGrandet = false;

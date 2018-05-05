@@ -3,7 +3,7 @@ using Tauron.Application.ProjectManager.Services.DTO;
 
 namespace Tauron.Application.ProjectManager.Services
 {
-    [ServiceContract(SessionMode = SessionMode.Required)]
+    [ServiceContract(SessionMode = SessionMode.Required, Namespace = "MGI-Proleckt-Server")]
     public interface IAdminService
     {
         [OperationContract(IsInitiating = true)]
@@ -25,6 +25,11 @@ namespace Tauron.Application.ProjectManager.Services
         [FaultContract(typeof(GenericServiceFault))]
         [FaultContract(typeof(LogInFault))]
         GenericServiceResult DeleteUser(string userName);
+
+        [OperationContract]
+        [FaultContract(typeof(GenericServiceFault))]
+        [FaultContract(typeof(LogInFault))]
+        void SetUserRights(string name, UserRights rights);
 
         [OperationContract(IsTerminating = true)]
         [FaultContract(typeof(GenericServiceFault))]

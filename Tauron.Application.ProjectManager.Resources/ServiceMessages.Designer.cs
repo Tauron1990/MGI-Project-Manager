@@ -61,6 +61,15 @@ namespace Tauron.Application.ProjectManager.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Unable to Delete User ähnelt.
+        /// </summary>
+        public static string UserManager_Reason_Delete {
+            get {
+                return ResourceManager.GetString("UserManager_Reason_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No Password Set ähnelt.
         /// </summary>
         public static string UserManager_Reason_NoPassword {
@@ -84,6 +93,15 @@ namespace Tauron.Application.ProjectManager.Resources {
         public static string UserManager_Reason_PasswordMismatch {
             get {
                 return ResourceManager.GetString("UserManager_Reason_PasswordMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The Password is Null ähnelt.
+        /// </summary>
+        public static string UserManager_Reason_PasswordNull {
+            get {
+                return ResourceManager.GetString("UserManager_Reason_PasswordNull", resourceCulture);
             }
         }
         

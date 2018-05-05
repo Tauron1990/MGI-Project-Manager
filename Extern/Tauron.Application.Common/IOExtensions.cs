@@ -15,7 +15,6 @@ namespace Tauron
 {
     /// <summary>The io extensions.</summary>
     [PublicAPI]
-    [DebuggerStepThrough]
     public static class IOExtensions
     {
         #region Public Methods and Operators
@@ -136,10 +135,10 @@ namespace Tauron
         public static string CombinePath([NotNull] this string path, [NotNull] string path1)
         {
             if (path1 == null) throw new ArgumentNullException(nameof(path1));
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
-            if (Path.HasExtension(path)) path = Path.GetDirectoryName(path);
+            if (string.IsNullOrWhiteSpace(path)) return path1;
+            //if (Path.HasExtension(path)) path = Path.GetDirectoryName(path);
 
-            return Path.Combine(path, path1);
+            return Path.Combine(path ?? throw new ArgumentNullException(nameof(path)), path1);
         }
 
         /// <summary>

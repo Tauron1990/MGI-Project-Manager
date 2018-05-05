@@ -32,8 +32,14 @@ namespace Tauron.Application.ProjectManager.Generic.Clients
             return Secure(() => Channel.DeleteUser(userName));
         }
 
+        public void SetUserRights(string name, UserRights rights)
+        {
+            Secure(() => Channel.SetUserRights(name, rights));
+        }
+
         public void AdminLogout()
         {
+            if(State != CommunicationState.Opened) return;
             Secure(() => Channel.AdminLogout());
         }
     }

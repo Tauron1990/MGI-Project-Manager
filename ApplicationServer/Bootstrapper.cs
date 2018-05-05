@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
+using NLog.Config;
 using Tauron.Application.Implement;
 
 namespace Tauron.Application.ProjectManager.ApplicationServer
 {
     public static class Bootstrapper
     {
+        public static event Action<LoggingConfiguration> ConfigurateLogging; 
+
         private static Core.Application _app;
 
         public static bool Start(bool console, IpSettings settings)
@@ -31,5 +34,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer
 
             _app = null;
         }
+
+        internal static void OnConfigurateLogging(LoggingConfiguration obj) => ConfigurateLogging?.Invoke(obj);
     }
 }

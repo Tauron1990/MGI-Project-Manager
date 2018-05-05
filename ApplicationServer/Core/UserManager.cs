@@ -1,24 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Linq;
 using System.Security.Cryptography;
+using System.ServiceModel;
 using System.Text;
 using NLog;
 using Tauron.Application.ProjectManager.ApplicationServer.Data;
 using Tauron.Application.ProjectManager.ApplicationServer.Data.PrivateEntitys;
 using Tauron.Application.ProjectManager.Resources;
+using Tauron.Application.ProjectManager.Services.DTO;
 
 namespace Tauron.Application.ProjectManager.ApplicationServer.Core
 {
     internal static class UserManager
     {
-        private static readonly Dictionary<string, UserEntity> UserEntities = new Dictionary<string, UserEntity>();
+        private static readonly ConcurrentDictionary<string, UserEntity> UserEntities = new ConcurrentDictionary<string, UserEntity>();
         private static readonly Logger                         Logger       = LogManager.GetCurrentClassLogger();
 
         public static void AddInitial(DatabaseImpl db)
         {
             if (db.Users.Find("admin") == null)
             {
-                var entity = new UserEntity {Id = "admin", Password = string.Empty, Salt = string.Empty};
+                var entity = new UserEntity {Id = "admin", Password = string.Empty, Salt = string.Empty, UserRights = UserRights.Admin};
                 db.Users.Add(entity);
                 UserEntities[entity.Id] = entity;
             }
@@ -33,6 +36,8 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
         {
             return UserEntities.TryGetValue(userName, out var ent) && string.IsNullOrWhiteSpace(ent.Password);
         }
+
+        public static string[] GetUsers() => UserEntities.Where(u => u.Value.Id != "admin").Select(u => u.Value.Id).ToArray();
 
         public static bool Validate(string userName, string password, out string reason)
         {
@@ -53,6 +58,12 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
             {
                 reason = "Ok";
                 return true;
+            }
+
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                reason = ServiceMessages.UserManager_Reason_PasswordNull;
+                return false;
             }
 
             var pass = GenerateHash(password, entity.Salt);
@@ -83,6 +94,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
                 CreateHash(entity, newPassword);
                 UserEntities[entity.Id] = entity;
 
+                db.SaveChanges();
                 Logger.Log(LogLevel.Trace, $"{userName} Password Changed - {DateTime.Today}");
                 return true;
             }
@@ -104,7 +116,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
                     return false;
                 }
 
-                var entity = new UserEntity {Id = userName};
+                var entity = new UserEntity {Id = userName, UserRights = UserRights.Manager};
                 CreateHash(entity, password);
 
                 db.Users.Add(entity);
@@ -130,8 +142,10 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
                 }
 
                 db.Remove(entity);
+                if (UserEntities.TryRemove(entity.Id, out _))
+                    throw new FaultException(new FaultReason(ServiceMessages.UserManager_Reason_Delete));
+
                 db.SaveChanges();
-                UserEntities.Remove(entity.Id);
             }
 
             reason = "Ok";
@@ -139,6 +153,25 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
             return true;
         }
 
+        public static UserRights GetUserRights(string name)
+        {
+            return UserEntities.TryGetValue(name, out var user) ? user.UserRights : UserRights.Error;
+        }
+
+        public static void SetUserRights(string name, UserRights rights)
+        {
+            using (var db = new DatabaseImpl())
+            {
+                var user = db.Users.Find(name);
+                if(user == null) return;
+
+                user.UserRights = rights;
+                UserEntities[name] = user;
+
+                db.SaveChanges();
+            }
+        }
+        
         private static void CreateHash(UserEntity entity, string password)
         {
             var passwordBytes = Encoding.UTF8.GetBytes(password);

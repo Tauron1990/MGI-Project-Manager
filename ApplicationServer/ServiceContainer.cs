@@ -44,9 +44,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer
                 host.Credentials.ClientCertificate.Authentication.CustomCertificateValidator = new CertificateValidator();
 
                 host.AddServiceEndpoint(serviceType.Item2, LocationHelper.CreateBinding(), serviceType.Item3);
-                //var endpoint = host.AddServiceEndpoint(serviceType.Item2, LocationHelper.CreateBinding(), string.Empty);
-                //var endpointAdress = new EndpointAddress(new Uri(baseAddress, serviceType.Item3), EndpointIdentity.CreateDnsIdentity("MGI-Certificate-Authority"));
-                //endpoint.Address = endpointAdress;
+
 
                 host.Open();
                 _services.Add(host);

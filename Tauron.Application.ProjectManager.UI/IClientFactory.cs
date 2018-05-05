@@ -11,5 +11,7 @@ namespace Tauron.Application.ProjectManager.UI
         ClientObject<TClient> CreateClient<TClient>() where TClient : class;
 
         Task<bool> ShowLoginWindow(IWindow mainWindow, bool asAdmin);
+
+        void ChangePassword(string password);
     }
 }

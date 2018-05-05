@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows.Forms;
 using NLog;
 using NLog.Config;
@@ -26,21 +27,12 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
 
         public override IContainer Container { get; set; }
 
-        public bool SignalExternalCommandLineArgs(IList<string> args)
-        {
-            return true;
-        }
+        public bool SignalExternalCommandLineArgs(IList<string> args) => true;
 
-        public override string GetdefaultFileLocation()
-        {
-            return GetDicPath();
-        }
+        public override string GetdefaultFileLocation() => GetDicPath();
 
-        private static string GetDicPath()
-        {
-            return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
-                              .CombinePath("Tauron\\MGIProjectManager");
-        }
+        private static string GetDicPath() => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
+                                                         .CombinePath("Tauron\\MGIProjectManager");
 
         protected override void Fill(IContainer container)
         {
@@ -73,6 +65,8 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
             config.AddTarget(filetarget);
             config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, filetarget));
 
+            Bootstrapper.OnConfigurateLogging(config);
+
             if (!_enableConsole) return;
 
             var consoleTarget = new ConsoleTarget {DetectConsoleAvailable = true, Name = "Console"};
@@ -90,6 +84,8 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
             DatabaseImpl.UpdateSchema();
 
             _serviceContainer.Start(_settings);
+
+            LogManager.GetCurrentClassLogger().Info($"Start Compled - Lang: {CultureInfo.CurrentCulture}");
 
             return null;
         }

@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="ClientObject.cs" />
     <Compile Include="IClientFactory.cs" />
+    <Compile Include="IClientHelperBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

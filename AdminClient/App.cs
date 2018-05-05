@@ -36,7 +36,7 @@ namespace Tauron.Application.ProjectManager.AdminClient
             if (mutex == null) throw new ArgumentNullException(nameof(mutex));
             if (channelName == null) throw new ArgumentNullException(nameof(channelName));
 
-            Run<App>(app => SingleInstance<App>.InitializeAsFirstInstance(mutex, channelName, app), CultureInfo.GetCultureInfo("de-de"));
+            Run<App>(app => SingleInstance<App>.InitializeAsFirstInstance(mutex, channelName, app), CultureInfo.InstalledUICulture);
         }
 
         protected override void ConfigSplash()

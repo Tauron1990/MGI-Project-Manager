@@ -107,6 +107,7 @@ namespace Tauron.Application.ProjectManager.Generic
                     ConnectionEstablished(clientType, objectBase);
                 }
 
+                StatusOk = true;
                 return true;
             }
             catch (Exception e)
@@ -138,7 +139,23 @@ namespace Tauron.Application.ProjectManager.Generic
             {
                 ok              = false;
                 ClientException = e;
+                StatusOk = false;
                 return default(TResult);
+            }
+        }
+
+        protected bool Secure(Action action)
+        {
+            try
+            {
+                action();
+                return true;
+            }
+            catch (ClientException e)
+            {
+                ClientException = e;
+                StatusOk = false;
+                return false;
             }
         }
 

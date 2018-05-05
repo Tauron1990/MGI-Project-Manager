@@ -22,12 +22,29 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
             }
             catch (Exception e)
             {
-                if (CriticalExceptions.IsCriticalException(e))
+                if (CriticalExceptions.IsCriticalException(e) || e is FaultException)
                     throw;
 
-                Logger.Log(LogLevel.Error, e);
+                Logger.Log(LogLevel.Error, $"{action.Method.Name} - {e.Message}");
 
                 throw new FaultException<GenericServiceFault>(new GenericServiceFault(e.GetType(), e.Message));
+            }
+        }
+
+        protected void Secure(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception e)
+            {
+                if (CriticalExceptions.IsCriticalException(e) || e is FaultException)
+                    throw;
+
+                Logger.Log(LogLevel.Error, $"{action.Method.Name} - {e.Message}");
+
+                throw new FaultException<GenericServiceFault>(new GenericServiceFault(e.GetType(), e.Message), e.Message);
             }
         }
     }

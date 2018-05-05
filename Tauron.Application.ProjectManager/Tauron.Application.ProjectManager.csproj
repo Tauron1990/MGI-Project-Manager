@@ -67,8 +67,10 @@
     <Compile Include="Services\DTO\GenericServiceFault.cs" />
     <Compile Include="Services\DTO\GenericServiceResult.cs" />
     <Compile Include="Services\DTO\LogInFault.cs" />
+    <Compile Include="Services\DTO\UserRights.cs" />
     <Compile Include="Services\IAdminService.cs" />
     <Compile Include="Services\IUserService.cs" />
+    <Compile Include="Services\IUserServiceCallback.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -84,8 +86,6 @@
       <Name>Tauron.Application.Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Core\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

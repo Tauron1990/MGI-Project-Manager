@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
-using System.ServiceModel.Security;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using NLog;
@@ -41,23 +39,17 @@ namespace Tauron.Application.ProjectManager.Generic
             {
                 var parms = new List<object>();
                 if (entry.Item1)
-                    parms.Add(new InstanceContext(entry.Item4()));
+                    parms.Add(entry.Item4());
                 parms.Add(LocationHelper.CreateBinding());
                 parms.Add(new EndpointAddress(LocationHelper.BuildUrl(settings.NetworkTarget, entry.Item3)));
 
                 var client = Activator.CreateInstance(entry.Item2, parms.ToArray());
 
-                var credinals = (client as ClientBase<TClient>)?.ClientCredentials;
-                if (credinals != null)
-                {
-                    credinals.UserName.UserName = Name;
-                    credinals.UserName.Password = Password;
+                var credinals = (ClientHelperBase<TClient>) client;
+                credinals.Name = Name;
+                credinals.Password = Password;
 
-                    credinals.ClientCertificate.Certificate                               = new X509Certificate2(Properties.Resources.ee, "tauron");
-                    credinals.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
-                }
-
-                var temp = new ClientObject<TClient>(client as TClient);
+                var temp = new ClientObject<TClient>(credinals);
                 _clientObjectBases.Add(temp);
                 return temp;
             }
@@ -86,25 +78,29 @@ namespace Tauron.Application.ProjectManager.Generic
                                                                        Name     = settings.UserName;
                                                                        Password = settings.Password;
 
-                                                                       foreach (var clientObjectBase in _clientObjectBases)
-                                                                       {
-                                                                           if(clientObjectBase.State == CommunicationState.Faulted) continue;
-
-                                                                           if(clientObjectBase.CommunicationObject.State == CommunicationState.Opened 
-                                                                              || clientObjectBase.CommunicationObject.State == CommunicationState.Opening)
-                                                                               clientObjectBase.Close();
-
-                                                                           var cred = clientObjectBase.ClientCredentials;
-                                                                           if (cred == null) continue;
-
-                                                                           cred.UserName.Password = Password;
-                                                                           cred.UserName.UserName = Name;
-                                                                       }
+                                                                       SetPassword();
 
                                                                        Properties.Settings.Default.UserName = Name;
                                                                        Properties.Settings.Default.Save();
                                                                        return true;
                                                                    });
+        }
+
+        public void ChangePassword(string password)
+        {
+            Password = password;
+            SetPassword();
+        }
+
+        private void SetPassword()
+        {
+            foreach (var clientObjectBase in _clientObjectBases)
+            {
+                clientObjectBase.Close();
+
+                clientObjectBase.Password = Password;
+                clientObjectBase.Name = Name;
+            }
         }
 
         private static Dictionary<Type, (bool, Type, string, Func<object>)> Initialize()
@@ -115,7 +111,7 @@ namespace Tauron.Application.ProjectManager.Generic
             return new Dictionary<Type, (bool, Type, string, Func<object>)>
                    {
                        {typeof(IAdminService), (false, typeof(AdminClient), ServiceNames.AdminService, null)},
-                       {typeof(IUserService), (false, typeof(UserClient), ServiceNames.UserService, null)}
+                       {typeof(IUserService), (true, typeof(UserClient), ServiceNames.UserService, () => new UserCallBack())}
                    };
         }
     }

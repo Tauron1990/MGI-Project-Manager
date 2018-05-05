@@ -61,6 +61,42 @@ namespace Tauron.Application.ProjectManager.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Change ähnelt.
+        /// </summary>
+        public static string Label_Admin_ChangePassword {
+            get {
+                return ResourceManager.GetString("Label_Admin_ChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die New Password ähnelt.
+        /// </summary>
+        public static string Label_Admin_NewPassword {
+            get {
+                return ResourceManager.GetString("Label_Admin_NewPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Old Password ähnelt.
+        /// </summary>
+        public static string Label_Admin_OldPassword {
+            get {
+                return ResourceManager.GetString("Label_Admin_OldPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Admin Password ähnelt.
+        /// </summary>
+        public static string Label_AdminPassword {
+            get {
+                return ResourceManager.GetString("Label_AdminPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Admin Password need to Changed ähnelt.
         /// </summary>
         public static string Label_AdminPasswordChange {
@@ -75,6 +111,69 @@ namespace Tauron.Application.ProjectManager.Resources {
         public static string Label_Common_Error {
             get {
                 return ResourceManager.GetString("Label_Common_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create ähnelt.
+        /// </summary>
+        public static string Label_CreateUser {
+            get {
+                return ResourceManager.GetString("Label_CreateUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delete ähnelt.
+        /// </summary>
+        public static string Label_DeleteUser {
+            get {
+                return ResourceManager.GetString("Label_DeleteUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Export ähnelt.
+        /// </summary>
+        public static string Label_IP_Export {
+            get {
+                return ResourceManager.GetString("Label_IP_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reload ähnelt.
+        /// </summary>
+        public static string Label_IP_Reload {
+            get {
+                return ResourceManager.GetString("Label_IP_Reload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save ähnelt.
+        /// </summary>
+        public static string Label_IP_Save {
+            get {
+                return ResourceManager.GetString("Label_IP_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die IP: ähnelt.
+        /// </summary>
+        public static string Label_IP_Text {
+            get {
+                return ResourceManager.GetString("Label_IP_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die IP Settings ähnelt.
+        /// </summary>
+        public static string Label_IPSettings {
+            get {
+                return ResourceManager.GetString("Label_IPSettings", resourceCulture);
             }
         }
         
@@ -97,6 +196,24 @@ namespace Tauron.Application.ProjectManager.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Useres ähnelt.
+        /// </summary>
+        public static string Label_User {
+            get {
+                return ResourceManager.GetString("Label_User", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die User Name: ähnelt.
+        /// </summary>
+        public static string Label_UserName {
+            get {
+                return ResourceManager.GetString("Label_UserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Export Ok ähnelt.
         /// </summary>
         public static string Text_IpExport_Ok {
@@ -111,6 +228,60 @@ namespace Tauron.Application.ProjectManager.Resources {
         public static string Text_Login_Faild {
             get {
                 return ResourceManager.GetString("Text_Login_Faild", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No Anser was send From Server ähnelt.
+        /// </summary>
+        public static string Text_PassordChange_Timeout {
+            get {
+                return ResourceManager.GetString("Text_PassordChange_Timeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Admin ähnelt.
+        /// </summary>
+        public static string Text_UserRighs_Admin {
+            get {
+                return ResourceManager.GetString("Text_UserRighs_Admin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Error ähnelt.
+        /// </summary>
+        public static string Text_UserRighs_Error {
+            get {
+                return ResourceManager.GetString("Text_UserRighs_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manager ähnelt.
+        /// </summary>
+        public static string Text_UserRighs_Manager {
+            get {
+                return ResourceManager.GetString("Text_UserRighs_Manager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Operator ähnelt.
+        /// </summary>
+        public static string Text_UserRighs_Operator {
+            get {
+                return ResourceManager.GetString("Text_UserRighs_Operator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Wrong IP ähnelt.
+        /// </summary>
+        public static string Text_WrongIPSetting {
+            get {
+                return ResourceManager.GetString("Text_WrongIPSetting", resourceCulture);
             }
         }
     }

@@ -129,4 +129,10 @@
   <data name="UserManager_Reason_UserExis" xml:space="preserve">
     <value>Der User Existiert bereits</value>
   </data>
+  <data name="UserManager_Reason_PasswordNull" xml:space="preserve">
+    <value>Kein Passwort Angegeben</value>
+  </data>
+  <data name="UserManager_Reason_Delete" xml:space="preserve">
+    <value>Benutzer konnte nicht gelöscht werden</value>
+  </data>
 </root>
