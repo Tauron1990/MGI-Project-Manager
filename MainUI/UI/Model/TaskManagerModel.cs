@@ -29,7 +29,7 @@ namespace Tauron.Application.MgiProjectManager.UI.Model
             set => SetValue(MessageProperty, value);
         }
 
-        public async void RunTask(Action action, string title)
+        public async Task RunTask(Action action, string title)
         {
             await Task.Run(() =>
                            {

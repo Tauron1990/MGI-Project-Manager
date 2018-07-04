@@ -83,9 +83,9 @@ namespace Tauron.Application.Models
         [Inject]
         public ViewManager ViewManager { get; protected set; }
 
+        private static IDialogFactory _dialogs;
         [NotNull]
-        [Inject]
-        public IDialogFactory Dialogs { get; protected set; }
+        public static IDialogFactory Dialogs => _dialogs ?? (_dialogs = CommonApplication.Current.Container.Resolve<IDialogFactory>());
 
         [NotNull]
         public System.Windows.Application CurrentApplication => System.Windows.Application.Current;
@@ -94,7 +94,7 @@ namespace Tauron.Application.Models
         public Dispatcher SystemDispatcher => CurrentApplication.Dispatcher;
 
         [CanBeNull]
-        public IWindow MainWindow => CommonApplication.Current.MainWindow;
+        public static IWindow MainWindow => CommonApplication.Current.MainWindow;
 
         [NotNull]
         public IUISynchronize Synchronize => UiSynchronize.Synchronize;

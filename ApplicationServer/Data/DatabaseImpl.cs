@@ -2,11 +2,10 @@
 using JetBrains.Annotations;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using NLog.Extensions.Logging;
 using SQLitePCL;
 using Tauron.Application.ProjectManager.ApplicationServer.Core;
 using Tauron.Application.ProjectManager.ApplicationServer.Data.PrivateEntitys;
-using Tauron.Application.ProjectManager.Data.Entitys;
+using Tauron.Application.ProjectManager.Services.Data.Entitys;
 
 namespace Tauron.Application.ProjectManager.ApplicationServer.Data
 {
@@ -18,12 +17,13 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Data
             modelBuilder.Entity<UserEntity>().HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotifications);
             modelBuilder.Entity<JobRunEntity>().HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotifications);
             modelBuilder.Entity<SetupEntity>().HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotifications);
+            //modelBuilder.Entity<JobEntity>().HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotifications);
 
-            modelBuilder.Entity<JobEntity>()
-                        .HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotifications)
-                        .HasOne(e => e.JobRun)
-                        .WithOne(b => b.Job)
-                        .HasForeignKey<JobRunEntity>(b => b.JobId);
+            //modelBuilder.Entity<JobEntity>()
+            //            .HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotifications)
+            //            .HasOne(e => e.JobRuns)
+            //            .WithOne(b => b.)
+            //            .HasForeignKey<JobRunEntity>(b => b.JobId);
             base.OnModelCreating(modelBuilder);
         }
 

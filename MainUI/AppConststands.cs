@@ -8,8 +8,9 @@
         public const string JobPreperation   = "JobPreperation";
 
         //Model
+        public const string CreationWorkItemModel = "CreationWorkItemModel";
         public const string TaskManager          = "TaskManager";
-        public const string WorkItemModel        = "WortkItemModel";
+        //public const string WorkItemModel        = "WortkItemModel";
         public const string TimeCalculationModel = "TimeCalculation";
 
         //Logger

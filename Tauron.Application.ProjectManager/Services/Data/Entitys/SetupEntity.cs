@@ -1,7 +1,7 @@
 ﻿using System;
 using Tauron.Application.Common.BaseLayer.Data;
 
-namespace Tauron.Application.ProjectManager.Data.Entitys
+namespace Tauron.Application.ProjectManager.Services.Data.Entitys
 {
     [Serializable]
     public class SetupEntity : GenericBaseEntity<int>

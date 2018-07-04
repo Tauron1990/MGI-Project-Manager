@@ -31,7 +31,17 @@ namespace ServerStartApp
             hiberateCheckBox.Checked = Settings.Default.SetHiberate;
 
             Bootstrapper.ConfigurateLogging += BootstrapperOnConfigurateLogging;
+            Bootstrapper.Faulted += BootstrapperOnFaulted;
             MessageHelper.Initialize(LogConsole);
+        }
+
+        private void BootstrapperOnFaulted()
+        {
+            Invoke(new Action(() =>
+                              {
+                                  startButton.Enabled = true;
+                                  LogConsole.Text = "ServiceContainer Error. See Logfile for Reasons";
+                              }));
         }
 
         private void BootstrapperOnConfigurateLogging(LoggingConfiguration obj)
@@ -89,7 +99,11 @@ namespace ServerStartApp
             closeButton.Enabled = false;
             shutdownButton.Enabled = false;
 
-            Task.Run(() => Bootstrapper.Stop()).ContinueWith(t => Invoke(new Action(() => startButton.Enabled = true)));
+            Task.Run(() => Bootstrapper.Stop()).ContinueWith(t => Invoke(new Action(() =>
+                                                                                    {
+                                                                                        startButton.Enabled = true;
+                                                                                        LogConsole.Text = string.Empty;
+                                                                                    })));
         }
 
         private void shutdownButton_Click(object sender, EventArgs e)
@@ -101,7 +115,14 @@ namespace ServerStartApp
                      {
                          Bootstrapper.Stop();
                          Process.Start("shutdown", Settings.Default.SetHiberate ? "/h /f" : "/s /t 0");
-                         Invoke(new Action(Close));
+                         if(!Settings.Default.SetHiberate)
+                            Invoke(new Action(Close));
+                         else
+                             Invoke(new Action(() =>
+                                               {
+                                                   startButton.Enabled = true;
+                                                   LogConsole.Text = string.Empty;
+                                               }));
                      });
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
 using JetBrains.Annotations;
@@ -10,6 +11,7 @@ using Tauron.Application.Models;
 
 namespace Tauron.Application
 {
+    [Serializable]
     public class PropertyModelExtension : IContainerExtension
     {
         private class PropertyImportInterceptor : IImportInterceptor

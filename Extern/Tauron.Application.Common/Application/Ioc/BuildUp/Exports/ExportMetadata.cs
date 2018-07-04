@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 namespace Tauron.Application.Ioc.BuildUp.Exports
 {
     /// <summary>The export metadata.</summary>
-    [PublicAPI]
+    [PublicAPI, Serializable]
     public sealed class ExportMetadata : IEquatable<ExportMetadata>
     {
         #region Constructors and Destructors

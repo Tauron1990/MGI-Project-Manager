@@ -35,6 +35,7 @@ using Tauron.Application.Ioc.BuildUp.Exports;
 namespace Tauron.Application.Ioc
 {
     /// <summary>The aggregare export provider.</summary>
+    [Serializable]
     public class AggregareExportProvider : ExportProvider
     {
         #region Fields

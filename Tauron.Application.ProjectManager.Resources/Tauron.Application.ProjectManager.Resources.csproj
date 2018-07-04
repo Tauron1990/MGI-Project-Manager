@@ -45,6 +45,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AdminClientLabels.resx</DependentUpon>
     </Compile>
+    <Compile Include="MainUIResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MainUIResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceMessages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -62,6 +67,10 @@
     <EmbeddedResource Include="AdminClientLabels.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AdminClientLabels.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainUIResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MainUIResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ServiceMessages.de.resx" />
     <EmbeddedResource Include="ServiceMessages.resx">

@@ -22,8 +22,7 @@ namespace Tauron.Application
 
         public DefaultShellFactory([NotNull] Type shellType)
         {
-            if (shellType == null) throw new ArgumentNullException(nameof(shellType));
-            _shellType = shellType;
+            _shellType = shellType ?? throw new ArgumentNullException(nameof(shellType));
         }
 
         #endregion
@@ -35,10 +34,7 @@ namespace Tauron.Application
         ///     The <see cref="object" />.
         /// </returns>
         [NotNull]
-        public object CreateView()
-        {
-            return Activator.CreateInstance(_shellType);
-        }
+        public object CreateView() => Activator.CreateInstance(_shellType);
 
         #endregion
     }

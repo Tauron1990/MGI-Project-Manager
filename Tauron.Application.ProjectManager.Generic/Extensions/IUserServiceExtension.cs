@@ -1,4 +1,5 @@
 ﻿using System;
+using Tauron.Application.ProjectManager.Services.Data.Entitys;
 using Tauron.Application.ProjectManager.Services.DTO;
 
 namespace Tauron.Application.ProjectManager.Generic.Extensions

@@ -1,10 +1,11 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using Tauron.Application.Ioc.BuildUp.Exports;
 using Tauron.Application.Ioc.BuildUp.Exports.DefaultExports;
 
 namespace Tauron.Application.Ioc
 {
-    [PublicAPI]
+    [PublicAPI, Serializable]
     public class SimpleBuildPrameter : BuildParameter
     {
         private readonly IExport _export;

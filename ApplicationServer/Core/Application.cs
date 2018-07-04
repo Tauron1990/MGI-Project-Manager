@@ -32,7 +32,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
         public override string GetdefaultFileLocation() => GetDicPath();
 
         private static string GetDicPath() => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
-                                                         .CombinePath("Tauron\\MGIProjectManager");
+                                                         .CombinePath("Tauron\\MGIProjectServer");
 
         protected override void Fill(IContainer container)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Tauron.Application.Common.BaseLayer;
 using Tauron.Application.Common.BaseLayer.Core;
+using Tauron.Application.ProjectManager.ApplicationServer.Data.Repositorys;
 
 namespace Tauron.Application.ProjectManager.ApplicationServer.Data
 {
@@ -10,7 +11,10 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Data
     {
         public override IEnumerable<(Type, Type)> GetRepositoryTypes()
         {
-            yield break;
+            yield return (typeof(IJobRepository), typeof(JobRepository));
+            yield return (typeof(IJobRunRepository), typeof(JobRunRepository));
+            yield return (typeof(ISetupRepository), typeof(SetupRepository));
+            yield return (typeof(IUserRepsoitory), typeof(UserRepository));
         }
     }
 }

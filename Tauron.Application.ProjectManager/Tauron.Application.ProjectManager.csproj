@@ -36,7 +36,7 @@
       <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.2\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.5.4\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -66,9 +66,13 @@
     <Compile Include="ServiceNames.cs" />
     <Compile Include="Services\DTO\GenericServiceFault.cs" />
     <Compile Include="Services\DTO\GenericServiceResult.cs" />
+    <Compile Include="Services\DTO\JobItemDto.cs" />
     <Compile Include="Services\DTO\LogInFault.cs" />
     <Compile Include="Services\DTO\UserRights.cs" />
     <Compile Include="Services\IAdminService.cs" />
+    <Compile Include="Services\IJobManager.cs" />
+    <Compile Include="Services\IJobPushMessage.cs" />
+    <Compile Include="Services\IJobPushMessageCallback.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\IUserServiceCallback.cs" />
   </ItemGroup>

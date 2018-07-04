@@ -34,7 +34,7 @@
       <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.2\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.5.4\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -74,9 +74,16 @@
     <Compile Include="ClientException.cs" />
     <Compile Include="ClientFactory.cs" />
     <Compile Include="Clients\AdminClient.cs" />
+    <Compile Include="Clients\CallbackBase.cs" />
     <Compile Include="Clients\ClientHelperBase.cs" />
+    <Compile Include="Clients\JobManagerClient.cs" />
+    <Compile Include="Clients\JobMessageClientCallback.cs" />
+    <Compile Include="Clients\JobPushMessageClient.cs" />
+    <Compile Include="Clients\UserCallBack.cs" />
     <Compile Include="Clients\UserClient.cs" />
     <Compile Include="ClientViewModel.cs" />
+    <Compile Include="Core\TimeManager.cs" />
+    <Compile Include="Extensions\IJobPushMessage.cs" />
     <Compile Include="Extensions\IUserServiceExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -90,6 +97,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="ResultAwaiter.cs" />
+    <Compile Include="ServiceManager.cs" />
     <Compile Include="Windows\Consts.cs" />
     <Compile Include="Windows\LogInWindow.xaml.cs">
       <DependentUpon>LogInWindow.xaml</DependentUpon>

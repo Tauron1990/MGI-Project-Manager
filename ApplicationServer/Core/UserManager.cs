@@ -205,5 +205,17 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
             using (var deriveBytes = new Rfc2898DeriveBytes(password, salt, iterations))
                 return deriveBytes.GetBytes(length);
         }
+
+        public static bool HasRights(string name, UserRights allowedRights, out UserRights right)
+        {
+            if (UserEntities.TryGetValue(name, out var user))
+            {
+                right = user.UserRights;
+                return user.UserRights >= allowedRights;
+            }
+
+            right = UserRights.Error;
+            return false;
+        }
     }
 }

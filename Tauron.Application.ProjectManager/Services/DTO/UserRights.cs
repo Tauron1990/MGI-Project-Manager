@@ -2,10 +2,10 @@
 {
     public enum UserRights
     {
-        None,
-        Error,
-        Manager,
-        Operater,
-        Admin
+        None = 0,
+        Error = 1,
+        Manager = 2,
+        Operater = 3,
+        Admin = 4
     }
 }

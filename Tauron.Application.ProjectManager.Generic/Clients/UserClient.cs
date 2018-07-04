@@ -7,15 +7,6 @@ using Tauron.Application.ProjectManager.Services.DTO;
 
 namespace Tauron.Application.ProjectManager.Generic.Clients
 {
-    public class UserCallBack : IUserServiceCallback
-    {
-        private UserClient _userClient;
-
-        public void PasswortChanged(GenericServiceResult result) => _userClient.OnPasswordChanged(result);
-
-        public void SetClient(UserClient client) => _userClient = client;
-    }
-
     public sealed class UserClient : ClientHelperBase<IUserService>, IUserService, IUserServiceExtension
     {
         public UserClient(UserCallBack context, Binding binding, EndpointAddress adress) 

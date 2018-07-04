@@ -89,8 +89,7 @@ namespace Tauron.Application.Ioc.Components
             /// <summary>The dispose.</summary>
             public void Dispose()
             {
-                var disposable = _object as IDisposable;
-                if (disposable != null) disposable.Dispose();
+                if (_object is IDisposable disposable) disposable.Dispose();
             }
 
             #endregion

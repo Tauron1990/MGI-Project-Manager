@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
-using Tauron.Application.MgiProjectManager.Data;
-using Tauron.Application.MgiProjectManager.ServiceLayer.Dto;
+using Tauron.Application.ProjectManager.Services.Data.Entitys;
+using Tauron.Application.ProjectManager.Services.DTO;
 
 namespace Tauron.Application.MgiProjectManager.UI
 {

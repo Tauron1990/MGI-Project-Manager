@@ -1,185 +1,50 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ServiceModel;
+using System.ComponentModel;
 using Tauron.Application.Ioc;
 using Tauron.Application.Models;
-using Tauron.Application.ProjectManager.Resources;
-using Tauron.Application.ProjectManager.Services.DTO;
 using Tauron.Application.ProjectManager.UI;
 
 namespace Tauron.Application.ProjectManager.Generic
 {
     public abstract class ClientViewModel : ViewModelBase, IDisposable
     {
-        private ClientException _clientException;
-        private Exception       _openException;
-        private bool            _statusOk;
-
-        protected Dictionary<Type, ClientObjectBase> ClientObjects = new Dictionary<Type, ClientObjectBase>();
+        private ServiceManager _serviceManager;
 
         public bool StatusOk
         {
-            get => _statusOk;
-            set => SetProperty(ref _statusOk, value);
+            get => _serviceManager.StatusOk;
+            set => _serviceManager.StatusOk = value;
         }
 
-        public Exception OpenException
-        {
-            get => _openException;
-            set => SetProperty(ref _openException, value);
-        }
+        public Exception OpenException => _serviceManager.OpenException;
 
-        public ClientException ClientException
-        {
-            get => _clientException;
-            private set => SetProperty(ref _clientException, value);
-        }
+        public ClientException ClientException => _serviceManager.ClientException;
 
         [Inject]
         public IClientFactory ClientFactory { get; set; }
 
         public void Dispose()
         {
-            foreach (var clientObject in ClientObjects)
-            {
-                (clientObject.Value.CommunicationObject as IDisposable)?.Dispose();
-            }
+            _serviceManager.PropertyChanged       -= ServiceManagerOnPropertyChanged;
+            _serviceManager.OpenFailed            -= OpenFailed;
+            _serviceManager.BeginOpen             -= BeginOpen;
+            _serviceManager.ConnectionEstablished -= ConnectionEstablished;
+            _serviceManager.Dispose();
         }
 
-        protected void ResetClients()
-        {
-            foreach (var clientObjectBase in ClientObjects)
-            {
-                if(clientObjectBase.Value.State == CommunicationState.Opened || clientObjectBase.Value.State == CommunicationState.Opening)
-                    clientObjectBase.Value.CommunicationObject.Close();
-            }
+        protected void ResetClients() => _serviceManager.ResetClients();
 
-            ClientObjects.Clear();
-        }
+        protected TClient CreateClint<TClient>() where TClient : class => _serviceManager.CreateClint<TClient>();
 
-        protected TClient CreateClint<TClient>() where TClient : class
-        {
-            var key = typeof(TClient);
+        protected void Close(params Type[] clients) => _serviceManager.Close(clients);
 
-            if (ClientObjects.TryGetValue(key, out var clientObjectBase))
-                if (clientObjectBase.State != CommunicationState.Faulted && clientObjectBase is ClientObject<TClient> tempClient)
-                    return tempClient.Client;
+        protected bool EnsureOpen(params Type[] clients) => _serviceManager.EnsureOpen(clients);
 
-            var client = ClientFactory.CreateClient<TClient>();
-            if (client == null) return null;
+        protected TResult Secure<TResult>(Func<TResult> action, out bool ok) => _serviceManager.Secure(action, out ok);
 
-            ClientObjects[key] = client;
-            return client.Client;
-        }
+        protected bool Secure(Action action) => _serviceManager.Secure(action);
 
-        protected void Close(params Type[] clients)
-        {
-            if (clients == null)
-                foreach (var clientObject in ClientObjects)
-                {
-                    if (clientObject.Value.State != CommunicationState.Closed)
-                        clientObject.Value.Close();
-                }
-            else
-                foreach (var client in clients)
-                {
-                    if (!ClientObjects.TryGetValue(client, out var clientObjectBase)) continue;
-
-                    if (clientObjectBase.State != CommunicationState.Closed)
-                        clientObjectBase.Close();
-                }
-        }
-
-        protected bool EnsureOpen(params Type[] clients)
-        {
-            try
-            {
-                var clientTypes = new List<Type>();
-                if (clients == null) clientTypes.AddRange(ClientObjects.Keys);
-                else clientTypes.AddRange(clients);
-
-                foreach (var clientType in clientTypes)
-                {
-                    if (!ClientObjects.TryGetValue(clientType, out var objectBase) || objectBase.State == CommunicationState.Opened) continue;
-
-                    BeginOpen();
-                    objectBase.Open();
-                    ConnectionEstablished(clientType, objectBase);
-                }
-
-                StatusOk = true;
-                return true;
-            }
-            catch (Exception e)
-            {
-                if (CriticalExceptions.IsCriticalApplicationException(e)) throw;
-
-                if (e.InnerException != null)
-                    e = e.InnerException;
-
-                OpenException = e;
-                StatusOk      = false;
-
-                OpenFailed();
-
-                return false;
-            }
-        }
-
-        protected TResult Secure<TResult>(Func<TResult> action, out bool ok)
-        {
-            try
-            {
-                var temp = action();
-                ok = true;
-
-                return temp;
-            }
-            catch (ClientException e)
-            {
-                ok              = false;
-                ClientException = e;
-                StatusOk = false;
-                return default(TResult);
-            }
-        }
-
-        protected bool Secure(Action action)
-        {
-            try
-            {
-                action();
-                return true;
-            }
-            catch (ClientException e)
-            {
-                ClientException = e;
-                StatusOk = false;
-                return false;
-            }
-        }
-
-        protected string ProcessDefaultErrors()
-        {
-            if (ClientException == null) return string.Empty;
-
-            var inner = ClientException.InnerException;
-
-            switch (inner)
-            {
-                case FaultException<GenericServiceFault> genericFaultException:
-                    Dialogs.ShowMessageBox(MainWindow, genericFaultException.Detail.Reason, "Error", MsgBoxButton.Ok, MsgBoxImage.Error, null);
-                    return genericFaultException.Detail.Reason;
-                case FaultException<LogInFault> loginFaultException:
-                    Dialogs.ShowMessageBox(MainWindow, loginFaultException.Detail.Reason, UIMessages.LogIn_Error_Caption, MsgBoxButton.Ok, MsgBoxImage.Error, null);
-                    return loginFaultException.Detail.Reason;
-                case CommunicationException communicationException:
-                    Dialogs.FormatException(MainWindow, communicationException);
-                    return $"{inner.GetType()} - {communicationException.Message}";
-            }
-
-            return inner?.Message ?? string.Empty;
-        }
+        protected string ProcessDefaultErrors() => _serviceManager.ProcessDefaultErrors();
 
         protected virtual void OpenFailed()
         {
@@ -193,5 +58,18 @@ namespace Tauron.Application.ProjectManager.Generic
         protected virtual void ConnectionEstablished(Type type, ClientObjectBase clientObjectBase)
         {
         }
+
+        public override void BuildCompled()
+        {
+            base.BuildCompled();
+
+            _serviceManager                       =  new ServiceManager(Dialogs, MainWindow);
+            _serviceManager.PropertyChanged       += ServiceManagerOnPropertyChanged;
+            _serviceManager.OpenFailed            += OpenFailed;
+            _serviceManager.BeginOpen             += BeginOpen;
+            _serviceManager.ConnectionEstablished += ConnectionEstablished;
+        }
+
+        private void ServiceManagerOnPropertyChanged(object sender, PropertyChangedEventArgs e) => OnPropertyChangedExplicit(e.PropertyName);
     }
 }

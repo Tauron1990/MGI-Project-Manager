@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace Tauron.Application.Ioc
 {
-    public sealed class ErrorTracer
+    public sealed class ErrorTracer : MarshalByRefObject
     {
         private readonly StringBuilder _internalPhase = new StringBuilder();
         private          int           _ident;

@@ -36,6 +36,7 @@ using Tauron.Application.Ioc.LifeTime;
 namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
 {
     /// <summary>The default export.</summary>
+    [Serializable]
     public sealed class DefaultExport : IExport
     {
         #region Methods
@@ -131,53 +132,34 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
 
         #region Constructors and Destructors
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="DefaultExport" /> class.
-        ///     Initialisiert eine neue Instanz der <see cref="DefaultExport" /> Klasse.
-        ///     Initializes a new instance of the <see cref="DefaultExport" /> class.
-        /// </summary>
-        /// <param name="exportetType">
-        ///     The exportet type.
-        /// </param>
-        /// <param name="externalInfo">
-        ///     The external info.
-        /// </param>
-        /// <param name="asAnonym">
-        ///     The as anonym.
-        /// </param>
+        public DefaultExport(object export)
+            : this(export?.GetType(), export)
+        {
+            
+        }
+
+        public DefaultExport(Type exportetType, object obj)
+            : this(exportetType, new ExternalExportInfo(true, true, true, false, (x, g) => obj, exportetType?.FullName), true)
+        {
+        }
+
         public DefaultExport([NotNull] Type exportetType, [NotNull] ExternalExportInfo externalInfo, bool asAnonym)
         {
             if (exportetType == null) throw new ArgumentNullException(nameof(exportetType));
-            if (externalInfo == null) throw new ArgumentNullException(nameof(externalInfo));
 
             Globalmetadata     = new Dictionary<string, object>();
             _exportetType      = exportetType;
             _attributeProvider = exportetType;
-            ExternalInfo       = externalInfo;
+            ExternalInfo       = externalInfo ?? throw new ArgumentNullException(nameof(externalInfo));
             Initialize(asAnonym);
         }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="DefaultExport" /> class.
-        ///     Initialisiert eine neue Instanz der <see cref="DefaultExport" /> Klasse.
-        ///     Initializes a new instance of the <see cref="DefaultExport" /> class.
-        /// </summary>
-        /// <param name="info">
-        ///     The exportet type.
-        /// </param>
-        /// <param name="externalInfo">
-        ///     The external info.
-        /// </param>
-        /// <param name="asAnonym">
-        ///     The as anonym.
-        /// </param>
+        
         public DefaultExport([NotNull] MethodInfo info, [NotNull] ExternalExportInfo externalInfo, bool asAnonym)
         {
             if (info == null) throw new ArgumentNullException(nameof(info));
-            if (externalInfo == null) throw new ArgumentNullException(nameof(externalInfo));
             Globalmetadata     = new Dictionary<string, object>();
             _attributeProvider = info;
-            ExternalInfo       = externalInfo;
+            ExternalInfo       = externalInfo ?? throw new ArgumentNullException(nameof(externalInfo));
             Initialize(asAnonym);
         }
 

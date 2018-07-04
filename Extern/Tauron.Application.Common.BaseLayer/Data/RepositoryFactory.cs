@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using JetBrains.Annotations;
 using Tauron.Application.Ioc;
 
@@ -9,6 +10,9 @@ namespace Tauron.Application.Common.BaseLayer.Data
     public interface IDatabaseAcess : IDisposable
     {
         void SaveChanges();
+
+        T GetRepository<T>()
+            where T : class;
     }
 
     [Export(typeof(RepositoryFactory))]
@@ -17,6 +21,13 @@ namespace Tauron.Application.Common.BaseLayer.Data
     {
         private class NullDispose : IDatabaseAcess
         {
+            private readonly RepositoryFactory _fac;
+
+            public NullDispose(RepositoryFactory fac)
+            {
+                _fac = fac;
+            }
+
             public void Dispose()
             {
             }
@@ -24,25 +35,27 @@ namespace Tauron.Application.Common.BaseLayer.Data
             public void SaveChanges()
             {
             }
+
+            public T GetRepository<T>() where T : class => _fac.GetRepository<T>();
         }
 
         private class DatabaseDisposer : IDatabaseAcess
         {
             private readonly GroupDictionary<IDatabaseIdentifer, object> _databases;
             private readonly Action                                      _exitAction;
+            private readonly RepositoryFactory _fac;
 
-            public DatabaseDisposer(GroupDictionary<IDatabaseIdentifer, object> databases, Action exitAction)
+            public DatabaseDisposer(GroupDictionary<IDatabaseIdentifer, object> databases, Action exitAction, RepositoryFactory fac)
             {
                 _databases  = databases;
                 _exitAction = exitAction;
+                _fac = fac;
             }
 
             public void Dispose()
             {
                 foreach (var database in _databases.Keys)
-                {
                     database.Dispose();
-                }
 
                 _exitAction();
             }
@@ -50,12 +63,17 @@ namespace Tauron.Application.Common.BaseLayer.Data
             public void SaveChanges()
             {
                 foreach (var database in _databases.Keys.OfType<IDatabase>())
-                {
                     database.SaveChanges();
-                }
             }
+
+            public T GetRepository<T>() where T : class => _fac.GetRepository<T>();
         }
 
+        private static RepositoryFactory _repositoryFactory;
+
+        public static RepositoryFactory Factory => _repositoryFactory ?? (_repositoryFactory = CommonApplication.Current.Container.Resolve<RepositoryFactory>());
+
+        private object _sync;
         private bool             _compositeMode;
         private DatabaseDisposer _databaseDisposer;
 
@@ -92,14 +110,24 @@ namespace Tauron.Application.Common.BaseLayer.Data
 
         public IDatabaseAcess Enter()
         {
-            if (_compositeMode) return new NullDispose();
+            if (_compositeMode) return new NullDispose(this);
+            bool locked = false;
 
-            if (_databaseDisposer != null) throw new InvalidOperationException("Only One Database Acess Alowed");
+            try
+            {
+                if (!Monitor.TryEnter(_sync, TimeSpan.FromMinutes(1))) throw new InvalidOperationException("Only One Database Acess Alowed");
+                locked = true;
 
-            _repositorys      = new GroupDictionary<IDatabaseIdentifer, object>();
-            _databaseDisposer = new DatabaseDisposer(_repositorys, Exit);
+                _repositorys      = new GroupDictionary<IDatabaseIdentifer, object>();
+                _databaseDisposer = new DatabaseDisposer(_repositorys, Exit, this);
 
-            return _databaseDisposer;
+                return _databaseDisposer;
+            }
+            finally
+            {
+                if(locked)
+                    Monitor.Exit(_sync);
+            }
         }
 
         public TRepo GetRepository<TRepo>()

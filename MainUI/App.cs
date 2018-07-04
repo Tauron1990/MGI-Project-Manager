@@ -5,15 +5,14 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using JetBrains.Annotations;
-using Microsoft.EntityFrameworkCore;
 using NLog;
 using NLog.Config;
-using Tauron.Application.Common.BaseLayer.BusinessLayer;
 using Tauron.Application.Implement;
 using Tauron.Application.Implementation;
 using Tauron.Application.Ioc;
-using Tauron.Application.MgiProjectManager.Data;
-using Tauron.Application.MgiProjectManager.Resources;
+using Tauron.Application.Ioc.BuildUp.Exports.DefaultExports;
+using Tauron.Application.ProjectManager.Generic;
+using Tauron.Application.ProjectManager.Resources;
 using Tauron.Application.Views;
 
 namespace Tauron.Application.MgiProjectManager
@@ -64,6 +63,8 @@ namespace Tauron.Application.MgiProjectManager
             var temp   = ViewManager.Manager.CreateWindow(AppConststands.MainWindowName);
             MainWindow = temp;
 
+            Container.Register(new DefaultExport(new ServiceManager(Container.Resolve<IDialogFactory>(), temp)), 0);
+
             CurrentWpfApplication.Dispatcher.Invoke(() =>
                                                     {
                                                         Current.MainWindow               = temp;
@@ -80,15 +81,12 @@ namespace Tauron.Application.MgiProjectManager
 
         protected override void LoadResources()
         {
-            SimpleLocalize.Register(UIResources.ResourceManager, typeof(App).Assembly);
+            SimpleLocalize.Register(MainUIResources.ResourceManager, typeof(App).Assembly);
 
             System.Windows.Application.Current.Resources.MergedDictionaries.Add(
                                                                                 (ResourceDictionary)
                                                                                 System.Windows.Application.LoadComponent(new PackUriHelper().GetUri("Theme.xaml", typeof(App).Assembly.FullName,
                                                                                                                                                     false)));
-
-            using (var db = new DatabaseImpl())
-                db.Database.Migrate();
         }
 
         public override string GetdefaultFileLocation()
@@ -120,7 +118,7 @@ namespace Tauron.Application.MgiProjectManager
             resolver.AddAssembly(typeof(WpfApplication).Assembly);
             resolver.AddAssembly(typeof(CommonApplication).Assembly);
             resolver.AddAssembly(typeof(DialogFactory).Assembly);
-            resolver.AddAssembly(typeof(RuleFactory).Assembly);
+            resolver.AddAssembly(typeof(ClientFactory).Assembly);
 
             container.Register(resolver);
         }

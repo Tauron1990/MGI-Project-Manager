@@ -15,7 +15,9 @@ namespace Tauron.Application.ProjectManager.ApplicationServer
         private static readonly (Type, Type, string)[] ServiceTypes =
         {
             (typeof(AdminServiceImpl), typeof(IAdminService), ServiceNames.AdminService),
-            (typeof(UserServiceImpl), typeof(IUserService), ServiceNames.UserService)
+            (typeof(UserServiceImpl), typeof(IUserService), ServiceNames.UserService),
+            (typeof(JobManagerImpl), typeof(IJobManager), ServiceNames.JobManager),
+            (typeof(JobPushMessageImpl), typeof(IJobPushMessage), ServiceNames.JobPushMessage)
         };
 
         private readonly List<ServiceHost> _services = new List<ServiceHost>();
@@ -36,6 +38,8 @@ namespace Tauron.Application.ProjectManager.ApplicationServer
             {
                 var host = new ServiceHost(serviceType.Item1, baseAddress);
 
+                host.Faulted += HostOnFaulted;
+
                 host.Credentials.UserNameAuthentication.UserNamePasswordValidationMode       = UserNamePasswordValidationMode.Custom;
                 host.Credentials.UserNameAuthentication.CustomUserNamePasswordValidator      = new UserAuthentication();
                 host.Credentials.ServiceCertificate.Certificate                              = new X509Certificate2(Properties.Resources.local, str);
@@ -45,17 +49,31 @@ namespace Tauron.Application.ProjectManager.ApplicationServer
 
                 host.AddServiceEndpoint(serviceType.Item2, LocationHelper.CreateBinding(), serviceType.Item3);
 
-
                 host.Open();
+
                 _services.Add(host);
             }
         }
 
+        private static void HostOnFaulted(object sender, EventArgs e)
+        {
+            Bootstrapper.FaultedStop();
+        }
+
         public void Stop()
         {
+            ConnectivityManager.Close();
+
             foreach (var serviceHost in _services)
             {
-                serviceHost.Close();
+                try
+                {
+                    serviceHost.Close(TimeSpan.FromMinutes(5));
+                }
+                catch (Exception e) when(e is CommunicationException || e is TimeoutException)
+                {
+                    serviceHost.Abort();
+                }
             }
 
             _services.Clear();

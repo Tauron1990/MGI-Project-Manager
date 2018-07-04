@@ -27,7 +27,7 @@ namespace Tauron.Application.MgiProjectManager
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            ((WorkItemModel) ModelBase.ResolveModel(AppConststands.WorkItemModel)).CollectionView = ((CollectionViewSource) Resources["JobSource"]).View;
+            ((CreationWorkItemModel) ModelBase.ResolveModel(AppConststands.WorkItemModel)).CollectionView = ((CollectionViewSource) Resources["JobSource"]).View;
         }
     }
 }

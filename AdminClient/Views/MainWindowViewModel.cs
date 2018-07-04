@@ -142,49 +142,51 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
         [CommandTarget]
         public void ChangeAdminPassword()
         {
+            base.BuildCompled();
+
             IsBusy = true;
 
-                Task.Run(() =>
+            Task.Run(() =>
+                     {
+                         if (!OpenAdmin())
+                             _adminService.AdminLogout();
+                         if (!EnsureOpen(typeof(IUserService)))
                          {
-                             if(!OpenAdmin()) 
-                                 _adminService.AdminLogout();
-                             if (!EnsureOpen(typeof(IUserService)))
-                             {
-                                 ProcessOpenException();
-                                 return;
-                             }
+                             ProcessOpenException();
+                             return;
+                         }
 
-                             bool isok = Secure(() => _userService.ChangePassword("admin", NewPassword, CurrentPassword));
+                         bool isok = Secure(() => _userService.ChangePassword("admin", NewPassword, CurrentPassword));
 
-                             if (!isok)
-                             {
-                                 ErrorText = ProcessDefaultErrors();
-                                 return;
-                             }
+                         if (!isok)
+                         {
+                             ErrorText = ProcessDefaultErrors();
+                             return;
+                         }
 
-                             var result = _passwordChangeResult.Result;
-                             _passwordChangeResult.Reset();
+                         var result = _passwordChangeResult.Result;
+                         _passwordChangeResult.Reset();
 
 
-                             if (!result.SuccededSuccessful)
-                             {
-                                 ErrorText = $"{AdminClientLabels.Label_Common_Error} {result.Reason}";
-                                 return;
-                             }
+                         if (!result.SuccededSuccessful)
+                         {
+                             ErrorText = $"{AdminClientLabels.Label_Common_Error} {result.Reason}";
+                             return;
+                         }
 
-                             
-                             ClientFactory.ChangePassword(NewPassword);
-                             if (OpenAdmin())
-                                 return;
 
-                             _adminService.AdminLogin(NewPassword);
+                         ClientFactory.ChangePassword(NewPassword);
+                         if (OpenAdmin())
+                             return;
 
-                             ErrorText          = result.Reason;
-                             NeedPasswordChange = false;
-                             CurrentPassword = string.Empty;
-                             NewPassword     = string.Empty;
-                            
-                         }).ContinueWith(t => IsBusy = false);
+                         _adminService.AdminLogin(NewPassword);
+
+                         ErrorText          = result.Reason;
+                         NeedPasswordChange = false;
+                         CurrentPassword    = string.Empty;
+                         NewPassword        = string.Empty;
+
+                     }).ContinueWith(t => IsBusy = false);
         }
 
         [CommandTarget]

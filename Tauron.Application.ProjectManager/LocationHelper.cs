@@ -32,7 +32,12 @@ namespace Tauron.Application.ProjectManager
                                                 {
                                                     ClientCredentialType = MessageCredentialType.UserName
                                                 }
-                                  }
+                                  },
+                       ReliableSession = new OptionalReliableSession
+                                         {
+                                             Enabled = true,
+                                             InactivityTimeout = TimeSpan.MaxValue
+                                         }
                    };
         }
     }

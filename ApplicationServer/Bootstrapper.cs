@@ -7,7 +7,8 @@ namespace Tauron.Application.ProjectManager.ApplicationServer
 {
     public static class Bootstrapper
     {
-        public static event Action<LoggingConfiguration> ConfigurateLogging; 
+        public static event Action<LoggingConfiguration> ConfigurateLogging;
+        public static event Action Faulted;
 
         private static Core.Application _app;
 
@@ -36,5 +37,11 @@ namespace Tauron.Application.ProjectManager.ApplicationServer
         }
 
         internal static void OnConfigurateLogging(LoggingConfiguration obj) => ConfigurateLogging?.Invoke(obj);
+
+        internal static void FaultedStop()
+        {
+            Stop();
+            Faulted?.Invoke();
+        }
     }
 }

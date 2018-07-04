@@ -39,10 +39,11 @@ using Tauron.Application.Ioc.Components;
 namespace Tauron.Application.Ioc
 {
     /// <summary>The export resolver.</summary>
-    [PublicAPI]
+    [PublicAPI, Serializable]
     public sealed class ExportResolver
     {
         /// <summary>The assembly export provider.</summary>
+        [Serializable]
         internal sealed class AssemblyExportProvider : ExportProvider, IEquatable<AssemblyExportProvider>
         {
             #region Constructors and Destructors
@@ -154,6 +155,7 @@ namespace Tauron.Application.Ioc
         }
 
         /// <summary>The path export provider.</summary>
+        [Serializable]
         private sealed class PathExportProvider : ExportProvider, IDisposable
         {
             #region Fields
@@ -366,6 +368,7 @@ namespace Tauron.Application.Ioc
         }
 
         /// <summary>The type export provider.</summary>
+        [Serializable]
         private sealed class TypeExportProvider : ExportProvider
         {
             #region Public Properties

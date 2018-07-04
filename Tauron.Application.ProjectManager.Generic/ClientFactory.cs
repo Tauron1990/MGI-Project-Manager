@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using NLog;
 using Tauron.Application.Ioc;
 using Tauron.Application.ProjectManager.Generic.Clients;
+using Tauron.Application.ProjectManager.Generic.Extensions;
 using Tauron.Application.ProjectManager.Generic.Windows;
 using Tauron.Application.ProjectManager.Services;
 using Tauron.Application.ProjectManager.UI;
@@ -111,7 +112,8 @@ namespace Tauron.Application.ProjectManager.Generic
             return new Dictionary<Type, (bool, Type, string, Func<object>)>
                    {
                        {typeof(IAdminService), (false, typeof(AdminClient), ServiceNames.AdminService, null)},
-                       {typeof(IUserService), (true, typeof(UserClient), ServiceNames.UserService, () => new UserCallBack())}
+                       {typeof(IUserService), (true, typeof(UserClient), ServiceNames.UserService, () => new UserCallBack())},
+                       {typeof(IJobPushMessageExtension), (true, typeof(JobPushMessageClient), ServiceNames.JobPushMessage, () => new JobMessageClientCallback())}
                    };
         }
     }

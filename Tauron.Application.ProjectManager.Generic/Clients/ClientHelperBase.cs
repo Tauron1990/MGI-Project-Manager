@@ -3,12 +3,14 @@ using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Security;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using NLog;
 using Tauron.Application.ProjectManager.UI;
 
 namespace Tauron.Application.ProjectManager.Generic.Clients
 {
+    [PublicAPI]
     public abstract class ClientHelperBase<TChannel> : ITypedClientHelperBase<TChannel> 
         where TChannel : class
     {
@@ -89,38 +91,55 @@ namespace Tauron.Application.ProjectManager.Generic.Clients
             }
         }
 
-        public void Dispose()
-        {
-            Close();
-        }
+        public void Dispose() => Close();
 
         public void Abort()
         {
-            _channel?.Abort();
-            _channel = null;
-        }
-
-        public void Close()
-        {
             try
-            {
-                _channel?.Close();
-            }
-            catch
             {
                 _channel?.Abort();
             }
-
+            catch (CommunicationException)
+            {
+            }
             _channel = null;
         }
 
-        void ICommunicationObject.Close(TimeSpan timeout) => ((ICommunicationObject) _channel)?.Close(timeout);
+        public void Close() => InnerClose(Close);
 
-        IAsyncResult ICommunicationObject.BeginClose(AsyncCallback callback, object state) => ((ICommunicationObject) _channel)?.BeginClose(callback, state);
+        public void Close(TimeSpan timeout) => InnerClose(() => Close(timeout));
 
-        IAsyncResult ICommunicationObject.BeginClose(TimeSpan timeout, AsyncCallback callback, object state) => ((ICommunicationObject) _channel)?.BeginClose(timeout, callback, state);
+        protected virtual void InnerClose(Action close)
+        {
+            try
+            {
+                close();
+            }
+            catch
+            {
+                Abort();
+            }
 
-        void ICommunicationObject.EndClose(IAsyncResult result) => ((ICommunicationObject) _channel)?.EndClose(result);
+            _channel.Close();
+        }
+
+        IAsyncResult ICommunicationObject.BeginClose(AsyncCallback callback, object state)
+        {
+            var task = new Task(o => Close(), state);
+            task.ContinueWith(t => callback(t));
+            task.Start();
+            return task;
+        }
+
+        IAsyncResult ICommunicationObject.BeginClose(TimeSpan timeout, AsyncCallback callback, object state)
+        {
+            var task = new Task(o => Close(timeout), state);
+            task.ContinueWith(t => callback(t));
+            task.Start();
+            return task;
+        }
+
+        void ICommunicationObject.EndClose(IAsyncResult result) => result.AsyncWaitHandle.WaitOne();
 
         private CommonClient CreateClientBase()
         {
@@ -128,14 +147,13 @@ namespace Tauron.Application.ProjectManager.Generic.Clients
 
             var credinals = client.ClientCredentials;
 
-            if (credinals != null)
-            {
-                credinals.UserName.UserName = Name;
-                credinals.UserName.Password = Password;
+            if (credinals == null) return client;
 
-                credinals.ClientCertificate.Certificate                               = new X509Certificate2(Properties.Resources.ee, "tauron");
-                credinals.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
-            }
+            credinals.UserName.UserName = Name;
+            credinals.UserName.Password = Password;
+
+            credinals.ClientCertificate.Certificate                               = new X509Certificate2(Properties.Resources.ee, "tauron");
+            credinals.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
 
             return client;
         }
@@ -144,25 +162,34 @@ namespace Tauron.Application.ProjectManager.Generic.Clients
 
         public string Name { get; set; }
 
-        public void Open()
-        {
-            if(_channel == null)
-                _channel = CreateClientBase();
-            _channel.Open();
-        }
+        public void Open() => InnerOpen(_channel.Open);
 
-        public void Open(TimeSpan timeout)
+        public void Open(TimeSpan timeout) => InnerOpen(() => ((ICommunicationObject) _channel).Open(timeout));
+
+        protected virtual void InnerOpen(Action open)
         {
             if (_channel == null)
                 _channel = CreateClientBase();
-            ((ICommunicationObject) _channel).Open(timeout);
+            open();
         }
 
-        IAsyncResult ICommunicationObject.BeginOpen(AsyncCallback callback, object state) => ((ICommunicationObject) _channel)?.BeginOpen(callback, state);
+        IAsyncResult ICommunicationObject.BeginOpen(AsyncCallback callback, object state)
+        {
+            var task = new Task(o => Open(), state);
+            task.ContinueWith(t => callback(t));
+            task.Start();
+            return task;
+        }
 
-        IAsyncResult ICommunicationObject.BeginOpen(TimeSpan timeout, AsyncCallback callback, object state) => ((ICommunicationObject) _channel)?.BeginOpen(timeout, callback, state);
+        IAsyncResult ICommunicationObject.BeginOpen(TimeSpan timeout, AsyncCallback callback, object state)
+        {
+            var task = new Task(o => Open(timeout), state);
+            task.ContinueWith(t => callback(t));
+            task.Start();
+            return task;
+        }
 
-        void ICommunicationObject.EndOpen(IAsyncResult result) => ((ICommunicationObject) _channel)?.EndOpen(result);
+        void ICommunicationObject.EndOpen(IAsyncResult result) => result.AsyncWaitHandle.WaitOne();
 
         public CommunicationState State => _channel?.State ?? CommunicationState.Closed;
 

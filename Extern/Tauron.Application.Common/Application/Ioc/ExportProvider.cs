@@ -34,7 +34,7 @@ using Tauron.Application.Ioc.BuildUp.Exports;
 namespace Tauron.Application.Ioc
 {
     /// <summary>The export provider.</summary>
-    [PublicAPI]
+    [PublicAPI, Serializable]
     public abstract class ExportProvider
     {
         #region Public Events
@@ -90,7 +90,7 @@ namespace Tauron.Application.Ioc
     }
 
     /// <summary>The export changed event args.</summary>
-    [PublicAPI]
+    [PublicAPI, Serializable]
     public class ExportChangedEventArgs : EventArgs
     {
         #region Constructors and Destructors

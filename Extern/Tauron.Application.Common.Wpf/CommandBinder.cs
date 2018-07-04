@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -36,6 +37,7 @@ namespace Tauron.Application
                         _method      = method;
                         _firstArg    = firstArg ?? throw new ArgumentNullException(nameof(firstArg));
                         _isParameter = method.GetParameters().Length == 1;
+                        _isAsync = method.ReturnType.IsAssignableFrom(typeof(Task));
                     }
 
                     #endregion
@@ -47,6 +49,8 @@ namespace Tauron.Application
                     private readonly bool _isParameter;
 
                     private readonly MethodInfo _method;
+
+                    private readonly bool _isAsync;
 
                     #pragma warning disable 169
                     //private readonly Func<object, object[], RoutedEventArgs> _parmeterMapper;
@@ -71,7 +75,7 @@ namespace Tauron.Application
                         if (e == null) throw new ArgumentNullException(nameof(e));
                         var args = _isParameter ? new[] {e.Parameter} : new object[0];
 
-                        e.CanExecute = _method.Invoke<bool>(_firstArg, args);
+                        e.CanExecute = _isAsync ? _method.Invoke<Task<bool>>(_firstArg, args).Result : _method.Invoke<bool>(_firstArg, args);
                     }
 
                     /// <summary>
@@ -87,8 +91,11 @@ namespace Tauron.Application
                     {
                         if (sender == null) throw new ArgumentNullException(nameof(sender));
                         if (e == null) throw new ArgumentNullException(nameof(e));
-                        if (_isParameter) _method.Invoke(_firstArg, e.Parameter);
-                        else _method.Invoke(_firstArg, null);
+                        
+                        if (_isParameter) 
+                            _method.Invoke(_firstArg, e.Parameter);
+                        else 
+                            _method.Invoke(_firstArg, null);
                     }
 
                     #endregion
@@ -274,9 +281,12 @@ namespace Tauron.Application
 
                     ExecutedRoutedEventHandler del = null;
                     if (pair.Item1 != null)
+                    {   
                         del =
                             Delegate.CreateDelegate(typeof(ExecutedRoutedEventHandler), target, pair.Item1, false)
                                     .As<ExecutedRoutedEventHandler>() ?? new ParameterMapper(pair.Item1, target).Execute;
+
+                    }
 
                     CanExecuteRoutedEventHandler del2 = null;
                     if (pair.Item2 != null)

@@ -110,7 +110,7 @@ namespace Tauron.Application
             /// <summary>The scan.</summary>
             public override void Scan()
             {
-                var context = DataContext == null ? null : DataContext.Target;
+                var context = DataContext?.Target;
                 if (context == null) return;
 
                 MemberInfoAttribute.InvokeMembers<ControlTargetAttribute>(context, Name, Target);

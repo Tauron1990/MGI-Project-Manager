@@ -109,13 +109,12 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         {
             lock (this)
             {
-                foreach (var disposable in
-                    _global.Values.Concat(_local.Values)
-                           .Select(lifetimeContext => lifetimeContext.GetValue())
-                           .OfType<IDisposable>())
-                {
+                List<IDisposable> toDispose = new List<IDisposable>();
+                toDispose.AddRange(_global.Where(p => !p.Key.ExternalInfo.HandlesDispose).Select(p => p.Value?.GetValue()).OfType<IDisposable>());
+                toDispose.AddRange(_local.Where(p => !p.Key.Export.ExternalInfo.HandlesDispose).Select(p => p.Value?.GetValue()).OfType<IDisposable>());
+
+                foreach (var disposable in toDispose)
                     disposable.Dispose();
-                }
 
                 _global.Clear();
                 _local.Clear();

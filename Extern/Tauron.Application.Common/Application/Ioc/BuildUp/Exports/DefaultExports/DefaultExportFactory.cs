@@ -87,7 +87,7 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
 
             var export = new DefaultExport(
                                            type,
-                                           new ExternalExportInfo(false, false, true, true, null, string.Empty),
+                                           new ExternalExportInfo(false, false, true, false, null, string.Empty),
                                            false);
 
             var attr                = type.GetCustomAttribute<ExportLevelAttribute>();

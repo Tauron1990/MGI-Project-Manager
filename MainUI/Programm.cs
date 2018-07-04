@@ -56,22 +56,13 @@ namespace Tauron.Application.MgiProjectManager
                                                     SingleInstance<App>.GetCommandLineArgs(applicationIdentifier));
         }
 
-        private static void CleanUp()
-        {
-            SingleInstance<App>.Cleanup();
-        }
+        private static void CleanUp() => SingleInstance<App>.Cleanup();
 
 
-        private static void StartApp([NotNull] Mutex mutex, [NotNull] string channelName)
-        {
-            App.Setup(mutex, channelName);
-        }
+        private static void StartApp([NotNull] Mutex mutex, [NotNull] string channelName) => App.Setup(mutex, channelName);
 
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
-        private static void OnUnhandledException([NotNull] object sender, [NotNull] UnhandledExceptionEventArgs args)
-        {
-            CommonConstants.LogCommon(true, args.ExceptionObject.ToString());
-        }
+        private static void OnUnhandledException([NotNull] object sender, [NotNull] UnhandledExceptionEventArgs args) => CommonConstants.LogCommon(true, args.ExceptionObject.ToString());
     }
 }

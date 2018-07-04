@@ -61,6 +61,24 @@ namespace Tauron.Application.ProjectManager.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Authorization Faild: ähnelt.
+        /// </summary>
+        public static string Authorization_Error {
+            get {
+                return ResourceManager.GetString("Authorization_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Session Is Alredy Registered ähnelt.
+        /// </summary>
+        public static string ConnectivityManager_Session_AlreadyRegistered {
+            get {
+                return ResourceManager.GetString("ConnectivityManager_Session_AlreadyRegistered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Unable to Delete User ähnelt.
         /// </summary>
         public static string UserManager_Reason_Delete {

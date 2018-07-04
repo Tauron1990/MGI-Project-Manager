@@ -1,4 +1,4 @@
-﻿namespace Tauron.Application.ProjectManager.Data.Entitys
+﻿namespace Tauron.Application.ProjectManager.Services.Data.Entitys
 {
     public enum SetupType
     {

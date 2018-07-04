@@ -24,6 +24,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using Tauron.Application.Ioc.BuildUp;
 using Tauron.Application.Ioc.BuildUp.Exports;
 using Tauron.Application.Ioc.BuildUp.Exports.DefaultExports;
@@ -35,6 +36,7 @@ using Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys;
 namespace Tauron.Application.Ioc.Components
 {
     /// <summary>The default extension.</summary>
+    [Serializable]
     public sealed class DefaultExtension : IContainerExtension
     {
         #region Public Methods and Operators

@@ -135,4 +135,10 @@
   <data name="UserManager_Reason_Delete" xml:space="preserve">
     <value>Benutzer konnte nicht gelöscht werden</value>
   </data>
+  <data name="Authorization_Error" xml:space="preserve">
+    <value>Autorisierung Fehlgeschlagen:</value>
+  </data>
+  <data name="ConnectivityManager_Session_AlreadyRegistered" xml:space="preserve">
+    <value>Session ist schon Registriert.</value>
+  </data>
 </root>

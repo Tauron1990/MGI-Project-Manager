@@ -1,24 +1,24 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using Tauron.Application.Ioc;
-using Tauron.Application.MgiProjectManager.Data;
-using Tauron.Application.MgiProjectManager.ServiceLayer;
 using Tauron.Application.Models;
+using Tauron.Application.ProjectManager.Generic;
+using Tauron.Application.ProjectManager.Services;
+using Tauron.Application.ProjectManager.Services.Data.Entitys;
 
 namespace Tauron.Application.MgiProjectManager.UI.Model
 {
-    [ExportModel(AppConststands.WorkItemModel)]
-    public sealed class WorkItemModel : ModelBase
+    [ExportModel(AppConststands.CreationWorkItemModel)]
+    public sealed class CreationWorkItemModel : ModelBase
     {
-        public static readonly ObservableProperty JobItemsProperty = RegisterProperty(nameof(JobItems), typeof(WorkItemModel), typeof(UISyncObservableCollection<JobItem>),
-                                                                                      new ObservablePropertyMetadata(new UISyncObservableCollection<JobItem>()));
 
-        public static readonly ObservableProperty CurrentJobProperty = RegisterProperty(nameof(CurrentJob), typeof(WorkItemModel), typeof(JobItem),
+        public static readonly ObservableProperty CurrentJobProperty = RegisterProperty(nameof(CurrentJob), typeof(CreationWorkItemModel), typeof(JobItem),
                                                                                         new ObservablePropertyMetadata(CurrentJobValueChanged));
 
-        public static readonly ObservableProperty JobCreationProperty = RegisterProperty(nameof(JobCreation), typeof(WorkItemModel), typeof(bool),
+        public static readonly ObservableProperty JobCreationProperty = RegisterProperty(nameof(JobCreation), typeof(CreationWorkItemModel), typeof(bool),
                                                                                          new ObservablePropertyMetadata((object) false));
+
+        private ServiceManager _serviceManager;
 
         private bool _lock;
 
@@ -35,17 +35,12 @@ namespace Tauron.Application.MgiProjectManager.UI.Model
             get => GetValue<JobItem>(CurrentJobProperty);
             set => SetValue(CurrentJobProperty, value);
         }
-
-        public UISyncObservableCollection<JobItem> JobItems => GetValue<UISyncObservableCollection<JobItem>>(JobItemsProperty);
-
-        public ICollectionView CollectionView { get; set; }
-
-        [Inject]
+        
         public IJobManager JobManager { get; private set; }
 
         private static void CurrentJobValueChanged(ObservableProperty prop, ModelBase model, object value)
         {
-            var itemModel = (WorkItemModel) model;
+            var itemModel = (CreationWorkItemModel) model;
             itemModel.OnJobValueChanged(value);
         }
 
@@ -60,12 +55,11 @@ namespace Tauron.Application.MgiProjectManager.UI.Model
 
             _newJob = new JobItem
                       {
-                          Name       = "BM" + DateTime.Now.Year.ToString().Substring(2),
+                          Name       = "BM_" + DateTime.Now.Year.ToString().Substring(2),
                           Status     = JobStatus.Creation,
                           TargetDate = DateTime.Now + TimeSpan.FromHours(48)
                       };
 
-            JobItems.Add(_newJob);
             SetValue(CurrentJobProperty, _newJob);
             OnItemStatusChange();
             _lock = false;
@@ -76,17 +70,9 @@ namespace Tauron.Application.MgiProjectManager.UI.Model
             _lock       = true;
             _newJob     = null;
             JobCreation = false;
-            CurrentDispatcher.BeginInvoke(CollectionView.Refresh);
             _lock = false;
         }
-
-        public void FetchJobs()
-        {
-            JobItems.Clear();
-
-            JobItems.AddRange(JobManager.GetActiveJobs().Select(dto => new JobItem(dto)));
-        }
-
+        
         public void OnItemStatusChange()
         {
             ItemStatusChange?.Invoke(this, new JobItemStatusEventArgs(CurrentJob));
@@ -107,7 +93,6 @@ namespace Tauron.Application.MgiProjectManager.UI.Model
             _lock       = true;
             CurrentJob  = null;
             JobCreation = false;
-            JobItems.Remove(_newJob);
             OnItemStatusChange();
             _lock = false;
         }
@@ -118,7 +103,12 @@ namespace Tauron.Application.MgiProjectManager.UI.Model
 
             CurrentJob.Importent = true;
             JobManager.MarkImportent(CurrentJob.CreateDto());
-            CurrentDispatcher.BeginInvoke(CollectionView.Refresh);
+        }
+
+        public override void BuildCompled()
+        {
+            _serviceManager = new ServiceManager(ViewModelBase.Dialogs, ViewModelBase.MainWindow);
+            JobManager = _serviceManager.CreateClint<IJobManager>();
         }
     }
 }
