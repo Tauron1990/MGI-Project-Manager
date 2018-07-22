@@ -38,10 +38,10 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Services
 
         public void MarkImportent(JobItemDto jobItem) => ExecuteRule(RuleFactory.CreateIiBusinessRule<JobItemDto>(RuleNames.MarkImportent), jobItem, nameof(IJobManager), rights:UserRights.Manager);
 
-        public bool StateTransition(JobStatus status) => Secure(() => CurrentJobManager.SetStatus(status));
+        public bool StateTransition(string name, JobStatus status) => Secure(() => CurrentJobManager.SetStatus(name, status));
 
-        public bool StartJob(string name) => Secure(() =>  CurrentJobManager.SetCurrentJob(name));
+        public bool SeCurrentJob(string name) => Secure(() =>  CurrentJobManager.SetCurrentJob(name));
 
-        public JobItemDto GetCurrentJob() => Secure(() => JobItemDto.FromEntity(CurrentJobManager.CurrentJop), UserRights.Manager);
+        public JobItemDto GetCurrentJob() => Secure(() => JobItemDto.FromEntity(CurrentJobManager.CurrentJob), UserRights.Manager);
     }
 }

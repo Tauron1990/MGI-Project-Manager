@@ -20,9 +20,9 @@ namespace Tauron.Application.ProjectManager.Generic.Clients
 
         public void MarkImportent(JobItemDto jobItem) => Secure(() => Channel.MarkImportent(jobItem));
 
-        public bool StateTransition(JobStatus status) => Secure(() => Channel.StateTransition(status));
+        public bool StateTransition(string name, JobStatus status) => Secure(() => Channel.StateTransition(name, status));
 
-        public bool StartJob(string name) => Secure(() => Channel.StartJob(name));
+        public bool SeCurrentJob(string name) => Secure(() => Channel.SeCurrentJob(name));
 
         public JobItemDto GetCurrentJob() => Secure(() => Channel.GetCurrentJob());
     }

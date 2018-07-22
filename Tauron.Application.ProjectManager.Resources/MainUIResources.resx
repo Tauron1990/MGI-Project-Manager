@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-	<!-- 
+  <!-- 
 		Microsoft ResX Schema
 
 		Version 1.3
@@ -58,44 +58,211 @@
 			: using a System.ComponentModel.TypeConverter
 			: and then encoded with base64 encoding.
 	-->
-	
-	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-		<xsd:element name="root" msdata:IsDataSet="true">
-			<xsd:complexType>
-				<xsd:choice maxOccurs="unbounded">
-					<xsd:element name="data">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
-							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="resheader">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required" />
-						</xsd:complexType>
-					</xsd:element>
-				</xsd:choice>
-			</xsd:complexType>
-		</xsd:element>
-	</xsd:schema>
-	<resheader name="resmimetype">
-		<value>text/microsoft-resx</value>
-	</resheader>
-	<resheader name="version">
-		<value>1.3</value>
-	</resheader>
-	<resheader name="reader">
-		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<resheader name="writer">
-		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MainWindow_Button_CreateJob" xml:space="preserve">
+    <value>Create Job</value>
+  </data>
+  <data name="WindowTitelCreateJob" xml:space="preserve">
+    <value>Create Job</value>
+  </data>
+  <data name="CommonLabelOk" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="StatusConverter_StatusCreation" xml:space="preserve">
+    <value>Creation</value>
+  </data>
+  <data name="StatusConverter_StatusPrepare" xml:space="preserve">
+    <value>Prepare</value>
+  </data>
+  <data name="StatusConverter_StatusPending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="StatusConverter_StatusInProgress" xml:space="preserve">
+    <value>In Progress</value>
+  </data>
+  <data name="StatusConverter_StatusDrying" xml:space="preserve">
+    <value>Drying</value>
+  </data>
+  <data name="StatusConverter_StatusCompled" xml:space="preserve">
+    <value>Compled</value>
+  </data>
+  <data name="JobCreationView_Label_JobDate" xml:space="preserve">
+    <value>Target Date:</value>
+  </data>
+  <data name="JobCreationView_Label_SelectTargetDate" xml:space="preserve">
+    <value>Select Target Date</value>
+  </data>
+  <data name="JobCreationView_Label_IsImportetSelector" xml:space="preserve">
+    <value>Is Importent ?</value>
+  </data>
+  <data name="JobCreationView_Label_CommonError" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Common_Label_Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="MainWindow_Button_MarkAsImportent" xml:space="preserve">
+    <value>Mark As Importent</value>
+  </data>
+  <data name="TaskFetchJobs" xml:space="preserve">
+    <value>Fetching Jobs</value>
+  </data>
+  <data name="JobCreationViewModel_Label_Next" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="LabelTimeData" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="LabelTimeMikron" xml:space="preserve">
+    <value>Mikron:</value>
+  </data>
+  <data name="WaterLabelTimeMikron" xml:space="preserve">
+    <value>Mikron</value>
+  </data>
+  <data name="LabelTimeSpeed" xml:space="preserve">
+    <value>Speed:</value>
+  </data>
+  <data name="WaterLabelTimeSpeed" xml:space="preserve">
+    <value>Speed</value>
+  </data>
+  <data name="TimeFormatToolTip" xml:space="preserve">
+    <value>The last Values only in 5 cm steps</value>
+  </data>
+  <data name="WaterLabelPaperFormat" xml:space="preserve">
+    <value>Paper Format</value>
+  </data>
+  <data name="LabelTimePaperFormat" xml:space="preserve">
+    <value>Paper Format:</value>
+  </data>
+  <data name="LabelTimeRuns" xml:space="preserve">
+    <value>Runs:</value>
+  </data>
+  <data name="WaterLabelRuns" xml:space="preserve">
+    <value>Runs</value>
+  </data>
+  <data name="LabelTimeNumber" xml:space="preserve">
+    <value>Amount:</value>
+  </data>
+  <data name="WaterLabelTimeNumber" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="LabelTimeResult" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="LabelTimeCalcRuntime" xml:space="preserve">
+    <value>Runtime:</value>
+  </data>
+  <data name="LabelTimeSetupTime" xml:space="preserve">
+    <value>Setup Time:</value>
+  </data>
+  <data name="LabelTimeCompled" xml:space="preserve">
+    <value>Compled Time:</value>
+  </data>
+  <data name="LabelTimeStatus" xml:space="preserve">
+    <value>Status:</value>
+  </data>
+  <data name="BtnTimeCalculate" xml:space="preserve">
+    <value>Calculate</value>
+  </data>
+  <data name="LabelTimeSaveJobTime" xml:space="preserve">
+    <value>Saving Job Data</value>
+  </data>
+  <data name="LabelTimeSaveJobTimeSuccess" xml:space="preserve">
+    <value>Saving Compled</value>
+  </data>
+  <data name="TimeCalcRuntimeCalculation" xml:space="preserve">
+    <value>Runtime Calculation</value>
+  </data>
+  <data name="LabelTimeCalcSetupTime" xml:space="preserve">
+    <value>Setup</value>
+  </data>
+  <data name="LabelTimeCalcIterationTime" xml:space="preserve">
+    <value>Iteration Time</value>
+  </data>
+  <data name="TitleTimeCalcCalculation" xml:space="preserve">
+    <value>Time is calculating</value>
+  </data>
+  <data name="PrecisionModePerfect" xml:space="preserve">
+    <value>High reliability</value>
+  </data>
+  <data name="PrecisionModeNearCorner" xml:space="preserve">
+    <value>Medium reliability</value>
+  </data>
+  <data name="PrecisionModeAmountMismatchPerfect" xml:space="preserve">
+    <value>Extrapolation with medium reliability</value>
+  </data>
+  <data name="PrecisionModeAmountMismatchNearCorner" xml:space="preserve">
+    <value>Extrapolation with low reliability</value>
+  </data>
+  <data name="PrecisionModeNoData" xml:space="preserve">
+    <value>No Data</value>
+  </data>
+  <data name="MainWindow_MenuLabel_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="MainWindow_MenuButton_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="MainWindow_MenuLabel_Server" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="MainWindowModel_Label_Connecting" xml:space="preserve">
+    <value>Fetching Data...</value>
+  </data>
+  <data name="MainWindowModel_Label_ConnectionFailed" xml:space="preserve">
+    <value>Connection Failed</value>
+  </data>
+  <data name="MainWindow_MenuLabel_Reconnect" xml:space="preserve">
+    <value>Reconnect</value>
+  </data>
+  <data name="MainWindow_MenuLabel_ShowLogin" xml:space="preserve">
+    <value>Show Login Window</value>
+  </data>
+  <data name="MainWindowModel_Label_StatusOk" xml:space="preserve">
+    <value>Status: OK</value>
+  </data>
+  <data name="MainWindowModel_Label_Login" xml:space="preserve">
+    <value>Logging In</value>
+  </data>
+  <data name="MainWindowViewModel_Label_FinlizeFailed" xml:space="preserve">
+    <value>Operation Failed</value>
+  </data>
 </root>

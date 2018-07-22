@@ -12,12 +12,13 @@ namespace Tauron.Application.ProjectManager.ApplicationServer
 {
     internal class ServiceContainer
     {
-        private static readonly (Type, Type, string)[] ServiceTypes =
+        private static readonly (Type ServiceImpl, Type SeriviceInterface, string ServiceName)[] ServiceTypes =
         {
             (typeof(AdminServiceImpl), typeof(IAdminService), ServiceNames.AdminService),
             (typeof(UserServiceImpl), typeof(IUserService), ServiceNames.UserService),
             (typeof(JobManagerImpl), typeof(IJobManager), ServiceNames.JobManager),
-            (typeof(JobPushMessageImpl), typeof(IJobPushMessage), ServiceNames.JobPushMessage)
+            (typeof(JobPushMessageImpl), typeof(IJobPushMessage), ServiceNames.JobPushMessage),
+            (typeof(TimeCalculatorImpl), typeof(ITimeCalculator), ServiceNames.TimeCalculator)
         };
 
         private readonly List<ServiceHost> _services = new List<ServiceHost>();
@@ -36,7 +37,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer
 
             foreach (var serviceType in ServiceTypes)
             {
-                var host = new ServiceHost(serviceType.Item1, baseAddress);
+                var host = new ServiceHost(serviceType.ServiceImpl, baseAddress);
 
                 host.Faulted += HostOnFaulted;
 
@@ -47,7 +48,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer
                 host.Credentials.ClientCertificate.Authentication.CertificateValidationMode  = X509CertificateValidationMode.Custom;
                 host.Credentials.ClientCertificate.Authentication.CustomCertificateValidator = new CertificateValidator();
 
-                host.AddServiceEndpoint(serviceType.Item2, LocationHelper.CreateBinding(), serviceType.Item3);
+                host.AddServiceEndpoint(serviceType.SeriviceInterface, LocationHelper.CreateBinding(), serviceType.ServiceName);
 
                 host.Open();
 

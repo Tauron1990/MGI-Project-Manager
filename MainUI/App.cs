@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using JetBrains.Annotations;
 using NLog;
 using NLog.Config;
+using NLog.Layouts;
+using NLog.Targets;
+using Syncfusion.SfSkinManager;
 using Tauron.Application.Implement;
 using Tauron.Application.Implementation;
 using Tauron.Application.Ioc;
@@ -19,7 +24,46 @@ namespace Tauron.Application.MgiProjectManager
 {
     internal class App : WpfApplication, ISingleInstanceApp
     {
-        public App()
+#if DEBUG
+        public sealed class VsDebuggerTarget : TargetWithLayoutHeaderAndFooter
+        {
+
+            public VsDebuggerTarget()
+            {
+                Layout = "${logger}|${message}";
+            }
+
+            /// <summary>Initializes the target.</summary>
+            protected override void InitializeTarget()
+            {
+                base.InitializeTarget();
+                if (Header == null)
+                    return;
+                Debug.WriteLine(RenderLogEvent(Header, LogEventInfo.CreateNullEvent()));
+            }
+
+            /// <summary>
+            /// Closes the target and releases any unmanaged resources.
+            /// </summary>
+            protected override void CloseTarget()
+            {
+                if (Footer != null)
+                    Debug.WriteLine(RenderLogEvent(Footer, LogEventInfo.CreateNullEvent()));
+                base.CloseTarget();
+            }
+
+            /// <summary>
+            /// Writes the specified logging event to the attached debugger.
+            /// </summary>
+            /// <param name="logEvent">The logging event.</param>
+            protected override void Write(LogEventInfo logEvent)
+            {
+                Debug.WriteLine($"{RenderLogEvent(Layout, logEvent)}");
+            }
+        }
+
+#endif
+    public App()
             : base(true)
         {
         }
@@ -45,31 +89,31 @@ namespace Tauron.Application.MgiProjectManager
             CurrentWpfApplication.Resources = dic;
 
             var control = new ContentControl
-                          {
-                              HorizontalContentAlignment = HorizontalAlignment.Center,
-                              VerticalContentAlignment   = VerticalAlignment.Center,
-                              Height                     = 236,
-                              Width                      = 414,
-                              Content                    = dic["MainLabel"]
-                          };
+            {
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                Height = 236,
+                Width = 414,
+                Content = dic["MainLabel"]
+            };
 
-            SplashMessageListener.CurrentListner.SplashContent       = control;
+            SplashMessageListener.CurrentListner.SplashContent = control;
             SplashMessageListener.CurrentListner.MainLabelForeground = "Black";
             SplashMessageListener.CurrentListner.MainLabelBackground = dic["MainLabelbackground"];
         }
 
         protected override IWindow DoStartup(CommandLineProcessor prcessor)
         {
-            var temp   = ViewManager.Manager.CreateWindow(AppConststands.MainWindowName);
+            var temp = ViewManager.Manager.CreateWindow(AppConststands.MainWindowName);
             MainWindow = temp;
 
             Container.Register(new DefaultExport(new ServiceManager(Container.Resolve<IDialogFactory>(), temp)), 0);
 
             CurrentWpfApplication.Dispatcher.Invoke(() =>
-                                                    {
-                                                        Current.MainWindow               = temp;
-                                                        CurrentWpfApplication.MainWindow = (Window) temp.TranslateForTechnology();
-                                                    });
+            {
+                Current.MainWindow = temp;
+                CurrentWpfApplication.MainWindow = (Window) temp.TranslateForTechnology();
+            });
             return temp;
         }
 
@@ -83,10 +127,12 @@ namespace Tauron.Application.MgiProjectManager
         {
             SimpleLocalize.Register(MainUIResources.ResourceManager, typeof(App).Assembly);
 
-            System.Windows.Application.Current.Resources.MergedDictionaries.Add(
-                                                                                (ResourceDictionary)
-                                                                                System.Windows.Application.LoadComponent(new PackUriHelper().GetUri("Theme.xaml", typeof(App).Assembly.FullName,
-                                                                                                                                                    false)));
+            SfSkinManager.ApplyStylesOnApplication = true;
+
+            //System.Windows.Application.Current.Resources.MergedDictionaries.Add(
+            //    (ResourceDictionary)
+            //    System.Windows.Application.LoadComponent(new PackUriHelper().GetUri("Theme.xaml", typeof(App).Assembly.FullName,
+            //        false)));
         }
 
         public override string GetdefaultFileLocation()
@@ -105,7 +151,7 @@ namespace Tauron.Application.MgiProjectManager
         {
             return
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
-                           .CombinePath("Tauron\\MGIProjectManager");
+                    .CombinePath("Tauron\\MGIProjectManager");
         }
 
         protected override void Fill(IContainer container)
@@ -127,10 +173,12 @@ namespace Tauron.Application.MgiProjectManager
         {
             base.ConfigurateLagging(config);
 
-            #if DEBUG
+#if DEBUG
             LogManager.ThrowExceptions = true;
             LogManager.GlobalThreshold = LogLevel.Trace;
-            #endif
+
+            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, new VsDebuggerTarget()));
+#endif
         }
     }
 }

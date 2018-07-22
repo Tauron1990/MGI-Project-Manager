@@ -1,8 +1,8 @@
 ﻿using System.Windows;
-using System.Windows.Data;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using Syncfusion.Windows.Controls.Input;
-using Tauron.Application.MgiProjectManager.UI.Model;
-using Tauron.Application.Models;
 using Tauron.Application.Views;
 
 namespace Tauron.Application.MgiProjectManager
@@ -27,7 +27,15 @@ namespace Tauron.Application.MgiProjectManager
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            ((CreationWorkItemModel) ModelBase.ResolveModel(AppConststands.WorkItemModel)).CollectionView = ((CollectionViewSource) Resources["JobSource"]).View;
+            //MainGrid.RowDefinitions[3].SetBinding(RowDefinition.HeightProperty, new Binding
+            //{
+            //    Path = new PropertyPath("Height"),
+            //    Source = MainGrid.RowDefinitions[0]
+            //});
         }
+
+        private void EventSetter_OnMouseEnterHandler(object sender, MouseEventArgs e) => ((ContentControl)sender).Background = Brushes.LightGray;
+
+        private void EventSetter_OnMouseLeaveHandler(object sender, MouseEventArgs e) => ((ContentControl)sender).Background = Brushes.White;
     }
 }

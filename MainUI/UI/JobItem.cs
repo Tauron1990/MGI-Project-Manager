@@ -7,11 +7,11 @@ namespace Tauron.Application.MgiProjectManager.UI
 {
     public sealed class JobItem : ObservableObject
     {
-        private bool      _importent;
-        private string    _longName;
-        private string    _name;
+        private bool _importent;
+        private string _longName;
+        private string _name;
         private JobStatus _status;
-        private DateTime  _targetDate;
+        private DateTime _targetDate;
 
         public JobItem()
         {
@@ -19,11 +19,11 @@ namespace Tauron.Application.MgiProjectManager.UI
 
         public JobItem(JobItemDto dto)
         {
-            Importent  = dto.Importent;
-            Name       = dto.Name;
-            LongName   = dto.LongName;
+            Importent = dto.Importent;
+            Name = dto.Name;
+            LongName = dto.LongName;
             TargetDate = dto.TargetDate;
-            Status     = dto.Status;
+            Status = dto.Status;
         }
 
         public DateTime TargetDate
@@ -63,13 +63,13 @@ namespace Tauron.Application.MgiProjectManager.UI
         public JobItemDto CreateDto()
         {
             return new JobItemDto
-                   {
-                       Importent  = Importent,
-                       LongName   = LongName,
-                       Name       = Name,
-                       Status     = Status,
-                       TargetDate = TargetDate
-                   };
+            {
+                Importent = Importent,
+                LongName = LongName,
+                Name = Name,
+                Status = Status,
+                TargetDate = TargetDate
+            };
         }
     }
 }

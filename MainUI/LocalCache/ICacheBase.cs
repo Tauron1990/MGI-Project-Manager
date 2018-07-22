@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Tauron.Application.ProjectManager.Generic;
 
 namespace Tauron.Application.MgiProjectManager.LocalCache
@@ -7,6 +8,6 @@ namespace Tauron.Application.MgiProjectManager.LocalCache
     {
         void SetServiceManager(ServiceManager manager);
 
-        (ICacheItem, ICacheAction) Fail(Delegate del, object parm);
+        (IEnumerable<ICacheItem>, ICacheAction)? Fail(Delegate del, object[] parms);
     }
 }

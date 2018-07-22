@@ -368,32 +368,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BussinesLayer\AddSetupItemRule.cs" />
-    <Compile Include="BussinesLayer\AssertHelp.cs" />
-    <Compile Include="BussinesLayer\TimeCalculationCalculationValidationRule.cs" />
-    <Compile Include="BussinesLayer\TimeCalculationCalculateTimeRule.cs" />
-    <Compile Include="BussinesLayer\GetActiveJobsRule.cs" />
-    <Compile Include="BussinesLayer\InsertJobRule.cs" />
-    <Compile Include="BussinesLayer\TimeCalculationFetchJobInfoRule.cs" />
-    <Compile Include="BussinesLayer\TimeCalculationRecalculateSetupRule.cs" />
-    <Compile Include="BussinesLayer\TimeCalculationValidationRule.cs" />
-    <Compile Include="BussinesLayer\MarkImportentRule.cs" />
-    <Compile Include="BussinesLayer\RuleNames.cs" />
-    <Compile Include="BussinesLayer\TimeCalculationSaveRule.cs" />
-    <Compile Include="BussinesLayer\ValidateJobItemRule.cs" />
-    <Compile Include="BussinesLayer\ValidationRuleHelper.cs" />
-    <Compile Include="Data\Database.cs" />
-    <Compile Include="Data\Entitys\JobEntity.cs" />
-    <Compile Include="Data\Entitys\JobRunEntity.cs" />
-    <Compile Include="Data\Entitys\SetupEntity.cs" />
-    <Compile Include="Data\Entitys\SetupType.cs" />
-    <Compile Include="Data\MainDatabase.cs" />
-    <Compile Include="Data\JobStatus.cs" />
-    <Compile Include="Migrations\20180121030241_V1.cs" />
-    <Compile Include="Migrations\20180121030241_V1.designer.cs">
-      <DependentUpon>20180121030241_V1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\DatabaseImplModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -407,53 +381,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Resources\UIResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="ServiceLayer\Dto\AddSetupInput.cs" />
-    <Compile Include="ServiceLayer\Dto\CalculateTimeInput.cs" />
-    <Compile Include="ServiceLayer\Dto\CalculateTimeOutput.cs" />
-    <Compile Include="ServiceLayer\Dto\CalculateValidateOutput.cs" />
-    <Compile Include="ServiceLayer\Dto\JobItemDto.cs" />
-    <Compile Include="ServiceLayer\Dto\JobRunDto.cs" />
-    <Compile Include="ServiceLayer\Dto\PaperFormat.cs" />
-    <Compile Include="ServiceLayer\Dto\PrecisionMode.cs" />
-    <Compile Include="UI\RunTimeCalculatorItem.cs" />
-    <Compile Include="UI\RunTimeCalculatorItemType.cs" />
-    <Compile Include="UI\RuntimeCalculatorResult.cs" />
-    <Compile Include="ServiceLayer\Dto\SaveInput.cs" />
-    <Compile Include="ServiceLayer\Dto\SaveOutput.cs" />
-    <Compile Include="ServiceLayer\Dto\SpeedNotes.cs" />
-    <Compile Include="ServiceLayer\Dto\ValidationInput.cs" />
-    <Compile Include="ServiceLayer\Dto\ValidationOutput.cs" />
-    <Compile Include="ServiceLayer\IJobManager.cs" />
-    <Compile Include="ServiceLayer\Impl\ExecutionHelper.cs" />
-    <Compile Include="ServiceLayer\Impl\JobManager.cs" />
-    <Compile Include="ServiceLayer\Impl\TimeCalculator.cs" />
-    <Compile Include="ServiceLayer\ITimeCalculator.cs" />
-    <Compile Include="UI\Controls\JobCreationView.xaml.cs">
-      <DependentUpon>JobCreationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\JobCreationViewModel.cs" />
-    <Compile Include="UI\Controls\JobPreperationView.xaml.cs">
-      <DependentUpon>JobPreperationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\JobPreperationViewModel.cs" />
-    <Compile Include="UI\Converter\CompareHelp.cs" />
-    <Compile Include="UI\Converter\StatusConverter.cs" />
-    <Compile Include="UI\IJobChange.cs" />
-    <Compile Include="UI\Test\TestItem.cs" />
-    <Compile Include="UI\Converter\DateTimeHumanizer.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UIResources.de.resx" />
-    <EmbeddedResource Include="Resources\UIResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>UIResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -477,20 +407,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Themes\Editors.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\Controls\JobCreationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Controls\JobPreperationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="main.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -512,14 +428,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\exclamation.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UI\Model\" />
+    <Folder Include="UI\Controls\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />

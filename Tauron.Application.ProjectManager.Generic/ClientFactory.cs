@@ -23,7 +23,7 @@ namespace Tauron.Application.ProjectManager.Generic
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
-        private static Dictionary<Type, (bool, Type, string, Func<object>)> _clients = Initialize();
+        private static Dictionary<Type, (bool Callback, Type ClientType, string ServiceName, Func<object> CallbackCreator)> _clients = Initialize();
 
         public string Password { get; private set; }
 
@@ -39,12 +39,12 @@ namespace Tauron.Application.ProjectManager.Generic
             try
             {
                 var parms = new List<object>();
-                if (entry.Item1)
-                    parms.Add(entry.Item4());
+                if (entry.Callback)
+                    parms.Add(entry.CallbackCreator());
                 parms.Add(LocationHelper.CreateBinding());
-                parms.Add(new EndpointAddress(LocationHelper.BuildUrl(settings.NetworkTarget, entry.Item3)));
+                parms.Add(new EndpointAddress(LocationHelper.BuildUrl(settings.NetworkTarget, entry.ServiceName)));
 
-                var client = Activator.CreateInstance(entry.Item2, parms.ToArray());
+                var client = Activator.CreateInstance(entry.ClientType, parms.ToArray());
 
                 var credinals = (ClientHelperBase<TClient>) client;
                 credinals.Name = Name;
@@ -104,16 +104,18 @@ namespace Tauron.Application.ProjectManager.Generic
             }
         }
 
-        private static Dictionary<Type, (bool, Type, string, Func<object>)> Initialize()
+        private static Dictionary<Type, (bool Callback, Type ClientType, string ServiceName, Func<object> CallbackCreator)> Initialize()
         {
             ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, errors) => true;
             ServicePointManager.CheckCertificateRevocationList      =  false;
 
-            return new Dictionary<Type, (bool, Type, string, Func<object>)>
+            return new Dictionary<Type, (bool Callback, Type ClientType, string ServiceName, Func<object> CallbackCreator)>
                    {
                        {typeof(IAdminService), (false, typeof(AdminClient), ServiceNames.AdminService, null)},
                        {typeof(IUserService), (true, typeof(UserClient), ServiceNames.UserService, () => new UserCallBack())},
-                       {typeof(IJobPushMessageExtension), (true, typeof(JobPushMessageClient), ServiceNames.JobPushMessage, () => new JobMessageClientCallback())}
+                       {typeof(IJobPushMessageExtension), (true, typeof(JobPushMessageClient), ServiceNames.JobPushMessage, () => new JobMessageClientCallback())},
+                       {typeof(IJobManager),  (false, typeof(JobManagerClient), ServiceNames.JobManager, null)},
+                       {typeof(ITimeCalculator), (false, typeof(TimeCalculatorClient), ServiceNames.TimeCalculator, null) }
                    };
         }
     }

@@ -74,7 +74,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
             
             var name = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             if (!UserManager.HasRights(name, realRights, out var rights))
-                throw new FaultException(new FaultReason($"{ServiceMessages.Authorization_Error}-{rights}->{realRights}"));
+                throw new FaultException(new FaultReason($"{ServiceErrorMessages.Authorization_Error}-{rights}->{realRights}"));
         }
 
         private bool LogIfNeed(IRuleBase rule, string name, string message = null)

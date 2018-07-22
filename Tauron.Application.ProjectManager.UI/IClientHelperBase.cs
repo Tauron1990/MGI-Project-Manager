@@ -9,7 +9,7 @@ namespace Tauron.Application.ProjectManager.UI
         string Name     { get; set; }
     }
 
-    public interface ITypedClientHelperBase<TClient> : IClientHelperBase 
+    public interface ITypedClientHelperBase<out TClient> : IClientHelperBase 
         where TClient : class
     {
         TClient Client { get; }

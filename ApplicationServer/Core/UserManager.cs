@@ -50,7 +50,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
         {
             if (entity == null)
             {
-                reason = ServiceMessages.UserManager_Reason_NoUser;
+                reason = ServiceErrorMessages.UserManager_Reason_NoUser;
                 return false;
             }
 
@@ -62,7 +62,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
 
             if (string.IsNullOrWhiteSpace(password))
             {
-                reason = ServiceMessages.UserManager_Reason_PasswordNull;
+                reason = ServiceErrorMessages.UserManager_Reason_PasswordNull;
                 return false;
             }
 
@@ -70,7 +70,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
 
             if (entity.Password != pass)
             {
-                reason = ServiceMessages.UserManager_Reason_PasswordMismatch;
+                reason = ServiceErrorMessages.UserManager_Reason_PasswordMismatch;
                 return false;
             }
 
@@ -82,7 +82,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
         {
             if (string.IsNullOrWhiteSpace(newPassword))
             {
-                reason = ServiceMessages.UserManager_Reason_NoPassword;
+                reason = ServiceErrorMessages.UserManager_Reason_NoPassword;
                 return false;
             }
 
@@ -104,7 +104,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
         {
             if (string.IsNullOrWhiteSpace(password))
             {
-                reason = ServiceMessages.UserManager_Reason_NoPassword;
+                reason = ServiceErrorMessages.UserManager_Reason_NoPassword;
                 return false;
             }
 
@@ -112,7 +112,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
             {
                 if (db.Users.Find(userName) != null)
                 {
-                    reason = ServiceMessages.UserManager_Reason_UserExis;
+                    reason = ServiceErrorMessages.UserManager_Reason_UserExis;
                     return false;
                 }
 
@@ -137,13 +137,13 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
                 var entity = db.Users.Find(userName);
                 if (entity == null)
                 {
-                    reason = ServiceMessages.UserManager_Reason_NoUser;
+                    reason = ServiceErrorMessages.UserManager_Reason_NoUser;
                     return false;
                 }
 
                 db.Remove(entity);
                 if (UserEntities.TryRemove(entity.Id, out _))
-                    throw new FaultException(new FaultReason(ServiceMessages.UserManager_Reason_Delete));
+                    throw new FaultException(new FaultReason(ServiceErrorMessages.UserManager_Reason_Delete));
 
                 db.SaveChanges();
             }

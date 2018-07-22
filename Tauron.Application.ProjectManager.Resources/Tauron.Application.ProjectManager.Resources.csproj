@@ -45,21 +45,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AdminClientLabels.resx</DependentUpon>
     </Compile>
-    <Compile Include="MainUIResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MainUIResources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceMessages.Designer.cs">
+    <Compile Include="ServerMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ServiceMessages.resx</DependentUpon>
+      <DependentUpon>ServerMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ServiceErrorMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ServiceErrorMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="UIMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>UIMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="MainUIResources.Designer.cs">
+      <DependentUpon>MainUIResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -68,23 +73,32 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AdminClientLabels.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainUIResources.resx">
+    <EmbeddedResource Include="ServerMessages.de.resx" />
+    <EmbeddedResource Include="ServerMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>MainUIResources.Designer.cs</LastGenOutput>
+      <LastGenOutput>ServerMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="ServiceMessages.de.resx" />
-    <EmbeddedResource Include="ServiceMessages.resx">
+    <EmbeddedResource Include="ServiceErrorMessages.de.resx" />
+    <EmbeddedResource Include="ServiceErrorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ServiceMessages.Designer.cs</LastGenOutput>
+      <LastGenOutput>ServiceErrorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="UIMessages.de.resx" />
     <EmbeddedResource Include="UIMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UIMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="MainUIResources.de.resx" />
+    <EmbeddedResource Include="MainUIResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MainUIResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Login.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="exclamation.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

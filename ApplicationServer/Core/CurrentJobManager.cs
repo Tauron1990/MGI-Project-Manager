@@ -8,39 +8,41 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
 {
     public static class CurrentJobManager
     {
-        public static JobEntity CurrentJop { get; private set; }
+        public static JobEntity CurrentJob { get; private set; }
 
         public static bool SetCurrentJob(string name)
         {
-            using (var db = RepositoryFactory.Factory.Enter())
+            if (string.IsNullOrEmpty(name))
+                CurrentJob = null;
+            else
             {
-                var ent = db.GetRepository<IJobRepository>().QueryAsNoTracking().Include(e => e.JobRuns).SingleOrDefault(e => e.Id == name);
-
-                if (ent == null)
+                using (var db = RepositoryFactory.Factory.Enter())
                 {
-                    CurrentJop = null;
-                    return false;
-                }
+                    var ent = db.GetRepository<IJobRepository>().QueryAsNoTracking().Include(e => e.JobRuns).SingleOrDefault(e => e.Id == name);
 
-                CurrentJop = ent;
+                    if (ent == null)
+                    {
+                        CurrentJob = null;
+                        return false;
+                    }
+
+                    CurrentJob = ent;
+                }
             }
 
             ConnectivityManager.Inform(c => c.CurrentJobChanged(name));
             return true;
         }
-
-        public static bool SetStatus(JobStatus status)
+        
+        public static bool SetStatus(string name, JobStatus status)
         {
-            if (CurrentJop == null)
-                return false;
-
             using (var db = RepositoryFactory.Factory.Enter())
             {
-                var ent = db.GetRepository<IJobRepository>().Find(CurrentJop.Id);
+                var ent = db.GetRepository<IJobRepository>().Find(name);
                 if (ent == null) return false;
 
                 ent.Status = status;
-                CurrentJop.Status = status;
+                CurrentJob.Status = status;
                 db.SaveChanges();
             }
 

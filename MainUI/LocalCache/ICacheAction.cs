@@ -7,6 +7,7 @@ namespace Tauron.Application.MgiProjectManager.LocalCache
     public interface ICacheAction
     {
         Type IdentiferType { get; }
+        string Id { get; }
         void Try(List<ICacheItem> items, ClientObjectBase client);
     }
 }

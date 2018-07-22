@@ -102,7 +102,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
         public static void Register(string sessionId, IContextChannel channel, IJobPushMessageCallback callback)
         {
             if (!Callbacks.TryAdd(new SessionKey(channel, sessionId), callback))
-                throw new FaultException(new FaultReason(ServiceMessages.ConnectivityManager_Session_AlreadyRegistered));
+                throw new FaultException(new FaultReason(ServiceErrorMessages.ConnectivityManager_Session_AlreadyRegistered));
         }
 
         public static void UnResgister(string sessionId)

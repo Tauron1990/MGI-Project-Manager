@@ -55,7 +55,7 @@ namespace Tauron.Application.ProjectManager.Generic
         {
         }
 
-        protected virtual void ConnectionEstablished(Type type, ClientObjectBase clientObjectBase)
+        protected virtual void ConnectionEstablished(ServiceManager serviceManager, Type type, ClientObjectBase clientObjectBase)
         {
         }
 

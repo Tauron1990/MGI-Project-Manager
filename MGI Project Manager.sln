@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MGI Project Manager", "MGI Project Manager\MGI Project Manager.csproj", "{922AAD2F-4C03-4B8B-96C3-DD8575DB29AD}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extern", "Extern", "{5E9ED051-2D4E-4B29-8F4D-09B32E348E23}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.Common", "Extern\Tauron.Application.Common\Tauron.Application.Common.csproj", "{0D50EE98-A718-41B2-A1B6-57D23FDF5223}"
@@ -26,8 +24,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerStartHelper", "ServerStartHelper\ServerStartHelper.csproj", "{90FCA1DC-E6BC-41B6-A6CF-1ACA629F7686}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.ProjectManager.Resources", "Tauron.Application.ProjectManager.Resources\Tauron.Application.ProjectManager.Resources.csproj", "{01E858DD-6EFC-49B3-92F9-4D93169BCB1B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Old", "Old", "{8A5DB3AC-0A30-4BAB-B8B5-AB0481778545}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{0341D143-C1FD-4ADF-ACED-D91D107D90EE}"
 EndProject
@@ -62,12 +58,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{922AAD2F-4C03-4B8B-96C3-DD8575DB29AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{922AAD2F-4C03-4B8B-96C3-DD8575DB29AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{922AAD2F-4C03-4B8B-96C3-DD8575DB29AD}.Release Debug|Any CPU.ActiveCfg = Release|Any CPU
-		{922AAD2F-4C03-4B8B-96C3-DD8575DB29AD}.Release Debug|Any CPU.Build.0 = Release|Any CPU
-		{922AAD2F-4C03-4B8B-96C3-DD8575DB29AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{922AAD2F-4C03-4B8B-96C3-DD8575DB29AD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0D50EE98-A718-41B2-A1B6-57D23FDF5223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0D50EE98-A718-41B2-A1B6-57D23FDF5223}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D50EE98-A718-41B2-A1B6-57D23FDF5223}.Release Debug|Any CPU.ActiveCfg = Release Debug|Any CPU
@@ -169,7 +159,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{922AAD2F-4C03-4B8B-96C3-DD8575DB29AD} = {8A5DB3AC-0A30-4BAB-B8B5-AB0481778545}
 		{0D50EE98-A718-41B2-A1B6-57D23FDF5223} = {5E9ED051-2D4E-4B29-8F4D-09B32E348E23}
 		{03F1490A-9173-4E75-9D6E-FBE5A37AA649} = {5E9ED051-2D4E-4B29-8F4D-09B32E348E23}
 		{2CC827C8-5084-4334-8A68-0515DA46465E} = {5E9ED051-2D4E-4B29-8F4D-09B32E348E23}

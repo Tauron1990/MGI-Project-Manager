@@ -10,23 +10,26 @@ namespace Tauron.Application.ProjectManager.Generic
     public sealed class ServiceManager : ObservableObject, IDisposable
     {
         private static IClientFactory _clientFactory;
-        public static  IClientFactory ClientFactory => _clientFactory ?? (_clientFactory = CommonApplication.Current.Container.Resolve<IClientFactory>());
 
-        private readonly IDialogFactory  _dialogFactory;
-        private readonly IWindow         _ownerWindow;
-        private          ClientException _clientException;
-        private          bool            _statusOk;
+        public static IClientFactory ClientFactory => _clientFactory ??
+                                                      (_clientFactory = CommonApplication.Current.Container
+                                                          .Resolve<IClientFactory>());
+
+        private readonly IDialogFactory _dialogFactory;
+        private readonly IWindow _ownerWindow;
+        private ClientException _clientException;
+        private bool _statusOk;
 
         private readonly Dictionary<Type, ClientObjectBase> _clientObjects = new Dictionary<Type, ClientObjectBase>();
 
-        public event Action<Type, ClientObjectBase> ConnectionEstablished;
-        public event Action                         BeginOpen;
-        public event Action                         OpenFailed;
+        public event Action<ServiceManager, Type, ClientObjectBase> ConnectionEstablished;
+        public event Action BeginOpen;
+        public event Action OpenFailed;
 
         public ServiceManager(IDialogFactory dialogFactory, IWindow ownerWindow)
         {
             _dialogFactory = dialogFactory;
-            _ownerWindow   = ownerWindow;
+            _ownerWindow = ownerWindow;
         }
 
         public bool StatusOk
@@ -42,7 +45,7 @@ namespace Tauron.Application.ProjectManager.Generic
             get => _clientException;
             private set => SetProperty(ref _clientException, value);
         }
-       
+
 
         public void Dispose()
         {
@@ -53,7 +56,8 @@ namespace Tauron.Application.ProjectManager.Generic
         public void ResetClients()
         {
             foreach (var clientObjectBase in _clientObjects)
-                if (clientObjectBase.Value.State == CommunicationState.Opened || clientObjectBase.Value.State == CommunicationState.Opening)
+                if (clientObjectBase.Value.State == CommunicationState.Opened ||
+                    clientObjectBase.Value.State == CommunicationState.Opening)
                     clientObjectBase.Value.CommunicationObject.Close();
 
             _clientObjects.Clear();
@@ -104,13 +108,15 @@ namespace Tauron.Application.ProjectManager.Generic
 
                 foreach (var clientType in clientTypes)
                 {
-                    if (!_clientObjects.TryGetValue(clientType, out var objectBase) || objectBase.State == CommunicationState.Opened) continue;
+                    if (!_clientObjects.TryGetValue(clientType, out var objectBase) ||
+                        objectBase.State == CommunicationState.Opened) continue;
 
                     OnBeginOpen();
                     objectBase.Open();
                     OnConnectionEstablished(clientType, objectBase);
                 }
 
+                ClientException = null;
                 StatusOk = true;
                 return true;
             }
@@ -122,7 +128,7 @@ namespace Tauron.Application.ProjectManager.Generic
                     e = e.InnerException;
 
                 OpenException = e;
-                StatusOk      = false;
+                StatusOk = false;
 
                 OnOpenFailed();
 
@@ -141,9 +147,9 @@ namespace Tauron.Application.ProjectManager.Generic
             }
             catch (ClientException e)
             {
-                ok              = false;
+                ok = false;
                 ClientException = e;
-                StatusOk        = false;
+                StatusOk = false;
                 return default(TResult);
             }
         }
@@ -159,9 +165,9 @@ namespace Tauron.Application.ProjectManager.Generic
             }
             catch (ClientException e)
             {
-                ok              = false;
+                ok = false;
                 ClientException = e;
-                StatusOk        = false;
+                StatusOk = false;
                 return null;
             }
         }
@@ -176,7 +182,7 @@ namespace Tauron.Application.ProjectManager.Generic
             catch (ClientException e)
             {
                 ClientException = e;
-                StatusOk        = false;
+                StatusOk = false;
                 return false;
             }
         }
@@ -190,10 +196,12 @@ namespace Tauron.Application.ProjectManager.Generic
             switch (inner)
             {
                 case FaultException<GenericServiceFault> genericFaultException:
-                    _dialogFactory.ShowMessageBox(_ownerWindow, genericFaultException.Detail.Reason, "Error", MsgBoxButton.Ok, MsgBoxImage.Error, null);
+                    _dialogFactory.ShowMessageBox(_ownerWindow, genericFaultException.Detail.Reason, "Error",
+                        MsgBoxButton.Ok, MsgBoxImage.Error, null);
                     return genericFaultException.Detail.Reason;
                 case FaultException<LogInFault> loginFaultException:
-                    _dialogFactory.ShowMessageBox(_ownerWindow, loginFaultException.Detail.Reason, UIMessages.LogIn_Error_Caption, MsgBoxButton.Ok, MsgBoxImage.Error, null);
+                    _dialogFactory.ShowMessageBox(_ownerWindow, loginFaultException.Detail.Reason,
+                        UIMessages.LogIn_Error_Caption, MsgBoxButton.Ok, MsgBoxImage.Error, null);
                     return loginFaultException.Detail.Reason;
                 case CommunicationException communicationException:
                     _dialogFactory.FormatException(_ownerWindow, communicationException);
@@ -207,7 +215,8 @@ namespace Tauron.Application.ProjectManager.Generic
 
         private void OnBeginOpen() => BeginOpen?.Invoke();
 
-        private void OnConnectionEstablished(Type type, ClientObjectBase clientObjectBase) => ConnectionEstablished?.Invoke(type, clientObjectBase);
+        private void OnConnectionEstablished(Type type, ClientObjectBase clientObjectBase) =>
+            ConnectionEstablished?.Invoke(this, type, clientObjectBase);
 
         public override string ToString()
         {

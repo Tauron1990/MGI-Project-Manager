@@ -57,6 +57,8 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Data
         public DbSet<SetupEntity> Setups { get; set; }
 
         public DbSet<UserEntity> Users { get; set; }
+
+        public DbSet<OptionEntity> Options { get; set; }
         #pragma warning restore CS3003 // Typ ist nicht CLS-kompatibel
     }
 }

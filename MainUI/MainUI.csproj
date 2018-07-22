@@ -37,39 +37,42 @@
     <ApplicationIcon>main.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Humanizer, Version=2.4.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Humanizer.Core.2.4.2\lib\netstandard2.0\Humanizer.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.4\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.5.6\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Syncfusion.SfBusyIndicator.WPF">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\16.1.0.32\precompiledassemblies\16.1.0.32\4.6\Syncfusion.SfBusyIndicator.WPF.dll</HintPath>
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.SfBusyIndicator.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.SfChromelessWindow.WPF">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\16.1.0.32\precompiledassemblies\16.1.0.32\4.6\Syncfusion.SfChromelessWindow.WPF.dll</HintPath>
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.SfChromelessWindow.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.SfInput.WPF">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\16.1.0.32\precompiledassemblies\16.1.0.32\4.6\Syncfusion.SfInput.WPF.dll</HintPath>
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.SfInput.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.SfShared.WPF">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\16.1.0.32\precompiledassemblies\16.1.0.32\4.6\Syncfusion.SfShared.WPF.dll</HintPath>
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.SfShared.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.SfSkinManager.WPF">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\16.1.0.32\precompiledassemblies\16.1.0.32\4.6\Syncfusion.SfSkinManager.WPF.dll</HintPath>
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.SfSkinManager.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Shared.Base">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\16.1.0.32\precompiledassemblies\16.1.0.32\4.6\Syncfusion.Shared.Base.dll</HintPath>
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.Shared.Base.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Shared.WPF">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\16.1.0.32\precompiledassemblies\16.1.0.32\4.6\Syncfusion.Shared.WPF.dll</HintPath>
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.Shared.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Themes.Metro.WPF">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\16.1.0.32\precompiledassemblies\16.1.0.32\4.6\Syncfusion.Themes.Metro.WPF.dll</HintPath>
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.Themes.Metro.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Tools.WPF">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\16.1.0.32\precompiledassemblies\16.1.0.32\4.6\Syncfusion.Tools.WPF.dll</HintPath>
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.Tools.WPF.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -94,6 +97,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="AppConststands.cs" />
+    <Compile Include="Helper\OperationHelper.cs" />
     <Compile Include="LocalCache\CacheCore.cs" />
     <Compile Include="LocalCache\CacheManager.cs" />
     <Compile Include="LocalCache\ICacheAction.cs" />
@@ -120,11 +124,26 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="UI\Converter\CompareHelp.cs" />
+    <Compile Include="UI\Converter\DateTimeHumanizer.cs" />
+    <Compile Include="UI\Converter\StatusConverter.cs" />
+    <Compile Include="UI\IJobChange.cs" />
     <Compile Include="UI\JobItem.cs" />
     <Compile Include="UI\JobItemStatusEventArgs.cs" />
+    <Compile Include="UI\Model\JobManagerModel.cs" />
     <Compile Include="UI\Model\TaskManagerModel.cs" />
-    <None Include="UI\Model\TimeCalculationModel.cs" />
-    <Compile Include="UI\Model\CreationWorkItemModel.cs" />
+    <Compile Include="UI\RunTimeCalculatorItem.cs" />
+    <Compile Include="UI\RuntimeCalculatorResult.cs" />
+    <Compile Include="UI\Views\JobCreationView.xaml.cs">
+      <DependentUpon>JobCreationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\JobCreationViewModel.cs" />
+    <Compile Include="UI\Views\JobPreperationView.xaml.cs">
+      <DependentUpon>JobPreperationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\JobPreperationViewModel.cs" />
+    <Compile Include="UI\Model\TimeCalculationModel.cs" />
+    <Compile Include="UI\Model\CreationJobItemModel.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -150,7 +169,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Theme.xaml">
+    <Page Include="UI\Views\JobCreationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Views\JobPreperationView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -185,6 +208,8 @@
       <Name>Tauron.Application.ProjectManager</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

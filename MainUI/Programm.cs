@@ -22,7 +22,7 @@ namespace Tauron.Application.MgiProjectManager
             try
             {
                 var channelName = string.Concat(applicationIdentifier, ":", "SingeInstanceIPCChannel");
-                var mutex       = new Mutex(true, applicationIdentifier, out var first);
+                var mutex = new Mutex(true, applicationIdentifier, out var first);
 
                 try
                 {
@@ -53,16 +53,25 @@ namespace Tauron.Application.MgiProjectManager
             if (applicationIdentifier == null) throw new ArgumentNullException(nameof(applicationIdentifier));
 
             SingleInstance<App>.SignalFirstInstance(channelName,
-                                                    SingleInstance<App>.GetCommandLineArgs(applicationIdentifier));
+                SingleInstance<App>.GetCommandLineArgs(applicationIdentifier));
         }
 
-        private static void CleanUp() => SingleInstance<App>.Cleanup();
+        private static void CleanUp()
+        {
+            SingleInstance<App>.Cleanup();
+        }
 
 
-        private static void StartApp([NotNull] Mutex mutex, [NotNull] string channelName) => App.Setup(mutex, channelName);
+        private static void StartApp([NotNull] Mutex mutex, [NotNull] string channelName)
+        {
+            App.Setup(mutex, channelName);
+        }
 
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
-        private static void OnUnhandledException([NotNull] object sender, [NotNull] UnhandledExceptionEventArgs args) => CommonConstants.LogCommon(true, args.ExceptionObject.ToString());
+        private static void OnUnhandledException([NotNull] object sender, [NotNull] UnhandledExceptionEventArgs args)
+        {
+            CommonConstants.LogCommon(true, args.ExceptionObject.ToString());
+        }
     }
 }

@@ -5,7 +5,7 @@ using Tauron.Application.ProjectManager.Services.Data.Entitys;
 namespace Tauron.Application.ProjectManager.Services.DTO
 {
     [DataContract]
-    public class JobItemDto
+    public class JobItemDto : IEquatable<JobItemDto>
     {
         [DataMember]
         public DateTime TargetDate { get; set; }
@@ -35,6 +35,13 @@ namespace Tauron.Application.ProjectManager.Services.DTO
                        Status     = entity.Status,
                        TargetDate = entity.TargetDate
                    };
+        }
+
+        public bool Equals(JobItemDto other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return TargetDate.Equals(other.TargetDate) && string.Equals(LongName, other.LongName) && string.Equals(Name, other.Name) && Status == other.Status && Importent == other.Importent;
         }
     }
 }

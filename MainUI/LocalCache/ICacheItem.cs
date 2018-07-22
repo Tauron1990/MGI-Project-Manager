@@ -7,5 +7,9 @@ namespace Tauron.Application.MgiProjectManager.LocalCache
         Type IdentiferType { get; }
 
         object Content { get; }
+
+        string Id { get; }
+
+        int Order { get; }
     }
 }

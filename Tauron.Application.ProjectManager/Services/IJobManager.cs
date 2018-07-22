@@ -18,10 +18,10 @@ namespace Tauron.Application.ProjectManager.Services
         void  MarkImportent(JobItemDto jobItem);
 
         [OperationContract]
-        bool StateTransition(JobStatus status);
+        bool StateTransition(string name, JobStatus status);
 
         [OperationContract]
-        bool StartJob(string name);
+        bool SeCurrentJob(string name);
 
         [OperationContract]
         JobItemDto GetCurrentJob();

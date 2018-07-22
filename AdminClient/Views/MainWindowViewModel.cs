@@ -458,7 +458,7 @@ namespace Tauron.Application.ProjectManager.AdminClient.Views
 
         protected override void BeginOpen() => IsBusy = true;
 
-        protected override void ConnectionEstablished(Type type, ClientObjectBase clientObjectBase)
+        protected override void ConnectionEstablished(ServiceManager manager, Type type, ClientObjectBase clientObjectBase)
         {
             if (type == typeof(IAdminService))
                 _adminService.AdminLogin(ClientFactory.Password);
