@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -7,6 +8,7 @@ using System.Xaml;
 using JetBrains.Annotations;
 using NLog;
 using NLog.Config;
+using NLog.Targets;
 using Tauron.Application.Composition;
 using Tauron.Application.Implement;
 using Tauron.Application.Ioc;
@@ -18,6 +20,135 @@ namespace Tauron.Application
     [PublicAPI]
     public abstract class CommonApplication
     {
+        private class TestApplication : CommonApplication
+        {
+            private readonly Action<IContainer> _configContainer;
+
+            internal sealed class SyncTask : ITaskScheduler
+            {
+                public void Dispose()
+                {
+                    
+                }
+
+                public Task QueueTask(ITask task)
+                {
+                    task.Execute();
+                    return task.Task;
+                }
+            }
+
+            internal sealed class UiSyncFake : IUISynchronize
+            {
+                public Task BeginInvoke(Action action)
+                {
+                    return QueueWorkitemAsync(action, false);
+                }
+
+                public Task<TResult> BeginInvoke<TResult>(Func<TResult> action)
+                {
+                    return (Task<TResult>)QueueWorkitemAsync(action, false);
+                }
+
+                public void Invoke(Action action)
+                {
+                    action();
+                }
+
+                public TReturn Invoke<TReturn>(Func<TReturn> action)
+                {
+                    return action();
+                }
+            }
+
+            internal sealed class UiControllerFactoryFake : IUIControllerFactory
+            {
+                public UiControllerFactoryFake()
+                {
+                    SetSynchronizationContext();
+                }
+
+                public IUIController CreateController()
+                {
+                    return new UiControllerFake();
+                }
+
+                public void SetSynchronizationContext()
+                {
+                    UiSynchronize.Synchronize = new UiSyncFake();
+                }
+            }
+
+            internal sealed class UiControllerFake : IUIController
+            {
+                public IWindow MainWindow { get; set; }
+                public ShutdownMode ShutdownMode { get; set; }
+
+                public void Run(IWindow window)
+                {
+                }
+
+                public void Shutdown()
+                {
+                }
+            }
+
+            public TestApplication(Action<IContainer> configContainer) : base(true, null, new UiControllerFactoryFake(), new SyncTask())
+            {
+                _configContainer = configContainer;
+            }
+
+            public override IContainer Container { get; set; }
+
+            protected override IContainer CreateContainer()
+            {
+                var con = base.CreateContainer();
+
+                _configContainer(con);
+
+                return con;
+            }
+
+            protected override void ConfigurateLagging(LoggingConfiguration config) => config.AddRuleForAllLevels(new VsDebuggerTarget());
+        }
+
+        public sealed class VsDebuggerTarget : TargetWithLayoutHeaderAndFooter
+        {
+
+            public VsDebuggerTarget()
+            {
+                Layout = "${logger}|${message}";
+            }
+
+            /// <summary>Initializes the target.</summary>
+            protected override void InitializeTarget()
+            {
+                base.InitializeTarget();
+                if (Header == null)
+                    return;
+                Debug.WriteLine(RenderLogEvent(Header, LogEventInfo.CreateNullEvent()));
+            }
+
+            /// <summary>
+            /// Closes the target and releases any unmanaged resources.
+            /// </summary>
+            protected override void CloseTarget()
+            {
+                if (Footer != null)
+                    Debug.WriteLine(RenderLogEvent(Footer, LogEventInfo.CreateNullEvent()));
+                base.CloseTarget();
+            }
+
+            /// <summary>
+            /// Writes the specified logging event to the attached debugger.
+            /// </summary>
+            /// <param name="logEvent">The logging event.</param>
+            protected override void Write(LogEventInfo logEvent)
+            {
+                Debug.WriteLine($"{RenderLogEvent(Layout, logEvent)}");
+            }
+        }
+
         /// <summary>The null splash.</summary>
         private class NullSplash : ISplashService
         {
@@ -61,9 +192,28 @@ namespace Tauron.Application
         #region Static Fields
 
         /// <summary>The _scheduler.</summary>
-        private static TaskScheduler _scheduler;
+        private static ITaskScheduler _scheduler;
 
         #endregion
+
+        public static IContainer SetupTest(Action<IContainer> setup)
+        {
+            if(Current != null && !(Current is TestApplication))
+                throw new InvalidOperationException("An Applications is Existing");
+
+            var testApp = new TestApplication(setup);
+            testApp.OnStartup(new string[0]);
+
+            return Current.Container;
+        }
+
+        public static void FreeTest()
+        {
+            if (!(Current is TestApplication)) return;
+
+            Current.Shutdown();
+            Current = null;
+        }
 
         #region Constructors and Destructors
 
@@ -79,11 +229,11 @@ namespace Tauron.Application
         /// <param name="factory">
         ///     The factory.
         /// </param>
-        protected CommonApplication(bool doStartup, [CanBeNull] ISplashService service, [NotNull] IUIControllerFactory factory)
+        protected CommonApplication(bool doStartup, [CanBeNull] ISplashService service, [NotNull] IUIControllerFactory factory, [CanBeNull] ITaskScheduler taskScheduler = null)
         {
             Factory        = factory ?? throw new ArgumentNullException(nameof(factory));
             Current        = this;
-            _scheduler     = new TaskScheduler(UiSynchronize.Synchronize);
+            _scheduler     = taskScheduler ?? new TaskScheduler(UiSynchronize.Synchronize);
             _splash        = service ?? new NullSplash();
             _doStartup     = doStartup;
             SourceAssembly = new AssemblyName(Assembly.GetAssembly(GetType()).FullName).Name;
@@ -100,10 +250,7 @@ namespace Tauron.Application
 
         #endregion
 
-        public virtual string GetdefaultFileLocation()
-        {
-            return AppDomain.CurrentDomain.BaseDirectory;
-        }
+        public virtual string GetdefaultFileLocation() => AppDomain.CurrentDomain.BaseDirectory;
 
         #region Fields
 
@@ -128,7 +275,7 @@ namespace Tauron.Application
         /// <summary>Gets the scheduler.</summary>
         /// <value>The scheduler.</value>
         [NotNull]
-        public static TaskScheduler Scheduler => _scheduler ?? (_scheduler = new TaskScheduler());
+        public static ITaskScheduler Scheduler => _scheduler ?? (_scheduler = new TaskScheduler());
 
         /// <summary>Gets or sets the catalog list.</summary>
         /// <value>The catalog list.</value>
@@ -199,10 +346,7 @@ namespace Tauron.Application
         ///     The <see cref="IContainer" />.
         /// </returns>
         [NotNull]
-        protected virtual IContainer CreateContainer()
-        {
-            return new DefaultContainer();
-        }
+        protected virtual IContainer CreateContainer() => new DefaultContainer();
 
         /// <summary>
         ///     The do startup.
@@ -293,12 +437,14 @@ namespace Tauron.Application
                 _scheduler.QueueTask(new UserTask(PerformStartup, false));
             }
 
-            Scheduler.EnterLoop();
+            if(_scheduler is TaskScheduler impl)
+                impl.EnterLoop();
         }
 
         /// <summary>The shutdown.</summary>
         public virtual void Shutdown()
         {
+            OnExit();
             Scheduler.Dispose();
         }
 

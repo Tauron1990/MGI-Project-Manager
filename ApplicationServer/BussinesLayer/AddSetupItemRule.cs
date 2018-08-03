@@ -2,7 +2,7 @@
 using System.Linq;
 using Tauron.Application.Common.BaseLayer;
 using Tauron.Application.Common.BaseLayer.Core;
-using Tauron.Application.Common.BaseLayer.Data;
+using Tauron.Application.ProjectManager.ApplicationServer.Data.Repositorys;
 using Tauron.Application.ProjectManager.Services.Data.Entitys;
 using Tauron.Application.ProjectManager.Services.DTO;
 
@@ -15,18 +15,16 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.BussinesLayer
         {
             using (var database = RepositoryFactory.Enter())
             {
-                var repo = RepositoryFactory.GetRepository<Repository<SetupEntity, int>>();
+                var repo = RepositoryFactory.GetRepository<ISetupRepository>();
 
                 foreach (var item in input.Items.Where(i => i != null))
-                {
                     AddSetupEntity(repo, item);
-                }
 
                 database.SaveChanges();
             }
         }
 
-        private void AddSetupEntity(Repository<SetupEntity, int> database, AddSetupInputItem item)
+        private void AddSetupEntity(ISetupRepository database, AddSetupInputItem item)
         {
             SetupType type;
             switch (item.ItemType)

@@ -59,7 +59,7 @@ namespace Tauron.Application
         ///     The <see cref="ITask" />.
         /// </returns>
         [NotNull]
-        ITask Generate([NotNull] WeakReference dataContext, [NotNull] TaskScheduler scheduler);
+        ITask Generate([NotNull] WeakReference dataContext, [NotNull] ITaskScheduler scheduler);
 
         #endregion
 
@@ -71,7 +71,7 @@ namespace Tauron.Application
 
         /// <summary>Gets or sets the task scheduler.</summary>
         [CanBeNull]
-        TaskScheduler TaskScheduler { get; set; }
+        ITaskScheduler TaskScheduler { get; set; }
 
         #endregion
     }
@@ -190,7 +190,7 @@ namespace Tauron.Application
             /// <param name="schedule">
             ///     The schedule.
             /// </param>
-            public void AddPipline([NotNull] IPipeLine pipline, [NotNull] TaskScheduler schedule)
+            public void AddPipline([NotNull] IPipeLine pipline, [NotNull] ITaskScheduler schedule)
             {
                 var context = FindDataContext(DependencyObject);
                 if (context != null)
@@ -232,7 +232,7 @@ namespace Tauron.Application
             /// <param name="scheduler">
             ///     The scheduler.
             /// </param>
-            public void NewDataContext([CanBeNull] object dataContext, [NotNull] TaskScheduler scheduler)
+            public void NewDataContext([CanBeNull] object dataContext, [NotNull] ITaskScheduler scheduler)
             {
                 var weakDataContext = new WeakReference(dataContext);
                 foreach (var pip in _pips.ToArray()) scheduler.QueueTask(pip.Generate(weakDataContext, scheduler));

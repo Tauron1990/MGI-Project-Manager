@@ -73,7 +73,7 @@ namespace Tauron.Application.Common.BaseLayer.Data
 
         public static RepositoryFactory Factory => _repositoryFactory ?? (_repositoryFactory = CommonApplication.Current.Container.Resolve<RepositoryFactory>());
 
-        private object _sync;
+        private object _sync = new object();
         private bool             _compositeMode;
         private DatabaseDisposer _databaseDisposer;
 

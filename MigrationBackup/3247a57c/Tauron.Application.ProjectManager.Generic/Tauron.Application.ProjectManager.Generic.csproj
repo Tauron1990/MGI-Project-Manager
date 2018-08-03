@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A50329FE-F913-4DF7-98B4-0112BFBFC31F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tauron.Application.ProjectManager.Generic</RootNamespace>
+    <AssemblyName>Tauron.Application.ProjectManager.Generic</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.5.6\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Syncfusion.SfChromelessWindow.WPF">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\16.1.0.32\precompiledassemblies\16.1.0.32\4.6\Syncfusion.SfChromelessWindow.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfInput.WPF, Version=16.1460.0.24, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\16.1.0.32\precompiledassemblies\16.1.0.32\4.6\Syncfusion.SfInput.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfShared.WPF, Version=16.1460.0.24, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\16.1.0.32\precompiledassemblies\16.1.0.32\4.6\Syncfusion.SfShared.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Shared.Wpf">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\16.1.0.32\precompiledassemblies\16.1.0.32\4.6\Syncfusion.Shared.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ClientException.cs" />
+    <Compile Include="ClientFactory.cs" />
+    <Compile Include="Clients\AdminClient.cs" />
+    <Compile Include="Clients\CallbackBase.cs" />
+    <Compile Include="Clients\ClientHelperBase.cs" />
+    <Compile Include="Clients\JobManagerClient.cs" />
+    <Compile Include="Clients\JobMessageClientCallback.cs" />
+    <Compile Include="Clients\JobPushMessageClient.cs" />
+    <Compile Include="Clients\TimeCalculatorClient.cs" />
+    <Compile Include="Clients\UserCallBack.cs" />
+    <Compile Include="Clients\UserClient.cs" />
+    <Compile Include="ClientViewModel.cs" />
+    <Compile Include="Core\TimeManager.cs" />
+    <Compile Include="Extensions\IJobPushMessage.cs" />
+    <Compile Include="Extensions\IUserServiceExtension.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="ResultAwaiter.cs" />
+    <Compile Include="ServiceManager.cs" />
+    <Compile Include="Windows\Consts.cs" />
+    <Compile Include="Windows\LogInWindow.xaml.cs">
+      <DependentUpon>LogInWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\LogInWindowSettings.cs" />
+    <Compile Include="Windows\LogInWindowViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Extern\Tauron.Application.Common.Wpf\Tauron.Application.Common.Wpf.csproj">
+      <Project>{03f1490a-9173-4e75-9d6e-fbe5a37aa649}</Project>
+      <Name>Tauron.Application.Common.Wpf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Extern\Tauron.Application.Common\Tauron.Application.Common.csproj">
+      <Project>{0d50ee98-a718-41b2-a1b6-57d23fdf5223}</Project>
+      <Name>Tauron.Application.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tauron.Application.ProjectManager.Resources\Tauron.Application.ProjectManager.Resources.csproj">
+      <Project>{01e858dd-6efc-49b3-92f9-4d93169bcb1b}</Project>
+      <Name>Tauron.Application.ProjectManager.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tauron.Application.ProjectManager.UI\Tauron.Application.ProjectManager.UI.csproj">
+      <Project>{6c02dc62-7652-4193-aae1-807d8892b21c}</Project>
+      <Name>Tauron.Application.ProjectManager.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tauron.Application.ProjectManager\Tauron.Application.ProjectManager.csproj">
+      <Project>{9112ec18-699d-45f0-ab8b-710358d1c094}</Project>
+      <Name>Tauron.Application.ProjectManager</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CertificateGenerator\bin\Debug\ee.pfx">
+      <Link>ee.pfx</Link>
+    </None>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Windows\LogInWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

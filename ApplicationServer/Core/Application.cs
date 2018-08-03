@@ -76,7 +76,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
 
         protected override void OnStartupError(Exception e)
         {
-            MessageBox.Show($"{e.GetType()} : {e.Message}", e.GetType().Name);
+            MessageBox.Show($@"{e.GetType()} : {e.Message}", e.GetType().Name);
         }
 
         protected override IWindow DoStartup(CommandLineProcessor args)
@@ -93,7 +93,6 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Core
         public override void Shutdown()
         {
             _serviceContainer.Stop();
-            OnExit();
 
             base.Shutdown();
         }

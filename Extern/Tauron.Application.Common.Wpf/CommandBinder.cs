@@ -119,7 +119,7 @@ namespace Tauron.Application
                     /// <param name="sync">
                     ///     The sync.
                     /// </param>
-                    public TaskFactory([NotNull] Delegate del, [NotNull] TaskScheduler scheduler, bool sync)
+                    public TaskFactory([NotNull] Delegate del, [NotNull] ITaskScheduler scheduler, bool sync)
                     {
                         _del = del ?? throw new ArgumentNullException(nameof(del));
                         _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
@@ -150,7 +150,7 @@ namespace Tauron.Application
 
                     private readonly Delegate _del;
 
-                    private readonly TaskScheduler _scheduler;
+                    private readonly ITaskScheduler _scheduler;
 
                     private readonly bool _sync;
 
@@ -261,7 +261,7 @@ namespace Tauron.Application
                 /// </param>
                 /// <param name="commandName"></param>
                 public void Connect([NotNull] ICommand command, [NotNull] DependencyObject targetObject,
-                    [NotNull] TaskScheduler scheduler, [NotNull] string commandName)
+                    [NotNull] ITaskScheduler scheduler, [NotNull] string commandName)
                 {
                     if (scheduler == null) throw new ArgumentNullException(nameof(scheduler));
                     var target = Target?.Target;

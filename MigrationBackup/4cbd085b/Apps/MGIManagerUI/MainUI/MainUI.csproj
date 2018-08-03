@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{903F2534-F980-4E08-8448-256DDEA1D2E7}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Tauron.Application.MgiProjectManager</RootNamespace>
+    <AssemblyName>Mgi Project Manager</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>main.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Humanizer, Version=2.4.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Humanizer.Core.2.4.2\lib\netstandard2.0\Humanizer.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.5.6\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="Syncfusion.SfBusyIndicator.WPF">
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.SfBusyIndicator.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfChromelessWindow.WPF">
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.SfChromelessWindow.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfInput.WPF">
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.SfInput.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfShared.WPF">
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.SfShared.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfSkinManager.WPF">
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.SfSkinManager.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Shared.Base">
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.Shared.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Shared.WPF">
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.Shared.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Themes.Metro.WPF">
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.Themes.Metro.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Tools.WPF">
+      <HintPath>D:\Program Files (x86)\Syncfusion\Essential Studio\WPF\16.2.0.41\precompiledassemblies\4.6\Syncfusion.Tools.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.cs" />
+    <Compile Include="AppConststands.cs" />
+    <Compile Include="Helper\OperationHelper.cs" />
+    <Compile Include="LocalCache\CacheCore.cs" />
+    <Compile Include="LocalCache\CacheManager.cs" />
+    <Compile Include="LocalCache\ICacheAction.cs" />
+    <Compile Include="LocalCache\ICacheBase.cs" />
+    <Compile Include="LocalCache\ICacheItem.cs" />
+    <Compile Include="LocalCache\IJobManagerCache.cs" />
+    <Compile Include="LocalCache\Impl\CacheBase.cs" />
+    <Compile Include="LocalCache\Impl\JobManagerCache.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="Programm.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="UI\Converter\CompareHelp.cs" />
+    <Compile Include="UI\Converter\DateTimeHumanizer.cs" />
+    <Compile Include="UI\Converter\StatusConverter.cs" />
+    <Compile Include="UI\IJobChange.cs" />
+    <Compile Include="UI\JobItem.cs" />
+    <Compile Include="UI\JobItemStatusEventArgs.cs" />
+    <Compile Include="UI\Model\JobManagerModel.cs" />
+    <Compile Include="UI\Model\TaskManagerModel.cs" />
+    <Compile Include="UI\RunTimeCalculatorItem.cs" />
+    <Compile Include="UI\RuntimeCalculatorResult.cs" />
+    <Compile Include="UI\Views\JobCreationView.xaml.cs">
+      <DependentUpon>JobCreationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\JobCreationViewModel.cs" />
+    <Compile Include="UI\Views\JobPreperationView.xaml.cs">
+      <DependentUpon>JobPreperationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\JobPreperationViewModel.cs" />
+    <Compile Include="UI\Model\TimeCalculationModel.cs" />
+    <Compile Include="UI\Model\CreationJobItemModel.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="main.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StartResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Views\JobCreationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Views\JobPreperationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Extern\Tauron.Application.Common.Wpf.Controls\Tauron.Application.Common.Wpf.Controls.csproj">
+      <Project>{2cc827c8-5084-4334-8a68-0515da46465e}</Project>
+      <Name>Tauron.Application.Common.Wpf.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Extern\Tauron.Application.Common.Wpf\Tauron.Application.Common.Wpf.csproj">
+      <Project>{03f1490a-9173-4e75-9d6e-fbe5a37aa649}</Project>
+      <Name>Tauron.Application.Common.Wpf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Extern\Tauron.Application.Common\Tauron.Application.Common.csproj">
+      <Project>{0d50ee98-a718-41b2-a1b6-57d23fdf5223}</Project>
+      <Name>Tauron.Application.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tauron.Application.ProjectManager.Generic\Tauron.Application.ProjectManager.Generic.csproj">
+      <Project>{a50329fe-f913-4df7-98b4-0112bfbfc31f}</Project>
+      <Name>Tauron.Application.ProjectManager.Generic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tauron.Application.ProjectManager.Resources\Tauron.Application.ProjectManager.Resources.csproj">
+      <Project>{01e858dd-6efc-49b3-92f9-4d93169bcb1b}</Project>
+      <Name>Tauron.Application.ProjectManager.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tauron.Application.ProjectManager.UI\Tauron.Application.ProjectManager.UI.csproj">
+      <Project>{6c02dc62-7652-4193-aae1-807d8892b21c}</Project>
+      <Name>Tauron.Application.ProjectManager.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tauron.Application.ProjectManager\Tauron.Application.ProjectManager.csproj">
+      <Project>{9112ec18-699d-45f0-ab8b-710358d1c094}</Project>
+      <Name>Tauron.Application.ProjectManager</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

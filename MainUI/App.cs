@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
-using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using JetBrains.Annotations;
 using NLog;
 using NLog.Config;
-using NLog.Layouts;
-using NLog.Targets;
 using Syncfusion.SfSkinManager;
 using Tauron.Application.Implement;
 using Tauron.Application.Implementation;
@@ -24,46 +20,7 @@ namespace Tauron.Application.MgiProjectManager
 {
     internal class App : WpfApplication, ISingleInstanceApp
     {
-#if DEBUG
-        public sealed class VsDebuggerTarget : TargetWithLayoutHeaderAndFooter
-        {
-
-            public VsDebuggerTarget()
-            {
-                Layout = "${logger}|${message}";
-            }
-
-            /// <summary>Initializes the target.</summary>
-            protected override void InitializeTarget()
-            {
-                base.InitializeTarget();
-                if (Header == null)
-                    return;
-                Debug.WriteLine(RenderLogEvent(Header, LogEventInfo.CreateNullEvent()));
-            }
-
-            /// <summary>
-            /// Closes the target and releases any unmanaged resources.
-            /// </summary>
-            protected override void CloseTarget()
-            {
-                if (Footer != null)
-                    Debug.WriteLine(RenderLogEvent(Footer, LogEventInfo.CreateNullEvent()));
-                base.CloseTarget();
-            }
-
-            /// <summary>
-            /// Writes the specified logging event to the attached debugger.
-            /// </summary>
-            /// <param name="logEvent">The logging event.</param>
-            protected override void Write(LogEventInfo logEvent)
-            {
-                Debug.WriteLine($"{RenderLogEvent(Layout, logEvent)}");
-            }
-        }
-
-#endif
-    public App()
+        public App()
             : base(true)
         {
         }

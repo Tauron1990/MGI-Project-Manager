@@ -132,7 +132,7 @@ namespace Tauron.Application
                 /// </param>
                 public InternalEventLinker([CanBeNull] IEnumerable<CommandMember>      member, [CanBeNull] EventInfo @event, [NotNull] WeakReference dataContext, [NotNull] string targetName,
                                            [CanBeNull] WeakReference<DependencyObject> host,
-                                           [NotNull]   TaskScheduler                   scheduler)
+                                           [NotNull]   ITaskScheduler                   scheduler)
                 {
                     _isDirty = (member == null) | (@event == null);
 
@@ -170,7 +170,7 @@ namespace Tauron.Application
 
                 private readonly WeakReference<DependencyObject> _host;
 
-                private readonly TaskScheduler _scheduler;
+                private readonly ITaskScheduler _scheduler;
 
                 private readonly string _targetName;
 

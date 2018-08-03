@@ -2,9 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tauron.Application.ProjectManager.ApplicationServer.Data;
 
 namespace Tauron.Application.ProjectManager.ApplicationServer.Migrations
@@ -16,8 +14,19 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ChangeDetector.SkipDetectChanges", "true")
-                .HasAnnotation("ProductVersion", "2.1.0-preview2-30571");
+                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846");
+
+            modelBuilder.Entity("Tauron.Application.ProjectManager.ApplicationServer.Data.PrivateEntitys.OptionEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Content");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Options");
+                });
 
             modelBuilder.Entity("Tauron.Application.ProjectManager.ApplicationServer.Data.PrivateEntitys.UserEntity", b =>
                 {
@@ -35,7 +44,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Tauron.Application.ProjectManager.Data.Entitys.JobEntity", b =>
+            modelBuilder.Entity("Tauron.Application.ProjectManager.Services.Data.Entitys.JobEntity", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -55,7 +64,7 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Migrations
                     b.ToTable("Jobs");
                 });
 
-            modelBuilder.Entity("Tauron.Application.ProjectManager.Data.Entitys.JobRunEntity", b =>
+            modelBuilder.Entity("Tauron.Application.ProjectManager.Services.Data.Entitys.JobRunEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -92,13 +101,12 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("JobId")
-                        .IsUnique();
+                    b.HasIndex("JobId");
 
                     b.ToTable("Runs");
                 });
 
-            modelBuilder.Entity("Tauron.Application.ProjectManager.Data.Entitys.SetupEntity", b =>
+            modelBuilder.Entity("Tauron.Application.ProjectManager.Services.Data.Entitys.SetupEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -114,11 +122,11 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Migrations
                     b.ToTable("Setups");
                 });
 
-            modelBuilder.Entity("Tauron.Application.ProjectManager.Data.Entitys.JobRunEntity", b =>
+            modelBuilder.Entity("Tauron.Application.ProjectManager.Services.Data.Entitys.JobRunEntity", b =>
                 {
-                    b.HasOne("Tauron.Application.ProjectManager.Data.Entitys.JobEntity", "Job")
-                        .WithOne("JobRun")
-                        .HasForeignKey("Tauron.Application.ProjectManager.Data.Entitys.JobRunEntity", "JobId");
+                    b.HasOne("Tauron.Application.ProjectManager.Services.Data.Entitys.JobEntity", "Job")
+                        .WithMany("JobRuns")
+                        .HasForeignKey("JobId");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,7 +3,7 @@ using Tauron.Application.ProjectManager.Services.Data.Entitys;
 
 namespace Tauron.Application.ProjectManager.ApplicationServer.Data.Repositorys
 {
-    public sealed class SetupRepository : Repository<SetupEntity, int>
+    public sealed class SetupRepository : Repository<SetupEntity, int>, ISetupRepository
     {
         public SetupRepository(IDatabase database) : base(database)
         {

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,8 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Data
     [PublicAPI]
     public sealed class DatabaseImpl : DbContext
     {
+        private static WeakDelegate _testMode;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserEntity>().HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotifications);
@@ -29,23 +32,35 @@ namespace Tauron.Application.ProjectManager.ApplicationServer.Data
 
         protected override void OnConfiguring([NotNull] DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseLoggerFactory(new NLogLoggerFactory());
-            var datasource = CommonApplication.Current?.GetdefaultFileLocation().CombinePath("jobs.db") ?? "Jobs.db";
-            datasource.CreateDirectoryIfNotExis();
+            if (_testMode == null)
+            {
+                //optionsBuilder.UseLoggerFactory(new NLogLoggerFactory());
+                var datasource = CommonApplication.Current?.GetdefaultFileLocation().CombinePath("jobs.db") ?? "Jobs.db";
+                datasource.CreateDirectoryIfNotExis();
 
-            optionsBuilder.UseSqlite(new SqliteConnectionStringBuilder {DataSource = datasource}.ConnectionString);
+                optionsBuilder.UseSqlite(new SqliteConnectionStringBuilder {DataSource = datasource}.ConnectionString);
+            }
+            else
+                _testMode.Invoke(optionsBuilder);
 
             base.OnConfiguring(optionsBuilder);
         }
 
-        public static void UpdateSchema()
+        public static void UpdateSchema(Action<DbContextOptionsBuilder> config = null)
         {
-            using (var db = new DatabaseImpl())
+            if (config != null)
+                _testMode = new WeakDelegate(config);
+            else
             {
-                Batteries_V2.Init();
-                db.Database.Migrate();
-                UserManager.AddInitial(db);
-                db.SaveChanges();
+                _testMode = null;
+
+                using (var db = new DatabaseImpl())
+                {
+                    Batteries_V2.Init();
+                    db.Database.Migrate();
+                    UserManager.AddInitial(db);
+                    db.SaveChanges();
+                }
             }
         }
         #pragma warning disable CS3003 // Typ ist nicht CLS-kompatibel

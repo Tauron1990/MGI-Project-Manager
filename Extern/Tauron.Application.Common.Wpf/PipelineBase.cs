@@ -77,7 +77,7 @@ namespace Tauron.Application
         public bool IsAlive => Source?.IsAlive() ?? false;
 
 
-        public TaskScheduler TaskScheduler { get; set; }
+        public ITaskScheduler TaskScheduler { get; set; }
 
         public virtual bool Synchronize => true;
 
@@ -88,7 +88,7 @@ namespace Tauron.Application
 
         #region Explicit Interface Methods
 
-        ITask IPipeLine.Generate(WeakReference dataContext, TaskScheduler scheduler)
+        ITask IPipeLine.Generate(WeakReference dataContext, ITaskScheduler scheduler)
         {
             DataContext   = dataContext;
             TaskScheduler = scheduler;

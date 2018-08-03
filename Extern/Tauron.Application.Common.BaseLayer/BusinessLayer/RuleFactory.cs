@@ -51,13 +51,13 @@ namespace Tauron.Application.Common.BaseLayer.BusinessLayer
         }
 
         public IIOBusinessRule<TInput, TOutput> CreateIioBusinessRule<TInput, TOutput>(string name)
-            where TOutput : class where TInput : class
+            //where TOutput : class where TInput : class
         {
             return (IIOBusinessRule<TInput, TOutput>) Create(name);
         }
 
         public IOBussinesRule<TOutput> CreateOBussinesRule<TOutput>(string name)
-            where TOutput : class
+            //where TOutput : class
         {
             return (IOBussinesRule<TOutput>) Create(name);
         }

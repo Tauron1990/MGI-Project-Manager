@@ -19,9 +19,23 @@ using JetBrains.Annotations;
 
 namespace Tauron.Application
 {
+    public interface ITaskScheduler : IDisposable
+    {
+        /// <summary>
+        ///     The queue task.
+        /// </summary>
+        /// <param name="task">
+        ///     The task.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Task" />.
+        /// </returns>
+        Task QueueTask([NotNull] ITask task);
+    }
+
     /// <summary>The task scheduler.</summary>
     [PublicAPI]
-    public sealed class TaskScheduler : IDisposable
+    public sealed class TaskScheduler : ITaskScheduler
     {
         #region Public Properties
 

@@ -9,6 +9,7 @@ namespace Tauron.Application.Common.BaseLayer.Core
         {
             try
             {
+                SetError(null);
                 return ActionImpl();
             }
             catch (Exception e)
