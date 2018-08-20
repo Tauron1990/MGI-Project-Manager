@@ -12,12 +12,12 @@ using Xunit;
 
 namespace ApplicationServer.Tests.BussinesLayer
 {
-    public class InsertJobRuleTest : IDisposable
+    public class MarkImportentRuleTest : IDisposable
     {
         private readonly IContainer _container;
         private readonly InMemoryDatabaseRoot _inMemoryDatabaseRoot = new InMemoryDatabaseRoot();
 
-        public InsertJobRuleTest()
+        public MarkImportentRuleTest()
         {
             SetupApplication.AddSetupAction(() => DatabaseImpl.UpdateSchema(o => o.UseInMemoryDatabase("test", _inMemoryDatabaseRoot)));
             SetupApplication.AddTypes(typeof(MainDatabase));
@@ -27,26 +27,23 @@ namespace ApplicationServer.Tests.BussinesLayer
         public void Dispose() => SetupApplication.Free();
 
         [Fact]
-        public void TestMethod()
+        public void Test()
         {
-            var rule = _container.GetIoBusinessRule<JobItemDto, bool>(RuleNames.InsertJob);
-            const string Name = "BM18_0000001";
-
-            JobItemDto dto = new JobItemDto
-            {
-                LongName = Name,
-                Name = Name,
-                Status = JobStatus.Compled,
-                TargetDate = DateTime.Now
-            };
-
-            rule.Action(dto);
+            const string name = "BM18_00001";
+            var ent = new JobEntity {Id = name, Importent = false, LongName = name};
 
             using (var db = new DatabaseImpl())
             {
-                Assert.Equal(1, db.Jobs.Count());
-                Assert.Equal(Name, db.Jobs.Single().Id);
+                db.Jobs.Add(ent);
+                db.SaveChanges();
             }
+
+            var rule = _container.GetIBusinessRule<JobItemDto>(RuleNames.MarkImportent);
+
+            rule.Action(JobItemDto.FromEntity(ent));
+
+            using (var db = new DatabaseImpl())
+                Assert.Equal(name, db.Jobs.Single().Id);
         }
     }
 }

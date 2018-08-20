@@ -58,6 +58,9 @@
     <Compile Include="BussinesLayer\AddSetupItemTest.cs" />
     <Compile Include="BussinesLayer\GetActiveJobsRuleTest.cs" />
     <Compile Include="BussinesLayer\InsertJobRuleTest.cs" />
+    <Compile Include="BussinesLayer\MarkImportentRuleTest.cs" />
+    <Compile Include="BussinesLayer\TimeCalculationCalculateTimeRuleTest.cs" />
+    <Compile Include="BussinesLayer\TimeCalculationCalculationValidationRuleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
