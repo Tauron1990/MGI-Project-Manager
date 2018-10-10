@@ -2,17 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Tauron.Application.Ioc;
 
 namespace Tauron.Application.Common.BaseLayer.Data
 {
+    [PublicAPI]
     public interface IDatabaseAcess : IDisposable
     {
         void SaveChanges();
 
         T GetRepository<T>()
             where T : class;
+
+        T GetContext<T>();
+
+        Task SaveChangesAsync(CancellationToken sourceToken);
     }
 
     [Export(typeof(RepositoryFactory))]
@@ -37,6 +43,12 @@ namespace Tauron.Application.Common.BaseLayer.Data
             }
 
             public T GetRepository<T>() where T : class => _fac.GetRepository<T>();
+            public T GetContext<T>()
+            {
+                return default(T);
+            }
+
+            public Task SaveChangesAsync(CancellationToken sourceToken) => Task.CompletedTask;
         }
 
         private class DatabaseDisposer : IDatabaseAcess
@@ -67,6 +79,12 @@ namespace Tauron.Application.Common.BaseLayer.Data
             }
 
             public T GetRepository<T>() where T : class => _fac.GetRepository<T>();
+
+            public T GetContext<T>() => (T) GetDbContext(typeof(T));
+
+            private object GetDbContext(Type dbContext) => _databases.Keys.SingleOrDefault(di => di.Context?.GetType() == dbContext)?.Context;
+
+            public Task SaveChangesAsync(CancellationToken sourceToken) => Task.WhenAll(_databases.Keys.OfType<IDatabase>().Select(d => d.SaveChangesAsync(sourceToken)));
         }
 
         private static RepositoryFactory _repositoryFactory;

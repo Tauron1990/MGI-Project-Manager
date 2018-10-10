@@ -66,9 +66,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             context.ErrorTracer.Phase = "Reciving Build (" + context.Metadata + ") from Cache";
 
             var life = _cache.GetContext(context.Metadata);
-            if (life == null) return;
 
-            var value = life.GetValue();
+            var value = life?.GetValue();
             if (value == null) return;
 
             context.Target       = value;

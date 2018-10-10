@@ -16,6 +16,27 @@ namespace Tauron.Application.Converter
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public abstract class ValueConverterFactoryBase : MarkupExtension
     {
+        private class FuncCommonConverter<TSource, TDest> : ValueConverterBase<TSource, TDest>
+        {
+            private readonly Func<TSource, TDest> _func;
+
+            public FuncCommonConverter(Func<TSource, TDest> func)
+            {
+                _func = func;
+            }
+
+            protected override TDest Convert(TSource value) => _func(value);
+        }
+
+        private class FuncStringConverter<TType> : StringConverterBase<TType>
+        {
+            private readonly Func<TType, string> _converter;
+
+            public FuncStringConverter(Func<TType, string> converter) => _converter = converter;
+
+            protected override string Convert(TType value) => _converter(value);
+        }
+
         protected abstract class StringConverterBase<TSource> : ValueConverterBase<TSource, string>
         {
         }
@@ -76,6 +97,10 @@ namespace Tauron.Application.Converter
         #endregion
 
         #region Public Methods and Operators
+
+        protected static IValueConverter CreateStringConverter<TType>(Func<TType, string> converter) => new FuncStringConverter<TType>(converter);
+
+        protected static IValueConverter CreateCommonConverter<TSource, TDest>(Func<TSource, TDest> converter) => new FuncCommonConverter<TSource, TDest>(converter);
 
         /// <summary>
         ///     Gibt bei der Implementierung in einer abgeleiteten Klasse ein Objekt zurück, das als Wert der Zieleigenschaft für

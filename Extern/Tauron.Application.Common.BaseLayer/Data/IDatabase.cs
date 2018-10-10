@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Tauron.Application.Common.BaseLayer.Data
 {
@@ -20,5 +22,7 @@ namespace Tauron.Application.Common.BaseLayer.Data
 
         TEntity Find<TEntity, TKey>(TKey key)
             where TEntity : GenericBaseEntity<TKey>;
+
+        Task SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
