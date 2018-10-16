@@ -174,9 +174,10 @@ namespace Tauron
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (destination == null) throw new ArgumentNullException(nameof(destination));
-            if (destination.ExisFile()) destination.DeleteFile();
 
-            File.Copy(source, destination);
+            if(!source.ExisFile()) return;
+
+            File.Copy(source, destination, true);
         }
 
         /// <summary>
@@ -863,6 +864,13 @@ namespace Tauron
             if (string.IsNullOrWhiteSpace(path))
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return !File.Exists(path) ? new byte[0] : File.ReadAllBytes(path);
+        }
+
+        [NotNull]
+        public static byte[] ReadAllBytes([NotNull] this string path)
+        {
+            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            return File.ReadAllBytes(path);
         }
 
         /// <summary>

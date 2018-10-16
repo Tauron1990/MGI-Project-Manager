@@ -1013,7 +1013,7 @@ namespace Tauron.Application
         Justification = "Reviewed. Suppression is OK here.")]
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Field)]
     [PublicAPI]
-    [MeansImplicitUse]
+    [MeansImplicitUse(ImplicitUseKindFlags.Access)]
     public sealed class CommandTargetAttribute : MemberInfoAttribute
     {
         #region Public Properties

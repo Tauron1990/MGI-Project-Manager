@@ -56,18 +56,13 @@ namespace Tauron.Application
         /// <summary>The _disposed.</summary>
         private bool _disposed;
 
+        private bool _predisposed;
+
         #endregion
 
         #region Constructors and Destructors
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="TaskScheduler" /> class.
-        ///     Initialisiert eine neue Instanz der <see cref="TaskScheduler" /> Klasse.
-        ///     Initializes a new instance of the <see cref="TaskScheduler" /> class.
-        /// </summary>
-        /// <param name="synchronizationContext">
-        ///     The synchronization context.
-        /// </param>
+
         public TaskScheduler([NotNull] IUISynchronize synchronizationContext)
         {
             _synchronizationContext =
@@ -75,20 +70,12 @@ namespace Tauron.Application
             _collection = new BlockingCollection<ITask>();
         }
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="TaskScheduler" /> class.
-        ///     Initialisiert eine neue Instanz der <see cref="TaskScheduler" /> Klasse.
-        ///     Initializes a new instance of the <see cref="TaskScheduler" /> class.
-        /// </summary>
+
         public TaskScheduler()
         {
         }
 
-        /// <summary>
-        ///     Finalizes an instance of the <see cref="TaskScheduler" /> class.
-        ///     Finalisiert eine Instanz der <see cref="TaskScheduler" /> Klasse.
-        ///     Finalizes an instance of the <see cref="TaskScheduler" /> class.
-        /// </summary>
+
         ~TaskScheduler()
         {
             Dispose(false);
@@ -115,7 +102,7 @@ namespace Tauron.Application
         ///     The <see cref="Task" />.
         /// </returns>
         [NotNull]
-        public Task QueueTask([NotNull] ITask task)
+        public Task QueueTask(ITask task)
         {
             if (task == null) throw new ArgumentNullException(nameof(task));
             CheckDispose();
@@ -144,7 +131,10 @@ namespace Tauron.Application
             foreach (var task in _collection.GetConsumingEnumerable()) task.Execute();
 
             _collection.Dispose();
+            _disposed = true;
         }
+
+        public void Start() => Task.Factory.StartNew(EnterLoop, TaskCreationOptions.LongRunning);
 
         /// <summary>The check dispose.</summary>
         /// <exception cref="ObjectDisposedException"></exception>
@@ -165,9 +155,9 @@ namespace Tauron.Application
         private void Dispose(bool disposing)
         {
             // ReSharper restore UnusedParameter.Local
-            if (_disposed) return;
+            if (_predisposed) return;
 
-            _disposed = true;
+            _predisposed = true;
 
             _collection?.CompleteAdding();
         }

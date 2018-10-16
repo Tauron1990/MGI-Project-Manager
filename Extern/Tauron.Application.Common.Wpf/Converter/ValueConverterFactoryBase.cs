@@ -16,39 +16,26 @@ namespace Tauron.Application.Converter
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public abstract class ValueConverterFactoryBase : MarkupExtension
     {
-        #region Public Properties
-
-        [CanBeNull] public IServiceProvider ServiceProvider { get; set; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        ///     Gibt bei der Implementierung in einer abgeleiteten Klasse ein Objekt zurück, das als Wert der Zieleigenschaft für
-        ///     die Markuperweiterung festgelegt wird.
-        /// </summary>
-        /// <returns>
-        ///     Der Objektwert, der für die Eigenschaft festgelegt werden soll, für die die Erweiterung angewendet wird.
-        /// </returns>
-        /// <param name="serviceProvider">
-        ///     Objekt, das Dienste für die Markuperweiterung bereitstellen kann.
-        /// </param>
-        public override object ProvideValue(IServiceProvider serviceProvider)
+        private class FuncCommonConverter<TSource, TDest> : ValueConverterBase<TSource, TDest>
         {
-            ServiceProvider = serviceProvider;
+            private readonly Func<TSource, TDest> _func;
 
-            return Create();
+            public FuncCommonConverter(Func<TSource, TDest> func)
+            {
+                _func = func;
+            }
+
+            protected override TDest Convert(TSource value) => _func(value);
         }
 
-        #endregion
+        private class FuncStringConverter<TType> : StringConverterBase<TType>
+        {
+            private readonly Func<TType, string> _converter;
 
-        #region Methods
+            public FuncStringConverter(Func<TType, string> converter) => _converter = converter;
 
-        [NotNull]
-        protected abstract IValueConverter Create();
-
-        #endregion
+            protected override string Convert(TType value) => _converter(value);
+        }
 
         protected abstract class StringConverterBase<TSource> : ValueConverterBase<TSource, string>
         {
@@ -101,7 +88,34 @@ namespace Tauron.Application.Converter
                 return default(TSource);
             }
 
-            #endregion
+        #region Public Properties
+
+        [CanBeNull]
+        public IServiceProvider ServiceProvider { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        protected static IValueConverter CreateStringConverter<TType>(Func<TType, string> converter) => new FuncStringConverter<TType>(converter);
+
+        protected static IValueConverter CreateCommonConverter<TSource, TDest>(Func<TSource, TDest> converter) => new FuncCommonConverter<TSource, TDest>(converter);
+
+        /// <summary>
+        ///     Gibt bei der Implementierung in einer abgeleiteten Klasse ein Objekt zurück, das als Wert der Zieleigenschaft für
+        ///     die Markuperweiterung festgelegt wird.
+        /// </summary>
+        /// <returns>
+        ///     Der Objektwert, der für die Eigenschaft festgelegt werden soll, für die die Erweiterung angewendet wird.
+        /// </returns>
+        /// <param name="serviceProvider">
+        ///     Objekt, das Dienste für die Markuperweiterung bereitstellen kann.
+        /// </param>
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
+
+            return Create();
         }
     }
 }

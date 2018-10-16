@@ -59,13 +59,6 @@ namespace Tauron.Application
 
         #region Constructors and Destructors
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="WpfApplication" /> class.
-        ///     Initialisiert eine neue Instanz der <see cref="WpfApplication" /> Klasse.
-        /// </summary>
-        /// <param name="doStartup">
-        ///     The do startup.
-        /// </param>
         public WpfApplication(bool doStartup)
             : base(doStartup, new SplashService(), new WpfIuiControllerFactory())
         {
@@ -135,8 +128,9 @@ namespace Tauron.Application
         public override void Shutdown()
         {
             base.Shutdown();
-            System.Windows.Application.Current.Shutdown();
-            Container.Dispose();
+            var app = System.Windows.Application.Current;
+
+            app.Dispatcher.BeginInvoke(new Action(app.Shutdown));
         }
 
         protected override void ConfigurateLagging(LoggingConfiguration config)

@@ -71,7 +71,7 @@
     <Compile Include="Core\IBusinessRuleBase.cs" />
     <Compile Include="Core\IOBusinessRuleBase.cs" />
     <Compile Include="Core\IRuleMetadata.cs" />
-    <Compile Include="Core\OBuissinesRuleBase.cs" />
+    <Compile Include="Core\OBusinessRuleBase.cs" />
     <Compile Include="Core\RuleBase.cs" />
     <Compile Include="Data\BaseEntity.cs" />
     <Compile Include="Data\IDatabase.cs" />
@@ -102,7 +102,7 @@
       <Version>2018.2.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">
-      <Version>2.6.2-beta2</Version>
+      <Version>2.6.2</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

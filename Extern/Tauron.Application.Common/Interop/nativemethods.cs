@@ -254,9 +254,34 @@ namespace Tauron.Interop
         [DllImport("shell32.dll")]
         internal static extern int SHGetKnownFolderPath(
             [MarshalAs(UnmanagedType.LPStruct)] Guid rfid,
-            uint dwFlags,
-            IntPtr hToken,
-            out IntPtr pszPath);
+            uint                                     dwFlags,
+            IntPtr                                   hToken,
+            out IntPtr                               pszPath);
+
+        /// <summary>
+        /// Places the given window in the system-maintained clipboard format listener list.
+        /// </summary>
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool AddClipboardFormatListener(IntPtr hwnd);
+
+        /// <summary>
+        /// Removes the given window from the system-maintained clipboard format listener list.
+        /// </summary>
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool RemoveClipboardFormatListener(IntPtr hwnd);
+
+        /// <summary>
+        /// Sent when the contents of the clipboard have changed.
+        /// </summary>
+        public const int WM_CLIPBOARDUPDATE = 0x031D;
+
+        /// <summary>
+        /// To find message-only windows, specify HWND_MESSAGE in the hwndParent parameter of the FindWindowEx function.
+        /// </summary>
+        public static IntPtr HWND_MESSAGE = new IntPtr(-3);
+
 
         /// <summary>The copy file flags.</summary>
         [Flags]

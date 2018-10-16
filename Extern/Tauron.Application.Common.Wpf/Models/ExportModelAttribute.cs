@@ -12,8 +12,7 @@ namespace Tauron.Application.Models
         public ExportModelAttribute([NotNull] string name)
             : base(typeof(IModel))
         {
-            if (name == null) throw new ArgumentNullException(nameof(name));
-            ContractName = name;
+            ContractName = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         protected override bool HasMetadata => true;

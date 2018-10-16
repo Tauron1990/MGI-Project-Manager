@@ -9,6 +9,7 @@ using JetBrains.Annotations;
 namespace Tauron.Application.Commands
 {
     /// <summary>The simple command.</summary>
+    [PublicAPI]
     public class SimpleCommand : ICommand
     {
         #region Public Events
@@ -34,15 +35,23 @@ namespace Tauron.Application.Commands
         private readonly Func<object, bool> _canExecute;
 
         private readonly Action<object> _execute;
+        [CanBeNull] private readonly object _parameter;
 
         #endregion
 
         #region Constructors and Destructors
 
         public SimpleCommand([CanBeNull] Func<object, bool> canExecute, [NotNull] Action<object> execute)
+            : this(canExecute, execute, null)
+        {
+            
+        }
+
+        public SimpleCommand([CanBeNull] Func<object, bool> canExecute, [NotNull] Action<object> execute, [CanBeNull] object parameter)
         {
             _canExecute = canExecute;
-            _execute = execute;
+            _execute    = execute;
+            _parameter = parameter;
         }
 
         public SimpleCommand([NotNull] Action<object> execute)
@@ -56,6 +65,9 @@ namespace Tauron.Application.Commands
 
         public bool CanExecute([CanBeNull] object parameter)
         {
+            if (_parameter == null)
+                parameter = _parameter;
+
             return _canExecute == null || _canExecute(parameter);
         }
 
@@ -67,6 +79,8 @@ namespace Tauron.Application.Commands
         /// </param>
         public void Execute([CanBeNull] object parameter)
         {
+            if (_parameter == null)
+                parameter = _parameter;
             if (_execute != null) _execute(parameter);
         }
 

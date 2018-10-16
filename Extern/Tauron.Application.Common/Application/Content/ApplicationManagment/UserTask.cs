@@ -10,28 +10,12 @@ namespace Tauron.Application
 {
     public class UserResultTask<TResult> : ITask
     {
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="UserTask" /> class.
-        ///     Initialisiert eine neue Instanz der <see cref="UserTask" /> Klasse.
-        ///     Initializes a new instance of the <see cref="UserTask" /> class.
-        /// </summary>
-        /// <param name="callback">
-        ///     The callback.
-        /// </param>
-        /// <param name="sync">
-        ///     The sync.
-        /// </param>
         public UserResultTask([NotNull] Func<TResult> callback, bool sync)
         {
-            if (callback == null) throw new ArgumentNullException(nameof(callback));
-            _callback = callback;
+            _callback   = callback ?? throw new ArgumentNullException(nameof(callback));
             Synchronize = sync;
             _task = new TaskCompletionSource<TResult>();
         }
-
-        #endregion
 
         #region Public Methods and Operators
 

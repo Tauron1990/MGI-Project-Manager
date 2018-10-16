@@ -3,7 +3,7 @@ using Tauron.Application.Common.BaseLayer.BusinessLayer;
 
 namespace Tauron.Application.Common.BaseLayer.Core
 {
-    public abstract class OBuissinesRuleBase<TOutput> : RuleBase, IOBussinesRule<TOutput>
+    public abstract class OBusinessRuleBase<TOutput> : RuleBase, IOBussinesRule<TOutput>
     {
         public virtual TOutput Action()
         {
