@@ -41,13 +41,7 @@ namespace Tauron.Application.Converter
         {
         }
 
-        /// <summary>
-        ///     The value converter base.
-        /// </summary>
-        /// <typeparam name="TSource">
-        /// </typeparam>
-        /// <typeparam name="TDest">
-        /// </typeparam>
+
         protected abstract class ValueConverterBase<TSource, TDest> : IValueConverter
         {
             #region Properties
@@ -79,7 +73,6 @@ namespace Tauron.Application.Converter
 
             #endregion
 
-            #region Methods
 
             protected abstract TDest Convert(TSource value);
 
@@ -87,6 +80,7 @@ namespace Tauron.Application.Converter
             {
                 return default(TSource);
             }
+        }
 
         #region Public Properties
 
@@ -94,8 +88,6 @@ namespace Tauron.Application.Converter
         public IServiceProvider ServiceProvider { get; set; }
 
         #endregion
-
-        #region Public Methods and Operators
 
         protected static IValueConverter CreateStringConverter<TType>(Func<TType, string> converter) => new FuncStringConverter<TType>(converter);
 
@@ -117,5 +109,7 @@ namespace Tauron.Application.Converter
 
             return Create();
         }
+
+        protected abstract IValueConverter Create();
     }
 }

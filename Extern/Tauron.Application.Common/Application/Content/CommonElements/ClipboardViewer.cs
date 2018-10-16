@@ -14,13 +14,6 @@ namespace Tauron.Application
     [PublicAPI]
     public sealed class ClipboardViewer : IDisposable
     {
-        #region Public Events
-
-        /// <summary>The clipboard changed.</summary>
-        public event EventHandler ClipboardChanged;
-
-        #endregion
-
         private class ViewerSafeHandle : SafeHandleMinusOneIsInvalid
         {
             #region Constructors and Destructors
@@ -72,8 +65,7 @@ namespace Tauron.Application
         #endregion
 
         #region Public Methods and Operators
-
-        /// <summary>The dispose.</summa
+        
         public void Dispose()
         {
             if (_disposed) return;
