@@ -26,9 +26,9 @@ namespace Tauron.Application
         public UserResultTask([NotNull] Func<TResult> callback, bool sync)
         {
             if (callback == null) throw new ArgumentNullException(nameof(callback));
-            _callback   = callback;
+            _callback = callback;
             Synchronize = sync;
-            _task       = new TaskCompletionSource<TResult>();
+            _task = new TaskCompletionSource<TResult>();
         }
 
         #endregion
@@ -90,9 +90,9 @@ namespace Tauron.Application
         public UserTask([NotNull] Action callback, bool sync)
         {
             if (callback == null) throw new ArgumentNullException(nameof(callback));
-            _callback   = callback;
+            _callback = callback;
             Synchronize = sync;
-            _task       = new TaskCompletionSource<object>();
+            _task = new TaskCompletionSource<object>();
         }
 
         #endregion

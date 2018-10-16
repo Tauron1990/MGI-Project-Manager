@@ -11,18 +11,15 @@ namespace Tauron.Application.Models
             if (message == null) throw new ArgumentNullException(nameof(message));
 
             PropertyName = propertyName;
-            Value        = value;
-            Message      = message;
+            Value = value;
+            Message = message;
         }
 
-        [NotNull]
-        public string PropertyName { get; }
+        [NotNull] public string PropertyName { get; }
 
-        [CanBeNull]
-        public object Value { get; }
+        [CanBeNull] public object Value { get; }
 
-        [NotNull]
-        public string Message { get; }
+        [NotNull] public string Message { get; }
 
         public override string ToString()
         {

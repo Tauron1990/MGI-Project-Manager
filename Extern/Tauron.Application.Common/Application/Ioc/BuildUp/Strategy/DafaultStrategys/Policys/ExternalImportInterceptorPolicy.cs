@@ -10,7 +10,6 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             Interceptors = new List<IImportInterceptor>();
         }
 
-        [NotNull]
-        public List<IImportInterceptor> Interceptors { get; }
+        [NotNull] public List<IImportInterceptor> Interceptors { get; }
     }
 }

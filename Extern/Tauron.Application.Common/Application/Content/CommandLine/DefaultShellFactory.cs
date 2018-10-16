@@ -34,7 +34,10 @@ namespace Tauron.Application
         ///     The <see cref="object" />.
         /// </returns>
         [NotNull]
-        public object CreateView() => Activator.CreateInstance(_shellType);
+        public object CreateView()
+        {
+            return Activator.CreateInstance(_shellType);
+        }
 
         #endregion
     }

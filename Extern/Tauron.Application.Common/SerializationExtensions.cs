@@ -130,7 +130,10 @@ namespace Tauron
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             if (formatter == null) throw new ArgumentNullException(nameof(formatter));
-            using (var stream = File.OpenRead(path)) return (TValue) InternalDeserialize(formatter, stream);
+            using (var stream = File.OpenRead(path))
+            {
+                return (TValue) InternalDeserialize(formatter, stream);
+            }
         }
 
         /// <summary>
@@ -151,7 +154,10 @@ namespace Tauron
             if (path == null) throw new ArgumentNullException(nameof(path));
             if (!File.Exists(path)) return Activator.CreateInstance<TValue>();
 
-            using (var stream = File.OpenRead(path)) return (TValue) InternalDeserialize(new BinaryFormatter(), stream);
+            using (var stream = File.OpenRead(path))
+            {
+                return (TValue) InternalDeserialize(new BinaryFormatter(), stream);
+            }
         }
 
         /// <summary>
@@ -171,7 +177,10 @@ namespace Tauron
             if (graph == null) throw new ArgumentNullException(nameof(graph));
             if (formatter == null) throw new ArgumentNullException(nameof(formatter));
             if (path == null) throw new ArgumentNullException(nameof(path));
-            using (var stream = File.OpenWrite(path)) InternalSerialize(graph, formatter, stream);
+            using (var stream = File.OpenWrite(path))
+            {
+                InternalSerialize(graph, formatter, stream);
+            }
         }
 
         /// <summary>
@@ -188,7 +197,10 @@ namespace Tauron
             if (graph == null) throw new ArgumentNullException(nameof(graph));
             if (path == null) throw new ArgumentNullException(nameof(path));
             path.CreateDirectoryIfNotExis();
-            using (var stream = File.OpenWrite(path)) InternalSerialize(graph, new BinaryFormatter(), stream);
+            using (var stream = File.OpenWrite(path))
+            {
+                InternalSerialize(graph, new BinaryFormatter(), stream);
+            }
         }
 
         /// <summary>
@@ -211,7 +223,10 @@ namespace Tauron
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             if (formatter == null) throw new ArgumentNullException(nameof(formatter));
-            using (var stream = File.OpenRead(path)) return (TValue) InternalDeserialize(new XmlSerilalizerDelegator(formatter), stream);
+            using (var stream = File.OpenRead(path))
+            {
+                return (TValue) InternalDeserialize(new XmlSerilalizerDelegator(formatter), stream);
+            }
         }
 
         /// <summary>
@@ -251,12 +266,16 @@ namespace Tauron
         /// <param name="path">
         ///     The path.
         /// </param>
-        public static void XmlSerialize([NotNull] this object graph, [NotNull] XmlSerializer formatter, [NotNull] string path)
+        public static void XmlSerialize([NotNull] this object graph, [NotNull] XmlSerializer formatter,
+            [NotNull] string path)
         {
             if (graph == null) throw new ArgumentNullException(nameof(graph));
             if (formatter == null) throw new ArgumentNullException(nameof(formatter));
             if (path == null) throw new ArgumentNullException(nameof(path));
-            using (var stream = File.OpenWrite(path)) InternalSerialize(graph, new XmlSerilalizerDelegator(formatter), stream);
+            using (var stream = File.OpenWrite(path))
+            {
+                InternalSerialize(graph, new XmlSerilalizerDelegator(formatter), stream);
+            }
         }
 
         #endregion
@@ -295,7 +314,8 @@ namespace Tauron
         /// <param name="stream">
         ///     The stream.
         /// </param>
-        private static void InternalSerialize([NotNull] object graph, [NotNull] IFormatter formatter, [NotNull] Stream stream)
+        private static void InternalSerialize([NotNull] object graph, [NotNull] IFormatter formatter,
+            [NotNull] Stream stream)
         {
             if (graph == null) throw new ArgumentNullException(nameof(graph));
             if (formatter == null) throw new ArgumentNullException(nameof(formatter));

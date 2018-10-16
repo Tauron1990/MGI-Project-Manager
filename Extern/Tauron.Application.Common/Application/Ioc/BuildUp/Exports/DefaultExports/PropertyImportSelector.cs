@@ -48,16 +48,16 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
         public IEnumerable<ImportMetadata> SelectImport(IExport exportType)
         {
             return from property in exportType.ImplementType.GetProperties(AopConstants.DefaultBindingFlags)
-                   let attr = property.GetCustomAttribute<InjectAttribute>()
-                   where attr != null
-                   select
-                       new ImportMetadata(
-                                          attr.Interface,
-                                          attr.ContractName,
-                                          exportType,
-                                          property.Name,
-                                          attr.Optional,
-                                          attr.CreateMetadata());
+                let attr = property.GetCustomAttribute<InjectAttribute>()
+                where attr != null
+                select
+                    new ImportMetadata(
+                        attr.Interface,
+                        attr.ContractName,
+                        exportType,
+                        property.Name,
+                        attr.Optional,
+                        attr.CreateMetadata());
         }
 
         #endregion

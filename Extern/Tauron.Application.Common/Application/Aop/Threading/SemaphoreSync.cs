@@ -64,13 +64,13 @@ namespace Tauron.Application.Aop.Threading
         protected internal override void Register(ObjectContext context, MemberInfo info, object target)
         {
             context.Register<SemaphoreHolder, SemaphoreHolder>(
-                                                               new SemaphoreHolder(
-                                                                                   info.GetInvokeMember<SemaphoreSlim>(target))
-                                                               {
-                                                                   Name
-                                                                       =
-                                                                       HolderName
-                                                               });
+                new SemaphoreHolder(
+                    info.GetInvokeMember<SemaphoreSlim>(target))
+                {
+                    Name
+                        =
+                        HolderName
+                });
         }
 
         #endregion
@@ -104,9 +104,9 @@ namespace Tauron.Application.Aop.Threading
         protected internal override void Initialize(object target, ObjectContext context, string contextName)
         {
             _holder = BaseHolder.GetOrAdd<SemaphoreHolder, SemaphoreHolder>(
-                                                                            context,
-                                                                            () => new SemaphoreHolder(),
-                                                                            HolderName);
+                context,
+                () => new SemaphoreHolder(),
+                HolderName);
 
             base.Initialize(target, context, contextName);
         }

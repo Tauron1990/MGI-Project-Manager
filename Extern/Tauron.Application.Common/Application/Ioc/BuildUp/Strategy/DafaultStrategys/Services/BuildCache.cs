@@ -79,7 +79,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             lock (this)
             {
                 if (shareLifetime) _global[metadata.Export] = context;
-                else _local[metadata]                       = context;
+                else _local[metadata] = context;
             }
         }
 
@@ -109,9 +109,11 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         {
             lock (this)
             {
-                List<IDisposable> toDispose = new List<IDisposable>();
-                toDispose.AddRange(_global.Where(p => !p.Key.ExternalInfo.HandlesDispose).Select(p => p.Value?.GetValue()).OfType<IDisposable>());
-                toDispose.AddRange(_local.Where(p => !p.Key.Export.ExternalInfo.HandlesDispose).Select(p => p.Value?.GetValue()).OfType<IDisposable>());
+                var toDispose = new List<IDisposable>();
+                toDispose.AddRange(_global.Where(p => !p.Key.ExternalInfo.HandlesDispose)
+                    .Select(p => p.Value?.GetValue()).OfType<IDisposable>());
+                toDispose.AddRange(_local.Where(p => !p.Key.Export.ExternalInfo.HandlesDispose)
+                    .Select(p => p.Value?.GetValue()).OfType<IDisposable>());
 
                 foreach (var disposable in toDispose)
                     disposable.Dispose();

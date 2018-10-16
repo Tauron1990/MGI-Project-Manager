@@ -32,7 +32,9 @@ namespace Tauron.Application.Modules
         {
             if (key == null) throw new ArgumentNullException(nameof(key));
             ICollection<Action<MemberInfo, Attribute, IModule>> action;
-            return Handlers.TryGetValue(key, out action) ? action : Enumerable.Empty<Action<MemberInfo, Attribute, IModule>>();
+            return Handlers.TryGetValue(key, out action)
+                ? action
+                : Enumerable.Empty<Action<MemberInfo, Attribute, IModule>>();
         }
 
         public static void Progress([NotNull] IModule module)
@@ -41,15 +43,9 @@ namespace Tauron.Application.Modules
             var type = module.GetType();
 
             foreach (var info in type.GetMembers(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
-            {
-                foreach (var attribute in info.GetCustomAttributes(true))
-                {
-                    foreach (var action in GetHandler(attribute.GetType()))
-                    {
-                        action(info, (Attribute) attribute, module);
-                    }
-                }
-            }
+            foreach (var attribute in info.GetCustomAttributes(true))
+            foreach (var action in GetHandler(attribute.GetType()))
+                action(info, (Attribute) attribute, module);
         }
     }
 }

@@ -20,18 +20,16 @@ namespace Tauron.Application.Models
         // ReSharper disable once MemberCanBePrivate.Global
         protected Func<object, ValidatorContext, bool> Validator { get; set; }
 
-        [NotNull]
-        public Func<string> Message { get; set; }
+        [NotNull] public Func<string> Message { get; set; }
 
-        [CanBeNull]
-        public string Id { get; set; }
+        [CanBeNull] public string Id { get; set; }
 
         public bool Equals([CanBeNull] ModelRule other)
         {
             if (ReferenceEquals(null, other)) return false;
             return ReferenceEquals(this, other) || Id == null
-                       ? RuntimeHelpers.Equals(this, other)
-                       : string.Equals(Id, other.Id);
+                ? RuntimeHelpers.Equals(this, other)
+                : string.Equals(Id, other.Id);
         }
 
         public override int GetHashCode()

@@ -103,7 +103,8 @@ namespace Tauron.Application
         [NotNull]
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         [PublicAPI]
-        IProgressDialog CreateProgressDialog([NotNull] string text, [NotNull] string title, [CanBeNull] IWindow owner, [NotNull] Action<IProgress<ActiveProgress>> worker);
+        IProgressDialog CreateProgressDialog([NotNull] string text, [NotNull] string title, [CanBeNull] IWindow owner,
+            [NotNull] Action<IProgress<ActiveProgress>> worker);
 
         /// <summary>
         ///     The format exception.
@@ -143,8 +144,9 @@ namespace Tauron.Application
         /// </returns>
         [NotNull]
         [PublicAPI]
-        string GetText([CanBeNull] IWindow owner,       [NotNull]   string instruction, [CanBeNull] string content, [NotNull] string caption,
-                       bool                allowCancel, [CanBeNull] string defaultValue);
+        string GetText([CanBeNull] IWindow owner, [NotNull] string instruction, [CanBeNull] string content,
+            [NotNull] string caption,
+            bool allowCancel, [CanBeNull] string defaultValue);
 
         /// <summary>
         ///     The show message box.
@@ -172,8 +174,8 @@ namespace Tauron.Application
         /// </returns>
         [PublicAPI]
         MsgBoxResult ShowMessageBox([CanBeNull] IWindow owner, [NotNull] string text, [NotNull] string caption,
-                                    MsgBoxButton        button,
-                                    MsgBoxImage         icon, [CanBeNull] Icon custumIcon);
+            MsgBoxButton button,
+            MsgBoxImage icon, [CanBeNull] Icon custumIcon);
 
         /// <summary>
         ///     The show open file dialog.
@@ -217,12 +219,12 @@ namespace Tauron.Application
         /// </returns>
         [NotNull]
         IEnumerable<string> ShowOpenFileDialog([CanBeNull] IWindow owner,
-                                               bool                checkFileExists,  [NotNull] string defaultExt,
-                                               bool                dereferenceLinks, [NotNull] string filter,
-                                               bool                multiSelect,      [NotNull] string title,
-                                               bool                validateNames,
-                                               bool                checkPathExists,
-                                               out bool?           result);
+            bool checkFileExists, [NotNull] string defaultExt,
+            bool dereferenceLinks, [NotNull] string filter,
+            bool multiSelect, [NotNull] string title,
+            bool validateNames,
+            bool checkPathExists,
+            out bool? result);
 
         /// <summary>
         ///     The show open folder dialog.
@@ -249,11 +251,11 @@ namespace Tauron.Application
         ///     The <see cref="string" />.
         /// </returns>
         [NotNull]
-        string ShowOpenFolderDialog([CanBeNull] IWindow       owner, [NotNull] string description,
-                                    Environment.SpecialFolder rootFolder,
-                                    bool                      showNewFolderButton,
-                                    bool                      useDescriptionForTitle,
-                                    out bool?                 result);
+        string ShowOpenFolderDialog([CanBeNull] IWindow owner, [NotNull] string description,
+            Environment.SpecialFolder rootFolder,
+            bool showNewFolderButton,
+            bool useDescriptionForTitle,
+            out bool? result);
 
         /// <summary>
         ///     The show save file dialog.
@@ -299,13 +301,13 @@ namespace Tauron.Application
         /// </returns>
         [NotNull]
         string ShowSaveFileDialog([CanBeNull] IWindow owner,
-                                  bool                addExtension,
-                                  bool                checkFileExists,
-                                  bool                checkPathExists,  [NotNull] string defaultExt,
-                                  bool                dereferenceLinks, [NotNull] string filter,
-                                  bool                createPrompt,
-                                  bool                overwritePrompt, [NotNull] string title, [NotNull] string initialDirectory,
-                                  out bool?           result);
+            bool addExtension,
+            bool checkFileExists,
+            bool checkPathExists, [NotNull] string defaultExt,
+            bool dereferenceLinks, [NotNull] string filter,
+            bool createPrompt,
+            bool overwritePrompt, [NotNull] string title, [NotNull] string initialDirectory,
+            out bool? result);
 
         /// <summary>
         ///     The show task dialog.
@@ -333,8 +335,8 @@ namespace Tauron.Application
         /// </returns>
         [PublicAPI]
         MsgBoxResult ShowTaskDialog([CanBeNull] IWindow owner, [NotNull] string text, [NotNull] string caption,
-                                    MsgBoxButton        button,
-                                    MsgBoxImage         icon, [CanBeNull] Icon custumIcon);
+            MsgBoxButton button,
+            MsgBoxImage icon, [CanBeNull] Icon custumIcon);
 
         #endregion
     }

@@ -36,6 +36,24 @@ namespace Tauron.Application.Implement
     public static class SingleInstance<TApplication>
         where TApplication : ISingleInstanceApp
     {
+        #region Public Properties
+
+        /// <summary>Gets list of command line arguments for the application.</summary>
+        /// <value>The command line args.</value>
+        [NotNull]
+        [SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes")]
+        public static IList<string> CommandLineArgs => _commandLineArgs ?? throw new InvalidOperationException();
+
+        #endregion
+
+        public static void
+            InitializeAsFirstInstance(Mutex mutex, string channelName, TApplication app)
+        {
+            _app = app;
+            _singleInstanceMutex = mutex;
+            CreateRemoteService(channelName);
+        }
+
         /// <summary>
         ///     Remoting service class which is exposed by the server i.e the first instance and called by the second instance
         ///     to pass on the command line arguments to the first instance and cause it to activate itself.
@@ -74,24 +92,6 @@ namespace Tauron.Application.Implement
             #endregion
         }
 
-        #region Public Properties
-
-        /// <summary>Gets list of command line arguments for the application.</summary>
-        /// <value>The command line args.</value>
-        [NotNull]
-        [SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes")]
-        public static IList<string> CommandLineArgs => _commandLineArgs ?? throw new InvalidOperationException();
-
-        #endregion
-
-        public static void
-            InitializeAsFirstInstance(Mutex mutex, string channelName, TApplication app)
-        {
-            _app                 = app;
-            _singleInstanceMutex = mutex;
-            CreateRemoteService(channelName);
-        }
-
         #region Constants
 
         /// <summary>Suffix to the channel name.</summary>
@@ -111,20 +111,16 @@ namespace Tauron.Application.Implement
         #region Static Fields
 
         /// <summary>The _app.</summary>
-        [CanBeNull]
-        private static ISingleInstanceApp _app;
+        [CanBeNull] private static ISingleInstanceApp _app;
 
         /// <summary>IPC channel for communications.</summary>
-        [CanBeNull]
-        private static IpcServerChannel _channel;
+        [CanBeNull] private static IpcServerChannel _channel;
 
         /// <summary>List of command line arguments for the application.</summary>
-        [CanBeNull]
-        private static IList<string> _commandLineArgs;
+        [CanBeNull] private static IList<string> _commandLineArgs;
 
         /// <summary>Application mutex.</summary>
-        [CanBeNull]
-        private static Mutex _singleInstanceMutex;
+        [CanBeNull] private static Mutex _singleInstanceMutex;
 
         #endregion
 
@@ -163,7 +159,8 @@ namespace Tauron.Application.Implement
         [SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes")]
         public static bool InitializeAsFirstInstance([NotNull] string uniqueName, TApplication application)
         {
-            if (string.IsNullOrWhiteSpace(uniqueName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(uniqueName));
+            if (string.IsNullOrWhiteSpace(uniqueName))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(uniqueName));
             _commandLineArgs = GetCommandLineArgs(uniqueName);
 
             // Build unique application Id and the IPC channel name.
@@ -227,11 +224,11 @@ namespace Tauron.Application.Implement
         {
             var serverProvider = new BinaryServerFormatterSinkProvider {TypeFilterLevel = TypeFilterLevel.Full};
             IDictionary props = new Dictionary<string, string>
-                                {
-                                    ["name"]                = channelName,
-                                    ["portName"]            = channelName,
-                                    ["exclusiveAddressUse"] = "false"
-                                };
+            {
+                ["name"] = channelName,
+                ["portName"] = channelName,
+                ["exclusiveAddressUse"] = "false"
+            };
 
             // Create the IPC Server channel with the channel properties
             _channel = new IpcServerChannel(props, serverProvider);
@@ -257,9 +254,11 @@ namespace Tauron.Application.Implement
         [NotNull]
         public static IList<string> GetCommandLineArgs([NotNull] string uniqueApplicationName)
         {
-            if (string.IsNullOrWhiteSpace(uniqueApplicationName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(uniqueApplicationName));
+            if (string.IsNullOrWhiteSpace(uniqueApplicationName))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(uniqueApplicationName));
             string[] args = null;
-            if (AppDomain.CurrentDomain.ActivationContext == null) // The application was not clickonce deployed, get args from standard API's
+            if (AppDomain.CurrentDomain.ActivationContext == null
+            ) // The application was not clickonce deployed, get args from standard API's
             {
                 args = Environment.GetCommandLineArgs();
             }
@@ -272,14 +271,17 @@ namespace Tauron.Application.Implement
                 // shared location
                 var appFolderPath =
                     Path.Combine(
-                                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                                 uniqueApplicationName);
+                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                        uniqueApplicationName);
 
                 var cmdLinePath = Path.Combine(appFolderPath, "cmdline.txt");
                 if (File.Exists(cmdLinePath))
                     try
                     {
-                        using (TextReader reader = new StreamReader(cmdLinePath, Encoding.Unicode)) args = NativeMethods.CommandLineToArgvW(reader.ReadToEnd());
+                        using (TextReader reader = new StreamReader(cmdLinePath, Encoding.Unicode))
+                        {
+                            args = NativeMethods.CommandLineToArgvW(reader.ReadToEnd());
+                        }
 
                         File.Delete(cmdLinePath);
                     }

@@ -9,8 +9,8 @@ namespace Tauron.Application.Controls
     public class TabControlEx : TabControl
     {
         public static readonly DependencyProperty HeaderTemplateProperty = DependencyProperty.Register(
-                                                                                                       "HeaderTemplate", typeof(DataTemplate), typeof(TabControlEx),
-                                                                                                       new PropertyMetadata(default(DataTemplate)));
+            "HeaderTemplate", typeof(DataTemplate), typeof(TabControlEx),
+            new PropertyMetadata(default(DataTemplate)));
 
         [CanBeNull]
         public DataTemplate HeaderTemplate
@@ -29,7 +29,7 @@ namespace Tauron.Application.Controls
             base.PrepareContainerForItemOverride(element, item);
 
             var tabItem = (TabItem) element;
-            var model   = item as ViewModelBase;
+            var model = item as ViewModelBase;
 
             if (model == null) return;
 

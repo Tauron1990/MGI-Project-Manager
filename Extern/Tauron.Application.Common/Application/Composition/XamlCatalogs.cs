@@ -41,8 +41,8 @@ namespace Tauron.Application.Composition
             try
             {
                 var asm = string.IsNullOrWhiteSpace(AssemblyName)
-                              ? Assembly.GetEntryAssembly()
-                              : Assembly.Load(new AssemblyName(AssemblyName));
+                    ? Assembly.GetEntryAssembly()
+                    : Assembly.Load(new AssemblyName(AssemblyName));
 
                 container.AddAssembly(asm);
             }
@@ -144,8 +144,8 @@ namespace Tauron.Application.Composition
         /// </summary>
         public DirectoryCatalog()
         {
-            SearchPattern   = "*.dll";
-            SearchOption    = SearchOption.AllDirectories;
+            SearchPattern = "*.dll";
+            SearchOption = SearchOption.AllDirectories;
             DiscoverChanges = false;
         }
 

@@ -5,7 +5,8 @@ using Tauron.Application.Ioc.BuildUp.Exports.DefaultExports;
 
 namespace Tauron.Application.Ioc
 {
-    [PublicAPI, Serializable]
+    [PublicAPI]
+    [Serializable]
     public class SimpleBuildPrameter : BuildParameter
     {
         private readonly IExport _export;

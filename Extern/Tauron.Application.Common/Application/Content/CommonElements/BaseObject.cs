@@ -17,11 +17,9 @@ namespace Tauron.Application
     {
         #region Fields
 
-        [NonSerialized]
-        private Dictionary<string, object> _singletons;
+        [NonSerialized] private Dictionary<string, object> _singletons;
 
-        [NonSerialized]
-        private ObjectContext _context;
+        [NonSerialized] private ObjectContext _context;
 
         #endregion
 

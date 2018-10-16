@@ -67,7 +67,7 @@ namespace Tauron.Application.Aop
         public override IInterceptor Create(MemberInfo info)
         {
             MemberType = info.MemberType;
-            Name       = info is Type ? AopConstants.InternalUniversalInterceptorName : info.Name;
+            Name = info is Type ? AopConstants.InternalUniversalInterceptorName : info.Name;
             return this;
         }
 
@@ -111,7 +111,8 @@ namespace Tauron.Application.Aop
         /// <param name="contextName">
         ///     The context name.
         /// </param>
-        protected internal override void Initialize([NotNull] object target, [NotNull] ObjectContext context, [NotNull] string contextName)
+        protected internal override void Initialize([NotNull] object target, [NotNull] ObjectContext context,
+            [NotNull] string contextName)
         {
             ContextName = contextName;
         }

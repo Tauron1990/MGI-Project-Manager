@@ -11,7 +11,6 @@ namespace Tauron.Application.Ioc
             Meta = meta;
         }
 
-        [NotNull]
-        public ExportMetadata Meta { get; set; }
+        [NotNull] public ExportMetadata Meta { get; set; }
     }
 }

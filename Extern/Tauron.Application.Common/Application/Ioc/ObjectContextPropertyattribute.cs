@@ -51,7 +51,8 @@ namespace Tauron.Application.Ioc
         /// <param name="target">
         ///     The target.
         /// </param>
-        protected internal abstract void Register([NotNull] ObjectContext context, [NotNull] MemberInfo info, [NotNull] object target);
+        protected internal abstract void Register([NotNull] ObjectContext context, [NotNull] MemberInfo info,
+            [NotNull] object target);
 
         #endregion
     }

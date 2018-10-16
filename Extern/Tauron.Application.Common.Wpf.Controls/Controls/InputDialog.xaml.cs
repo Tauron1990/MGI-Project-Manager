@@ -66,7 +66,7 @@ namespace Tauron.Application.Controls
 
             set
             {
-                Cancelbutton.IsEnabled  = value;
+                Cancelbutton.IsEnabled = value;
                 Cancelbutton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
             }
         }

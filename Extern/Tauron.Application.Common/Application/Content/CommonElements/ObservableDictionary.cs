@@ -26,9 +26,87 @@ namespace Tauron.Application
     [DebuggerNonUserCode]
     [Serializable]
     public sealed class ObservableDictionary<TKey, TValue> : ObservableObject,
-                                                             IDictionary<TKey, TValue>,
-                                                             INotifyCollectionChanged
+        IDictionary<TKey, TValue>,
+        INotifyCollectionChanged
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ObservableDictionary{TKey,TValue}" /> class.
+        ///     Initialisiert eine neue Instanz der <see cref="ObservableDictionary{TKey,TValue}" /> Klasse.
+        ///     Initializes a new instance of the <see cref="ObservableDictionary{TKey,TValue}" /> class.
+        /// </summary>
+        public ObservableDictionary()
+        {
+            _helper = new BlockHelper();
+            _version = 1;
+            _entrys = new Entry[4];
+            _keyEquals = EqualityComparer<TKey>.Default;
+            _keys = new KeyCollection(this);
+            _values = new ValueCollection(this);
+        }
+
+        #endregion
+
+        #region Explicit Interface Properties
+
+        /// <summary>Gets a value indicating whether is read only.</summary>
+        /// <value>The is read only.</value>
+        bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly => false;
+
+        #endregion
+
+        #region Public Indexers
+
+        /// <summary>
+        ///     The this.
+        /// </summary>
+        /// <param name="key">
+        ///     The key.
+        /// </param>
+        /// <exception cref="KeyNotFoundException">
+        /// </exception>
+        /// <returns>
+        ///     The <see cref="TValue" />.
+        /// </returns>
+        public TValue this[TKey key]
+        {
+            get
+            {
+                int index;
+                var ent = FindEntry(key, out index);
+                if (ent == null) throw new KeyNotFoundException(key.ToString());
+
+                return ent.Value;
+            }
+
+            set
+            {
+                int index;
+                var entry = FindEntry(key, out index);
+
+                if (entry == null)
+                {
+                    AddCore(key, value);
+                }
+                else
+                {
+                    var temp = Entry.Construct(entry);
+                    entry.Value = value;
+                    OnCollectionReplace(Entry.Construct(entry), temp, index);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Public Events
+
+        /// <summary>The collection changed.</summary>
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        #endregion
+
         /// <summary>The block helper.</summary>
         [DebuggerNonUserCode]
         private class BlockHelper : IDisposable
@@ -115,8 +193,7 @@ namespace Tauron.Application
         [DebuggerNonUserCode]
         private class KeyCollection : NotifyCollectionChangedBase<TKey>
         {
-            [NotNull]
-            private readonly ObservableDictionary<TKey, TValue> _collection;
+            [NotNull] private readonly ObservableDictionary<TKey, TValue> _collection;
 
             #region Constructors and Destructors
 
@@ -184,8 +261,8 @@ namespace Tauron.Application
         [Serializable]
         [DebuggerNonUserCode]
         private abstract class NotifyCollectionChangedBase<TTarget> : ObservableObject,
-                                                                      ICollection<TTarget>,
-                                                                      INotifyCollectionChanged
+            ICollection<TTarget>,
+            INotifyCollectionChanged
         {
             #region Fields
 
@@ -308,7 +385,7 @@ namespace Tauron.Application
             /// <exception cref="InvalidOperationException"></exception>
             public IEnumerator<TTarget> GetEnumerator()
             {
-                var ver   = Dictionary._version;
+                var ver = Dictionary._version;
                 var count = 0;
                 foreach (var entry in Dictionary._entrys)
                 {
@@ -348,8 +425,8 @@ namespace Tauron.Application
             public void OnCollectionAdd(TTarget target, int index)
             {
                 InvokeCollectionChanged(
-                                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, target,
-                                                                             index));
+                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, target,
+                        index));
             }
 
             /// <summary>
@@ -364,8 +441,8 @@ namespace Tauron.Application
             public void OnCollectionRemove(TTarget target, int index)
             {
                 InvokeCollectionChanged(
-                                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
-                                                                             target, index));
+                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
+                        target, index));
             }
 
             /// <summary>
@@ -383,8 +460,8 @@ namespace Tauron.Application
             public void OnCollectionReplace(TTarget newItem, TTarget oldItem, int index)
             {
                 InvokeCollectionChanged(
-                                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace,
-                                                                             newItem, oldItem, index));
+                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace,
+                        newItem, oldItem, index));
             }
 
             /// <summary>The on collection reset.</summary>
@@ -431,10 +508,10 @@ namespace Tauron.Application
             private void InvokeCollectionChanged([NotNull] NotifyCollectionChangedEventArgs e)
             {
                 CurrentDispatcher.Invoke(() =>
-                                         {
-                                             InvokePropertyChanged();
-                                             CollectionChanged?.Invoke(this, e);
-                                         });
+                {
+                    InvokePropertyChanged();
+                    CollectionChanged?.Invoke(this, e);
+                });
             }
 
             /// <summary>The invoke property changed.</summary>
@@ -512,108 +589,25 @@ namespace Tauron.Application
             #endregion
         }
 
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="ObservableDictionary{TKey,TValue}" /> class.
-        ///     Initialisiert eine neue Instanz der <see cref="ObservableDictionary{TKey,TValue}" /> Klasse.
-        ///     Initializes a new instance of the <see cref="ObservableDictionary{TKey,TValue}" /> class.
-        /// </summary>
-        public ObservableDictionary()
-        {
-            _helper    = new BlockHelper();
-            _version   = 1;
-            _entrys    = new Entry[4];
-            _keyEquals = EqualityComparer<TKey>.Default;
-            _keys      = new KeyCollection(this);
-            _values    = new ValueCollection(this);
-        }
-
-        #endregion
-
-        #region Explicit Interface Properties
-
-        /// <summary>Gets a value indicating whether is read only.</summary>
-        /// <value>The is read only.</value>
-        bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly => false;
-
-        #endregion
-
-        #region Public Indexers
-
-        /// <summary>
-        ///     The this.
-        /// </summary>
-        /// <param name="key">
-        ///     The key.
-        /// </param>
-        /// <exception cref="KeyNotFoundException">
-        /// </exception>
-        /// <returns>
-        ///     The <see cref="TValue" />.
-        /// </returns>
-        public TValue this[TKey key]
-        {
-            get
-            {
-                int index;
-                var ent = FindEntry(key, out index);
-                if (ent == null) throw new KeyNotFoundException(key.ToString());
-
-                return ent.Value;
-            }
-
-            set
-            {
-                int index;
-                var entry = FindEntry(key, out index);
-
-                if (entry == null)
-                {
-                    AddCore(key, value);
-                }
-                else
-                {
-                    var temp = Entry.Construct(entry);
-                    entry.Value = value;
-                    OnCollectionReplace(Entry.Construct(entry), temp, index);
-                }
-            }
-        }
-
-        #endregion
-
-        #region Public Events
-
-        /// <summary>The collection changed.</summary>
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-
-        #endregion
-
         #region Fields
 
         /// <summary>The _entrys.</summary>
         private Entry[] _entrys;
 
         /// <summary>The _helper.</summary>
-        [NonSerialized]
-        private BlockHelper _helper;
+        [NonSerialized] private BlockHelper _helper;
 
         /// <summary>The _key equals.</summary>
-        [NonSerialized]
-        private IEqualityComparer<TKey> _keyEquals;
+        [NonSerialized] private IEqualityComparer<TKey> _keyEquals;
 
         /// <summary>The _keys.</summary>
-        [NonSerialized]
-        private KeyCollection _keys;
+        [NonSerialized] private KeyCollection _keys;
 
         /// <summary>The _values.</summary>
-        [NonSerialized]
-        private ValueCollection _values;
+        [NonSerialized] private ValueCollection _values;
 
         /// <summary>The _version.</summary>
-        [NonSerialized]
-        private int _version;
+        [NonSerialized] private int _version;
 
         #endregion
 
@@ -915,12 +909,12 @@ namespace Tauron.Application
         private void InvokePropertyChanged()
         {
             CurrentDispatcher.Invoke(() =>
-                                     {
-                                         OnPropertyChangedExplicit("Item[]");
-                                         OnPropertyChangedExplicit("Count");
-                                         OnPropertyChangedExplicit("Keys");
-                                         OnPropertyChangedExplicit("Values");
-                                     });
+            {
+                OnPropertyChangedExplicit("Item[]");
+                OnPropertyChangedExplicit("Count");
+                OnPropertyChangedExplicit("Keys");
+                OnPropertyChangedExplicit("Values");
+            });
         }
 
         /// <summary>
@@ -937,8 +931,8 @@ namespace Tauron.Application
             using (BlockCollection())
             {
                 InvokeCollectionChanged(
-                                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, changed,
-                                                                             index));
+                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, changed,
+                        index));
                 _keys.OnCollectionAdd(changed.Key, index);
                 _values.OnCollectionAdd(changed.Value, index);
                 InvokePropertyChanged();
@@ -959,8 +953,8 @@ namespace Tauron.Application
             using (BlockCollection())
             {
                 InvokeCollectionChanged(
-                                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
-                                                                             changed, index));
+                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
+                        changed, index));
                 _keys.OnCollectionRemove(changed.Key, index);
                 _values.OnCollectionRemove(changed.Value, index);
                 InvokePropertyChanged();
@@ -982,13 +976,13 @@ namespace Tauron.Application
         private void OnCollectionReplace(
             KeyValuePair<TKey, TValue> newItem,
             KeyValuePair<TKey, TValue> oldItem,
-            int                        index)
+            int index)
         {
             using (BlockCollection())
             {
                 InvokeCollectionChanged(
-                                        new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace,
-                                                                             newItem, oldItem, index));
+                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace,
+                        newItem, oldItem, index));
                 _values.OnCollectionReplace(newItem.Value, oldItem.Value, index);
                 InvokePropertyChanged();
             }
@@ -1015,11 +1009,11 @@ namespace Tauron.Application
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            _helper    = new BlockHelper();
-            _version   = 1;
+            _helper = new BlockHelper();
+            _version = 1;
             _keyEquals = EqualityComparer<TKey>.Default;
-            _keys      = new KeyCollection(this);
-            _values    = new ValueCollection(this);
+            _keys = new KeyCollection(this);
+            _values = new ValueCollection(this);
         }
 
         #endregion

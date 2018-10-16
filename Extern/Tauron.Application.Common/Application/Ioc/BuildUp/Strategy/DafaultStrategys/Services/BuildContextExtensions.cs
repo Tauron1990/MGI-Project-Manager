@@ -43,7 +43,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
             return !context.Metadata.Export.ExternalInfo.External
-                && !context.Metadata.Export.ExternalInfo.HandlesLiftime;
+                   && !context.Metadata.Export.ExternalInfo.HandlesLiftime;
         }
 
         /// <summary>

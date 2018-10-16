@@ -55,7 +55,8 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
 
             IEnumerable<ExportMetadataBaseAttribute> metadata =
                 _attributeProvider.GetAllCustomAttributes<ExportMetadataBaseAttribute>();
-            foreach (var exportMetadataAttribute in metadata) Globalmetadata[exportMetadataAttribute.InternalKey] = exportMetadataAttribute.InternalValue;
+            foreach (var exportMetadataAttribute in metadata)
+                Globalmetadata[exportMetadataAttribute.InternalKey] = exportMetadataAttribute.InternalValue;
 
             var attr = Globalmetadata.TryGetAndCast<LifetimeContextAttribute>(AopConstants.LiftimeMetadataName);
 
@@ -64,52 +65,50 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
             if (anonym)
             {
                 _exports = new[]
-                           {
-                               new ExportMetadata(
-                                                  _exportetType,
-                                                  ExternalInfo.ExtenalComponentName,
-                                                  typeof(NotSharedLifetime),
-                                                  new Dictionary<string, object>(Globalmetadata),
-                                                  this)
-                           };
+                {
+                    new ExportMetadata(
+                        _exportetType,
+                        ExternalInfo.ExtenalComponentName,
+                        typeof(NotSharedLifetime),
+                        new Dictionary<string, object>(Globalmetadata),
+                        this)
+                };
                 return;
             }
 
             _exports = _attributeProvider.GetAllCustomAttributes<ExportAttribute>()
-                                         .Select(
-                                                 attribute =>
-                                                 {
-                                                     var temp = new Dictionary<string, object>(Globalmetadata);
+                .Select(
+                    attribute =>
+                    {
+                        var temp = new Dictionary<string, object>(Globalmetadata);
 
-                                                     Type realLifetime;
+                        Type realLifetime;
 
-                                                     if (attr == null)
-                                                     {
-                                                         var customLifeTime = attribute.GetOverrideDefaultPolicy();
-                                                         if (customLifeTime != null)
-                                                         {
-                                                             realLifetime = customLifeTime.LifeTimeType;
-                                                             attr         = customLifeTime;
-                                                         }
-                                                         else
-                                                         {
-                                                             realLifetime = lifetime;
-                                                         }
-                                                     }
-                                                     else
-                                                     {
-                                                         realLifetime = lifetime;
-                                                     }
+                        if (attr == null)
+                        {
+                            var customLifeTime = attribute.GetOverrideDefaultPolicy();
+                            if (customLifeTime != null)
+                            {
+                                realLifetime = customLifeTime.LifeTimeType;
+                                attr = customLifeTime;
+                            }
+                            else
+                            {
+                                realLifetime = lifetime;
+                            }
+                        }
+                        else
+                        {
+                            realLifetime = lifetime;
+                        }
 
-                                                     foreach (var tuple in attribute.Metadata)
-                                                     {
-                                                         temp.Add(tuple.Item1,
-                                                                  tuple.Item2);
-                                                     }
+                        foreach (var tuple in attribute.Metadata)
+                            temp.Add(tuple.Item1,
+                                tuple.Item2);
 
-                                                     return new ExportMetadata(attribute.Export, attribute.ContractName, realLifetime, temp, this);
-                                                 })
-                                         .ToArray();
+                        return new ExportMetadata(attribute.Export, attribute.ContractName, realLifetime, temp, this);
+                    })
+                .ToArray();
 
             ShareLifetime = attr == null || attr.ShareLiftime;
         }
@@ -135,11 +134,11 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
         public DefaultExport(object export)
             : this(export?.GetType(), export)
         {
-            
         }
 
         public DefaultExport(Type exportetType, object obj)
-            : this(exportetType, new ExternalExportInfo(true, true, true, false, (x, g) => obj, exportetType?.FullName), true)
+            : this(exportetType, new ExternalExportInfo(true, true, true, false, (x, g) => obj, exportetType?.FullName),
+                true)
         {
         }
 
@@ -147,19 +146,19 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
         {
             if (exportetType == null) throw new ArgumentNullException(nameof(exportetType));
 
-            Globalmetadata     = new Dictionary<string, object>();
-            _exportetType      = exportetType;
+            Globalmetadata = new Dictionary<string, object>();
+            _exportetType = exportetType;
             _attributeProvider = exportetType;
-            ExternalInfo       = externalInfo ?? throw new ArgumentNullException(nameof(externalInfo));
+            ExternalInfo = externalInfo ?? throw new ArgumentNullException(nameof(externalInfo));
             Initialize(asAnonym);
         }
-        
+
         public DefaultExport([NotNull] MethodInfo info, [NotNull] ExternalExportInfo externalInfo, bool asAnonym)
         {
             if (info == null) throw new ArgumentNullException(nameof(info));
-            Globalmetadata     = new Dictionary<string, object>();
+            Globalmetadata = new Dictionary<string, object>();
             _attributeProvider = info;
-            ExternalInfo       = externalInfo ?? throw new ArgumentNullException(nameof(externalInfo));
+            ExternalInfo = externalInfo ?? throw new ArgumentNullException(nameof(externalInfo));
             Initialize(asAnonym);
         }
 

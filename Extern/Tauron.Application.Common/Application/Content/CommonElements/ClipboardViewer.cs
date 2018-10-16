@@ -14,6 +14,13 @@ namespace Tauron.Application
     [PublicAPI]
     public sealed class ClipboardViewer : IDisposable
     {
+        #region Public Events
+
+        /// <summary>The clipboard changed.</summary>
+        public event EventHandler ClipboardChanged;
+
+        #endregion
+
         private class ViewerSafeHandle : SafeHandleMinusOneIsInvalid
         {
             #region Fields
@@ -72,13 +79,6 @@ namespace Tauron.Application
             #endregion
         }
 
-        #region Public Events
-
-        /// <summary>The clipboard changed.</summary>
-        public event EventHandler ClipboardChanged;
-
-        #endregion
-
         #region Fields
 
         /// <summary>The _disposed.</summary>
@@ -91,8 +91,7 @@ namespace Tauron.Application
         private bool _isViewing;
 
         /// <summary>The _target.</summary>
-        [CanBeNull]
-        private IWindow _target;
+        [CanBeNull] private IWindow _target;
 
         #endregion
 
@@ -160,8 +159,8 @@ namespace Tauron.Application
             {
                 _target.AddHook(WinProc); // start processing window messages
                 _hWndNextViewer = new ViewerSafeHandle(
-                                                       NativeMethods.SetClipboardViewer(_target.Handle),
-                                                       _target); // set this window as a viewer
+                    NativeMethods.SetClipboardViewer(_target.Handle),
+                    _target); // set this window as a viewer
             }
 
             _isViewing = true;
@@ -234,9 +233,11 @@ namespace Tauron.Application
             switch (msg)
             {
                 case NativeMethods.WmChangecbchain:
-                    if (wParam == _hWndNextViewer.DangerousGetHandle()) // clipboard viewer chain changed, need to fix it.
+                    if (wParam == _hWndNextViewer.DangerousGetHandle()
+                    ) // clipboard viewer chain changed, need to fix it.
                         _hWndNextViewer.SetNewhandler(lParam);
-                    else if (_hWndNextViewer.DangerousGetHandle() != IntPtr.Zero) // pass the message to the next viewer.
+                    else if (_hWndNextViewer.DangerousGetHandle() != IntPtr.Zero
+                    ) // pass the message to the next viewer.
                         NativeMethods.SendMessage(_hWndNextViewer.DangerousGetHandle(), msg, wParam, lParam);
 
                     break;

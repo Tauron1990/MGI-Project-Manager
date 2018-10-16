@@ -13,8 +13,7 @@ namespace Tauron.Application.Modules
             AddIns = new List<AddinDescription>();
         }
 
-        [NotNull]
-        public static List<AddinDescription> AddIns { get; private set; }
+        [NotNull] public static List<AddinDescription> AddIns { get; private set; }
 
         internal static void OnProgress([NotNull] MemberInfo member, [NotNull] Attribute attr, [NotNull] IModule module)
         {

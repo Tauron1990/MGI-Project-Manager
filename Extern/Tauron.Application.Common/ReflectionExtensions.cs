@@ -66,7 +66,8 @@ namespace Tauron
         ///     The <see cref="TValue" />.
         /// </returns>
         [NotNull]
-        public static TValue CreateInstanceAndUnwrap<TValue>([NotNull] this AppDomain domain, [NotNull] params object[] args)
+        public static TValue CreateInstanceAndUnwrap<TValue>([NotNull] this AppDomain domain,
+            [NotNull] params object[] args)
             where TValue : class
         {
             if (domain == null) throw new ArgumentNullException(nameof(domain));
@@ -76,14 +77,14 @@ namespace Tauron
             return
                 (TValue)
                 domain.CreateInstanceAndUnwrap(
-                                               targetType.Assembly.FullName,
-                                               targetType.FullName,
-                                               false,
-                                               BindingFlags.Default,
-                                               null,
-                                               args,
-                                               null,
-                                               null);
+                    targetType.Assembly.FullName,
+                    targetType.FullName,
+                    false,
+                    BindingFlags.Default,
+                    null,
+                    args,
+                    null,
+                    null);
         }
 
         /// <summary>
@@ -107,8 +108,8 @@ namespace Tauron
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public static IEnumerable<Tuple<MemberInfo, TAttribute>> FindMemberAttributes<TAttribute>(
             [NotNull] this Type type,
-            bool                nonPublic,
-            BindingFlags        bindingflags) where TAttribute : Attribute
+            bool nonPublic,
+            BindingFlags bindingflags) where TAttribute : Attribute
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             bindingflags |= BindingFlags.Public;
@@ -116,14 +117,14 @@ namespace Tauron
 
             if (!Enum.IsDefined(typeof(BindingFlags), BindingFlags.FlattenHierarchy))
                 return from mem in type.GetMembers(bindingflags)
-                       let attr = CustomAttributeExtensions.GetCustomAttribute<TAttribute>(mem)
-                       where attr != null
-                       select Tuple.Create(mem, attr);
+                    let attr = CustomAttributeExtensions.GetCustomAttribute<TAttribute>(mem)
+                    where attr != null
+                    select Tuple.Create(mem, attr);
 
             return from mem in type.GetHieratichialMembers(bindingflags)
-                   let attr = mem.GetCustomAttribute<TAttribute>()
-                   where attr != null
-                   select Tuple.Create(mem, attr);
+                let attr = mem.GetCustomAttribute<TAttribute>()
+                where attr != null
+                select Tuple.Create(mem, attr);
         }
 
         [NotNull]
@@ -154,14 +155,15 @@ namespace Tauron
         /// </returns>
         [NotNull]
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public static IEnumerable<Tuple<MemberInfo, TAttribute>> FindMemberAttributes<TAttribute>([NotNull] this Type type,
-                                                                                                  bool                nonPublic) where TAttribute : Attribute
+        public static IEnumerable<Tuple<MemberInfo, TAttribute>> FindMemberAttributes<TAttribute>(
+            [NotNull] this Type type,
+            bool nonPublic) where TAttribute : Attribute
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             return FindMemberAttributes<TAttribute>(
-                                                    type,
-                                                    nonPublic,
-                                                    BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                type,
+                nonPublic,
+                BindingFlags.Instance | BindingFlags.FlattenHierarchy);
         }
 
         [NotNull]
@@ -174,7 +176,8 @@ namespace Tauron
 
         [NotNull]
         [System.Diagnostics.Contracts.Pure]
-        public static object[] GetAllCustomAttributes([NotNull] this ICustomAttributeProvider member, [NotNull] Type type)
+        public static object[] GetAllCustomAttributes([NotNull] this ICustomAttributeProvider member,
+            [NotNull] Type type)
         {
             if (member == null) throw new ArgumentNullException(nameof(member));
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -215,7 +218,8 @@ namespace Tauron
         ///     The <see cref="TAttribute" />.
         /// </returns>
         [CanBeNull]
-        public static TAttribute GetCustomAttribute<TAttribute>([NotNull] this ICustomAttributeProvider provider, bool inherit)
+        public static TAttribute GetCustomAttribute<TAttribute>([NotNull] this ICustomAttributeProvider provider,
+            bool inherit)
             where TAttribute : Attribute
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
@@ -238,7 +242,8 @@ namespace Tauron
         ///     The <see cref="IEnumerable" />.
         /// </returns>
         [NotNull]
-        public static IEnumerable<object> GetCustomAttributes([NotNull] this ICustomAttributeProvider provider, [NotNull] [ItemNotNull] params Type[] attributeTypes)
+        public static IEnumerable<object> GetCustomAttributes([NotNull] this ICustomAttributeProvider provider,
+            [NotNull] [ItemNotNull] params Type[] attributeTypes)
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 
@@ -262,14 +267,15 @@ namespace Tauron
         /// <returns>
         ///     The <see cref="TType" />.
         /// </returns>
-        public static TType GetInvokeMember<TType>([NotNull] this MemberInfo info, [NotNull] object instance, [CanBeNull] params object[] parameter)
+        public static TType GetInvokeMember<TType>([NotNull] this MemberInfo info, [NotNull] object instance,
+            [CanBeNull] params object[] parameter)
         {
             if (info == null) throw new ArgumentNullException(nameof(info));
             try
             {
                 if (info is PropertyInfo)
                 {
-                    var property                                              = info.CastObj<PropertyInfo>();
+                    var property = info.CastObj<PropertyInfo>();
                     if (parameter != null && parameter.Length == 0) parameter = null;
 
                     return (TType) property.GetValue(instance, parameter);
@@ -334,25 +340,26 @@ namespace Tauron
         ///     The <see cref="PropertyInfo" />.
         /// </returns>
         [CanBeNull]
-        public static PropertyInfo GetPropertyFromMethod([NotNull] this MethodInfo method, [NotNull] Type implementingType)
+        public static PropertyInfo GetPropertyFromMethod([NotNull] this MethodInfo method,
+            [NotNull] Type implementingType)
         {
             if (method == null) throw new ArgumentNullException(nameof(method));
             if (implementingType == null) throw new ArgumentNullException(nameof(implementingType));
             if (!method.IsSpecialName || method.Name.Length < 4) return null;
 
             var isGetMethod = method.Name.Substring(0, 4) == "get_";
-            var returnType  = isGetMethod ? method.ReturnType : method.GetParameterTypes().Last();
+            var returnType = isGetMethod ? method.ReturnType : method.GetParameterTypes().Last();
             var indexerTypes = isGetMethod
-                                   ? method.GetParameterTypes()
-                                   : method.GetParameterTypes().SkipLast(1);
+                ? method.GetParameterTypes()
+                : method.GetParameterTypes().SkipLast(1);
 
             return implementingType.GetProperty(
-                                                method.Name.Substring(4),
-                                                DefaultBindingFlags,
-                                                null,
-                                                returnType,
-                                                indexerTypes.ToArray(),
-                                                null);
+                method.Name.Substring(4),
+                DefaultBindingFlags,
+                null,
+                returnType,
+                indexerTypes.ToArray(),
+                null);
         }
 
         /// <summary>
@@ -368,7 +375,9 @@ namespace Tauron
         public static PropertyInfo GetPropertyFromMethod([NotNull] this MethodBase method)
         {
             if (method == null) throw new ArgumentNullException(nameof(method));
-            return !method.IsSpecialName ? null : method.DeclaringType.GetProperty(method.Name.Substring(4), DefaultBindingFlags);
+            return !method.IsSpecialName
+                ? null
+                : method.DeclaringType.GetProperty(method.Name.Substring(4), DefaultBindingFlags);
         }
 
         /// <summary>
@@ -450,7 +459,8 @@ namespace Tauron
         ///     The <see cref="bool" />.
         /// </returns>
         [System.Diagnostics.Contracts.Pure]
-        public static bool HasMatchingAttribute<T>([NotNull] this ICustomAttributeProvider member, [NotNull] T attributeToMatch)
+        public static bool HasMatchingAttribute<T>([NotNull] this ICustomAttributeProvider member,
+            [NotNull] T attributeToMatch)
             where T : Attribute
         {
             if (member == null) throw new ArgumentNullException(nameof(member));
@@ -477,7 +487,8 @@ namespace Tauron
         /// <returns>
         ///     The <see cref="TType" />.
         /// </returns>
-        public static TType Invoke<TType>([NotNull] this MethodBase method, [NotNull] object instance, [NotNull] params object[] args)
+        public static TType Invoke<TType>([NotNull] this MethodBase method, [NotNull] object instance,
+            [NotNull] params object[] args)
         {
             if (method == null) throw new ArgumentNullException(nameof(method));
             if (instance == null) throw new ArgumentNullException(nameof(instance));
@@ -496,7 +507,8 @@ namespace Tauron
         /// <param name="args">
         ///     The args.
         /// </param>
-        public static void Invoke([NotNull] this MethodBase method, [NotNull] object instance, [NotNull] params object[] args)
+        public static void Invoke([NotNull] this MethodBase method, [NotNull] object instance,
+            [NotNull] params object[] args)
         {
             if (method == null) throw new ArgumentNullException(nameof(method));
             if (instance == null) throw new ArgumentNullException(nameof(instance));
@@ -547,14 +559,15 @@ namespace Tauron
         /// <param name="parameter">
         ///     The parameter.
         /// </param>
-        public static void SetInvokeMember([NotNull] this MemberInfo info, [NotNull] object instance, [CanBeNull] params object[] parameter)
+        public static void SetInvokeMember([NotNull] this MemberInfo info, [NotNull] object instance,
+            [CanBeNull] params object[] parameter)
         {
             if (info == null) throw new ArgumentNullException(nameof(info));
             if (info is PropertyInfo)
             {
-                var      property = info.CastObj<PropertyInfo>();
-                object   value    = null;
-                object[] indexes  = null;
+                var property = info.CastObj<PropertyInfo>();
+                object value = null;
+                object[] indexes = null;
                 if (parameter != null)
                 {
                     if (parameter.Length >= 1) value = parameter[0];
@@ -566,7 +579,7 @@ namespace Tauron
             }
             else if (info is FieldInfo)
             {
-                object value                 = null;
+                object value = null;
                 if (parameter != null) value = parameter.FirstOrDefault();
 
                 info.CastObj<FieldInfo>().SetValue(instance, value);

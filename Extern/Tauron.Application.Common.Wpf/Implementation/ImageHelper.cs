@@ -26,7 +26,7 @@ namespace Tauron.Application.Implementation
 
             public KeyedImage([NotNull] Uri key, [NotNull] ImageSource source)
             {
-                Key     = key;
+                Key = key;
                 _source = new WeakReference(source);
             }
 
@@ -44,8 +44,7 @@ namespace Tauron.Application.Implementation
 
             #region Public Properties
 
-            [NotNull]
-            public Uri Key { get; }
+            [NotNull] public Uri Key { get; }
 
             public bool IsAlive => _source.IsAlive;
 
@@ -56,8 +55,7 @@ namespace Tauron.Application.Implementation
 
         private readonly WeakReferenceCollection<KeyedImage> _cache = new WeakReferenceCollection<KeyedImage>();
 
-        [Inject]
-        private IPackUriHelper _packUriHelper;
+        [Inject] private IPackUriHelper _packUriHelper;
 
         #endregion
 
@@ -84,7 +82,7 @@ namespace Tauron.Application.Implementation
                 if (temp != null) return temp;
             }
 
-            var flag        = target.IsAbsoluteUri && target.Scheme == Uri.UriSchemeFile && target.OriginalString.ExisFile();
+            var flag = target.IsAbsoluteUri && target.Scheme == Uri.UriSchemeFile && target.OriginalString.ExisFile();
             if (!flag) flag = target.IsAbsoluteUri;
 
             if (!flag) flag = target.OriginalString.ExisFile();

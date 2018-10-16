@@ -59,8 +59,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         /// </param>
         public override void Initialize(ComponentRegistry components)
         {
-            _eventManager         = components.Get<IEventManager>();
-            _factory              = components.Get<IMetadataFactory>();
+            _eventManager = components.Get<IEventManager>();
+            _factory = components.Get<IMetadataFactory>();
             _interceptorFactories = components.GetAll<IImportInterceptorFactory>().ToArray();
         }
 
@@ -79,8 +79,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             foreach (var policy in context.Policys.GetAll<InjectMemberPolicy>())
             {
                 policy.Injector.Inject(context.Target, context.Container, policy.Metadata,
-                                       policy.Interceptors == null ? null : new CompositeInterceptor(policy.Interceptors),
-                                       context.ErrorTracer, context.Parameters);
+                    policy.Interceptors == null ? null : new CompositeInterceptor(policy.Interceptors),
+                    context.ErrorTracer, context.Parameters);
 
                 if (context.ErrorTracer.Exceptional) return;
             }
@@ -101,18 +101,18 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             var members = context.ExportType.GetMembers(AopConstants.DefaultBindingFlags);
 
             List<IImportInterceptor> importInterceptors = null;
-            var                      intpol             = context.Policys.Get<ExternalImportInterceptorPolicy>();
-            if (intpol != null) importInterceptors      = intpol.Interceptors;
+            var intpol = context.Policys.Get<ExternalImportInterceptorPolicy>();
+            if (intpol != null) importInterceptors = intpol.Interceptors;
 
             foreach (
                 var temp in
                 _interceptorFactories.Select(
-                                             importInterceptorFactory => importInterceptorFactory.CreateInterceptor(context.Metadata))
-                                     .Where(temp => temp != null))
-            {
-                if (importInterceptors == null) importInterceptors = new List<IImportInterceptor> {temp};
-                else importInterceptors.Add(temp);
-            }
+                        importInterceptorFactory => importInterceptorFactory.CreateInterceptor(context.Metadata))
+                    .Where(temp => temp != null))
+                if (importInterceptors == null)
+                    importInterceptors = new List<IImportInterceptor> {temp};
+                else
+                    importInterceptors.Add(temp);
 
             foreach (var importMetadata in context.Metadata.Export.ImportMetadata)
             {
@@ -130,10 +130,12 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
                         policy.Injector = new FieldInjector(_factory, (FieldInfo) info, context.ResolverExtensions);
                         break;
                     case MemberTypes.Property:
-                        policy.Injector = new PropertyInjector(_factory, (PropertyInfo) info, context.ResolverExtensions);
+                        policy.Injector =
+                            new PropertyInjector(_factory, (PropertyInfo) info, context.ResolverExtensions);
                         break;
                     case MemberTypes.Method:
-                        policy.Injector = new MethodInjector((MethodInfo) info, _factory, _eventManager, context.ResolverExtensions);
+                        policy.Injector = new MethodInjector((MethodInfo) info, _factory, _eventManager,
+                            context.ResolverExtensions);
                         break;
                 }
 

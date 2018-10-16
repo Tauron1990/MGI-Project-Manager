@@ -32,8 +32,8 @@ namespace Tauron.Application.Views.Core
             if (name == null) return null;
 
             var temp = NamingHelper.CreatePossibilyNames(name)
-                                   .Select(Match)
-                                   .FirstOrDefault(view => view != null);
+                .Select(Match)
+                .FirstOrDefault(view => view != null);
 
             if (temp != null) return temp;
 
@@ -78,7 +78,8 @@ namespace Tauron.Application.Views.Core
         public abstract DependencyObject Match([NotNull] ISortableViewExportMetadata name);
 
         [NotNull]
-        public abstract IEnumerable<InstanceResolver<Control, ISortableViewExportMetadata>> GetAllViewsImpl([NotNull] string name);
+        public abstract IEnumerable<InstanceResolver<Control, ISortableViewExportMetadata>> GetAllViewsImpl(
+            [NotNull] string name);
 
         [NotNull]
         public abstract IWindow CreateWindowImpl([NotNull] string name, [CanBeNull] object[] parameters);

@@ -37,55 +37,6 @@ namespace Tauron.Application.Controls
     /// <summary>The simple progress dialog.</summary>
     public sealed class SimpleProgressDialog : IProgressDialog
     {
-        private class DialogReporter : IProgress<ActiveProgress>
-        {
-            #region Constructors and Destructors
-
-            /// <summary>
-            ///     Initializes a new instance of the <see cref="DialogReporter" /> class.
-            ///     Initialisiert eine neue Instanz der <see cref="DialogReporter" /> Klasse.
-            /// </summary>
-            /// <param name="dialog">
-            ///     The dialog.
-            /// </param>
-            /// <param name="text">
-            ///     The text.
-            /// </param>
-            public DialogReporter([NotNull] ProgressDialog dialog, [NotNull] string text)
-            {
-                _dialog = dialog;
-                _text   = text;
-            }
-
-            #endregion
-
-            #region Public Methods and Operators
-
-            /// <summary>
-            ///     The report.
-            /// </summary>
-            /// <param name="value">
-            ///     The value.
-            /// </param>
-            public void Report([NotNull] ActiveProgress value)
-            {
-                _dialog.ReportProgress(
-                                       (int) value.OverAllProgress,
-                                       _text,
-                                       string.Format("{0} : {1}%", value.Message, (int) value.Percent));
-            }
-
-            #endregion
-
-            #region Fields
-
-            private readonly ProgressDialog _dialog;
-
-            private readonly string _text;
-
-            #endregion
-        }
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -104,18 +55,19 @@ namespace Tauron.Application.Controls
         /// <param name="worker">
         ///     The worker.
         /// </param>
-        public SimpleProgressDialog([NotNull] string text, [NotNull] string title, [NotNull] IWindow owner, [NotNull] Action<IProgress<ActiveProgress>> worker)
+        public SimpleProgressDialog([NotNull] string text, [NotNull] string title, [NotNull] IWindow owner,
+            [NotNull] Action<IProgress<ActiveProgress>> worker)
         {
-            _owner  = owner;
+            _owner = owner;
             _worker = worker;
             _dialog = new ProgressDialog
-                      {
-                          Text              = text,
-                          ShowTimeRemaining = false,
-                          WindowTitle       = title,
-                          ShowCancelButton  = false
-                      };
-            _dialog.DoWork             += DoWork;
+            {
+                Text = text,
+                ShowTimeRemaining = false,
+                WindowTitle = title,
+                ShowCancelButton = false
+            };
+            _dialog.DoWork += DoWork;
             _dialog.RunWorkerCompleted += RunWorkerCompleted;
         }
 
@@ -140,6 +92,55 @@ namespace Tauron.Application.Controls
 
         #endregion
 
+        private class DialogReporter : IProgress<ActiveProgress>
+        {
+            #region Constructors and Destructors
+
+            /// <summary>
+            ///     Initializes a new instance of the <see cref="DialogReporter" /> class.
+            ///     Initialisiert eine neue Instanz der <see cref="DialogReporter" /> Klasse.
+            /// </summary>
+            /// <param name="dialog">
+            ///     The dialog.
+            /// </param>
+            /// <param name="text">
+            ///     The text.
+            /// </param>
+            public DialogReporter([NotNull] ProgressDialog dialog, [NotNull] string text)
+            {
+                _dialog = dialog;
+                _text = text;
+            }
+
+            #endregion
+
+            #region Public Methods and Operators
+
+            /// <summary>
+            ///     The report.
+            /// </summary>
+            /// <param name="value">
+            ///     The value.
+            /// </param>
+            public void Report([NotNull] ActiveProgress value)
+            {
+                _dialog.ReportProgress(
+                    (int) value.OverAllProgress,
+                    _text,
+                    string.Format("{0} : {1}%", value.Message, (int) value.Percent));
+            }
+
+            #endregion
+
+            #region Fields
+
+            private readonly ProgressDialog _dialog;
+
+            private readonly string _text;
+
+            #endregion
+        }
+
         #region Fields
 
         private readonly ProgressDialog _dialog;
@@ -162,14 +163,14 @@ namespace Tauron.Application.Controls
         public void Start()
         {
             ObservableObject.CurrentDispatcher.Invoke(
-                                                      () =>
-                                                      {
-                                                          if (_owner == null) _dialog.ShowDialog();
-                                                          else
-                                                              _dialog.ShowDialog(
-                                                                                 (Window)
-                                                                                 _owner.TranslateForTechnology());
-                                                      });
+                () =>
+                {
+                    if (_owner == null) _dialog.ShowDialog();
+                    else
+                        _dialog.ShowDialog(
+                            (Window)
+                            _owner.TranslateForTechnology());
+                });
         }
 
         #endregion

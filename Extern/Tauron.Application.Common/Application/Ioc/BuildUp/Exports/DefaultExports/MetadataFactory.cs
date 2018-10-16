@@ -82,7 +82,7 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
         /// </param>
         public void Intercept(IInvocation invocation)
         {
-            var name     = invocation.Method.Name.Remove(0, 4);
+            var name = invocation.Method.Name.Remove(0, 4);
             var metadata = (MetadataBase) invocation.Proxy;
 
             metadata.Metadata.TryGetValue(name, out var value);
@@ -122,11 +122,11 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
             lock (this)
             {
                 return _generator.CreateClassProxy(
-                                                   typeof(MetadataBase),
-                                                   new[] {interfaceType},
-                                                   ProxyGenerationOptions.Default,
-                                                   new object[] {metadata},
-                                                   new MetadataInterceptor());
+                    typeof(MetadataBase),
+                    new[] {interfaceType},
+                    ProxyGenerationOptions.Default,
+                    new object[] {metadata},
+                    new MetadataInterceptor());
             }
         }
 

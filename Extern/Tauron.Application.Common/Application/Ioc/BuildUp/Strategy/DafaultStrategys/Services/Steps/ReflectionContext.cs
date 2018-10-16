@@ -10,61 +10,40 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
     [PublicAPI]
     public class ReflectionContext
     {
-        private class UionExportMetatdataEqualityComparer : IEqualityComparer<ExportMetadata>
-        {
-            public bool Equals([NotNull] ExportMetadata x, [NotNull] ExportMetadata y)
-            {
-                return x.Export.ImplementType == y.Export.ImplementType;
-            }
-
-            public int GetHashCode([NotNull] ExportMetadata obj)
-            {
-                return obj.Export.ImplementType?.GetHashCode() ?? obj.GetHashCode();
-            }
-        }
-
         private readonly InjectorContext _parentContext;
 
-        public ReflectionContext([NotNull] IMetadataFactory metadataFactory, [NotNull] Type                 memberType,
-                                 [NotNull] InjectorContext  parentContext,   [NotNull] IResolverExtension[] resolverExtensions)
+        public ReflectionContext([NotNull] IMetadataFactory metadataFactory, [NotNull] Type memberType,
+            [NotNull] InjectorContext parentContext, [NotNull] IResolverExtension[] resolverExtensions)
         {
-            _parentContext          = parentContext;
-            MetadataFactory         = metadataFactory;
-            MemberType              = memberType;
-            ResolverExtensions      = resolverExtensions;
-            CurrentType             = memberType;
+            _parentContext = parentContext;
+            MetadataFactory = metadataFactory;
+            MemberType = memberType;
+            ResolverExtensions = resolverExtensions;
+            CurrentType = memberType;
             BuildParametersRegistry = new ExportRegistry();
         }
 
         public IResolverExtension[] ResolverExtensions { get; private set; }
 
-        [CanBeNull]
-        public ExportMetadata ExportMetadataOverride { get; set; }
+        [CanBeNull] public ExportMetadata ExportMetadataOverride { get; set; }
 
-        [NotNull]
-        public ExportRegistry BuildParametersRegistry { get; private set; }
+        [NotNull] public ExportRegistry BuildParametersRegistry { get; private set; }
 
-        [NotNull]
-        public IMetadataFactory MetadataFactory { get; private set; }
+        [NotNull] public IMetadataFactory MetadataFactory { get; private set; }
 
-        [CanBeNull]
-        public InterceptorCallback InterceptorCallback { get; set; }
+        [CanBeNull] public InterceptorCallback InterceptorCallback { get; set; }
 
-        [NotNull]
-        public Type MemberType { get; private set; }
+        [NotNull] public Type MemberType { get; private set; }
 
-        [NotNull]
-        public Type CurrentType { get; set; }
+        [NotNull] public Type CurrentType { get; set; }
 
         public Type AdditionalInfo { get; set; }
 
         public int Level { get; set; }
 
-        [CanBeNull]
-        public object Metadata { get; set; }
+        [CanBeNull] public object Metadata { get; set; }
 
-        [CanBeNull]
-        public Type MetadataType { get; set; }
+        [CanBeNull] public Type MetadataType { get; set; }
 
         //[NotNull]
         //public IResolver CreateSimpleListHelper([NotNull] ExportMetadata meta, bool isDescriptor)
@@ -91,9 +70,9 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
 
             return
                 BuildParametersRegistry.FindAll(type, name, new ErrorTracer())
-                                       .Union(
-                                              _parentContext.Container.FindExports(type, name, _parentContext.Tracer, Level),
-                                              new UionExportMetatdataEqualityComparer());
+                    .Union(
+                        _parentContext.Container.FindExports(type, name, _parentContext.Tracer, Level),
+                        new UionExportMetatdataEqualityComparer());
         }
 
         [CanBeNull]
@@ -112,8 +91,10 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
             var temp = BuildParametersRegistry.FindOptional(type, name, new ErrorTracer());
             if (temp != null) return temp;
 
-            return _parentContext.Container.FindExport(_parentContext.Metadata.InterfaceType ?? ExtractRealType(CurrentType), _parentContext.Metadata.ContractName,
-                                                       _parentContext.Tracer, _parentContext.Metadata.Optional, Level);
+            return _parentContext.Container.FindExport(
+                _parentContext.Metadata.InterfaceType ?? ExtractRealType(CurrentType),
+                _parentContext.Metadata.ContractName,
+                _parentContext.Tracer, _parentContext.Metadata.Optional, Level);
         }
 
         [NotNull]
@@ -127,6 +108,19 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
                 return type.GenericTypeArguments[0];
 
             return type.IsArray ? type.GetElementType() : type;
+        }
+
+        private class UionExportMetatdataEqualityComparer : IEqualityComparer<ExportMetadata>
+        {
+            public bool Equals([NotNull] ExportMetadata x, [NotNull] ExportMetadata y)
+            {
+                return x.Export.ImplementType == y.Export.ImplementType;
+            }
+
+            public int GetHashCode([NotNull] ExportMetadata obj)
+            {
+                return obj.Export.ImplementType?.GetHashCode() ?? obj.GetHashCode();
+            }
         }
     }
 }

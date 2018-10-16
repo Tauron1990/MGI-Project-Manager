@@ -7,19 +7,19 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
 {
     public abstract class ManyResolverStep : InjectorStep
     {
-        private         Type                   _currentType;
-        private         ExportEnumeratorHelper _enumeratorHelper;
-        private         string                 _error;
-        private         Type                   _listType;
-        private         List<IResolver>        _resolvers;
-        public override string                 ErrorMessage => _error;
+        private Type _currentType;
+        private ExportEnumeratorHelper _enumeratorHelper;
+        private string _error;
+        private Type _listType;
+        private List<IResolver> _resolvers;
+        public override string ErrorMessage => _error;
 
         public override StepId OnExecute(InjectorContext context)
         {
             _error = nameof(ManyResolverStep);
 
-            _listType                             = context.ReflectionContext.CurrentType;
-            _currentType                          = GetCurrentType(context.ReflectionContext);
+            _listType = context.ReflectionContext.CurrentType;
+            _currentType = GetCurrentType(context.ReflectionContext);
             context.ReflectionContext.CurrentType = _currentType;
 
             var findAllExports = context.ReflectionContext.FindAllExports();
@@ -29,7 +29,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
                 return StepId.Invalid;
             }
 
-            _resolvers        = new List<IResolver>();
+            _resolvers = new List<IResolver>();
             _enumeratorHelper = new ExportEnumeratorHelper(findAllExports.GetEnumerator(), context.ReflectionContext);
             return StepId.Loop;
         }
@@ -47,14 +47,15 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
         }
 
         [NotNull]
-        protected abstract IResolver CreateResolver([NotNull] IEnumerable<IResolver> resolvers, [NotNull] Type listType);
+        protected abstract IResolver
+            CreateResolver([NotNull] IEnumerable<IResolver> resolvers, [NotNull] Type listType);
 
         public override void OnExecuteFinish(InjectorContext context)
         {
             context.Resolver = CreateResolver(_resolvers, _listType);
 
-            _resolvers        = null;
-            _listType         = null;
+            _resolvers = null;
+            _listType = null;
             _enumeratorHelper = null;
         }
     }

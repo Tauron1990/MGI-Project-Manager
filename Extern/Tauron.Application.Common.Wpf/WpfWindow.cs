@@ -123,10 +123,10 @@ namespace Tauron.Application
         public void Close()
         {
             UiSynchronize.Synchronize.Invoke(() =>
-                                             {
-                                                 Dispose();
-                                                 _window.Close();
-                                             });
+            {
+                Dispose();
+                _window.Close();
+            });
         }
 
         /// <summary>
@@ -146,27 +146,27 @@ namespace Tauron.Application
         public void Show()
         {
             UiSynchronize.Synchronize.Invoke(() =>
-                                             {
-                                                 var info = _window.DataContext as IShowInformation;
+            {
+                var info = _window.DataContext as IShowInformation;
 
-                                                 info?.OnShow(this);
-                                                 _window.Show();
-                                                 info?.AfterShow(this);
-                                             });
+                info?.OnShow(this);
+                _window.Show();
+                info?.AfterShow(this);
+            });
         }
 
         public Task ShowDialogAsync(IWindow window)
         {
             return UiSynchronize.Synchronize.BeginInvoke(() =>
-                                                         {
-                                                             _window.Owner = window?.TranslateForTechnology() as Window;
+            {
+                _window.Owner = window?.TranslateForTechnology() as Window;
 
-                                                             var info = _window.DataContext as IShowInformation;
+                var info = _window.DataContext as IShowInformation;
 
-                                                             info?.OnShow(this);
-                                                             _window.ShowDialog();
-                                                             info?.AfterShow(this);
-                                                         });
+                info?.OnShow(this);
+                _window.ShowDialog();
+                info?.AfterShow(this);
+            });
         }
 
         /// <summary>The translate for technology.</summary>
@@ -193,10 +193,10 @@ namespace Tauron.Application
             get
             {
                 return UiSynchronize.Synchronize.Invoke(() =>
-                                                        {
-                                                            var temp = _window.DataContext as IResultProvider;
-                                                            return temp?.Result;
-                                                        });
+                {
+                    var temp = _window.DataContext as IResultProvider;
+                    return temp?.Result;
+                });
             }
         }
 

@@ -56,7 +56,8 @@ namespace Tauron.Application.Ioc
         public ContextScopeAttribute([NotNull] string name)
             : base(AopConstants.ContextMetadataName, name)
         {
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
         }
 
         /// <summary>

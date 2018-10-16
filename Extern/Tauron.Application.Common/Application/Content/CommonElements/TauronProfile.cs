@@ -37,11 +37,13 @@ namespace Tauron.Application
         /// </param>
         protected TauronProfile([NotNull] string application, [NotNull] string dafaultPath)
         {
-            if (string.IsNullOrWhiteSpace(application)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(application));
-            if (string.IsNullOrWhiteSpace(dafaultPath)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(dafaultPath));
-            Application  = application;
+            if (string.IsNullOrWhiteSpace(application))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(application));
+            if (string.IsNullOrWhiteSpace(dafaultPath))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(dafaultPath));
+            Application = application;
             _defaultPath = dafaultPath;
-            LogCategory  = "Tauron Profile";
+            LogCategory = "Tauron Profile";
         }
 
         #endregion
@@ -132,10 +134,11 @@ namespace Tauron.Application
         /// </param>
         public virtual void Load([NotNull] string name)
         {
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             IlligalCharCheck(name);
 
-            Name       = name;
+            Name = name;
             Dictionary = _defaultPath.CombinePath(Application, name);
             Dictionary.CreateDirectoryIfNotExis();
             FilePath = Dictionary.CombinePath("Settings.db");
@@ -145,8 +148,8 @@ namespace Tauron.Application
             _settings.Clear();
             foreach (var vals in
                 FilePath.EnumerateTextLinesIfExis()
-                        .Select(line => line.Split(ContentSplitter, 2))
-                        .Where(vals => vals.Length == 2))
+                    .Select(line => line.Split(ContentSplitter, 2))
+                    .Where(vals => vals.Length == 2))
             {
                 Log.Write(LogLevel.Info, "key: {0} | Value {1}", vals[0], vals[1]);
 
@@ -189,8 +192,10 @@ namespace Tauron.Application
         [NotNull]
         public virtual string GetValue([NotNull] string key, [NotNull] string defaultValue)
         {
-            if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(key));
-            if (string.IsNullOrWhiteSpace(defaultValue)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(defaultValue));
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(key));
+            if (string.IsNullOrWhiteSpace(defaultValue))
+                return string.Empty;
             IlligalCharCheck(key);
 
             return !_settings.ContainsKey(key) ? defaultValue : _settings[key];
@@ -208,7 +213,8 @@ namespace Tauron.Application
         public virtual void SetVaue([NotNull] string key, [NotNull] object value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
-            if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(key));
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(key));
             IlligalCharCheck(key);
 
             _settings[key] = value.ToString();

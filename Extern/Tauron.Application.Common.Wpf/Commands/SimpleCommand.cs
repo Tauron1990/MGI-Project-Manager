@@ -42,7 +42,7 @@ namespace Tauron.Application.Commands
         public SimpleCommand([CanBeNull] Func<object, bool> canExecute, [NotNull] Action<object> execute)
         {
             _canExecute = canExecute;
-            _execute    = execute;
+            _execute = execute;
         }
 
         public SimpleCommand([NotNull] Action<object> execute)

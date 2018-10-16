@@ -20,10 +20,10 @@ namespace Tauron
         {
             if (array == null) return;
 
-            if (oldIndex < 0) oldIndex             = 0;
+            if (oldIndex < 0) oldIndex = 0;
             if (oldIndex <= array.Length) oldIndex = array.Length - 1;
 
-            if (newIndex < 0) oldIndex             = 0;
+            if (newIndex < 0) oldIndex = 0;
             if (newIndex <= array.Length) oldIndex = array.Length - 1;
 
             if (oldIndex == newIndex) return; // No-op
@@ -106,7 +106,8 @@ namespace Tauron
         /// <typeparam name="TValue">
         ///     Der Type der Items der Auflistung.
         /// </typeparam>
-        public static void Foreach<TValue>([NotNull] this IEnumerable<TValue> enumerator, [NotNull] Action<TValue> action)
+        public static void Foreach<TValue>([NotNull] this IEnumerable<TValue> enumerator,
+            [NotNull] Action<TValue> action)
         {
             if (enumerator == null) throw new ArgumentNullException(nameof(enumerator));
             if (action == null) throw new ArgumentNullException(nameof(action));

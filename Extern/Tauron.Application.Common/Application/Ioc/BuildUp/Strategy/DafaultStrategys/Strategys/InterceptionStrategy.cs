@@ -98,7 +98,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
                 }
             }
 
-            foreach (var contextProperty in contextPolicy.ContextPropertys) contextProperty.Item1.Register(objectContext, contextProperty.Item2, context.Target);
+            foreach (var contextProperty in contextPolicy.ContextPropertys)
+                contextProperty.Item1.Register(objectContext, contextProperty.Item2, context.Target);
 
             var policy = context.Policys.Get<InterceptionPolicy>();
 
@@ -115,22 +116,20 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
                 lock (_generator)
                 {
                     context.Target = _generator.CreateClassProxyWithTarget(
-                                                                           context.ExportType,
-                                                                           context.Target,
-                                                                           options,
-                                                                           policy.MemberInterceptor.Select(
-                                                                                                           mem =>
-                                                                                                               mem.Value)
-                                                                                 .ToArray());
+                        context.ExportType,
+                        context.Target,
+                        options,
+                        policy.MemberInterceptor.Select(
+                                mem =>
+                                    mem.Value)
+                            .ToArray());
                 }
             }
             finally
             {
                 foreach (var result in
                     policy.MemberInterceptor.Select(mem => mem.Key).Where(attr => attr != null))
-                {
                     result.Initialize(context.Target, objectContext, name);
-                }
             }
         }
 
@@ -147,17 +146,18 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             context.ErrorTracer.Phase = "Reciving Interception Informations for " + context.Metadata;
 
             var contextPolicy = new ObjectContextPolicy
-                                {
-                                    ContextName =
-                                        context.Metadata.Metadata.TryGetAndCast<string>(
-                                                                                        AopConstants.ContextMetadataName)
-                                };
+            {
+                ContextName =
+                    context.Metadata.Metadata.TryGetAndCast<string>(
+                        AopConstants.ContextMetadataName)
+            };
 
             foreach (var memberInfo in context.ExportType.GetMembers(AopConstants.DefaultBindingFlags))
             {
                 var attrs =
                     memberInfo.GetAllCustomAttributes<ObjectContextPropertyAttribute>();
-                foreach (var objectContextPropertyAttribute in attrs) contextPolicy.ContextPropertys.Add(Tuple.Create(objectContextPropertyAttribute, memberInfo));
+                foreach (var objectContextPropertyAttribute in attrs)
+                    contextPolicy.ContextPropertys.Add(Tuple.Create(objectContextPropertyAttribute, memberInfo));
             }
 
             context.Policys.Add(contextPolicy);
@@ -178,17 +178,16 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             if (attr == null) return;
 
             var policy = new InterceptionPolicy {InterceptAttribute = attr};
-            var temp   = attr.Create();
-            if (temp != null) policy.MemberInterceptor.Add(new KeyValuePair<MemberInterceptionAttribute, IInterceptor>(null, temp));
+            var temp = attr.Create();
+            if (temp != null)
+                policy.MemberInterceptor.Add(new KeyValuePair<MemberInterceptionAttribute, IInterceptor>(null, temp));
 
             foreach (var attribute in
                 context.ExportType.GetAllCustomAttributes<MemberInterceptionAttribute>())
-            {
                 policy.MemberInterceptor.Add(
-                                             new KeyValuePair<MemberInterceptionAttribute, IInterceptor>(
-                                                                                                         attribute,
-                                                                                                         attribute.Create(context.ExportType)));
-            }
+                    new KeyValuePair<MemberInterceptionAttribute, IInterceptor>(
+                        attribute,
+                        attribute.Create(context.ExportType)));
 
             foreach (var member in context.ExportType.GetMembers(AopConstants.DefaultBindingFlags))
             {
@@ -197,8 +196,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
                 {
                     var temp2 = interceptionAttribute.Create(member);
                     policy.MemberInterceptor.Add(
-                                                 new KeyValuePair<MemberInterceptionAttribute, IInterceptor>(
-                                                                                                             interceptionAttribute, temp2));
+                        new KeyValuePair<MemberInterceptionAttribute, IInterceptor>(
+                            interceptionAttribute, temp2));
                 }
             }
 

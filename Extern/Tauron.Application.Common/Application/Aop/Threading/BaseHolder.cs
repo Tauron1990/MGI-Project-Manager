@@ -47,12 +47,14 @@ namespace Tauron.Application.Aop.Threading
         ///     The <see cref="TValue" />.
         /// </returns>
         [NotNull]
-        public static TValue GetOrAdd<TKey, TValue>([NotNull] ObjectContext context, [NotNull] Func<TValue> factory, [NotNull] string name)
+        public static TValue GetOrAdd<TKey, TValue>([NotNull] ObjectContext context, [NotNull] Func<TValue> factory,
+            [NotNull] string name)
             where TKey : class, IBaseHolder where TValue : class
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
             if (factory == null) throw new ArgumentNullException(nameof(factory));
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             var instance = context.GetAll<TKey>().FirstOrDefault(holder => holder.Name == name) as TValue;
 
             if (instance != null) return instance;

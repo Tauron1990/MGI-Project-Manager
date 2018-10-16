@@ -44,9 +44,9 @@ namespace Tauron.Application.Aop.Threading
         /// </summary>
         public ScheduleAttribute()
         {
-            Order           = 0;
+            Order = 0;
             CreationOptions = TaskCreationOptions.None;
-            TaskOption      = TaskOption.Worker;
+            TaskOption = TaskOption.Worker;
         }
 
         #endregion
@@ -68,9 +68,9 @@ namespace Tauron.Application.Aop.Threading
             _isOk = ((MethodInfo) info).ReturnType == typeof(void);
 
             CommonConstants.LogCommon(false,
-                                      "AOP Module: The member {0}.{1} has no Void Return",
-                                      info.DeclaringType.FullName,
-                                      info.Name);
+                "AOP Module: The member {0}.{1} has no Void Return",
+                info.DeclaringType.FullName,
+                info.Name);
 
             return base.Create(info);
         }
@@ -108,7 +108,8 @@ namespace Tauron.Application.Aop.Threading
                     CommonApplication.QueueWorkitemAsync(invocation.Proceed, true);
                     break;
                 default:
-                    CommonConstants.LogCommon(false, "Invalid Schedule TaskOption: {0}.{1}", invocation.TargetType, invocation.Method);
+                    CommonConstants.LogCommon(false, "Invalid Schedule TaskOption: {0}.{1}", invocation.TargetType,
+                        invocation.Method);
                     invocation.Proceed();
                     break;
             }

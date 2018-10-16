@@ -76,7 +76,7 @@ namespace Tauron.Application
         #region Fields
 
         private readonly IWorkspaceHolder _holder;
-        private          ITabWorkspace    _activeItem;
+        private ITabWorkspace _activeItem;
 
         #endregion
 

@@ -34,7 +34,7 @@ namespace Tauron.Application.Converter
 
             var temp =
                 CompositionServices.Container.Resolve<IImageHelper>()
-                                   .Convert(new Uri(ImageSource, UriKind.RelativeOrAbsolute), Assembly);
+                    .Convert(new Uri(ImageSource, UriKind.RelativeOrAbsolute), Assembly);
 
             return ImageSourceHelper.Exit(ImageSource, temp == null) ? null : new Image {Source = temp};
         }

@@ -26,20 +26,22 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         /// <param name="member">
         ///     The member.
         /// </param>
-        public EventMemberInjector([NotNull] ImportMetadata metadata, [NotNull] IEventManager manager, [NotNull] MemberInfo member)
+        public EventMemberInjector([NotNull] ImportMetadata metadata, [NotNull] IEventManager manager,
+            [NotNull] MemberInfo member)
         {
             if (metadata == null) throw new ArgumentNullException(nameof(metadata));
             if (member == null) throw new ArgumentNullException(nameof(member));
             _metadata = metadata;
-            _manager  = manager ?? throw new ArgumentNullException(nameof(manager));
-            _member   = member;
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
+            _member = member;
         }
 
         #endregion
 
         #region Public Methods and Operators
 
-        public override void Inject(object target, IContainer container, ImportMetadata metadata, IImportInterceptor interceptor, ErrorTracer errorTracer, BuildParameter[] parameters)
+        public override void Inject(object target, IContainer container, ImportMetadata metadata,
+            IImportInterceptor interceptor, ErrorTracer errorTracer, BuildParameter[] parameters)
         {
             errorTracer.Phase = "EventManager Inject " + metadata.ContractName;
 
@@ -54,7 +56,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             catch (Exception e)
             {
                 errorTracer.Exceptional = true;
-                errorTracer.Exception   = e;
+                errorTracer.Exception = e;
             }
         }
 

@@ -38,6 +38,13 @@ namespace Tauron.Application.Ioc.Components
     [PublicAPI]
     public sealed class ExportRegistry
     {
+        #region Fields
+
+        /// <summary>The _registrations.</summary>
+        private readonly ExportList _registrations = new ExportList();
+
+        #endregion
+
         private class ExportEntry : GroupDictionary<Type, IExport>
         {
             public ExportEntry()
@@ -48,18 +55,6 @@ namespace Tauron.Application.Ioc.Components
 
         private class ExportList : SortedList<int, ExportEntry>
         {
-            private class DescendingComparer : IComparer<int>
-            {
-                public int Compare(int x, int y)
-                {
-                    if (x < y)
-                        return 1;
-                    if (x > y)
-                        return -1;
-                    return 0;
-                }
-            }
-
             public ExportList()
                 : base(new DescendingComparer())
             {
@@ -85,10 +80,9 @@ namespace Tauron.Application.Ioc.Components
                 var realExports = new HashSet<ExportMetadata>();
 
                 foreach (var pair in this.Where(p => p.Key <= at))
-                {
                     if (pair.Value.TryGetValue(type, out var exports))
-                        exports.SelectMany(ep => ep.SelectContractName(contractName)).Foreach(ex => realExports.Add(ex));
-                }
+                        exports.SelectMany(ep => ep.SelectContractName(contractName))
+                            .Foreach(ex => realExports.Add(ex));
 
                 return realExports.Count == 0 ? null : realExports;
             }
@@ -97,19 +91,25 @@ namespace Tauron.Application.Ioc.Components
             {
                 foreach (var value in Values.ToArray()) value.RemoveValue(export);
             }
+
+            private class DescendingComparer : IComparer<int>
+            {
+                public int Compare(int x, int y)
+                {
+                    if (x < y)
+                        return 1;
+                    if (x > y)
+                        return -1;
+                    return 0;
+                }
+            }
         }
-
-        #region Fields
-
-        /// <summary>The _registrations.</summary>
-        private readonly ExportList _registrations = new ExportList();
-
-        #endregion
 
         #region Public Methods and Operators
 
         [NotNull]
-        public IEnumerable<ExportMetadata> FindAll([NotNull] Type type, [CanBeNull] string contractName, [NotNull] ErrorTracer errorTracer, int limit = int.MaxValue)
+        public IEnumerable<ExportMetadata> FindAll([NotNull] Type type, [CanBeNull] string contractName,
+            [NotNull] ErrorTracer errorTracer, int limit = int.MaxValue)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             if (errorTracer == null) throw new ArgumentNullException(nameof(errorTracer));
@@ -130,16 +130,17 @@ namespace Tauron.Application.Ioc.Components
             }
             catch (Exception e)
             {
-                errorTracer.Exception   = e;
+                errorTracer.Exception = e;
                 errorTracer.Exceptional = true;
-                errorTracer.Export      = ErrorTracer.FormatExport(type, contractName);
+                errorTracer.Export = ErrorTracer.FormatExport(type, contractName);
 
                 return Enumerable.Empty<ExportMetadata>();
             }
         }
 
         [CanBeNull]
-        public ExportMetadata FindOptional([NotNull] Type type, [CanBeNull] string contractName, [NotNull] ErrorTracer errorTracer, int level = int.MaxValue)
+        public ExportMetadata FindOptional([NotNull] Type type, [CanBeNull] string contractName,
+            [NotNull] ErrorTracer errorTracer, int level = int.MaxValue)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             if (errorTracer == null) throw new ArgumentNullException(nameof(errorTracer));
@@ -154,8 +155,8 @@ namespace Tauron.Application.Ioc.Components
                 if (arr.Length <= 1) return arr.Length == 0 ? null : arr[0];
 
                 errorTracer.Exceptional = true;
-                errorTracer.Exception   = new InvalidOperationException("More then One Export Found");
-                errorTracer.Export      = ErrorTracer.FormatExport(type, contractName);
+                errorTracer.Exception = new InvalidOperationException("More then One Export Found");
+                errorTracer.Export = ErrorTracer.FormatExport(type, contractName);
 
                 return arr.Length == 0 ? null : arr[0];
             }
@@ -163,7 +164,8 @@ namespace Tauron.Application.Ioc.Components
 
 
         [CanBeNull]
-        public ExportMetadata FindSingle([NotNull] Type type, [NotNull] string contractName, [NotNull] ErrorTracer errorTracer, int level = int.MaxValue)
+        public ExportMetadata FindSingle([NotNull] Type type, [NotNull] string contractName,
+            [NotNull] ErrorTracer errorTracer, int level = int.MaxValue)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             if (errorTracer == null) throw new ArgumentNullException(nameof(errorTracer));
@@ -172,8 +174,8 @@ namespace Tauron.Application.Ioc.Components
             if (temp != null) return temp;
 
             errorTracer.Exceptional = true;
-            errorTracer.Exception   = new InvalidOperationException("No Export Found");
-            errorTracer.Export      = ErrorTracer.FormatExport(type, contractName);
+            errorTracer.Exception = new InvalidOperationException("No Export Found");
+            errorTracer.Export = ErrorTracer.FormatExport(type, contractName);
 
             return null;
         }
@@ -182,14 +184,19 @@ namespace Tauron.Application.Ioc.Components
         {
             if (export == null) throw new ArgumentNullException(nameof(export));
             lock (this)
+            {
                 foreach (var type in export.Exports)
                     _registrations.Add(level, type, export);
+            }
         }
 
         public void Remove([NotNull] IExport export)
         {
             if (export == null) throw new ArgumentNullException(nameof(export));
-            lock (this) _registrations.RemoveValue(export);
+            lock (this)
+            {
+                _registrations.RemoveValue(export);
+            }
         }
 
         #endregion

@@ -23,49 +23,6 @@ namespace Tauron.Application
     [Serializable]
     public class UISyncObservableCollection<TType> : ObservableCollection<TType>
     {
-        private class DispoableBlocker : IDisposable
-        {
-            private readonly UISyncObservableCollection<TType> _collection;
-
-            public DispoableBlocker(UISyncObservableCollection<TType> collection)
-            {
-                _collection            = collection;
-                _collection._isBlocked = true;
-            }
-
-            public void Dispose()
-            {
-                _collection._isBlocked = false;
-                _collection.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-            }
-        }
-
-        private class DummySync : IUISynchronize
-        {
-            public Task BeginInvoke(Action action)
-            {
-                action();
-// ReSharper disable once AssignNullToNotNullAttribute
-                return null;
-            }
-
-            public Task<TResult> BeginInvoke<TResult>(Func<TResult> action)
-            {
-                // ReSharper disable once AssignNullToNotNullAttribute
-                return null;
-            }
-
-            public void Invoke(Action action)
-            {
-                action();
-            }
-
-            public TReturn Invoke<TReturn>(Func<TReturn> action)
-            {
-                return action();
-            }
-        }
-
         private bool _isBlocked;
 
         private IUISynchronize _synchronize;
@@ -100,6 +57,50 @@ namespace Tauron.Application
         public IDisposable BlockChangedMessages()
         {
             return new DispoableBlocker(this);
+        }
+
+        private class DispoableBlocker : IDisposable
+        {
+            private readonly UISyncObservableCollection<TType> _collection;
+
+            public DispoableBlocker(UISyncObservableCollection<TType> collection)
+            {
+                _collection = collection;
+                _collection._isBlocked = true;
+            }
+
+            public void Dispose()
+            {
+                _collection._isBlocked = false;
+                _collection.OnCollectionChanged(
+                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            }
+        }
+
+        private class DummySync : IUISynchronize
+        {
+            public Task BeginInvoke(Action action)
+            {
+                action();
+// ReSharper disable once AssignNullToNotNullAttribute
+                return null;
+            }
+
+            public Task<TResult> BeginInvoke<TResult>(Func<TResult> action)
+            {
+                // ReSharper disable once AssignNullToNotNullAttribute
+                return null;
+            }
+
+            public void Invoke(Action action)
+            {
+                action();
+            }
+
+            public TReturn Invoke<TReturn>(Func<TReturn> action)
+            {
+                return action();
+            }
         }
 
         #region Methods

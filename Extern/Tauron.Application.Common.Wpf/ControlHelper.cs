@@ -213,18 +213,18 @@ namespace Tauron.Application
             /// <summary>The scan.</summary>
             public override void Scan()
             {
-                var    realName   = Name;
+                var realName = Name;
                 string windowName = null;
 
                 if (realName.Contains(":"))
                 {
                     var nameSplit = realName.Split(new[] {':'}, 2);
-                    realName   = nameSplit[0];
+                    realName = nameSplit[0];
                     windowName = nameSplit[1];
                 }
 
                 object context;
-                var    priTarget = Target;
+                var priTarget = Target;
                 if (DataContext == null || (context = DataContext.Target) == null || priTarget == null)
                 {
                     CommonConstants.LogCommon(false, "ControlHelper: No Context Found");
@@ -236,12 +236,14 @@ namespace Tauron.Application
                     if (!(priTarget is Window)) priTarget = Window.GetWindow(priTarget);
 
                     if (priTarget == null)
-                        CommonWpfConstans.LogCommon(false, "ControlHelper: No Window Found: {0}|{1}", context.GetType(), realName);
+                        CommonWpfConstans.LogCommon(false, "ControlHelper: No Window Found: {0}|{1}", context.GetType(),
+                            realName);
                 }
                 else
                 {
                     priTarget =
-                        System.Windows.Application.Current.Windows.Cast<Window>().FirstOrDefault(win => win.Name == windowName);
+                        System.Windows.Application.Current.Windows.Cast<Window>()
+                            .FirstOrDefault(win => win.Name == windowName);
 
                     if (priTarget == null)
                         CommonWpfConstans.LogCommon(false, "ControlHelper: No Window Named {0} Found", windowName);
@@ -251,25 +253,24 @@ namespace Tauron.Application
 
                 foreach (var member in
                     MemberInfoAttribute.GetMembers<WindowTargetAttribute>(context.GetType())
-                                       .Where(mem => mem.Item1 == realName))
-                {
+                        .Where(mem => mem.Item1 == realName))
                     try
                     {
                         var targetType = member.Item2.GetSetInvokeType();
 
                         object arg;
                         if (targetType == typeof(IWindow)) arg = new WpfWindow((Window) priTarget);
-                        else arg                               = priTarget;
+                        else arg = priTarget;
 
                         member.Item2.SetInvokeMember(context, arg);
                     }
                     catch (Exception e)
                     {
-                        CommonConstants.LogCommon(true, "ControlHelper: Error On {0} Member Acess: {1}", member.Item2.Name, e);
+                        CommonConstants.LogCommon(true, "ControlHelper: Error On {0} Member Acess: {1}",
+                            member.Item2.Name, e);
 
                         throw;
                     }
-                }
             }
 
             #endregion
@@ -279,21 +280,21 @@ namespace Tauron.Application
 
         public static readonly DependencyProperty MarkControlProperty =
             DependencyProperty.RegisterAttached(
-                                                "MarkControl",
-                                                typeof(string),
-                                                typeof(ControlHelper),
-                                                new UIPropertyMetadata(string.Empty, MarkControl));
+                "MarkControl",
+                typeof(string),
+                typeof(ControlHelper),
+                new UIPropertyMetadata(string.Empty, MarkControl));
 
         public static readonly DependencyProperty MarkWindowProperty = DependencyProperty.RegisterAttached(
-                                                                                                           "MarkWindow",
-                                                                                                           typeof(
-                                                                                                               string),
-                                                                                                           typeof(
-                                                                                                                   ControlHelper
-                                                                                                               ),
-                                                                                                           new UIPropertyMetadata
-                                                                                                               (null,
-                                                                                                                MarkWindowChanged));
+            "MarkWindow",
+            typeof(
+                string),
+            typeof(
+                ControlHelper
+            ),
+            new UIPropertyMetadata
+            (null,
+                MarkWindowChanged));
 
         private static readonly WeakReferenceCollection<LinkerBase> LinkerCollection =
             new WeakReferenceCollection<LinkerBase>();
@@ -346,7 +347,8 @@ namespace Tauron.Application
         public static void SetMarkControl([NotNull] DependencyObject obj, [NotNull] string value)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
-            if (string.IsNullOrEmpty(value)) throw new ArgumentException("Value cannot be null or empty.", nameof(value));
+            if (string.IsNullOrEmpty(value))
+                throw new ArgumentException("Value cannot be null or empty.", nameof(value));
             obj.SetValue(MarkControlProperty, value);
         }
 
@@ -362,7 +364,8 @@ namespace Tauron.Application
         public static void SetMarkWindow([NotNull] DependencyObject obj, [NotNull] string value)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
-            if (string.IsNullOrEmpty(value)) throw new ArgumentException("Value cannot be null or empty.", nameof(value));
+            if (string.IsNullOrEmpty(value))
+                throw new ArgumentException("Value cannot be null or empty.", nameof(value));
             obj.SetValue(MarkWindowProperty, value);
         }
 
@@ -372,7 +375,9 @@ namespace Tauron.Application
 
         private static void MarkControl([NotNull] DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            SetLinker(d, e.OldValue.As<string>() ?? throw new InvalidOperationException(), e.NewValue.As<string>() ?? throw new InvalidOperationException(), (obj, str) => new ControlLinker(str, obj));
+            SetLinker(d, e.OldValue.As<string>() ?? throw new InvalidOperationException(),
+                e.NewValue.As<string>() ?? throw new InvalidOperationException(),
+                (obj, str) => new ControlLinker(str, obj));
         }
 
         // Using a DependencyProperty as the backing store for MarkWindow.  This enables animation, styling, binding, etc...
@@ -381,7 +386,8 @@ namespace Tauron.Application
             SetLinker(d, e.OldValue.As<string>(), e.NewValue.As<string>(), (obj, str) => new WindowLinker(str, obj));
         }
 
-        private static void SetLinker([NotNull] DependencyObject obj, [CanBeNull] string oldName, [CanBeNull] string newName, [NotNull] Func<DependencyObject, string, LinkerBase> factory)
+        private static void SetLinker([NotNull] DependencyObject obj, [CanBeNull] string oldName,
+            [CanBeNull] string newName, [NotNull] Func<DependencyObject, string, LinkerBase> factory)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
             if (factory == null) throw new ArgumentNullException(nameof(factory));

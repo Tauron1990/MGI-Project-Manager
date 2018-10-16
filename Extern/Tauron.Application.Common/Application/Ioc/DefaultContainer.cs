@@ -43,10 +43,10 @@ namespace Tauron.Application.Ioc
 
         public DefaultContainer()
         {
-            _extensions                     =  new List<IContainerExtension>();
-            _componetnts                    =  new ComponentRegistry();
-            _exports                        =  new ExportRegistry();
-            _exportproviders                =  new ExportProviderRegistry();
+            _extensions = new List<IContainerExtension>();
+            _componetnts = new ComponentRegistry();
+            _exports = new ExportRegistry();
+            _exportproviders = new ExportProviderRegistry();
             _exportproviders.ExportsChanged += ExportsChanged;
             Register(new DefaultExtension());
             _buildEngine = new BuildEngine(this, _exportproviders, _componetnts);
@@ -117,7 +117,8 @@ namespace Tauron.Application.Ioc
         ///     The <see cref="object" />.
         /// </returns>
         [NotNull]
-        public object BuildUp([NotNull] ExportMetadata data, ErrorTracer errorTracer, params BuildParameter[] parameters)
+        public object BuildUp([NotNull] ExportMetadata data, ErrorTracer errorTracer,
+            params BuildParameter[] parameters)
         {
             try
             {
@@ -175,7 +176,8 @@ namespace Tauron.Application.Ioc
         /// <returns>
         ///     The <see cref="object" />.
         /// </returns>
-        public object BuildUp(Type type, ErrorTracer errorTracer, BuildParameter[] buildParameters, params object[] constructorArguments)
+        public object BuildUp(Type type, ErrorTracer errorTracer, BuildParameter[] buildParameters,
+            params object[] constructorArguments)
         {
             try
             {
@@ -217,12 +219,14 @@ namespace Tauron.Application.Ioc
         {
             try
             {
-                return isOptional ? _exports.FindOptional(interfaceType, name, errorTracer) : FindExport(interfaceType, name, errorTracer);
+                return isOptional
+                    ? _exports.FindOptional(interfaceType, name, errorTracer)
+                    : FindExport(interfaceType, name, errorTracer);
             }
             catch (Exception e)
             {
                 errorTracer.Exceptional = true;
-                errorTracer.Exception   = e;
+                errorTracer.Exception = e;
                 //if (e is FindExportException) throw;
 
                 //throw new FindExportException(string.Format("Resolve Failed: [{0}|{1}]", interfaceType, name), e);
@@ -252,7 +256,7 @@ namespace Tauron.Application.Ioc
             catch (Exception e)
             {
                 errorTracer.Exceptional = true;
-                errorTracer.Exception   = e;
+                errorTracer.Exception = e;
 
                 //if (e is FindExportException) throw;
 
@@ -283,7 +287,7 @@ namespace Tauron.Application.Ioc
             catch (Exception e)
             {
                 errorTracer.Exceptional = true;
-                errorTracer.Exception   = e;
+                errorTracer.Exception = e;
 
                 //if (e is FindExportException) throw;
 
@@ -293,14 +297,16 @@ namespace Tauron.Application.Ioc
             return null;
         }
 
-        public ExportMetadata FindExport(Type interfaceType, string name, ErrorTracer errorTracer, bool isOptional, int level)
+        public ExportMetadata FindExport(Type interfaceType, string name, ErrorTracer errorTracer, bool isOptional,
+            int level)
         {
             return isOptional
-                       ? _exports.FindOptional(interfaceType, name, errorTracer, level)
-                       : _exports.FindSingle(interfaceType, name, errorTracer, level);
+                ? _exports.FindOptional(interfaceType, name, errorTracer, level)
+                : _exports.FindSingle(interfaceType, name, errorTracer, level);
         }
 
-        public IEnumerable<ExportMetadata> FindExports(Type interfaceType, string name, ErrorTracer errorTracer, int level)
+        public IEnumerable<ExportMetadata> FindExports(Type interfaceType, string name, ErrorTracer errorTracer,
+            int level)
         {
             return _exports.FindAll(interfaceType, name, errorTracer, level);
         }

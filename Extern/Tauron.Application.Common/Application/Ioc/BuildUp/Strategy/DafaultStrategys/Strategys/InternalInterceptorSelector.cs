@@ -58,32 +58,36 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             var name = method.Name;
             if (method.IsSpecialName)
             {
-                if (name.StartsWith(AopConstants.PropertyGetter, StringComparison.Ordinal)) name = name.Remove(0, AopConstants.PropertyGetter.Length);
+                if (name.StartsWith(AopConstants.PropertyGetter, StringComparison.Ordinal))
+                    name = name.Remove(0, AopConstants.PropertyGetter.Length);
 
-                if (name.StartsWith(AopConstants.PropertySetter, StringComparison.Ordinal)) name = name.Remove(0, AopConstants.PropertySetter.Length);
+                if (name.StartsWith(AopConstants.PropertySetter, StringComparison.Ordinal))
+                    name = name.Remove(0, AopConstants.PropertySetter.Length);
 
-                if (name.StartsWith(AopConstants.EventAdder, StringComparison.Ordinal)) name = name.Remove(0, AopConstants.EventAdder.Length);
+                if (name.StartsWith(AopConstants.EventAdder, StringComparison.Ordinal))
+                    name = name.Remove(0, AopConstants.EventAdder.Length);
 
-                if (name.StartsWith(AopConstants.EventRemover, StringComparison.Ordinal)) name = name.Remove(0, AopConstants.EventRemover.Length);
+                if (name.StartsWith(AopConstants.EventRemover, StringComparison.Ordinal))
+                    name = name.Remove(0, AopConstants.EventRemover.Length);
             }
 
             return interceptors.Where(
-                                      inter =>
-                                      {
-                                          var sinter = inter as ISpecificInterceptor;
-                                          if (sinter != null)
-                                              return sinter.Name == name ||
-                                                     sinter.Name == AopConstants.InternalUniversalInterceptorName;
+                    inter =>
+                    {
+                        var sinter = inter as ISpecificInterceptor;
+                        if (sinter != null)
+                            return sinter.Name == name ||
+                                   sinter.Name == AopConstants.InternalUniversalInterceptorName;
 
-                                          return true;
-                                      })
-                               .OrderBy(
-                                        inter =>
-                                        {
-                                            var sinter = inter as ISpecificInterceptor;
-                                            return sinter == null ? 0 : sinter.Order;
-                                        })
-                               .ToArray();
+                        return true;
+                    })
+                .OrderBy(
+                    inter =>
+                    {
+                        var sinter = inter as ISpecificInterceptor;
+                        return sinter == null ? 0 : sinter.Order;
+                    })
+                .ToArray();
         }
 
         #endregion

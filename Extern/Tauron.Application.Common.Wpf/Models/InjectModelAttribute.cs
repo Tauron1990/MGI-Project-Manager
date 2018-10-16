@@ -7,7 +7,7 @@ namespace Tauron.Application.Models
 {
     [AttributeUsage(
         AttributeTargets.Constructor | AttributeTargets.Field | AttributeTargets.Method | AttributeTargets.Parameter
-      | AttributeTargets.Property)]
+        | AttributeTargets.Property)]
     public sealed class InjectModelAttribute : InjectAttribute
     {
         public InjectModelAttribute([NotNull] string name)
@@ -22,9 +22,9 @@ namespace Tauron.Application.Models
         public override Dictionary<string, object> CreateMetadata()
         {
             return new Dictionary<string, object>
-                   {
-                       {PropertyModelExtension.EnablePropertyInheritanceMetadataName, EnablePropertyInheritance}
-                   };
+            {
+                {PropertyModelExtension.EnablePropertyInheritanceMetadataName, EnablePropertyInheritance}
+            };
         }
     }
 }

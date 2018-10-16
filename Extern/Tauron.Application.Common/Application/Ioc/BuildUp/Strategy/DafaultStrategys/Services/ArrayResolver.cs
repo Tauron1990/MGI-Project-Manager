@@ -11,12 +11,12 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
     public sealed class ArrayResolver : IResolver
     {
         private readonly IResolver[] _resolvers;
-        private readonly Type        _target;
+        private readonly Type _target;
 
         public ArrayResolver(IEnumerable<IResolver> resolvers, Type target)
         {
             _resolvers = resolvers.ToArray();
-            _target    = target;
+            _target = target;
         }
 
         public object Create(ErrorTracer errorTracer)
@@ -42,7 +42,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             catch (Exception e)
             {
                 errorTracer.Exceptional = true;
-                errorTracer.Exception   = e;
+                errorTracer.Exception = e;
                 return null;
             }
         }

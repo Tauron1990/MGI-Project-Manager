@@ -9,7 +9,7 @@ namespace Tauron.Application
         public ViewModelBinding([NotNull] string path)
         {
             Converter = new ViewModelConverter(false);
-            Path      = new PropertyPath(path);
+            Path = new PropertyPath(path);
         }
 
         public ViewModelBinding()

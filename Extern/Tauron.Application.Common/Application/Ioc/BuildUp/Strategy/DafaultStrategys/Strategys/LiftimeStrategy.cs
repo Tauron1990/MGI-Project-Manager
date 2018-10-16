@@ -48,11 +48,11 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             context.ErrorTracer.Phase = "Reciving Liftime Informations for " + context.Metadata;
 
             context.Policys.Add(
-                                new LifetimeTimePolicy
-                                {
-                                    LiftimeType  = context.Metadata.Lifetime,
-                                    ShareLiftime = context.Metadata.Export.ShareLifetime
-                                });
+                new LifetimeTimePolicy
+                {
+                    LiftimeType = context.Metadata.Lifetime,
+                    ShareLiftime = context.Metadata.Export.ShareLifetime
+                });
         }
 
         /// <summary>

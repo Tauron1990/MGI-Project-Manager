@@ -14,6 +14,11 @@ namespace Tauron.Application.Converter
     [MarkupExtensionReturnType(typeof(IValueConverter))]
     public class StringToIntConverter : ValueConverterFactoryBase
     {
+        protected override IValueConverter Create()
+        {
+            return new Converter();
+        }
+
         private class Converter : StringConverterBase<int>
         {
             protected override bool CanConvertBack => true;
@@ -38,11 +43,6 @@ namespace Tauron.Application.Converter
                 }
             }
         }
-
-        protected override IValueConverter Create()
-        {
-            return new Converter();
-        }
     }
 
 
@@ -51,6 +51,19 @@ namespace Tauron.Application.Converter
     [MarkupExtensionReturnType(typeof(IValueConverter))]
     public class BoolToVisibilityConverter : ValueConverterFactoryBase
     {
+        #region Methods
+
+        /// <summary>The create.</summary>
+        /// <returns>
+        ///     The <see cref="IValueConverter" />.
+        /// </returns>
+        protected override IValueConverter Create()
+        {
+            return new Converter(IsHidden, Reverse);
+        }
+
+        #endregion
+
         private class Converter : ValueConverterBase<bool, Visibility>
         {
             #region Constructors and Destructors
@@ -68,7 +81,7 @@ namespace Tauron.Application.Converter
             public Converter(bool isHidden, bool reverse)
             {
                 _isHidden = isHidden;
-                _reverse  = reverse;
+                _reverse = reverse;
             }
 
             #endregion
@@ -141,19 +154,6 @@ namespace Tauron.Application.Converter
 
             #endregion
         }
-
-        #region Methods
-
-        /// <summary>The create.</summary>
-        /// <returns>
-        ///     The <see cref="IValueConverter" />.
-        /// </returns>
-        protected override IValueConverter Create()
-        {
-            return new Converter(IsHidden, Reverse);
-        }
-
-        #endregion
 
         #region Public Properties
 

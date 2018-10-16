@@ -63,23 +63,26 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy
         /// <param name="errorTracer"></param>
         [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1027:TabsMustNotBeUsed",
             Justification = "Reviewed. Suppression is OK here.")]
-        public DefaultBuildContext([NotNull] IExport     targetExport, BuildMode                    mode,       [NotNull]   IContainer           container, [CanBeNull] string contractName,
-                                   [NotNull] ErrorTracer errorTracer,  [CanBeNull] BuildParameter[] parameters, [CanBeNull] IResolverExtension[] resolverExtensions)
+        public DefaultBuildContext([NotNull] IExport targetExport, BuildMode mode, [NotNull] IContainer container,
+            [CanBeNull] string contractName,
+            [NotNull] ErrorTracer errorTracer, [CanBeNull] BuildParameter[] parameters,
+            [CanBeNull] IResolverExtension[] resolverExtensions)
         {
             if (targetExport == null) throw new ArgumentNullException(nameof(targetExport));
             if (container == null) throw new ArgumentNullException(nameof(container));
             if (errorTracer == null) throw new ArgumentNullException(nameof(errorTracer));
-            if (!Enum.IsDefined(typeof(BuildMode), mode)) throw new InvalidEnumArgumentException(nameof(mode), (int) mode, typeof(BuildMode));
-            Metadata           = targetExport.GetNamedExportMetadata(contractName);
+            if (!Enum.IsDefined(typeof(BuildMode), mode))
+                throw new InvalidEnumArgumentException(nameof(mode), (int) mode, typeof(BuildMode));
+            Metadata = targetExport.GetNamedExportMetadata(contractName);
             errorTracer.Export = Metadata.ToString();
-            ExportType         = targetExport.ImplementType;
-            Target             = null;
-            BuildCompled       = false;
-            Policys            = new PolicyList();
-            Mode               = mode;
-            Container          = container;
-            ErrorTracer        = errorTracer;
-            Parameters         = parameters;
+            ExportType = targetExport.ImplementType;
+            Target = null;
+            BuildCompled = false;
+            Policys = new PolicyList();
+            Mode = mode;
+            Container = container;
+            ErrorTracer = errorTracer;
+            Parameters = parameters;
             ResolverExtensions = resolverExtensions;
         }
 
@@ -94,21 +97,22 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy
         /// </param>
         /// <param name="errorTracer"></param>
         /// <param name="parameters"></param>
-        public DefaultBuildContext([NotNull] BuildObject buildObject, [NotNull] IContainer container, [NotNull] ErrorTracer errorTracer, [CanBeNull] BuildParameter[] parameters)
+        public DefaultBuildContext([NotNull] BuildObject buildObject, [NotNull] IContainer container,
+            [NotNull] ErrorTracer errorTracer, [CanBeNull] BuildParameter[] parameters)
         {
             if (buildObject == null) throw new ArgumentNullException(nameof(buildObject));
             if (container == null) throw new ArgumentNullException(nameof(container));
             if (errorTracer == null) throw new ArgumentNullException(nameof(errorTracer));
-            Metadata           = buildObject.Metadata;
+            Metadata = buildObject.Metadata;
             errorTracer.Export = Metadata.ToString();
-            Mode               = BuildMode.BuildUpObject;
-            Policys            = new PolicyList();
-            Target             = buildObject.Instance;
-            ExportType         = Metadata.Export.ImplementType;
-            BuildCompled       = false;
-            Container          = container;
-            ErrorTracer        = errorTracer;
-            Parameters         = parameters;
+            Mode = BuildMode.BuildUpObject;
+            Policys = new PolicyList();
+            Target = buildObject.Instance;
+            ExportType = Metadata.Export.ImplementType;
+            BuildCompled = false;
+            Container = container;
+            ErrorTracer = errorTracer;
+            Parameters = parameters;
         }
 
         #endregion
@@ -143,8 +147,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy
         /// <value>The target.</value>
         public object Target { get; set; }
 
-        public ErrorTracer          ErrorTracer        { get; private set; }
-        public BuildParameter[]     Parameters         { get; private set; }
+        public ErrorTracer ErrorTracer { get; private set; }
+        public BuildParameter[] Parameters { get; private set; }
         public IResolverExtension[] ResolverExtensions { get; set; }
 
         #endregion

@@ -23,7 +23,7 @@ namespace Tauron.Application.Help.ViewModels
         internal HelpTopic([NotNull] string name, [NotNull] string tocken)
         {
             Tocken = tocken;
-            Name   = name;
+            Name = name;
         }
 
         #endregion
@@ -82,8 +82,8 @@ namespace Tauron.Application.Help.ViewModels
         /// </param>
         public HelpGroup([NotNull] string titel, [NotNull] string content, [NotNull] string id)
         {
-            Id       = id;
-            _titel   = titel;
+            Id = id;
+            _titel = titel;
             _content = content;
         }
 
@@ -153,7 +153,7 @@ namespace Tauron.Application.Help.ViewModels
         /// <summary>Gets the topics.</summary>
         [NotNull]
         public IEnumerable<HelpTopic> Topics => from ele in _database.Elements()
-                                                select new HelpTopic(ele.Attribute("Name").Value, ele.Attribute("Tocken").Value);
+            select new HelpTopic(ele.Attribute("Name").Value, ele.Attribute("Tocken").Value);
 
         #endregion
 
@@ -175,13 +175,11 @@ namespace Tauron.Application.Help.ViewModels
             if (groupsContent == null) return;
 
             foreach (var group in groupsContent.Elements())
-            {
                 groups.Add(
-                           new HelpGroup(
-                                         group.Attribute("Name").Value,
-                                         group.Elements().First().ToString(),
-                                         group.Attribute("Id").Value));
-            }
+                    new HelpGroup(
+                        group.Attribute("Name").Value,
+                        group.Elements().First().ToString(),
+                        group.Attribute("Id").Value));
         }
 
         #endregion
@@ -202,11 +200,11 @@ namespace Tauron.Application.Help.ViewModels
         /// </param>
         public HelpViewModel([NotNull] string helpfilePath)
         {
-            _groups   = new ObservableCollection<HelpGroup>();
+            _groups = new ObservableCollection<HelpGroup>();
             _database = new HelpDatabase(helpfilePath);
 
             Height = SystemParameters.MaximumWindowTrackHeight / 3 * 2;
-            Width  = SystemParameters.MaximumWindowTrackWidth / 3 * 2;
+            Width = SystemParameters.MaximumWindowTrackWidth / 3 * 2;
         }
 
         #endregion

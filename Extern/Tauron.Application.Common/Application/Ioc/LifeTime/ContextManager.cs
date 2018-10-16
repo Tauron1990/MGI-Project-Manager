@@ -110,7 +110,7 @@ namespace Tauron.Application.Ioc.LifeTime
             if (contextName != null)
             {
                 var weakHolder = AspectContexts[contextName];
-                var context    = weakHolder.Context;
+                var context = weakHolder.Context;
                 return context;
             }
 
@@ -183,7 +183,8 @@ namespace Tauron.Application.Ioc.LifeTime
         /// </param>
         private static void AddContext([NotNull] string name, ObjectContext context, object owner)
         {
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             AspectContexts[name] = new WeakContext(owner) {Context = context};
         }
 

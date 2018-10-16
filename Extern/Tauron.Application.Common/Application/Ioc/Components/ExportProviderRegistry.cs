@@ -90,9 +90,8 @@ namespace Tauron.Application.Ioc.Components
         public void Dispose()
         {
             foreach (var exportProvider in _providers)
-            {
-                if (exportProvider is IDisposable dipo) dipo.Dispose();
-            }
+                if (exportProvider is IDisposable dipo)
+                    dipo.Dispose();
         }
 
         /// <summary>

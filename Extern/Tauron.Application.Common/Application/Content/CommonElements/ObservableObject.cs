@@ -49,39 +49,9 @@ namespace Tauron.Application
     [PublicAPI]
     public abstract class ObservableObject : BaseObject, INotifyPropertyChangedMethod
     {
-        [PublicAPI]
-        protected class LogHelper
-        {
-            private readonly string _name;
-            private          Logger _logger;
-
-            public LogHelper(string name)
-            {
-                _name = name;
-            }
-
-            public Logger Logger => _logger ?? (_logger = LogManager.GetLogger(_name));
-
-            public void Write([CanBeNull] object message, LogLevel type)
-            {
-                Logger.Log(type, message);
-            }
-
-            [StringFormatMethod("format")]
-            public void Write(LogLevel type, [NotNull] string format, [NotNull] params object[] parms)
-            {
-                Logger.Log(type, format, parms);
-            }
-
-            public void Error(Exception e, string messege)
-            {
-                Logger.Error(e, messege);
-            }
-        }
-
         protected ObservableObject()
         {
-            LogName     = GetType().Name;
+            LogName = GetType().Name;
             LogCategory = GetType().ToString();
         }
 
@@ -116,6 +86,36 @@ namespace Tauron.Application
 
         #endregion
 
+        [PublicAPI]
+        protected class LogHelper
+        {
+            private readonly string _name;
+            private Logger _logger;
+
+            public LogHelper(string name)
+            {
+                _name = name;
+            }
+
+            public Logger Logger => _logger ?? (_logger = LogManager.GetLogger(_name));
+
+            public void Write([CanBeNull] object message, LogLevel type)
+            {
+                Logger.Log(type, message);
+            }
+
+            [StringFormatMethod("format")]
+            public void Write(LogLevel type, [NotNull] string format, [NotNull] params object[] parms)
+            {
+                Logger.Log(type, format, parms);
+            }
+
+            public void Error(Exception e, string messege)
+            {
+                Logger.Error(e, messege);
+            }
+        }
+
         #region Public Properties
 
         private LogHelper _logHelper;
@@ -125,11 +125,9 @@ namespace Tauron.Application
         [NotNull]
         public static IUISynchronize CurrentDispatcher => UiSynchronize.Synchronize;
 
-        [NotNull]
-        protected LogHelper Log => _logHelper ?? (_logHelper = new LogHelper(LogName));
+        [NotNull] protected LogHelper Log => _logHelper ?? (_logHelper = new LogHelper(LogName));
 
-        [CanBeNull]
-        protected string LogCategory { get; set; }
+        [CanBeNull] protected string LogCategory { get; set; }
 
         public string LogName { get; set; }
 
@@ -145,7 +143,8 @@ namespace Tauron.Application
             OnPropertyChangedExplicit(name ?? throw new ArgumentNullException(nameof(name)));
         }
 
-        public void SetProperty<TType>(ref TType property, TType value, Action changed, [CallerMemberName] string name = null)
+        public void SetProperty<TType>(ref TType property, TType value, Action changed,
+            [CallerMemberName] string name = null)
         {
             if (EqualityComparer<TType>.Default.Equals(property, value)) return;
 
@@ -203,7 +202,8 @@ namespace Tauron.Application
 
         public virtual void OnPropertyChangedExplicit([NotNull] string propertyName)
         {
-            if (string.IsNullOrWhiteSpace(propertyName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(propertyName));
+            if (string.IsNullOrWhiteSpace(propertyName))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(propertyName));
             OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
         }
 

@@ -48,13 +48,14 @@ namespace Tauron.Application.Ioc.Components
         /// </param>
         /// <param name="targetExport">
         /// </param>
-        public BuildObject([NotNull] IEnumerable<ImportMetadata> imports, [NotNull] ExportMetadata targetExport, [CanBeNull] BuildParameter[] buildParameters)
+        public BuildObject([NotNull] IEnumerable<ImportMetadata> imports, [NotNull] ExportMetadata targetExport,
+            [CanBeNull] BuildParameter[] buildParameters)
         {
             if (imports == null) throw new ArgumentNullException(nameof(imports));
             if (targetExport == null) throw new ArgumentNullException(nameof(targetExport));
-            Metadata        = targetExport;
-            this.imports    = imports.ToArray();
-            Export          = targetExport.Export;
+            Metadata = targetExport;
+            this.imports = imports.ToArray();
+            Export = targetExport.Export;
             BuildParameters = buildParameters;
         }
 
@@ -104,8 +105,7 @@ namespace Tauron.Application.Ioc.Components
         /// <value>The is alive.</value>
         public bool IsAlive => _instance.IsAlive;
 
-        [CanBeNull]
-        public BuildParameter[] BuildParameters { get; set; }
+        [CanBeNull] public BuildParameter[] BuildParameters { get; set; }
 
         #endregion
     }
@@ -133,7 +133,10 @@ namespace Tauron.Application.Ioc.Components
         public void AddBuild([NotNull] BuildObject instance)
         {
             if (instance == null) throw new ArgumentNullException(nameof(instance));
-            lock (this) _objects[instance.Metadata].Add(instance);
+            lock (this)
+            {
+                _objects[instance.Metadata].Add(instance);
+            }
         }
 
         /// <summary>
@@ -159,17 +162,17 @@ namespace Tauron.Application.Ioc.Components
                 var changed = added.Concat(removed);
 
                 return from o in _objects
-                       from buildObject in o.Value
-                       where
-                           buildObject.GetImports()
-                                      .Any(
-                                           tup =>
-                                               changed.Any(
-                                                           meta =>
-                                                               tup.InterfaceType == meta.InterfaceType
-                                                            && tup.ContractName == meta.ContractName))
-                       where buildObject.IsAlive
-                       select buildObject;
+                    from buildObject in o.Value
+                    where
+                        buildObject.GetImports()
+                            .Any(
+                                tup =>
+                                    changed.Any(
+                                        meta =>
+                                            tup.InterfaceType == meta.InterfaceType
+                                            && tup.ContractName == meta.ContractName))
+                    where buildObject.IsAlive
+                    select buildObject;
             }
         }
 

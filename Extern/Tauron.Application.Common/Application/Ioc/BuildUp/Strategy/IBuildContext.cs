@@ -73,11 +73,9 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy
         [CanBeNull]
         object Target { get; set; }
 
-        [NotNull]
-        ErrorTracer ErrorTracer { get; }
+        [NotNull] ErrorTracer ErrorTracer { get; }
 
-        [CanBeNull]
-        BuildParameter[] Parameters { get; }
+        [CanBeNull] BuildParameter[] Parameters { get; }
 
         #endregion
     }

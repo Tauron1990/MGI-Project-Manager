@@ -11,11 +11,9 @@ namespace Tauron.Application.Views.Core
 {
     public class AttributeBasedLocator : CommonLocatorBase
     {
-        [Inject]
-        protected List<InstanceResolver<Control, ISortableViewExportMetadata>> Views;
+        [Inject] protected List<InstanceResolver<Control, ISortableViewExportMetadata>> Views;
 
-        [Inject]
-        protected List<InstanceResolver<Window, INameExportMetadata>> Windows;
+        [Inject] protected List<InstanceResolver<Window, INameExportMetadata>> Windows;
 
         public override string GetName(Type model)
         {
@@ -49,9 +47,7 @@ namespace Tauron.Application.Views.Core
                 {
                     buildParameters = new BuildParameter[parameters.Length];
                     for (var i = 0; i < parameters.Length; i++)
-                    {
                         buildParameters[i] = new SimpleBuildPrameter(parameters[i]);
-                    }
                 }
 
                 CompositionServices.BuildParameters = buildParameters;

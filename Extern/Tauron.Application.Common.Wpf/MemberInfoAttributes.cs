@@ -74,9 +74,9 @@ namespace Tauron.Application
         {
             return
                 targetType.FindMemberAttributes<TAttribute>(true)
-                          .Select(
-                                  attribute =>
-                                      Tuple.Create(attribute.Item2.ProvideMemberName(attribute.Item1), attribute.Item1));
+                    .Select(
+                        attribute =>
+                            Tuple.Create(attribute.Item2.ProvideMemberName(attribute.Item1), attribute.Item1));
         }
 
         /// <summary>
@@ -94,17 +94,17 @@ namespace Tauron.Application
         /// <typeparam name="TAttribute">
         /// </typeparam>
         [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
-        public static void InvokeMembers<TAttribute>([NotNull] object instance, [NotNull] string targetMember, [NotNull] params object[] parameters)
+        public static void InvokeMembers<TAttribute>([NotNull] object instance, [NotNull] string targetMember,
+            [NotNull] params object[] parameters)
             where TAttribute : MemberInfoAttribute
         {
             if (instance == null) throw new ArgumentNullException(nameof(instance));
             if (parameters == null) throw new ArgumentNullException(nameof(parameters));
-            if (string.IsNullOrEmpty(targetMember)) throw new ArgumentException("Value cannot be null or empty.", nameof(targetMember));
+            if (string.IsNullOrEmpty(targetMember))
+                throw new ArgumentException("Value cannot be null or empty.", nameof(targetMember));
             foreach (var member in
                 GetMembers<TAttribute>(instance.GetType()).Where(member => member.Item1 == targetMember))
-            {
                 member.Item2.SetInvokeMember(instance, parameters);
-            }
         }
 
         /// <summary>

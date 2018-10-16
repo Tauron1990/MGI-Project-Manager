@@ -37,6 +37,23 @@ namespace Tauron.Application.Aop.Model
     [AttributeUsage(AttributeTargets.Event | AttributeTargets.Method | AttributeTargets.Property)]
     public sealed class TraceAttribute : AspectBaseAttribute
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="TraceAttribute" /> class.
+        ///     Initialisiert eine neue Instanz der <see cref="TraceAttribute" /> Klasse.
+        ///     Initializes a new instance of the <see cref="TraceAttribute" /> class.
+        /// </summary>
+        public TraceAttribute()
+        {
+            Order = 100;
+            TraceEventType = LogLevel.Info;
+            LogOptions = TraceAspectOptions.ParameterName;
+            LogTitle = string.Empty;
+        }
+
+        #endregion
+
         /// <summary>The logger helper.</summary>
         private class LoggerHelper
         {
@@ -56,7 +73,7 @@ namespace Tauron.Application.Aop.Model
             public LoggerHelper(bool value, bool type)
             {
                 _value = value;
-                _type  = type;
+                _type = type;
             }
 
             #endregion
@@ -85,15 +102,17 @@ namespace Tauron.Application.Aop.Model
                 if (entry == null) throw new ArgumentNullException(nameof(entry));
                 if (invocation == null) throw new ArgumentNullException(nameof(invocation));
                 lock (this)
+                {
                     if (!_initialized)
                         Initialize(invocation.Method);
+                }
 
-                entry.Properties["Parameters"]     = _stringNmes;
+                entry.Properties["Parameters"] = _stringNmes;
                 entry.Properties["ParameterTypes"] = _types;
 
                 if (!_value) return;
 
-                var args                                                                                 = invocation.Arguments;
+                var args = invocation.Arguments;
                 for (var i = 0; i < ParmNames.Length; i++) entry.Properties["Parameter:" + ParmNames[i]] = args[i];
             }
 
@@ -111,11 +130,11 @@ namespace Tauron.Application.Aop.Model
             {
                 if (info == null) throw new ArgumentNullException(nameof(info));
                 var parms = info.GetParameters();
-                ParmNames   = parms.Select(parm => parm.Name).ToArray();
+                ParmNames = parms.Select(parm => parm.Name).ToArray();
                 _stringNmes = ParmNames.Aggregate((working, next) => working + ", " + next);
                 if (_type)
                     _types = parms.Select(parm => parm.ParameterType)
-                                  .Aggregate("Types: ", (s, type1) => s + type1.ToString() + ", ");
+                        .Aggregate("Types: ", (s, type1) => s + type1.ToString() + ", ");
 
                 _initialized = true;
             }
@@ -141,23 +160,6 @@ namespace Tauron.Application.Aop.Model
 
             #endregion
         }
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="TraceAttribute" /> class.
-        ///     Initialisiert eine neue Instanz der <see cref="TraceAttribute" /> Klasse.
-        ///     Initializes a new instance of the <see cref="TraceAttribute" /> class.
-        /// </summary>
-        public TraceAttribute()
-        {
-            Order          = 100;
-            TraceEventType = LogLevel.Info;
-            LogOptions     = TraceAspectOptions.ParameterName;
-            LogTitle       = string.Empty;
-        }
-
-        #endregion
 
         #region Fields
 
@@ -204,13 +206,14 @@ namespace Tauron.Application.Aop.Model
         {
             base.Initialize(target, context, contextName);
 
-            var logParameterName  = LogOptions.HasFlag(TraceAspectOptions.ParameterName);
-            var logParameterType  = LogOptions.HasFlag(TraceAspectOptions.ParameterType);
+            var logParameterName = LogOptions.HasFlag(TraceAspectOptions.ParameterName);
+            var logParameterType = LogOptions.HasFlag(TraceAspectOptions.ParameterType);
             var logparameterValue = LogOptions.HasFlag(TraceAspectOptions.ParameterValue);
 
             _logReturn = LogOptions.HasFlag(TraceAspectOptions.ReturnValue);
 
-            if (logParameterName || logParameterType || logparameterValue) _helper = new LoggerHelper(logparameterValue, logParameterType);
+            if (logParameterName || logParameterType || logparameterValue)
+                _helper = new LoggerHelper(logparameterValue, logParameterType);
         }
 
         /// <summary>

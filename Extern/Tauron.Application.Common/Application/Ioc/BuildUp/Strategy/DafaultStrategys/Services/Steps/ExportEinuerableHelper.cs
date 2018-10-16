@@ -7,21 +7,22 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
 {
     public class ExportEnumeratorHelper
     {
-        private readonly ReflectionContext           _context;
+        private readonly ReflectionContext _context;
         private readonly IEnumerator<ExportMetadata> _metaEnumerator;
-        private          bool                        _ok;
+        private bool _ok;
 
-        public ExportEnumeratorHelper([NotNull] IEnumerator<ExportMetadata> metaEnumerator, [NotNull] ReflectionContext context)
+        public ExportEnumeratorHelper([NotNull] IEnumerator<ExportMetadata> metaEnumerator,
+            [NotNull] ReflectionContext context)
         {
             _metaEnumerator = metaEnumerator;
-            _context        = context;
+            _context = context;
         }
 
         public StepId NextId => _ok ? StepId.None : StepId.LoopEnd;
 
         public bool MoveNext()
         {
-            _ok                             = _metaEnumerator.MoveNext();
+            _ok = _metaEnumerator.MoveNext();
             _context.ExportMetadataOverride = _ok ? _metaEnumerator.Current : null;
 
             return _ok;
