@@ -8,5 +8,12 @@ namespace Tauron.MgiManager.User.Service.Data
     public sealed class UserDatabase : DbContext
     {
         public DbSet<ApplicationUser> Users => Set<ApplicationUser>();
+
+        public UserDatabase(DbContextOptions options)
+            : base(options)
+        {
+
+        }
+
     }
 }

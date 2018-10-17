@@ -8,7 +8,7 @@ using CQRSlite.Events;
 
 namespace Tauron.CQRS.Services.Core.Components
 {
-    public class CqrsSession : ISession
+    public class CqrsSession : ICqrsSession
     {
         private readonly IDispatcherClient _dispatcherClient;
         private readonly IRepository _repository;

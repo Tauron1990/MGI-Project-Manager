@@ -1,6 +1,8 @@
-﻿namespace Tauron.TestHelper
+﻿using Tauron.CQRS.Services.Core;
+
+namespace Tauron.TestHelper
 {
-    public interface ITestDispatcher
+    public interface ITestDispatcher : ICoreDispatcherClient
     {
         
     }

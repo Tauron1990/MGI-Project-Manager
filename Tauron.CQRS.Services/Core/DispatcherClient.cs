@@ -19,11 +19,12 @@ using Tauron.CQRS.Common;
 using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Services.Core.Components;
+using Tauron.CQRS.Services.Extensions;
 
 namespace Tauron.CQRS.Services.Core
 {
     [UsedImplicitly]
-    public class DispatcherClient : IDispatcherClient
+    public class DispatcherClient : ICoreDispatcherClient
     {
         private class MessageDelivery
         {
@@ -94,7 +95,7 @@ namespace Tauron.CQRS.Services.Core
             _hubConnection.On(HubEventNames.RejectedEvent, new Action<string, int>(MessageReject));
         }
 
-        internal void AddHandler(string name, Func<IMessage, ServerDomainMessage, CancellationToken, Task> handler)
+        public void AddHandler(string name, Func<IMessage, ServerDomainMessage, CancellationToken, Task> handler)
         {
             if(_eventRegistrations.ContainsKey(name)) return;
 
@@ -137,32 +138,32 @@ namespace Tauron.CQRS.Services.Core
 
         public async Task Send(IMessage command, CancellationToken cancellationToken)
         {
-            var msg = new ServerDomainMessage
-                                      {
-                                          EventData = JsonConvert.SerializeObject(command.Clear()),
-                                          TypeName = command.GetType().AssemblyQualifiedName,
-                                          EventName = command.GetType().Name,
-                                          EventType = EventType.Command,
-                                          SequenceNumber = DateTime.UtcNow.Ticks + _random.Next()
-                                      };
+            //var msg = new ServerDomainMessage
+            //                          {
+            //                              EventData = JsonConvert.SerializeObject(command.Clear()),
+            //                              TypeName = command.GetType().AssemblyQualifiedName,
+            //                              EventName = command.GetType().Name,
+            //                              EventType = EventType.Command,
+            //                              SequenceNumber = DateTime.UtcNow.Ticks + _random.Next()
+            //                          };
 
-            switch (command)
-            {
-                case IEvent @event:
-                    msg.Id = @event.Id;
-                    msg.Version = @event.Version;
-                    msg.TimeStamp = @event.TimeStamp;
-                    msg.EventType = EventType.Event;
-                    break;
-                case IAmbientCommand _:
-                    msg.EventType = EventType.AmbientCommand;
-                    break;
-            }
+            //switch (command)
+            //{
+            //    case IEvent @event:
+            //        msg.Id = @event.Id;
+            //        msg.Version = @event.Version;
+            //        msg.TimeStamp = @event.TimeStamp;
+            //        msg.EventType = EventType.Event;
+            //        break;
+            //    case IAmbientCommand _:
+            //        msg.EventType = EventType.AmbientCommand;
+            //        break;
+            //}
 
             using var source = new CancellationTokenSource(10_000);
             using var linked = CancellationTokenSource.CreateLinkedTokenSource(source.Token, cancellationToken);
 
-            await _hubConnection.SendAsync(HubEventNames.PublishEvent, msg, _config.Value.ApiKey, linked.Token).ConfigureAwait(false);
+            await _hubConnection.SendAsync(HubEventNames.PublishEvent, command.ToDomainMessage(), _config.Value.ApiKey, linked.Token).ConfigureAwait(false);
         }
 
         public async Task SendToClient(string client, ServerDomainMessage serverDomainMessage, CancellationToken token) 
@@ -170,17 +171,7 @@ namespace Tauron.CQRS.Services.Core
 
         public async Task SendEvents(IEnumerable<IEvent> events, CancellationToken cancellationToken)
         {
-            await _hubConnection.SendAsync(HubEventNames.PublishEventGroup, events.Select(@event => new ServerDomainMessage
-            {
-                EventData = JsonConvert.SerializeObject(@event.Clear()),
-                TypeName = @event.GetType().AssemblyQualifiedName,
-                EventName = @event.GetType().Name,
-                EventType = EventType.Event,
-                SequenceNumber = DateTime.UtcNow.Ticks + _random.Next(),
-                Id = @event.Id,
-                Version = @event.Version,
-                TimeStamp = @event.TimeStamp
-            }).ToArray(), _config.Value.ApiKey, cancellationToken);
+            await _hubConnection.SendAsync(HubEventNames.PublishEventGroup, events.Select(@event => @event.ToDomainMessage()).ToArray(), _config.Value.ApiKey, cancellationToken);
         }
 
         public async Task Subscribe(string name, Func<IMessage, ServerDomainMessage, CancellationToken, Task> msg)
@@ -205,19 +196,8 @@ namespace Tauron.CQRS.Services.Core
 
             var awaiter = scope.ServiceProvider.GetRequiredService<QueryAwaiter<TResponse>>();
 
-            return await awaiter.SendQuery(query, cancellationToken, async query1 =>
-                                                                     {
-                                                                         var msg = new ServerDomainMessage
-                                                                                   {
-                                                                                       EventType = EventType.Query,
-                                                                                       EventName = typeof(TResponse).FullName,
-                                                                                       EventData = JsonConvert.SerializeObject(query),
-                                                                                       TypeName = query1.GetType().AssemblyQualifiedName,
-                                                                                       SequenceNumber = DateTime.UtcNow.Ticks + _random.Next()
-                                                                         };
-
-                                                                         await _hubConnection.InvokeAsync(HubEventNames.PublishEvent, msg, _config.Value.ApiKey, cancellationToken);
-                                                                     });
+            return await awaiter.SendQuery(query, cancellationToken, 
+                async query1 => await _hubConnection.InvokeAsync(HubEventNames.PublishEvent, query.ToDomainMessage(true), _config.Value.ApiKey, cancellationToken)); 
         }
 
         private async void ProcessMessage(ServerDomainMessage domainMessage)

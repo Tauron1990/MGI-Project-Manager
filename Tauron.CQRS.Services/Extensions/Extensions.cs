@@ -6,13 +6,16 @@ using CQRSlite.Commands;
 using CQRSlite.Domain;
 using CQRSlite.Domain.Exception;
 using CQRSlite.Events;
+using CQRSlite.Messages;
 using CQRSlite.Queries;
 using CQRSlite.Snapshotting;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Tauron.CQRS.Common.Configuration;
+using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Services.Core;
 using Tauron.CQRS.Services.Core.Components;
 
@@ -21,6 +24,37 @@ namespace Tauron.CQRS.Services.Extensions
     [PublicAPI]
     public static class Extensions
     {
+        private static readonly Random Random = new Random();
+
+        public static ServerDomainMessage ToDomainMessage(this IMessage message, bool query = false)
+        {
+            var type = message.GetType();
+
+            var msg = new ServerDomainMessage
+            {
+                EventData = JsonConvert.SerializeObject(message.Clear()),
+                TypeName = type.AssemblyQualifiedName,
+                EventName = query ? type.FullName : type.Name,
+                EventType = EventType.Command,
+                SequenceNumber = DateTime.UtcNow.Ticks + Random.Next()
+            };
+
+            switch (message)
+            {
+                case IEvent @event:
+                    msg.Id = @event.Id;
+                    msg.Version = @event.Version;
+                    msg.TimeStamp = @event.TimeStamp;
+                    msg.EventType = EventType.Event;
+                    break;
+                case IAmbientCommand _:
+                    msg.EventType = EventType.AmbientCommand;
+                    break;
+            }
+
+            return msg;
+        }
+
         public static async Task<bool> Exis<TAggregate>(this ISession session, Guid id) 
             where TAggregate : AggregateRoot
         {
@@ -38,7 +72,7 @@ namespace Tauron.CQRS.Services.Extensions
         public static Task PublishEvent<T>(this ISession session, T @event, CancellationToken token = default)
             where T : class, IEvent
         {
-            if(!(session is CqrsSession internalSession)) 
+            if(!(session is ICqrsSession internalSession)) 
                 throw new InvalidOperationException("Only CqrsSessions are Compatible");
 
             return internalSession.EventPublisher.Publish(@event, token);

@@ -7,10 +7,10 @@ namespace Tauron.MgiManager.User.Shared.Events
     {
         public string Name { get; set; }
 
-        [Remove]
+        //[Remove]
         public string Hash { get; set; }
 
-        [Remove]
+        //[Remove]
         public string Salt { get; set; }
 
         public override Guid Id { get; set; }
