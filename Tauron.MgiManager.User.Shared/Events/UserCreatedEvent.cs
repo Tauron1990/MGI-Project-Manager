@@ -17,9 +17,12 @@ namespace Tauron.MgiManager.User.Shared.Events
 
         public bool Error { get; set; }
 
-        public UserCreatedEvent(string result)
+        public string ErrorMessage { get; set; }
+
+        public UserCreatedEvent(string name, string result)
         {
-            Name = result;
+            ErrorMessage = result;
+            Name = name;
             Id = Guid.NewGuid();
             Error = true;
         }
@@ -37,5 +40,7 @@ namespace Tauron.MgiManager.User.Shared.Events
         {
             
         }
+
+        public override string ToString() => $"[Created User: {Name} -- {Id}]";
     }
 }

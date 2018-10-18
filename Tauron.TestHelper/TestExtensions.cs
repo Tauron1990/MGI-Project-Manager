@@ -16,7 +16,7 @@ namespace Tauron.TestHelper
 {
     [PublicAPI]
     public static class TestExtensions
-     {
+    {
         public static async Task<IServiceProvider> AddTestCqrs(this IServiceCollection collection, InMemoryDatabaseRoot root, Action<ClientCofiguration> config)
         {
             collection.AddDbContext<DataStore>(builder => builder.UseInMemoryDatabase(nameof(DataStore), root));

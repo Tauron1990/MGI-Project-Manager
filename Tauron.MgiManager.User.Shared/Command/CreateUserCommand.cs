@@ -18,5 +18,7 @@ namespace Tauron.MgiManager.User.Shared.Command
             Name = name;
             Password = password;
         }
+
+        public override string ToString() => $"[New User: {Name}]";
     }
 }

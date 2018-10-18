@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="JetBrains.DotMemoryUnit" Version="3.0.20171219.105559" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -21,7 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CalculatorService\CalculatorService.csproj" />
+    <ProjectReference Include="..\Tauron.MgiManager.User.Service\Tauron.MgiManager.User.Service.csproj" />
+    <ProjectReference Include="..\Tauron.MgiManager.User.Shared\Tauron.MgiManager.User.Shared.csproj" />
+    <ProjectReference Include="..\Tauron.TestHelper\Tauron.TestHelper.csproj" />
   </ItemGroup>
 
 </Project>

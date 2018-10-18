@@ -30,35 +30,40 @@ namespace Tauron.MgiManager.User.Service.UserManager
 
         public override async Task Handle(CreateUserCommand command, string error)
         {
-            var id = IdGenerator.Generator.NewGuid(UserNamespace.UserNameSpace, command.Name);
-
-            try
+            using (_logger.BeginScope(command))
             {
-                if (!string.IsNullOrWhiteSpace(error))
+                var id = IdGenerator.Generator.NewGuid(UserNamespace.UserNameSpace, command.Name);
+
+                try
                 {
-                    if (await _session.Exis<UserAggregate>(id))
+                    if (string.IsNullOrWhiteSpace(error))
                     {
-                        _logger.LogWarning(EventIds.UserManager.UserCreation, $"User Name {command.Name} is in Use");
-                        await _session.PublishEvent(new UserCreatedEvent(UserServiceResources.CreateUserValidationFailed_Duplicate));
-                        return;
+                        if (await _session.Exis<UserAggregate>(id))
+                        {
+                            _logger.LogWarning(EventIds.UserManager.UserCreation, $"User Name {command.Name} is in Use");
+                            await _session.PublishEvent(new UserCreatedEvent(command.Name, UserServiceResources.CreateUserValidationFailed_Duplicate));
+                            return;
+                        }
+
+                        var (hash, salt) = PasswordGenerator.Hash(command.Password);
+                        var aggregate = new UserAggregate(id);
+
+                        aggregate.CreateUser(command.Name, hash, salt);
+
+                        await _session.Add(aggregate);
+                        await _session.Commit();
+                        _logger.LogInformation(EventIds.UserManager.UserCreation, $"{command.Name} User Created");
                     }
-
-                    var (hash, salt) = PasswordGenerator.Hash(command.Password);
-                    var  aggregate = new UserAggregate(id);
-
-                    aggregate.CreateUser(command.Name, hash, salt);
-
-                    await _session.Commit();
+                    else
+                    {
+                        _logger.LogWarning(EventIds.UserManager.UserCreation, $"{command.Name} Validation Failed");
+                        await _session.PublishEvent(new UserCreatedEvent(command.Name, error));
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    _logger.LogWarning(EventIds.UserManager.UserCreation, $"{command.Name} Validation Failed");
-                    await _session.PublishEvent(new UserCreatedEvent(error));
+                    _logger.LogError(EventIds.UserManager.UserCreation, e, $"Error on Creating {command.Name}");
                 }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(EventIds.UserManager.UserCreation, e, $"Error on Creating {command.Name}");
             }
         }
 

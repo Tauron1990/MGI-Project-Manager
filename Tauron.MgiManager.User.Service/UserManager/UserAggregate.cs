@@ -32,7 +32,7 @@ namespace Tauron.MgiManager.User.Service.UserManager
 
         public UserAggregate(Guid id)
         {
-            
+            Id = id;
         }
 
         private void Apply(UserCreatedEvent @event)

@@ -156,6 +156,33 @@ namespace Tauron.CQRS.Services.Extensions
             return config;
         }
 
+        public static ClientCofiguration AddType(this ClientCofiguration config, Type type)
+        {
+            foreach (var @interface in type.GetInterfaces())
+            {
+                if (!@interface.IsGenericType) continue;
+
+                var genericDefinition = @interface.GetGenericTypeDefinition();
+
+                if (genericDefinition == typeof(IReadModel<,>))
+                {
+                    AddReadModel(config, type, @interface);
+                    continue;
+                }
+
+                if (genericDefinition != typeof(ICancellableCommandHandler<>) && genericDefinition != typeof(ICancellableEventHandler<>) &&
+                    genericDefinition != typeof(ICommandHandler<>) && genericDefinition != typeof(IEventHandler<>) &&
+                    genericDefinition != typeof(ISpecificationCommandHandler<>))
+                    continue;
+
+                var name = @interface.GetGenericArguments()[0].Name;
+
+                config.RegisterHandler(name, type);
+            }
+
+            return config;
+        }
+
 
         public static void AddReadModel(ClientCofiguration configuration, Type readModel, Type @interface) 
             => configuration.RegisterHandler(@interface.GetGenericArguments()[0].FullName, readModel);
@@ -168,27 +195,7 @@ namespace Tauron.CQRS.Services.Extensions
             {
                 if (!type.IsDefined(typeof(CQRSHandlerAttribute), false)) continue;
 
-                foreach (var @interface in type.GetInterfaces())
-                {
-                    if (!@interface.IsGenericType) continue;
-
-                    var genericDefinition = @interface.GetGenericTypeDefinition();
-
-                    if (genericDefinition == typeof(IReadModel<,>))
-                    {
-                        AddReadModel(config, type, @interface);
-                        continue;
-                    }
-
-                    if (genericDefinition != typeof(ICancellableCommandHandler<>) && genericDefinition != typeof(ICancellableEventHandler<>) &&
-                        genericDefinition != typeof(ICommandHandler<>)            && genericDefinition != typeof(IEventHandler<>)            &&
-                        genericDefinition != typeof(ISpecificationCommandHandler<>))
-                        continue;
-
-                    var name = @interface.GetGenericArguments()[0].Name;
-
-                    config.RegisterHandler(name, type);
-                }
+                config.AddType(type);
             }
         }
     }
