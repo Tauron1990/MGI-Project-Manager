@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using CQRSlite.Commands;
 using CQRSlite.Domain;
-using CQRSlite.Domain.Exception;
 using Microsoft.Extensions.Logging;
 using Tauron.CQRS.Services;
 using Tauron.CQRS.Services.Core;
@@ -32,12 +30,13 @@ namespace Tauron.MgiManager.User.Service.UserManager
         {
             using (_logger.BeginScope(command))
             {
-                var id = IdGenerator.Generator.NewGuid(UserNamespace.UserNameSpace, command.Name);
-
-                try
+                if (string.IsNullOrWhiteSpace(error))
                 {
-                    if (string.IsNullOrWhiteSpace(error))
+                    var id = IdGenerator.Generator.NewGuid(UserNamespace.UserNameSpace, command.Name);
+
+                    try
                     {
+
                         if (await _session.Exis<UserAggregate>(id))
                         {
                             _logger.LogWarning(EventIds.UserManager.UserCreation, $"User Name {command.Name} is in Use");
@@ -53,16 +52,17 @@ namespace Tauron.MgiManager.User.Service.UserManager
                         await _session.Add(aggregate);
                         await _session.Commit();
                         _logger.LogInformation(EventIds.UserManager.UserCreation, $"{command.Name} User Created");
+
                     }
-                    else
+                    catch (Exception e)
                     {
-                        _logger.LogWarning(EventIds.UserManager.UserCreation, $"{command.Name} Validation Failed");
-                        await _session.PublishEvent(new UserCreatedEvent(command.Name, error));
+                        _logger.LogError(EventIds.UserManager.UserCreation, e, $"Error on Creating {command.Name}");
                     }
                 }
-                catch (Exception e)
+                else
                 {
-                    _logger.LogError(EventIds.UserManager.UserCreation, e, $"Error on Creating {command.Name}");
+                    _logger.LogWarning(EventIds.UserManager.UserCreation, $"{command.Name} Validation Failed");
+                    await _session.PublishEvent(new UserCreatedEvent(command.Name, error));
                 }
             }
         }

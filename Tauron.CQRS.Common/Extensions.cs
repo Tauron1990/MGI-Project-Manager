@@ -9,7 +9,7 @@ namespace Tauron.CQRS.Common
         public static bool TryGetTypedValue<TKey, TValue, TActual>(
             this IDictionary<TKey, TValue> data,
             TKey key,
-            out TActual value, Func<TValue, TActual>? converter = null) where TActual : TValue
+            out TActual value, Func<TValue, TActual> converter = null) where TActual : TValue
         {
             if (data.TryGetValue(key, out var tmp))
             {

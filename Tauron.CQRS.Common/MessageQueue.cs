@@ -12,11 +12,11 @@ namespace Tauron.CQRS.Common
         private readonly BlockingCollection<TMessage> _incomming;
         private readonly BlockingCollection<Task> _processorQueue;
 
-        public event Func<Exception, Task>? OnError;
+        public event Func<Exception, Task> OnError;
 
-        public event Func<TMessage, Task>? OnWork;
+        public event Func<TMessage, Task> OnWork;
 
-        private Task? _dispatcher;
+        private Task _dispatcher;
         private bool _stop;
 
         public MessageQueue(int maxParallel = int.MaxValue, bool skipExceptions = true)

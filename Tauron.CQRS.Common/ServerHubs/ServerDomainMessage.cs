@@ -20,7 +20,7 @@ namespace Tauron.CQRS.Common.ServerHubs
 
         public string TypeName { get; set; } = string.Empty;
 
-        public string? Sender { get; set; }
+        public string Sender { get; set; }
     }
 
     //public class DomainMessage

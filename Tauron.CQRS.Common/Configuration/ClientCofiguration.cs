@@ -35,7 +35,7 @@ namespace Tauron.CQRS.Common.Configuration
 
         public Dictionary<string, HashSet<Type>> GetHandlers () => new Dictionary<string, HashSet<Type>>(_handlerRegistry);
 
-        public string? ConnectionString { get; set; }
+        public string ConnectionString { get; set; }
 
         public bool Memory { get; set; }
 

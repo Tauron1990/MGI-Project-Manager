@@ -10,6 +10,7 @@ using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Services;
 using Tauron.CQRS.Services.Extensions;
 using Tauron.ServiceBootstrapper.Core;
+using Tauron.ServiceBootstrapper.Jobs;
 
 namespace Tauron.ServiceBootstrapper
 {
@@ -34,6 +35,7 @@ namespace Tauron.ServiceBootstrapper
         {
             var rootPath = AppContext.BaseDirectory;
             var collection = new ServiceCollection();
+            collection.AddSingleton<IJobManager, JobManager>();
 
             collection.AddLogging(lb =>
             {
@@ -67,9 +69,12 @@ namespace Tauron.ServiceBootstrapper
             if(config != null)
                 await config(collection);
 
+            JobStore.SearchAt<TStartOptions>();
+
             var provider = collection.BuildServiceProvider();
             await provider.StartCQRS();
-            
+            provider.GetRequiredService<IJobManager>().Start();
+
             _serviceProvider = provider;
             if (startUp != null)
                 await startUp(provider, new StartOptions<TStartOptions>(args));
@@ -77,6 +82,7 @@ namespace Tauron.ServiceBootstrapper
             Console.WriteLine("Service start Compled");
             ExitWaiter.WaitOne();
 
+            provider.GetRequiredService<IJobManager>().Stop();
             await _serviceProvider.GetRequiredService<IDispatcherClient>().Stop();
             ExitWaiter.Dispose();
             provider.Dispose();

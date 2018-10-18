@@ -14,7 +14,7 @@ using Tauron.TestHelper.Mocks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Tauron.MgiManager.User.Service.Tests
+namespace Tauron.MgiManager.User.Service.Tests.UserManager
 {
     public sealed class CreateUserCommandHandlerTests
     {
@@ -123,6 +123,39 @@ namespace Tauron.MgiManager.User.Service.Tests
 
 
             Assert.False(commitCalled);
+            Assert.Null(aggregate);
+            Assert.NotNull(userCreatedEvent);
+            Assert.Null(userCreatedEvent.Salt);
+            Assert.Null(userCreatedEvent.Hash);
+            Assert.NotNull(userCreatedEvent.Name);
+            Assert.NotNull(userCreatedEvent.ErrorMessage);
+        }
+
+        [Theory]
+        [InlineData("TestUser", "TestPassword")]
+        public async Task Test_CreateUserHandler_Exception(string name, string passwort)
+        {
+            var commitCalled = false;
+            UserAggregate aggregate = null;
+            UserCreatedEvent userCreatedEvent = null;
+
+            var mockSession = new MockSession(new Dictionary<Guid, AggregateRoot>(),
+                add: o => aggregate = o as UserAggregate,
+                commit: () =>
+                {
+                    commitCalled = true;
+                    throw new InvalidOperationException();
+                },
+                eventPublisher: new MockEventPublisher(o => userCreatedEvent = o as UserCreatedEvent));
+
+            var handler = SCHTest.Create(new CreateUserCommandHandler(mockSession, _mockLogger));
+            var command = new CreateUserCommand(name, passwort);
+
+
+            await handler.Handle(command);
+
+
+            Assert.True(commitCalled);
             Assert.Null(aggregate);
             Assert.NotNull(userCreatedEvent);
             Assert.Null(userCreatedEvent.Salt);
