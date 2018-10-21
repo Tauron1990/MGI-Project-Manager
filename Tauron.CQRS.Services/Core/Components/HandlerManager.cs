@@ -237,7 +237,9 @@ namespace Tauron.CQRS.Services.Core.Components
                 public ReadModel(Func<object> handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
 
                 public override async Task Invoke(IMessage msg, ServerDomainMessage rawMessage, CancellationToken token)
-                    => await (Task)GetMethod()(_handler(), msg, rawMessage, token);
+                {
+                    await (Task) GetMethod()(_handler(), msg, rawMessage, token);
+                }
             }
             private class SpecificationCommand : InvokerHelper
             {

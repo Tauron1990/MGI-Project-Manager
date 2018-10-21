@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Querys\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Tauron.CQRS.Services\Tauron.CQRS.Services.csproj" />
   </ItemGroup>
 

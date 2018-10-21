@@ -26,6 +26,25 @@ namespace Tauron.CQRS.Services.Extensions
     {
         private static readonly Random Random = new Random();
 
+        public static async Task RespondToQuery<TType>(this IDispatcherClient client, TType result, ServerDomainMessage original)
+        {
+                if (result == null) return;
+
+                var data = new QueryEvent<TType>(original.EventName, result);
+
+                await client.SendToClient(original.Sender, new ServerDomainMessage
+                {
+                    EventName = data.GetType().FullName,
+                    EventType = EventType.QueryResult,
+                    EventData = JsonConvert.SerializeObject(data),
+                    TypeName = typeof(QueryEvent<TType>).AssemblyQualifiedName
+                }, CancellationToken.None);
+            
+        }
+
+        public static TType ToRealMessage<TType>(this ServerDomainMessage message) 
+            => JsonConvert.DeserializeObject(message.EventData, Type.GetType(message.TypeName)) as TType;
+
         public static ServerDomainMessage ToDomainMessage(this IMessage message, bool query = false)
         {
             var type = message.GetType();

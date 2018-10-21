@@ -10,5 +10,16 @@ namespace Tauron.MgiManager.User.Service.Data.Entitys
         public Guid Id { get; set; }
 
         public List<Claim> Claims { get; set; }
+
+        public UserRole()
+        {
+            
+        }
+
+        public UserRole(Guid id, List<Claim> claims)
+        {
+            Id = id;
+            Claims = claims;
+        }
     }
 }

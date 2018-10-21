@@ -12,6 +12,8 @@ namespace Tauron.MgiManager.User.Service.UserManager.Roles
         {
             get
             {
+                //TODO ID Speichern
+                ClaimID Specihern
                 var list = GetValue<List<string>>();
                 if (list != null) return list;
 
