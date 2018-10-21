@@ -9,9 +9,4 @@
     <PackageReference Include="RestEase" Version="1.4.10" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Tauron.MgiManager.User.Service\Tauron.MgiManager.User.Service.csproj" />
-    <ProjectReference Include="..\Tauron.MgiManager.User.Shared\Tauron.MgiManager.User.Shared.csproj" />
-  </ItemGroup>
-
 </Project>

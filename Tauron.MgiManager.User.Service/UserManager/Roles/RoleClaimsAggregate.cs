@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Microsoft.CodeAnalysis;
 using Tauron.CQRS.Services;
 using Tauron.MgiManager.User.Shared.Events;
 
@@ -8,16 +9,14 @@ namespace Tauron.MgiManager.User.Service.UserManager.Roles
 {
     public sealed class RoleClaimsAggregate : CoreAggregateRoot
     {
-        public List<string> Claims
+        public Dictionary<Guid, string> Claims
         {
             get
             {
-                //TODO ID Speichern
-                ClaimID Specihern
-                var list = GetValue<List<string>>();
+                var list = GetValue<Dictionary<Guid, string>>();
                 if (list != null) return list;
 
-                list = new List<string>();
+                list = new Dictionary<Guid, string>();
                 SetValue(list);
                 return list;
 
@@ -25,11 +24,8 @@ namespace Tauron.MgiManager.User.Service.UserManager.Roles
         }
 
         [UsedImplicitly]
-        private void Apply(ClaimToRoleAddedEvent revent)
-        {
-            if(!Claims.Contains(revent.Data))
-                Claims.Add(revent.Data);
-        }
+        private void Apply(ClaimToRoleAddedEvent revent) 
+            => Claims[revent.ClaimId] = revent.Data;
 
         public RoleClaimsAggregate(Guid id) 
             => Id = id;

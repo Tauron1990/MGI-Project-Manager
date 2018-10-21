@@ -32,7 +32,7 @@ namespace MgiManager.Data
             await using var writer = new BinaryWriter(mem);
             claim.WriteTo(writer);
             
-            await _sender.Send(new AddClaimToRoleCommand(role.Id, Convert.ToBase64String(mem.ToArray())), cancellationToken);
+            await _sender.Send(new AddClaimToRoleCommand(role.Id, Convert.ToBase64String(mem.ToArray()), ), cancellationToken);
         }
 
         public override async Task<IList<Claim>> GetClaimsAsync(InternalRole role, CancellationToken cancellationToken = new CancellationToken())

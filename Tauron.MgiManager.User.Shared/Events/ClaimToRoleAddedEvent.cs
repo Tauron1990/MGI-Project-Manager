@@ -7,6 +7,8 @@ namespace Tauron.MgiManager.User.Shared.Events
     {
         public override  Guid Id { get; set; }
 
+        public Guid ClaimId { get; set; }
+
         public string Data { get; set; }
 
         public Guid RoleId { get; set; }
@@ -16,11 +18,12 @@ namespace Tauron.MgiManager.User.Shared.Events
             
         }
 
-        public ClaimToRoleAddedEvent(Guid aggregateId, string data, Guid roleId)
+        public ClaimToRoleAddedEvent(Guid aggregateId, string data, Guid roleId, Guid claimId)
         {
             Id = aggregateId;
             Data = data;
             RoleId = roleId;
+            ClaimId = claimId;
         }
     }
 }

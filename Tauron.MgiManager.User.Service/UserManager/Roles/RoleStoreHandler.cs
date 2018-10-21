@@ -33,7 +33,7 @@ namespace Tauron.MgiManager.User.Service.UserManager.Roles
 
                 var aggregate = await _session.GetOrAdd<RoleClaimsAggregate>(IdGenerator.Generator.NewGuid(UserNamespace.AddClaimToRole, message.Role.ToString()));
 
-                aggregate.PublicApplyEvent(new ClaimToRoleAddedEvent(aggregate.Id, message.Data, message.Role));
+                aggregate.PublicApplyEvent(new ClaimToRoleAddedEvent(aggregate.Id, message.Data, message.Role, message.));
 
                 await _session.Commit();
                 _logger.LogInformation(EventIds.UserManager.RoleManagment, $"{message.Role}: Claim Added");
