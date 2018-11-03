@@ -13,11 +13,9 @@ namespace Tauron.Application.Views.Core
     [PublicAPI]
     public class AttributeBasedLocator : CommonLocatorBase
     {
-        [Inject]
-        protected List<InstanceResolver<Control, ISortableViewExportMetadata>> Views;
+        [Inject] protected List<InstanceResolver<Control, ISortableViewExportMetadata>> Views;
 
-        [Inject]
-        protected List<InstanceResolver<Window, INameExportMetadata>> Windows;
+        [Inject] protected List<InstanceResolver<Window, INameExportMetadata>> Windows;
 
         public override string GetName(Type model)
         {

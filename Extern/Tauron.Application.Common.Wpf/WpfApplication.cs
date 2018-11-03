@@ -38,7 +38,8 @@ namespace Tauron.Application
         #region Public Methods and Operators
 
         /// <summary>The run.</summary>
-        public static void Run<TApp>(Action<TApp> runBeforStart = null, CultureInfo info = null) where TApp : WpfApplication, new()
+        public static void Run<TApp>(Action<TApp> runBeforStart = null, CultureInfo info = null)
+            where TApp : WpfApplication, new()
         {
             WpfApplicationController.Initialize(info);
 
@@ -86,8 +87,7 @@ namespace Tauron.Application
         [CanBeNull]
         public string ThemeDictionary { get; set; }
 
-        [NotNull]
-        public static System.Windows.Application CurrentWpfApplication => System.Windows.Application.Current;
+        [NotNull] public static System.Windows.Application CurrentWpfApplication => System.Windows.Application.Current;
 
         #endregion
 

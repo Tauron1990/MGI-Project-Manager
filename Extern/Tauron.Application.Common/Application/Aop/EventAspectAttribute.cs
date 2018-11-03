@@ -70,7 +70,8 @@ namespace Tauron.Application.Aop
         /// <param name="eventInfo">
         ///     The event info.
         /// </param>
-        protected virtual void OnGet([NotNull] IInvocation invocation, [NotNull] ObjectContext context, [NotNull] EventInfo eventInfo)
+        protected virtual void OnGet([NotNull] IInvocation invocation, [NotNull] ObjectContext context,
+            [NotNull] EventInfo eventInfo)
         {
             if (invocation == null) throw new ArgumentNullException(nameof(invocation));
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -90,7 +91,8 @@ namespace Tauron.Application.Aop
         /// <param name="eventInfo">
         ///     The event info.
         /// </param>
-        protected virtual void OnSet([NotNull] IInvocation invocation, [NotNull] ObjectContext context, [NotNull] EventInfo eventInfo)
+        protected virtual void OnSet([NotNull] IInvocation invocation, [NotNull] ObjectContext context,
+            [NotNull] EventInfo eventInfo)
         {
             if (invocation == null) throw new ArgumentNullException(nameof(invocation));
             if (context == null) throw new ArgumentNullException(nameof(context));

@@ -15,14 +15,11 @@ namespace Tauron.Application.Models
             Message = message;
         }
 
-        [NotNull]
-        public string PropertyName { get; }
+        [NotNull] public string PropertyName { get; }
 
-        [CanBeNull]
-        public object Value { get; }
+        [CanBeNull] public object Value { get; }
 
-        [NotNull]
-        public string Message { get; }
+        [NotNull] public string Message { get; }
 
         public override string ToString()
         {

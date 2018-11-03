@@ -159,7 +159,8 @@ namespace Tauron.Application.Implement
         [SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes")]
         public static bool InitializeAsFirstInstance([NotNull] string uniqueName, TApplication application)
         {
-            if (string.IsNullOrWhiteSpace(uniqueName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(uniqueName));
+            if (string.IsNullOrWhiteSpace(uniqueName))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(uniqueName));
             _commandLineArgs = GetCommandLineArgs(uniqueName);
 
             // Build unique application Id and the IPC channel name.
@@ -253,9 +254,11 @@ namespace Tauron.Application.Implement
         [NotNull]
         public static IList<string> GetCommandLineArgs([NotNull] string uniqueApplicationName)
         {
-            if (string.IsNullOrWhiteSpace(uniqueApplicationName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(uniqueApplicationName));
+            if (string.IsNullOrWhiteSpace(uniqueApplicationName))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(uniqueApplicationName));
             string[] args = null;
-            if (AppDomain.CurrentDomain.ActivationContext == null) // The application was not clickonce deployed, get args from standard API's
+            if (AppDomain.CurrentDomain.ActivationContext == null
+            ) // The application was not clickonce deployed, get args from standard API's
             {
                 args = Environment.GetCommandLineArgs();
             }

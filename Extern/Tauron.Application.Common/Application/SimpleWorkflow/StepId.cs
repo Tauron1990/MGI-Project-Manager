@@ -25,8 +25,7 @@ namespace Tauron.Application.SimpleWorkflow
             Name = name;
         }
 
-        [NotNull]
-        public string Name { get; }
+        [NotNull] public string Name { get; }
 
         [DebuggerStepThrough]
         public override bool Equals([CanBeNull] object obj)

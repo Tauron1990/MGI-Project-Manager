@@ -47,7 +47,8 @@ namespace Tauron.Application
         protected virtual void AddEvent([NotNull] string name, [NotNull] Delegate handler)
         {
             if (handler == null) throw new ArgumentNullException(nameof(handler));
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             if (Handlers.ContainsKey(name)) Handlers[name] = Delegate.Combine(Handlers[name], handler);
             else Handlers[name] = handler;
         }
@@ -64,7 +65,8 @@ namespace Tauron.Application
         protected virtual void InvokeEvent([NotNull] string name, [NotNull] params object[] args)
         {
             if (args == null) throw new ArgumentNullException(nameof(args));
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             if (!Handlers.ContainsKey(name)) return;
 
             if (UseDispatcher)
@@ -85,7 +87,8 @@ namespace Tauron.Application
         protected virtual void RemoveEvent([NotNull] string name, [NotNull] Delegate handler)
         {
             if (handler == null) throw new ArgumentNullException(nameof(handler));
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             if (!Handlers.ContainsKey(name)) return;
 
             var del = Handlers[name];

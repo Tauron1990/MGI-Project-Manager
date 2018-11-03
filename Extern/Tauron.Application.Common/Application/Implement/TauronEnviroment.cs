@@ -53,7 +53,8 @@ namespace Tauron.Application.Implement
 
         /// <summary>Gets the local application data.</summary>
         /// <value>The local application data.</value>
-        public string LocalApplicationData => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).CombinePath(AppRepository);
+        public string LocalApplicationData => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
+            .CombinePath(AppRepository);
 
         /// <summary>Gets the local application temp folder.</summary>
         /// <value>The local application temp folder.</value>

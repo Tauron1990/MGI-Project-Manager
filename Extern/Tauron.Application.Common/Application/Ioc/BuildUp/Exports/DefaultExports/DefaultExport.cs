@@ -55,7 +55,8 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
 
             IEnumerable<ExportMetadataBaseAttribute> metadata =
                 _attributeProvider.GetAllCustomAttributes<ExportMetadataBaseAttribute>();
-            foreach (var exportMetadataAttribute in metadata) Globalmetadata[exportMetadataAttribute.InternalKey] = exportMetadataAttribute.InternalValue;
+            foreach (var exportMetadataAttribute in metadata)
+                Globalmetadata[exportMetadataAttribute.InternalKey] = exportMetadataAttribute.InternalValue;
 
             var attr = Globalmetadata.TryGetAndCast<LifetimeContextAttribute>(AopConstants.LiftimeMetadataName);
 
@@ -136,7 +137,8 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
         }
 
         public DefaultExport(Type exportetType, object obj)
-            : this(exportetType, new ExternalExportInfo(true, true, true, false, (x, g) => obj, exportetType?.FullName), true)
+            : this(exportetType, new ExternalExportInfo(true, true, true, false, (x, g) => obj, exportetType?.FullName),
+                true)
         {
         }
 

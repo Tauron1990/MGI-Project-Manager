@@ -46,7 +46,6 @@ namespace Tauron.Application.Ioc
 
         #endregion
 
-        [NotNull]
-        public ErrorTracer ErrorTracer { get; private set; }
+        [NotNull] public ErrorTracer ErrorTracer { get; private set; }
     }
 }

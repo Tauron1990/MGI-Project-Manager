@@ -35,15 +35,15 @@ namespace Tauron.Application.Ioc.BuildUp
     /// <summary>The ProxyService interface.</summary>
     public interface IProxyService
     {
-        [NotNull]
-        ProxyGenerator GenericGenerator { get; }
+        [NotNull] ProxyGenerator GenericGenerator { get; }
 
         #region Public Properties
 
         /// <summary>Gets the generator.</summary>
         /// <value>The generator.</value>
         [NotNull]
-        ProxyGenerator Generate([NotNull] ExportMetadata metadata, [NotNull] ImportMetadata[] imports, out IImportInterceptor interceptor);
+        ProxyGenerator Generate([NotNull] ExportMetadata metadata, [NotNull] ImportMetadata[] imports,
+            out IImportInterceptor interceptor);
 
         #endregion
     }

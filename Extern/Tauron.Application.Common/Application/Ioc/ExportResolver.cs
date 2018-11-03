@@ -227,7 +227,8 @@ namespace Tauron.Application.Ioc
             /// <param name="discoverChanges">
             ///     The discover changes.
             /// </param>
-            public PathExportProvider([NotNull] string path, [NotNull] string searchpattern, SearchOption option, bool discoverChanges)
+            public PathExportProvider([NotNull] string path, [NotNull] string searchpattern, SearchOption option,
+                bool discoverChanges)
             {
                 _path = path ?? throw new ArgumentNullException(nameof(path));
                 _searchpattern = searchpattern ?? throw new ArgumentNullException(nameof(searchpattern));
@@ -497,7 +498,8 @@ namespace Tauron.Application.Ioc
         /// <param name="discoverChanges">
         ///     The discover changes.
         /// </param>
-        public void AddPath([NotNull] string path, [NotNull] string searchpattern, SearchOption option, bool discoverChanges)
+        public void AddPath([NotNull] string path, [NotNull] string searchpattern, SearchOption option,
+            bool discoverChanges)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             if (searchpattern == null) throw new ArgumentNullException(nameof(searchpattern));
@@ -601,11 +603,13 @@ namespace Tauron.Application.Ioc
             if (exportRegistry == null) throw new ArgumentNullException(nameof(exportRegistry));
             if (exportProviderRegistry == null) throw new ArgumentNullException(nameof(exportProviderRegistry));
             var factorys = new Dictionary<string, IExportFactory>();
-            foreach (var factory in componentRegistry.GetAll<IExportFactory>()) factorys[factory.TechnologyName] = factory;
+            foreach (var factory in componentRegistry.GetAll<IExportFactory>())
+                factorys[factory.TechnologyName] = factory;
 
             foreach (var exportProvider in _providers)
             {
-                foreach (var export in exportProvider.CreateExports(factorys[exportProvider.Technology])) exportRegistry.Register(export.Item1, export.Item2);
+                foreach (var export in exportProvider.CreateExports(factorys[exportProvider.Technology]))
+                    exportRegistry.Register(export.Item1, export.Item2);
 
                 if (exportProvider.BroadcastChanges) exportProviderRegistry.Add(exportProvider);
             }

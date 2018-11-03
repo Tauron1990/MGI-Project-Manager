@@ -28,11 +28,9 @@ namespace Tauron.Application.Views
             ViewLocator = locator;
         }
 
-        [NotNull]
-        public IViewLocator ViewLocator { get; set; }
+        [NotNull] public IViewLocator ViewLocator { get; set; }
 
-        [NotNull]
-        public static ViewManager Manager => CompositionServices.Container.Resolve<ViewManager>();
+        [NotNull] public static ViewManager Manager => CompositionServices.Container.Resolve<ViewManager>();
 
 
         public IWindow CreateWindow(string name, params object[] parameters)
@@ -79,7 +77,8 @@ namespace Tauron.Application.Views
         public TType CreateView<TType>([NotNull] string name)
             where TType : class
         {
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             return CreateView(name) as TType;
         }
 

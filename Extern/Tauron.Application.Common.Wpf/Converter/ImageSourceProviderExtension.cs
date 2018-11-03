@@ -38,11 +38,9 @@ namespace Tauron.Application.Converter
 
         #region Public Properties
 
-        [NotNull]
-        public string Assembly { get; set; }
+        [NotNull] public string Assembly { get; set; }
 
-        [NotNull]
-        public string ImageSource { get; set; }
+        [NotNull] public string ImageSource { get; set; }
 
         #endregion
     }

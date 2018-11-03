@@ -100,8 +100,10 @@ namespace Tauron
             bool overwrite,
             bool nobuffering, [CanBeNull] EventHandler<ProgressChangedEventArgs> handler)
         {
-            if (string.IsNullOrEmpty(source)) throw new ArgumentException("Value cannot be null or empty.", nameof(source));
-            if (string.IsNullOrEmpty(destination)) throw new ArgumentException("Value cannot be null or empty.", nameof(destination));
+            if (string.IsNullOrEmpty(source))
+                throw new ArgumentException("Value cannot be null or empty.", nameof(source));
+            if (string.IsNullOrEmpty(destination))
+                throw new ArgumentException("Value cannot be null or empty.", nameof(destination));
 
             new XCopy().CopyInternal(source, destination, overwrite, nobuffering, handler);
         }
@@ -134,8 +136,10 @@ namespace Tauron
             bool overwrite,
             bool nobuffering, [CanBeNull] EventHandler<ProgressChangedEventArgs> handler)
         {
-            if (string.IsNullOrEmpty(source)) throw new ArgumentException("Value cannot be null or empty.", nameof(source));
-            if (string.IsNullOrEmpty(destination)) throw new ArgumentException("Value cannot be null or empty.", nameof(destination));
+            if (string.IsNullOrEmpty(source))
+                throw new ArgumentException("Value cannot be null or empty.", nameof(source));
+            if (string.IsNullOrEmpty(destination))
+                throw new ArgumentException("Value cannot be null or empty.", nameof(destination));
             try
             {
                 var copyFileFlags = NativeMethods.CopyFileFlags.COPY_FILE_RESTARTABLE;
@@ -211,7 +215,8 @@ namespace Tauron
             IntPtr hDestinationFile,
             IntPtr lpData)
         {
-            if (reason == NativeMethods.CopyProgressCallbackReason.CALLBACK_CHUNK_FINISHED) OnProgressChanged(transferred / (double) total * 100.0);
+            if (reason == NativeMethods.CopyProgressCallbackReason.CALLBACK_CHUNK_FINISHED)
+                OnProgressChanged(transferred / (double) total * 100.0);
 
             return NativeMethods.CopyProgressResult.PROGRESS_CONTINUE;
         }

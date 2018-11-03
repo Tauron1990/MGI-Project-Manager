@@ -11,7 +11,8 @@ namespace Tauron.Application.Models
 {
     public class ModelBase : ObservableObject, IModel, ICustomTypeDescriptor, INotifyBuildCompled
     {
-        private static GroupDictionary<Type, ObservableProperty> _properties = new GroupDictionary<Type, ObservableProperty>();
+        private static GroupDictionary<Type, ObservableProperty> _properties =
+            new GroupDictionary<Type, ObservableProperty>();
 
         private GroupDictionary<string, WeakAction> _changedActions;
 
@@ -39,8 +40,7 @@ namespace Tauron.Application.Models
 
         public bool BlockOnPropertyChanged { get; set; }
 
-        [NotNull]
-        protected ValidatorContext ValidatorContext { get; private set; }
+        [NotNull] protected ValidatorContext ValidatorContext { get; private set; }
 
         protected virtual bool HasErrorOverride => false;
         public bool HasNoErrors => !HasErrors;
@@ -52,7 +52,9 @@ namespace Tauron.Application.Models
         {
             if (propertyName == null) return null;
 
-            var enumerable = !_propertyIssues.ContainsKey(propertyName) ? GetErrorsOverride(propertyName) : _propertyIssues[propertyName];
+            var enumerable = !_propertyIssues.ContainsKey(propertyName)
+                ? GetErrorsOverride(propertyName)
+                : _propertyIssues[propertyName];
             if (enumerable == null) return null;
 
             return ConvertPropertyIssuesToString ? enumerable.Cast<object>().Select(o => o.ToString()) : enumerable;
@@ -169,7 +171,9 @@ namespace Tauron.Application.Models
             var getter = property.Metadata.CustomGetter;
             if (getter != null) return getter(property);
 
-            return _values.TryGetValue(property.Name, out var value) ? value : property.Metadata.DefaultValue ?? GetDefaultValue(property.Type);
+            return _values.TryGetValue(property.Name, out var value)
+                ? value
+                : property.Metadata.DefaultValue ?? GetDefaultValue(property.Type);
         }
 
         public static object GetDefaultValue(Type type)
@@ -310,7 +314,8 @@ namespace Tauron.Application.Models
         {
             private readonly ObservableProperty _prop;
 
-            public ObservablePropertyDescriptor([NotNull] ObservableProperty prop, [NotNull] Type componentType, [NotNull] ModelBase owner)
+            public ObservablePropertyDescriptor([NotNull] ObservableProperty prop, [NotNull] Type componentType,
+                [NotNull] ModelBase owner)
                 : base(prop.Name, null)
             {
                 if (prop == null) throw new ArgumentNullException(nameof(prop));
@@ -322,13 +327,11 @@ namespace Tauron.Application.Models
 
             public ModelBase Owner { get; }
 
-            [NotNull]
-            public override Type ComponentType { get; }
+            [NotNull] public override Type ComponentType { get; }
 
             public override bool IsReadOnly => false;
 
-            [NotNull]
-            public override Type PropertyType => _prop.Type;
+            [NotNull] public override Type PropertyType => _prop.Type;
 
             public override bool CanResetValue(object component)
             {
@@ -442,7 +445,8 @@ namespace Tauron.Application.Models
             while (type != null && type != typeof(ModelBase) && type != typeof(object))
             {
                 if (_properties.TryGetValue(type, out var props))
-                    properties.AddRange(props.Select(observableProperty => new ObservablePropertyDescriptor(observableProperty, orgType, this)));
+                    properties.AddRange(props.Select(observableProperty =>
+                        new ObservablePropertyDescriptor(observableProperty, orgType, this)));
 
                 type = type.BaseType;
             }

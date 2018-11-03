@@ -63,7 +63,8 @@ namespace Tauron
         ///     Weiter informationen stehen dann in der Inner Exceptionzur verfügung.
         /// </exception>
         [NotNull]
-        public static TType Resolve<TType>([NotNull] this IContainer con, params BuildParameter[] parameters) where TType : class
+        public static TType Resolve<TType>([NotNull] this IContainer con, params BuildParameter[] parameters)
+            where TType : class
         {
             if (con == null) throw new ArgumentNullException(nameof(con));
             return (TType) con.Resolve(typeof(TType), null, parameters);
@@ -86,7 +87,8 @@ namespace Tauron
         /// <returns>
         ///     The <see cref="TType" />.
         /// </returns>
-        public static TType Resolve<TType>([NotNull] this IContainer con, string name, bool optional, params BuildParameter[] buildParameters) where TType : class
+        public static TType Resolve<TType>([NotNull] this IContainer con, string name, bool optional,
+            params BuildParameter[] buildParameters) where TType : class
         {
             if (con == null) throw new ArgumentNullException(nameof(con));
             return con.Resolve(typeof(TType), name, optional, buildParameters) as TType;
@@ -122,7 +124,8 @@ namespace Tauron
         ///     Wird geworfen wenn ein Export nicht gefunden wurde.
         ///     Weiter informationen stehen dann in der Inner Exceptionzur verfügung.
         /// </exception>
-        public static object Resolve([NotNull] this IContainer con, [NotNull] Type @interface, string name, params BuildParameter[] buildParameters)
+        public static object Resolve([NotNull] this IContainer con, [NotNull] Type @interface, string name,
+            params BuildParameter[] buildParameters)
         {
             if (con == null) throw new ArgumentNullException(nameof(con));
             if (@interface == null) throw new ArgumentNullException(nameof(@interface));
@@ -174,7 +177,8 @@ namespace Tauron
         ///     Wird geworfen wenn ein Export nicht gefunden wurde.
         ///     Weiter informationen stehen dann in der Inner Exceptionzur verfügung.
         /// </exception>
-        public static object Resolve([NotNull] this IContainer con, [NotNull] Type @interface, string name, bool optional, BuildParameter[] buildParameters)
+        public static object Resolve([NotNull] this IContainer con, [NotNull] Type @interface, string name,
+            bool optional, BuildParameter[] buildParameters)
         {
             if (con == null) throw new ArgumentNullException(nameof(con));
             if (@interface == null) throw new ArgumentNullException(nameof(@interface));
@@ -227,7 +231,8 @@ namespace Tauron
         ///     Wird geworfen wenn ein Export nicht gefunden wurde.
         ///     Weiter informationen stehen dann in der Inner Exceptionzur verfügung.
         /// </exception>
-        public static IEnumerable<object> ResolveAll([NotNull] this IContainer con, [NotNull] Type @interface, string name, params BuildParameter[] buildParameters)
+        public static IEnumerable<object> ResolveAll([NotNull] this IContainer con, [NotNull] Type @interface,
+            string name, params BuildParameter[] buildParameters)
         {
             if (con == null) throw new ArgumentNullException(nameof(con));
             if (@interface == null) throw new ArgumentNullException(nameof(@interface));
@@ -238,8 +243,9 @@ namespace Tauron
                 var temp = con.FindExports(@interface, name, tracer);
                 if (tracer.Exceptional) yield break;
 
-                foreach (var tempBuild in temp.Select(exportMetadata => con.BuildUp(exportMetadata, tracer, buildParameters)).TakeWhile(tempBuild => !tracer.Exceptional))
-                    yield return tempBuild;
+                foreach (var tempBuild in temp
+                    .Select(exportMetadata => con.BuildUp(exportMetadata, tracer, buildParameters))
+                    .TakeWhile(tempBuild => !tracer.Exceptional)) yield return tempBuild;
             }
             finally
             {

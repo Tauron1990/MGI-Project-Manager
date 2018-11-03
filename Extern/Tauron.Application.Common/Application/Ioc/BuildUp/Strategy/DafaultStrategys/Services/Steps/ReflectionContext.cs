@@ -25,33 +25,25 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
 
         public IResolverExtension[] ResolverExtensions { get; private set; }
 
-        [CanBeNull]
-        public ExportMetadata ExportMetadataOverride { get; set; }
+        [CanBeNull] public ExportMetadata ExportMetadataOverride { get; set; }
 
-        [NotNull]
-        public ExportRegistry BuildParametersRegistry { get; private set; }
+        [NotNull] public ExportRegistry BuildParametersRegistry { get; private set; }
 
-        [NotNull]
-        public IMetadataFactory MetadataFactory { get; private set; }
+        [NotNull] public IMetadataFactory MetadataFactory { get; private set; }
 
-        [CanBeNull]
-        public InterceptorCallback InterceptorCallback { get; set; }
+        [CanBeNull] public InterceptorCallback InterceptorCallback { get; set; }
 
-        [NotNull]
-        public Type MemberType { get; private set; }
+        [NotNull] public Type MemberType { get; private set; }
 
-        [NotNull]
-        public Type CurrentType { get; set; }
+        [NotNull] public Type CurrentType { get; set; }
 
         public Type AdditionalInfo { get; set; }
 
         public int Level { get; set; }
 
-        [CanBeNull]
-        public object Metadata { get; set; }
+        [CanBeNull] public object Metadata { get; set; }
 
-        [CanBeNull]
-        public Type MetadataType { get; set; }
+        [CanBeNull] public Type MetadataType { get; set; }
 
         //[NotNull]
         //public IResolver CreateSimpleListHelper([NotNull] ExportMetadata meta, bool isDescriptor)
@@ -99,7 +91,9 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
             var temp = BuildParametersRegistry.FindOptional(type, name, new ErrorTracer());
             if (temp != null) return temp;
 
-            return _parentContext.Container.FindExport(_parentContext.Metadata.InterfaceType ?? ExtractRealType(CurrentType), _parentContext.Metadata.ContractName,
+            return _parentContext.Container.FindExport(
+                _parentContext.Metadata.InterfaceType ?? ExtractRealType(CurrentType),
+                _parentContext.Metadata.ContractName,
                 _parentContext.Tracer, _parentContext.Metadata.Optional, Level);
         }
 

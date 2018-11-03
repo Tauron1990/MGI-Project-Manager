@@ -484,7 +484,8 @@ namespace Tauron.Application
         public static void SetEvents([NotNull] DependencyObject obj, [NotNull] string value)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
-            if (string.IsNullOrEmpty(value)) throw new ArgumentException("Value cannot be null or empty.", nameof(value));
+            if (string.IsNullOrEmpty(value))
+                throw new ArgumentException("Value cannot be null or empty.", nameof(value));
             obj.SetValue(EventsProperty, value);
         }
 

@@ -49,7 +49,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
                 {
                     var info = closed.GetMethod("Add");
 
-                    var args = resolvers.Select(resolver => resolver.Create(errorTracer)).TakeWhile(vtemp => !errorTracer.Exceptional).ToList();
+                    var args = resolvers.Select(resolver => resolver.Create(errorTracer))
+                        .TakeWhile(vtemp => !errorTracer.Exceptional).ToList();
 
                     if (errorTracer.Exceptional) return null;
 

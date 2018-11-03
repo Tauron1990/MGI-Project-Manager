@@ -72,7 +72,8 @@ namespace Tauron.Application.Help
         ///     The <see cref="HelpViewModel" />.
         /// </returns>
         [NotNull]
-        public static HelpViewModel GetHelpViewModel([NotNull] string filePath, [CanBeNull] string topic, [CanBeNull] string group)
+        public static HelpViewModel GetHelpViewModel([NotNull] string filePath, [CanBeNull] string topic,
+            [CanBeNull] string group)
         {
             if (filePath == null) throw new ArgumentNullException(nameof(filePath));
 

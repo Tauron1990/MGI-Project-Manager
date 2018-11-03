@@ -66,7 +66,8 @@ namespace Tauron
         ///     The <see cref="TValue" />.
         /// </returns>
         [NotNull]
-        public static TValue CreateInstanceAndUnwrap<TValue>([NotNull] this AppDomain domain, [NotNull] params object[] args)
+        public static TValue CreateInstanceAndUnwrap<TValue>([NotNull] this AppDomain domain,
+            [NotNull] params object[] args)
             where TValue : class
         {
             if (domain == null) throw new ArgumentNullException(nameof(domain));
@@ -154,7 +155,8 @@ namespace Tauron
         /// </returns>
         [NotNull]
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public static IEnumerable<Tuple<MemberInfo, TAttribute>> FindMemberAttributes<TAttribute>([NotNull] this Type type,
+        public static IEnumerable<Tuple<MemberInfo, TAttribute>> FindMemberAttributes<TAttribute>(
+            [NotNull] this Type type,
             bool nonPublic) where TAttribute : Attribute
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -174,7 +176,8 @@ namespace Tauron
 
         [NotNull]
         [System.Diagnostics.Contracts.Pure]
-        public static object[] GetAllCustomAttributes([NotNull] this ICustomAttributeProvider member, [NotNull] Type type)
+        public static object[] GetAllCustomAttributes([NotNull] this ICustomAttributeProvider member,
+            [NotNull] Type type)
         {
             if (member == null) throw new ArgumentNullException(nameof(member));
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -215,7 +218,8 @@ namespace Tauron
         ///     The <see cref="TAttribute" />.
         /// </returns>
         [CanBeNull]
-        public static TAttribute GetCustomAttribute<TAttribute>([NotNull] this ICustomAttributeProvider provider, bool inherit)
+        public static TAttribute GetCustomAttribute<TAttribute>([NotNull] this ICustomAttributeProvider provider,
+            bool inherit)
             where TAttribute : Attribute
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
@@ -238,7 +242,8 @@ namespace Tauron
         ///     The <see cref="IEnumerable" />.
         /// </returns>
         [NotNull]
-        public static IEnumerable<object> GetCustomAttributes([NotNull] this ICustomAttributeProvider provider, [NotNull] [ItemNotNull] params Type[] attributeTypes)
+        public static IEnumerable<object> GetCustomAttributes([NotNull] this ICustomAttributeProvider provider,
+            [NotNull] [ItemNotNull] params Type[] attributeTypes)
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 
@@ -262,7 +267,8 @@ namespace Tauron
         /// <returns>
         ///     The <see cref="TType" />.
         /// </returns>
-        public static TType GetInvokeMember<TType>([NotNull] this MemberInfo info, [NotNull] object instance, [CanBeNull] params object[] parameter)
+        public static TType GetInvokeMember<TType>([NotNull] this MemberInfo info, [NotNull] object instance,
+            [CanBeNull] params object[] parameter)
         {
             if (info == null) throw new ArgumentNullException(nameof(info));
             try
@@ -334,7 +340,8 @@ namespace Tauron
         ///     The <see cref="PropertyInfo" />.
         /// </returns>
         [CanBeNull]
-        public static PropertyInfo GetPropertyFromMethod([NotNull] this MethodInfo method, [NotNull] Type implementingType)
+        public static PropertyInfo GetPropertyFromMethod([NotNull] this MethodInfo method,
+            [NotNull] Type implementingType)
         {
             if (method == null) throw new ArgumentNullException(nameof(method));
             if (implementingType == null) throw new ArgumentNullException(nameof(implementingType));
@@ -368,7 +375,9 @@ namespace Tauron
         public static PropertyInfo GetPropertyFromMethod([NotNull] this MethodBase method)
         {
             if (method == null) throw new ArgumentNullException(nameof(method));
-            return !method.IsSpecialName ? null : method.DeclaringType.GetProperty(method.Name.Substring(4), DefaultBindingFlags);
+            return !method.IsSpecialName
+                ? null
+                : method.DeclaringType.GetProperty(method.Name.Substring(4), DefaultBindingFlags);
         }
 
         /// <summary>
@@ -450,7 +459,8 @@ namespace Tauron
         ///     The <see cref="bool" />.
         /// </returns>
         [System.Diagnostics.Contracts.Pure]
-        public static bool HasMatchingAttribute<T>([NotNull] this ICustomAttributeProvider member, [NotNull] T attributeToMatch)
+        public static bool HasMatchingAttribute<T>([NotNull] this ICustomAttributeProvider member,
+            [NotNull] T attributeToMatch)
             where T : Attribute
         {
             if (member == null) throw new ArgumentNullException(nameof(member));
@@ -477,7 +487,8 @@ namespace Tauron
         /// <returns>
         ///     The <see cref="TType" />.
         /// </returns>
-        public static TType Invoke<TType>([NotNull] this MethodBase method, [NotNull] object instance, [NotNull] params object[] args)
+        public static TType Invoke<TType>([NotNull] this MethodBase method, [NotNull] object instance,
+            [NotNull] params object[] args)
         {
             if (method == null) throw new ArgumentNullException(nameof(method));
             if (instance == null) throw new ArgumentNullException(nameof(instance));
@@ -496,7 +507,8 @@ namespace Tauron
         /// <param name="args">
         ///     The args.
         /// </param>
-        public static void Invoke([NotNull] this MethodBase method, [NotNull] object instance, [NotNull] params object[] args)
+        public static void Invoke([NotNull] this MethodBase method, [NotNull] object instance,
+            [NotNull] params object[] args)
         {
             if (method == null) throw new ArgumentNullException(nameof(method));
             if (instance == null) throw new ArgumentNullException(nameof(instance));
@@ -547,7 +559,8 @@ namespace Tauron
         /// <param name="parameter">
         ///     The parameter.
         /// </param>
-        public static void SetInvokeMember([NotNull] this MemberInfo info, [NotNull] object instance, [CanBeNull] params object[] parameter)
+        public static void SetInvokeMember([NotNull] this MemberInfo info, [NotNull] object instance,
+            [CanBeNull] params object[] parameter)
         {
             if (info == null) throw new ArgumentNullException(nameof(info));
             if (info is PropertyInfo)

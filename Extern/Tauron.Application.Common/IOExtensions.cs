@@ -109,7 +109,8 @@ namespace Tauron
         public static string CombinePath([NotNull] this string path, [ItemNotNull] [NotNull] params string[] paths)
         {
             if (paths == null) throw new ArgumentNullException(nameof(paths));
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             paths = paths.Select(str => str.TrimStart('\\')).ToArray();
 
             if (Path.HasExtension(path)) path = Path.GetDirectoryName(path);
@@ -332,37 +333,44 @@ namespace Tauron
         [NotNull]
         public static IEnumerable<string> EnumerateAllFiles([NotNull] this string dic, [NotNull] string filter)
         {
-            if (string.IsNullOrWhiteSpace(dic)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(dic));
-            if (string.IsNullOrWhiteSpace(filter)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(filter));
+            if (string.IsNullOrWhiteSpace(dic))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(dic));
+            if (string.IsNullOrWhiteSpace(filter))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(filter));
             return Directory.EnumerateFiles(dic, filter, SearchOption.AllDirectories);
         }
 
         [NotNull]
         public static IEnumerable<string> EnumerateDirectorys([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return !Directory.Exists(path) ? Enumerable.Empty<string>() : Directory.EnumerateDirectories(path);
         }
 
         [NotNull]
         public static IEnumerable<FileSystemInfo> EnumerateFileSystemEntrys([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return new DirectoryInfo(path).EnumerateFileSystemInfos();
         }
 
         [NotNull]
         public static IEnumerable<string> EnumerateFiles([NotNull] this string dic)
         {
-            if (string.IsNullOrWhiteSpace(dic)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(dic));
+            if (string.IsNullOrWhiteSpace(dic))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(dic));
             return Directory.EnumerateFiles(dic, "*.*", SearchOption.TopDirectoryOnly);
         }
 
         [NotNull]
         public static IEnumerable<string> EnumerateFiles([NotNull] this string dic, [NotNull] string filter)
         {
-            if (string.IsNullOrWhiteSpace(dic)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(dic));
-            if (string.IsNullOrWhiteSpace(filter)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(filter));
+            if (string.IsNullOrWhiteSpace(dic))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(dic));
+            if (string.IsNullOrWhiteSpace(filter))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(filter));
             return Directory.EnumerateFiles(dic, filter, SearchOption.TopDirectoryOnly);
         }
 
@@ -426,7 +434,8 @@ namespace Tauron
         /// </returns>
         public static bool ExisFile([NotNull] this string workingDirectory, [NotNull] string file)
         {
-            if (string.IsNullOrEmpty(workingDirectory)) throw new ArgumentException("Value cannot be null or empty.", nameof(workingDirectory));
+            if (string.IsNullOrEmpty(workingDirectory))
+                throw new ArgumentException("Value cannot be null or empty.", nameof(workingDirectory));
             if (string.IsNullOrEmpty(file)) throw new ArgumentException("Value cannot be null or empty.", nameof(file));
             try
             {
@@ -463,7 +472,8 @@ namespace Tauron
         /// </returns>
         public static DateTime GetDirectoryCreationTime([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return Directory.GetCreationTime(path);
         }
 
@@ -479,7 +489,8 @@ namespace Tauron
         [NotNull]
         public static string GetDirectoryName([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return Path.GetDirectoryName(path);
         }
 
@@ -503,7 +514,8 @@ namespace Tauron
         [NotNull]
         public static string[] GetDirectorys([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return Directory.GetDirectories(path);
         }
 
@@ -519,7 +531,8 @@ namespace Tauron
         [NotNull]
         public static string GetExtension([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return Path.GetExtension(path);
         }
 
@@ -535,7 +548,8 @@ namespace Tauron
         [NotNull]
         public static string GetFileName([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return Path.GetFileName(path);
         }
 
@@ -551,7 +565,8 @@ namespace Tauron
         [NotNull]
         public static string GetFileNameWithoutExtension([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return Path.GetFileNameWithoutExtension(path);
         }
 
@@ -566,7 +581,8 @@ namespace Tauron
         /// </returns>
         public static int GetFileSystemCount([NotNull] this string strDir)
         {
-            if (string.IsNullOrWhiteSpace(strDir)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(strDir));
+            if (string.IsNullOrWhiteSpace(strDir))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(strDir));
             // 0. Einstieg in die Rekursion auf oberster Ebene
             return GetFileSystemCount(new DirectoryInfo(strDir));
         }
@@ -613,15 +629,18 @@ namespace Tauron
         [NotNull]
         public static string[] GetFiles([NotNull] this string dic)
         {
-            if (string.IsNullOrWhiteSpace(dic)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(dic));
+            if (string.IsNullOrWhiteSpace(dic))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(dic));
             return Directory.GetFiles(dic);
         }
 
         [NotNull]
         public static string[] GetFiles([NotNull] this string path, [NotNull] string pattern, SearchOption option)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
-            if (string.IsNullOrWhiteSpace(pattern)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(pattern));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(pattern))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(pattern));
             return Directory.GetFiles(path, pattern, option);
         }
 
@@ -637,7 +656,8 @@ namespace Tauron
         [NotNull]
         public static string GetFullPath([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return Path.GetFullPath(path);
         }
 
@@ -652,7 +672,8 @@ namespace Tauron
         /// </returns>
         public static bool HasExtension([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return Path.HasExtension(path);
         }
 
@@ -667,7 +688,8 @@ namespace Tauron
         /// </returns>
         public static bool IsPathRooted([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return Path.IsPathRooted(path);
         }
 
@@ -682,8 +704,10 @@ namespace Tauron
         /// </param>
         public static void MoveTo([NotNull] this string source, [NotNull] string dest)
         {
-            if (string.IsNullOrWhiteSpace(source)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(source));
-            if (string.IsNullOrWhiteSpace(dest)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(dest));
+            if (string.IsNullOrWhiteSpace(source))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(source));
+            if (string.IsNullOrWhiteSpace(dest))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(dest));
             File.Move(source, dest);
         }
 
@@ -699,11 +723,15 @@ namespace Tauron
         /// <param name="dest">
         ///     The dest.
         /// </param>
-        public static void MoveTo([NotNull] this string source, [NotNull] string workingDirectory, [NotNull] string dest)
+        public static void MoveTo([NotNull] this string source, [NotNull] string workingDirectory,
+            [NotNull] string dest)
         {
-            if (string.IsNullOrWhiteSpace(source)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(source));
-            if (string.IsNullOrWhiteSpace(workingDirectory)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(workingDirectory));
-            if (string.IsNullOrWhiteSpace(dest)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(dest));
+            if (string.IsNullOrWhiteSpace(source))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(source));
+            if (string.IsNullOrWhiteSpace(workingDirectory))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(workingDirectory));
+            if (string.IsNullOrWhiteSpace(dest))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(dest));
             var realDest = dest;
 
             if (!dest.HasExtension())
@@ -732,7 +760,8 @@ namespace Tauron
         [NotNull]
         public static Stream OpenRead([NotNull] this string path, FileShare share)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             path = path.GetFullPath();
             path.CreateDirectoryIfNotExis();
             return new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read, share);
@@ -750,7 +779,8 @@ namespace Tauron
         [NotNull]
         public static Stream OpenRead([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return OpenRead(path, FileShare.None);
         }
 
@@ -766,7 +796,8 @@ namespace Tauron
         [NotNull]
         public static StreamWriter OpenTextAppend([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             path.CreateDirectoryIfNotExis();
             return new StreamWriter(new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.None));
         }
@@ -783,7 +814,8 @@ namespace Tauron
         [NotNull]
         public static StreamReader OpenTextRead([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return File.OpenText(path);
         }
 
@@ -799,7 +831,8 @@ namespace Tauron
         [NotNull]
         public static StreamWriter OpenTextWrite([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             path.CreateDirectoryIfNotExis();
             return new StreamWriter(path);
         }
@@ -807,14 +840,16 @@ namespace Tauron
         [NotNull]
         public static Stream OpenWrite([NotNull] this string path, bool delete = true)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return OpenWrite(path, FileShare.None, delete);
         }
 
         [NotNull]
         public static Stream OpenWrite([NotNull] this string path, FileShare share, bool delete = true)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             if (delete)
                 path.DeleteFile();
 
@@ -826,7 +861,8 @@ namespace Tauron
         [NotNull]
         public static byte[] ReadAllBytesIfExis([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return !File.Exists(path) ? new byte[0] : File.ReadAllBytes(path);
         }
 
@@ -849,7 +885,8 @@ namespace Tauron
         [NotNull]
         public static string ReadTextIfExis([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             return File.Exists(path) ? File.ReadAllText(path) : string.Empty;
         }
 
@@ -868,15 +905,18 @@ namespace Tauron
         [NotNull]
         public static string ReadTextIfExis([NotNull] this string workingDirectory, [NotNull] string subPath)
         {
-            if (string.IsNullOrWhiteSpace(workingDirectory)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(workingDirectory));
-            if (string.IsNullOrWhiteSpace(subPath)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(subPath));
+            if (string.IsNullOrWhiteSpace(workingDirectory))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(workingDirectory));
+            if (string.IsNullOrWhiteSpace(subPath))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(subPath));
             return ReadTextIfExis(CombinePath(workingDirectory, subPath));
         }
 
         [NotNull]
         public static IEnumerable<string> ReadTextLinesIfExis([NotNull] this string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             if (!File.Exists(path)) yield break;
 
             using (var reader = File.OpenText(path))
@@ -906,10 +946,12 @@ namespace Tauron
         /// <returns>
         ///     The <see cref="bool" />.
         /// </returns>
-        public static bool TryCreateUriWithoutScheme([NotNull] this string str, out Uri uri, [NotNull] params string[] scheme)
+        public static bool TryCreateUriWithoutScheme([NotNull] this string str, out Uri uri,
+            [NotNull] params string[] scheme)
         {
             if (scheme == null) throw new ArgumentNullException(nameof(scheme));
-            if (string.IsNullOrWhiteSpace(str)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(str));
+            if (string.IsNullOrWhiteSpace(str))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(str));
             Uri target;
             var flag = Uri.TryCreate(str, UriKind.RelativeOrAbsolute, out target);
 
@@ -934,8 +976,10 @@ namespace Tauron
         /// </param>
         public static void WriteTextContentTo([NotNull] this string content, [NotNull] string path)
         {
-            if (string.IsNullOrWhiteSpace(content)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(content));
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(content))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(content));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             File.WriteAllText(path, content);
         }
 
@@ -951,11 +995,15 @@ namespace Tauron
         /// <param name="path">
         ///     The path.
         /// </param>
-        public static void WriteTextContentTo([NotNull] this string content, [NotNull] string workingDirectory, [NotNull] string path)
+        public static void WriteTextContentTo([NotNull] this string content, [NotNull] string workingDirectory,
+            [NotNull] string path)
         {
-            if (string.IsNullOrWhiteSpace(content)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(content));
-            if (string.IsNullOrWhiteSpace(workingDirectory)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(workingDirectory));
-            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            if (string.IsNullOrWhiteSpace(content))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(content));
+            if (string.IsNullOrWhiteSpace(workingDirectory))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(workingDirectory));
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
             WriteTextContentTo(content, CombinePath(workingDirectory, path));
         }
 

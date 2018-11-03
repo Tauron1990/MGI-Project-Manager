@@ -47,7 +47,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
         }
 
         [NotNull]
-        protected abstract IResolver CreateResolver([NotNull] IEnumerable<IResolver> resolvers, [NotNull] Type listType);
+        protected abstract IResolver
+            CreateResolver([NotNull] IEnumerable<IResolver> resolvers, [NotNull] Type listType);
 
         public override void OnExecuteFinish(InjectorContext context)
         {

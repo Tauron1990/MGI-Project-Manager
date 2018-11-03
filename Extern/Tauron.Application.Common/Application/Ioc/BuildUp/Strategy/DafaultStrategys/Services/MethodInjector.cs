@@ -19,8 +19,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             ParameterInfo = parameterInfo;
         }
 
-        [NotNull]
-        public ParameterInfo ParameterInfo { get; private set; }
+        [NotNull] public ParameterInfo ParameterInfo { get; private set; }
 
         public override MemberTypes MemberType => 0;
 

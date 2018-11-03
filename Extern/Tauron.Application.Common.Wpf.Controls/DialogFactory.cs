@@ -41,7 +41,8 @@ namespace Tauron.Application
             IWindow owner,
             Action<IProgress<ActiveProgress>> worker)
         {
-            return new SimpleProgressDialog(text, title, owner ?? throw new ArgumentNullException(nameof(owner)), worker);
+            return new SimpleProgressDialog(text, title, owner ?? throw new ArgumentNullException(nameof(owner)),
+                worker);
         }
 
         /// <summary>

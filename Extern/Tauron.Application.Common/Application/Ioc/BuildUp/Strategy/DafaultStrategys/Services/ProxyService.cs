@@ -16,11 +16,6 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
     {
         #region Constructors and Destructors
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="ProxyService" /> class.
-        ///     Initialisiert eine neue Instanz der <see cref="ProxyService" /> Klasse.
-        ///     Initializes a new instance of the <see cref="ProxyService" /> class.
-        /// </summary>
         public ProxyService()
         {
             GenericGenerator = new ProxyGenerator {Logger = new PrivateLogger()};
@@ -66,21 +61,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
 
             #region Methods
 
-            /// <summary>
-            ///     The log.
-            /// </summary>
-            /// <param name="loggerLevel">
-            ///     The logger level.
-            /// </param>
-            /// <param name="loggerName">
-            ///     The logger name.
-            /// </param>
-            /// <param name="message">
-            ///     The message.
-            /// </param>
-            /// <param name="exception">
-            ///     The exception.
-            /// </param>
+
             protected override void Log(LoggerLevel loggerLevel, string loggerName, string message, Exception exception)
             {
                 LogLevel logLevel;

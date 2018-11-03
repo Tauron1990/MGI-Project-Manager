@@ -73,9 +73,7 @@ namespace Tauron.Application.Ioc
         [NotNull]
         public Type Export { get; }
 
-        [CanBeNull]
-        [UsedImplicitly]
-        public virtual string DebugName => ContractName;
+        [CanBeNull] [UsedImplicitly] public virtual string DebugName => ContractName;
 
         /// <summary>The get metadata.</summary>
         /// <returns>
@@ -103,8 +101,7 @@ namespace Tauron.Application.Ioc
         /// <value>The has metadata.</value>
         protected virtual bool HasMetadata => false;
 
-        [CanBeNull]
-        protected virtual LifetimeContextAttribute OverrideDefaultPolicy => null;
+        [CanBeNull] protected virtual LifetimeContextAttribute OverrideDefaultPolicy => null;
 
         [CanBeNull]
         internal LifetimeContextAttribute GetOverrideDefaultPolicy()

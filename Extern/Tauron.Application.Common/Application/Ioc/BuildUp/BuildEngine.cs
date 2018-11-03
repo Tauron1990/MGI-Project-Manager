@@ -118,7 +118,8 @@ namespace Tauron.Application.Ioc.BuildUp
         /// <returns>
         ///     The <see cref="object" />.
         /// </returns>
-        public object BuildUp([NotNull] IExport export, [CanBeNull] string contractName, [NotNull] ErrorTracer tracer, [CanBeNull] BuildParameter[] buildParameters)
+        public object BuildUp([NotNull] IExport export, [CanBeNull] string contractName, [NotNull] ErrorTracer tracer,
+            [CanBeNull] BuildParameter[] buildParameters)
         {
             if (export == null) throw new ArgumentNullException(nameof(export));
             if (tracer == null) throw new ArgumentNullException(nameof(tracer));
@@ -158,7 +159,8 @@ namespace Tauron.Application.Ioc.BuildUp
         /// <returns>
         ///     The <see cref="object" />.
         /// </returns>
-        public object BuildUp([NotNull] object toBuild, [NotNull] ErrorTracer errorTracer, [NotNull] BuildParameter[] buildParameters)
+        public object BuildUp([NotNull] object toBuild, [NotNull] ErrorTracer errorTracer,
+            [NotNull] BuildParameter[] buildParameters)
         {
             if (toBuild == null) throw new ArgumentNullException(nameof(toBuild));
             if (errorTracer == null) throw new ArgumentNullException(nameof(errorTracer));
@@ -203,7 +205,8 @@ namespace Tauron.Application.Ioc.BuildUp
         /// <returns>
         ///     The <see cref="object" />.
         /// </returns>
-        internal object BuildUp([NotNull] Type type, [CanBeNull] object[] constructorArguments, ErrorTracer errorTracer, [CanBeNull] BuildParameter[] buildParameters)
+        internal object BuildUp([NotNull] Type type, [CanBeNull] object[] constructorArguments, ErrorTracer errorTracer,
+            [CanBeNull] BuildParameter[] buildParameters)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             lock (type)

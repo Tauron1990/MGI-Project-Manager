@@ -138,7 +138,8 @@ namespace Tauron.Application.Implementation
 
         private static void RunApplication()
         {
-            Application = new System.Windows.Application {ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown};
+            Application = new System.Windows.Application
+                {ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown};
 
             WpfIuiControllerFactory.SetSynchronizationContext();
             _waiter.Set();

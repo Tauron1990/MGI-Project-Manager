@@ -64,13 +64,7 @@ namespace Tauron.Application.Converter
         {
         }
 
-        /// <summary>
-        ///     The value converter base.
-        /// </summary>
-        /// <typeparam name="TSource">
-        /// </typeparam>
-        /// <typeparam name="TDest">
-        /// </typeparam>
+
         protected abstract class ValueConverterBase<TSource, TDest> : IValueConverter
         {
             #region Properties
@@ -82,7 +76,8 @@ namespace Tauron.Application.Converter
             #region Public Methods and Operators
 
             [CanBeNull]
-            public virtual object Convert([NotNull] object value, [NotNull] Type targetType, [NotNull] object parameter, [NotNull] CultureInfo culture)
+            public virtual object Convert([NotNull] object value, [NotNull] Type targetType, [NotNull] object parameter,
+                [NotNull] CultureInfo culture)
             {
                 if (value is TDest && typeof(TSource) != typeof(TDest)) return value;
                 if (!(value is TSource)) return null;
@@ -91,7 +86,8 @@ namespace Tauron.Application.Converter
             }
 
             [CanBeNull]
-            public virtual object ConvertBack([NotNull] object value, [NotNull] Type targetType, [NotNull] object parameter, [NotNull] CultureInfo culture)
+            public virtual object ConvertBack([NotNull] object value, [NotNull] Type targetType,
+                [NotNull] object parameter, [NotNull] CultureInfo culture)
             {
                 if (!CanConvertBack || !(value is TDest)) return null;
 
@@ -100,7 +96,6 @@ namespace Tauron.Application.Converter
 
             #endregion
 
-            #region Methods
 
             protected abstract TDest Convert(TSource value);
 
@@ -108,8 +103,6 @@ namespace Tauron.Application.Converter
             {
                 return default;
             }
-
-            #endregion
         }
 
         #region Public Methods and Operators

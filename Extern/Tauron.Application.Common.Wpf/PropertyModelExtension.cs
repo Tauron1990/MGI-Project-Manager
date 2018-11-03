@@ -58,7 +58,8 @@ namespace Tauron.Application
                 GenericGenerator = new ProxyGenerator(new DefaultProxyBuilder(moduleScope));
             }
 
-            public ProxyGenerator Generate(ExportMetadata metadata, ImportMetadata[] imports, out IImportInterceptor interceptor)
+            public ProxyGenerator Generate(ExportMetadata metadata, ImportMetadata[] imports,
+                out IImportInterceptor interceptor)
             {
                 interceptor = null;
                 if (!typeof(ModelBase).IsAssignableFrom(metadata.Export.ImplementType)) return GenericGenerator;

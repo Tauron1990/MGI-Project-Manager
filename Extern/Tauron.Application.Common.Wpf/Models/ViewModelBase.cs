@@ -30,33 +30,29 @@ namespace Tauron.Application.Models
             get
             {
                 if (_isInDesignMode.HasValue) return _isInDesignMode.Value;
-                var dependencyPropertyDescriptor = DependencyPropertyDescriptor.FromProperty(DesignerProperties.IsInDesignModeProperty, typeof(FrameworkElement));
+                var dependencyPropertyDescriptor =
+                    DependencyPropertyDescriptor.FromProperty(DesignerProperties.IsInDesignModeProperty,
+                        typeof(FrameworkElement));
                 _isInDesignMode = (bool) dependencyPropertyDescriptor.Metadata.DefaultValue;
                 return _isInDesignMode.Value;
             }
         }
 
-        [NotNull]
-        protected Dictionary<string, ModelBase> ModelList { get; private set; }
+        [NotNull] protected Dictionary<string, ModelBase> ModelList { get; private set; }
+
+        [NotNull] [Inject] public ViewManager ViewManager { get; protected set; }
 
         [NotNull]
-        [Inject]
-        public ViewManager ViewManager { get; protected set; }
+        public static IDialogFactory Dialogs =>
+            _dialogs ?? (_dialogs = CommonApplication.Current.Container.Resolve<IDialogFactory>());
 
-        [NotNull]
-        public static IDialogFactory Dialogs => _dialogs ?? (_dialogs = CommonApplication.Current.Container.Resolve<IDialogFactory>());
+        [NotNull] public System.Windows.Application CurrentApplication => System.Windows.Application.Current;
 
-        [NotNull]
-        public System.Windows.Application CurrentApplication => System.Windows.Application.Current;
+        [NotNull] public Dispatcher SystemDispatcher => CurrentApplication.Dispatcher;
 
-        [NotNull]
-        public Dispatcher SystemDispatcher => CurrentApplication.Dispatcher;
+        [CanBeNull] public static IWindow MainWindow => CommonApplication.Current.MainWindow;
 
-        [CanBeNull]
-        public static IWindow MainWindow => CommonApplication.Current.MainWindow;
-
-        [NotNull]
-        public IUISynchronize Synchronize => UiSynchronize.Synchronize;
+        [NotNull] public IUISynchronize Synchronize => UiSynchronize.Synchronize;
 
         protected bool EditingInheritedModel { get; set; }
 
@@ -113,7 +109,8 @@ namespace Tauron.Application.Models
             return new LinkedProperty(this, name, target, customName);
         }
 
-        protected LinkedProperty LinkPropertyExp<T>(Expression<Func<T>> name, INotifyPropertyChanged target, string customName = null)
+        protected LinkedProperty LinkPropertyExp<T>(Expression<Func<T>> name, INotifyPropertyChanged target,
+            string customName = null)
         {
             return new LinkedProperty(this, PropertyHelper.ExtractPropertyName(name), target, customName);
         }
@@ -165,7 +162,50 @@ namespace Tauron.Application.Models
 
         protected override void OnErrorsChanged(string propertyName)
         {
-            CommonApplication.Scheduler.QueueTask(new UserTask(() => { Synchronize.Invoke(() => base.OnErrorsChanged(propertyName)); }, false));
+            CommonApplication.Scheduler.QueueTask(
+                new UserTask(() => { Synchronize.Invoke(() => base.OnErrorsChanged(propertyName)); }, false));
+        }
+
+        [PublicAPI]
+        protected class LinkedProperty : IDisposable
+        {
+            private readonly string _custom;
+            private ObservableObject _host;
+            private string _name;
+            private INotifyPropertyChanged _target;
+
+            public LinkedProperty(ObservableObject host, string name, INotifyPropertyChanged target, string custom)
+            {
+                _host = host;
+                _name = name;
+                _target = target;
+                _custom = custom;
+
+                _target.PropertyChanged += PropertyChangedMethod;
+            }
+
+            public void Dispose()
+            {
+                Stop();
+            }
+
+            private void PropertyChangedMethod(object sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName != _name) return;
+
+                _host.OnPropertyChangedExplicit(_custom ?? _name);
+            }
+
+            public void Stop()
+            {
+                if (_target == null) return;
+
+                _target.PropertyChanged -= PropertyChangedMethod;
+
+                _host = null;
+                _name = null;
+                _target = null;
+            }
         }
 
         [PublicAPI]

@@ -266,7 +266,8 @@ namespace Tauron
         /// <param name="path">
         ///     The path.
         /// </param>
-        public static void XmlSerialize([NotNull] this object graph, [NotNull] XmlSerializer formatter, [NotNull] string path)
+        public static void XmlSerialize([NotNull] this object graph, [NotNull] XmlSerializer formatter,
+            [NotNull] string path)
         {
             if (graph == null) throw new ArgumentNullException(nameof(graph));
             if (formatter == null) throw new ArgumentNullException(nameof(formatter));
@@ -313,7 +314,8 @@ namespace Tauron
         /// <param name="stream">
         ///     The stream.
         /// </param>
-        private static void InternalSerialize([NotNull] object graph, [NotNull] IFormatter formatter, [NotNull] Stream stream)
+        private static void InternalSerialize([NotNull] object graph, [NotNull] IFormatter formatter,
+            [NotNull] Stream stream)
         {
             if (graph == null) throw new ArgumentNullException(nameof(graph));
             if (formatter == null) throw new ArgumentNullException(nameof(formatter));

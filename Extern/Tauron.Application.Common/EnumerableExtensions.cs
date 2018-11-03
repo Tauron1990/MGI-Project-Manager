@@ -106,7 +106,8 @@ namespace Tauron
         /// <typeparam name="TValue">
         ///     Der Type der Items der Auflistung.
         /// </typeparam>
-        public static void Foreach<TValue>([NotNull] this IEnumerable<TValue> enumerator, [NotNull] Action<TValue> action)
+        public static void Foreach<TValue>([NotNull] this IEnumerable<TValue> enumerator,
+            [NotNull] Action<TValue> action)
         {
             if (enumerator == null) throw new ArgumentNullException(nameof(enumerator));
             if (action == null) throw new ArgumentNullException(nameof(action));

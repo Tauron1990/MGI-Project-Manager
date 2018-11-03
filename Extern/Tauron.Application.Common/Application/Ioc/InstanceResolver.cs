@@ -12,7 +12,8 @@ namespace Tauron.Application.Ioc
         private TMetadata _metadata;
         private Func<object> _metadataFactory;
 
-        public InstanceResolver([NotNull] Func<BuildParameter[], object> resolver, [NotNull] Func<object> metadataFactory,
+        public InstanceResolver([NotNull] Func<BuildParameter[], object> resolver,
+            [NotNull] Func<object> metadataFactory,
             [NotNull] Type realType)
         {
             RealType = realType ?? throw new ArgumentNullException(nameof(realType));
@@ -21,8 +22,7 @@ namespace Tauron.Application.Ioc
         }
 
 
-        [NotNull]
-        public Type RealType { get; private set; }
+        [NotNull] public Type RealType { get; private set; }
 
         [NotNull]
         public TMetadata Metadata

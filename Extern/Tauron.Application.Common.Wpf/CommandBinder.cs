@@ -125,7 +125,9 @@ namespace Tauron.Application
                         if (e == null) throw new ArgumentNullException(nameof(e));
                         var args = _isParameter ? new[] {e.Parameter} : new object[0];
 
-                        e.CanExecute = _isAsync ? _method.Invoke<Task<bool>>(_firstArg, args).Result : _method.Invoke<bool>(_firstArg, args);
+                        e.CanExecute = _isAsync
+                            ? _method.Invoke<Task<bool>>(_firstArg, args).Result
+                            : _method.Invoke<bool>(_firstArg, args);
                     }
 
                     /// <summary>
@@ -328,7 +330,9 @@ namespace Tauron.Application
                     }
 
                     if (del != null) binding.Executed += new TaskFactory(del, scheduler, _isSync).Handler;
-                    else CommonWpfConstans.LogCommon(false, "CommandBinder: No Compatible method Found: {0}", commandName);
+                    else
+                        CommonWpfConstans.LogCommon(false, "CommandBinder: No Compatible method Found: {0}",
+                            commandName);
 
                     if (del2 != null) binding.CanExecute += del2;
                 }
@@ -355,7 +359,8 @@ namespace Tauron.Application
                 #region Methods
 
                 [CanBeNull]
-                private static CommandBinding SetCommandBinding([CanBeNull] DependencyObject obj, [CanBeNull] ICommand command)
+                private static CommandBinding SetCommandBinding([CanBeNull] DependencyObject obj,
+                    [CanBeNull] ICommand command)
                 {
                     while (obj != null && !(obj is Window || obj is UserControl || GetCommandScope(obj)))
                     {
@@ -398,7 +403,8 @@ namespace Tauron.Application
 
                     var mainAttr = main.Method.GetCustomAttribute<CommandTargetAttribute>();
                     MemberInfo second = null;
-                    foreach (var m in targetType.GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+                    foreach (var m in targetType.GetMembers(BindingFlags.Instance | BindingFlags.Public |
+                                                            BindingFlags.NonPublic))
                     {
                         var attr = m.GetCustomAttribute<CommandTargetAttribute>();
                         if (attr == null) continue;
@@ -474,8 +480,7 @@ namespace Tauron.Application
 
                 #region Properties
 
-                [NotNull]
-                private WeakReference<DependencyObject> Target { get; }
+                [NotNull] private WeakReference<DependencyObject> Target { get; }
 
                 #endregion
 
@@ -502,7 +507,8 @@ namespace Tauron.Application
                                     var typeName = tarType.ToString();
                                     var propName = _prop == null ? CustomName + "(Not Found)" : _prop.Name;
 
-                                    CommonWpfConstans.LogCommon(false, "CommandBinder: FoundetProperty Incompatible: {0}:{1}", typeName, propName);
+                                    CommonWpfConstans.LogCommon(false,
+                                        "CommandBinder: FoundetProperty Incompatible: {0}:{1}", typeName, propName);
                                     _prop = null;
                                 }
                                 else
@@ -639,7 +645,8 @@ namespace Tauron.Application
 
                 if (_searcher == null)
                 {
-                    _searcher = new PropertySearcher(Source ?? throw new InvalidOperationException(), customProperty, targetCommand);
+                    _searcher = new PropertySearcher(Source ?? throw new InvalidOperationException(), customProperty,
+                        targetCommand);
                 }
                 else
                 {
