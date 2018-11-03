@@ -5,13 +5,13 @@ namespace Tauron.Application.Models.Rules
 {
     public sealed class TimeSpanParsingRule : ModelRule
     {
-        private readonly bool   _mustBePositive;
-        private          string _message;
+        private readonly bool _mustBePositive;
+        private string _message;
 
         public TimeSpanParsingRule(bool mustBePositive = true)
         {
             _mustBePositive = mustBePositive;
-            Message         = () => _message;
+            Message = () => _message;
         }
 
         public override bool IsValidValue(object obj, ValidatorContext context)

@@ -54,14 +54,14 @@ namespace Tauron.Application.Controls
             : base(adornedElement)
         {
             _collection = new VisualCollection(this);
-            _textBox    = new TextBox();
-            _textBlock  = adornedElement;
+            _textBox = new TextBox();
+            _textBlock = adornedElement;
 
             var binding = new Binding("Text") {Source = adornedElement};
             _textBox.SetBinding(TextBox.TextProperty, binding);
-            _textBox.AcceptsReturn =  true;
-            _textBox.MaxLength     =  adornedElement.MaxLength;
-            _textBox.KeyUp         += TextBoxKeyUpEventHandler;
+            _textBox.AcceptsReturn = true;
+            _textBox.MaxLength = adornedElement.MaxLength;
+            _textBox.KeyUp += TextBoxKeyUpEventHandler;
 
             _collection.Add(_textBox);
         }
@@ -119,7 +119,7 @@ namespace Tauron.Application.Controls
         protected override Size ArrangeOverride(Size finalSize)
         {
             _textBox.Arrange(
-                             new Rect(0, 0, _textBlock.DesiredSize.Width + 50, _textBlock.DesiredSize.Height * 1.5));
+                new Rect(0, 0, _textBlock.DesiredSize.Width + 50, _textBlock.DesiredSize.Height * 1.5));
             _textBox.Focus();
             return finalSize;
         }
@@ -147,10 +147,10 @@ namespace Tauron.Application.Controls
         protected override void OnRender(DrawingContext drawingContext)
         {
             drawingContext.DrawRectangle(
-                                         null,
-                                         new Pen {Brush = Brushes.Gold, Thickness = 2},
-                                         new Rect(0, 0, _textBlock.DesiredSize.Width + 50,
-                                                  _textBlock.DesiredSize.Height * 1.5));
+                null,
+                new Pen {Brush = Brushes.Gold, Thickness = 2},
+                new Rect(0, 0, _textBlock.DesiredSize.Width + 50,
+                    _textBlock.DesiredSize.Height * 1.5));
         }
 
         private void TextBoxKeyUpEventHandler([NotNull] object sender, [NotNull] KeyEventArgs e)

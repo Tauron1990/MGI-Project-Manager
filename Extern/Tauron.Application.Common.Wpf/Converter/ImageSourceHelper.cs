@@ -23,7 +23,7 @@ namespace Tauron.Application.Converter
             if (imageSource != null) return false;
 
             GetLogger().Warn("InmageSource are null. {0}",
-                             provider.GetService<IProvideValueTarget>().TargetObject);
+                provider.GetService<IProvideValueTarget>().TargetObject);
 
 
             return true;

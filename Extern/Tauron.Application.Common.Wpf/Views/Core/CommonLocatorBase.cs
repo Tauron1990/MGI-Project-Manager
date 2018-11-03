@@ -13,10 +13,7 @@ namespace Tauron.Application.Views.Core
     {
         private Dictionary<string, ExportNameHelper> _views = new Dictionary<string, ExportNameHelper>();
 
-        public void Register(ExportNameHelper export)
-        {
-            _views[export.Name] = export;
-        }
+        public void Register(ExportNameHelper export) => _views[export.Name] = export;
 
         public DependencyObject CreateViewForModel(object model)
         {
@@ -32,8 +29,8 @@ namespace Tauron.Application.Views.Core
             if (name == null) return null;
 
             var temp = NamingHelper.CreatePossibilyNames(name)
-                                   .Select(Match)
-                                   .FirstOrDefault(view => view != null);
+                .Select(Match)
+                .FirstOrDefault(view => view != null);
 
             if (temp != null) return temp;
 
@@ -43,10 +40,7 @@ namespace Tauron.Application.Views.Core
             return temp;
         }
 
-        public DependencyObject CreateView(string name)
-        {
-            return Match(name);
-        }
+        public DependencyObject CreateView(string name) => Match(name);
 
         public IWindow CreateWindow(string name, object[] parameters)
         {
@@ -57,15 +51,9 @@ namespace Tauron.Application.Views.Core
 
         public abstract Type GetViewType(string name);
 
-        public IEnumerable<DependencyObject> GetAllViews(string name)
-        {
-            return GetAllViewsImpl(name).OrderBy(meta => meta.Metadata.Order).Select(i => i.Resolve());
-        }
+        public IEnumerable<DependencyObject> GetAllViews(string name) => GetAllViewsImpl(name).OrderBy(meta => meta.Metadata.Order).Select(i => i.Resolve());
 
-        public string GetName(ViewModelBase model)
-        {
-            return GetName(model.GetType());
-        }
+        public string GetName(ViewModelBase model) => GetName(model.GetType());
 
 
         [NotNull]

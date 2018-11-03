@@ -117,8 +117,8 @@ namespace Tauron.Application.Aop
         /// <param name="context">
         ///     The context.
         /// </param>
-        protected virtual bool MethodException([NotNull] IInvocation   invocation, [NotNull] Exception exception,
-                                               [NotNull] ObjectContext context)
+        protected virtual bool MethodException([NotNull] IInvocation invocation, [NotNull] Exception exception,
+            [NotNull] ObjectContext context)
         {
             if (invocation == null) throw new ArgumentNullException(nameof(invocation));
             if (exception == null) throw new ArgumentNullException(nameof(exception));

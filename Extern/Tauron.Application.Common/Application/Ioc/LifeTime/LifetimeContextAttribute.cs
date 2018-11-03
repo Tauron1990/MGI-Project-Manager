@@ -50,8 +50,8 @@ namespace Tauron.Application.Ioc.LifeTime
             : base(AopConstants.LiftimeMetadataName, null)
         {
             if (lifeTimeType == null) throw new ArgumentNullException(nameof(lifeTimeType));
-            LifeTimeType  = lifeTimeType;
-            ShareLiftime  = true;
+            LifeTimeType = lifeTimeType;
+            ShareLiftime = true;
             InternalValue = this;
         }
 

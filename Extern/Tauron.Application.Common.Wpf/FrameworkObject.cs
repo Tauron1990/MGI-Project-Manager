@@ -15,6 +15,49 @@ namespace Tauron.Application
     [PublicAPI]
     public sealed class FrameworkObject : IWeakReference
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="FrameworkObject" /> class.
+        ///     Initialisiert eine neue Instanz der <see cref="FrameworkObject" /> Klasse.
+        /// </summary>
+        /// <param name="obj">
+        ///     The obj.
+        /// </param>
+        /// <param name="isWeak">
+        ///     The is weak.
+        /// </param>
+        public FrameworkObject([CanBeNull] object obj, bool isWeak = true)
+        {
+            var fe = obj as FrameworkElement;
+            var fce = obj as FrameworkContentElement;
+
+            _isFe = fe != null;
+            _isFce = fce != null;
+            IsValid = _isFce || _isFe;
+
+            // ReSharper disable AssignNullToNotNullAttribute
+            if (_isFe) _fe = new ElementReference<FrameworkElement>(fe, isWeak);
+            else if (_isFce) _fce = new ElementReference<FrameworkContentElement>(fce, isWeak);
+            // ReSharper restore AssignNullToNotNullAttribute
+        }
+
+        #endregion
+
+        #region Explicit Interface Properties
+
+        bool IWeakReference.IsAlive
+        {
+            get
+            {
+                if (_isFe) return _fe.IsAlive;
+
+                return _isFce && _fce.IsAlive;
+            }
+        }
+
+        #endregion
+
         [DebuggerStepThrough]
         private class ElementReference<TReference> : IWeakReference
             where TReference : class
@@ -36,7 +79,7 @@ namespace Tauron.Application
                 if (reference == null) throw new ArgumentNullException(nameof(reference));
 
                 if (isWeak) _weakRef = new WeakReference<TReference>(reference);
-                else _reference      = reference;
+                else _reference = reference;
             }
 
             #endregion
@@ -61,49 +104,6 @@ namespace Tauron.Application
             #endregion
         }
 
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="FrameworkObject" /> class.
-        ///     Initialisiert eine neue Instanz der <see cref="FrameworkObject" /> Klasse.
-        /// </summary>
-        /// <param name="obj">
-        ///     The obj.
-        /// </param>
-        /// <param name="isWeak">
-        ///     The is weak.
-        /// </param>
-        public FrameworkObject([CanBeNull] object obj, bool isWeak = true)
-        {
-            var fe  = obj as FrameworkElement;
-            var fce = obj as FrameworkContentElement;
-
-            _isFe   = fe != null;
-            _isFce  = fce != null;
-            IsValid = _isFce || _isFe;
-
-            // ReSharper disable AssignNullToNotNullAttribute
-            if (_isFe) _fe        = new ElementReference<FrameworkElement>(fe, isWeak);
-            else if (_isFce) _fce = new ElementReference<FrameworkContentElement>(fce, isWeak);
-            // ReSharper restore AssignNullToNotNullAttribute
-        }
-
-        #endregion
-
-        #region Explicit Interface Properties
-
-        bool IWeakReference.IsAlive
-        {
-            get
-            {
-                if (_isFe) return _fe.IsAlive;
-
-                return _isFce && _fce.IsAlive;
-            }
-        }
-
-        #endregion
-
         #region Fields
 
         private readonly ElementReference<FrameworkContentElement> _fce;
@@ -125,10 +125,10 @@ namespace Tauron.Application
             {
                 if (!IsValid) return;
 
-                FrameworkElement        fe;
+                FrameworkElement fe;
                 FrameworkContentElement fce;
 
-                if (TryGetFrameworkElement(out fe)) fe.DataContextChanged               += value;
+                if (TryGetFrameworkElement(out fe)) fe.DataContextChanged += value;
                 else if (TryGetFrameworkContentElement(out fce)) fce.DataContextChanged += value;
             }
 
@@ -136,10 +136,10 @@ namespace Tauron.Application
             {
                 if (!IsValid) return;
 
-                FrameworkElement        fe;
+                FrameworkElement fe;
                 FrameworkContentElement fce;
 
-                if (TryGetFrameworkElement(out fe)) fe.DataContextChanged               -= value;
+                if (TryGetFrameworkElement(out fe)) fe.DataContextChanged -= value;
                 else if (TryGetFrameworkContentElement(out fce)) fce.DataContextChanged -= value;
             }
         }
@@ -151,10 +151,10 @@ namespace Tauron.Application
             {
                 if (!IsValid) return;
 
-                FrameworkElement        fe;
+                FrameworkElement fe;
                 FrameworkContentElement fce;
 
-                if (TryGetFrameworkElement(out fe)) fe.Loaded               += value;
+                if (TryGetFrameworkElement(out fe)) fe.Loaded += value;
                 else if (TryGetFrameworkContentElement(out fce)) fce.Loaded += value;
             }
 
@@ -162,9 +162,9 @@ namespace Tauron.Application
             {
                 if (!IsValid) return;
 
-                FrameworkElement        fe;
+                FrameworkElement fe;
                 FrameworkContentElement fce;
-                if (TryGetFrameworkElement(out fe)) fe.Loaded               -= value;
+                if (TryGetFrameworkElement(out fe)) fe.Loaded -= value;
                 else if (TryGetFrameworkContentElement(out fce)) fce.Loaded -= value;
             }
         }
@@ -181,7 +181,7 @@ namespace Tauron.Application
             {
                 if (!IsValid) return null;
 
-                FrameworkElement        fe;
+                FrameworkElement fe;
                 FrameworkContentElement fce;
 
                 if (TryGetFrameworkElement(out fe)) return fe.DataContext;
@@ -193,10 +193,10 @@ namespace Tauron.Application
             {
                 if (!IsValid) return;
 
-                FrameworkElement        fe;
+                FrameworkElement fe;
                 FrameworkContentElement fce;
 
-                if (TryGetFrameworkElement(out fe)) fe.DataContext               = value;
+                if (TryGetFrameworkElement(out fe)) fe.DataContext = value;
                 else if (TryGetFrameworkContentElement(out fce)) fce.DataContext = value;
             }
         }
@@ -224,7 +224,7 @@ namespace Tauron.Application
             {
                 if (!IsValid) return null;
 
-                FrameworkElement        fe;
+                FrameworkElement fe;
                 FrameworkContentElement fce;
 
                 if (TryGetFrameworkElement(out fe)) return fe.Parent;

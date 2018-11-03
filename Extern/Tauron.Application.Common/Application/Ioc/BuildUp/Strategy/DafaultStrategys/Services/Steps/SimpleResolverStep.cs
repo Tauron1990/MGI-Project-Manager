@@ -5,7 +5,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
 {
     public sealed class SimpleResolverStep : InjectorStep
     {
-        private         string _error;
+        private string _error;
         public override string ErrorMessage => _error;
 
         public override StepId Id => StepIds.SimpleResolver;
@@ -14,7 +14,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
         {
             _error = nameof(SimpleResolverStep);
 
-            var export            = context.ReflectionContext.FindExport();
+            var export = context.ReflectionContext.FindExport();
             var reflectionContext = context.ReflectionContext;
 
             if (export == null)
@@ -30,18 +30,18 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
 
             if (isExportFactory)
             {
-                factoryType                    = currentType.GenericTypeArguments[0];
+                factoryType = currentType.GenericTypeArguments[0];
                 reflectionContext.MetadataType = currentType.GenericTypeArguments[1];
                 reflectionContext.Metadata =
                     context.ReflectionContext.MetadataFactory.CreateMetadata(context.ReflectionContext.MetadataType,
-                                                                             export.Metadata);
+                        export.Metadata);
             }
 
             context.Resolver = new SimpleResolver(export, context.Container, isExportFactory, factoryType,
-                                                  reflectionContext.Metadata,
-                                                  reflectionContext.MetadataType,
-                                                  reflectionContext.InterceptorCallback,
-                                                  currentType == typeof(ExportDescriptor), reflectionContext.ResolverExtensions);
+                reflectionContext.Metadata,
+                reflectionContext.MetadataType,
+                reflectionContext.InterceptorCallback,
+                currentType == typeof(ExportDescriptor), reflectionContext.ResolverExtensions);
             return base.OnExecute(context);
         }
     }

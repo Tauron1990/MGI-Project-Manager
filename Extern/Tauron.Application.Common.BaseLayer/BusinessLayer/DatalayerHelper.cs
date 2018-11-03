@@ -9,13 +9,6 @@ namespace Tauron.Application.Common.BaseLayer.BusinessLayer
 {
     public static class DatalayerHelper
     {
-        private class InitInfo
-        {
-            public MethodInfo MethodInfo { get; set; }
-
-            public List<Type> Type { get; } = new List<Type>();
-        }
-
         private static readonly Dictionary<string, InitInfo> Infos = new Dictionary<string, InitInfo>();
 
         public static void InitializeRule(IRuleBase rule, RepositoryFactory factory)
@@ -27,10 +20,10 @@ namespace Tauron.Application.Common.BaseLayer.BusinessLayer
             var info = GetOrCreate(rule.GetType(), rule.InitializeMethod);
 
             info.MethodInfo.Invoke(rule, info.Type.Select(t =>
-                                                          {
-                                                              if (t == typeof(RepositoryFactory)) return factory;
-                                                              return factory.GetRepository(t);
-                                                          }).ToArray());
+            {
+                if (t == typeof(RepositoryFactory)) return factory;
+                return factory.GetRepository(t);
+            }).ToArray());
         }
 
         private static InitInfo GetOrCreate(Type type, string name)
@@ -46,6 +39,13 @@ namespace Tauron.Application.Common.BaseLayer.BusinessLayer
             Infos[key] = initInfo;
 
             return initInfo;
+        }
+
+        private class InitInfo
+        {
+            public MethodInfo MethodInfo { get; set; }
+
+            public List<Type> Type { get; } = new List<Type>();
         }
     }
 }

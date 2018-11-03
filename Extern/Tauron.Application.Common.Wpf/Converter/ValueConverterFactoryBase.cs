@@ -16,6 +16,20 @@ namespace Tauron.Application.Converter
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public abstract class ValueConverterFactoryBase : MarkupExtension
     {
+        #region Public Properties
+
+        [CanBeNull]
+        public IServiceProvider ServiceProvider { get; set; }
+
+        #endregion
+
+        #region Methods
+
+        [NotNull]
+        protected abstract IValueConverter Create();
+
+        #endregion
+
         private class FuncCommonConverter<TSource, TDest> : ValueConverterBase<TSource, TDest>
         {
             private readonly Func<TSource, TDest> _func;
@@ -25,16 +39,25 @@ namespace Tauron.Application.Converter
                 _func = func;
             }
 
-            protected override TDest Convert(TSource value) => _func(value);
+            protected override TDest Convert(TSource value)
+            {
+                return _func(value);
+            }
         }
 
         private class FuncStringConverter<TType> : StringConverterBase<TType>
         {
             private readonly Func<TType, string> _converter;
 
-            public FuncStringConverter(Func<TType, string> converter) => _converter = converter;
+            public FuncStringConverter(Func<TType, string> converter)
+            {
+                _converter = converter;
+            }
 
-            protected override string Convert(TType value) => _converter(value);
+            protected override string Convert(TType value)
+            {
+                return _converter(value);
+            }
         }
 
         protected abstract class StringConverterBase<TSource> : ValueConverterBase<TSource, string>
@@ -83,24 +106,23 @@ namespace Tauron.Application.Converter
 
             protected virtual TSource ConvertBack(TDest value)
             {
-                return default(TSource);
+                return default;
             }
 
             #endregion
         }
 
-        #region Public Properties
-
-        [CanBeNull]
-        public IServiceProvider ServiceProvider { get; set; }
-
-        #endregion
-
         #region Public Methods and Operators
 
-        protected static IValueConverter CreateStringConverter<TType>(Func<TType, string> converter) => new FuncStringConverter<TType>(converter);
+        protected static IValueConverter CreateStringConverter<TType>(Func<TType, string> converter)
+        {
+            return new FuncStringConverter<TType>(converter);
+        }
 
-        protected static IValueConverter CreateCommonConverter<TSource, TDest>(Func<TSource, TDest> converter) => new FuncCommonConverter<TSource, TDest>(converter);
+        protected static IValueConverter CreateCommonConverter<TSource, TDest>(Func<TSource, TDest> converter)
+        {
+            return new FuncCommonConverter<TSource, TDest>(converter);
+        }
 
         /// <summary>
         ///     Gibt bei der Implementierung in einer abgeleiteten Klasse ein Objekt zurück, das als Wert der Zieleigenschaft für
@@ -118,13 +140,6 @@ namespace Tauron.Application.Converter
 
             return Create();
         }
-
-        #endregion
-
-        #region Methods
-
-        [NotNull]
-        protected abstract IValueConverter Create();
 
         #endregion
     }

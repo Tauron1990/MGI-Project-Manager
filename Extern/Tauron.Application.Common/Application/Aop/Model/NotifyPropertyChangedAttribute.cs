@@ -32,7 +32,7 @@ namespace Tauron.Application.Aop.Model
         public NotifyPropertyChangedAttribute()
         {
             AlternativePropertyChangedName = "OnPropertyChanged";
-            Order                          = 900;
+            Order = 900;
         }
 
         #endregion
@@ -74,20 +74,20 @@ namespace Tauron.Application.Aop.Model
             {
                 var info =
                     target.GetType()
-                          .GetMethods(AopConstants.DefaultBindingFlags)
-                          .FirstOrDefault(
-                                          metodInfo =>
-                                              metodInfo.Name == AlternativePropertyChangedName
-                                           && metodInfo.ReturnType == typeof(void));
+                        .GetMethods(AopConstants.DefaultBindingFlags)
+                        .FirstOrDefault(
+                            metodInfo =>
+                                metodInfo.Name == AlternativePropertyChangedName
+                                && metodInfo.ReturnType == typeof(void));
                 if (info != null && info.GetParameters().Length == 1)
                 {
                     var parameterType = info.GetParameters()[0].ParameterType;
                     if (parameterType == typeof(PropertyChangedEventArgs)) _eventInvoker = s => info.Invoke(target, new PropertyChangedEventArgs(s));
-                    else if (parameterType == typeof(string)) _eventInvoker              = s => info.Invoke(target, s);
+                    else if (parameterType == typeof(string)) _eventInvoker = s => info.Invoke(target, s);
                     else
                         CommonConstants.LogCommon(false, "AOP Module: No PropertyChanged Method Found: Class:{0} AltName:{1}",
-                                                  target,
-                                                  AlternativePropertyChangedName);
+                            target,
+                            AlternativePropertyChangedName);
                 }
             }
 
@@ -112,7 +112,7 @@ namespace Tauron.Application.Aop.Model
             if (_eventInvoker == null) return;
 
             if (invocation.Method.Name.StartsWith(AopConstants.PropertySetter, StringComparison.Ordinal)
-             && invocation.Method.IsSpecialName) _eventInvoker(invocation.Method.Name.Remove(0, AopConstants.PropertySetter.Length));
+                && invocation.Method.IsSpecialName) _eventInvoker(invocation.Method.Name.Remove(0, AopConstants.PropertySetter.Length));
         }
 
         #endregion

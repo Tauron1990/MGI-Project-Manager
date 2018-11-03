@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace Tauron.Application.Common.BaseLayer.Data
@@ -20,5 +21,7 @@ namespace Tauron.Application.Common.BaseLayer.Data
         public void Remove(TEntity entity) => _database.Remove(entity);
 
         public void Add(TEntity entity) => _database.Add(entity);
+
+        public void AddRange(IEnumerable<TEntity> newEntities) => _database.AddRange(newEntities);
     }
 }

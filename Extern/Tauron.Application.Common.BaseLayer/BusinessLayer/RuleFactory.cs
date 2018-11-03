@@ -14,11 +14,9 @@ namespace Tauron.Application.Common.BaseLayer.BusinessLayer
     {
         private readonly IDictionary<string, IRuleBase> _cache = new Dictionary<string, IRuleBase>();
 
-        [InjectRepositoryFactory]
-        private RepositoryFactory _repositoryFactory;
+        [InjectRepositoryFactory] private RepositoryFactory _repositoryFactory;
 
-        [Inject(typeof(IRuleBase))]
-        private InstanceResolver<IRuleBase, IRuleMetadata>[] _rules;
+        [Inject(typeof(IRuleBase))] private InstanceResolver<IRuleBase, IRuleMetadata>[] _rules;
 
         private IRuleBase GetOrCreate(string name)
         {
@@ -66,12 +64,9 @@ namespace Tauron.Application.Common.BaseLayer.BusinessLayer
         {
             var keyBuilder = new StringBuilder();
 
-            foreach (var name in names)
-            {
-                keyBuilder.Append(name);
-            }
+            foreach (var name in names) keyBuilder.Append(name);
 
-            var                            key = keyBuilder.ToString();
+            var key = keyBuilder.ToString();
             CompositeRule<TInput, TOutput> compositeule;
 
             if (_cache.TryGetValue(key, out var cache))
@@ -81,7 +76,7 @@ namespace Tauron.Application.Common.BaseLayer.BusinessLayer
             else
             {
                 compositeule = new CompositeRule<TInput, TOutput>(names.Select(GetOrCreate));
-                _cache[key]  = compositeule;
+                _cache[key] = compositeule;
             }
 
             DatalayerHelper.InitializeRule(compositeule, _repositoryFactory);

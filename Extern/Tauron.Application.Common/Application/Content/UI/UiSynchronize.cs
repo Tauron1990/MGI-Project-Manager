@@ -49,6 +49,8 @@ namespace Tauron.Application
         /// </returns>
         TReturn Invoke<TReturn>([NotNull] Func<TReturn> action);
 
+        bool CheckAccess { get; }
+
         #endregion
     }
 

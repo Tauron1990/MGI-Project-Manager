@@ -26,7 +26,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         public ListResolver(IEnumerable<IResolver> resolvers, Type target)
         {
             this.resolvers = resolvers;
-            this.target    = target;
+            this.target = target;
         }
 
         #endregion
@@ -61,14 +61,14 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
                 }
 
                 errorTracer.Exceptional = true;
-                errorTracer.Exception   = new InvalidOperationException(target + " is Not Compatible");
+                errorTracer.Exception = new InvalidOperationException(target + " is Not Compatible");
 
                 return null;
             }
             catch (Exception e)
             {
                 errorTracer.Exceptional = true;
-                errorTracer.Exception   = e;
+                errorTracer.Exception = e;
                 return null;
             }
         }

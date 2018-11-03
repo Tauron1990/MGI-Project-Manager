@@ -101,9 +101,9 @@ namespace Tauron.Application.Help
 
             window?.Activate();
 
-            window             =  GetHelpView();
-            window.Closed      += (sender, e) => _windowRef = null;
-            window.DataContext =  GetHelpViewModel(filePath, topic, group);
+            window = GetHelpView();
+            window.Closed += (sender, e) => _windowRef = null;
+            window.DataContext = GetHelpViewModel(filePath, topic, group);
             window.Show();
             _windowRef = window;
         }

@@ -23,8 +23,7 @@ namespace Tauron.Application.Implement
         #region Fields
 
         /// <summary>The _commands.</summary>
-        [Inject]
-        private readonly List<ICommandLineCommand> _commands = new List<ICommandLineCommand>();
+        [Inject] private readonly List<ICommandLineCommand> _commands = new List<ICommandLineCommand>();
 
         #endregion
 

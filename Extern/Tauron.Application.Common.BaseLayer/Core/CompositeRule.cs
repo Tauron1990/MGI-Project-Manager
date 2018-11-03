@@ -17,12 +17,12 @@ namespace Tauron.Application.Common.BaseLayer.Core
 
         public override object GenericAction(object input)
         {
-            return input == null ? Run(default(TInput)) : Run((TInput) input);
+            return input == null ? Run(default) : Run((TInput) input);
         }
 
         void IBusinessRule.Action()
         {
-            Run(default(TInput));
+            Run(default);
         }
 
         void IIBusinessRule<TInput>.Action(TInput input)
@@ -41,10 +41,7 @@ namespace Tauron.Application.Common.BaseLayer.Core
 
             RepositoryFactory = factory;
 
-            foreach (var rule in _rules)
-            {
-                DatalayerHelper.InitializeRule(rule, factory);
-            }
+            foreach (var rule in _rules) DatalayerHelper.InitializeRule(rule, factory);
         }
 
         private TOutput Run(TInput input)
@@ -52,7 +49,7 @@ namespace Tauron.Application.Common.BaseLayer.Core
             using (var db = RepositoryFactory.EnterCompositeMode())
             {
                 object output = input;
-                var    change = false;
+                var change = false;
 
                 foreach (var ruleBase in _rules)
                 {
@@ -60,7 +57,7 @@ namespace Tauron.Application.Common.BaseLayer.Core
                     if (ruleBase.Error)
                     {
                         SetError(ruleBase.Errors);
-                        return default(TOutput);
+                        return default;
                     }
 
                     if (tempObj == RuleNull.Null) continue;
@@ -71,7 +68,7 @@ namespace Tauron.Application.Common.BaseLayer.Core
 
                 db.SaveChanges();
 
-                if (!change || output == null) return default(TOutput);
+                if (!change || output == null) return default;
 
                 return (TOutput) output;
             }

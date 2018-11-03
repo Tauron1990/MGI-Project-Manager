@@ -20,12 +20,62 @@ namespace Tauron.Application
     [PublicAPI]
     public static class CommandBinder
     {
+        #region Public Properties
+
+        /// <summary>Gets or sets a value indicating whether auto register.</summary>
+        public static bool AutoRegister { get; set; }
+
+        #endregion
+
         // [DebuggerNonUserCode]
         private class CommandLinker : PipelineBase
         {
+            #region Constructors and Destructors
+
+            public CommandLinker([NotNull] DependencyObject element)
+                : base(element, false)
+            {
+            }
+
+            #endregion
+
+            #region Public Properties
+
+            /// <summary>Gets or sets the command target.</summary>
+            [CanBeNull]
+            public string CommandTarget { get; set; }
+
+            #endregion
+
             //[DebuggerNonUserCode]
             private class CommandFactory
             {
+                #region Fields
+
+                private bool _isSync;
+
+                #endregion
+
+                #region Constructors and Destructors
+
+                /// <summary>
+                ///     Initializes a new instance of the <see cref="CommandFactory" /> class.
+                ///     Initialisiert eine neue Instanz der <see cref="CommandFactory" /> Klasse.
+                /// </summary>
+                /// <param name="target">
+                ///     The target.
+                /// </param>
+                /// <param name="name">
+                ///     The name.
+                /// </param>
+                public CommandFactory([NotNull] WeakReference target, [NotNull] string name)
+                {
+                    Target = target ?? throw new ArgumentNullException(nameof(target));
+                    Name = name ?? throw new ArgumentNullException(nameof(name));
+                }
+
+                #endregion
+
                 //[DebuggerNonUserCode]
                 private class ParameterMapper
                 {
@@ -179,32 +229,6 @@ namespace Tauron.Application
                     }
                 }
 
-                #region Fields
-
-                private bool _isSync;
-
-                #endregion
-
-                #region Constructors and Destructors
-
-                /// <summary>
-                ///     Initializes a new instance of the <see cref="CommandFactory" /> class.
-                ///     Initialisiert eine neue Instanz der <see cref="CommandFactory" /> Klasse.
-                /// </summary>
-                /// <param name="target">
-                ///     The target.
-                /// </param>
-                /// <param name="name">
-                ///     The name.
-                /// </param>
-                public CommandFactory([NotNull] WeakReference target, [NotNull] string name)
-                {
-                    Target = target ?? throw new ArgumentNullException(nameof(target));
-                    Name = name ?? throw new ArgumentNullException(nameof(name));
-                }
-
-                #endregion
-
                 #region Public Properties
 
                 /// <summary>Gets the last command.</summary>
@@ -281,12 +305,9 @@ namespace Tauron.Application
 
                     ExecutedRoutedEventHandler del = null;
                     if (pair.Item1 != null)
-                    {
                         del =
                             Delegate.CreateDelegate(typeof(ExecutedRoutedEventHandler), target, pair.Item1, false)
                                 .As<ExecutedRoutedEventHandler>() ?? new ParameterMapper(pair.Item1, target).Execute;
-
-                    }
 
                     CanExecuteRoutedEventHandler del2 = null;
                     if (pair.Item2 != null)
@@ -424,26 +445,6 @@ namespace Tauron.Application
             //[DebuggerNonUserCode]
             private class PropertySearcher
             {
-                #region Enums
-
-                [Flags]
-                private enum PropertyFlags
-                {
-                    /// <summary>The none.</summary>
-                    None = 0,
-
-                    /// <summary>The custom name.</summary>
-                    CustomName = 1,
-
-                    /// <summary>The command.</summary>
-                    Command = 2,
-
-                    /// <summary>The all.</summary>
-                    All = 3
-                }
-
-                #endregion
-
                 #region Constructors and Destructors
 
                 /// <summary>
@@ -521,6 +522,26 @@ namespace Tauron.Application
 
                 #endregion
 
+                #region Enums
+
+                [Flags]
+                private enum PropertyFlags
+                {
+                    /// <summary>The none.</summary>
+                    None = 0,
+
+                    /// <summary>The custom name.</summary>
+                    CustomName = 1,
+
+                    /// <summary>The command.</summary>
+                    Command = 2,
+
+                    /// <summary>The all.</summary>
+                    All = 3
+                }
+
+                #endregion
+
                 #region Fields
 
                 private PropertyFlags _changedFlags;
@@ -567,23 +588,6 @@ namespace Tauron.Application
 
                 #endregion
             }
-
-            #region Constructors and Destructors
-
-            public CommandLinker([NotNull] DependencyObject element)
-                : base(element, false)
-            {
-            }
-
-            #endregion
-
-            #region Public Properties
-
-            /// <summary>Gets or sets the command target.</summary>
-            [CanBeNull]
-            public string CommandTarget { get; set; }
-
-            #endregion
 
             #region Fields
 
@@ -677,13 +681,6 @@ namespace Tauron.Application
 
             #endregion
         }
-
-        #region Public Properties
-
-        /// <summary>Gets or sets a value indicating whether auto register.</summary>
-        public static bool AutoRegister { get; set; }
-
-        #endregion
 
         #region Static Fields
 

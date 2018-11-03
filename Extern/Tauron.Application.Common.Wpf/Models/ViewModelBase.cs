@@ -16,49 +16,9 @@ namespace Tauron.Application.Models
     [PublicAPI]
     public abstract class ViewModelBase : ModelBase, IShowInformation
     {
-        [PublicAPI]
-        protected class LinkedProperty : IDisposable
-        {
-            private readonly string                 _custom;
-            private          ObservableObject       _host;
-            private          string                 _name;
-            private          INotifyPropertyChanged _target;
-
-            public LinkedProperty(ObservableObject host, string name, INotifyPropertyChanged target, string custom)
-            {
-                _host   = host;
-                _name   = name;
-                _target = target;
-                _custom = custom;
-
-                _target.PropertyChanged += PropertyChangedMethod;
-            }
-
-            public void Dispose()
-            {
-                Stop();
-            }
-
-            private void PropertyChangedMethod(object sender, PropertyChangedEventArgs e)
-            {
-                if (e.PropertyName != _name) return;
-
-                _host.OnPropertyChangedExplicit(_custom ?? _name);
-            }
-
-            public void Stop()
-            {
-                if (_target == null) return;
-
-                _target.PropertyChanged -= PropertyChangedMethod;
-
-                _host   = null;
-                _name   = null;
-                _target = null;
-            }
-        }
-
         private static bool? _isInDesignMode;
+
+        private static IDialogFactory _dialogs;
 
         protected ViewModelBase()
         {
@@ -83,7 +43,6 @@ namespace Tauron.Application.Models
         [Inject]
         public ViewManager ViewManager { get; protected set; }
 
-        private static IDialogFactory _dialogs;
         [NotNull]
         public static IDialogFactory Dialogs => _dialogs ?? (_dialogs = CommonApplication.Current.Container.Resolve<IDialogFactory>());
 
@@ -168,9 +127,7 @@ namespace Tauron.Application.Models
         {
             if (EditingInheritedModel)
                 foreach (var value in ModelList.Values)
-                {
                     value.BeginEdit();
-                }
 
             base.BeginEdit();
         }
@@ -179,9 +136,7 @@ namespace Tauron.Application.Models
         {
             if (EditingInheritedModel)
                 foreach (var value in ModelList.Values)
-                {
                     value.EndEdit();
-                }
 
             base.EndEdit();
         }
@@ -190,9 +145,7 @@ namespace Tauron.Application.Models
         {
             if (EditingInheritedModel)
                 foreach (var value in ModelList.Values)
-                {
                     value.CancelEdit();
-                }
 
             base.CancelEdit();
         }
@@ -207,12 +160,54 @@ namespace Tauron.Application.Models
         protected void InvalidateRequerySuggested()
         {
             CommonApplication.Scheduler.QueueTask(
-                                                  new UserTask(() => CurrentDispatcher.BeginInvoke(CommandManager.InvalidateRequerySuggested), false));
+                new UserTask(() => CurrentDispatcher.BeginInvoke(CommandManager.InvalidateRequerySuggested), false));
         }
 
         protected override void OnErrorsChanged(string propertyName)
         {
             CommonApplication.Scheduler.QueueTask(new UserTask(() => { Synchronize.Invoke(() => base.OnErrorsChanged(propertyName)); }, false));
+        }
+
+        [PublicAPI]
+        protected class LinkedProperty : IDisposable
+        {
+            private readonly string _custom;
+            private ObservableObject _host;
+            private string _name;
+            private INotifyPropertyChanged _target;
+
+            public LinkedProperty(ObservableObject host, string name, INotifyPropertyChanged target, string custom)
+            {
+                _host = host;
+                _name = name;
+                _target = target;
+                _custom = custom;
+
+                _target.PropertyChanged += PropertyChangedMethod;
+            }
+
+            public void Dispose()
+            {
+                Stop();
+            }
+
+            private void PropertyChangedMethod(object sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName != _name) return;
+
+                _host.OnPropertyChangedExplicit(_custom ?? _name);
+            }
+
+            public void Stop()
+            {
+                if (_target == null) return;
+
+                _target.PropertyChanged -= PropertyChangedMethod;
+
+                _host = null;
+                _name = null;
+                _target = null;
+            }
         }
     }
 }

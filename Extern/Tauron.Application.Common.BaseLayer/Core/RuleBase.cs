@@ -11,10 +11,10 @@ namespace Tauron.Application.Common.BaseLayer.Core
         [InjectRepositoryFactory]
         public RepositoryFactory RepositoryFactory { get; set; }
 
-        public bool                Error  { get; private set; }
+        public bool Error { get; private set; }
         public IEnumerable<object> Errors { get; private set; }
 
-        public virtual  string InitializeMethod { get; }
+        public virtual string InitializeMethod { get; }
         public abstract object GenericAction(object input);
 
         protected internal void SetError(params object[] errors)
@@ -24,7 +24,7 @@ namespace Tauron.Application.Common.BaseLayer.Core
 
         protected void SetError(IEnumerable<object> objects)
         {
-            Error  = objects != null;
+            Error = objects != null;
             Errors = objects != null ? new ReadOnlyEnumerator<object>(objects) : null;
         }
     }

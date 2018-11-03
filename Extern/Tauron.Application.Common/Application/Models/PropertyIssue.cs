@@ -11,8 +11,8 @@ namespace Tauron.Application.Models
             if (message == null) throw new ArgumentNullException(nameof(message));
 
             PropertyName = propertyName;
-            Value        = value;
-            Message      = message;
+            Value = value;
+            Message = message;
         }
 
         [NotNull]

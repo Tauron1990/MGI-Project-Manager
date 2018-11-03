@@ -21,15 +21,51 @@ namespace Tauron.Application
     [DebuggerNonUserCode]
     [PublicAPI]
     [Serializable]
-    public class UISyncObservableCollection<TType> : ObservableCollection<TType>
+    public class UIObservableCollection<TType> : ObservableCollection<TType>
     {
+        private bool _isBlocked;
+
+        private IUISynchronize _synchronize;
+
+        public UIObservableCollection()
+        {
+        }
+
+        public UIObservableCollection([NotNull] IEnumerable<TType> enumerable)
+            : base(enumerable)
+        {
+        }
+
+        [NotNull]
+        protected IUISynchronize InternalUISynchronize
+        {
+            get
+            {
+                if (_synchronize != null) return _synchronize;
+                _synchronize = UiSynchronize.Synchronize ?? new DummySync();
+
+                return _synchronize;
+            }
+        }
+
+        public void AddRange([NotNull] IEnumerable<TType> enumerable)
+        {
+            if (enumerable == null) throw new ArgumentNullException(nameof(enumerable));
+            foreach (var item in enumerable) Add(item);
+        }
+
+        public IDisposable BlockChangedMessages()
+        {
+            return new DispoableBlocker(this);
+        }
+
         private class DispoableBlocker : IDisposable
         {
-            private readonly UISyncObservableCollection<TType> _collection;
+            private readonly UIObservableCollection<TType> _collection;
 
-            public DispoableBlocker(UISyncObservableCollection<TType> collection)
+            public DispoableBlocker(UIObservableCollection<TType> collection)
             {
-                _collection            = collection;
+                _collection = collection;
                 _collection._isBlocked = true;
             }
 
@@ -64,42 +100,8 @@ namespace Tauron.Application
             {
                 return action();
             }
-        }
 
-        private bool _isBlocked;
-
-        private IUISynchronize _synchronize;
-
-        public UISyncObservableCollection()
-        {
-        }
-
-        public UISyncObservableCollection([NotNull] IEnumerable<TType> enumerable)
-            : base(enumerable)
-        {
-        }
-
-        [NotNull]
-        private IUISynchronize InternalUISynchronize
-        {
-            get
-            {
-                if (_synchronize != null) return _synchronize;
-                _synchronize = UiSynchronize.Synchronize ?? new DummySync();
-
-                return _synchronize;
-            }
-        }
-
-        public void AddRange([NotNull] IEnumerable<TType> enumerable)
-        {
-            if (enumerable == null) throw new ArgumentNullException(nameof(enumerable));
-            foreach (var item in enumerable) Add(item);
-        }
-
-        public IDisposable BlockChangedMessages()
-        {
-            return new DispoableBlocker(this);
+            public bool CheckAccess { get; } = true;
         }
 
         #region Methods
@@ -113,6 +115,8 @@ namespace Tauron.Application
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             if (_isBlocked) return;
+            if (InternalUISynchronize.CheckAccess)
+                base.OnCollectionChanged(e);
             InternalUISynchronize.Invoke(() => base.OnCollectionChanged(e));
         }
 
@@ -125,6 +129,7 @@ namespace Tauron.Application
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             if (_isBlocked) return;
+            if (InternalUISynchronize.CheckAccess) base.OnPropertyChanged(e);
             InternalUISynchronize.Invoke(() => base.OnPropertyChanged(e));
         }
 

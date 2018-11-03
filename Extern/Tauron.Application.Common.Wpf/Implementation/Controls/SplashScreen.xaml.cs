@@ -8,9 +8,9 @@
         public SplashScreen()
         {
             InitializeComponent();
-            #if(DEBUG)
+#if(DEBUG)
             ShowInTaskbar = true;
-            #else
+#else
 			ShowInTaskbar = false;
 #endif
         }

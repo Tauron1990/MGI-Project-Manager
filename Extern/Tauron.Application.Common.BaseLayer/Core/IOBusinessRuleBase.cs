@@ -14,15 +14,15 @@ namespace Tauron.Application.Common.BaseLayer.Core
             }
             catch (Exception e)
             {
-                if (CriticalExceptions.IsCriticalApplicationException(e)) throw;
+                if (e.IsCriticalApplicationException()) throw;
                 SetError(e);
-                return default(TOutput);
+                return default;
             }
         }
 
         public override object GenericAction(object input)
         {
-            return input == null ? Action(default(TInput)) : Action((TInput) input);
+            return input == null ? Action(default) : Action((TInput) input);
         }
 
         public abstract TOutput ActionImpl(TInput input);

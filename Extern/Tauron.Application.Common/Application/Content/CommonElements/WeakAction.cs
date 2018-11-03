@@ -84,8 +84,8 @@ namespace Tauron.Application
 
             _method = method;
             _delegateType = parameterType == null
-                                ? typeof(Action)
-                                : typeof(Action<>).MakeGenericType(parameterType);
+                ? typeof(Action)
+                : typeof(Action<>).MakeGenericType(parameterType);
 
             ParameterCount = parameterType == null ? 0 : 1;
         }
@@ -108,8 +108,8 @@ namespace Tauron.Application
                 method.GetParameters().OrderBy(parm => parm.Position).Select(parm => parm.ParameterType).ToArray();
             var returntype = method.ReturnType;
             _delegateType = returntype == typeof(void)
-                                ? FactoryDelegateType("System.Action", parames.ToArray())
-                                : FactoryDelegateType("System.Func", parames.Concat(new[] {returntype}).ToArray());
+                ? FactoryDelegateType("System.Action", parames.ToArray())
+                : FactoryDelegateType("System.Func", parames.Concat(new[] {returntype}).ToArray());
 
             ParameterCount = parames.Length;
         }
@@ -143,8 +143,8 @@ namespace Tauron.Application
 
             var target = TargetObject.Target;
             return target != null
-                       ? Delegate.CreateDelegate(_delegateType, TargetObject.Target, _method)
-                       : null;
+                ? Delegate.CreateDelegate(_delegateType, TargetObject.Target, _method)
+                : null;
         }
 
         /// <summary>
@@ -216,7 +216,10 @@ namespace Tauron.Application
 
                 var dead = _delegates.Where(item => !item.TargetObject.IsAlive).ToList();
 
-                lock (this) dead.ForEach(ac => _delegates.Remove(ac));
+                lock (this)
+                {
+                    dead.ForEach(ac => _delegates.Remove(ac));
+                }
             }
 
             ;
@@ -241,12 +244,15 @@ namespace Tauron.Application
 
             if (
                 _delegates.Where(del => del.MethodInfo == handler.Method)
-                          .Select(weakAction => weakAction.TargetObject?.Target)
-                          .Any(weakTarget => weakTarget == handler.Target)) return this;
+                    .Select(weakAction => weakAction.TargetObject?.Target)
+                    .Any(weakTarget => weakTarget == handler.Target)) return this;
 
             var parameterType = parameters[0].ParameterType;
 
-            lock (this) _delegates.Add(new WeakAction(handler.Target, handler.Method, parameterType));
+            lock (this)
+            {
+                _delegates.Add(new WeakAction(handler.Target, handler.Method, parameterType));
+            }
 
             return this;
         }
@@ -260,8 +266,10 @@ namespace Tauron.Application
         public void Invoke(T arg)
         {
             lock (this)
+            {
                 foreach (var action in _delegates.Select(weakAction => weakAction.CreateDelegate()))
                     action.DynamicInvoke(arg);
+            }
         }
 
         /// <summary>

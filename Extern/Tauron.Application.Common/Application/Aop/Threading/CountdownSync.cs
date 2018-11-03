@@ -63,13 +63,13 @@ namespace Tauron.Application.Aop.Threading
         protected internal override void Register(ObjectContext context, MemberInfo info, object target)
         {
             context.Register<CountdownEventHolder, CountdownEventHolder>(
-                                                                         new CountdownEventHolder(
-                                                                                                  info.GetInvokeMember<CountdownEvent>(target))
-                                                                         {
-                                                                             Name
-                                                                                 =
-                                                                                 HolderName
-                                                                         });
+                new CountdownEventHolder(
+                    info.GetInvokeMember<CountdownEvent>(target))
+                {
+                    Name
+                        =
+                        HolderName
+                });
         }
 
         #endregion
@@ -142,9 +142,9 @@ namespace Tauron.Application.Aop.Threading
         protected internal override void Initialize(object target, ObjectContext context, string contextName)
         {
             _holder = BaseHolder.GetOrAdd<CountdownEventHolder, CountdownEventHolder>(
-                                                                                      context,
-                                                                                      () => new CountdownEventHolder(),
-                                                                                      HolderName);
+                context,
+                () => new CountdownEventHolder(),
+                HolderName);
 
             base.Initialize(target, context, contextName);
         }

@@ -16,7 +16,7 @@ namespace Tauron.Application.Converter
             // (to avoid crash bugs for views in the designer)
             if (!(values[0] is bool) || !(values[1] is bool)) return Visibility.Visible;
 
-            var hasText  = !(bool) values[0];
+            var hasText = !(bool) values[0];
             var hasFocus = (bool) values[1];
 
             if (hasFocus || hasText) return Visibility.Collapsed;

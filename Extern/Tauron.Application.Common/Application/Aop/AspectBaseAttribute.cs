@@ -67,7 +67,7 @@ namespace Tauron.Application.Aop
         public override IInterceptor Create(MemberInfo info)
         {
             MemberType = info.MemberType;
-            Name       = info is Type ? AopConstants.InternalUniversalInterceptorName : info.Name;
+            Name = info is Type ? AopConstants.InternalUniversalInterceptorName : info.Name;
             return this;
         }
 

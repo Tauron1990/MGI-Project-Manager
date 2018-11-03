@@ -13,16 +13,16 @@ namespace Tauron.Application.Models
     [PublicAPI]
     public sealed class ObservablePropertyMetadata
     {
-        public ObservablePropertyMetadata([CanBeNull] object                          defaultValue, bool isReadOnly,
-                                          [CanBeNull] ObservableValidateValueCallback validateValueCallback,
-                                          [CanBeNull] ObservableCoerceValueCallback   coerceValueCallback,
-                                          [CanBeNull] ObservablePropertyChanged       propertyChanged)
+        public ObservablePropertyMetadata([CanBeNull] object defaultValue, bool isReadOnly,
+            [CanBeNull] ObservableValidateValueCallback validateValueCallback,
+            [CanBeNull] ObservableCoerceValueCallback coerceValueCallback,
+            [CanBeNull] ObservablePropertyChanged propertyChanged)
         {
-            DefaultValue          = defaultValue;
-            IsReadOnly            = isReadOnly;
+            DefaultValue = defaultValue;
+            IsReadOnly = isReadOnly;
             ValidateValueCallback = validateValueCallback;
-            CoerceValueCallback   = coerceValueCallback;
-            PropertyChanged       = propertyChanged;
+            CoerceValueCallback = coerceValueCallback;
+            PropertyChanged = propertyChanged;
         }
 
         public ObservablePropertyMetadata([CanBeNull] object defaultValue)
@@ -48,7 +48,7 @@ namespace Tauron.Application.Models
         public ObservablePropertyMetadata([CanBeNull] ObservablePropertyChanged propertyChanged, [CanBeNull] ObservableValidateValueCallback observableValidateValueCallback)
         {
             ValidateValueCallback = observableValidateValueCallback;
-            PropertyChanged       = propertyChanged;
+            PropertyChanged = propertyChanged;
         }
 
         public ObservablePropertyMetadata()
@@ -114,14 +114,14 @@ namespace Tauron.Application.Models
     [Serializable]
     public sealed class ObservableProperty : IEquatable<ObservableProperty>
     {
-        public ObservableProperty([NotNull]   string                     name, [NotNull] Type type,
-                                  [CanBeNull] ObservablePropertyMetadata metadata)
+        public ObservableProperty([NotNull] string name, [NotNull] Type type,
+            [CanBeNull] ObservablePropertyMetadata metadata)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (type == null) throw new ArgumentNullException(nameof(type));
 
-            Name     = name;
-            Type     = type;
+            Name = name;
+            Type = type;
             Metadata = metadata ?? new ObservablePropertyMetadata();
             Metadata.Prepare(Type);
         }

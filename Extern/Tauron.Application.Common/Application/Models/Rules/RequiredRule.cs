@@ -4,7 +4,7 @@
     {
         public RequiredRule()
         {
-            Id      = "RequiredRule";
+            Id = "RequiredRule";
             Message = () => ResourceMessages.RequireRuleError.SFormat(FieldName);
         }
 

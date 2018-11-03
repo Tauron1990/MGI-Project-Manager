@@ -14,7 +14,7 @@ namespace Tauron.Application.Common.BaseLayer.Core
             }
             catch (Exception e)
             {
-                if (CriticalExceptions.IsCriticalApplicationException(e)) throw;
+                if (e.IsCriticalApplicationException()) throw;
                 SetError(e);
             }
         }
@@ -22,7 +22,7 @@ namespace Tauron.Application.Common.BaseLayer.Core
         public override object GenericAction(object input)
         {
             if (input == null)
-                Action(default(TType));
+                Action(default);
             Action((TType) input);
 
             return RuleNull.Null;

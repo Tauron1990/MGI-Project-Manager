@@ -69,12 +69,12 @@ namespace Tauron.Application.Aop.Threading
         protected internal override void Register(ObjectContext context, MemberInfo info, object target)
         {
             context.Register<BarrierHolder, BarrierHolder>(
-                                                           new BarrierHolder(info.GetInvokeMember<Barrier>(target))
-                                                           {
-                                                               Name
-                                                                   =
-                                                                   HolderName
-                                                           });
+                new BarrierHolder(info.GetInvokeMember<Barrier>(target))
+                {
+                    Name
+                        =
+                        HolderName
+                });
         }
 
         #endregion
@@ -117,9 +117,9 @@ namespace Tauron.Application.Aop.Threading
         protected internal override void Initialize(object target, ObjectContext context, string contextName)
         {
             _holder = BaseHolder.GetOrAdd<BarrierHolder, BarrierHolder>(
-                                                                        context,
-                                                                        () => new BarrierHolder(),
-                                                                        HolderName);
+                context,
+                () => new BarrierHolder(),
+                HolderName);
 
             base.Initialize(target, context, contextName);
         }

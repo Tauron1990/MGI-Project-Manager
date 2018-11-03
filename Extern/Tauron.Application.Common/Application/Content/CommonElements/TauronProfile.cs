@@ -39,9 +39,9 @@ namespace Tauron.Application
         {
             if (string.IsNullOrWhiteSpace(application)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(application));
             if (string.IsNullOrWhiteSpace(dafaultPath)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(dafaultPath));
-            Application  = application;
+            Application = application;
             _defaultPath = dafaultPath;
-            LogCategory  = "Tauron Profile";
+            LogCategory = "Tauron Profile";
         }
 
         #endregion
@@ -135,7 +135,7 @@ namespace Tauron.Application
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             IlligalCharCheck(name);
 
-            Name       = name;
+            Name = name;
             Dictionary = _defaultPath.CombinePath(Application, name);
             Dictionary.CreateDirectoryIfNotExis();
             FilePath = Dictionary.CombinePath("Settings.db");
@@ -145,8 +145,8 @@ namespace Tauron.Application
             _settings.Clear();
             foreach (var vals in
                 FilePath.EnumerateTextLinesIfExis()
-                        .Select(line => line.Split(ContentSplitter, 2))
-                        .Where(vals => vals.Length == 2))
+                    .Select(line => line.Split(ContentSplitter, 2))
+                    .Where(vals => vals.Length == 2))
             {
                 Log.Write(LogLevel.Info, "key: {0} | Value {1}", vals[0], vals[1]);
 

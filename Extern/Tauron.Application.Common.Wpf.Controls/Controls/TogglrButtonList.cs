@@ -135,13 +135,13 @@ namespace Tauron.Application.Controls
         #region Static Fields
 
         public static readonly DependencyProperty TopicProperty = DependencyProperty.RegisterAttached(
-                                                                                                      "Topic",
-                                                                                                      typeof(object),
-                                                                                                      typeof(
-                                                                                                              ToggleButtonList
-                                                                                                          ),
-                                                                                                      new UIPropertyMetadata
-                                                                                                          (null));
+            "Topic",
+            typeof(object),
+            typeof(
+                ToggleButtonList
+            ),
+            new UIPropertyMetadata
+                (null));
 
         #endregion
 
@@ -154,8 +154,8 @@ namespace Tauron.Application.Controls
         static ToggleButtonList()
         {
             DefaultStyleKeyProperty.OverrideMetadata(
-                                                     typeof(ToggleButtonList),
-                                                     new FrameworkPropertyMetadata(typeof(ToggleButtonList)));
+                typeof(ToggleButtonList),
+                new FrameworkPropertyMetadata(typeof(ToggleButtonList)));
         }
 
         #endregion
@@ -289,7 +289,7 @@ namespace Tauron.Application.Controls
             var topic = GetTopic(toggle);
             if (topic == null)
             {
-                var itemdo                = item as DependencyObject;
+                var itemdo = item as DependencyObject;
                 if (itemdo != null) topic = GetTopic(itemdo);
             }
 

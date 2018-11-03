@@ -14,7 +14,7 @@ namespace Tauron.Application.Common.BaseLayer.Core
             }
             catch (Exception e)
             {
-                if (CriticalExceptions.IsCriticalApplicationException(e)) throw;
+                if (e.IsCriticalApplicationException()) throw;
                 SetError(e);
             }
         }

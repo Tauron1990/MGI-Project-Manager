@@ -70,7 +70,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             var value = life?.GetValue();
             if (value == null) return;
 
-            context.Target       = value;
+            context.Target = value;
             context.BuildCompled = true;
         }
 

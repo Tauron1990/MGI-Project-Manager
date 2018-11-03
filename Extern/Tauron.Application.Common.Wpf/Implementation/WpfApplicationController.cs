@@ -46,9 +46,9 @@ namespace Tauron.Application.Implementation
         {
             var win = window as WpfWindow;
             Application.Dispatcher.BeginInvoke(
-                                               win == null
-                                                   ? new Action(() => Application.Run())
-                                                   : () => Application.Run((Window) win.TranslateForTechnology()));
+                win == null
+                    ? new Action(() => Application.Run())
+                    : () => Application.Run((Window) win.TranslateForTechnology()));
         }
 
         #endregion
@@ -119,7 +119,7 @@ namespace Tauron.Application.Implementation
 
             if (info != null && !info.Equals(CultureInfo.InvariantCulture))
             {
-                runner.CurrentCulture   = info;
+                runner.CurrentCulture = info;
                 runner.CurrentUICulture = info;
             }
 

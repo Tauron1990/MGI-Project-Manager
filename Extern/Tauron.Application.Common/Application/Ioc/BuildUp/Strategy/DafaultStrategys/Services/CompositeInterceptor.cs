@@ -20,10 +20,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         {
             var returnValue = true;
 
-            foreach (var importInterceptor in _interceptors.Where(importInterceptor => returnValue))
-            {
-                returnValue = importInterceptor.Intercept(member, metadata, target, ref value);
-            }
+            foreach (var importInterceptor in _interceptors.Where(importInterceptor => returnValue)) returnValue = importInterceptor.Intercept(member, metadata, target, ref value);
 
             return returnValue;
         }

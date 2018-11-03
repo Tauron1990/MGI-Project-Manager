@@ -30,8 +30,8 @@ namespace Tauron.Application.Models
         {
             if (ReferenceEquals(null, other)) return false;
             return ReferenceEquals(this, other) || Id == null
-                       ? RuntimeHelpers.Equals(this, other)
-                       : string.Equals(Id, other.Id);
+                ? RuntimeHelpers.Equals(this, other)
+                : string.Equals(Id, other.Id);
         }
 
         public override int GetHashCode()

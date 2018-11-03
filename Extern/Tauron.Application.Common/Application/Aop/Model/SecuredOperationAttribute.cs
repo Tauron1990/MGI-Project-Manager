@@ -53,7 +53,7 @@ namespace Tauron.Application.Aop.Model
 
             if (!able?.IsUserInRole(Thread.CurrentPrincipal.Identity, Roles) == true)
                 throw new SecurityException(
-                                            $"The user {Thread.CurrentPrincipal.Identity.Name} does not have the required permissions.");
+                    $"The user {Thread.CurrentPrincipal.Identity.Name} does not have the required permissions.");
 
             invocation.Proceed();
         }

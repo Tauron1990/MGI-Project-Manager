@@ -68,22 +68,22 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             }
 
             return interceptors.Where(
-                                      inter =>
-                                      {
-                                          var sinter = inter as ISpecificInterceptor;
-                                          if (sinter != null)
-                                              return sinter.Name == name ||
-                                                     sinter.Name == AopConstants.InternalUniversalInterceptorName;
+                    inter =>
+                    {
+                        var sinter = inter as ISpecificInterceptor;
+                        if (sinter != null)
+                            return sinter.Name == name ||
+                                   sinter.Name == AopConstants.InternalUniversalInterceptorName;
 
-                                          return true;
-                                      })
-                               .OrderBy(
-                                        inter =>
-                                        {
-                                            var sinter = inter as ISpecificInterceptor;
-                                            return sinter == null ? 0 : sinter.Order;
-                                        })
-                               .ToArray();
+                        return true;
+                    })
+                .OrderBy(
+                    inter =>
+                    {
+                        var sinter = inter as ISpecificInterceptor;
+                        return sinter == null ? 0 : sinter.Order;
+                    })
+                .ToArray();
         }
 
         #endregion

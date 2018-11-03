@@ -14,6 +14,35 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
     /// <summary>The proxy service.</summary>
     public sealed class ProxyService : IProxyService
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ProxyService" /> class.
+        ///     Initialisiert eine neue Instanz der <see cref="ProxyService" /> Klasse.
+        ///     Initializes a new instance of the <see cref="ProxyService" /> class.
+        /// </summary>
+        public ProxyService()
+        {
+            GenericGenerator = new ProxyGenerator {Logger = new PrivateLogger()};
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>Gets the generator.</summary>
+        /// <value>The generator.</value>
+        public ProxyGenerator GenericGenerator { get; }
+
+        #endregion
+
+        public ProxyGenerator Generate(ExportMetadata metadata, ImportMetadata[] imports, out IImportInterceptor interceptor)
+        {
+            interceptor = null;
+
+            return GenericGenerator;
+        }
+
         /// <summary>The private logger.</summary>
         private class PrivateLogger : LevelFilteredLogger
         {
@@ -82,35 +111,6 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             }
 
             #endregion
-        }
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="ProxyService" /> class.
-        ///     Initialisiert eine neue Instanz der <see cref="ProxyService" /> Klasse.
-        ///     Initializes a new instance of the <see cref="ProxyService" /> class.
-        /// </summary>
-        public ProxyService()
-        {
-            GenericGenerator = new ProxyGenerator {Logger = new PrivateLogger()};
-        }
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>Gets the generator.</summary>
-        /// <value>The generator.</value>
-        public ProxyGenerator GenericGenerator { get; }
-
-        #endregion
-
-        public ProxyGenerator Generate(ExportMetadata metadata, ImportMetadata[] imports, out IImportInterceptor interceptor)
-        {
-            interceptor = null;
-
-            return GenericGenerator;
         }
     }
 }

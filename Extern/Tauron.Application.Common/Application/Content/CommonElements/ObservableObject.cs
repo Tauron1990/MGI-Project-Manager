@@ -49,39 +49,9 @@ namespace Tauron.Application
     [PublicAPI]
     public abstract class ObservableObject : BaseObject, INotifyPropertyChangedMethod
     {
-        [PublicAPI]
-        protected class LogHelper
-        {
-            private readonly string _name;
-            private          Logger _logger;
-
-            public LogHelper(string name)
-            {
-                _name = name;
-            }
-
-            public Logger Logger => _logger ?? (_logger = LogManager.GetLogger(_name));
-
-            public void Write([CanBeNull] object message, LogLevel type)
-            {
-                Logger.Log(type, message);
-            }
-
-            [StringFormatMethod("format")]
-            public void Write(LogLevel type, [NotNull] string format, [NotNull] params object[] parms)
-            {
-                Logger.Log(type, format, parms);
-            }
-
-            public void Error(Exception e, string messege)
-            {
-                Logger.Error(e, messege);
-            }
-        }
-
         protected ObservableObject()
         {
-            LogName     = GetType().Name;
+            LogName = GetType().Name;
             LogCategory = GetType().ToString();
         }
 
@@ -108,13 +78,43 @@ namespace Tauron.Application
         /// <param name="withDispatcher">
         ///     The with dispatcher.
         /// </param>
-        protected static void QueueWorkitem([NotNull] Action action, bool withDispatcher)
+        protected static void QueueWorkitem([NotNull] Action action, bool withDispatcher = false)
         {
             if (action == null) throw new ArgumentNullException(nameof(action));
             CommonApplication.Scheduler.QueueTask(new UserTask(action, withDispatcher));
         }
 
         #endregion
+
+        [PublicAPI]
+        protected class LogHelper
+        {
+            private readonly string _name;
+            private Logger _logger;
+
+            public LogHelper(string name)
+            {
+                _name = name;
+            }
+
+            public Logger Logger => _logger ?? (_logger = LogManager.GetLogger(_name));
+
+            public void Write([CanBeNull] object message, LogLevel type)
+            {
+                Logger.Log(type, message);
+            }
+
+            [StringFormatMethod("format")]
+            public void Write(LogLevel type, [NotNull] string format, [NotNull] params object[] parms)
+            {
+                Logger.Log(type, format, parms);
+            }
+
+            public void Error(Exception e, string messege)
+            {
+                Logger.Error(e, messege);
+            }
+        }
 
         #region Public Properties
 

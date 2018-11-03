@@ -13,6 +13,24 @@ namespace Tauron.Application.Implement
     [PublicAPI]
     public class CommandLineProcessor
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="CommandLineProcessor" /> class.
+        ///     Initialisiert eine neue Instanz der <see cref="CommandLineProcessor" /> Klasse.
+        ///     Initializes a new instance of the <see cref="CommandLineProcessor" /> class.
+        /// </summary>
+        /// <param name="application">
+        ///     The application.
+        /// </param>
+        public CommandLineProcessor([NotNull] CommonApplication application)
+        {
+            _application = application ?? throw new ArgumentNullException(nameof(application));
+            ParseCommandLine();
+        }
+
+        #endregion
+
         /// <summary>The command.</summary>
         public class Command : IEquatable<Command>
         {
@@ -29,7 +47,7 @@ namespace Tauron.Application.Implement
             public Command([NotNull] string name)
             {
                 if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
-                Name  = name;
+                Name = name;
                 Parms = new List<string>();
             }
 
@@ -80,24 +98,6 @@ namespace Tauron.Application.Implement
             #endregion
         }
 
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="CommandLineProcessor" /> class.
-        ///     Initialisiert eine neue Instanz der <see cref="CommandLineProcessor" /> Klasse.
-        ///     Initializes a new instance of the <see cref="CommandLineProcessor" /> class.
-        /// </summary>
-        /// <param name="application">
-        ///     The application.
-        /// </param>
-        public CommandLineProcessor([NotNull] CommonApplication application)
-        {
-            _application = application ?? throw new ArgumentNullException(nameof(application));
-            ParseCommandLine();
-        }
-
-        #endregion
-
         #region Fields
 
         /// <summary>The _application.</summary>
@@ -143,7 +143,7 @@ namespace Tauron.Application.Implement
                 _application.Container.Resolve<ICommandLineService>().Commands)
             {
                 var command1 = command;
-                var temp     = _commands.FirstOrDefault(arg => arg.Name == command1.CommandName);
+                var temp = _commands.FirstOrDefault(arg => arg.Name == command1.CommandName);
                 if (temp == null) continue;
 
                 command.Execute(temp.Parms.ToArray(), _application.Container);
@@ -165,7 +165,7 @@ namespace Tauron.Application.Implement
         public static IEnumerable<Command> ParseCommandLine(IEnumerable<string> args, bool skipfirst = true)
         {
             Command current = null;
-            var     first   = skipfirst;
+            var first = skipfirst;
             foreach (var arg in args)
             {
                 if (first)
@@ -202,15 +202,13 @@ namespace Tauron.Application.Implement
             if (_factory != null) return;
 
             foreach (var command in
-                    _application.Container.Resolve<ICommandLineService>()
-                                .Commands.Where(
-                                                command =>
-                                                    command.Factory != null &&
-                                                    _commands.Any(com => com.Name == command.CommandName))
-                )
-            {
+                _application.Container.Resolve<ICommandLineService>()
+                    .Commands.Where(
+                        command =>
+                            command.Factory != null &&
+                            _commands.Any(com => com.Name == command.CommandName))
+            )
                 _factory = command.Factory;
-            }
         }
 
         #endregion

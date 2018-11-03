@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,5 +25,6 @@ namespace Tauron.Application.Common.BaseLayer.Data
             where TEntity : GenericBaseEntity<TKey>;
 
         Task SaveChangesAsync(CancellationToken cancellationToken);
+        void AddRange<TEntity>(IEnumerable<TEntity> newEntities);
     }
 }

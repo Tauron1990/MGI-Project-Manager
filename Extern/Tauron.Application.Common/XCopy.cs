@@ -97,8 +97,8 @@ namespace Tauron
         ///     The handler.
         /// </param>
         public static void Copy([NotNull] string source, [NotNull] string destination,
-                                bool             overwrite,
-                                bool             nobuffering, [CanBeNull] EventHandler<ProgressChangedEventArgs> handler)
+            bool overwrite,
+            bool nobuffering, [CanBeNull] EventHandler<ProgressChangedEventArgs> handler)
         {
             if (string.IsNullOrEmpty(source)) throw new ArgumentException("Value cannot be null or empty.", nameof(source));
             if (string.IsNullOrEmpty(destination)) throw new ArgumentException("Value cannot be null or empty.", nameof(destination));
@@ -131,19 +131,19 @@ namespace Tauron
         /// <exception cref="Win32Exception">
         /// </exception>
         private void CopyInternal([NotNull] string source, [NotNull] string destination,
-                                  bool             overwrite,
-                                  bool             nobuffering, [CanBeNull] EventHandler<ProgressChangedEventArgs> handler)
+            bool overwrite,
+            bool nobuffering, [CanBeNull] EventHandler<ProgressChangedEventArgs> handler)
         {
             if (string.IsNullOrEmpty(source)) throw new ArgumentException("Value cannot be null or empty.", nameof(source));
             if (string.IsNullOrEmpty(destination)) throw new ArgumentException("Value cannot be null or empty.", nameof(destination));
             try
             {
-                var copyFileFlags             = NativeMethods.CopyFileFlags.COPY_FILE_RESTARTABLE;
+                var copyFileFlags = NativeMethods.CopyFileFlags.COPY_FILE_RESTARTABLE;
                 if (!overwrite) copyFileFlags |= NativeMethods.CopyFileFlags.COPY_FILE_FAIL_IF_EXISTS;
 
                 if (nobuffering) copyFileFlags |= NativeMethods.CopyFileFlags.COPY_FILE_NO_BUFFERING;
 
-                _source      = source.GetFullPath();
+                _source = source.GetFullPath();
                 _destination = destination.GetFullPath();
 
                 if (handler != null) ProgressChanged += handler;
@@ -151,12 +151,12 @@ namespace Tauron
                 NativeMethods.CopyProgressRoutine callback = CopyProgressHandler;
 
                 var result = NativeMethods.CopyFileEx(
-                                                      _source,
-                                                      _destination,
-                                                      callback,
-                                                      IntPtr.Zero,
-                                                      ref _isCancelled,
-                                                      copyFileFlags);
+                    _source,
+                    _destination,
+                    callback,
+                    IntPtr.Zero,
+                    ref _isCancelled,
+                    copyFileFlags);
                 if (!result) throw new Win32Exception(Marshal.GetLastWin32Error());
             }
             catch (Exception)
@@ -201,15 +201,15 @@ namespace Tauron
         ///     The <see cref="Interop.NativeMethods.CopyProgressResult" />.
         /// </returns>
         private NativeMethods.CopyProgressResult CopyProgressHandler(
-            long                                     total,
-            long                                     transferred,
-            long                                     streamSize,
-            long                                     streamByteTrans,
-            uint                                     dwStreamNumber,
+            long total,
+            long transferred,
+            long streamSize,
+            long streamByteTrans,
+            uint dwStreamNumber,
             NativeMethods.CopyProgressCallbackReason reason,
-            IntPtr                                   hSourceFile,
-            IntPtr                                   hDestinationFile,
-            IntPtr                                   lpData)
+            IntPtr hSourceFile,
+            IntPtr hDestinationFile,
+            IntPtr lpData)
         {
             if (reason == NativeMethods.CopyProgressCallbackReason.CALLBACK_CHUNK_FINISHED) OnProgressChanged(transferred / (double) total * 100.0);
 

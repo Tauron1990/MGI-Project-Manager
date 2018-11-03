@@ -47,7 +47,7 @@ namespace Tauron.Application
         {
             if (methodInfo == null) throw new ArgumentNullException(nameof(methodInfo));
             if (target == null) throw new ArgumentNullException(nameof(target));
-            _method    = methodInfo;
+            _method = methodInfo;
             _reference = new WeakReference(target);
         }
 
@@ -79,7 +79,7 @@ namespace Tauron.Application
         /// <returns></returns>
         public static bool operator ==(WeakDelegate left, WeakDelegate right)
         {
-            var leftnull  = ReferenceEquals(left, null);
+            var leftnull = ReferenceEquals(left, null);
             var rightNull = ReferenceEquals(right, null);
 
             return !leftnull ? left.Equals(right) : rightNull;
@@ -91,7 +91,7 @@ namespace Tauron.Application
         /// <returns></returns>
         public static bool operator !=(WeakDelegate left, WeakDelegate right)
         {
-            var leftnull  = ReferenceEquals(left, null);
+            var leftnull = ReferenceEquals(left, null);
             var rightNull = ReferenceEquals(right, null);
 
             if (!leftnull) return !left.Equals(right);
@@ -126,7 +126,7 @@ namespace Tauron.Application
             {
                 object target;
                 return (((target = _reference.Target) != null ? target.GetHashCode() : 0) * 397)
-                     ^ _method.GetHashCode();
+                       ^ _method.GetHashCode();
             }
         }
 
@@ -173,7 +173,10 @@ namespace Tauron.Application
         public static void RegisterAction([NotNull] Action action)
         {
             if (action == null) throw new ArgumentNullException(nameof(action));
-            lock (Actions) Actions.Add(new WeakDelegate(action));
+            lock (Actions)
+            {
+                Actions.Add(new WeakDelegate(action));
+            }
         }
 
         #endregion
@@ -206,7 +209,6 @@ namespace Tauron.Application
             {
                 var dead = new List<WeakDelegate>();
                 foreach (var weakDelegate in Actions.ToArray())
-                {
                     if (weakDelegate != null && weakDelegate.IsAlive)
                         try
                         {
@@ -216,8 +218,8 @@ namespace Tauron.Application
                         {
                             Logger.Error(ex);
                         }
-                    else dead.Add(weakDelegate);
-                }
+                    else
+                        dead.Add(weakDelegate);
 
                 dead.ForEach(del => Actions.Remove(del));
             }

@@ -103,6 +103,8 @@ namespace Tauron.Application.Implementation
             return _dispatcher.Invoke(action);
         }
 
+        public bool CheckAccess => _dispatcher.CheckAccess();
+
         #endregion
     }
 }

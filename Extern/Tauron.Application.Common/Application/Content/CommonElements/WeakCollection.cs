@@ -171,8 +171,8 @@ namespace Tauron.Application
         {
             return
                 _internalCollection.Select(reference => reference.TypedTarget())
-                                   .Where(target => target != null)
-                                   .GetEnumerator();
+                    .Where(target => target != null)
+                    .GetEnumerator();
         }
 
         /// <summary>
@@ -296,7 +296,10 @@ namespace Tauron.Application
         /// <summary>The clear items.</summary>
         protected override void ClearItems()
         {
-            lock (this) base.ClearItems();
+            lock (this)
+            {
+                base.ClearItems();
+            }
         }
 
         /// <summary>
@@ -326,7 +329,10 @@ namespace Tauron.Application
         /// </param>
         protected override void RemoveItem(int index)
         {
-            lock (this) base.RemoveItem(index);
+            lock (this)
+            {
+                base.RemoveItem(index);
+            }
         }
 
         /// <summary>
@@ -340,7 +346,10 @@ namespace Tauron.Application
         /// </param>
         protected override void SetItem(int index, TType item)
         {
-            lock (this) base.SetItem(index, item);
+            lock (this)
+            {
+                base.SetItem(index, item);
+            }
         }
 
         /// <summary>The clean up method.</summary>
@@ -349,15 +358,15 @@ namespace Tauron.Application
             lock (this)
             {
                 Items.ToArray()
-                     .Where(it => !it.IsAlive)
-                     .ToArray()
-                     .Foreach(
-                              it =>
-                              {
-                                  if (it is IDisposable dis) dis.Dispose();
+                    .Where(it => !it.IsAlive)
+                    .ToArray()
+                    .Foreach(
+                        it =>
+                        {
+                            if (it is IDisposable dis) dis.Dispose();
 
-                                  Items.Remove(it);
-                              });
+                            Items.Remove(it);
+                        });
             }
         }
 

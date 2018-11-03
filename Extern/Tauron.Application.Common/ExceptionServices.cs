@@ -26,12 +26,12 @@ namespace Tauron
         /// <returns>
         ///     The <see cref="bool" />.
         /// </returns>
-        public static bool IsCriticalApplicationException([NotNull] Exception ex)
+        public static bool IsCriticalApplicationException([NotNull] this Exception ex)
         {
             if (ex == null) throw new ArgumentNullException(nameof(ex));
             ex = Unwrap(ex);
             return ex is StackOverflowException || ex is OutOfMemoryException || ex is ThreadAbortException
-                || ex is SecurityException;
+                   || ex is SecurityException;
         }
 
         /// <summary>
@@ -43,12 +43,12 @@ namespace Tauron
         /// <returns>
         ///     The <see cref="bool" />.
         /// </returns>
-        public static bool IsCriticalException([NotNull] Exception ex)
+        public static bool IsCriticalException([NotNull] this Exception ex)
         {
             if (ex == null) throw new ArgumentNullException(nameof(ex));
             ex = Unwrap(ex);
             return ex is NullReferenceException || ex is StackOverflowException || ex is OutOfMemoryException
-                || ex is ThreadAbortException || ex is SEHException || ex is SecurityException;
+                   || ex is ThreadAbortException || ex is SEHException || ex is SecurityException;
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Tauron
         ///     The <see cref="Exception" />.
         /// </returns>
         [NotNull]
-        public static Exception Unwrap([NotNull] Exception ex)
+        public static Exception Unwrap([NotNull] this Exception ex)
         {
             if (ex == null) throw new ArgumentNullException(nameof(ex));
             while (ex.InnerException != null && ex is TargetInvocationException) ex = ex.InnerException;

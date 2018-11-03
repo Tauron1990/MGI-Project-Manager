@@ -9,14 +9,14 @@ namespace Tauron.Application.Ioc
     {
         private readonly Func<BuildParameter[], object> _resolver;
 
-        private TMetadata    _metadata;
+        private TMetadata _metadata;
         private Func<object> _metadataFactory;
 
         public InstanceResolver([NotNull] Func<BuildParameter[], object> resolver, [NotNull] Func<object> metadataFactory,
-                                [NotNull] Type                           realType)
+            [NotNull] Type realType)
         {
-            RealType         = realType ?? throw new ArgumentNullException(nameof(realType));
-            _resolver        = resolver ?? throw new ArgumentNullException(nameof(resolver));
+            RealType = realType ?? throw new ArgumentNullException(nameof(realType));
+            _resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
             _metadataFactory = metadataFactory ?? throw new ArgumentNullException(nameof(metadataFactory));
         }
 
@@ -31,7 +31,7 @@ namespace Tauron.Application.Ioc
             {
                 if (_metadata != null) return _metadata;
 
-                _metadata        = (TMetadata) _metadataFactory();
+                _metadata = (TMetadata) _metadataFactory();
                 _metadataFactory = null;
 
                 return _metadata;
@@ -42,7 +42,7 @@ namespace Tauron.Application.Ioc
         {
             var obj = _resolver(buildParameters);
 
-            if (obj == null) return default(TExport);
+            if (obj == null) return default;
 
             return (TExport) obj;
         }
@@ -50,8 +50,8 @@ namespace Tauron.Application.Ioc
         public TExport Resolve(bool uiSync, [CanBeNull] BuildParameter[] buildParameters = null)
         {
             return uiSync
-                       ? UiSynchronize.Synchronize.Invoke(() => Resolve(buildParameters))
-                       : Resolve(buildParameters);
+                ? UiSynchronize.Synchronize.Invoke(() => Resolve(buildParameters))
+                : Resolve(buildParameters);
         }
 
         public object ResolveRaw([CanBeNull] BuildParameter[] buildParameters = null)
@@ -64,8 +64,8 @@ namespace Tauron.Application.Ioc
         public object ResolveRaw(bool uiSync, [CanBeNull] BuildParameter[] buildParameters = null)
         {
             return uiSync
-                       ? UiSynchronize.Synchronize.Invoke(() => ResolveRaw(buildParameters))
-                       : ResolveRaw(buildParameters);
+                ? UiSynchronize.Synchronize.Invoke(() => ResolveRaw(buildParameters))
+                : ResolveRaw(buildParameters);
         }
     }
 }

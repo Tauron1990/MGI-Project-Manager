@@ -52,7 +52,7 @@ namespace Tauron.Application.Ioc
         protected ExportMetadataBaseAttribute([NotNull] string key, object value)
         {
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(key));
-            InternalKey   = key;
+            InternalKey = key;
             InternalValue = value;
         }
 

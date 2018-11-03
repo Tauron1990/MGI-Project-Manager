@@ -28,9 +28,9 @@ namespace Tauron.Application
         /// </param>
         protected TabWorkspace([NotNull] string title, string name = null)
         {
-            _title         = title;
-            _name          = name;
-            _canClose      = true;
+            _title = title;
+            _name = name;
+            _canClose = true;
             CloseWorkspace = new SimpleCommand(obj => CanClose, obj => InvokeClose());
         }
 
@@ -58,7 +58,7 @@ namespace Tauron.Application
 
         private bool _canClose;
 
-        private          string _title;
+        private string _title;
         private readonly string _name;
 
         #endregion

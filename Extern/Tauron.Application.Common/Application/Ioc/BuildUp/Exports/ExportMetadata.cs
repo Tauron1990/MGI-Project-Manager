@@ -9,7 +9,8 @@ using JetBrains.Annotations;
 namespace Tauron.Application.Ioc.BuildUp.Exports
 {
     /// <summary>The export metadata.</summary>
-    [PublicAPI, Serializable]
+    [PublicAPI]
+    [Serializable]
     public sealed class ExportMetadata : IEquatable<ExportMetadata>
     {
         #region Constructors and Destructors
@@ -32,16 +33,16 @@ namespace Tauron.Application.Ioc.BuildUp.Exports
         /// <param name="export">
         ///     The export.
         /// </param>
-        public ExportMetadata([NotNull] Type                       interfaceType, [CanBeNull] string  contractName, [NotNull] Type lifetime,
-                              [NotNull] Dictionary<string, object> metadata,      [NotNull]   IExport export)
+        public ExportMetadata([NotNull] Type interfaceType, [CanBeNull] string contractName, [NotNull] Type lifetime,
+            [NotNull] Dictionary<string, object> metadata, [NotNull] IExport export)
         {
             if (interfaceType == null) throw new ArgumentNullException(nameof(interfaceType));
             if (lifetime == null) throw new ArgumentNullException(nameof(lifetime));
             InterfaceType = interfaceType;
-            ContractName  = contractName;
-            Lifetime      = lifetime;
-            Metadata      = metadata ?? throw new ArgumentNullException(nameof(metadata));
-            Export        = export ?? throw new ArgumentNullException(nameof(export));
+            ContractName = contractName;
+            Lifetime = lifetime;
+            Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
+            Export = export ?? throw new ArgumentNullException(nameof(export));
         }
 
         #endregion

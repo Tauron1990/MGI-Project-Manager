@@ -2,7 +2,6 @@
 
 using System;
 using System.Reflection;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 #endregion
@@ -16,7 +15,7 @@ namespace Tauron.Application.Commands
         internal EventData([NotNull] object sender, [NotNull] EventArgs eventArgs)
         {
             if (sender == null) throw new ArgumentNullException(nameof(sender));
-            Sender    = sender;
+            Sender = sender;
             EventArgs = eventArgs;
         }
 
@@ -42,25 +41,6 @@ namespace Tauron.Application.Commands
     /// <summary>The method command.</summary>
     public sealed class MethodCommand : CommandBase
     {
-        #region Enums
-
-        private enum MethodType
-        {
-            /// <summary>The zero.</summary>
-            Zero = 0,
-
-            /// <summary>The one.</summary>
-            One,
-
-            /// <summary>The two.</summary>
-            Two,
-
-            /// <summary>The event args.</summary>
-            EventArgs
-        }
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -77,7 +57,7 @@ namespace Tauron.Application.Commands
         {
             if (method == null) throw new ArgumentNullException(nameof(method));
             if (context == null) throw new ArgumentNullException(nameof(context));
-            _method  = method;
+            _method = method;
             _context = context;
 
             _methodType = (MethodType) method.GetParameters().Length;
@@ -129,6 +109,25 @@ namespace Tauron.Application.Commands
             }
 
             _method.Invoke(Context, args);
+        }
+
+        #endregion
+
+        #region Enums
+
+        private enum MethodType
+        {
+            /// <summary>The zero.</summary>
+            Zero = 0,
+
+            /// <summary>The one.</summary>
+            One,
+
+            /// <summary>The two.</summary>
+            Two,
+
+            /// <summary>The event args.</summary>
+            EventArgs
         }
 
         #endregion

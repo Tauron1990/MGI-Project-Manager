@@ -87,7 +87,7 @@ namespace Tauron.Application.Ioc.BuildUp
             catch (Exception e)
             {
                 context.ErrorTracer.Exceptional = true;
-                context.ErrorTracer.Exception   = e;
+                context.ErrorTracer.Exception = e;
             }
         }
 

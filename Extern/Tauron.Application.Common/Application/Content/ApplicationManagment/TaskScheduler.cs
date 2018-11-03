@@ -11,9 +11,11 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using NLog;
 
 #endregion
 
@@ -58,15 +60,16 @@ namespace Tauron.Application
 
         private bool _predisposed;
 
+        private Task _task;
+
         #endregion
 
         #region Constructors and Destructors
 
-
         public TaskScheduler([NotNull] IUISynchronize synchronizationContext)
         {
             _synchronizationContext = synchronizationContext ?? throw new ArgumentNullException(nameof(synchronizationContext));
-            _collection             = new BlockingCollection<ITask>();
+            _collection = new BlockingCollection<ITask>();
         }
 
 
@@ -117,6 +120,7 @@ namespace Tauron.Application
                 return tcs.Task;
             }
 
+            if (_collection.IsAddingCompleted) return Task.CompletedTask;
             _collection.Add(task);
             return task.Task;
         }
@@ -127,13 +131,33 @@ namespace Tauron.Application
 
         internal void EnterLoop()
         {
-            foreach (var task in _collection.GetConsumingEnumerable()) task.Execute();
+            var source = new TaskCompletionSource<object>();
+            _task = source.Task;
+            EnterLoopPrivate();
+            source.SetResult(null);
+        }
+
+        private void EnterLoopPrivate()
+        {
+            foreach (var task in _collection.GetConsumingEnumerable())
+                try
+                {
+                    task.Execute();
+                }
+                catch (Exception e)
+                {
+                    LogManager.GetCurrentClassLogger().Error(e);
+                    throw;
+                }
 
             _collection.Dispose();
             _disposed = true;
         }
 
-        public void Start() => Task.Factory.StartNew(EnterLoop, TaskCreationOptions.LongRunning);
+        public void Start()
+        {
+            _task = Task.Factory.StartNew(EnterLoopPrivate, TaskCreationOptions.LongRunning);
+        }
 
         /// <summary>The check dispose.</summary>
         /// <exception cref="ObjectDisposedException"></exception>
@@ -149,7 +173,7 @@ namespace Tauron.Application
         ///     The disposing.
         /// </param>
         [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "_collection")]
-        [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId           = "disposing")]
+        [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "disposing")]
         // ReSharper disable UnusedParameter.Local
         private void Dispose(bool disposing)
         {
@@ -159,6 +183,7 @@ namespace Tauron.Application
             _predisposed = true;
 
             _collection?.CompleteAdding();
+            _task?.Wait();
         }
 
         #endregion

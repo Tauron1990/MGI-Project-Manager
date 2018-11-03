@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using Microsoft.Win32.SafeHandles;
@@ -14,10 +15,24 @@ namespace Tauron.Application
     [PublicAPI]
     public sealed class ClipboardViewer : IDisposable
     {
+        /// <summary>The _disposed.</summary>
+        private bool _disposed;
+
+        /// <summary>The _h wnd next viewer.</summary>
+        private ViewerSafeHandle _hWndViewer;
+
+        /// <summary>The _is viewing.</summary>
+        private bool _isViewing;
+
+        /// <summary>The _target.</summary>
+        [CanBeNull] private IWindow _target;
+
+        /// <summary>The clipboard changed.</summary>
+        public event EventHandler ClipboardChanged;
+
         private class ViewerSafeHandle : SafeHandleMinusOneIsInvalid
         {
             #region Constructors and Destructors
-
 
             public ViewerSafeHandle([NotNull] IWindow current)
                 : base(true)
@@ -32,24 +47,7 @@ namespace Tauron.Application
             {
                 return NativeMethods.RemoveClipboardFormatListener(DangerousGetHandle());
             }
-         }
-
-        /// <summary>The clipboard changed.</summary>
-        public event EventHandler ClipboardChanged;
-
-
-        /// <summary>The _disposed.</summary>
-        private bool _disposed;
-
-        /// <summary>The _h wnd next viewer.</summary>
-        private ViewerSafeHandle _hWndViewer;
-
-        /// <summary>The _is viewing.</summary>
-        private bool _isViewing;
-
-        /// <summary>The _target.</summary>
-        [CanBeNull]
-        private IWindow _target;
+        }
 
         #region Constructors and Destructors
 
@@ -61,7 +59,10 @@ namespace Tauron.Application
             if (performInitialization) Initialize();
         }
 
-        ~ClipboardViewer() => Dispose();
+        ~ClipboardViewer()
+        {
+            Dispose();
+        }
 
         #endregion
 
@@ -131,12 +132,15 @@ namespace Tauron.Application
         /// <param name="e">
         ///     The e.
         /// </param>
-        private void TargetClosed([NotNull] object sender, [NotNull] EventArgs e) => Dispose();
+        private void TargetClosed([NotNull] object sender, [NotNull] EventArgs e)
+        {
+            Dispose();
+        }
 
-
+        [DebuggerStepThrough]
         private IntPtr WinProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if (msg != 776 || msg == 781 || _hWndViewer == null) throw new ArgumentException();
+            //if (msg != 776 || msg == 781 || _hWndViewer == null) throw new ArgumentException();
 
             switch (msg)
             {
@@ -144,6 +148,7 @@ namespace Tauron.Application
 
                     // clipboard content changed
                     OnClipboardChanged();
+                    handled = true;
                     break;
             }
 

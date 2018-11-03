@@ -20,15 +20,101 @@ namespace Tauron.Application
     [PublicAPI]
     public abstract class CommonApplication
     {
+        #region Static Fields
+
+        /// <summary>The _scheduler.</summary>
+        private static ITaskScheduler _scheduler;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initialisiert eine neue Instanz der <see cref="CommonApplication" /> Klasse.
+        /// </summary>
+        /// <param name="doStartup">
+        ///     The do startup.
+        /// </param>
+        /// <param name="service">
+        ///     The service.
+        /// </param>
+        /// <param name="factory">
+        ///     The factory.
+        /// </param>
+        protected CommonApplication(bool doStartup, [CanBeNull] ISplashService service, [NotNull] IUIControllerFactory factory, [CanBeNull] ITaskScheduler taskScheduler = null)
+        {
+            Factory = factory ?? throw new ArgumentNullException(nameof(factory));
+            Current = this;
+            _scheduler = taskScheduler ?? new TaskScheduler(UiSynchronize.Synchronize);
+            _splash = service ?? new NullSplash();
+            _doStartup = doStartup;
+            SourceAssembly = new AssemblyName(Assembly.GetAssembly(GetType()).FullName).Name;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>Gets or sets the source assembly.</summary>
+        /// <value>The source assembly.</value>
+        [NotNull]
+        protected static string SourceAssembly { get; set; }
+
+        #endregion
+
+        public static IContainer SetupTest(Action<IContainer> setup)
+        {
+            if (Current != null && !(Current is TestApplication))
+                throw new InvalidOperationException("An Applications is Existing");
+
+            var testApp = new TestApplication(setup);
+            testApp.OnStartup(new string[0]);
+
+            return Current.Container;
+        }
+
+        public static void FreeTest()
+        {
+            if (!(Current is TestApplication)) return;
+
+            Current.Shutdown();
+            Current = null;
+        }
+
+        public virtual string GetdefaultFileLocation()
+        {
+            return AppDomain.CurrentDomain.BaseDirectory;
+        }
+
         private class TestApplication : CommonApplication
         {
             private readonly Action<IContainer> _configContainer;
+
+            public TestApplication(Action<IContainer> configContainer) : base(true, null, new UiControllerFactoryFake(), new SyncTask())
+            {
+                _configContainer = configContainer;
+            }
+
+            public override IContainer Container { get; set; }
+
+            protected override IContainer CreateContainer()
+            {
+                var con = base.CreateContainer();
+
+                _configContainer(con);
+
+                return con;
+            }
+
+            protected override void ConfigurateLagging(LoggingConfiguration config)
+            {
+                config.AddRuleForAllLevels(new VsDebuggerTarget());
+            }
 
             internal sealed class SyncTask : ITaskScheduler
             {
                 public void Dispose()
                 {
-                    
                 }
 
                 public Task QueueTask(ITask task)
@@ -47,7 +133,7 @@ namespace Tauron.Application
 
                 public Task<TResult> BeginInvoke<TResult>(Func<TResult> action)
                 {
-                    return (Task<TResult>)QueueWorkitemAsync(action, false);
+                    return (Task<TResult>) QueueWorkitemAsync(action, false);
                 }
 
                 public void Invoke(Action action)
@@ -59,6 +145,8 @@ namespace Tauron.Application
                 {
                     return action();
                 }
+
+                public bool CheckAccess { get; } = true;
             }
 
             internal sealed class UiControllerFactoryFake : IUIControllerFactory
@@ -92,29 +180,10 @@ namespace Tauron.Application
                 {
                 }
             }
-
-            public TestApplication(Action<IContainer> configContainer) : base(true, null, new UiControllerFactoryFake(), new SyncTask())
-            {
-                _configContainer = configContainer;
-            }
-
-            public override IContainer Container { get; set; }
-
-            protected override IContainer CreateContainer()
-            {
-                var con = base.CreateContainer();
-
-                _configContainer(con);
-
-                return con;
-            }
-
-            protected override void ConfigurateLagging(LoggingConfiguration config) => config.AddRuleForAllLevels(new VsDebuggerTarget());
         }
 
         public sealed class VsDebuggerTarget : TargetWithLayoutHeaderAndFooter
         {
-
             public VsDebuggerTarget()
             {
                 Layout = "${logger}|${message}";
@@ -130,7 +199,7 @@ namespace Tauron.Application
             }
 
             /// <summary>
-            /// Closes the target and releases any unmanaged resources.
+            ///     Closes the target and releases any unmanaged resources.
             /// </summary>
             protected override void CloseTarget()
             {
@@ -140,7 +209,7 @@ namespace Tauron.Application
             }
 
             /// <summary>
-            /// Writes the specified logging event to the attached debugger.
+            ///     Writes the specified logging event to the attached debugger.
             /// </summary>
             /// <param name="logEvent">The logging event.</param>
             protected override void Write(LogEventInfo logEvent)
@@ -188,69 +257,6 @@ namespace Tauron.Application
 
             #endregion
         }
-
-        #region Static Fields
-
-        /// <summary>The _scheduler.</summary>
-        private static ITaskScheduler _scheduler;
-
-        #endregion
-
-        public static IContainer SetupTest(Action<IContainer> setup)
-        {
-            if(Current != null && !(Current is TestApplication))
-                throw new InvalidOperationException("An Applications is Existing");
-
-            var testApp = new TestApplication(setup);
-            testApp.OnStartup(new string[0]);
-
-            return Current.Container;
-        }
-
-        public static void FreeTest()
-        {
-            if (!(Current is TestApplication)) return;
-
-            Current.Shutdown();
-            Current = null;
-        }
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initialisiert eine neue Instanz der <see cref="CommonApplication" /> Klasse.
-        /// </summary>
-        /// <param name="doStartup">
-        ///     The do startup.
-        /// </param>
-        /// <param name="service">
-        ///     The service.
-        /// </param>
-        /// <param name="factory">
-        ///     The factory.
-        /// </param>
-        protected CommonApplication(bool doStartup, [CanBeNull] ISplashService service, [NotNull] IUIControllerFactory factory, [CanBeNull] ITaskScheduler taskScheduler = null)
-        {
-            Factory        = factory ?? throw new ArgumentNullException(nameof(factory));
-            Current        = this;
-            _scheduler     = taskScheduler ?? new TaskScheduler(UiSynchronize.Synchronize);
-            _splash        = service ?? new NullSplash();
-            _doStartup     = doStartup;
-            SourceAssembly = new AssemblyName(Assembly.GetAssembly(GetType()).FullName).Name;
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>Gets or sets the source assembly.</summary>
-        /// <value>The source assembly.</value>
-        [NotNull]
-        protected static string SourceAssembly { get; set; }
-
-        #endregion
-
-        public virtual string GetdefaultFileLocation() => AppDomain.CurrentDomain.BaseDirectory;
 
         #region Fields
 
@@ -346,7 +352,10 @@ namespace Tauron.Application
         ///     The <see cref="IContainer" />.
         /// </returns>
         [NotNull]
-        protected virtual IContainer CreateContainer() => new DefaultContainer();
+        protected virtual IContainer CreateContainer()
+        {
+            return new DefaultContainer();
+        }
 
         /// <summary>
         ///     The do startup.
@@ -437,7 +446,7 @@ namespace Tauron.Application
                 _scheduler.QueueTask(new UserTask(PerformStartup, false));
             }
 
-            if(_scheduler is TaskScheduler impl)
+            if (_scheduler is TaskScheduler impl)
                 impl.EnterLoop();
         }
 
@@ -473,11 +482,9 @@ namespace Tauron.Application
 
                 listner.ReceiveMessage(Resources.Resources.Init_Msg_Step2);
                 foreach (var module in Container.ResolveAll(typeof(IModule), null)
-                                                .Cast<IModule>()
-                                                .OrderBy(m => m.Order))
-                {
+                    .Cast<IModule>()
+                    .OrderBy(m => m.Order))
                     InitializeModule(module);
-                }
 
                 listner.ReceiveMessage(Resources.Resources.Init_Msg_Step3);
                 LoadResources();
@@ -490,11 +497,11 @@ namespace Tauron.Application
 
                 if (win != null)
                     UiSynchronize.Synchronize.Invoke(
-                                                     () =>
-                                                     {
-                                                         win.Show();
-                                                         win.Closed += MainWindowClosed;
-                                                     });
+                        () =>
+                        {
+                            win.Show();
+                            win.Closed += MainWindowClosed;
+                        });
 
                 _splash.CloseSplash();
                 _args = null;

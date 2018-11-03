@@ -44,7 +44,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy
         public TPolicy Get<TPolicy>()
         {
             ICollection<IPolicy> policies;
-            if (!_list.TryGetValue(typeof(TPolicy), out policies)) return default(TPolicy);
+            if (!_list.TryGetValue(typeof(TPolicy), out policies)) return default;
 
             return (TPolicy) policies.Last();
         }

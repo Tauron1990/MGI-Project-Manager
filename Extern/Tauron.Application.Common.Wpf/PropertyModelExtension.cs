@@ -14,6 +14,19 @@ namespace Tauron.Application
     [Serializable]
     public class PropertyModelExtension : IContainerExtension
     {
+        public const string EnablePropertyInheritanceMetadataName = "EnablePropertyInheritance";
+
+        public void Initialize(ComponentRegistry components)
+        {
+            components.Register<IProxyService, InternalProxyService>(true);
+        }
+
+        [NotNull]
+        private static string BuildImportName([NotNull] ImportMetadata metadata)
+        {
+            return metadata.InterfaceType + metadata.ContractName;
+        }
+
         private class PropertyImportInterceptor : IImportInterceptor
         {
             private readonly ImportMetadata[] _metadatas;
@@ -52,8 +65,8 @@ namespace Tauron.Application
 
                 var targetImports =
                     imports.Where(meta => meta.Metadata.ContainsKey(EnablePropertyInheritanceMetadataName))
-                           .Where(m => (bool) m.Metadata[EnablePropertyInheritanceMetadataName])
-                           .ToArray();
+                        .Where(m => (bool) m.Metadata[EnablePropertyInheritanceMetadataName])
+                        .ToArray();
 
                 if (targetImports.Length == 0) return GenericGenerator;
 
@@ -63,19 +76,6 @@ namespace Tauron.Application
             }
 
             public ProxyGenerator GenericGenerator { get; }
-        }
-
-        public const string EnablePropertyInheritanceMetadataName = "EnablePropertyInheritance";
-
-        public void Initialize(ComponentRegistry components)
-        {
-            components.Register<IProxyService, InternalProxyService>(true);
-        }
-
-        [NotNull]
-        private static string BuildImportName([NotNull] ImportMetadata metadata)
-        {
-            return metadata.InterfaceType + metadata.ContractName;
         }
     }
 }

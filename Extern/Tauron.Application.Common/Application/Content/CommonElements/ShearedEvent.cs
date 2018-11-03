@@ -138,7 +138,7 @@ namespace Tauron.Application
         /// </returns>
         public TEventType GetEvent<TEventType, TPayload>() where TEventType : SharedEvent<TPayload>, new()
         {
-            var t                                   = typeof(TEventType);
+            var t = typeof(TEventType);
             if (!_events.ContainsKey(t)) _events[t] = new TEventType();
 
             return (TEventType) _events[t];

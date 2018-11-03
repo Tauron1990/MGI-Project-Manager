@@ -66,12 +66,12 @@ namespace Tauron.Application.Implementation
         {
             var context = UiSynchronize.Synchronize;
             context.Invoke(
-                           () =>
-                           {
-                               if (_screen == null) return;
-                               _screen.Close();
-                               _screen = null;
-                           });
+                () =>
+                {
+                    if (_screen == null) return;
+                    _screen.Close();
+                    _screen = null;
+                });
         }
 
         /// <summary>The show splash.</summary>
@@ -79,11 +79,11 @@ namespace Tauron.Application.Implementation
         {
             var context = UiSynchronize.Synchronize;
             context.Invoke(
-                           () =>
-                           {
-                               _screen = new SplashScreen {DataContext = Listner, Width = Listner.Width, Height = Listner.Height};
-                               _screen.Show();
-                           });
+                () =>
+                {
+                    _screen = new SplashScreen {DataContext = Listner, Width = Listner.Width, Height = Listner.Height};
+                    _screen.Show();
+                });
         }
 
         #endregion

@@ -58,21 +58,21 @@ namespace Tauron.Application.Ioc.BuildUp
         ///     The component registry.
         /// </param>
         public BuildEngine(
-            [NotNull] IContainer             container,
+            [NotNull] IContainer container,
             [NotNull] ExportProviderRegistry providerRegistry,
-            [NotNull] ComponentRegistry      componentRegistry)
+            [NotNull] ComponentRegistry componentRegistry)
         {
             if (container == null) throw new ArgumentNullException(nameof(container));
             if (providerRegistry == null) throw new ArgumentNullException(nameof(providerRegistry));
             if (componentRegistry == null) throw new ArgumentNullException(nameof(componentRegistry));
-            _container         = container;
+            _container = container;
             _componentRegistry = componentRegistry;
             _factory =
                 componentRegistry.GetAll<IExportFactory>()
-                                 .First(fac => fac.TechnologyName == AopConstants.DefaultExportFactoryName)
-                                 .CastObj<DefaultExportFactory>();
-            Pipeline                        =  new Pipeline(componentRegistry);
-            RebuildManager                  =  new RebuildManager();
+                    .First(fac => fac.TechnologyName == AopConstants.DefaultExportFactoryName)
+                    .CastObj<DefaultExportFactory>();
+            Pipeline = new Pipeline(componentRegistry);
+            RebuildManager = new RebuildManager();
             providerRegistry.ExportsChanged += ExportsChanged;
         }
 
@@ -86,8 +86,7 @@ namespace Tauron.Application.Ioc.BuildUp
         /// <summary>The _container.</summary>
         private readonly IContainer _container;
 
-        [NotNull]
-        private readonly ComponentRegistry _componentRegistry;
+        [NotNull] private readonly ComponentRegistry _componentRegistry;
 
         #endregion
 
@@ -129,7 +128,7 @@ namespace Tauron.Application.Ioc.BuildUp
                 {
                     tracer.Phase = "Begin Building Up";
                     var context = new DefaultBuildContext(export, BuildMode.Resolve, _container, contractName,
-                                                          tracer, buildParameters, _componentRegistry.GetAll<IResolverExtension>().ToArray());
+                        tracer, buildParameters, _componentRegistry.GetAll<IResolverExtension>().ToArray());
                     var buildObject = new BuildObject(export.ImportMetadata, context.Metadata, buildParameters);
                     Pipeline.Build(context);
                     if (tracer.Exceptional) return null;
@@ -142,7 +141,7 @@ namespace Tauron.Application.Ioc.BuildUp
                 catch (Exception e)
                 {
                     tracer.Exceptional = true;
-                    tracer.Exception   = e;
+                    tracer.Exception = e;
                     return null;
                 }
             }
@@ -170,18 +169,18 @@ namespace Tauron.Application.Ioc.BuildUp
                 {
                     errorTracer.Phase = "Begin Building Up";
                     var context = new DefaultBuildContext(
-                                                          _factory.CreateAnonymosWithTarget(toBuild.GetType(), toBuild),
-                                                          BuildMode.BuildUpObject,
-                                                          _container,
-                                                          toBuild.GetType().Name, errorTracer,
-                                                          buildParameters, _componentRegistry.GetAll<IResolverExtension>().ToArray());
+                        _factory.CreateAnonymosWithTarget(toBuild.GetType(), toBuild),
+                        BuildMode.BuildUpObject,
+                        _container,
+                        toBuild.GetType().Name, errorTracer,
+                        buildParameters, _componentRegistry.GetAll<IResolverExtension>().ToArray());
                     Pipeline.Build(context);
                     return context.Target;
                 }
                 catch (Exception e)
                 {
                     errorTracer.Exceptional = true;
-                    errorTracer.Exception   = e;
+                    errorTracer.Exception = e;
                     return null;
                 }
             }
@@ -213,18 +212,18 @@ namespace Tauron.Application.Ioc.BuildUp
                 try
                 {
                     var context = new DefaultBuildContext(
-                                                          _factory.CreateAnonymos(type, constructorArguments),
-                                                          BuildMode.BuildUpObject,
-                                                          _container,
-                                                          type.Name, errorTracer,
-                                                          buildParameters, _componentRegistry.GetAll<IResolverExtension>().ToArray());
+                        _factory.CreateAnonymos(type, constructorArguments),
+                        BuildMode.BuildUpObject,
+                        _container,
+                        type.Name, errorTracer,
+                        buildParameters, _componentRegistry.GetAll<IResolverExtension>().ToArray());
                     Pipeline.Build(context);
                     return context.Target;
                 }
                 catch (Exception e)
                 {
                     errorTracer.Exceptional = true;
-                    errorTracer.Exception   = e;
+                    errorTracer.Exception = e;
                     return null;
                 }
             }

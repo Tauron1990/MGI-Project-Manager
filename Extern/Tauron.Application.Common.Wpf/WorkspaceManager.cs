@@ -11,7 +11,7 @@ using JetBrains.Annotations;
 namespace Tauron.Application
 {
     [PublicAPI]
-    public sealed class WorkspaceManager<TWorkspace> : UISyncObservableCollection<TWorkspace>
+    public sealed class WorkspaceManager<TWorkspace> : UIObservableCollection<TWorkspace>
         where TWorkspace : class, ITabWorkspace
     {
         #region Constructors and Destructors
@@ -76,7 +76,7 @@ namespace Tauron.Application
         #region Fields
 
         private readonly IWorkspaceHolder _holder;
-        private          ITabWorkspace    _activeItem;
+        private ITabWorkspace _activeItem;
 
         #endregion
 

@@ -38,15 +38,15 @@ namespace Tauron.Interop
         /// <param name="lpData">The lp data.</param>
         /// <returns>The CopyProgressResult.</returns>
         public delegate CopyProgressResult CopyProgressRoutine(
-            long                       totalFileSize,
-            long                       totalBytesTransferred,
-            long                       streamSize,
-            long                       streamBytesTransferred,
-            uint                       dwStreamNumber,
+            long totalFileSize,
+            long totalBytesTransferred,
+            long streamSize,
+            long streamBytesTransferred,
+            uint dwStreamNumber,
             CopyProgressCallbackReason dwCallbackReason,
-            IntPtr                     hSourceFile,
-            IntPtr                     hDestinationFile,
-            IntPtr                     lpData);
+            IntPtr hSourceFile,
+            IntPtr hDestinationFile,
+            IntPtr lpData);
 
         /// <summary>The copy progress callback reason.</summary>
         public enum CopyProgressCallbackReason : uint
@@ -74,31 +74,21 @@ namespace Tauron.Interop
             PROGRESS_QUIET = 3
         }
 
-        /// <summary>The copy file flags.</summary>
-        [Flags]
-        internal enum CopyFileFlags : uint
-        {
-            /// <summary>The cop y_ fil e_ fai l_ i f_ exists.</summary>
-            COPY_FILE_FAIL_IF_EXISTS = 0x00000001,
-
-            /// <summary>The cop y_ fil e_ n o_ buffering.</summary>
-            COPY_FILE_NO_BUFFERING = 0x00001000,
-
-            /// <summary>The cop y_ fil e_ restartable.</summary>
-            COPY_FILE_RESTARTABLE = 0x00000002,
-
-            /// <summary>The cop y_ fil e_ ope n_ sourc e_ fo r_ write.</summary>
-            COPY_FILE_OPEN_SOURCE_FOR_WRITE = 0x00000004,
-
-            /// <summary>The cop y_ fil e_ allo w_ decrypte d_ destination.</summary>
-            COPY_FILE_ALLOW_DECRYPTED_DESTINATION = 0x00000008
-        }
-
         /// <summary>The wm drawclipboard.</summary>
         internal const int WmDrawclipboard = 0x0308;
 
         /// <summary>The wm changecbchain.</summary>
         internal const int WmChangecbchain = 0x030D;
+
+        /// <summary>
+        ///     Sent when the contents of the clipboard have changed.
+        /// </summary>
+        public const int WM_CLIPBOARDUPDATE = 0x031D;
+
+        /// <summary>
+        ///     To find message-only windows, specify HWND_MESSAGE in the hwndParent parameter of the FindWindowEx function.
+        /// </summary>
+        public static IntPtr HWND_MESSAGE = new IntPtr(-3);
 
         /// <summary>
         ///     The set clipboard viewer.
@@ -164,7 +154,7 @@ namespace Tauron.Interop
         [DllImport("shell32.dll", EntryPoint = "CommandLineToArgvW", CharSet = CharSet.Unicode)]
         private static extern IntPtr _CommandLineToArgvW(
             [MarshalAs(UnmanagedType.LPWStr)] string cmdLine,
-            out                               int    numArgs);
+            out int numArgs);
 
         /// <summary>
         ///     The _ local free.
@@ -243,15 +233,15 @@ namespace Tauron.Interop
         ///     The <see cref="bool" />.
         /// </returns>
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false,
-            ThrowOnUnmappableChar               = true)]
+            ThrowOnUnmappableChar = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool CopyFileEx(
-            string              lpExistingFileName,
-            string              lpNewFileName,
+            string lpExistingFileName,
+            string lpNewFileName,
             CopyProgressRoutine lpProgressRoutine,
-            IntPtr              lpData,
-            ref int             pbCancel,
-            CopyFileFlags       dwCopyFlags);
+            IntPtr lpData,
+            ref int pbCancel,
+            CopyFileFlags dwCopyFlags);
 
         /// <summary>
         ///     The sh get known folder path.
@@ -274,32 +264,42 @@ namespace Tauron.Interop
         [DllImport("shell32.dll")]
         internal static extern int SHGetKnownFolderPath(
             [MarshalAs(UnmanagedType.LPStruct)] Guid rfid,
-            uint                                     dwFlags,
-            IntPtr                                   hToken,
-            out IntPtr                               pszPath);
+            uint dwFlags,
+            IntPtr hToken,
+            out IntPtr pszPath);
 
         /// <summary>
-        /// Places the given window in the system-maintained clipboard format listener list.
+        ///     Places the given window in the system-maintained clipboard format listener list.
         /// </summary>
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool AddClipboardFormatListener(IntPtr hwnd);
 
         /// <summary>
-        /// Removes the given window from the system-maintained clipboard format listener list.
+        ///     Removes the given window from the system-maintained clipboard format listener list.
         /// </summary>
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool RemoveClipboardFormatListener(IntPtr hwnd);
 
-        /// <summary>
-        /// Sent when the contents of the clipboard have changed.
-        /// </summary>
-        public const int WM_CLIPBOARDUPDATE = 0x031D;
+        /// <summary>The copy file flags.</summary>
+        [Flags]
+        internal enum CopyFileFlags : uint
+        {
+            /// <summary>The cop y_ fil e_ fai l_ i f_ exists.</summary>
+            COPY_FILE_FAIL_IF_EXISTS = 0x00000001,
 
-        /// <summary>
-        /// To find message-only windows, specify HWND_MESSAGE in the hwndParent parameter of the FindWindowEx function.
-        /// </summary>
-        public static IntPtr HWND_MESSAGE = new IntPtr(-3);
+            /// <summary>The cop y_ fil e_ n o_ buffering.</summary>
+            COPY_FILE_NO_BUFFERING = 0x00001000,
+
+            /// <summary>The cop y_ fil e_ restartable.</summary>
+            COPY_FILE_RESTARTABLE = 0x00000002,
+
+            /// <summary>The cop y_ fil e_ ope n_ sourc e_ fo r_ write.</summary>
+            COPY_FILE_OPEN_SOURCE_FOR_WRITE = 0x00000004,
+
+            /// <summary>The cop y_ fil e_ allo w_ decrypte d_ destination.</summary>
+            COPY_FILE_ALLOW_DECRYPTED_DESTINATION = 0x00000008
+        }
     }
 }

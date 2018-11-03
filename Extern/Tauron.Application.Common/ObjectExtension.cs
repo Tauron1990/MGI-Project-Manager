@@ -64,7 +64,7 @@ namespace Tauron
         /// </returns>
         public static T CastObj<T>([CanBeNull] this object value)
         {
-            if (value == null) return default(T);
+            if (value == null) return default;
 
             return (T) value;
         }
@@ -87,7 +87,7 @@ namespace Tauron
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
             var temp = provider.GetService(typeof(T));
-            if (temp == null) return default(T);
+            if (temp == null) return default;
 
             return (T) temp;
         }

@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -24,8 +23,8 @@ namespace Tauron
         {
             var pathParts = path.Split('\\');
             var pathBuild = new StringBuilder(path.Length);
-            var lastPart  = pathParts[pathParts.Length - 1];
-            var prevPath  = "";
+            var lastPart = pathParts[pathParts.Length - 1];
+            var prevPath = "";
 
             //Erst prüfen ob der komplette String evtl. bereits kürzer als die Maximallänge ist
             if (path.Length >= length) return path;
@@ -175,7 +174,7 @@ namespace Tauron
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (destination == null) throw new ArgumentNullException(nameof(destination));
 
-            if(!source.ExisFile()) return;
+            if (!source.ExisFile()) return;
 
             File.Copy(source, destination, true);
         }

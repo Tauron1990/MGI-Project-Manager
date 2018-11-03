@@ -16,12 +16,12 @@ namespace Tauron.Application.Models
         private GroupDictionary<string, WeakAction> _changedActions;
 
         private GroupDictionary<string, PropertyIssue> _propertyIssues = new GroupDictionary<string, PropertyIssue>();
-        private EditableDictionary<string, object>     _values;
+        private EditableDictionary<string, object> _values;
 
         public ModelBase()
         {
-            _changedActions  = new GroupDictionary<string, WeakAction>();
-            _values          = new EditableDictionary<string, object>();
+            _changedActions = new GroupDictionary<string, WeakAction>();
+            _values = new EditableDictionary<string, object>();
             ValidatorContext = new ValidatorContext(this);
         }
 
@@ -43,7 +43,7 @@ namespace Tauron.Application.Models
         protected ValidatorContext ValidatorContext { get; private set; }
 
         protected virtual bool HasErrorOverride => false;
-        public            bool HasNoErrors      => !HasErrors;
+        public bool HasNoErrors => !HasErrors;
 
         public bool ConvertPropertyIssuesToString { get; set; }
 
@@ -94,13 +94,13 @@ namespace Tauron.Application.Models
         public static IEnumerable<ObservableProperty> GetProperties([NotNull] Type type)
         {
             return _properties.TryGetValue(type, out var properties)
-                       ? new ReadOnlyEnumerator<ObservableProperty>(properties)
-                       : Enumerable.Empty<ObservableProperty>();
+                ? new ReadOnlyEnumerator<ObservableProperty>(properties)
+                : Enumerable.Empty<ObservableProperty>();
         }
 
         [NotNull]
-        public static ObservableProperty RegisterProperty([NotNull] string name, [NotNull]   Type                       ownerType,
-                                                          [NotNull] Type   type, [CanBeNull] ObservablePropertyMetadata metadata)
+        public static ObservableProperty RegisterProperty([NotNull] string name, [NotNull] Type ownerType,
+            [NotNull] Type type, [CanBeNull] ObservablePropertyMetadata metadata)
         {
             var properties = _properties[ownerType];
 
@@ -114,13 +114,13 @@ namespace Tauron.Application.Models
 
         [NotNull]
         public static ObservableProperty RegisterProperty([NotNull] string name, [NotNull] Type ownerType,
-                                                          [NotNull] Type   type)
+            [NotNull] Type type)
         {
             return RegisterProperty(name, ownerType, type, null);
         }
 
-        public void RegisterPropertyChanged([NotNull] ObservableProperty        prop,
-                                            [NotNull] ObservablePropertyChanged changed)
+        public void RegisterPropertyChanged([NotNull] ObservableProperty prop,
+            [NotNull] ObservablePropertyChanged changed)
         {
             if (prop == null) throw new ArgumentNullException(nameof(prop));
             if (changed == null) throw new ArgumentNullException(nameof(changed));
@@ -129,7 +129,7 @@ namespace Tauron.Application.Models
         }
 
         public void RegisterPropertyChanged([NotNull] ObservableProperty prop,
-                                            [NotNull] Action<string>     changed)
+            [NotNull] Action<string> changed)
         {
             if (prop == null) throw new ArgumentNullException(nameof(prop));
             if (changed == null) throw new ArgumentNullException(nameof(changed));
@@ -231,11 +231,10 @@ namespace Tauron.Application.Models
             if (changedActions == null) return;
 
             foreach (var changedAction in changedActions)
-            {
-                if (changedAction.ParameterCount == 0) changedAction.Invoke();
+                if (changedAction.ParameterCount == 0)
+                    changedAction.Invoke();
                 else if (changedAction.ParameterCount == 2) changedAction.Invoke(this, value);
                 else changedAction.Invoke(_values[prop.Name]);
-            }
         }
 
         public void ValidateAll()
@@ -243,10 +242,7 @@ namespace Tauron.Application.Models
             var props = _properties[GetType()];
             if (props == null) return;
 
-            foreach (var property in props)
-            {
-                ValidateProperty(property, GetValue(property));
-            }
+            foreach (var property in props) ValidateProperty(property, GetValue(property));
         }
 
         private void ValidateProperty([NotNull] ObservableProperty property, [CanBeNull] object value)
@@ -256,9 +252,9 @@ namespace Tauron.Application.Models
 
             ValidatorContext.Property = property;
             SetIssues(property.Name,
-                      rules.Where(r => !r.IsValidValue(value, ValidatorContext))
-                           .Select(r => new PropertyIssue(property.Name, value, string.Format(r.Message(), value)))
-                           .ToArray());
+                rules.Where(r => !r.IsValidValue(value, ValidatorContext))
+                    .Select(r => new PropertyIssue(property.Name, value, string.Format(r.Message(), value)))
+                    .ToArray());
             // ReSharper disable once AssignNullToNotNullAttribute
             ValidatorContext.Property = null;
 
@@ -319,8 +315,8 @@ namespace Tauron.Application.Models
             {
                 if (prop == null) throw new ArgumentNullException(nameof(prop));
                 if (componentType == null) throw new ArgumentNullException(nameof(componentType));
-                _prop         = prop ?? throw new ArgumentNullException(nameof(prop));
-                Owner         = owner ?? throw new ArgumentNullException(nameof(owner));
+                _prop = prop ?? throw new ArgumentNullException(nameof(prop));
+                Owner = owner ?? throw new ArgumentNullException(nameof(owner));
                 ComponentType = componentType ?? throw new ArgumentNullException(nameof(componentType));
             }
 
@@ -421,11 +417,11 @@ namespace Tauron.Application.Models
             var coll = TypeDescriptor.GetProperties(this, true);
             return
                 new PropertyDescriptorCollection(
-                                                 GetPropertyDescriptors()
-                                                     .Union(CustomObservableProperties())
-                                                     .Union(coll.Cast<MemberDescriptor>(), MemberDescriptorEqualityComparer.Comparer)
-                                                     .Cast<PropertyDescriptor>()
-                                                     .ToArray(), true);
+                    GetPropertyDescriptors()
+                        .Union(CustomObservableProperties())
+                        .Union(coll.Cast<MemberDescriptor>(), MemberDescriptorEqualityComparer.Comparer)
+                        .Cast<PropertyDescriptor>()
+                        .ToArray(), true);
         }
 
         [NotNull]
@@ -441,11 +437,12 @@ namespace Tauron.Application.Models
             var properties = new List<ObservablePropertyDescriptor>();
 
             var orgType = GetType();
-            var type    = orgType;
+            var type = orgType;
 
             while (type != null && type != typeof(ModelBase) && type != typeof(object))
             {
-                if (_properties.TryGetValue(type, out var props)) properties.AddRange(props.Select(observableProperty => new ObservablePropertyDescriptor(observableProperty, orgType, this)));
+                if (_properties.TryGetValue(type, out var props))
+                    properties.AddRange(props.Select(observableProperty => new ObservablePropertyDescriptor(observableProperty, orgType, this)));
 
                 type = type.BaseType;
             }

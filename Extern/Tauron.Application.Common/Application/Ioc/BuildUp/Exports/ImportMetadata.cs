@@ -63,22 +63,22 @@ namespace Tauron.Application.Ioc.BuildUp.Exports
         ///     The metadata.
         /// </param>
         public ImportMetadata(
-            [CanBeNull] Type                      interfaceType,
-            [CanBeNull] string                    contractName,
-            [NotNull]   IExport                   export,
-            [NotNull]   string                    memberName,
-            bool                                  optional,
+            [CanBeNull] Type interfaceType,
+            [CanBeNull] string contractName,
+            [NotNull] IExport export,
+            [NotNull] string memberName,
+            bool optional,
             [NotNull] IDictionary<string, object> metadata)
         {
             if (export == null) throw new ArgumentNullException(nameof(export));
             if (metadata == null) throw new ArgumentNullException(nameof(metadata));
             if (string.IsNullOrWhiteSpace(memberName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(memberName));
             InterfaceType = interfaceType;
-            ContractName  = contractName;
-            Export        = export;
-            MemberName    = memberName;
-            Optional      = optional;
-            Metadata      = metadata;
+            ContractName = contractName;
+            Export = export;
+            MemberName = memberName;
+            Optional = optional;
+            Metadata = metadata;
         }
 
         #endregion
@@ -134,7 +134,7 @@ namespace Tauron.Application.Ioc.BuildUp.Exports
 
             bool flag;
             if (InterfaceType != null) flag = InterfaceType == other.InterfaceType;
-            else flag                       = other.InterfaceType == null;
+            else flag = other.InterfaceType == null;
 
             return flag && string.Equals(ContractName, other.ContractName)
                         && string.Equals(MemberName, other.MemberName);
@@ -182,7 +182,7 @@ namespace Tauron.Application.Ioc.BuildUp.Exports
             unchecked
             {
                 return (InterfaceType?.GetHashCode() * 397 ?? 0)
-                     ^ (ContractName?.GetHashCode() ?? 0);
+                       ^ (ContractName?.GetHashCode() ?? 0);
             }
         }
 

@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
@@ -8,13 +9,14 @@ using JetBrains.Annotations;
 
 namespace Tauron.Application
 {
+    [DebuggerStepThrough]
     public class UserResultTask<TResult> : ITask
     {
         public UserResultTask([NotNull] Func<TResult> callback, bool sync)
         {
-            _callback   = callback ?? throw new ArgumentNullException(nameof(callback));
+            _callback = callback ?? throw new ArgumentNullException(nameof(callback));
             Synchronize = sync;
-            _task       = new TaskCompletionSource<TResult>();
+            _task = new TaskCompletionSource<TResult>();
         }
 
         #region Public Methods and Operators
@@ -56,6 +58,7 @@ namespace Tauron.Application
     }
 
     /// <summary>The user task.</summary>
+    [DebuggerStepThrough]
     public class UserTask : ITask
     {
         #region Constructors and Destructors
@@ -74,9 +77,9 @@ namespace Tauron.Application
         public UserTask([NotNull] Action callback, bool sync)
         {
             if (callback == null) throw new ArgumentNullException(nameof(callback));
-            _callback   = callback;
+            _callback = callback;
             Synchronize = sync;
-            _task       = new TaskCompletionSource<object>();
+            _task = new TaskCompletionSource<object>();
         }
 
         #endregion

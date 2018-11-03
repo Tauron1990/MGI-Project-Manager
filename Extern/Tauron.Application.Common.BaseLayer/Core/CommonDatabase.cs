@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -11,11 +12,17 @@ namespace Tauron.Application.Common.BaseLayer.Core
     public class CommonDatabase<TDbContext> : IDatabase
         where TDbContext : DbContext, new()
     {
-        public CommonDatabase(TDbContext context) => Context = context;
+        public CommonDatabase(TDbContext context)
+        {
+            Context = context;
+        }
 
         public DbContext Context { get; }
 
-        public void Dispose() => Context.Dispose();
+        public void Dispose()
+        {
+            Context.Dispose();
+        }
 
         public virtual string Id { get; } = "Common";
 
@@ -35,5 +42,7 @@ namespace Tauron.Application.Common.BaseLayer.Core
         public TEntity Find<TEntity, TKey>(TKey key) where TEntity : GenericBaseEntity<TKey> => Context.Find<TEntity>(key);
 
         public Task SaveChangesAsync(CancellationToken cancellationToken) => Context.SaveChangesAsync(cancellationToken);
+
+        public void AddRange<TEntity>(IEnumerable<TEntity> newEntities) => Context.AddRange(newEntities);
     }
 }

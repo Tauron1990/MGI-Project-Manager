@@ -40,14 +40,14 @@ namespace Tauron.Application.Controls
         #region Static Fields
 
         public static readonly DependencyProperty ActiveItemProperty = DependencyProperty.Register(
-                                                                                                   "ActiveItem",
-                                                                                                   typeof(object),
-                                                                                                   typeof(
-                                                                                                           ToggleSwitchSelectionBase
-                                                                                                       ),
-                                                                                                   new UIPropertyMetadata
-                                                                                                       (null,
-                                                                                                        OnPropertyChanged));
+            "ActiveItem",
+            typeof(object),
+            typeof(
+                ToggleSwitchSelectionBase
+            ),
+            new UIPropertyMetadata
+            (null,
+                OnPropertyChanged));
 
         #endregion
 
@@ -136,13 +136,11 @@ namespace Tauron.Application.Controls
 
             var toggle = (TToggle) element;
             foreach (var item2 in controls)
-            {
                 if (ReferenceEquals(item, toggle))
                 {
                     controls.Remove(item2.Key);
                     break;
                 }
-            }
 
             ClearItem(toggle, item);
             toggle.SetHeader(null);
@@ -307,7 +305,7 @@ namespace Tauron.Application.Controls
 
                 Active = sender;
 
-                var item                                                 = GetItem((TToggle) Active);
+                var item = GetItem((TToggle) Active);
                 if (ActiveItem != null && ActiveItem != item) ActiveItem = item;
 
                 ItemActivateted((TToggle) sender);

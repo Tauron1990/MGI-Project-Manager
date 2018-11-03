@@ -44,7 +44,7 @@ namespace Tauron.Application
 
             if (info != null && !info.Equals(CultureInfo.InvariantCulture))
             {
-                Thread.CurrentThread.CurrentCulture   = info;
+                Thread.CurrentThread.CurrentCulture = info;
                 Thread.CurrentThread.CurrentUICulture = info;
             }
 
@@ -104,19 +104,19 @@ namespace Tauron.Application
             if (string.IsNullOrEmpty(ThemeDictionary)) return;
 
             QueueWorkitemAsync(
-                               () =>
-                                   WpfApplicationController.Application.Resources.MergedDictionaries.Add(
-                                                                                                         System.Windows.Application
-                                                                                                               .LoadComponent(
-                                                                                                                              new Uri
-                                                                                                                                  (
-                                                                                                                                   $@"/{SourceAssembly};component/{ThemeDictionary}",
-                                                                                                                                   UriKind
-                                                                                                                                       .Relative))
-                                                                                                               .CastObj
-                                                                                                                   <ResourceDictionary>
-                                                                                                                   ()),
-                               true);
+                () =>
+                    WpfApplicationController.Application.Resources.MergedDictionaries.Add(
+                        System.Windows.Application
+                            .LoadComponent(
+                                new Uri
+                                (
+                                    $@"/{SourceAssembly};component/{ThemeDictionary}",
+                                    UriKind
+                                        .Relative))
+                            .CastObj
+                                <ResourceDictionary>
+                                ()),
+                true);
         }
 
 
@@ -127,24 +127,27 @@ namespace Tauron.Application
 
         public override void Shutdown()
         {
-            base.Shutdown();
             var app = System.Windows.Application.Current;
 
-            app.Dispatcher.BeginInvoke(new Action(app.Shutdown));
+            app.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                base.Shutdown();
+                app.Shutdown();
+            }));
         }
 
         protected override void ConfigurateLagging(LoggingConfiguration config)
         {
             var filetarget = new FileTarget
-                             {
-                                 Name             = "CommonFile",
-                                 Layout           = "${log4jxmlevent}",
-                                 ArchiveAboveSize = 10485760,
-                                 MaxArchiveFiles  = 10,
-                                 ArchiveFileName  = GetdefaultFileLocation().CombinePath("Logs\\Tauron.Application.Common.{##}.log"),
-                                 FileName         = GetdefaultFileLocation().CombinePath("Logs\\Tauron.Application.Common.log"),
-                                 ArchiveNumbering = ArchiveNumberingMode.Rolling
-                             };
+            {
+                Name = "CommonFile",
+                Layout = "${log4jxmlevent}",
+                ArchiveAboveSize = 10485760,
+                MaxArchiveFiles = 10,
+                ArchiveFileName = GetdefaultFileLocation().CombinePath("Logs\\Tauron.Application.Common.{##}.log"),
+                FileName = GetdefaultFileLocation().CombinePath("Logs\\Tauron.Application.Common.log"),
+                ArchiveNumbering = ArchiveNumberingMode.Rolling
+            };
             config.AddTarget(filetarget);
 
             config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, filetarget));

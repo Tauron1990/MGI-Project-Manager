@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using JetBrains.Annotations;
 using Tauron.Application.Composition;
 using Tauron.Application.Ioc;
 using Tauron.Application.Models;
 
 namespace Tauron.Application.Views.Core
 {
+    [PublicAPI]
     public class AttributeBasedLocator : CommonLocatorBase
     {
         [Inject]
@@ -30,15 +32,9 @@ namespace Tauron.Application.Views.Core
             return temp?.Resolve(true);
         }
 
-        public override IEnumerable<InstanceResolver<Control, ISortableViewExportMetadata>> GetAllViewsImpl(string name)
-        {
-            return Views.Where(v => v.Metadata.Name == name);
-        }
+        public override IEnumerable<InstanceResolver<Control, ISortableViewExportMetadata>> GetAllViewsImpl(string name) => Views.Where(v => v.Metadata.Name == name);
 
-        public override DependencyObject Match(string name)
-        {
-            return Views.First(v => v.Metadata.Name == name).Resolve();
-        }
+        public override DependencyObject Match(string name) => Views.First(v => v.Metadata.Name == name).Resolve();
 
         public override IWindow CreateWindowImpl(string name, object[] parameters)
         {
@@ -50,7 +46,11 @@ namespace Tauron.Application.Views.Core
                     buildParameters = new BuildParameter[parameters.Length];
                     for (var i = 0; i < parameters.Length; i++)
                     {
-                        buildParameters[i] = new SimpleBuildPrameter(parameters[i]);
+                        var oParm = parameters[i];
+                        if (oParm is BuildParameter buildParameter)
+                            buildParameters[i] = buildParameter;
+                        else
+                            buildParameters[i] = new SimpleBuildPrameter(parameters[i]);
                     }
                 }
 
@@ -65,10 +65,7 @@ namespace Tauron.Application.Views.Core
             }
         }
 
-        public override Type GetViewType(string name)
-        {
-            return Views.First(vi => vi.Metadata.Name == name).RealType;
-        }
+        public override Type GetViewType(string name) => Views.First(vi => vi.Metadata.Name == name).RealType;
 
         protected virtual IWindow CastToWindow(object objWindow, string name)
         {

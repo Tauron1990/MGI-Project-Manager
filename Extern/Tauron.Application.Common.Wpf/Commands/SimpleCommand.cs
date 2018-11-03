@@ -44,13 +44,12 @@ namespace Tauron.Application.Commands
         public SimpleCommand([CanBeNull] Func<object, bool> canExecute, [NotNull] Action<object> execute)
             : this(canExecute, execute, null)
         {
-            
         }
 
         public SimpleCommand([CanBeNull] Func<object, bool> canExecute, [NotNull] Action<object> execute, [CanBeNull] object parameter)
         {
             _canExecute = canExecute;
-            _execute    = execute;
+            _execute = execute;
             _parameter = parameter;
         }
 

@@ -59,6 +59,74 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
     /// <summary>The method injector.</summary>
     public class MethodInjector : MemberInjector
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MethodInjector" /> class.
+        ///     Initialisiert eine neue Instanz der <see cref="MethodInjector" /> Klasse.
+        ///     Initializes a new instance of the <see cref="MethodInjector" /> class.
+        /// </summary>
+        /// <param name="method">
+        ///     The method.
+        /// </param>
+        /// <param name="metadataFactory">
+        ///     The metadata factory.
+        /// </param>
+        /// <param name="eventManager">
+        ///     The event manager.
+        /// </param>
+        /// <param name="resolverExtensions"></param>
+        public MethodInjector([NotNull] MethodInfo method, [NotNull] IMetadataFactory metadataFactory, [NotNull] IEventManager eventManager,
+            [NotNull] [ItemNotNull] IResolverExtension[] resolverExtensions)
+        {
+            _method = method ?? throw new ArgumentNullException(nameof(method));
+            _metadataFactory = metadataFactory ?? throw new ArgumentNullException(nameof(metadataFactory));
+            _eventManager = eventManager ?? throw new ArgumentNullException(nameof(eventManager));
+            _resolverExtensions = resolverExtensions ?? throw new ArgumentNullException(nameof(resolverExtensions));
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     The inject.
+        /// </summary>
+        /// <param name="target">
+        ///     The target.
+        /// </param>
+        /// <param name="container">
+        ///     The container.
+        /// </param>
+        /// <param name="metadata">
+        ///     The metadata.
+        /// </param>
+        /// <param name="interceptor"></param>
+        /// <param name="errorTracer"></param>
+        /// <param name="parameters"></param>
+        public override void Inject(object target, IContainer container, ImportMetadata metadata, IImportInterceptor interceptor, ErrorTracer errorTracer,
+            BuildParameter[] parameters)
+        {
+            if (metadata.Metadata != null)
+                if (metadata.Metadata.TryGetValue(AopConstants.EventMetodMetadataName, out var obj))
+                    if ((bool) obj)
+                    {
+                        var topic = (string) metadata.Metadata[AopConstants.EventTopicMetadataName];
+                        _eventManager.AddEventHandler(topic, _method, target, errorTracer);
+                        return;
+                    }
+
+            var parms = _method.GetParameters();
+            var args = new List<object>();
+
+            foreach (var parameterInfo in parms.Select(p => new ParameterMemberInfo(p)))
+                new ParameterHelper(_metadataFactory, parameterInfo, args, _resolverExtensions).Inject(target, container, metadata, interceptor, errorTracer, parameters);
+
+            _method.Invoke(target, args.ToArray());
+        }
+
+        #endregion
+
         /// <summary>The parameter helper.</summary>
         private class ParameterHelper : Injectorbase<ParameterMemberInfo>
         {
@@ -71,8 +139,8 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
 
             #region Constructors and Destructors
 
-            public ParameterHelper([NotNull] IMetadataFactory metadataFactory, [NotNull] ParameterMemberInfo  parameter,
-                                   [NotNull] List<object>     parameters,      [NotNull] IResolverExtension[] resolverExtensions)
+            public ParameterHelper([NotNull] IMetadataFactory metadataFactory, [NotNull] ParameterMemberInfo parameter,
+                [NotNull] List<object> parameters, [NotNull] IResolverExtension[] resolverExtensions)
                 : base(metadataFactory, parameter, resolverExtensions)
             {
                 if (metadataFactory == null) throw new ArgumentNullException(nameof(metadataFactory));
@@ -112,75 +180,6 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
 
             #endregion
         }
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="MethodInjector" /> class.
-        ///     Initialisiert eine neue Instanz der <see cref="MethodInjector" /> Klasse.
-        ///     Initializes a new instance of the <see cref="MethodInjector" /> class.
-        /// </summary>
-        /// <param name="method">
-        ///     The method.
-        /// </param>
-        /// <param name="metadataFactory">
-        ///     The metadata factory.
-        /// </param>
-        /// <param name="eventManager">
-        ///     The event manager.
-        /// </param>
-        /// <param name="resolverExtensions"></param>
-        public MethodInjector([NotNull]               MethodInfo           method, [NotNull] IMetadataFactory metadataFactory, [NotNull] IEventManager eventManager,
-                              [NotNull] [ItemNotNull] IResolverExtension[] resolverExtensions)
-        {
-            _method             = method ?? throw new ArgumentNullException(nameof(method));
-            _metadataFactory    = metadataFactory ?? throw new ArgumentNullException(nameof(metadataFactory));
-            _eventManager       = eventManager ?? throw new ArgumentNullException(nameof(eventManager));
-            _resolverExtensions = resolverExtensions ?? throw new ArgumentNullException(nameof(resolverExtensions));
-        }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        ///     The inject.
-        /// </summary>
-        /// <param name="target">
-        ///     The target.
-        /// </param>
-        /// <param name="container">
-        ///     The container.
-        /// </param>
-        /// <param name="metadata">
-        ///     The metadata.
-        /// </param>
-        /// <param name="interceptor"></param>
-        /// <param name="errorTracer"></param>
-        /// <param name="parameters"></param>
-        public override void Inject(object target, IContainer container, ImportMetadata metadata, IImportInterceptor interceptor, ErrorTracer errorTracer, BuildParameter[] parameters)
-        {
-            if (metadata.Metadata != null)
-                if (metadata.Metadata.TryGetValue(AopConstants.EventMetodMetadataName, out var obj))
-                    if ((bool) obj)
-                    {
-                        var topic = (string) metadata.Metadata[AopConstants.EventTopicMetadataName];
-                        _eventManager.AddEventHandler(topic, _method, target, errorTracer);
-                        return;
-                    }
-
-            var parms = _method.GetParameters();
-            var args  = new List<object>();
-
-            foreach (var parameterInfo in parms.Select(p => new ParameterMemberInfo(p)))
-            {
-                new ParameterHelper(_metadataFactory, parameterInfo, args, _resolverExtensions).Inject(target, container, metadata, interceptor, errorTracer, parameters);
-            }
-
-            _method.Invoke(target, args.ToArray());
-        }
-
-        #endregion
 
         #region Fields
 

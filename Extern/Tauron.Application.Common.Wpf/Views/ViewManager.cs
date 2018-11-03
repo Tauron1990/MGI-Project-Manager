@@ -87,31 +87,31 @@ namespace Tauron.Application.Views
         public IWindow GetWindow([NotNull] string windowName)
         {
             return UiSynchronize.Synchronize.Invoke(() =>
-                                                    {
-                                                        var wind =
-                                                            System.Windows.Application.Current.Windows.Cast<Window>().FirstOrDefault(w => w.Name == windowName);
-                                                        return wind == null ? null : new WpfWindow(wind);
-                                                    });
+            {
+                var wind =
+                    System.Windows.Application.Current.Windows.Cast<Window>().FirstOrDefault(w => w.Name == windowName);
+                return wind == null ? null : new WpfWindow(wind);
+            });
         }
 
         #region ExportView
 
         public static readonly DependencyProperty ExportViewProperty =
             DependencyProperty.RegisterAttached("ExportView", typeof(string), typeof(ViewManager),
-                                                new FrameworkPropertyMetadata(string.Empty,
-                                                                              FrameworkPropertyMetadataOptions
-                                                                                  .NotDataBindable,
-                                                                              ExportViewPropertyChanged));
+                new FrameworkPropertyMetadata(string.Empty,
+                    FrameworkPropertyMetadataOptions
+                        .NotDataBindable,
+                    ExportViewPropertyChanged));
 
         private static void ExportViewPropertyChanged([NotNull] DependencyObject dependencyObject,
-                                                      DependencyPropertyChangedEventArgs
-                                                          dependencyPropertyChangedEventArgs)
+            DependencyPropertyChangedEventArgs
+                dependencyPropertyChangedEventArgs)
         {
             if (DesignerProperties.GetIsInDesignMode(dependencyObject))
                 return;
 
             var manager = Manager;
-            var name    = dependencyPropertyChangedEventArgs.NewValue as string;
+            var name = dependencyPropertyChangedEventArgs.NewValue as string;
 
             if (string.IsNullOrWhiteSpace(name) || dependencyObject as Control == null) return;
 
@@ -130,14 +130,14 @@ namespace Tauron.Application.Views
 
         public static readonly DependencyProperty ImportViewProperty =
             DependencyProperty.RegisterAttached("ImportView", typeof(string), typeof(ViewManager),
-                                                new FrameworkPropertyMetadata(string.Empty,
-                                                                              FrameworkPropertyMetadataOptions
-                                                                                  .NotDataBindable,
-                                                                              ImportViewPropertyChangedCallback));
+                new FrameworkPropertyMetadata(string.Empty,
+                    FrameworkPropertyMetadataOptions
+                        .NotDataBindable,
+                    ImportViewPropertyChangedCallback));
 
         private static void ImportViewPropertyChangedCallback([NotNull] DependencyObject dependencyObject,
-                                                              DependencyPropertyChangedEventArgs
-                                                                  dependencyPropertyChangedEventArgs)
+            DependencyPropertyChangedEventArgs
+                dependencyPropertyChangedEventArgs)
         {
             if (DesignerProperties.GetIsInDesignMode(dependencyObject))
                 return;
@@ -175,8 +175,8 @@ namespace Tauron.Application.Views
                 return;
             }
 
-            var                propertyes = TypeDescriptor.GetProperties(dependencyObject);
-            var                attribute  = dependencyObject.GetType().GetCustomAttribute<ContentPropertyAttribute>();
+            var propertyes = TypeDescriptor.GetProperties(dependencyObject);
+            var attribute = dependencyObject.GetType().GetCustomAttribute<ContentPropertyAttribute>();
             PropertyDescriptor desc;
 
             if (attribute != null)
@@ -187,8 +187,8 @@ namespace Tauron.Application.Views
             {
                 var altName = dependencyObject.GetValue(ContentPropertyProperty) as string;
                 desc = !string.IsNullOrEmpty(altName)
-                           ? propertyes.Cast<PropertyDescriptor>().FirstOrDefault(prop => prop.Name == altName)
-                           : null;
+                    ? propertyes.Cast<PropertyDescriptor>().FirstOrDefault(prop => prop.Name == altName)
+                    : null;
             }
 
             var viewType = Manager.GetViewType(viewName);
@@ -209,10 +209,10 @@ namespace Tauron.Application.Views
 
         public static readonly DependencyProperty ContentPropertyProperty =
             DependencyProperty.RegisterAttached("ContentProperty", typeof(string), typeof(ViewManager),
-                                                new FrameworkPropertyMetadata("Content",
-                                                                              FrameworkPropertyMetadataOptions.Inherits |
-                                                                              FrameworkPropertyMetadataOptions
-                                                                                  .NotDataBindable));
+                new FrameworkPropertyMetadata("Content",
+                    FrameworkPropertyMetadataOptions.Inherits |
+                    FrameworkPropertyMetadataOptions
+                        .NotDataBindable));
 
         [CanBeNull]
         internal static string GetContentProperty([NotNull] DependencyObject element)
@@ -231,7 +231,7 @@ namespace Tauron.Application.Views
 
         public static readonly DependencyProperty SortOrderProperty =
             DependencyProperty.RegisterAttached("SortOrder", typeof(int), typeof(ViewManager),
-                                                new PropertyMetadata(int.MaxValue));
+                new PropertyMetadata(int.MaxValue));
 
         public static void SetSortOrder([NotNull] DependencyObject element, int value)
         {

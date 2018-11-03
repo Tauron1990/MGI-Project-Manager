@@ -43,10 +43,10 @@ namespace Tauron.Application.Ioc
 
         public DefaultContainer()
         {
-            _extensions                     =  new List<IContainerExtension>();
-            _componetnts                    =  new ComponentRegistry();
-            _exports                        =  new ExportRegistry();
-            _exportproviders                =  new ExportProviderRegistry();
+            _extensions = new List<IContainerExtension>();
+            _componetnts = new ComponentRegistry();
+            _exports = new ExportRegistry();
+            _exportproviders = new ExportProviderRegistry();
             _exportproviders.ExportsChanged += ExportsChanged;
             Register(new DefaultExtension());
             _buildEngine = new BuildEngine(this, _exportproviders, _componetnts);
@@ -222,7 +222,7 @@ namespace Tauron.Application.Ioc
             catch (Exception e)
             {
                 errorTracer.Exceptional = true;
-                errorTracer.Exception   = e;
+                errorTracer.Exception = e;
                 //if (e is FindExportException) throw;
 
                 //throw new FindExportException(string.Format("Resolve Failed: [{0}|{1}]", interfaceType, name), e);
@@ -252,7 +252,7 @@ namespace Tauron.Application.Ioc
             catch (Exception e)
             {
                 errorTracer.Exceptional = true;
-                errorTracer.Exception   = e;
+                errorTracer.Exception = e;
 
                 //if (e is FindExportException) throw;
 
@@ -283,7 +283,7 @@ namespace Tauron.Application.Ioc
             catch (Exception e)
             {
                 errorTracer.Exceptional = true;
-                errorTracer.Exception   = e;
+                errorTracer.Exception = e;
 
                 //if (e is FindExportException) throw;
 
@@ -296,8 +296,8 @@ namespace Tauron.Application.Ioc
         public ExportMetadata FindExport(Type interfaceType, string name, ErrorTracer errorTracer, bool isOptional, int level)
         {
             return isOptional
-                       ? _exports.FindOptional(interfaceType, name, errorTracer, level)
-                       : _exports.FindSingle(interfaceType, name, errorTracer, level);
+                ? _exports.FindOptional(interfaceType, name, errorTracer, level)
+                : _exports.FindSingle(interfaceType, name, errorTracer, level);
         }
 
         public IEnumerable<ExportMetadata> FindExports(Type interfaceType, string name, ErrorTracer errorTracer, int level)

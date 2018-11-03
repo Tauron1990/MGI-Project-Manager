@@ -58,12 +58,12 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
                 {
                     yield return
                         new ImportMetadata(
-                                           attr.Interface,
-                                           attr.ContractName,
-                                           exportType,
-                                           methodInfo.Name,
-                                           attr.Optional,
-                                           meta);
+                            attr.Interface,
+                            attr.ContractName,
+                            exportType,
+                            methodInfo.Name,
+                            attr.Optional,
+                            meta);
                 }
                 else
                 {
@@ -71,12 +71,12 @@ namespace Tauron.Application.Ioc.BuildUp.Exports.DefaultExports
 
                     yield return
                         new ImportMetadata(
-                                           null,
-                                           null,
-                                           exportType,
-                                           methodInfo.Name,
-                                           false,
-                                           meta);
+                            null,
+                            null,
+                            exportType,
+                            methodInfo.Name,
+                            false,
+                            meta);
                 }
             }
         }

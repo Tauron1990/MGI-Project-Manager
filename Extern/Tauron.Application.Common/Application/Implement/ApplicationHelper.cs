@@ -15,6 +15,13 @@ namespace Tauron.Application.Implement
     [Export(typeof(IApplicationHelper))]
     public class ApplicationHelper : IApplicationHelper
     {
+        #region Fields
+
+        /// <summary>The _factory.</summary>
+        [Inject] private IUIControllerFactory _factory;
+
+        #endregion
+
         /// <summary>
         ///     The start up helper.
         /// </summary>
@@ -78,14 +85,6 @@ namespace Tauron.Application.Implement
             #endregion
         }
 
-        #region Fields
-
-        /// <summary>The _factory.</summary>
-        [Inject]
-        private IUIControllerFactory _factory;
-
-        #endregion
-
         #region Public Methods and Operators
 
         /// <summary>
@@ -124,7 +123,7 @@ namespace Tauron.Application.Implement
         public void RunAnonymousApplication(IWindow window)
         {
             var app = _factory.CreateController();
-            app.MainWindow   = window;
+            app.MainWindow = window;
             app.ShutdownMode = ShutdownMode.OnMainWindowClose;
             app.Run(window);
         }

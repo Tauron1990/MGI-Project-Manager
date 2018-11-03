@@ -27,7 +27,7 @@ namespace Tauron.Application
     public class ViewModelConverter : IValueConverter
     {
         private readonly Dictionary<string, object> _cache;
-        private readonly bool                       _enableCaching;
+        private readonly bool _enableCaching;
 
         public ViewModelConverter(bool enableCaching)
         {
@@ -52,7 +52,7 @@ namespace Tauron.Application
             if (_cache.TryGetValue(name, out var view))
                 return view;
 
-            view         = manager.CreateViewForModel(model);
+            view = manager.CreateViewForModel(model);
             _cache[name] = view;
             return view;
         }
