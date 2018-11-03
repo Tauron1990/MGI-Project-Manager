@@ -26,8 +26,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         ///     The member.
         /// </param>
         /// <param name="resolverExtensions"></param>
-        public PropertyInjector([NotNull] IMetadataFactory metadataFactory, [NotNull] PropertyInfo member,
-            [NotNull] IResolverExtension[] resolverExtensions)
+        public PropertyInjector([NotNull] IMetadataFactory metadataFactory, [NotNull] PropertyInfo member, [NotNull] IResolverExtension[] resolverExtensions)
             : base(metadataFactory, member, resolverExtensions)
         {
             if (metadataFactory == null) throw new ArgumentNullException(nameof(metadataFactory));

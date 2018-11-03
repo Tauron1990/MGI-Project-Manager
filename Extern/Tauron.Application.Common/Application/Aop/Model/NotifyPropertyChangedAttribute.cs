@@ -64,8 +64,7 @@ namespace Tauron.Application.Aop.Model
         {
             if (target == null) throw new ArgumentNullException(nameof(target));
             if (context == null) throw new ArgumentNullException(nameof(context));
-            if (string.IsNullOrEmpty(contextName))
-                throw new ArgumentException("Value cannot be null or empty.", nameof(contextName));
+            if (string.IsNullOrEmpty(contextName)) throw new ArgumentException("Value cannot be null or empty.", nameof(contextName));
             var metod = target as INotifyPropertyChangedMethod;
             if (metod != null)
             {

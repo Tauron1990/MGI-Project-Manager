@@ -212,8 +212,7 @@ namespace Tauron.Application.Aop.Model
 
             _logReturn = LogOptions.HasFlag(TraceAspectOptions.ReturnValue);
 
-            if (logParameterName || logParameterType || logparameterValue)
-                _helper = new LoggerHelper(logparameterValue, logParameterType);
+            if (logParameterName || logParameterType || logparameterValue) _helper = new LoggerHelper(logparameterValue, logParameterType);
         }
 
         /// <summary>

@@ -165,23 +165,6 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
 
                 #endregion
 
-                #region Enums
-
-                /// <summary>The invoke type.</summary>
-                private enum InvokeType
-                {
-                    /// <summary>The zero.</summary>
-                    Zero = 0,
-
-                    /// <summary>The one.</summary>
-                    One = 1,
-
-                    /// <summary>The two.</summary>
-                    Two = 2
-                }
-
-                #endregion
-
                 #region Fields
 
                 /// <summary>The _delegate.</summary>
@@ -266,8 +249,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             ///     The publisher.
             /// </param>
             /// <param name="errorTracer"></param>
-            public void AddPublisher([NotNull] EventInfo info, [NotNull] object publisher,
-                [NotNull] ErrorTracer errorTracer)
+            public void AddPublisher([NotNull] EventInfo info, [NotNull] object publisher, [NotNull] ErrorTracer errorTracer)
             {
                 if (info == null) throw new ArgumentNullException(nameof(info));
                 if (publisher == null) throw new ArgumentNullException(nameof(publisher));
@@ -302,8 +284,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             ///     The target.
             /// </param>
             /// <param name="errorTracer"></param>
-            public void Addhandler([NotNull] MethodInfo dDelegate, [NotNull] object target,
-                [NotNull] ErrorTracer errorTracer)
+            public void Addhandler([NotNull] MethodInfo dDelegate, [NotNull] object target, [NotNull] ErrorTracer errorTracer)
             {
                 if (dDelegate == null) throw new ArgumentNullException(nameof(dDelegate));
                 if (target == null) throw new ArgumentNullException(nameof(target));
@@ -327,8 +308,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         ///     The handler.
         /// </param>
         /// <param name="errorTracer"></param>
-        public void AddEventHandler([NotNull] string topic, [NotNull] Delegate handler,
-            [NotNull] ErrorTracer errorTracer)
+        public void AddEventHandler([NotNull] string topic, [NotNull] Delegate handler, [NotNull] ErrorTracer errorTracer)
         {
             if (handler == null) throw new ArgumentNullException(nameof(handler));
             if (errorTracer == null) throw new ArgumentNullException(nameof(errorTracer));

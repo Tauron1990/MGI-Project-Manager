@@ -132,8 +132,7 @@ namespace Tauron.Application
         /// </param>
         public virtual void Load([NotNull] string name)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             IlligalCharCheck(name);
 
             Name = name;
@@ -190,10 +189,8 @@ namespace Tauron.Application
         [NotNull]
         public virtual string GetValue([NotNull] string key, [NotNull] string defaultValue)
         {
-            if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(key));
-            if (string.IsNullOrWhiteSpace(defaultValue))
-                return string.Empty;
+            if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(key));
+            if (string.IsNullOrWhiteSpace(defaultValue)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(defaultValue));
             IlligalCharCheck(key);
 
             return !_settings.ContainsKey(key) ? defaultValue : _settings[key];
@@ -211,8 +208,7 @@ namespace Tauron.Application
         public virtual void SetVaue([NotNull] string key, [NotNull] object value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
-            if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(key));
+            if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(key));
             IlligalCharCheck(key);
 
             _settings[key] = value.ToString();

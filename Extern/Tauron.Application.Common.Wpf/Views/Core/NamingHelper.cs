@@ -9,8 +9,7 @@ namespace Tauron.Application.Views.Core
         [NotNull]
         public static IEnumerable<string> CreatePossibilyNames([NotNull] string baseName)
         {
-            if (string.IsNullOrEmpty(baseName))
-                throw new ArgumentException("Value cannot be null or empty.", nameof(baseName));
+            if (string.IsNullOrEmpty(baseName)) throw new ArgumentException("Value cannot be null or empty.", nameof(baseName));
             yield return baseName;
             yield return baseName + "View";
             yield return baseName + "ViewModel";

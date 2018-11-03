@@ -45,8 +45,7 @@ namespace Tauron.Application.Models
             ValidateValueCallback = observableValidateValueCallback;
         }
 
-        public ObservablePropertyMetadata([CanBeNull] ObservablePropertyChanged propertyChanged,
-            [CanBeNull] ObservableValidateValueCallback observableValidateValueCallback)
+        public ObservablePropertyMetadata([CanBeNull] ObservablePropertyChanged propertyChanged, [CanBeNull] ObservableValidateValueCallback observableValidateValueCallback)
         {
             ValidateValueCallback = observableValidateValueCallback;
             PropertyChanged = propertyChanged;
@@ -56,19 +55,25 @@ namespace Tauron.Application.Models
         {
         }
 
-        [CanBeNull] public object DefaultValue { get; private set; }
+        [CanBeNull]
+        public object DefaultValue { get; private set; }
 
         public bool IsReadOnly { get; private set; }
 
-        [CanBeNull] public ObservableValidateValueCallback ValidateValueCallback { get; private set; }
+        [CanBeNull]
+        public ObservableValidateValueCallback ValidateValueCallback { get; private set; }
 
-        [CanBeNull] public ObservableCoerceValueCallback CoerceValueCallback { get; private set; }
+        [CanBeNull]
+        public ObservableCoerceValueCallback CoerceValueCallback { get; private set; }
 
-        [CanBeNull] public ObservablePropertyChanged PropertyChanged { get; private set; }
+        [CanBeNull]
+        public ObservablePropertyChanged PropertyChanged { get; private set; }
 
-        [CanBeNull] public Func<ObservableProperty, object> CustomGetter { get; set; }
+        [CanBeNull]
+        public Func<ObservableProperty, object> CustomGetter { get; set; }
 
-        [CanBeNull] public ModelRule[] ModelRules { get; private set; }
+        [CanBeNull]
+        public ModelRule[] ModelRules { get; private set; }
 
         public bool ForceAllValidation { get; set; }
 
@@ -121,11 +126,14 @@ namespace Tauron.Application.Models
             Metadata.Prepare(Type);
         }
 
-        [NotNull] public string Name { get; private set; }
+        [NotNull]
+        public string Name { get; private set; }
 
-        [NotNull] public Type Type { get; private set; }
+        [NotNull]
+        public Type Type { get; private set; }
 
-        [NotNull] public ObservablePropertyMetadata Metadata { get; private set; }
+        [NotNull]
+        public ObservablePropertyMetadata Metadata { get; private set; }
 
         public bool Equals([CanBeNull] ObservableProperty other)
         {

@@ -130,12 +130,10 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
                         policy.Injector = new FieldInjector(_factory, (FieldInfo) info, context.ResolverExtensions);
                         break;
                     case MemberTypes.Property:
-                        policy.Injector =
-                            new PropertyInjector(_factory, (PropertyInfo) info, context.ResolverExtensions);
+                        policy.Injector = new PropertyInjector(_factory, (PropertyInfo) info, context.ResolverExtensions);
                         break;
                     case MemberTypes.Method:
-                        policy.Injector = new MethodInjector((MethodInfo) info, _factory, _eventManager,
-                            context.ResolverExtensions);
+                        policy.Injector = new MethodInjector((MethodInfo) info, _factory, _eventManager, context.ResolverExtensions);
                         break;
                 }
 

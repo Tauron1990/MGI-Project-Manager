@@ -32,9 +32,7 @@ namespace Tauron.Application.Modules
         {
             if (key == null) throw new ArgumentNullException(nameof(key));
             ICollection<Action<MemberInfo, Attribute, IModule>> action;
-            return Handlers.TryGetValue(key, out action)
-                ? action
-                : Enumerable.Empty<Action<MemberInfo, Attribute, IModule>>();
+            return Handlers.TryGetValue(key, out action) ? action : Enumerable.Empty<Action<MemberInfo, Attribute, IModule>>();
         }
 
         public static void Progress([NotNull] IModule module)

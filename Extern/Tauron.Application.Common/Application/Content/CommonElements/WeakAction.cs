@@ -23,8 +23,7 @@ namespace Tauron.Application
         {
             unchecked
             {
-                return ((_method != null ? _method.GetHashCode() : 0) * 397) ^
-                       (TargetObject.Target != null ? TargetObject.Target.GetHashCode() : 0);
+                return ((_method != null ? _method.GetHashCode() : 0) * 397) ^ (TargetObject.Target != null ? TargetObject.Target.GetHashCode() : 0);
             }
         }
 
@@ -166,8 +165,7 @@ namespace Tauron.Application
         private static Type FactoryDelegateType([NotNull] string name, [NotNull] Type[] types)
         {
             if (types == null) throw new ArgumentNullException(nameof(types));
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             var type = Type.GetType(name + "`" + types.Length);
             if (type != null) return types.Length > 0 ? type.MakeGenericType(types) : Type.GetType(name);
 
@@ -287,8 +285,7 @@ namespace Tauron.Application
             if (handler == null) throw new ArgumentNullException(nameof(handler));
             lock (this)
             {
-                foreach (var del in _delegates.Where(del =>
-                    del.TargetObject != null && del.TargetObject.Target == handler.Target))
+                foreach (var del in _delegates.Where(del => del.TargetObject != null && del.TargetObject.Target == handler.Target))
                 {
                     _delegates.Remove(del);
                     return this;

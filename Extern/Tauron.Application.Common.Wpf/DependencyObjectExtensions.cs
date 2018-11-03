@@ -28,8 +28,7 @@ namespace Tauron.Application
 
 
         [CanBeNull]
-        public static TType FindResource<TType>([NotNull] this DependencyObject obj, [NotNull] object key)
-            where TType : class
+        public static TType FindResource<TType>([NotNull] this DependencyObject obj, [NotNull] object key) where TType : class
         {
             return FindResource(obj, key) as TType;
         }

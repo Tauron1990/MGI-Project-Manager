@@ -111,8 +111,7 @@ namespace Tauron.Application.Aop
         /// <param name="contextName">
         ///     The context name.
         /// </param>
-        protected internal override void Initialize([NotNull] object target, [NotNull] ObjectContext context,
-            [NotNull] string contextName)
+        protected internal override void Initialize([NotNull] object target, [NotNull] ObjectContext context, [NotNull] string contextName)
         {
             ContextName = contextName;
         }

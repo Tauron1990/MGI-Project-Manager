@@ -108,8 +108,7 @@ namespace Tauron.Application.Aop.Threading
                     CommonApplication.QueueWorkitemAsync(invocation.Proceed, true);
                     break;
                 default:
-                    CommonConstants.LogCommon(false, "Invalid Schedule TaskOption: {0}.{1}", invocation.TargetType,
-                        invocation.Method);
+                    CommonConstants.LogCommon(false, "Invalid Schedule TaskOption: {0}.{1}", invocation.TargetType, invocation.Method);
                     invocation.Proceed();
                     break;
             }

@@ -60,8 +60,7 @@ namespace Tauron.Application.Aop
         /// <param name="propertyInfo">
         ///     The property.
         /// </param>
-        protected virtual void OnGet([NotNull] IInvocation invocation, [NotNull] ObjectContext context,
-            [NotNull] PropertyInfo propertyInfo)
+        protected virtual void OnGet([NotNull] IInvocation invocation, [NotNull] ObjectContext context, [NotNull] PropertyInfo propertyInfo)
         {
             if (invocation == null) throw new ArgumentNullException(nameof(invocation));
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -81,8 +80,7 @@ namespace Tauron.Application.Aop
         /// <param name="propertyInfo">
         ///     The property.
         /// </param>
-        protected virtual void OnSet([NotNull] IInvocation invocation, [NotNull] ObjectContext context,
-            [NotNull] PropertyInfo propertyInfo)
+        protected virtual void OnSet([NotNull] IInvocation invocation, [NotNull] ObjectContext context, [NotNull] PropertyInfo propertyInfo)
         {
             if (invocation == null) throw new ArgumentNullException(nameof(invocation));
             if (context == null) throw new ArgumentNullException(nameof(context));

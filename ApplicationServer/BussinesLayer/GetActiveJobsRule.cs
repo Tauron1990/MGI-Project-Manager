@@ -8,7 +8,7 @@ using Tauron.Application.ProjectManager.Services.DTO;
 namespace Tauron.Application.ProjectManager.ApplicationServer.BussinesLayer
 {
     [ExportRule(RuleNames.GetActiveJobsRule)]
-    public sealed class GetActiveJobsRule : OBusinessRuleBase<IEnumerable<JobItemDto>>
+    public sealed class GetActiveJobsRule : OBuissinesRuleBase<IEnumerable<JobItemDto>>
     {
         public override IEnumerable<JobItemDto> ActionImpl()
         {

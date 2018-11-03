@@ -24,9 +24,11 @@ namespace Tauron.Application.Ioc
             }
         }
 
-        [CanBeNull] public string Export { get; set; }
+        [CanBeNull]
+        public string Export { get; set; }
 
-        [CanBeNull] public Exception Exception { get; set; }
+        [CanBeNull]
+        public Exception Exception { get; set; }
 
         public void IncrementIdent()
         {

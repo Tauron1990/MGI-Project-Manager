@@ -9,8 +9,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
     [PublicAPI]
     public abstract class Injectorbase<TMember> : MemberInjector
     {
-        protected Injectorbase([NotNull] IMetadataFactory metadataFactory, [NotNull] TMember member,
-            [NotNull] IResolverExtension[] resolverExtensions)
+        protected Injectorbase([NotNull] IMetadataFactory metadataFactory, [NotNull] TMember member, [NotNull] IResolverExtension[] resolverExtensions)
         {
             if (metadataFactory == null) throw new ArgumentNullException(nameof(metadataFactory));
             if (member == null) throw new ArgumentNullException(nameof(member));
@@ -25,9 +24,11 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
 // ReSharper disable once MemberCanBePrivate.Global
         protected InjectorContext InjectorContext { get; private set; }
 
-        [NotNull] protected TMember Member { get; }
+        [NotNull]
+        protected TMember Member { get; }
 
-        [NotNull] protected abstract Type MemberType { get; }
+        [NotNull]
+        protected abstract Type MemberType { get; }
 
         // ReSharper disable once VirtualMemberNeverOverridden.Global
         protected virtual StepId InitializeMachine([NotNull] out ResolverFactory solidMachine)

@@ -81,8 +81,7 @@ namespace Tauron.Application.Ioc.Components
 
                 foreach (var pair in this.Where(p => p.Key <= at))
                     if (pair.Value.TryGetValue(type, out var exports))
-                        exports.SelectMany(ep => ep.SelectContractName(contractName))
-                            .Foreach(ex => realExports.Add(ex));
+                        exports.SelectMany(ep => ep.SelectContractName(contractName)).Foreach(ex => realExports.Add(ex));
 
                 return realExports.Count == 0 ? null : realExports;
             }
@@ -108,8 +107,7 @@ namespace Tauron.Application.Ioc.Components
         #region Public Methods and Operators
 
         [NotNull]
-        public IEnumerable<ExportMetadata> FindAll([NotNull] Type type, [CanBeNull] string contractName,
-            [NotNull] ErrorTracer errorTracer, int limit = int.MaxValue)
+        public IEnumerable<ExportMetadata> FindAll([NotNull] Type type, [CanBeNull] string contractName, [NotNull] ErrorTracer errorTracer, int limit = int.MaxValue)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             if (errorTracer == null) throw new ArgumentNullException(nameof(errorTracer));
@@ -139,8 +137,7 @@ namespace Tauron.Application.Ioc.Components
         }
 
         [CanBeNull]
-        public ExportMetadata FindOptional([NotNull] Type type, [CanBeNull] string contractName,
-            [NotNull] ErrorTracer errorTracer, int level = int.MaxValue)
+        public ExportMetadata FindOptional([NotNull] Type type, [CanBeNull] string contractName, [NotNull] ErrorTracer errorTracer, int level = int.MaxValue)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             if (errorTracer == null) throw new ArgumentNullException(nameof(errorTracer));
@@ -164,8 +161,7 @@ namespace Tauron.Application.Ioc.Components
 
 
         [CanBeNull]
-        public ExportMetadata FindSingle([NotNull] Type type, [NotNull] string contractName,
-            [NotNull] ErrorTracer errorTracer, int level = int.MaxValue)
+        public ExportMetadata FindSingle([NotNull] Type type, [NotNull] string contractName, [NotNull] ErrorTracer errorTracer, int level = int.MaxValue)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             if (errorTracer == null) throw new ArgumentNullException(nameof(errorTracer));

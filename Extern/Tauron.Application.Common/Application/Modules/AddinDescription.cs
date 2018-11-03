@@ -13,10 +13,13 @@ namespace Tauron.Application.Modules
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
-        [NotNull] public Version Version { get; set; }
+        [NotNull]
+        public Version Version { get; set; }
 
-        [NotNull] public string Description { get; set; }
+        [NotNull]
+        public string Description { get; set; }
 
-        [NotNull] public string Name { get; set; }
+        [NotNull]
+        public string Name { get; set; }
     }
 }

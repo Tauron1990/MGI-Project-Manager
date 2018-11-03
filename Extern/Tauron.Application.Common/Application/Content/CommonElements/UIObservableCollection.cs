@@ -72,8 +72,7 @@ namespace Tauron.Application
             public void Dispose()
             {
                 _collection._isBlocked = false;
-                _collection.OnCollectionChanged(
-                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                _collection.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             }
         }
 

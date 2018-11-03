@@ -11,7 +11,8 @@ namespace Tauron.Application.SimpleWorkflow
             Target = StepId.None;
         }
 
-        [CanBeNull] public Func<TContext, IStep<TContext>, bool> Guard { get; set; }
+        [CanBeNull]
+        public Func<TContext, IStep<TContext>, bool> Guard { get; set; }
 
         public StepId Target { get; set; }
 

@@ -98,8 +98,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
                 }
             }
 
-            foreach (var contextProperty in contextPolicy.ContextPropertys)
-                contextProperty.Item1.Register(objectContext, contextProperty.Item2, context.Target);
+            foreach (var contextProperty in contextPolicy.ContextPropertys) contextProperty.Item1.Register(objectContext, contextProperty.Item2, context.Target);
 
             var policy = context.Policys.Get<InterceptionPolicy>();
 
@@ -156,8 +155,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
             {
                 var attrs =
                     memberInfo.GetAllCustomAttributes<ObjectContextPropertyAttribute>();
-                foreach (var objectContextPropertyAttribute in attrs)
-                    contextPolicy.ContextPropertys.Add(Tuple.Create(objectContextPropertyAttribute, memberInfo));
+                foreach (var objectContextPropertyAttribute in attrs) contextPolicy.ContextPropertys.Add(Tuple.Create(objectContextPropertyAttribute, memberInfo));
             }
 
             context.Policys.Add(contextPolicy);

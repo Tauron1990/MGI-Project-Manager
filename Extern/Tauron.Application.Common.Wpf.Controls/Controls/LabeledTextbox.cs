@@ -8,13 +8,11 @@ namespace Tauron.Application.Controls
     public class LabeledTextbox : TextBox
     {
         public static readonly DependencyProperty LabelTextProperty =
-            DependencyProperty.Register("LabelText", typeof(string), typeof(LabeledTextbox),
-                new PropertyMetadata(null));
+            DependencyProperty.Register("LabelText", typeof(string), typeof(LabeledTextbox), new PropertyMetadata(null));
 
         static LabeledTextbox()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(LabeledTextbox),
-                new FrameworkPropertyMetadata(typeof(LabeledTextbox)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(LabeledTextbox), new FrameworkPropertyMetadata(typeof(LabeledTextbox)));
         }
 
         [CanBeNull]

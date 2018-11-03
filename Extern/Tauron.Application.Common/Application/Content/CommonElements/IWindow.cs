@@ -19,7 +19,8 @@ namespace Tauron.Application
     [PublicAPI]
     public interface IWindow
     {
-        [CanBeNull] object Result { get; }
+        [CanBeNull]
+        object Result { get; }
 
         #region Public Events
 

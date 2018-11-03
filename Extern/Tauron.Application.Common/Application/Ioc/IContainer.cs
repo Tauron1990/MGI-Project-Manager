@@ -78,8 +78,7 @@ namespace Tauron.Application.Ioc
         /// <returns>
         ///     The <see cref="object" />.
         /// </returns>
-        object BuildUp(Type type, ErrorTracer errorTracer, BuildParameter[] buildParameters,
-            params object[] constructorArguments);
+        object BuildUp(Type type, ErrorTracer errorTracer, BuildParameter[] buildParameters, params object[] constructorArguments);
 
         /// <summary>
         ///     The find export.
@@ -125,12 +124,10 @@ namespace Tauron.Application.Ioc
         ///     The <see cref="IEnumerable" />.
         /// </returns>
         [NotNull]
-        IEnumerable<ExportMetadata> FindExports([NotNull] Type interfaceType, [NotNull] string name,
-            [NotNull] ErrorTracer errorTracer);
+        IEnumerable<ExportMetadata> FindExports([NotNull] Type interfaceType, [NotNull] string name, [NotNull] ErrorTracer errorTracer);
 
         [NotNull]
-        ExportMetadata FindExport([NotNull] Type interfaceType, [NotNull] string name,
-            [NotNull] ErrorTracer errorTracer, bool isOptional, int level);
+        ExportMetadata FindExport([NotNull] Type interfaceType, [NotNull] string name, [NotNull] ErrorTracer errorTracer, bool isOptional, int level);
 
         /// <summary>
         ///     The find exports.
@@ -145,8 +142,7 @@ namespace Tauron.Application.Ioc
         ///     The <see cref="IEnumerable" />.
         /// </returns>
         [NotNull]
-        IEnumerable<ExportMetadata> FindExports([NotNull] Type interfaceType, [NotNull] string name,
-            [NotNull] ErrorTracer errorTracer, int level);
+        IEnumerable<ExportMetadata> FindExports([NotNull] Type interfaceType, [NotNull] string name, [NotNull] ErrorTracer errorTracer, int level);
 
         /// <summary>
         ///     The register.

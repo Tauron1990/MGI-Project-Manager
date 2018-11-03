@@ -4,6 +4,7 @@ namespace Tauron.Application
 {
     public interface IResultProvider
     {
-        [CanBeNull] object Result { get; }
+        [CanBeNull]
+        object Result { get; }
     }
 }

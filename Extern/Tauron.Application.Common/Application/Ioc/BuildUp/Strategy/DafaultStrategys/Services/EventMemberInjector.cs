@@ -26,8 +26,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys
         /// <param name="member">
         ///     The member.
         /// </param>
-        public EventMemberInjector([NotNull] ImportMetadata metadata, [NotNull] IEventManager manager,
-            [NotNull] MemberInfo member)
+        public EventMemberInjector([NotNull] ImportMetadata metadata, [NotNull] IEventManager manager, [NotNull] MemberInfo member)
         {
             if (metadata == null) throw new ArgumentNullException(nameof(metadata));
             if (member == null) throw new ArgumentNullException(nameof(member));

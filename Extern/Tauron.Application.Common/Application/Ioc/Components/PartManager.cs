@@ -48,8 +48,7 @@ namespace Tauron.Application.Ioc.Components
         /// </param>
         /// <param name="targetExport">
         /// </param>
-        public BuildObject([NotNull] IEnumerable<ImportMetadata> imports, [NotNull] ExportMetadata targetExport,
-            [CanBeNull] BuildParameter[] buildParameters)
+        public BuildObject([NotNull] IEnumerable<ImportMetadata> imports, [NotNull] ExportMetadata targetExport, [CanBeNull] BuildParameter[] buildParameters)
         {
             if (imports == null) throw new ArgumentNullException(nameof(imports));
             if (targetExport == null) throw new ArgumentNullException(nameof(targetExport));
@@ -105,7 +104,8 @@ namespace Tauron.Application.Ioc.Components
         /// <value>The is alive.</value>
         public bool IsAlive => _instance.IsAlive;
 
-        [CanBeNull] public BuildParameter[] BuildParameters { get; set; }
+        [CanBeNull]
+        public BuildParameter[] BuildParameters { get; set; }
 
         #endregion
     }

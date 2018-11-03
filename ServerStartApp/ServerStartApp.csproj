@@ -123,7 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NLog">
-      <Version>4.5.10</Version>
+      <Version>4.5.6</Version>
     </PackageReference>
     <PackageReference Include="NLog.Windows.Forms">
       <Version>4.2.3</Version>

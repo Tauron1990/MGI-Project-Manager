@@ -44,7 +44,8 @@ namespace Tauron.Application.Implementation
 
             #region Public Properties
 
-            [NotNull] public Uri Key { get; }
+            [NotNull]
+            public Uri Key { get; }
 
             public bool IsAlive => _source.IsAlive;
 

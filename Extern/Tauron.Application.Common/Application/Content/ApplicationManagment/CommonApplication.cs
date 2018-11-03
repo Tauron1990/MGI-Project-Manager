@@ -255,6 +255,9 @@ namespace Tauron.Application
             {
             }
 
+            #endregion
+        }
+
         #region Fields
 
         /// <summary>The _do startup.</summary>
@@ -294,7 +297,8 @@ namespace Tauron.Application
         [NotNull]
         public IUIControllerFactory Factory { get; private set; }
 
-        [CanBeNull] public IWindow MainWindow { get; set; }
+        [CanBeNull]
+        public IWindow MainWindow { get; set; }
 
         #endregion
 

@@ -72,8 +72,7 @@ namespace Tauron.Application.Ioc.BuildUp.Exports
         {
             if (export == null) throw new ArgumentNullException(nameof(export));
             if (metadata == null) throw new ArgumentNullException(nameof(metadata));
-            if (string.IsNullOrWhiteSpace(memberName))
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(memberName));
+            if (string.IsNullOrWhiteSpace(memberName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(memberName));
             InterfaceType = interfaceType;
             ContractName = contractName;
             Export = export;

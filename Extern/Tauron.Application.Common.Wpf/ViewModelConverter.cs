@@ -38,8 +38,7 @@ namespace Tauron.Application
         }
 
         [CanBeNull]
-        public object Convert([NotNull] object value, [NotNull] Type targetType, [NotNull] object parameter,
-            [NotNull] CultureInfo culture)
+        public object Convert([NotNull] object value, [NotNull] Type targetType, [NotNull] object parameter, [NotNull] CultureInfo culture)
         {
             if (!(value is ViewModelBase model)) return value;
 
@@ -59,8 +58,7 @@ namespace Tauron.Application
         }
 
         [CanBeNull]
-        public object ConvertBack([NotNull] object value, [NotNull] Type targetType, [NotNull] object parameter,
-            [NotNull] CultureInfo culture)
+        public object ConvertBack([NotNull] object value, [NotNull] Type targetType, [NotNull] object parameter, [NotNull] CultureInfo culture)
         {
             return new FrameworkObject(value, false).DataContext;
         }

@@ -11,8 +11,7 @@ namespace Tauron.Application.Ioc.BuildUp.Strategy.DafaultStrategys.Steps
         private readonly IEnumerator<ExportMetadata> _metaEnumerator;
         private bool _ok;
 
-        public ExportEnumeratorHelper([NotNull] IEnumerator<ExportMetadata> metaEnumerator,
-            [NotNull] ReflectionContext context)
+        public ExportEnumeratorHelper([NotNull] IEnumerator<ExportMetadata> metaEnumerator, [NotNull] ReflectionContext context)
         {
             _metaEnumerator = metaEnumerator;
             _context = context;

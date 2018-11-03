@@ -20,9 +20,11 @@ namespace Tauron.Application.Models
         // ReSharper disable once MemberCanBePrivate.Global
         protected Func<object, ValidatorContext, bool> Validator { get; set; }
 
-        [NotNull] public Func<string> Message { get; set; }
+        [NotNull]
+        public Func<string> Message { get; set; }
 
-        [CanBeNull] public string Id { get; set; }
+        [CanBeNull]
+        public string Id { get; set; }
 
         public bool Equals([CanBeNull] ModelRule other)
         {

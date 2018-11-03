@@ -29,7 +29,8 @@ namespace Tauron.Application.Aop.Model
 
         #region Public Properties
 
-        [NotNull] public string Roles { get; }
+        [NotNull]
+        public string Roles { get; }
 
         #endregion
 

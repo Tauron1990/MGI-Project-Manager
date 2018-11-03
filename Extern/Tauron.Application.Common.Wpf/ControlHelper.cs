@@ -236,14 +236,12 @@ namespace Tauron.Application
                     if (!(priTarget is Window)) priTarget = Window.GetWindow(priTarget);
 
                     if (priTarget == null)
-                        CommonWpfConstans.LogCommon(false, "ControlHelper: No Window Found: {0}|{1}", context.GetType(),
-                            realName);
+                        CommonWpfConstans.LogCommon(false, "ControlHelper: No Window Found: {0}|{1}", context.GetType(), realName);
                 }
                 else
                 {
                     priTarget =
-                        System.Windows.Application.Current.Windows.Cast<Window>()
-                            .FirstOrDefault(win => win.Name == windowName);
+                        System.Windows.Application.Current.Windows.Cast<Window>().FirstOrDefault(win => win.Name == windowName);
 
                     if (priTarget == null)
                         CommonWpfConstans.LogCommon(false, "ControlHelper: No Window Named {0} Found", windowName);
@@ -266,8 +264,7 @@ namespace Tauron.Application
                     }
                     catch (Exception e)
                     {
-                        CommonConstants.LogCommon(true, "ControlHelper: Error On {0} Member Acess: {1}",
-                            member.Item2.Name, e);
+                        CommonConstants.LogCommon(true, "ControlHelper: Error On {0} Member Acess: {1}", member.Item2.Name, e);
 
                         throw;
                     }
@@ -347,8 +344,7 @@ namespace Tauron.Application
         public static void SetMarkControl([NotNull] DependencyObject obj, [NotNull] string value)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
-            if (string.IsNullOrEmpty(value))
-                throw new ArgumentException("Value cannot be null or empty.", nameof(value));
+            if (string.IsNullOrEmpty(value)) throw new ArgumentException("Value cannot be null or empty.", nameof(value));
             obj.SetValue(MarkControlProperty, value);
         }
 
@@ -364,8 +360,7 @@ namespace Tauron.Application
         public static void SetMarkWindow([NotNull] DependencyObject obj, [NotNull] string value)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
-            if (string.IsNullOrEmpty(value))
-                throw new ArgumentException("Value cannot be null or empty.", nameof(value));
+            if (string.IsNullOrEmpty(value)) throw new ArgumentException("Value cannot be null or empty.", nameof(value));
             obj.SetValue(MarkWindowProperty, value);
         }
 
@@ -375,8 +370,7 @@ namespace Tauron.Application
 
         private static void MarkControl([NotNull] DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            SetLinker(d, e.OldValue.As<string>() ?? throw new InvalidOperationException(),
-                e.NewValue.As<string>() ?? throw new InvalidOperationException(),
+            SetLinker(d, e.OldValue.As<string>() ?? throw new InvalidOperationException(), e.NewValue.As<string>() ?? throw new InvalidOperationException(),
                 (obj, str) => new ControlLinker(str, obj));
         }
 
@@ -386,8 +380,8 @@ namespace Tauron.Application
             SetLinker(d, e.OldValue.As<string>(), e.NewValue.As<string>(), (obj, str) => new WindowLinker(str, obj));
         }
 
-        private static void SetLinker([NotNull] DependencyObject obj, [CanBeNull] string oldName,
-            [CanBeNull] string newName, [NotNull] Func<DependencyObject, string, LinkerBase> factory)
+        private static void SetLinker([NotNull] DependencyObject obj, [CanBeNull] string oldName, [CanBeNull] string newName,
+            [NotNull] Func<DependencyObject, string, LinkerBase> factory)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
             if (factory == null) throw new ArgumentNullException(nameof(factory));

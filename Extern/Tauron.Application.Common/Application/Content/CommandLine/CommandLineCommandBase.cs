@@ -23,8 +23,7 @@ namespace Tauron.Application
         /// </param>
         protected CommandLineCommandBase([NotNull] string comandName)
         {
-            if (string.IsNullOrWhiteSpace(comandName))
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(comandName));
+            if (string.IsNullOrWhiteSpace(comandName)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(comandName));
             CommandName = comandName;
         }
 

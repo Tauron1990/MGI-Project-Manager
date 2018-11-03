@@ -110,8 +110,7 @@ namespace Tauron.Application.Ioc.BuildUp
         /// <returns>
         ///     The <see cref="bool" />.
         /// </returns>
-        private static bool Invoke([NotNull] IEnumerable<IStrategy> strategies, [NotNull] Action<IStrategy> invoker,
-            [NotNull] IBuildContext context)
+        private static bool Invoke([NotNull] IEnumerable<IStrategy> strategies, [NotNull] Action<IStrategy> invoker, [NotNull] IBuildContext context)
         {
             if (strategies == null) throw new ArgumentNullException(nameof(strategies));
             if (invoker == null) throw new ArgumentNullException(nameof(invoker));

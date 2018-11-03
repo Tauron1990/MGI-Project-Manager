@@ -55,8 +55,7 @@ namespace Tauron.Application.Controls
         /// <param name="worker">
         ///     The worker.
         /// </param>
-        public SimpleProgressDialog([NotNull] string text, [NotNull] string title, [NotNull] IWindow owner,
-            [NotNull] Action<IProgress<ActiveProgress>> worker)
+        public SimpleProgressDialog([NotNull] string text, [NotNull] string title, [NotNull] IWindow owner, [NotNull] Action<IProgress<ActiveProgress>> worker)
         {
             _owner = owner;
             _worker = worker;

@@ -9,8 +9,7 @@ namespace Tauron.Application
         public const string CommonCategory = "Tauron.Application.Common.Wpf";
 
         [StringFormatMethod("format")]
-        public static void LogCommon(bool isError, [NotNull] string format,
-            [NotNull] [ItemNotNull] params object[] parms)
+        public static void LogCommon(bool isError, [NotNull] string format, [NotNull] [ItemNotNull] params object[] parms)
         {
             if (format == null) throw new ArgumentNullException(nameof(format));
             if (parms == null) throw new ArgumentNullException(nameof(parms));
