@@ -1,0 +1,3 @@
+[submodule "Extern"]
+	path = Extern
+	url = https://github.com/Tauron1990/Tauron-Application-Common
