@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using System.ServiceModel.Security;
 using Tauron.Application.ProjectManager.ApplicationServer.Core;
+using Tauron.Application.ProjectManager.ApplicationServer.Data;
 using Tauron.Application.ProjectManager.ApplicationServer.Services;
 using Tauron.Application.ProjectManager.Services;
 
