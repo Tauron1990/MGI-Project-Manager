@@ -254,4 +254,7 @@ Authentifizierungs-App-Code beim Anmelden angeben oder die 2FA Deaktivieren und 
   <data name="ResetPassword_Text_NoCode" xml:space="preserve">
     <value>Ein Code muss für Password Reset Übergeben werden.</value>
   </data>
+  <data name="ResetPasswordConfirmation_Text" xml:space="preserve">
+    <value>Dein Password wurde zurückgesetzt. Bitte &lt;a href="{0}"&gt;Klicke hier zum einloggen&lt;/a&gt;.</value>
+  </data>
 </root>

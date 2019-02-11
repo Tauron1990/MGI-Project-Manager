@@ -253,4 +253,7 @@
   <data name="ResetPassword_Text_NoCode" xml:space="preserve">
     <value>A code must be supplied for password reset.</value>
   </data>
+  <data name="ResetPasswordConfirmation_Text" xml:space="preserve">
+    <value>Your password has been reset. Please &lt;a href="{0}"&gt;click here to log in&lt;/a&gt;.</value>
+  </data>
 </root>

@@ -465,5 +465,14 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
                 return ResourceManager.GetString("ResetPassword_Text_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Your password has been reset. Please &lt;a href=&quot;{0}&quot;&gt;click here to log in&lt;/a&gt;. ähnelt.
+        /// </summary>
+        public static string ResetPasswordConfirmation_Text {
+            get {
+                return ResourceManager.GetString("ResetPasswordConfirmation_Text", resourceCulture);
+            }
+        }
     }
 }
