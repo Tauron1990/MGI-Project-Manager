@@ -1,0 +1,14 @@
+﻿@page
+@using MGIProjectManagerServer.Core
+@model ConfirmEmailModel
+@inject SimpleLoc SimpleLoc
+@{
+    ViewData["Title"] = SimpleLoc["ConfirmEmail_Text_Title"];
+}
+
+<h1>@ViewData["Title"]</h1>
+<div>
+    <p>
+        @SimpleLoc["ConfirmEmail_Text"]
+    </p>
+</div>
