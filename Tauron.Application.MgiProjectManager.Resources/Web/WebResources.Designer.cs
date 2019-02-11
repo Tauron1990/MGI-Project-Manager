@@ -196,6 +196,15 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The {0} must be at least {2} and at max {1} characters long. ähnelt.
+        /// </summary>
+        public static string Data_StringLenght {
+            get {
+                return ResourceManager.GetString("Data_StringLenght", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die An error occurred while processing your request. ähnelt.
         /// </summary>
         public static string Error_Text {
@@ -400,6 +409,60 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         public static string Logout_Text_Title {
             get {
                 return ResourceManager.GetString("Logout_Text_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reset ähnelt.
+        /// </summary>
+        public static string ResetPassowrt_Button {
+            get {
+                return ResourceManager.GetString("ResetPassowrt_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The password and confirmation password do not match. ähnelt.
+        /// </summary>
+        public static string ResetPassword_Data_ComparePassword {
+            get {
+                return ResourceManager.GetString("ResetPassword_Data_ComparePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Confirm password ähnelt.
+        /// </summary>
+        public static string ResetPassword_Data_ConfirmPassword {
+            get {
+                return ResourceManager.GetString("ResetPassword_Data_ConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reset your Password. ähnelt.
+        /// </summary>
+        public static string ResetPassword_Text_Header {
+            get {
+                return ResourceManager.GetString("ResetPassword_Text_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die A code must be supplied for password reset. ähnelt.
+        /// </summary>
+        public static string ResetPassword_Text_NoCode {
+            get {
+                return ResourceManager.GetString("ResetPassword_Text_NoCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reset Password ähnelt.
+        /// </summary>
+        public static string ResetPassword_Text_Title {
+            get {
+                return ResourceManager.GetString("ResetPassword_Text_Title", resourceCulture);
             }
         }
     }

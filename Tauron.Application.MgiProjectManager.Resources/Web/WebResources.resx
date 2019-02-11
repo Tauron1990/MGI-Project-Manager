@@ -232,4 +232,25 @@
   <data name="Lockout_Text" xml:space="preserve">
     <value>This account has been locked out, please try again later.</value>
   </data>
+  <data name="ResetPassword_Text_Title" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+  <data name="ResetPassword_Text_Header" xml:space="preserve">
+    <value>Reset your Password.</value>
+  </data>
+  <data name="ResetPassowrt_Button" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Data_StringLenght" xml:space="preserve">
+    <value>The {0} must be at least {2} and at max {1} characters long.</value>
+  </data>
+  <data name="ResetPassword_Data_ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="ResetPassword_Data_ComparePassword" xml:space="preserve">
+    <value>The password and confirmation password do not match.</value>
+  </data>
+  <data name="ResetPassword_Text_NoCode" xml:space="preserve">
+    <value>A code must be supplied for password reset.</value>
+  </data>
 </root>

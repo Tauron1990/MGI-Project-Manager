@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Tauron.Application.MgiProjectManager.Resources.Web;
 
 namespace MGIProjectManagerServer.Areas.Identity.Pages.Account
 {
@@ -25,18 +26,18 @@ namespace MGIProjectManagerServer.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessageResourceName = "Data_Required", ErrorMessageResourceType = typeof(WebResources))]
+            [EmailAddress(ErrorMessageResourceName = "Data_EmailAddress_Invalid", ErrorMessageResourceType = typeof(WebResources))]
             public string Email { get; set; }
 
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessageResourceName = "Data_Required", ErrorMessageResourceType = typeof(WebResources))]
+            [StringLength(100, ErrorMessageResourceName = "Data_StringLenght", ErrorMessageResourceType = typeof(WebResources), MinimumLength = 6)]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "ResetPassword_Data_ConfirmPassword", ResourceType = typeof(WebResources))]
+            [Compare("Password", ErrorMessageResourceName = "ResetPassword_Data_ComparePassword", ErrorMessageResourceType = typeof(WebResources))]
             public string ConfirmPassword { get; set; }
 
             public string Code { get; set; }
@@ -46,16 +47,14 @@ namespace MGIProjectManagerServer.Areas.Identity.Pages.Account
         {
             if (code == null)
             {
-                return BadRequest("A code must be supplied for password reset.");
+                return BadRequest(WebResources.ResetPassword_Text_NoCode);
             }
-            else
+
+            Input = new InputModel
             {
-                Input = new InputModel
-                {
-                    Code = code
-                };
-                return Page();
-            }
+                Code = code
+            };
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()

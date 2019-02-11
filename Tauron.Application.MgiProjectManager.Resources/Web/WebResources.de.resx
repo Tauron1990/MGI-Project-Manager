@@ -233,4 +233,25 @@ Authentifizierungs-App-Code beim Anmelden angeben oder die 2FA Deaktivieren und 
   <data name="Lockout_Text" xml:space="preserve">
     <value>Dieser Account wurde Gesperrt. Versuche es Später nochmal.</value>
   </data>
+  <data name="ResetPassword_Text_Title" xml:space="preserve">
+    <value>Passwort Zurücksetzen</value>
+  </data>
+  <data name="ResetPassword_Text_Header" xml:space="preserve">
+    <value>Setze dein Passwort zurück.</value>
+  </data>
+  <data name="ResetPassowrt_Button" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Data_StringLenght" xml:space="preserve">
+    <value>Das {0} muss mindestens {2} und maximal {1} lang sein.</value>
+  </data>
+  <data name="ResetPassword_Data_ConfirmPassword" xml:space="preserve">
+    <value>Passwort Bestätigen</value>
+  </data>
+  <data name="ResetPassword_Data_ComparePassword" xml:space="preserve">
+    <value>Die Beiden Passwörter müssen übereinstimmen.</value>
+  </data>
+  <data name="ResetPassword_Text_NoCode" xml:space="preserve">
+    <value>Ein Code muss für Password Reset Übergeben werden.</value>
+  </data>
 </root>

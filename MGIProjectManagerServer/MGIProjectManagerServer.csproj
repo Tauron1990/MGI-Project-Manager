@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>aspnet-MGIProjectManagerServer-55C5A5BD-BAA3-4C51-B629-D01575AB3C7A</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <StartupObject>MGIProjectManagerServer.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
