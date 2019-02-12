@@ -70,6 +70,24 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Change your account settings ähnelt.
+        /// </summary>
+        public static string _Layout_Account_Text {
+            get {
+                return ResourceManager.GetString("_Layout_Account_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage your account ähnelt.
+        /// </summary>
+        public static string _Layout_Account_Text_Title {
+            get {
+                return ResourceManager.GetString("_Layout_Account_Text_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Lanuguages ähnelt.
         /// </summary>
         public static string _Layout_DropDown_Language {
@@ -102,6 +120,15 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         public static string _LoginPatial_Text_Hello {
             get {
                 return ResourceManager.GetString("_LoginPatial_Text_Hello", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Profile ähnelt.
+        /// </summary>
+        public static string _ManageNav_Account_Profile {
+            get {
+                return ResourceManager.GetString("_ManageNav_Account_Profile", resourceCulture);
             }
         }
         

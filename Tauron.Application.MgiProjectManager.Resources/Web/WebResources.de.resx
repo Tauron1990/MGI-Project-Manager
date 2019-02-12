@@ -257,4 +257,13 @@ Authentifizierungs-App-Code beim Anmelden angeben oder die 2FA Deaktivieren und 
   <data name="ResetPasswordConfirmation_Text" xml:space="preserve">
     <value>Dein Password wurde zurückgesetzt. Bitte &lt;a href="{0}"&gt;Klicke hier zum einloggen&lt;/a&gt;.</value>
   </data>
+  <data name="_Layout_Account_Text_Title" xml:space="preserve">
+    <value>Verwalte deinen Account</value>
+  </data>
+  <data name="_Layout_Account_Text" xml:space="preserve">
+    <value>Ändere deine Enstellungen</value>
+  </data>
+  <data name="_ManageNav_Account_Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
 </root>

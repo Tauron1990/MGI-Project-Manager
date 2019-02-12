@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using MGIProjectManagerServer.Core;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -31,9 +32,7 @@ namespace MGIProjectManagerServer
             using (var context = new ApplicationDbContext())
                 context.Database.Migrate();
 
-             string[] roleNames = {"Admin", "Operator", "Controller", "Provider", "Viewer"};
-
-            foreach (var roleName in roleNames)
+             foreach (var roleName in RoleNames.GetAllRoles())
             {
                 var roleExist = roleManager.RoleExistsAsync(roleName).Result;
                 if (!roleExist)

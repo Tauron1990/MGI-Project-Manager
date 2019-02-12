@@ -256,4 +256,13 @@
   <data name="ResetPasswordConfirmation_Text" xml:space="preserve">
     <value>Your password has been reset. Please &lt;a href="{0}"&gt;click here to log in&lt;/a&gt;.</value>
   </data>
+  <data name="_Layout_Account_Text_Title" xml:space="preserve">
+    <value>Manage your account</value>
+  </data>
+  <data name="_Layout_Account_Text" xml:space="preserve">
+    <value>Change your account settings</value>
+  </data>
+  <data name="_ManageNav_Account_Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
 </root>
