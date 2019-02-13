@@ -52,7 +52,7 @@ namespace MGIProjectManagerServer
             var createPowerUser = userManager.CreateAsync(poweruser, userPassword).Result;
             if (createPowerUser.Succeeded)
             {
-                userManager.AddToRoleAsync(poweruser, roleNames[0]).Wait();
+                userManager.AddToRoleAsync(poweruser, RoleNames.Admin).Wait();
             }
         }
     }
