@@ -265,4 +265,16 @@
   <data name="_ManageNav_Account_Profile" xml:space="preserve">
     <value>Profile</value>
   </data>
+  <data name="Account_ManageNav_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Account_ManageNav_PersonalData" xml:space="preserve">
+    <value>Personal Data</value>
+  </data>
+  <data name="Account_ChangedPassword_UpdatePassword" xml:space="preserve">
+    <value>Update Password</value>
+  </data>
+  <data name="Account_ChangedPassord_Title" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
 </root>

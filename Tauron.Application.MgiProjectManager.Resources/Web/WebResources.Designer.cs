@@ -151,6 +151,42 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Change Password ähnelt.
+        /// </summary>
+        public static string Account_ChangedPassord_Title {
+            get {
+                return ResourceManager.GetString("Account_ChangedPassord_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update Password ähnelt.
+        /// </summary>
+        public static string Account_ChangedPassword_UpdatePassword {
+            get {
+                return ResourceManager.GetString("Account_ChangedPassword_UpdatePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
+        /// </summary>
+        public static string Account_ManageNav_Password {
+            get {
+                return ResourceManager.GetString("Account_ManageNav_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Personal Data ähnelt.
+        /// </summary>
+        public static string Account_ManageNav_PersonalData {
+            get {
+                return ResourceManager.GetString("Account_ManageNav_PersonalData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Accept ähnelt.
         /// </summary>
         public static string Base_Text_Accept {

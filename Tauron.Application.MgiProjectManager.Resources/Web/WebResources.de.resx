@@ -266,4 +266,16 @@ Authentifizierungs-App-Code beim Anmelden angeben oder die 2FA Deaktivieren und 
   <data name="_ManageNav_Account_Profile" xml:space="preserve">
     <value>Profile</value>
   </data>
+  <data name="Account_ManageNav_Password" xml:space="preserve">
+    <value>Passwort</value>
+  </data>
+  <data name="Account_ManageNav_PersonalData" xml:space="preserve">
+    <value>Persönliche Daten</value>
+  </data>
+  <data name="Account_ChangedPassword_UpdatePassword" xml:space="preserve">
+    <value>Update Passwort</value>
+  </data>
+  <data name="Account_ChangedPassord_Title" xml:space="preserve">
+    <value>Passwort Ändern</value>
+  </data>
 </root>
