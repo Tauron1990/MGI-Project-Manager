@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Diagramme", "Diagramme", "{
 		Diagramme\Einplanen und Eintragen.png = Diagramme\Einplanen und Eintragen.png
 		Diagramme\Fertig Stellen.png = Diagramme\Fertig Stellen.png
 		Diagramme\Gund Ablauf.png = Diagramme\Gund Ablauf.png
+		Help.txt = Help.txt
 		Diagramme\Produzieren.png = Diagramme\Produzieren.png
 	EndProjectSection
 EndProject
@@ -36,9 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGIProjectManagerServer", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{A6558C51-188E-49DD-876F-E7C7BF8ED6C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.MgiProjectManager.Resources", "Tauron.Application.MgiProjectManager.Resources\Tauron.Application.MgiProjectManager.Resources.csproj", "{8E32D428-20CF-474E-B3EA-11B58EB2A20C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.MgiProjectManager.Resources", "Tauron.Application.MgiProjectManager.Resources\Tauron.Application.MgiProjectManager.Resources.csproj", "{8E32D428-20CF-474E-B3EA-11B58EB2A20C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.MgiProjectManager.Server.Data", "Tauron.Application.MgiProjectManager.Server.Data\Tauron.Application.MgiProjectManager.Server.Data.csproj", "{BD1CF5B6-BF32-4E40-86B6-F377A80FBCE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.MgiProjectManager.Server.Data", "Tauron.Application.MgiProjectManager.Server.Data\Tauron.Application.MgiProjectManager.Server.Data.csproj", "{BD1CF5B6-BF32-4E40-86B6-F377A80FBCE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

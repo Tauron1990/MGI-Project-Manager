@@ -1,16 +1,18 @@
 ﻿@page
+@using MGIProjectManagerServer.Core
 @model DeletePersonalDataModel
 @{
-    ViewData["Title"] = "Delete Personal Data";
+    ViewData["Title"] = SimpleLoc["Account_DeletePersonalData_Title"];
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
+@inject SimpleLoc SimpleLoc
 
 <h4>@ViewData["Title"]</h4>
 
 <div class="alert alert-warning" role="alert">
     <p>
         <span class="glyphicon glyphicon-warning-sign"></span>
-        <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
+        <strong></strong>
     </p>
 </div>
 
@@ -25,7 +27,7 @@
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
         }
-        <button class="btn btn-danger" type="submit">Delete data and close my account</button>
+        <button class="btn btn-danger" type="submit">@SimpleLoc["Account_DeletePersonalData_Button"]</button>
     </form>
 </div>
 

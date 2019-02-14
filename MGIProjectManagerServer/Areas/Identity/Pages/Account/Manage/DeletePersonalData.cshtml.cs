@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using MGIProjectManagerServer.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Tauron.Application.MgiProjectManager.Resources.Web;
 
 namespace MGIProjectManagerServer.Areas.Identity.Pages.Account.Manage
 {
@@ -13,15 +15,18 @@ namespace MGIProjectManagerServer.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly SimpleLoc _simpleLoc;
 
         public DeletePersonalDataModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            SimpleLoc simpleLoc)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _simpleLoc = simpleLoc;
         }
 
         [BindProperty]
@@ -53,7 +58,7 @@ namespace MGIProjectManagerServer.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound(_simpleLoc["Account_DeletePersonalData_UserNotFound", _userManager.GetUserId(User)]);
             }
 
             RequirePassword = await _userManager.HasPasswordAsync(user);
@@ -61,7 +66,7 @@ namespace MGIProjectManagerServer.Areas.Identity.Pages.Account.Manage
             {
                 if (!await _userManager.CheckPasswordAsync(user, Input.Password))
                 {
-                    ModelState.AddModelError(string.Empty, "Password not correct.");
+                    ModelState.AddModelError(string.Empty, WebResources.Account_DeletePersonalData_WrongPassword);
                     return Page();
                 }
             }
@@ -70,7 +75,7 @@ namespace MGIProjectManagerServer.Areas.Identity.Pages.Account.Manage
             var userId = await _userManager.GetUserIdAsync(user);
             if (!result.Succeeded)
             {
-                throw new InvalidOperationException($"Unexpected error occurred deleteing user with ID '{userId}'.");
+                throw new InvalidOperationException(string.Format(WebResources.Account_DeletePersonalData_UnexpectError, userId));
             }
 
             await _signInManager.SignOutAsync();

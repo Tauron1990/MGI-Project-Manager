@@ -169,6 +169,78 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delete data and close my account ähnelt.
+        /// </summary>
+        public static string Account_DeletePersonalData_Button {
+            get {
+                return ResourceManager.GetString("Account_DeletePersonalData_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Deleting this data will permanently remove your account, and this cannot be recovered. ähnelt.
+        /// </summary>
+        public static string Account_DeletePersonalData_Text {
+            get {
+                return ResourceManager.GetString("Account_DeletePersonalData_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delete Personal Data ähnelt.
+        /// </summary>
+        public static string Account_DeletePersonalData_Title {
+            get {
+                return ResourceManager.GetString("Account_DeletePersonalData_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Unexpected error occurred deleteing user with ID &apos;{0}&apos;. ähnelt.
+        /// </summary>
+        public static string Account_DeletePersonalData_UnexpectError {
+            get {
+                return ResourceManager.GetString("Account_DeletePersonalData_UnexpectError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Unable to load user with ID &apos;{0}&apos;. ähnelt.
+        /// </summary>
+        public static string Account_DeletePersonalData_UserNotFound {
+            get {
+                return ResourceManager.GetString("Account_DeletePersonalData_UserNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password not correct. ähnelt.
+        /// </summary>
+        public static string Account_DeletePersonalData_WrongPassword {
+            get {
+                return ResourceManager.GetString("Account_DeletePersonalData_WrongPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Download Your Data ähnelt.
+        /// </summary>
+        public static string Account_DownloadPersonalData_Title {
+            get {
+                return ResourceManager.GetString("Account_DownloadPersonalData_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Generate two-factor authentication (2FA) recovery codes ähnelt.
+        /// </summary>
+        public static string Account_GenerateRecoveryCode_Title {
+            get {
+                return ResourceManager.GetString("Account_GenerateRecoveryCode_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
         /// </summary>
         public static string Account_ManageNav_Password {

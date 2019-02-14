@@ -277,4 +277,28 @@
   <data name="Account_ChangedPassord_Title" xml:space="preserve">
     <value>Change Password</value>
   </data>
+  <data name="Account_DeletePersonalData_Title" xml:space="preserve">
+    <value>Delete Personal Data</value>
+  </data>
+  <data name="Account_DeletePersonalData_Text" xml:space="preserve">
+    <value>Deleting this data will permanently remove your account, and this cannot be recovered.</value>
+  </data>
+  <data name="Account_DeletePersonalData_Button" xml:space="preserve">
+    <value>Delete data and close my account</value>
+  </data>
+  <data name="Account_DeletePersonalData_UserNotFound" xml:space="preserve">
+    <value>Unable to load user with ID '{0}'.</value>
+  </data>
+  <data name="Account_DeletePersonalData_WrongPassword" xml:space="preserve">
+    <value>Password not correct.</value>
+  </data>
+  <data name="Account_DeletePersonalData_UnexpectError" xml:space="preserve">
+    <value>Unexpected error occurred deleteing user with ID '{0}'.</value>
+  </data>
+  <data name="Account_DownloadPersonalData_Title" xml:space="preserve">
+    <value>Download Your Data</value>
+  </data>
+  <data name="Account_GenerateRecoveryCode_Title" xml:space="preserve">
+    <value>Generate two-factor authentication (2FA) recovery codes</value>
+  </data>
 </root>

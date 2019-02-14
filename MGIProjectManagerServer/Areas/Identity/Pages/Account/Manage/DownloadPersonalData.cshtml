@@ -1,9 +1,11 @@
 ﻿@page
+@using MGIProjectManagerServer.Core
 @model DownloadPersonalDataModel
 @{
-    ViewData["Title"] = "Download Your Data";
+    ViewData["Title"] = SimpleLoc["Account_DownloadPersonalData_Title"];
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
+@inject SimpleLoc SimpleLoc
 
 <h4>@ViewData["Title"]</h4>
 

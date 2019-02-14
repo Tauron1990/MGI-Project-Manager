@@ -1,9 +1,11 @@
 ﻿@page
+@using MGIProjectManagerServer.Core
 @model GenerateRecoveryCodesModel
 @{
-    ViewData["Title"] = "Generate two-factor authentication (2FA) recovery codes";
+    ViewData["Title"] = SimpleLoc["Account_GenerateRecoveryCode_Title"];
     ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
 }
+@inject SimpleLoc SimpleLoc
 
 <partial name="_StatusMessage" for="StatusMessage" />
 <h4>@ViewData["Title"]</h4>

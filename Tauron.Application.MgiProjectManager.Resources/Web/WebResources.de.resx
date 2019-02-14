@@ -278,4 +278,28 @@ Authentifizierungs-App-Code beim Anmelden angeben oder die 2FA Deaktivieren und 
   <data name="Account_ChangedPassord_Title" xml:space="preserve">
     <value>Passwort Ändern</value>
   </data>
+  <data name="Account_DeletePersonalData_Title" xml:space="preserve">
+    <value>Persönliche Daten Löschen</value>
+  </data>
+  <data name="Account_DeletePersonalData_Text" xml:space="preserve">
+    <value>Das löschen der Daten resultiert im permanenten verschwinden der Daten, die nicht wiederhergestellt werden können.</value>
+  </data>
+  <data name="Account_DeletePersonalData_Button" xml:space="preserve">
+    <value>Lösche und Schlisse mein Account</value>
+  </data>
+  <data name="Account_DeletePersonalData_UserNotFound" xml:space="preserve">
+    <value>Benutzer mit der ID '{0}' konnte nicht gefunden werden.</value>
+  </data>
+  <data name="Account_DeletePersonalData_WrongPassword" xml:space="preserve">
+    <value>Passwort Falsch.</value>
+  </data>
+  <data name="Account_DeletePersonalData_UnexpectError" xml:space="preserve">
+    <value>Unerwarteter Fehler beim Löschen von ID {0}.</value>
+  </data>
+  <data name="Account_DownloadPersonalData_Title" xml:space="preserve">
+    <value>Downloade deine Daten</value>
+  </data>
+  <data name="Account_GenerateRecoveryCode_Title" xml:space="preserve">
+    <value>Erzeuge zwei-Faktor Authentifizierungs (2FA) widerherstellungs Codes.</value>
+  </data>
 </root>

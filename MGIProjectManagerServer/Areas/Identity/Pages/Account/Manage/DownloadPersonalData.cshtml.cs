@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Tauron.Application.MgiProjectManager.Resources.Web;
 
 namespace MGIProjectManagerServer.Areas.Identity.Pages.Account.Manage
 {
@@ -29,7 +30,7 @@ namespace MGIProjectManagerServer.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound(string.Format(WebResources.Account_DeletePersonalData_UserNotFound, _userManager.GetUserId(User));
             }
 
             _logger.LogInformation("User with ID '{UserId}' asked for their personal data.", _userManager.GetUserId(User));
