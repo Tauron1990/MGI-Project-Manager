@@ -1,1 +1,2 @@
 https://github.com/aspnet/AspNetCore/issues/4873
+https://github.com/aspnet/Entropy
