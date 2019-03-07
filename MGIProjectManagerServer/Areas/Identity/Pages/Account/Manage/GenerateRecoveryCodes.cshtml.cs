@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using MGIProjectManagerServer.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -63,7 +64,7 @@ namespace MGIProjectManagerServer.Areas.Identity.Pages.Account.Manage
             RecoveryCodes = recoveryCodes.ToArray();
 
             _logger.LogInformation("User with ID '{UserId}' has generated new 2FA recovery codes.", userId);
-            StatusMessage = "You have generated new recovery codes.";
+            StatusMessage = WebResources.Account_GenerateRecuveryCode_GenerateStatus;
             return RedirectToPage("./ShowRecoveryCodes");
         }
     }

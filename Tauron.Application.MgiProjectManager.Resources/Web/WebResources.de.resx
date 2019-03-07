@@ -302,4 +302,16 @@ Authentifizierungs-App-Code beim Anmelden angeben oder die 2FA Deaktivieren und 
   <data name="Account_GenerateRecoveryCode_Title" xml:space="preserve">
     <value>Erzeuge zwei-Faktor Authentifizierungs (2FA) widerherstellungs Codes.</value>
   </data>
+  <data name="Account_GenerateRecoveryCode_P1" xml:space="preserve">
+    <value>Bewahren sie die Codes an einem sicheren platz auf.</value>
+  </data>
+  <data name="Account_GenerateRecuveryCode_P2" xml:space="preserve">
+    <value>Verlieren sie ihr Gerät und haben die Wiederherstellungs Codes nicht, verlieren sie den Zugriff auf ihren Account.</value>
+  </data>
+  <data name="Account_GenerateRecuveryCode_GenerateButton" xml:space="preserve">
+    <value>Erstelle Widerherstellungs Codes</value>
+  </data>
+  <data name="Account_GenerateRecuveryCode_GenerateStatus" xml:space="preserve">
+    <value>Sie neue Codes Generiert.</value>
+  </data>
 </root>

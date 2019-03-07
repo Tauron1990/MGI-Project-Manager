@@ -30,7 +30,7 @@ namespace MGIProjectManagerServer.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound(string.Format(WebResources.Account_DeletePersonalData_UserNotFound, _userManager.GetUserId(User));
+                return NotFound(string.Format(WebResources.Account_DeletePersonalData_UserNotFound, _userManager.GetUserId(User)));
             }
 
             _logger.LogInformation("User with ID '{UserId}' asked for their personal data.", _userManager.GetUserId(User));

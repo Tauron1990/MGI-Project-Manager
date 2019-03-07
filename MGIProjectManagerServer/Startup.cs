@@ -1,16 +1,15 @@
-using System;
 using System.Globalization;
-using System.IO;
 using FluentValidation.AspNetCore;
 using JetBrains.Annotations;
 using MGIProjectManagerServer.Core;
+using MGIProjectManagerServer.Core.Setup;
+using MGIProjectManagerServer.Core.Setup.Impl;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,7 +39,8 @@ namespace MGIProjectManagerServer
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddEntityFrameworkSqlite().AddDbContext<ApplicationDbContext>();
+            services.AddEntityFrameworkSqlServer()
+                .AddDbContext<ApplicationDbContext>( o => Configuration.GetConnectionString("DefaultConnection"));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
@@ -54,10 +54,11 @@ namespace MGIProjectManagerServer
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddFluentValidation();
 
-           services.AddAuthentication();
+            services.AddAuthentication();
             services.AddAuthorization();
 
             services.TryAddTransient<SimpleLoc, SimpleLoc>();
+            services.TryAddSingleton<IBaseSettingsManager, BaseSettingsManager>();
         }
 
         [UsedImplicitly]

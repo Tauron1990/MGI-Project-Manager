@@ -232,11 +232,47 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Put these codes in a safe place. ähnelt.
+        /// </summary>
+        public static string Account_GenerateRecoveryCode_P1 {
+            get {
+                return ResourceManager.GetString("Account_GenerateRecoveryCode_P1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Generate two-factor authentication (2FA) recovery codes ähnelt.
         /// </summary>
         public static string Account_GenerateRecoveryCode_Title {
             get {
                 return ResourceManager.GetString("Account_GenerateRecoveryCode_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Generate Recovery Codes ähnelt.
+        /// </summary>
+        public static string Account_GenerateRecuveryCode_GenerateButton {
+            get {
+                return ResourceManager.GetString("Account_GenerateRecuveryCode_GenerateButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die You have generated new recovery codes. ähnelt.
+        /// </summary>
+        public static string Account_GenerateRecuveryCode_GenerateStatus {
+            get {
+                return ResourceManager.GetString("Account_GenerateRecuveryCode_GenerateStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die If you lose your device and don&apos;t have the recovery codes you will lose access to your account. ähnelt.
+        /// </summary>
+        public static string Account_GenerateRecuveryCode_P2 {
+            get {
+                return ResourceManager.GetString("Account_GenerateRecuveryCode_P2", resourceCulture);
             }
         }
         

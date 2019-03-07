@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using JetBrains.Annotations;
+using MGIProjectManagerServer.Core.Setup;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,20 @@ namespace MGIProjectManagerServer.Pages
 {
     public class IndexModel : PageModel
     {
-        [UsedImplicitly]
-        public void OnGet()
-        {
+        private readonly IBaseSettingsManager _manager;
 
+        public IndexModel(IBaseSettingsManager manager)
+        {
+            _manager = manager;
+        }
+
+        [UsedImplicitly]
+        public ActionResult OnGet()
+        {
+            if (_manager.BaseSettings.IsConfigurated)
+                return Page();
+
+            return RedirectToPage("/Index", new { area = "Setup" });
         }
 
         [UsedImplicitly]
