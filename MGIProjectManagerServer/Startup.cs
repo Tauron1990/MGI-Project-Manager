@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using MGIProjectManagerServer.Core;
 using MGIProjectManagerServer.Core.Setup;
 using MGIProjectManagerServer.Core.Setup.Impl;
+using MGIProjectManagerServer.Pages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -11,11 +12,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Tauron.Application.MgiProjectManager.Resources.Web;
 using Tauron.Application.MgiProjectManager.Server.Data;
+using WebOptimizer;
 
 namespace MGIProjectManagerServer
 {
@@ -30,6 +33,7 @@ namespace MGIProjectManagerServer
         {
             SimpleLoc.SetGlobalResourceManager(WebResources.ResourceManager);
 
+            services.AddWebOptimizer();
             services.Configure<IdentityOptions>(opt => { opt.Password.RequireNonAlphanumeric = false; });
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -39,8 +43,10 @@ namespace MGIProjectManagerServer
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddEntityFrameworkSqlServer()
-                .AddDbContext<ApplicationDbContext>( o => Configuration.GetConnectionString("DefaultConnection"));
+            services.AddDbContext<ApplicationDbContext>( o =>
+                {
+                    o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                });
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
@@ -52,7 +58,13 @@ namespace MGIProjectManagerServer
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddFluentValidation();
+                .AddFluentValidation(fc =>
+                {
+                    fc.RegisterValidatorsFromAssemblyContaining<ApplicationDbContext>()
+                        .RegisterValidatorsFromAssemblyContaining<IndexModel>();
+                    fc.LocalizationEnabled = true;
+                    fc.ImplicitlyValidateChildProperties = true;
+                });
 
             services.AddAuthentication();
             services.AddAuthorization();
@@ -78,7 +90,6 @@ namespace MGIProjectManagerServer
                 // UI strings that we have localized.
                 SupportedUICultures = supportedCultures
             });
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -86,6 +97,7 @@ namespace MGIProjectManagerServer
             }
             else
             {
+                app.UseWebOptimizer();
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();

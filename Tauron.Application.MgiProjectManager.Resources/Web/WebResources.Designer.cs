@@ -313,6 +313,24 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The path contains illegal characters. ähnelt.
+        /// </summary>
+        public static string BaseSettings_FilePath_InvalidChars {
+            get {
+                return ResourceManager.GetString("BaseSettings_FilePath_InvalidChars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die File Path ähnelt.
+        /// </summary>
+        public static string BaseSettings_FilePath_Name {
+            get {
+                return ResourceManager.GetString("BaseSettings_FilePath_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Thank you for confirming your email. ähnelt.
         /// </summary>
         public static string ConfirmEmail_Text {
@@ -643,6 +661,259 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         public static string ResetPasswordConfirmation_Text {
             get {
                 return ResourceManager.GetString("ResetPasswordConfirmation_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Only the administrator can create users and assign roles. ähnelt.
+        /// </summary>
+        public static string Setup_CreateUser_Description {
+            get {
+                return ResourceManager.GetString("Setup_CreateUser_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Email: ähnelt.
+        /// </summary>
+        public static string Setup_CreateUser_Email {
+            get {
+                return ResourceManager.GetString("Setup_CreateUser_Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password: ähnelt.
+        /// </summary>
+        public static string Setup_CreateUser_Password {
+            get {
+                return ResourceManager.GetString("Setup_CreateUser_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Show password ähnelt.
+        /// </summary>
+        public static string Setup_CreateUser_ShowPassword {
+            get {
+                return ResourceManager.GetString("Setup_CreateUser_ShowPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create Administrator ähnelt.
+        /// </summary>
+        public static string Setup_CreateUser_Title {
+            get {
+                return ResourceManager.GetString("Setup_CreateUser_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Filepath: ähnelt.
+        /// </summary>
+        public static string Setup_Finish_Span_FilePath {
+            get {
+                return ResourceManager.GetString("Setup_Finish_Span_FilePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die UserName: ähnelt.
+        /// </summary>
+        public static string Setup_Finish_Span_UsernName {
+            get {
+                return ResourceManager.GetString("Setup_Finish_Span_UsernName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The selected settings ähnelt.
+        /// </summary>
+        public static string Setup_Finish_Summary {
+            get {
+                return ResourceManager.GetString("Setup_Finish_Summary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Setup Finisht ähnelt.
+        /// </summary>
+        public static string Setup_Finish_Title {
+            get {
+                return ResourceManager.GetString("Setup_Finish_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password: ähnelt.
+        /// </summary>
+        public static string Setup_Finsih_Span_Password {
+            get {
+                return ResourceManager.GetString("Setup_Finsih_Span_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Infomation ähnelt.
+        /// </summary>
+        public static string Setup_Index_Title {
+            get {
+                return ResourceManager.GetString("Setup_Index_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Finish ähnelt.
+        /// </summary>
+        public static string Setup_Layout_Button_Finish {
+            get {
+                return ResourceManager.GetString("Setup_Layout_Button_Finish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Next ähnelt.
+        /// </summary>
+        public static string Setup_Layout_Button_Next {
+            get {
+                return ResourceManager.GetString("Setup_Layout_Button_Next", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create Admin User ähnelt.
+        /// </summary>
+        public static string Setup_navbar_CreateUser {
+            get {
+                return ResourceManager.GetString("Setup_navbar_CreateUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Finish ähnelt.
+        /// </summary>
+        public static string Setup_navbar_Finish {
+            get {
+                return ResourceManager.GetString("Setup_navbar_Finish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start ähnelt.
+        /// </summary>
+        public static string Setup_navbar_Index {
+            get {
+                return ResourceManager.GetString("Setup_navbar_Index", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die File Paths ähnelt.
+        /// </summary>
+        public static string Setup_navbar_SetFilePath {
+            get {
+                return ResourceManager.GetString("Setup_navbar_SetFilePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Converts to the AppData directory for the user. ähnelt.
+        /// </summary>
+        public static string Setup_SetFilePath_AppData {
+            get {
+                return ResourceManager.GetString("Setup_SetFilePath_AppData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No Variable Requires an Absolute Path ähnelt.
+        /// </summary>
+        public static string Setup_SetFilePath_Emty {
+            get {
+                return ResourceManager.GetString("Setup_SetFilePath_Emty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Empty ähnelt.
+        /// </summary>
+        public static string Setup_SetFilePath_Emty_Title {
+            get {
+                return ResourceManager.GetString("Setup_SetFilePath_Emty_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Path: ähnelt.
+        /// </summary>
+        public static string Setup_SetFilePath_FormLabel {
+            get {
+                return ResourceManager.GetString("Setup_SetFilePath_FormLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Will be converted to the Global AppData directory. ähnelt.
+        /// </summary>
+        public static string Setup_SetFilePath_Roaming {
+            get {
+                return ResourceManager.GetString("Setup_SetFilePath_Roaming", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Here are the paths needed for configuration data and uploaded data. There are various options available for relative paths. An absolute path is also possible.  ähnelt.
+        /// </summary>
+        public static string Setup_SetFilePath_Summary {
+            get {
+                return ResourceManager.GetString("Setup_SetFilePath_Summary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Is converted to the path of the operating system installation. ähnelt.
+        /// </summary>
+        public static string Setup_SetFilePath_System {
+            get {
+                return ResourceManager.GetString("Setup_SetFilePath_System", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Set File Path ähnelt.
+        /// </summary>
+        public static string Setup_SetFilePath_Title {
+            get {
+                return ResourceManager.GetString("Setup_SetFilePath_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Is converted to the directory of the current user. ähnelt.
+        /// </summary>
+        public static string Setup_SetFilePath_User {
+            get {
+                return ResourceManager.GetString("Setup_SetFilePath_User", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die On the following pages, the basic settings for the website are made. ähnelt.
+        /// </summary>
+        public static string Setup_Start_Summary {
+            get {
+                return ResourceManager.GetString("Setup_Start_Summary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die To use the site you need a user account to authorize the administrator. Contact the administrator if you want to have access to special functions. 
+        ///In case of wishes and/or errors you can find help here:  ähnelt.
+        /// </summary>
+        public static string Shared_Index_Content {
+            get {
+                return ResourceManager.GetString("Shared_Index_Content", resourceCulture);
             }
         }
     }

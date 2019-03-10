@@ -1,0 +1,13 @@
+﻿@page
+@using MGIProjectManagerServer.Areas.Setup.Pages
+@model MGIProjectManagerServer.Areas.Setup.Pages.StartModel
+@{
+    ViewData["Title"] = SimpleLoc["Setup_Index_Title"];
+    ViewData["ActivePage"] = SetupManageNavPages.Start;
+    ViewData[SetupManageNavPages.LabelName] = SimpleLoc["Setup_Layout_Button_Next"];
+}
+
+<div class="container">
+    <h4>@ViewData["Title"]</h4>
+    <p class="m-2">@SimpleLoc["Setup_Start_Summary"]</p>
+</div>

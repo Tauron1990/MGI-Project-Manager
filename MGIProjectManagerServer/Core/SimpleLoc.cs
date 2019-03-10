@@ -18,6 +18,9 @@ namespace MGIProjectManagerServer.Core
 
         public string this[string key] => _resourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? key;
 
-        public string this[string key, params object[] elemnts] => string.Format(_resourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? key, elemnts);
+        public string this[string key, params object[] elemnts] 
+            => elemnts.Length == 0 
+                ? _resourceManager.GetString(key) 
+                : string.Format(_resourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? key, elemnts);
     }
 }

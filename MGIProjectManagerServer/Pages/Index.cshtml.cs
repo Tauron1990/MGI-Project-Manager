@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using JetBrains.Annotations;
 using MGIProjectManagerServer.Core.Setup;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -23,7 +22,7 @@ namespace MGIProjectManagerServer.Pages
             if (_manager.BaseSettings.IsConfigurated)
                 return Page();
 
-            return RedirectToPage("/Index", new { area = "Setup" });
+            return RedirectToPage("/Start", new { area = "Setup" });
         }
 
         [UsedImplicitly]

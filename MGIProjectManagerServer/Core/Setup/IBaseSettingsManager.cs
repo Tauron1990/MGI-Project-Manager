@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using Tauron.Application.MgiProjectManager.Server.Data.Core.Setup;
 
 namespace MGIProjectManagerServer.Core.Setup
 {

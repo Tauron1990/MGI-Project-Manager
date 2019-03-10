@@ -1,16 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+﻿using System.IO;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
+using Tauron.Application.MgiProjectManager.Server.Data.Core.Setup;
 
 namespace MGIProjectManagerServer.Core.Setup.Impl
 {
+    [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
     public sealed class BaseSettingsManager : IBaseSettingsManager
     {
         private const string RelativeSettingsPath = "Settings.bin";
 
         private readonly IHostingEnvironment _hostingEnvironment;
-        private static readonly BinaryFormatter BinaryFormatter = new BinaryFormatter();
+        private static readonly System.Runtime.Serialization.Formatters.Binary.BinaryFormatter BinaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
         public BaseSettings BaseSettings { get; private set; } = new BaseSettings();
 
@@ -21,7 +22,7 @@ namespace MGIProjectManagerServer.Core.Setup.Impl
         {
             try
             {
-                using (var stream = File.OpenWrite(GetPath()))
+                using (var stream = File.OpenRead(GetPath()))
                     BaseSettings = (BaseSettings) BinaryFormatter.Deserialize(stream);
             }
             catch

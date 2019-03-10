@@ -1,7 +1,9 @@
 ﻿using System;
 using MGIProjectManagerServer.Core.Setup;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Tauron.Application.MgiProjectManager.Server.Data;
 
 namespace MGIProjectManagerServer
 {
@@ -22,6 +24,11 @@ namespace MGIProjectManagerServer
 
             settings.UserName = configuration.GetSection("UserSettings")["UserEmail"];
             settings.Password = configuration.GetSection("UserSettings")["UserPassword"];
+            settings.SaveFilePath = @"%Roaming%\Tauron\MGIManager";
+
+           using (var context = serviceProvider.GetRequiredService<ApplicationDbContext>())
+                context.Database.Migrate();
+
             //
             //var env = serviceProvider.GetRequiredService<IHostingEnvironment>();
 
@@ -35,9 +42,6 @@ namespace MGIProjectManagerServer
             //    Directory.CreateDirectory(path);
 
             //ApplicationDbContext.ConnectionPath = Path.Combine(path, "mgi.db");
-
-            //using (var context = new ApplicationDbContext())
-            //    context.Database.Migrate();
 
             //foreach (var roleName in RoleNames.GetAllRoles())
             //{

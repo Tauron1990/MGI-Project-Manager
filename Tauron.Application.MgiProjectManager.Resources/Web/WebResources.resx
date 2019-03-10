@@ -313,4 +313,95 @@
   <data name="Account_GenerateRecuveryCode_GenerateStatus" xml:space="preserve">
     <value>You have generated new recovery codes.</value>
   </data>
+  <data name="Setup_navbar_Index" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Setup_Index_Title" xml:space="preserve">
+    <value>Infomation</value>
+  </data>
+  <data name="Setup_Layout_Button_Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Setup_navbar_CreateUser" xml:space="preserve">
+    <value>Create Admin User</value>
+  </data>
+  <data name="Setup_Start_Summary" xml:space="preserve">
+    <value>On the following pages, the basic settings for the website are made.</value>
+  </data>
+  <data name="Setup_navbar_SetFilePath" xml:space="preserve">
+    <value>File Paths</value>
+  </data>
+  <data name="Setup_CreateUser_Title" xml:space="preserve">
+    <value>Create Administrator</value>
+  </data>
+  <data name="Setup_CreateUser_Description" xml:space="preserve">
+    <value>Only the administrator can create users and assign roles.</value>
+  </data>
+  <data name="Setup_CreateUser_Email" xml:space="preserve">
+    <value>Email:</value>
+  </data>
+  <data name="Setup_CreateUser_Password" xml:space="preserve">
+    <value>Password:</value>
+  </data>
+  <data name="Setup_CreateUser_ShowPassword" xml:space="preserve">
+    <value>Show password</value>
+  </data>
+  <data name="Setup_SetFilePath_Title" xml:space="preserve">
+    <value>Set File Path</value>
+  </data>
+  <data name="Setup_SetFilePath_Summary" xml:space="preserve">
+    <value>Here are the paths needed for configuration data and uploaded data. There are various options available for relative paths. An absolute path is also possible. </value>
+  </data>
+  <data name="Setup_SetFilePath_Emty_Title" xml:space="preserve">
+    <value>Empty</value>
+  </data>
+  <data name="Setup_SetFilePath_Emty" xml:space="preserve">
+    <value>No Variable Requires an Absolute Path</value>
+  </data>
+  <data name="Setup_SetFilePath_System" xml:space="preserve">
+    <value>Is converted to the path of the operating system installation.</value>
+  </data>
+  <data name="Setup_SetFilePath_AppData" xml:space="preserve">
+    <value>Converts to the AppData directory for the user.</value>
+  </data>
+  <data name="Setup_SetFilePath_Roaming" xml:space="preserve">
+    <value>Will be converted to the Global AppData directory.</value>
+  </data>
+  <data name="Setup_SetFilePath_User" xml:space="preserve">
+    <value>Is converted to the directory of the current user.</value>
+  </data>
+  <data name="BaseSettings_FilePath_InvalidChars" xml:space="preserve">
+    <value>The path contains illegal characters.</value>
+  </data>
+  <data name="Setup_SetFilePath_FormLabel" xml:space="preserve">
+    <value>Path:</value>
+  </data>
+  <data name="BaseSettings_FilePath_Name" xml:space="preserve">
+    <value>File Path</value>
+  </data>
+  <data name="Setup_Finish_Summary" xml:space="preserve">
+    <value>The selected settings</value>
+  </data>
+  <data name="Setup_Finish_Span_UsernName" xml:space="preserve">
+    <value>UserName:</value>
+  </data>
+  <data name="Setup_Finsih_Span_Password" xml:space="preserve">
+    <value>Password:</value>
+  </data>
+  <data name="Setup_Finish_Span_FilePath" xml:space="preserve">
+    <value>Filepath:</value>
+  </data>
+  <data name="Setup_Finish_Title" xml:space="preserve">
+    <value>Setup Finisht</value>
+  </data>
+  <data name="Setup_Layout_Button_Finish" xml:space="preserve">
+    <value>Finish</value>
+  </data>
+  <data name="Setup_navbar_Finish" xml:space="preserve">
+    <value>Finish</value>
+  </data>
+  <data name="Shared_Index_Content" xml:space="preserve">
+    <value>To use the site you need a user account to authorize the administrator. Contact the administrator if you want to have access to special functions. 
+In case of wishes and/or errors you can find help here: </value>
+  </data>
 </root>

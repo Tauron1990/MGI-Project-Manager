@@ -314,4 +314,95 @@ Authentifizierungs-App-Code beim Anmelden angeben oder die 2FA Deaktivieren und 
   <data name="Account_GenerateRecuveryCode_GenerateStatus" xml:space="preserve">
     <value>Sie neue Codes Generiert.</value>
   </data>
+  <data name="Setup_navbar_Index" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Setup_Index_Title" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="Setup_Layout_Button_Next" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
+  <data name="Setup_navbar_CreateUser" xml:space="preserve">
+    <value>Administrator Erstellen</value>
+  </data>
+  <data name="Setup_Start_Summary" xml:space="preserve">
+    <value>Auf den folgenden Seiten werden die Grundeinstellungen für die Webseite vorgenommen.</value>
+  </data>
+  <data name="Setup_navbar_SetFilePath" xml:space="preserve">
+    <value>Datei Pfade</value>
+  </data>
+  <data name="Setup_CreateUser_Title" xml:space="preserve">
+    <value>Administrator Erstellen</value>
+  </data>
+  <data name="Setup_CreateUser_Description" xml:space="preserve">
+    <value>Nur der Administrator kann Benutzer erstellen und Rollen vergeben.</value>
+  </data>
+  <data name="Setup_CreateUser_Email" xml:space="preserve">
+    <value>Email:</value>
+  </data>
+  <data name="Setup_CreateUser_Password" xml:space="preserve">
+    <value>Passwort:</value>
+  </data>
+  <data name="Setup_CreateUser_ShowPassword" xml:space="preserve">
+    <value>Passwort Anzeigen</value>
+  </data>
+  <data name="Setup_SetFilePath_Title" xml:space="preserve">
+    <value>Dateipfad setzen</value>
+  </data>
+  <data name="Setup_SetFilePath_Summary" xml:space="preserve">
+    <value>Hier werden die Pfade die für Konfigurationsdaten und hochbeladenen Daten benötigt werden. es sind verschiedene Optionen für relative Pfade verfügbar. Ein absoluter Pfad ist auch möglich.</value>
+  </data>
+  <data name="Setup_SetFilePath_Emty_Title" xml:space="preserve">
+    <value>Leer</value>
+  </data>
+  <data name="Setup_SetFilePath_Emty" xml:space="preserve">
+    <value>Keine Angabe einer variable erfordert einen Absoluten Pfad</value>
+  </data>
+  <data name="Setup_SetFilePath_System" xml:space="preserve">
+    <value>Wird in den Pfad der Betriebssystem Installation umgewandelt.</value>
+  </data>
+  <data name="Setup_SetFilePath_AppData" xml:space="preserve">
+    <value>Wird in AppData Verzeichnis für den Benutzer umgewandelt.</value>
+  </data>
+  <data name="Setup_SetFilePath_Roaming" xml:space="preserve">
+    <value>Wird in das Globale AppData Verzeichnis umgewandelt.</value>
+  </data>
+  <data name="Setup_SetFilePath_User" xml:space="preserve">
+    <value>Wird in das Verzeichnis des Aktuellen Benutzers umgewandelt.</value>
+  </data>
+  <data name="BaseSettings_FilePath_InvalidChars" xml:space="preserve">
+    <value>Der Pfad Enthält unerlaubte Zeichen.</value>
+  </data>
+  <data name="Setup_SetFilePath_FormLabel" xml:space="preserve">
+    <value>Pfad:</value>
+  </data>
+  <data name="BaseSettings_FilePath_Name" xml:space="preserve">
+    <value>Datei Pfad</value>
+  </data>
+  <data name="Setup_Finish_Summary" xml:space="preserve">
+    <value>Die gewählten Einstellungen</value>
+  </data>
+  <data name="Setup_Finish_Span_UsernName" xml:space="preserve">
+    <value>Benutzername:</value>
+  </data>
+  <data name="Setup_Finsih_Span_Password" xml:space="preserve">
+    <value>Passwort:</value>
+  </data>
+  <data name="Setup_Finish_Span_FilePath" xml:space="preserve">
+    <value>Dateipfad:</value>
+  </data>
+  <data name="Setup_Finish_Title" xml:space="preserve">
+    <value>Setup Fertig</value>
+  </data>
+  <data name="Setup_Layout_Button_Finish" xml:space="preserve">
+    <value>Fertigstellen</value>
+  </data>
+  <data name="Setup_navbar_Finish" xml:space="preserve">
+    <value>Fertig</value>
+  </data>
+  <data name="Shared_Index_Content" xml:space="preserve">
+    <value>Für die Benutzung der Seite ist ein Benutzer Account um die Autorisierung des Administrators nötig. Wenden sie sich an den Administrator sofern sie Zugriff auf spezielle Funktionen haben möchten. 
+Im falle von Wünschen und/oder Fehlern können hier Hilfe finden: </value>
+  </data>
 </root>
