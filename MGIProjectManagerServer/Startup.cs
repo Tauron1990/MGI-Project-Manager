@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Newtonsoft.Json.Serialization;
 using Tauron.Application.MgiProjectManager.Resources.Web;
 using Tauron.Application.MgiProjectManager.Server.Data;
 using WebOptimizer;
@@ -24,13 +25,21 @@ namespace MGIProjectManagerServer
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration) => Configuration = configuration;
+        public bool IsInDev { get; set; }
+
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
+        {
+            IsInDev = environment.IsDevelopment();
+            Configuration = configuration;
+        }
 
         private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzYwNTVAMzEzNjJlMzQyZTMwZ1Q5QUdvdTkxdk5icTNEbFFuZVJ1WGY4cyswWmpaSU5uM094d3p5SWw3QT0=");
+
             SimpleLoc.SetGlobalResourceManager(WebResources.ResourceManager);
 
             services.AddWebOptimizer();
@@ -64,10 +73,16 @@ namespace MGIProjectManagerServer
                         .RegisterValidatorsFromAssemblyContaining<IndexModel>();
                     fc.LocalizationEnabled = true;
                     fc.ImplicitlyValidateChildProperties = true;
-                });
+                })
+                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
             services.AddAuthentication();
             services.AddAuthorization();
+
+            if (IsInDev)
+            {
+                services.AddSwaggerDocument();
+            }
 
             services.TryAddTransient<SimpleLoc, SimpleLoc>();
             services.TryAddSingleton<IBaseSettingsManager, BaseSettingsManager>();
@@ -94,6 +109,8 @@ namespace MGIProjectManagerServer
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+                app.UseSwagger();
+                app.UseSwaggerUi3();
             }
             else
             {

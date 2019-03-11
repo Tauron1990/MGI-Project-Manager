@@ -404,4 +404,25 @@
     <value>To use the site you need a user account to authorize the administrator. Contact the administrator if you want to have access to special functions. 
 In case of wishes and/or errors you can find help here: </value>
   </data>
+  <data name="Admin_Index_Title" xml:space="preserve">
+    <value>Admin Managment Tool</value>
+  </data>
+  <data name="Shared_Layout_AdminLabel" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Admin_Index_UserGrid_NameColumn" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Admin_Index_UserGrid_RoleColumn" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Api_GridUserController_UserExis" xml:space="preserve">
+    <value>The Exis</value>
+  </data>
+  <data name="Api_GridUserController_NoUser" xml:space="preserve">
+    <value>No User Found</value>
+  </data>
+  <data name="Admin_Index_Summery" xml:space="preserve">
+    <value>Here users can be added, deleted and their roles changed. Possible roles that can be set with comma separation are:</value>
+  </data>
 </root>

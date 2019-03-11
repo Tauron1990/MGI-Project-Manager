@@ -405,4 +405,25 @@ Authentifizierungs-App-Code beim Anmelden angeben oder die 2FA Deaktivieren und 
     <value>Für die Benutzung der Seite ist ein Benutzer Account um die Autorisierung des Administrators nötig. Wenden sie sich an den Administrator sofern sie Zugriff auf spezielle Funktionen haben möchten. 
 Im falle von Wünschen und/oder Fehlern können hier Hilfe finden: </value>
   </data>
+  <data name="Admin_Index_Title" xml:space="preserve">
+    <value>Admin Management Tool</value>
+  </data>
+  <data name="Shared_Layout_AdminLabel" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Admin_Index_UserGrid_NameColumn" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Admin_Index_UserGrid_RoleColumn" xml:space="preserve">
+    <value>Aufgabe</value>
+  </data>
+  <data name="Api_GridUserController_UserExis" xml:space="preserve">
+    <value>Der Benutzer Existiert schon.</value>
+  </data>
+  <data name="Api_GridUserController_NoUser" xml:space="preserve">
+    <value>Kein Benutzer Gefunden</value>
+  </data>
+  <data name="Admin_Index_Summery" xml:space="preserve">
+    <value>Hier Können Benutzer Hinzugefügt, Gelöscht und dessen Rollen Verändert Werden. Mögliche Rollen den mit Komma Trennung gesetzt werden Können sind:</value>
+  </data>
 </root>

@@ -295,6 +295,60 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Here users can be added, deleted and their roles changed. Possible roles that can be set with comma separation are: ähnelt.
+        /// </summary>
+        public static string Admin_Index_Summery {
+            get {
+                return ResourceManager.GetString("Admin_Index_Summery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Admin Managment Tool ähnelt.
+        /// </summary>
+        public static string Admin_Index_Title {
+            get {
+                return ResourceManager.GetString("Admin_Index_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Name ähnelt.
+        /// </summary>
+        public static string Admin_Index_UserGrid_NameColumn {
+            get {
+                return ResourceManager.GetString("Admin_Index_UserGrid_NameColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Role ähnelt.
+        /// </summary>
+        public static string Admin_Index_UserGrid_RoleColumn {
+            get {
+                return ResourceManager.GetString("Admin_Index_UserGrid_RoleColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No User Found ähnelt.
+        /// </summary>
+        public static string Api_GridUserController_NoUser {
+            get {
+                return ResourceManager.GetString("Api_GridUserController_NoUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The Exis ähnelt.
+        /// </summary>
+        public static string Api_GridUserController_UserExis {
+            get {
+                return ResourceManager.GetString("Api_GridUserController_UserExis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Accept ähnelt.
         /// </summary>
         public static string Base_Text_Accept {
@@ -914,6 +968,15 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         public static string Shared_Index_Content {
             get {
                 return ResourceManager.GetString("Shared_Index_Content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Admin ähnelt.
+        /// </summary>
+        public static string Shared_Layout_AdminLabel {
+            get {
+                return ResourceManager.GetString("Shared_Layout_AdminLabel", resourceCulture);
             }
         }
     }

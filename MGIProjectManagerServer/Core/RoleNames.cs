@@ -23,5 +23,7 @@ namespace MGIProjectManagerServer.Core
             yield return Viewer;
         }
 
+        public static bool IsValidRole(string role) 
+            => role == Controller || role == Operator || role == Viewer;
     }
 }
