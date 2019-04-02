@@ -9,6 +9,8 @@ namespace MGIProjectManagerServer
 {
     public class Program
     {
+        
+
         public static void Main(string[] args)
         {
             var host = CreateWebHostBuilder(args).Build();
@@ -34,8 +36,17 @@ namespace MGIProjectManagerServer
             host.Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>()
+                .ConfigureLogging(l =>
+                {
+                    l.AddConsole();
+                #if DEBUG
+                    l.AddDebug();
+                #endif
+                });
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Net;
 using FluentValidation;
 using JetBrains.Annotations;
 using Tauron.Application.MgiProjectManager.Resources.Web;
@@ -27,10 +26,7 @@ namespace Tauron.Application.MgiProjectManager.Server.Data.Validators.Core
                 {
                     var invalid = Path.GetInvalidPathChars();
 
-                    if (value.IndexOfAny(invalid) != -1)
-                    {
-                        context.AddFailure(context.PropertyName, WebResources.BaseSettings_FilePath_InvalidChars);
-                    }
+                    if (value.IndexOfAny(invalid) != -1) context.AddFailure(context.PropertyName, WebResources.BaseSettings_FilePath_InvalidChars);
                 });
         }
     }

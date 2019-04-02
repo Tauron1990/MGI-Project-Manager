@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using MGIProjectManagerServer.Core;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,8 +16,8 @@ namespace MGIProjectManagerServer.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly SimpleLoc _simpleLoc;
 
         public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, SimpleLoc simpleLoc)
@@ -28,29 +27,13 @@ namespace MGIProjectManagerServer.Areas.Identity.Pages.Account
             _simpleLoc = simpleLoc;
         }
 
-        [BindProperty]
-        public InputModel Input { get; set; }
+        [BindProperty] public InputModel Input { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public string ReturnUrl { get; set; }
 
-        [TempData]
-        public string ErrorMessage { get; set; }
-
-        public class InputModel
-        {
-            [Required(ErrorMessageResourceName = "Data_Required", ErrorMessageResourceType = typeof(WebResources))]
-            [EmailAddress(ErrorMessageResourceName = "Data_EmailAddress_Invalid", ErrorMessageResourceType = typeof(WebResources))]
-            public string Email { get; set; }
-
-            [Required(ErrorMessageResourceName = "Data_Required", ErrorMessageResourceType = typeof(WebResources))]
-            [DataType(DataType.Password)]
-            public string Password { get; set; }
-
-            [Display(Name = "Data_Display_RememberMe", ResourceType = typeof(WebResources))]
-            public bool RememberMe { get; set; }
-        }
+        [TempData] public string ErrorMessage { get; set; }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
@@ -81,10 +64,8 @@ namespace MGIProjectManagerServer.Areas.Identity.Pages.Account
                 _logger.LogInformation("User logged in.");
                 return LocalRedirect(returnUrl);
             }
-            if (result.RequiresTwoFactor)
-            {
-                return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, Input.RememberMe });
-            }
+
+            if (result.RequiresTwoFactor) return RedirectToPage("./LoginWith2fa", new {ReturnUrl = returnUrl, Input.RememberMe});
             if (result.IsLockedOut)
             {
                 _logger.LogWarning("User account locked out.");
@@ -94,6 +75,20 @@ namespace MGIProjectManagerServer.Areas.Identity.Pages.Account
             ModelState.AddModelError(string.Empty, _simpleLoc["Login_Text_LoginError"]);
 
             return Page();
+        }
+
+        public class InputModel
+        {
+            [Required(ErrorMessageResourceName = "Data_Required", ErrorMessageResourceType = typeof(WebResources))]
+            //[EmailAddress(ErrorMessageResourceName = "Data_EmailAddress_Invalid", ErrorMessageResourceType = typeof(WebResources))]
+            public string Email { get; set; }
+
+            [Required(ErrorMessageResourceName = "Data_Required", ErrorMessageResourceType = typeof(WebResources))]
+            [DataType(DataType.Password)]
+            public string Password { get; set; }
+
+            [Display(Name = "Data_Display_RememberMe", ResourceType = typeof(WebResources))]
+            public bool RememberMe { get; set; }
         }
     }
 }

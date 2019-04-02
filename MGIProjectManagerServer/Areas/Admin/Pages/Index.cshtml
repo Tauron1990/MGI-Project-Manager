@@ -3,44 +3,45 @@
 @{
     ViewData["Title"] = SimpleLoc["Admin_Index_Title"];
     ViewData[Consts.Ej2] = true;
+
+    List<object> toolbarItems = new List<object> {"Add", "Edit", "Delete", "Update", "Cancel"};
 }
+
 @section Scripts
 {
     <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+    <script src="js/json2html.js"></script>
+    
+    <script>
+        var objects = null;
+
+        function onCreated() {
+            var dialogObj = document.getElementById("ErrorList").ej2_instances[0];
+            dialogObj.hide();
+            addObject("ErrorList", dialogObj);
+        }
+    </script>
 }
 
-    <div class="container">
-        <div class="m-5">
-            <span>@SimpleLoc["Admin_Index_Summery"]</span>
-            <ul>
-                <li>@RoleNames.Operator</li>
-                <li>@RoleNames.Controller</li>
-                <li>@RoleNames.Viewer</li>
-            </ul>
-        </div>
-        <ejs-grid id="UserGrid" actionFailure="actionFailure">
-            <e-data-manager url="/api/UserGrid" insertUrl="/api/UserGrid/Insert" updateUrl="/api/UserGrid/Update" removeUrl="/api/UserGrid/Remove" adaptor="UrlAdaptor" />
-            <e-grid-editSettings allowAdding="true" allowEditing="true" allowDeleting="true" showDeleteConfirmDialog="true"></e-grid-editSettings>
-            <e-grid-columns>
-                <e-grid-column field="Id" headerText="ID" isPrimaryKey="true" type="string" />
-                <e-grid-column field="Name" headerText="@SimpleLoc["Admin_Index_UserGrid_NameColumn"]" type="string" allowEditing="false" textAlign="Left" />
-                <e-grid-column field="Role" headerText="@SimpleLoc["Admin_Index_UserGrid_RoleColumn"]" type="string" allowEditing="true" textAlign="Left" />
-            </e-grid-columns>
-        </ejs-grid>
-
-        <ejs-dialog id="ErrorList" header="Error" showCloseIcon="true" width="700" created="onCreated"></ejs-dialog>
+<div class="container">
+    <div class="m-5">
+        <span>@SimpleLoc["Admin_Index_Summery"]</span>
+        <ul>
+            <li>@RoleNames.Operator</li>
+            <li>@RoleNames.Controller</li>
+            <li>@RoleNames.Viewer</li>
+        </ul>
     </div>
-<script>
-    function actionFailure(args) {
-        var error = $(args.error.responseText).eq(9).text();  //get the error message from server side. 
-        $('#ErrorList').html(""); 
-        $('#ErrorList').html('<span class="text-danger">' + error + "</span>"); 
-        $('#ErrorList').ejDialog("open"); 
-    }
+    <ejs-grid id="UserGrid" actionFailure="actionFailure" toolbar="@toolbarItems">
+        <e-data-manager url="/api/UserGrid" insertUrl="/api/UserGrid/Insert" updateUrl="/api/UserGrid/Update" removeUrl="/api/UserGrid/Remove" adaptor="UrlAdaptor"/>
+        <e-grid-editSettings allowAdding="true" allowEditing="true" allowDeleting="true" showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-columns>
+            <e-grid-column field="Id" headerText="ID" isPrimaryKey="true" type="string"/>
+            <e-grid-column field="Name" headerText="@SimpleLoc["Admin_Index_UserGrid_NameColumn"]" type="string" allowEditing="true" textAlign="Left"/>
+            <e-grid-column field="Email" headerText="@SimpleLoc["Admin_Index_UserGrid_Email"]" type="string" allowEditing="true" textAlign="Left"/>
+            <e-grid-column field="Role" headerText="@SimpleLoc["Admin_Index_UserGrid_RoleColumn"]" type="string" allowEditing="true" textAlign="Left"/>
+        </e-grid-columns>
+    </ejs-grid>
 
-    function onCreated() { 
-        var dialogObj = document.getElementById("ErrorList").ej2_instances[0]; 
-        dialogObj.hide(); 
-    } 
-
-</script>
+    <ejs-dialog id="ErrorList" header="Error" showCloseIcon="true" closeOnEscape="true" width="700" created="onCreated" content="<div id='ErrorListSpan' class='text-danger m-3'></div>"></ejs-dialog>
+</div>

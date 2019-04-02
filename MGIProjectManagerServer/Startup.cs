@@ -6,39 +6,41 @@ using MGIProjectManagerServer.Core.Setup;
 using MGIProjectManagerServer.Core.Setup.Impl;
 using MGIProjectManagerServer.Pages;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json.Serialization;
+using Syncfusion.Licensing;
+using Tauron.Application.MgiProjectManager.Data.Api;
 using Tauron.Application.MgiProjectManager.Resources.Web;
 using Tauron.Application.MgiProjectManager.Server.Data;
-using WebOptimizer;
 
 namespace MGIProjectManagerServer
 {
     public class Startup
     {
-        public bool IsInDev { get; set; }
-
         public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
             IsInDev = environment.IsDevelopment();
             Configuration = configuration;
         }
 
+        public bool IsInDev { get; set; }
+
         private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzYwNTVAMzEzNjJlMzQyZTMwZ1Q5QUdvdTkxdk5icTNEbFFuZVJ1WGY4cyswWmpaSU5uM094d3p5SWw3QT0=");
+            SyncfusionLicenseProvider.RegisterLicense("ODI0MjBAMzEzNzJlMzEyZTMwaURXbU9ZbVdiald4cytvU0RLaURoT3RjSnlrUWdHS2dDa1MzN2hCSEVCWT0=;ODI0MjFAMzEzNzJlMzEyZTM" +
+                                                      "wTWh6WU1PUzlBaWhOemJiVzRNMTJZL2gyMTBsSmY1eVk1RVplWkNGYnlnZz0=");
 
             SimpleLoc.SetGlobalResourceManager(WebResources.ResourceManager);
 
@@ -52,10 +54,7 @@ namespace MGIProjectManagerServer
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<ApplicationDbContext>( o =>
-                {
-                    o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-                });
+            services.AddDbContext<ApplicationDbContext>(o => { o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")); });
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
@@ -70,7 +69,8 @@ namespace MGIProjectManagerServer
                 .AddFluentValidation(fc =>
                 {
                     fc.RegisterValidatorsFromAssemblyContaining<ApplicationDbContext>()
-                        .RegisterValidatorsFromAssemblyContaining<IndexModel>();
+                        .RegisterValidatorsFromAssemblyContaining<IndexModel>()
+                        .RegisterValidatorsFromAssemblyContaining<AppUser>();
                     fc.LocalizationEnabled = true;
                     fc.ImplicitlyValidateChildProperties = true;
                 })
@@ -79,10 +79,7 @@ namespace MGIProjectManagerServer
             services.AddAuthentication();
             services.AddAuthorization();
 
-            if (IsInDev)
-            {
-                services.AddSwaggerDocument();
-            }
+            if (IsInDev) services.AddSwaggerDocument();
 
             services.TryAddTransient<SimpleLoc, SimpleLoc>();
             services.TryAddSingleton<IBaseSettingsManager, BaseSettingsManager>();
@@ -91,10 +88,10 @@ namespace MGIProjectManagerServer
         [UsedImplicitly]
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-           var supportedCultures = new[]
+            var supportedCultures = new[]
             {
                 new CultureInfo("en"),
-                new CultureInfo("de"),
+                new CultureInfo("de")
             };
 
             app.UseRequestLocalization(new RequestLocalizationOptions

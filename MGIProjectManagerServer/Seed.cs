@@ -9,25 +9,26 @@ namespace MGIProjectManagerServer
 {
     public static class Seed
     {
-      
         //public static string UserPassword { get; private set; }
 
         //public static string UserName { get; private set; }
 
         public static void CreateRoles(IServiceProvider serviceProvider, IConfiguration configuration)
         {
+            using (var context = serviceProvider.GetRequiredService<ApplicationDbContext>())
+            {
+                context.Database.Migrate();
+            }
+
             var manager = serviceProvider.GetRequiredService<IBaseSettingsManager>();
             manager.Read();
-            
-            if(manager.BaseSettings.IsConfigurated) return;
-            var settings = manager.BaseSettings; 
+
+            if (manager.BaseSettings.IsConfigurated) return;
+            var settings = manager.BaseSettings;
 
             settings.UserName = configuration.GetSection("UserSettings")["UserEmail"];
             settings.Password = configuration.GetSection("UserSettings")["UserPassword"];
             settings.SaveFilePath = @"%Roaming%\Tauron\MGIManager";
-
-           using (var context = serviceProvider.GetRequiredService<ApplicationDbContext>())
-                context.Database.Migrate();
 
             //
             //var env = serviceProvider.GetRequiredService<IHostingEnvironment>();

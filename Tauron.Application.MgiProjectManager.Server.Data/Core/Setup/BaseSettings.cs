@@ -10,9 +10,9 @@ namespace Tauron.Application.MgiProjectManager.Server.Data.Core.Setup
         private static readonly Dictionary<string, string> Variables = new Dictionary<string, string>
         {
             {"%System%", Environment.GetFolderPath(Environment.SpecialFolder.System)},
-            {"%AppData%", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) },
-            {"%Roaming%", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) },
-            {"%User%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) }
+            {"%AppData%", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)},
+            {"%Roaming%", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)},
+            {"%User%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}
         };
 
         private static string _cachedPath;
@@ -35,10 +35,7 @@ namespace Tauron.Application.MgiProjectManager.Server.Data.Core.Setup
             }
         }
 
-        public string FullSaveFilePath
-        {
-            get => Expand(_saveFilePath);
-        }
+        public string FullSaveFilePath => Expand(_saveFilePath);
 
         private static string Expand(string path)
         {
@@ -49,14 +46,17 @@ namespace Tauron.Application.MgiProjectManager.Server.Data.Core.Setup
                 return path;
             }
 
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append(path[0]);
 
-            for (int i = 1; i < path.Length; i++)
+            for (var i = 1; i < path.Length; i++)
             {
-                char c = path[i];
+                var c = path[i];
 
-                if (c != '%') builder.Append(c);
+                if (c != '%')
+                {
+                    builder.Append(c);
+                }
                 else
                 {
                     builder.Append(c);

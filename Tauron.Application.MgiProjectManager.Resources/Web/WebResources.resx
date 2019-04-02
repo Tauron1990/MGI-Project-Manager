@@ -425,4 +425,25 @@ In case of wishes and/or errors you can find help here: </value>
   <data name="Admin_Index_Summery" xml:space="preserve">
     <value>Here users can be added, deleted and their roles changed. Possible roles that can be set with comma separation are:</value>
   </data>
+  <data name="Admin_Index_UserGrid_Email" xml:space="preserve">
+    <value>E-Mail</value>
+  </data>
+  <data name="Admin_Index_File" xml:space="preserve">
+    <value>Image Files</value>
+  </data>
+  <data name="Shared_Layout_FileLabel" xml:space="preserve">
+    <value>Fils</value>
+  </data>
+  <data name="Files_Index_Title" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="Files_Index_Upload_Label" xml:space="preserve">
+    <value>Upload {0}</value>
+  </data>
+  <data name="Files_Index_Upload_Error" xml:space="preserve">
+    <value>There was error uploading files!</value>
+  </data>
+  <data name="Files_Index_FileLabel" xml:space="preserve">
+    <value>Drag-n-Drop files here.</value>
+  </data>
 </root>

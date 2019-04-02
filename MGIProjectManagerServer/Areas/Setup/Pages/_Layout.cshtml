@@ -6,43 +6,43 @@
 }
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>@ViewData["Title"]</title>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"]</title>
 
-        <environment include="Development">
-            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        </environment>
-        <environment exclude="Development">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"
-                  asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-                  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
-                  crossorigin="anonymous"
-                  integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" />
-        </environment>
-        <link rel="stylesheet" href="~/css/site.css" />
-    </head>
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css"/>
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
+              crossorigin="anonymous"
+              integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE="/>
+    </environment>
+    <link rel="stylesheet" href="~/css/site.css"/>
+</head>
 <body style="height: 80vh">
 <header>
     <h1 class="text-center m-5">Setup</h1>
 </header>
-    <main role="main" class="container" style="height: 80%">
-        <div class="row h-100">
-            <div class="col-md-2 ">
-                <partial name="_SetupManageNav"/>
-            </div>
-            <div class="col-md-9 m-2">
-                <div asp-validation-summary="All" class="text-danger"></div>
-                @RenderBody()
-            </div>
+<main role="main" class="container" style="height: 80%">
+    <div class="row h-100">
+        <div class="col-md-2 ">
+            <partial name="_SetupManageNav"/>
         </div>
-        <div class="row align-self-end justify-content-end">
-            <button class="btn btn-primary" onclick="SetupFormCheck('@Html.Encode(Url.Page(nextPage, handler, new { area }))')">@ViewData[SetupManageNavPages.LabelName]</button>
-            @*<a class="btn btn-primary" asp-page="@SetupManageNavPages.GetNext(ViewContext)" asp-area="@SetupManageNavPages.SelectArea(ViewContext)"
+        <div class="col-md-9 m-2">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            @RenderBody()
+        </div>
+    </div>
+    <div class="row align-self-end justify-content-end">
+        <button class="btn btn-primary" onclick="SetupFormCheck('@Html.Encode(Url.Page(nextPage, handler, new {area}))')">@ViewData[SetupManageNavPages.LabelName]</button>
+        @*<a class="btn btn-primary" asp-page="@SetupManageNavPages.GetNext(ViewContext)" asp-area="@SetupManageNavPages.SelectArea(ViewContext)"
                    asp-page-handler="@SetupManageNavPages.GetHandler(ViewContext)" >@ViewData[SetupManageNavPages.LabelName]</a>*@
-        </div>
-    </main>
+    </div>
+</main>
 
 <footer class="border-top footer text-muted">
     <div class="container">
@@ -70,6 +70,6 @@
 </environment>
 <script src="~/js/site.js" asp-append-version="true"></script>
 
-@RenderSection("Scripts", required: false)
+@RenderSection("Scripts", false)
 </body>
 </html>

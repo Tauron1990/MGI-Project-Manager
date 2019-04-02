@@ -8,7 +8,10 @@ namespace MGIProjectManagerServer.Areas.Setup.Pages
     {
         private readonly IBaseSettingsManager _manager;
 
-        public IndexModel(IBaseSettingsManager manager) => _manager = manager;
+        public IndexModel(IBaseSettingsManager manager)
+        {
+            _manager = manager;
+        }
 
         public IActionResult OnGet()
         {

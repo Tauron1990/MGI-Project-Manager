@@ -19,7 +19,7 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class WebResources {
@@ -295,6 +295,15 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Image Files ähnelt.
+        /// </summary>
+        public static string Admin_Index_File {
+            get {
+                return ResourceManager.GetString("Admin_Index_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Here users can be added, deleted and their roles changed. Possible roles that can be set with comma separation are: ähnelt.
         /// </summary>
         public static string Admin_Index_Summery {
@@ -309,6 +318,15 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         public static string Admin_Index_Title {
             get {
                 return ResourceManager.GetString("Admin_Index_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die E-Mail ähnelt.
+        /// </summary>
+        public static string Admin_Index_UserGrid_Email {
+            get {
+                return ResourceManager.GetString("Admin_Index_UserGrid_Email", resourceCulture);
             }
         }
         
@@ -462,6 +480,42 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         public static string Error_Text_Title {
             get {
                 return ResourceManager.GetString("Error_Text_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Drag-n-Drop files here. ähnelt.
+        /// </summary>
+        public static string Files_Index_FileLabel {
+            get {
+                return ResourceManager.GetString("Files_Index_FileLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Files ähnelt.
+        /// </summary>
+        public static string Files_Index_Title {
+            get {
+                return ResourceManager.GetString("Files_Index_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die There was error uploading files! ähnelt.
+        /// </summary>
+        public static string Files_Index_Upload_Error {
+            get {
+                return ResourceManager.GetString("Files_Index_Upload_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Upload {0} ähnelt.
+        /// </summary>
+        public static string Files_Index_Upload_Label {
+            get {
+                return ResourceManager.GetString("Files_Index_Upload_Label", resourceCulture);
             }
         }
         
@@ -977,6 +1031,15 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         public static string Shared_Layout_AdminLabel {
             get {
                 return ResourceManager.GetString("Shared_Layout_AdminLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fils ähnelt.
+        /// </summary>
+        public static string Shared_Layout_FileLabel {
+            get {
+                return ResourceManager.GetString("Shared_Layout_FileLabel", resourceCulture);
             }
         }
     }

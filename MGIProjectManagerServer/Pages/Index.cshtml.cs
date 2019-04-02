@@ -22,7 +22,7 @@ namespace MGIProjectManagerServer.Pages
             if (_manager.BaseSettings.IsConfigurated)
                 return Page();
 
-            return RedirectToPage("/Start", new { area = "Setup" });
+            return RedirectToPage("/Start", new {area = "Setup"});
         }
 
         [UsedImplicitly]

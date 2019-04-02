@@ -1,5 +1,4 @@
 using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentValidation;
 using MGIProjectManagerServer.Core;
@@ -7,9 +6,7 @@ using MGIProjectManagerServer.Core.Setup;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using Tauron;
-using Tauron.Application.MgiProjectManager.Server.Data;
 using Tauron.Application.MgiProjectManager.Server.Data.Core.Setup;
 using Tauron.Application.MgiProjectManager.Server.Data.Validators.Core;
 
@@ -18,10 +15,10 @@ namespace MGIProjectManagerServer.Areas.Setup.Pages
     public class FinishModel : PageModel
     {
         private readonly IBaseSettingsManager _manager;
-        private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public FinishModel(IBaseSettingsManager manager, UserManager<IdentityUser> userManager, 
+        public FinishModel(IBaseSettingsManager manager, UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager)
         {
             _manager = manager;
@@ -29,12 +26,11 @@ namespace MGIProjectManagerServer.Areas.Setup.Pages
             _roleManager = roleManager;
         }
 
-        [BindProperty]
-        public BaseSettings BaseSettings { get; set; }
+        [BindProperty] public BaseSettings BaseSettings { get; set; }
 
         public IActionResult OnGet()
         {
-            if (_manager.BaseSettings.IsConfigurated) return RedirectToPage("/Index", new { area = "" });
+            if (_manager.BaseSettings.IsConfigurated) return RedirectToPage("/Index", new {area = ""});
             BaseSettings = _manager.BaseSettings;
 
             return Page();
@@ -62,13 +58,9 @@ namespace MGIProjectManagerServer.Areas.Setup.Pages
             var userResult = await _userManager.CreateAsync(user, _manager.BaseSettings.Password);
 
             if (userResult.Succeeded)
-            {
                 await _userManager.AddToRoleAsync(user, RoleNames.Admin);
-            }
             else
-            {
                 throw new InvalidOperationException("Admin creation faild.");
-            }
 
             _manager.Save();
             return RedirectToPage("/Index", new {area = ""});

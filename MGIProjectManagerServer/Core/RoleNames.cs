@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MGIProjectManagerServer.Core
 {
@@ -23,7 +20,9 @@ namespace MGIProjectManagerServer.Core
             yield return Viewer;
         }
 
-        public static bool IsValidRole(string role) 
-            => role == Controller || role == Operator || role == Viewer;
+        public static bool IsValidRole(string role)
+        {
+            return role == Controller || role == Operator || role == Viewer;
+        }
     }
 }

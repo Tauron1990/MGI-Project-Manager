@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -21,8 +18,32 @@ namespace MGIProjectManagerServer.Areas.Identity.Pages.Account
             _userManager = userManager;
         }
 
-        [BindProperty]
-        public InputModel Input { get; set; }
+        [BindProperty] public InputModel Input { get; set; }
+
+        public IActionResult OnGet(string code = null)
+        {
+            if (code == null) return BadRequest(WebResources.ResetPassword_Text_NoCode);
+
+            Input = new InputModel
+            {
+                Code = code
+            };
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (!ModelState.IsValid) return Page();
+
+            var user = await _userManager.FindByEmailAsync(Input.Email);
+            if (user == null) return RedirectToPage("./ResetPasswordConfirmation");
+
+            var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
+            if (result.Succeeded) return RedirectToPage("./ResetPasswordConfirmation");
+
+            foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
+            return Page();
+        }
 
         public class InputModel
         {
@@ -41,47 +62,6 @@ namespace MGIProjectManagerServer.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             public string Code { get; set; }
-        }
-
-        public IActionResult OnGet(string code = null)
-        {
-            if (code == null)
-            {
-                return BadRequest(WebResources.ResetPassword_Text_NoCode);
-            }
-
-            Input = new InputModel
-            {
-                Code = code
-            };
-            return Page();
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            var user = await _userManager.FindByEmailAsync(Input.Email);
-            if (user == null)
-            {
-                // Don't reveal that the user does not exist
-                return RedirectToPage("./ResetPasswordConfirmation");
-            }
-
-            var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
-            if (result.Succeeded)
-            {
-                return RedirectToPage("./ResetPasswordConfirmation");
-            }
-
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-            return Page();
         }
     }
 }

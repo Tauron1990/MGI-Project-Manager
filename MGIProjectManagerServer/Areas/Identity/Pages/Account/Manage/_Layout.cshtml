@@ -1,17 +1,17 @@
 ﻿@using MGIProjectManagerServer.Core
-@*@{
-    Layout =  ""//"/Areas/Identity/Pages/_Layout.cshtml";
-}*@
+@{
+    Layout =  "/Areas/Identity/Pages/_Layout.cshtml";
+}
 @inject SimpleLoc SimpleLoc
 
 <h1>@SimpleLoc["_Layout_Account_Text_Title"]</h1>
 
 <div>
     <h4>@SimpleLoc["_Layout_Account_Text"]</h4>
-    <hr />
+    <hr/>
     <div class="row">
         <div class="col-md-3">
-            <partial name="_ManageNav" />
+            <partial name="_ManageNav"/>
         </div>
         <div class="col-md-9">
             @RenderBody()
@@ -20,5 +20,5 @@
 </div>
 
 @section Scripts {
-    @RenderSection("Scripts", required: false)
+    @RenderSection("Scripts", false)
 }

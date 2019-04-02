@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@syncfusion/ej2": "^17.1.38",
+    "@syncfusion/ej2-grids": "^17.1.38",
+    "@syncfusion/ej2-querybuilder": "^17.1.38",
+    "@types/jquery": "^3.3.29"
+  }
+}

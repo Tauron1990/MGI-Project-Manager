@@ -6,10 +6,8 @@ namespace Tauron.Application.MgiProjectManager.Data.Api
     [DataContract]
     public class UserList
     {
-        [DataMember]
-        public List<User> Items { get; set; } = new List<User>();
+        [DataMember] public List<AppUser> Items { get; set; } = new List<AppUser>();
 
-        [DataMember]
-        public int Count { get; set; }
+        [DataMember] public int Count { get; set; }
     }
 }

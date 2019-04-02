@@ -7,10 +7,12 @@ namespace Tauron.Application.MgiProjectManager.Server.Data
     [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
     public class ApplicationDbContext : IdentityDbContext
     {
-        public static string ConnectionPath { get; set; } = "C:\\temp.db";
-
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options) { }
+            : base(options)
+        {
+        }
+
+        public static string ConnectionPath { get; set; } = "C:\\temp.db";
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{

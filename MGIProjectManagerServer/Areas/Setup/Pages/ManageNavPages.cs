@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MGIProjectManagerServer.Areas.Setup.Pages
@@ -15,20 +16,36 @@ namespace MGIProjectManagerServer.Areas.Setup.Pages
 
         public static string Finish => "Finish";
 
-        public static string StartNavClass(ViewContext viewContext) => PageNavClass(viewContext, Start);
+        public static string StartNavClass(ViewContext viewContext)
+        {
+            return PageNavClass(viewContext, Start);
+        }
 
-        public static string CreateUserNavClass(ViewContext viewContext) => PageNavClass(viewContext, CreateUser);
+        public static string CreateUserNavClass(ViewContext viewContext)
+        {
+            return PageNavClass(viewContext, CreateUser);
+        }
 
-        public static string SetFilePathClass(ViewContext viewContext) => PageNavClass(viewContext, SetFilePath);
+        public static string SetFilePathClass(ViewContext viewContext)
+        {
+            return PageNavClass(viewContext, SetFilePath);
+        }
 
-        public static string SetFinishClass(ViewContext viewContext) => PageNavClass(viewContext, Finish);
+        public static string SetFinishClass(ViewContext viewContext)
+        {
+            return PageNavClass(viewContext, Finish);
+        }
 
-        private static string GetActivatePage(ViewContext viewContext) =>
-            viewContext.ViewData["ActivePage"] as string
-            ?? System.IO.Path.GetFileNameWithoutExtension(viewContext.ActionDescriptor.DisplayName);
+        private static string GetActivatePage(ViewContext viewContext)
+        {
+            return viewContext.ViewData["ActivePage"] as string
+                   ?? Path.GetFileNameWithoutExtension(viewContext.ActionDescriptor.DisplayName);
+        }
 
-        private static string PageNavClass(ViewContext viewContext, string page) 
-            => string.Equals(GetActivatePage(viewContext), page, StringComparison.OrdinalIgnoreCase) ? "active" : null;
+        private static string PageNavClass(ViewContext viewContext, string page)
+        {
+            return string.Equals(GetActivatePage(viewContext), page, StringComparison.OrdinalIgnoreCase) ? "active" : null;
+        }
 
         public static string GetNext(ViewContext viewContext)
         {

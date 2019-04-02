@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Syncfusion.EJ2.Base;
 using Tauron.Application.MgiProjectManager.Data.Api;
 
 namespace MGIProjectManagerServer.Api.User
@@ -16,19 +14,21 @@ namespace MGIProjectManagerServer.Api.User
     {
         private readonly UserManager<IdentityUser> _userManager;
 
-        public UserController(UserManager<IdentityUser> userManager) => _userManager = userManager;
+        public UserController(UserManager<IdentityUser> userManager)
+        {
+            _userManager = userManager;
+        }
 
-        private IEnumerable<Tauron.Application.MgiProjectManager.Data.Api.User> GetUserList()
+        private IEnumerable<AppUser> GetUserList()
         {
             foreach (var identityUser in _userManager.Users)
-            {
-                yield return new Tauron.Application.MgiProjectManager.Data.Api.User
+                yield return new AppUser
                 {
                     Id = identityUser.Id,
                     Name = identityUser.UserName,
+                    Email = identityUser.Email,
                     Role = string.Join(',', _userManager.GetRolesAsync(identityUser).Result)
                 };
-            }
         }
 
         // GET: api/<controller>
@@ -37,7 +37,7 @@ namespace MGIProjectManagerServer.Api.User
         {
             var list = new UserList();
 
-           list.Items.AddRange(GetUserList());
+            list.Items.AddRange(GetUserList());
 
             list.Count = list.Items.Count;
 
