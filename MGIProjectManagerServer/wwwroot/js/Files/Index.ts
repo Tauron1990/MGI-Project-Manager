@@ -47,6 +47,7 @@ function dropEvent(evt: JQueryEventObject) {
         if (request.readyState === 4) {
             $("#progress").hide();
             $("#fileBasket").html(request.responseText);
+            $("#fileBasket").css("background", "transparent");
             $("#fileBasket").off("drop");
         }
     }
