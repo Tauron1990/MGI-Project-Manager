@@ -511,7 +511,7 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Upload {0} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Upload: ähnelt.
         /// </summary>
         public static string Files_Index_Upload_Label {
             get {

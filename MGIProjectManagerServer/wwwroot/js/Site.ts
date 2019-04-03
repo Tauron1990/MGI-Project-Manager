@@ -63,16 +63,16 @@ export function uploadInit() {
 
             const request = new XMLHttpRequest();
             request.onreadystatechange = () => {
-                const reqthis = this as XMLHttpRequest;
-                if (reqthis.readyState === 4) {
+
+                if (request.readyState === 4) {
                     $("#progress").hide();
-                    $("#fileBasket").html(reqthis.responseText);
+                    $("#fileBasket").html(request.responseText);
                 }
             }
 
             request.onerror = () => {
-                const reqthis = this as XMLHttpRequest;
-                $("#fileBasket").html(reqthis.responseText);
+
+                $("#fileBasket").html(request.responseText);
             }
             
             request.onprogress = (ev: ProgressEvent) => {
@@ -80,16 +80,16 @@ export function uploadInit() {
                 $('#progressBar').attr('aria-valuenow', percent).css('width', percent + "%");
             }
 
-            request.open("POST", "/Files/UploadFiles");
+            request.open("POST", "api/files");
             request.send(data);
         });
 }
 
 export function redictToHome() {
     window.setTimeout(() => {
-            window
+            window.location.replace("/Index");
         },
-        2000);
+        3000);
 }
 
 // ReSharper disable once InconsistentNaming

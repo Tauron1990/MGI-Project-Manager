@@ -439,7 +439,7 @@ Im falle von Wünschen und/oder Fehlern können hier Hilfe finden: </value>
     <value>Daten</value>
   </data>
   <data name="Files_Index_Upload_Label" xml:space="preserve">
-    <value>Hochladen {0}</value>
+    <value>Hochladen:</value>
   </data>
   <data name="Files_Index_Upload_Error" xml:space="preserve">
     <value>Fehler beim Hochladen!</value>

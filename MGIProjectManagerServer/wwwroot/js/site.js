@@ -19,7 +19,6 @@ function actionFailure(args) {
 }
 exports.actionFailure = actionFailure;
 function uploadInit() {
-    var _this = this;
     $("#progress").hide();
     var dropSide = $("#fileBasket");
     dropSide.on("dragenter", function (evt) {
@@ -50,31 +49,30 @@ function uploadInit() {
         $("#progress").show();
         var request = new XMLHttpRequest();
         request.onreadystatechange = function () {
-            var reqthis = _this;
-            if (reqthis.readyState === 4) {
+            if (request.readyState === 4) {
                 $("#progress").hide();
-                $("#fileBasket").html(reqthis.responseText);
+                $("#fileBasket").html(request.responseText);
             }
         };
         request.onerror = function () {
-            var reqthis = _this;
-            $("#fileBasket").html(reqthis.responseText);
+            $("#fileBasket").html(request.responseText);
         };
         request.onprogress = function (ev) {
             var percent = 100 / ev.total * ev.loaded;
             $('#progressBar').attr('aria-valuenow', percent).css('width', percent + "%");
         };
-        request.open("POST", "/Files/UploadFiles");
+        request.open("POST", "api/files");
         request.send(data);
     });
 }
 exports.uploadInit = uploadInit;
 function redictToHome() {
     window.setTimeout(function () {
-        window;
-    }, 2000);
+        window.location.replace("/Index");
+    }, 3000);
 }
 exports.redictToHome = redictToHome;
+// ReSharper disable once InconsistentNaming
 function SetupFormCheck(url) {
     if (url === void 0) { url = null; }
     var form = document.forms["SetupForm"];
@@ -87,6 +85,7 @@ function SetupFormCheck(url) {
     }
 }
 exports.SetupFormCheck = SetupFormCheck;
+// ReSharper disable once InconsistentNaming
 function ToggleShowPass(passfield) {
     var ele = document.getElementById(passfield);
     if (ele != null) {

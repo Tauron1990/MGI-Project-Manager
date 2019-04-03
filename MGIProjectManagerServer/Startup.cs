@@ -1,4 +1,6 @@
+using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using FluentValidation.AspNetCore;
 using JetBrains.Annotations;
 using MGIProjectManagerServer.Core;
@@ -8,6 +10,7 @@ using MGIProjectManagerServer.Pages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Localization;
@@ -77,7 +80,12 @@ namespace MGIProjectManagerServer
                 .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
             services.AddAuthentication();
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(RoleNames.Viewer, builder => { builder.RequireRole(RoleNames.GetAllRoles()); });
+                options.AddPolicy(RoleNames.Controller, builder => builder.RequireRole(RoleNames.Controller, RoleNames.Operator, RoleNames.Admin));
+                options.AddPolicy(RoleNames.Operator, builder => builder.RequireRole(RoleNames.Operator, RoleNames.Admin));
+            });
 
             if (IsInDev) services.AddSwaggerDocument();
 
@@ -117,13 +125,18 @@ namespace MGIProjectManagerServer
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
             app.UseAuthentication();
 
             app.UseMvc();
+
+            //app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuilder =>
+            //{
+            //    appBuilder.Run(context => Task.Run(() => context.Features.Get<IHttpMaxRequestBodySizeFeature>().MaxRequestBodySize = null));    
+            //});
         }
     }
 }

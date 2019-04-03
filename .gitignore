@@ -266,3 +266,4 @@ __pycache__/
 #*.p12
 
 CertificateGenerator/
+MGIProjectManagerServer/publish/

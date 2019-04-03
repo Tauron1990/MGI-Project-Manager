@@ -438,7 +438,7 @@ In case of wishes and/or errors you can find help here: </value>
     <value>Files</value>
   </data>
   <data name="Files_Index_Upload_Label" xml:space="preserve">
-    <value>Upload {0}</value>
+    <value>Upload:</value>
   </data>
   <data name="Files_Index_Upload_Error" xml:space="preserve">
     <value>There was error uploading files!</value>
