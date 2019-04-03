@@ -1,5 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <!--<PropertyGroup>
+    <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
+  </PropertyGroup>-->
+  
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>aspnet-MGIProjectManagerServer-55C5A5BD-BAA3-4C51-B629-D01575AB3C7A</UserSecretsId>
@@ -16,6 +20,7 @@
   <ItemGroup>
     <Content Remove="wwwroot\db\mgi.db" />
     <Content Remove="wwwroot\js\Site.ts" />
+    <Content Remove="wwwroot\Settings.bin" />
   </ItemGroup>
 
   <ItemGroup>

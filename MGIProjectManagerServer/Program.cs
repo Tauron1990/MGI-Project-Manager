@@ -33,15 +33,24 @@ namespace MGIProjectManagerServer
                 }
             }
 
-            host.Run();
+            try
+            {
+                host.Run();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
+                .UseIIS()
                 .UseStartup<Startup>()
                 .ConfigureLogging(l =>
                 {
+                    l.AddEventSourceLogger();
                     l.AddConsole();
                 #if DEBUG
                     l.AddDebug();
