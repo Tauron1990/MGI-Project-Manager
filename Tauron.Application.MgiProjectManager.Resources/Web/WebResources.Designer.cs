@@ -349,6 +349,15 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die {0} file(s) / {1} bytes uploaded successfully! ähnelt.
+        /// </summary>
+        public static string Api_FilesController_SucessMessage {
+            get {
+                return ResourceManager.GetString("Api_FilesController_SucessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No User Found ähnelt.
         /// </summary>
         public static string Api_GridUserController_NoUser {

@@ -446,4 +446,7 @@ In case of wishes and/or errors you can find help here: </value>
   <data name="Files_Index_FileLabel" xml:space="preserve">
     <value>Drag-n-Drop files here.</value>
   </data>
+  <data name="Api_FilesController_SucessMessage" xml:space="preserve">
+    <value>{0} file(s) / {1} bytes uploaded successfully!</value>
+  </data>
 </root>

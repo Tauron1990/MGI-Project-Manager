@@ -19,8 +19,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using Syncfusion.Licensing;
+using Tauron.Application.MgiProjectManager.BL;
 using Tauron.Application.MgiProjectManager.Data.Api;
 using Tauron.Application.MgiProjectManager.Resources.Web;
 using Tauron.Application.MgiProjectManager.Server.Data;
@@ -91,11 +93,15 @@ namespace MGIProjectManagerServer
 
             services.TryAddTransient<SimpleLoc, SimpleLoc>();
             services.TryAddSingleton<IBaseSettingsManager, BaseSettingsManager>();
+            
+            services.AddBLServices();
         }
 
         [UsedImplicitly]
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddFile("Logs/myapp-{Date}.json", isJson: true, retainedFileCountLimit: 10, fileSizeLimitBytes: 10485760);
+
             var supportedCultures = new[]
             {
                 new CultureInfo("en"),
@@ -122,7 +128,7 @@ namespace MGIProjectManagerServer
                 app.UseWebOptimizer();
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                //app.UseHsts();
             }
 
             //app.UseHttpsRedirection();

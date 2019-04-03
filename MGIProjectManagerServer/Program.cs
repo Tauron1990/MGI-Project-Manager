@@ -40,13 +40,14 @@ namespace MGIProjectManagerServer
         {
             return WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .ConfigureLogging(l =>
-                {
-                    l.AddConsole();
+            .ConfigureLogging(l =>
+            {
+                
+                l.AddConsole();
                 #if DEBUG
-                    l.AddDebug();
+                l.AddDebug();
                 #endif
-                });
+            });
         }
     }
 }

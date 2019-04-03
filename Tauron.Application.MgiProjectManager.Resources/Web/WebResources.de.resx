@@ -447,4 +447,7 @@ Im falle von Wünschen und/oder Fehlern können hier Hilfe finden: </value>
   <data name="Files_Index_FileLabel" xml:space="preserve">
     <value>Hier Daten herziehen und ablegen.</value>
   </data>
+  <data name="Api_FilesController_SucessMessage" xml:space="preserve">
+    <value>{0} Daten(s) / {1} Bytes Erfolgreich Hochgeladen!</value>
+  </data>
 </root>

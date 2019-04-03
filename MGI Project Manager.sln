@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.MgiProje
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.MgiProjectManager.Data", "Tauron.Application.MgiProjectManager.Data\Tauron.Application.MgiProjectManager.Data.csproj", "{8D162E8F-FFA8-4576-8502-71C1FCAC1F89}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.MgiProjectManager.BL", "Tauron.Application.MgiProjectManager.BL\Tauron.Application.MgiProjectManager.BL.csproj", "{60BF7676-1CD7-49EA-BC9A-924765E09690}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{8D162E8F-FFA8-4576-8502-71C1FCAC1F89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D162E8F-FFA8-4576-8502-71C1FCAC1F89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D162E8F-FFA8-4576-8502-71C1FCAC1F89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60BF7676-1CD7-49EA-BC9A-924765E09690}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60BF7676-1CD7-49EA-BC9A-924765E09690}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60BF7676-1CD7-49EA-BC9A-924765E09690}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60BF7676-1CD7-49EA-BC9A-924765E09690}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{8E32D428-20CF-474E-B3EA-11B58EB2A20C} = {A6558C51-188E-49DD-876F-E7C7BF8ED6C5}
 		{BD1CF5B6-BF32-4E40-86B6-F377A80FBCE2} = {8C5D9947-4E24-43D9-BF3F-0EC822048BEF}
 		{8D162E8F-FFA8-4576-8502-71C1FCAC1F89} = {A6558C51-188E-49DD-876F-E7C7BF8ED6C5}
+		{60BF7676-1CD7-49EA-BC9A-924765E09690} = {8C5D9947-4E24-43D9-BF3F-0EC822048BEF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}
