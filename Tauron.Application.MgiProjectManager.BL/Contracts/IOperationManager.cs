@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Tauron.Application.MgiProjectManager.BL.Contracts
 {
@@ -6,6 +7,12 @@ namespace Tauron.Application.MgiProjectManager.BL.Contracts
     {
         IEnumerable<Operation> Operations { get; }
 
-        void AddOperation(Operation op);
+        Task AddOperation(Operation op);
+
+        Task<Operation> SearchOperation(string id);
+
+        Task<IEnumerable<Operation>> ExecuteNext(Operation op);
+
+        Task RemoveAction(Operation op);
     }
 }

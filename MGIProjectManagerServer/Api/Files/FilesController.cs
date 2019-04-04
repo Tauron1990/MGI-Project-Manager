@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using MGIProjectManagerServer.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -30,7 +31,7 @@ namespace MGIProjectManagerServer.Api.Files
         }
 
         [HttpPost]
-        public ActionResult<UploadResult> UploadFiles()
+        public async Task<ActionResult<UploadResult>> UploadFilesAsync()
         {
             Dictionary<string, string> errors = new Dictionary<string, string>();
             List<string> filesToAdd = new List<string>();
@@ -44,16 +45,17 @@ namespace MGIProjectManagerServer.Api.Files
 
             foreach (var file in files)
             {
-                var canAdd = _fileManager.CanAdd(file.FileName);
+                var canAdd = await _fileManager.CanAdd(file.FileName);
                 if (!canAdd.Ok)
                 {
                     errors[file.FileName] = canAdd.Error;
                     continue;
                 }
 
+                string filename = filedic + file.FileName;
+
                 try
                 {
-                    string filename = filedic + file.FileName;
                     size += file.Length;
                     using (FileStream fs = System.IO.File.Create(filename))
                     {
@@ -66,10 +68,11 @@ namespace MGIProjectManagerServer.Api.Files
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Error on Upload File!");
+                    errors[file.FileName] = e.Message;
                 }
             }
 
-            var result = _fileManager.AddFiles(filesToAdd);
+            var result = await _fileManager.AddFiles(filesToAdd);
 
             if (!result.Ok)
                 return BadRequest(result.Operation);

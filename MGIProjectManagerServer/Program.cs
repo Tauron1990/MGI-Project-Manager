@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Tauron.Application.MgiProjectManager.BL.Contracts;
 
 namespace MGIProjectManagerServer
 {
@@ -24,7 +25,7 @@ namespace MGIProjectManagerServer
                     var serviceProvider = services.GetRequiredService<IServiceProvider>();
                     var configuration = services.GetRequiredService<IConfiguration>();
 
-                    Seed.CreateRoles(serviceProvider, configuration);
+                    Seed.CreateRoles(serviceProvider, configuration, services.GetRequiredService<ITimedTaskManager>());
                 }
                 catch (Exception e)
                 {

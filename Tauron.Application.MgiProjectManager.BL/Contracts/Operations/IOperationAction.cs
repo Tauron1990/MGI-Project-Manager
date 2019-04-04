@@ -1,11 +1,17 @@
-﻿namespace Tauron.Application.MgiProjectManager.BL.Contracts
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Tauron.Application.MgiProjectManager.BL.Contracts
 {
     public interface IOperationAction
     {
         string Name { get; }
 
-        void Execude(Operation op);
+        Task<Operation[]> Execute(Operation op);
 
-        void Expired(Operation op);
+        Task<bool> Remove(Operation op);
+
+        Task Error(Operation op, Exception e);
     }
 }

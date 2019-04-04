@@ -2,20 +2,8 @@
 
 export function uploadInit() {
     $("#progress").hide();
-
-    const dropSide = $("#fileBasket");
-
-    dropSide.on("dragenter", (evt) => {
-        evt.preventDefault();
-        evt.stopPropagation();
-    });
-
-    dropSide.on("dragover", evt => {
-        evt.preventDefault();
-        evt.stopPropagation();
-    });
-
-    dropSide.on("drop", dropEvent);
+    //$("#uploadCompledBox").hide();
+    wireEvents();
 }
 
 function dropEvent(evt: JQueryEventObject) {
@@ -47,8 +35,7 @@ function dropEvent(evt: JQueryEventObject) {
         if (request.readyState === 4) {
             $("#progress").hide();
             $("#fileBasket").html(request.responseText);
-            $("#fileBasket").css("background", "transparent");
-            $("#fileBasket").off("drop");
+            disableUpload();
         }
     }
 
@@ -64,4 +51,35 @@ function dropEvent(evt: JQueryEventObject) {
 
     request.open("POST", "api/files");
     request.send(data);
+}
+
+function wireEvents() {
+    const dropSide = $("#fileBasket");
+
+    dropSide.on("dragenter", (evt) => {
+        evt.preventDefault();
+        evt.stopPropagation();
+    });
+
+    dropSide.on("dragover", evt => {
+        evt.preventDefault();
+        evt.stopPropagation();
+    });
+
+    dropSide.on("drop", dropEvent);
+}
+
+function disableUpload() {
+    $("#fileBasket").css("background", "transparent");
+    unWireEvents();
+}
+
+function unWireEvents() {
+    const dropSide = $("#fileBasket");
+
+    dropSide.off("dragenter");
+
+    dropSide.off("dragover");
+
+    dropSide.off("drop");
 }

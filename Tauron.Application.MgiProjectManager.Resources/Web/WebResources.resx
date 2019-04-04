@@ -449,4 +449,7 @@ In case of wishes and/or errors you can find help here: </value>
   <data name="Api_FilesController_SucessMessage" xml:space="preserve">
     <value>{0} file(s) / {1} bytes uploaded successfully!</value>
   </data>
+  <data name="Api_FilesController_DisallowedExtension" xml:space="preserve">
+    <value>This file type is not supported. {0}</value>
+  </data>
 </root>

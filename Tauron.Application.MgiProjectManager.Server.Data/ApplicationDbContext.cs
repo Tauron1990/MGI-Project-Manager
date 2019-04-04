@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Tauron.Application.MgiProjectManager.Server.Data.Entitys;
 
 namespace Tauron.Application.MgiProjectManager.Server.Data
 {
@@ -12,7 +13,13 @@ namespace Tauron.Application.MgiProjectManager.Server.Data
         {
         }
 
-        public static string ConnectionPath { get; set; } = "C:\\temp.db";
+        public DbSet<TimedTaskEntity> TimedTasks => Set<TimedTaskEntity>();
+
+        public DbSet<OperationEntity> Operations => Set<OperationEntity>();
+
+        public DbSet<OperationContextEntity> OperationContexts => Set<OperationContextEntity>();
+
+        //public static string ConnectionPath { get; set; } = "C:\\temp.db";
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{

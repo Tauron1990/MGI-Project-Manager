@@ -7,6 +7,7 @@
 
 @section Scripts
 {
+    <script src="js/Files/Index.js"></script>
     <script>
         filesIndexUploadLabel = "@SimpleLoc["Files_Index_Upload_Label"]" + '<br/>';
 
@@ -27,5 +28,12 @@
                 <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
             </div>
         </form>
+    </div>
+    <div id="uploadCompledBox" class="row">
+        <input class="m-1" type="checkbox" checked="checked"/>
+        <span class="m-1">Auto Next</span>
+        <span class="m-1">-- ID:</span>
+        <span class="m-1 text-info">@Guid.NewGuid().ToString("B")</span>
+        <input type="button"/>
     </div>
 </div>

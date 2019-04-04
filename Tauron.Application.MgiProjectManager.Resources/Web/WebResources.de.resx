@@ -450,4 +450,7 @@ Im falle von Wünschen und/oder Fehlern können hier Hilfe finden: </value>
   <data name="Api_FilesController_SucessMessage" xml:space="preserve">
     <value>{0} Daten(s) / {1} Bytes Erfolgreich Hochgeladen!</value>
   </data>
+  <data name="Api_FilesController_DisallowedExtension" xml:space="preserve">
+    <value>Dieser Datei type wird nicht unterstützt. {0}</value>
+  </data>
 </root>

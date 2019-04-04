@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Threading.Tasks;
 using FluentValidation.AspNetCore;
 using JetBrains.Annotations;
 using MGIProjectManagerServer.Core;
@@ -10,7 +9,6 @@ using MGIProjectManagerServer.Pages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Localization;
@@ -93,7 +91,10 @@ namespace MGIProjectManagerServer
 
             services.TryAddTransient<SimpleLoc, SimpleLoc>();
             services.TryAddSingleton<IBaseSettingsManager, BaseSettingsManager>();
-            
+            services.AddTransient<Func<ApplicationDbContext>>(provider => provider.GetRequiredService<ApplicationDbContext>);
+            services.AddSingleton(Configuration);
+
+            services.AddDBServices();
             services.AddBLServices();
         }
 

@@ -7,17 +7,21 @@ namespace Tauron.Application.MgiProjectManager.BL.Contracts
     {
         public string OperationId { get; }
 
-        public string NextOperation { get; set; }
+        public string OperationType { get; }
+        
+        public string CurrentOperation { get; }
 
-        public DateTime ExpiryDate { get; set; }
+        public DateTime ExpiryDate { get; }
 
         public IDictionary<string, string> OperationContext { get; }
 
-        public Operation(string operationId, string nextOperation, IDictionary<string, string> operationContext)
+        public Operation(string operationId, string currentOperation, string operationType, IDictionary<string, string> operationContext, DateTime expiryDate)
         {
             OperationId = operationId;
-            NextOperation = nextOperation;
+            CurrentOperation = currentOperation;
+            OperationType = operationType;
             OperationContext = operationContext;
+            ExpiryDate = expiryDate;
         }
     }
 }

@@ -349,6 +349,15 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This file type is not supported. {0} ähnelt.
+        /// </summary>
+        public static string Api_FilesController_DisallowedExtension {
+            get {
+                return ResourceManager.GetString("Api_FilesController_DisallowedExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die {0} file(s) / {1} bytes uploaded successfully! ähnelt.
         /// </summary>
         public static string Api_FilesController_SucessMessage {

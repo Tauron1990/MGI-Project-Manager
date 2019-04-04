@@ -4,6 +4,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CodeAnalysisRuleSet>Tauron.Application.MgiProjectManager.Server.Data.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CodeAnalysisRuleSet>Tauron.Application.MgiProjectManager.Server.Data.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="8.2.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
@@ -14,9 +22,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Tauron.Application.MgiProjectManager.Data\Tauron.Application.MgiProjectManager.Data.csproj" />
     <ProjectReference Include="..\Tauron.Application.MgiProjectManager.Resources\Tauron.Application.MgiProjectManager.Resources.csproj" />
   </ItemGroup>
 

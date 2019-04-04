@@ -3,6 +3,7 @@ using MGIProjectManagerServer.Core.Setup;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Tauron.Application.MgiProjectManager.BL.Contracts;
 using Tauron.Application.MgiProjectManager.Server.Data;
 
 namespace MGIProjectManagerServer
@@ -13,8 +14,10 @@ namespace MGIProjectManagerServer
 
         //public static string UserName { get; private set; }
 
-        public static void CreateRoles(IServiceProvider serviceProvider, IConfiguration configuration)
+        public static void CreateRoles(IServiceProvider serviceProvider, IConfiguration configuration, ITimedTaskManager timedTaskManager)
         {
+            timedTaskManager.Start();
+
             using (var context = serviceProvider.GetRequiredService<ApplicationDbContext>())
             {
                 context.Database.Migrate();
