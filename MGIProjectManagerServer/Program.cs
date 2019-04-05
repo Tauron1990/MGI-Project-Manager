@@ -25,7 +25,7 @@ namespace MGIProjectManagerServer
                     var serviceProvider = services.GetRequiredService<IServiceProvider>();
                     var configuration = services.GetRequiredService<IConfiguration>();
 
-                    Seed.CreateRoles(serviceProvider, configuration, services.GetRequiredService<ITimedTaskManager>());
+                    Seed.CreateRoles(serviceProvider, configuration);
                 }
                 catch (Exception e)
                 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using MGIProjectManagerServer.Core;
+using MGIProjectManagerServer.Core.Setup;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -22,12 +23,14 @@ namespace MGIProjectManagerServer.Api.Files
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IFileManager _fileManager;
         private readonly ILogger<FilesController> _logger;
+        private readonly IBaseSettingsManager _baseSettingsManager;
 
-        public FilesController(IHostingEnvironment hostingEnvironment, IFileManager fileManager, ILogger<FilesController> logger)
+        public FilesController(IHostingEnvironment hostingEnvironment, IFileManager fileManager, ILogger<FilesController> logger, IBaseSettingsManager baseSettingsManager)
         {
             _hostingEnvironment = hostingEnvironment;
             _fileManager = fileManager;
             _logger = logger;
+            _baseSettingsManager = baseSettingsManager;
         }
 
         [HttpPost]
@@ -39,7 +42,7 @@ namespace MGIProjectManagerServer.Api.Files
             long size = 0;
             var files = Request.Form.Files;
 
-            string filedic = _hostingEnvironment.WebRootPath + @"\uploadedfiles\";
+            string filedic = _baseSettingsManager.BaseSettings.FullSaveFilePath;
             if (!Directory.Exists(filedic))
                 Directory.CreateDirectory(filedic);
 

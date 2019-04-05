@@ -13,10 +13,8 @@ namespace MGIProjectManagerServer.Core.Setup.Impl
 
         private readonly IHostingEnvironment _hostingEnvironment;
 
-        public BaseSettingsManager(IHostingEnvironment hostingEnvironment)
-        {
-            _hostingEnvironment = hostingEnvironment;
-        }
+        public BaseSettingsManager(IHostingEnvironment hostingEnvironment) 
+            => _hostingEnvironment = hostingEnvironment;
 
         public BaseSettings BaseSettings { get; private set; } = new BaseSettings();
 

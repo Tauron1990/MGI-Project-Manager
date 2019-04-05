@@ -29,6 +29,7 @@ namespace Tauron.Application.MgiProjectManager.BL.Impl
             _timeTasks = tasks.ToArray();
             _timer = new Timer(TriggerTasks, null, -1, -1);
             _intTask = taskRepository.GetTaskAsync().ContinueWith(t => _list = new ConcurrentDictionary<string, TimedTaskEntity>(t.Result.ToDictionary(ks => ks.Name)));
+            //_intTask = taskRepository.GetTaskAsync().ContinueWith(t => _list = new ConcurrentDictionary<string, TimedTaskEntity>(t.Result.ToDictionary(ks => ks.Name)));
         }
         
         private async void TriggerTasks(object state)

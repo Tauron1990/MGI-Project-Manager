@@ -91,7 +91,17 @@ namespace MGIProjectManagerServer
 
             services.TryAddTransient<SimpleLoc, SimpleLoc>();
             services.TryAddSingleton<IBaseSettingsManager, BaseSettingsManager>();
-            services.AddTransient<Func<ApplicationDbContext>>(provider => provider.GetRequiredService<ApplicationDbContext>);
+            services.AddTransient<Func<ApplicationDbContext>>(provider =>
+            {
+                return () =>
+                {
+                    var scoper = provider.CreateScope();
+
+                    var context = scoper.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                    context.CurrentScope = scoper;
+                    return context;
+                };
+            });
             services.AddSingleton(Configuration);
 
             services.AddDBServices();

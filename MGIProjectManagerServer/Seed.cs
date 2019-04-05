@@ -14,14 +14,12 @@ namespace MGIProjectManagerServer
 
         //public static string UserName { get; private set; }
 
-        public static void CreateRoles(IServiceProvider serviceProvider, IConfiguration configuration, ITimedTaskManager timedTaskManager)
+        public static void CreateRoles(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            timedTaskManager.Start();
-
             using (var context = serviceProvider.GetRequiredService<ApplicationDbContext>())
-            {
                 context.Database.Migrate();
-            }
+
+            serviceProvider.GetRequiredService<ITimedTaskManager>().Start();
 
             var manager = serviceProvider.GetRequiredService<IBaseSettingsManager>();
             manager.Read();

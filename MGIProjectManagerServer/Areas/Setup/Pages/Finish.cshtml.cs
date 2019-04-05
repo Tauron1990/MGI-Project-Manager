@@ -44,7 +44,7 @@ namespace MGIProjectManagerServer.Areas.Setup.Pages
             validator.ValidateAndThrow(_manager.BaseSettings);
             _manager.BaseSettings.IsConfigurated = true;
 
-            _manager.BaseSettings.SaveFilePath.CreateDirectoryIfNotExis();
+            _manager.BaseSettings.FullSaveFilePath.CreateDirectoryIfNotExis();
 
 
             foreach (var roleName in RoleNames.GetAllRoles())
