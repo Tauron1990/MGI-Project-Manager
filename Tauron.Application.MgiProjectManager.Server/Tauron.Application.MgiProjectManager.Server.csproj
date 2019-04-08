@@ -10,6 +10,7 @@
   <ItemGroup>
     <None Remove="ClientApp\js\file.tsx" />
     <None Remove="ClientApp\ts\Admin\main.ts" />
+    <None Remove="ClientApp\ts\File\Index.ts" />
     <None Remove="ClientApp\ts\Identity\main.ts" />
   </ItemGroup>
   
@@ -21,8 +22,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
-    <PackageReference Include="NSwag.AspNetCore" Version="12.1.0" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
     <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="17.1.0.38" />
   </ItemGroup>
   
@@ -41,6 +42,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\ts\Admin\main.ts" />
     <TypeScriptCompile Include="ClientApp\ts\ApiClient\Client.g.ts" />
+    <TypeScriptCompile Include="ClientApp\ts\File\Index.ts" />
     <TypeScriptCompile Include="ClientApp\ts\Identity\main.ts" />
   </ItemGroup>
   

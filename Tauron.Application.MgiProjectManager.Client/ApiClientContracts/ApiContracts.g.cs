@@ -9,72 +9,164 @@ namespace Tauron.Application.MgiProjectManager.Client.ApiClientContracts
     #pragma warning disable
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "12.1.0.0 (NJsonSchema v9.13.28.0 (Newtonsoft.Json v11.0.0.0))")]
-    public partial interface IUserClient
+    public partial interface IFilesClient
     {
+        /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserList> GetAsync();
+        System.Threading.Tasks.Task<UploadResult> FilesAsync(System.Collections.Generic.IEnumerable<object> files);
     
+        /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        System.Threading.Tasks.Task<UserList> GetAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<UploadResult> FilesAsync(System.Collections.Generic.IEnumerable<object> files, System.Threading.CancellationToken cancellationToken);
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "12.1.0.0 (NJsonSchema v9.13.28.0 (Newtonsoft.Json v11.0.0.0))")]
+    public partial interface ITemplateClient
+    {
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> AdminGridErrorAsync(string jObject);
+    
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        System.Threading.Tasks.Task<string> AdminGridErrorAsync(string jObject, System.Threading.CancellationToken cancellationToken);
+    
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> FileUploadErrorAsync(UploadResult result);
+    
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        System.Threading.Tasks.Task<string> FileUploadErrorAsync(UploadResult result, System.Threading.CancellationToken cancellationToken);
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "12.1.0.0 (NJsonSchema v9.13.28.0 (Newtonsoft.Json v11.0.0.0))")]
+    public partial interface IUserClient
+    {
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UserList> UserAsync();
+    
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        System.Threading.Tasks.Task<UserList> UserAsync(System.Threading.CancellationToken cancellationToken);
     
     }
     
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "12.1.0.0 (NJsonSchema v9.13.28.0 (Newtonsoft.Json v11.0.0.0))")]
     public partial interface IUserGridClient
     {
+        /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> GridGetDataAsync(DataManagerRequest dm);
+        System.Threading.Tasks.Task UserGridAsync(DataManagerRequest dm);
     
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        System.Threading.Tasks.Task<FileResponse> GridGetDataAsync(DataManagerRequest dm, System.Threading.CancellationToken cancellationToken);
-    
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> GridUpdateDataAsync(AppUserValue userValue);
-    
+        /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        System.Threading.Tasks.Task<FileResponse> GridUpdateDataAsync(AppUserValue userValue, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task UserGridAsync(DataManagerRequest dm, System.Threading.CancellationToken cancellationToken);
     
+        /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> GridAddDataAsync(AppUserValue userValue);
+        System.Threading.Tasks.Task UpdateAsync(AppUserValue userValue);
     
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        System.Threading.Tasks.Task<FileResponse> GridAddDataAsync(AppUserValue userValue, System.Threading.CancellationToken cancellationToken);
-    
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> GridRemoveDataAsync(AppUserKey user);
-    
+        /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        System.Threading.Tasks.Task<FileResponse> GridRemoveDataAsync(AppUserKey user, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task UpdateAsync(AppUserValue userValue, System.Threading.CancellationToken cancellationToken);
     
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCode("NSwag", "12.1.0.0 (NJsonSchema v9.13.28.0 (Newtonsoft.Json v11.0.0.0))")]
-    public partial interface IFilesClient
-    {
+        /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UploadResult> UploadFilesAsync(System.Collections.Generic.IEnumerable<FileParameter> files);
+        System.Threading.Tasks.Task InsertAsync(AppUserValue userValue);
     
+        /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        System.Threading.Tasks.Task<UploadResult> UploadFilesAsync(System.Collections.Generic.IEnumerable<FileParameter> files, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task InsertAsync(AppUserValue userValue, System.Threading.CancellationToken cancellationToken);
+    
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task RemoveAsync(AppUserKey user);
+    
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        System.Threading.Tasks.Task RemoveAsync(AppUserKey user, System.Threading.CancellationToken cancellationToken);
     
     }
     
     
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "9.13.28.0 (Newtonsoft.Json v11.0.0.0)")]
+    public partial class IFormFile 
+    {
+        [Newtonsoft.Json.JsonProperty("ContentType", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ContentType { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("ContentDisposition", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ContentDisposition { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("Headers", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.IDictionary<string, System.Collections.Generic.ICollection<string>> Headers { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("Length", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public long? Length { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("Name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Name { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("FileName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string FileName { get; set; }
+    
+        public string ToJson() 
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+        }
+    
+        public static IFormFile FromJson(string data)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<IFormFile>(data);
+        }
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "9.13.28.0 (Newtonsoft.Json v11.0.0.0)")]
+    public partial class UploadResult 
+    {
+        [Newtonsoft.Json.JsonProperty("Errors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.IDictionary<string, string> Errors { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("Message", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Message { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("Operation", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Operation { get; set; }
+    
+        public string ToJson() 
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+        }
+    
+        public static UploadResult FromJson(string data)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<UploadResult>(data);
+        }
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "9.13.28.0 (Newtonsoft.Json v11.0.0.0)")]
     public partial class UserList 
     {
         [Newtonsoft.Json.JsonProperty("Items", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<AppUser> Items { get; set; }
     
-        [Newtonsoft.Json.JsonProperty("Count", Required = Newtonsoft.Json.Required.Always)]
-        public int Count { get; set; }
+        [Newtonsoft.Json.JsonProperty("Count", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? Count { get; set; }
     
         public string ToJson() 
         {
@@ -118,17 +210,17 @@ namespace Tauron.Application.MgiProjectManager.Client.ApiClientContracts
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "9.13.28.0 (Newtonsoft.Json v11.0.0.0)")]
     public partial class DataManagerRequest 
     {
-        [Newtonsoft.Json.JsonProperty("skip", Required = Newtonsoft.Json.Required.Always)]
-        public int Skip { get; set; }
+        [Newtonsoft.Json.JsonProperty("skip", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? Skip { get; set; }
     
-        [Newtonsoft.Json.JsonProperty("take", Required = Newtonsoft.Json.Required.Always)]
-        public int Take { get; set; }
+        [Newtonsoft.Json.JsonProperty("take", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? Take { get; set; }
     
         [Newtonsoft.Json.JsonProperty("antiForgery", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string AntiForgery { get; set; }
     
-        [Newtonsoft.Json.JsonProperty("requiresCounts", Required = Newtonsoft.Json.Required.Always)]
-        public bool RequiresCounts { get; set; }
+        [Newtonsoft.Json.JsonProperty("requiresCounts", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool? RequiresCounts { get; set; }
     
         [Newtonsoft.Json.JsonProperty("table", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Table { get; set; }
@@ -217,11 +309,11 @@ namespace Tauron.Application.MgiProjectManager.Client.ApiClientContracts
         [Newtonsoft.Json.JsonProperty("Field", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Field { get; set; }
     
-        [Newtonsoft.Json.JsonProperty("IgnoreCase", Required = Newtonsoft.Json.Required.Always)]
-        public bool IgnoreCase { get; set; }
+        [Newtonsoft.Json.JsonProperty("IgnoreCase", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool? IgnoreCase { get; set; }
     
-        [Newtonsoft.Json.JsonProperty("IsComplex", Required = Newtonsoft.Json.Required.Always)]
-        public bool IsComplex { get; set; }
+        [Newtonsoft.Json.JsonProperty("IsComplex", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool? IsComplex { get; set; }
     
         [Newtonsoft.Json.JsonProperty("Operator", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Operator { get; set; }
@@ -302,93 +394,6 @@ namespace Tauron.Application.MgiProjectManager.Client.ApiClientContracts
             return Newtonsoft.Json.JsonConvert.DeserializeObject<AppUserKey>(data);
         }
     
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "9.13.28.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class UploadResult 
-    {
-        [Newtonsoft.Json.JsonProperty("Errors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.IDictionary<string, string> Errors { get; set; }
-    
-        [Newtonsoft.Json.JsonProperty("Message", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Message { get; set; }
-    
-        [Newtonsoft.Json.JsonProperty("Operation", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Operation { get; set; }
-    
-        public string ToJson() 
-        {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(this);
-        }
-    
-        public static UploadResult FromJson(string data)
-        {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<UploadResult>(data);
-        }
-    
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NSwag", "12.1.0.0 (NJsonSchema v9.13.28.0 (Newtonsoft.Json v11.0.0.0))")]
-    public partial class FileParameter
-    {
-        public FileParameter(System.IO.Stream data)
-            : this (data, null)
-        {
-        }
-
-        public FileParameter(System.IO.Stream data, string fileName)
-            : this (data, fileName, null)
-        {
-        }
-
-        public FileParameter(System.IO.Stream data, string fileName, string contentType)
-        {
-            Data = data;
-            FileName = fileName;
-            ContentType = contentType;
-        }
-
-        public System.IO.Stream Data { get; private set; }
-
-        public string FileName { get; private set; }
-
-        public string ContentType { get; private set; }
-    }
-
-    public partial class FileResponse : System.IDisposable
-    {
-        private System.IDisposable _client; 
-        private System.IDisposable _response; 
-
-        public int StatusCode { get; private set; }
-
-        public System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
-
-        public System.IO.Stream Stream { get; private set; }
-
-        public bool IsPartial
-        {
-            get { return StatusCode == 206; }
-        }
-
-        public FileResponse(int statusCode, System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.IO.Stream stream, System.IDisposable client, System.IDisposable response)
-        {
-            StatusCode = statusCode; 
-            Headers = headers; 
-            Stream = stream; 
-            _client = client; 
-            _response = response;
-        }
-
-        public void Dispose() 
-        {
-            if (Stream != null)
-                Stream.Dispose();
-            if (_response != null)
-                _response.Dispose();
-            if (_client != null)
-                _client.Dispose();
-        }
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "12.1.0.0 (NJsonSchema v9.13.28.0 (Newtonsoft.Json v11.0.0.0))")]

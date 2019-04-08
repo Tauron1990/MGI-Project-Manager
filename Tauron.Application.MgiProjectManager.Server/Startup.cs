@@ -17,15 +17,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using Swashbuckle.AspNetCore.Swagger;
 using Syncfusion.Licensing;
 using Tauron.Application.MgiProjectManager.BL;
 using Tauron.Application.MgiProjectManager.BL.Impl.Hubs;
 using Tauron.Application.MgiProjectManager.Resources.Web;
 using Tauron.Application.MgiProjectManager.Server.Core;
+using Tauron.Application.MgiProjectManager.Server.Core.Impl;
 using Tauron.Application.MgiProjectManager.Server.Core.Setup;
 using Tauron.Application.MgiProjectManager.Server.Core.Setup.Impl;
 using Tauron.Application.MgiProjectManager.Server.Data;
 using Tauron.Application.MgiProjectManager.Server.Data.Api;
+using Tauron.Application.MgiProjectManager.Server.Data.Migrations;
 
 namespace Tauron.Application.MgiProjectManager.Server
 {
@@ -88,17 +91,22 @@ namespace Tauron.Application.MgiProjectManager.Server
                 options.AddPolicy(RoleNames.Operator, builder => builder.RequireRole(RoleNames.Operator, RoleNames.Admin));
             });
 
-            if (IsInDev) services.AddSwaggerDocument(settings =>
+            if (IsInDev)
             {
-                settings.PostProcess = document =>
+
+                services.AddSwaggerGen(options =>
                 {
-                    document.Info.Version = "v1";
-                    document.Info.Title = "Mgi Project Manager API";
-                    document.Info.Description = "REST API for Mgi Project Manager.";
-                };
-            });
+                    options.SwaggerDoc("v1", new Info
+                    {
+                        Version = "v1",
+                        Title = "Mgi Project Manager API",
+                        Description = "REST API for Mgi Project Manager."
+                    });
+                });
+            }
 
             services.AddSignalR();
+            services.AddAntiforgery();
 
             RegisterInternalServices(services);
             services.AddDBServices();
@@ -134,7 +142,11 @@ namespace Tauron.Application.MgiProjectManager.Server
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 app.UseSwagger();
-                app.UseSwaggerUi3();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                });
+
             }
             else
             {
@@ -174,6 +186,7 @@ namespace Tauron.Application.MgiProjectManager.Server
                 };
             });
             services.AddSingleton(Configuration);
+            services.AddTransient<IRazorPartialToStringRenderer, RazorPartialToStringRenderer>();
         }
     }
 }

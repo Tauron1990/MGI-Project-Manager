@@ -7,383 +7,511 @@
 //----------------------
 // ReSharper disable InconsistentNaming
 
-import * as jQuery from 'jquery';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export module ApiModule {
 
-export class UserClient {
-    baseUrl: string; 
-    beforeSend: any = undefined; 
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string) {
-        this.baseUrl = baseUrl ? baseUrl : "http://localhost:40000";
-    }
-
-    get() {
-        return new Promise<UserList | null>((resolve, reject) => {
-            this.getWithCallbacks((result) => resolve(result), (exception, _reason) => reject(exception));
-        });
-    }
-    
-    private getWithCallbacks(onSuccess?: (result: UserList | null) => void, onFail?: (exception: string, reason: string) => void) {
-        let url_ = this.baseUrl + "/api/User";
-        url_ = url_.replace(/[?&]$/, "");
-
-        jQuery.ajax({
-            url: url_,
-            beforeSend: this.beforeSend,
-            type: "get",
-            dataType: "text",
-            headers: {
-                "Accept": "application/json"
-            }
-        }).done((_data, _textStatus, xhr) => {
-            this.processGetWithCallbacks(url_, xhr, onSuccess, onFail);
-        }).fail((xhr) => {
-            this.processGetWithCallbacks(url_, xhr, onSuccess, onFail);
-        });
-    }
-
-    private processGetWithCallbacks(_url: string, xhr: any, onSuccess?: any, onFail?: any): void {
-        try {
-            let result = this.processGet(xhr);
-            if (onSuccess !== undefined)
-                onSuccess(result);
-        } catch (e) {
-            if (onFail !== undefined)
-                onFail(e, "http_service_exception");
-        }
-    }
-
-    protected processGet(xhr: any): UserList | null | null {
-        const status = xhr.status; 
-
-        let _headers: any = {};
-        if (status === 200) {
-            const _responseText = xhr.responseText;
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? UserList.fromJS(resultData200) : <any>null;
-            return result200;
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = xhr.responseText;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return null;
-    }
-}
-
-export class UserGridClient {
-    baseUrl: string; 
-    beforeSend: any = undefined; 
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string) {
-        this.baseUrl = baseUrl ? baseUrl : "http://localhost:40000";
-    }
-
-    gridGetData(dm: DataManagerRequest) {
-        return new Promise<any | null>((resolve, reject) => {
-            this.gridGetDataWithCallbacks(dm, (result) => resolve(result), (exception, _reason) => reject(exception));
-        });
-    }
-    
-    private gridGetDataWithCallbacks(dm: DataManagerRequest, onSuccess?: (result: any | null) => void, onFail?: (exception: string, reason: string) => void) {
-        let url_ = this.baseUrl + "/api/UserGrid";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(dm);
-
-        jQuery.ajax({
-            url: url_,
-            beforeSend: this.beforeSend,
-            type: "post",
-            data: content_,
-            dataType: "text",
-            headers: {
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            }
-        }).done((_data, _textStatus, xhr) => {
-            this.processGridGetDataWithCallbacks(url_, xhr, onSuccess, onFail);
-        }).fail((xhr) => {
-            this.processGridGetDataWithCallbacks(url_, xhr, onSuccess, onFail);
-        });
-    }
-
-    private processGridGetDataWithCallbacks(_url: string, xhr: any, onSuccess?: any, onFail?: any): void {
-        try {
-            let result = this.processGridGetData(xhr);
-            if (onSuccess !== undefined)
-                onSuccess(result);
-        } catch (e) {
-            if (onFail !== undefined)
-                onFail(e, "http_service_exception");
-        }
-    }
-
-    protected processGridGetData(xhr: any): any | null | null {
-        const status = xhr.status; 
-
-        let _headers: any = {};
-        if (status === 200 || status === 206) {
-            const _responseText = xhr.responseText;
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
-            return result200;
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = xhr.responseText;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return null;
-    }
-
-    gridUpdateData(userValue: AppUserValue) {
-        return new Promise<any | null>((resolve, reject) => {
-            this.gridUpdateDataWithCallbacks(userValue, (result) => resolve(result), (exception, _reason) => reject(exception));
-        });
-    }
-    
-    private gridUpdateDataWithCallbacks(userValue: AppUserValue, onSuccess?: (result: any | null) => void, onFail?: (exception: string, reason: string) => void) {
-        let url_ = this.baseUrl + "/api/UserGrid/Update";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(userValue);
-
-        jQuery.ajax({
-            url: url_,
-            beforeSend: this.beforeSend,
-            type: "post",
-            data: content_,
-            dataType: "text",
-            headers: {
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            }
-        }).done((_data, _textStatus, xhr) => {
-            this.processGridUpdateDataWithCallbacks(url_, xhr, onSuccess, onFail);
-        }).fail((xhr) => {
-            this.processGridUpdateDataWithCallbacks(url_, xhr, onSuccess, onFail);
-        });
-    }
-
-    private processGridUpdateDataWithCallbacks(_url: string, xhr: any, onSuccess?: any, onFail?: any): void {
-        try {
-            let result = this.processGridUpdateData(xhr);
-            if (onSuccess !== undefined)
-                onSuccess(result);
-        } catch (e) {
-            if (onFail !== undefined)
-                onFail(e, "http_service_exception");
-        }
-    }
-
-    protected processGridUpdateData(xhr: any): any | null | null {
-        const status = xhr.status; 
-
-        let _headers: any = {};
-        if (status === 200 || status === 206) {
-            const _responseText = xhr.responseText;
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
-            return result200;
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = xhr.responseText;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return null;
-    }
-
-    gridAddData(userValue: AppUserValue) {
-        return new Promise<any | null>((resolve, reject) => {
-            this.gridAddDataWithCallbacks(userValue, (result) => resolve(result), (exception, _reason) => reject(exception));
-        });
-    }
-    
-    private gridAddDataWithCallbacks(userValue: AppUserValue, onSuccess?: (result: any | null) => void, onFail?: (exception: string, reason: string) => void) {
-        let url_ = this.baseUrl + "/api/UserGrid/Insert";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(userValue);
-
-        jQuery.ajax({
-            url: url_,
-            beforeSend: this.beforeSend,
-            type: "post",
-            data: content_,
-            dataType: "text",
-            headers: {
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            }
-        }).done((_data, _textStatus, xhr) => {
-            this.processGridAddDataWithCallbacks(url_, xhr, onSuccess, onFail);
-        }).fail((xhr) => {
-            this.processGridAddDataWithCallbacks(url_, xhr, onSuccess, onFail);
-        });
-    }
-
-    private processGridAddDataWithCallbacks(_url: string, xhr: any, onSuccess?: any, onFail?: any): void {
-        try {
-            let result = this.processGridAddData(xhr);
-            if (onSuccess !== undefined)
-                onSuccess(result);
-        } catch (e) {
-            if (onFail !== undefined)
-                onFail(e, "http_service_exception");
-        }
-    }
-
-    protected processGridAddData(xhr: any): any | null | null {
-        const status = xhr.status; 
-
-        let _headers: any = {};
-        if (status === 200 || status === 206) {
-            const _responseText = xhr.responseText;
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
-            return result200;
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = xhr.responseText;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return null;
-    }
-
-    gridRemoveData(user: AppUserKey) {
-        return new Promise<any | null>((resolve, reject) => {
-            this.gridRemoveDataWithCallbacks(user, (result) => resolve(result), (exception, _reason) => reject(exception));
-        });
-    }
-    
-    private gridRemoveDataWithCallbacks(user: AppUserKey, onSuccess?: (result: any | null) => void, onFail?: (exception: string, reason: string) => void) {
-        let url_ = this.baseUrl + "/api/UserGrid/Remove";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(user);
-
-        jQuery.ajax({
-            url: url_,
-            beforeSend: this.beforeSend,
-            type: "post",
-            data: content_,
-            dataType: "text",
-            headers: {
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            }
-        }).done((_data, _textStatus, xhr) => {
-            this.processGridRemoveDataWithCallbacks(url_, xhr, onSuccess, onFail);
-        }).fail((xhr) => {
-            this.processGridRemoveDataWithCallbacks(url_, xhr, onSuccess, onFail);
-        });
-    }
-
-    private processGridRemoveDataWithCallbacks(_url: string, xhr: any, onSuccess?: any, onFail?: any): void {
-        try {
-            let result = this.processGridRemoveData(xhr);
-            if (onSuccess !== undefined)
-                onSuccess(result);
-        } catch (e) {
-            if (onFail !== undefined)
-                onFail(e, "http_service_exception");
-        }
-    }
-
-    protected processGridRemoveData(xhr: any): any | null | null {
-        const status = xhr.status; 
-
-        let _headers: any = {};
-        if (status === 200 || status === 206) {
-            const _responseText = xhr.responseText;
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
-            return result200;
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = xhr.responseText;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return null;
-    }
-}
-
 export class FilesClient {
-    baseUrl: string; 
-    beforeSend: any = undefined; 
+    private instance: AxiosInstance;
+    private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-    constructor(baseUrl?: string) {
-        this.baseUrl = baseUrl ? baseUrl : "http://localhost:40000";
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+        this.instance = instance ? instance : axios.create();
+        this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    uploadFiles(files: FileParameter[] | null | undefined) {
-        return new Promise<UploadResult | null>((resolve, reject) => {
-            this.uploadFilesWithCallbacks(files, (result) => resolve(result), (exception, _reason) => reject(exception));
-        });
-    }
-    
-    private uploadFilesWithCallbacks(files: FileParameter[] | null | undefined, onSuccess?: (result: UploadResult | null) => void, onFail?: (exception: string, reason: string) => void) {
+    /**
+     * @param files (optional) 
+     * @return Success
+     */
+    files(files: any[] | null | undefined): Promise<UploadResult> {
         let url_ = this.baseUrl + "/api/Files";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = new FormData();
         if (files !== null && files !== undefined)
-            files.forEach(item_ => content_.append("Files", item_.data, item_.fileName ? item_.fileName : "Files") );
+            content_.append("files", files.toString());
 
-        jQuery.ajax({
-            url: url_,
-            beforeSend: this.beforeSend,
-            type: "post",
+        let options_ = <AxiosRequestConfig>{
             data: content_,
-            mimeType: "multipart/form-data",
-            contentType: false,
+            method: "POST",
+            url: url_,
             headers: {
                 "Accept": "application/json"
             }
-        }).done((_data, _textStatus, xhr) => {
-            this.processUploadFilesWithCallbacks(url_, xhr, onSuccess, onFail);
-        }).fail((xhr) => {
-            this.processUploadFilesWithCallbacks(url_, xhr, onSuccess, onFail);
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processFiles(_response);
         });
     }
 
-    private processUploadFilesWithCallbacks(_url: string, xhr: any, onSuccess?: any, onFail?: any): void {
-        try {
-            let result = this.processUploadFiles(xhr);
-            if (onSuccess !== undefined)
-                onSuccess(result);
-        } catch (e) {
-            if (onFail !== undefined)
-                onFail(e, "http_service_exception");
-        }
-    }
-
-    protected processUploadFiles(xhr: any): UploadResult | null | null {
-        const status = xhr.status; 
-
-        let _headers: any = {};
+    protected processFiles(response: AxiosResponse): Promise<UploadResult> {
+        const status = response.status;
+        let _headers: any = {}; 
+        if (response.headers && response.headers.forEach) { 
+            response.headers.forEach((v: any, k: any) => _headers[k] = v);
+        };
         if (status === 200) {
-            const _responseText = xhr.responseText;
+            const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? UploadResult.fromJS(resultData200) : <any>null;
+            let resultData200  = _responseText;
+            result200 = resultData200 ? UploadResult.fromJS(resultData200) : new UploadResult();
             return result200;
         } else if (status !== 200 && status !== 204) {
-            const _responseText = xhr.responseText;
+            const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return null;
+        return Promise.resolve<UploadResult>(<any>null);
     }
+}
+
+export class TemplateClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+        this.instance = instance ? instance : axios.create();
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param jObject (optional) 
+     * @return Success
+     */
+    adminGridError(jObject: string | null | undefined): Promise<string> {
+        let url_ = this.baseUrl + "/api/Template/AdminGridError?";
+        if (jObject !== undefined)
+            url_ += "jObject=" + encodeURIComponent("" + jObject) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processAdminGridError(_response);
+        });
+    }
+
+    protected processAdminGridError(response: AxiosResponse): Promise<string> {
+        const status = response.status;
+        let _headers: any = {}; 
+        if (response.headers && response.headers.forEach) { 
+            response.headers.forEach((v: any, k: any) => _headers[k] = v);
+        };
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<string>(<any>null);
+    }
+
+    /**
+     * @param result (optional) 
+     * @return Success
+     */
+    fileUploadError(result: UploadResult | null | undefined): Promise<string> {
+        let url_ = this.baseUrl + "/api/Template/FileUploadError";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(result);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json", 
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processFileUploadError(_response);
+        });
+    }
+
+    protected processFileUploadError(response: AxiosResponse): Promise<string> {
+        const status = response.status;
+        let _headers: any = {}; 
+        if (response.headers && response.headers.forEach) { 
+            response.headers.forEach((v: any, k: any) => _headers[k] = v);
+        };
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<string>(<any>null);
+    }
+}
+
+export class UserClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+        this.instance = instance ? instance : axios.create();
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    user(): Promise<UserList> {
+        let url_ = this.baseUrl + "/api/User";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processUser(_response);
+        });
+    }
+
+    protected processUser(response: AxiosResponse): Promise<UserList> {
+        const status = response.status;
+        let _headers: any = {}; 
+        if (response.headers && response.headers.forEach) { 
+            response.headers.forEach((v: any, k: any) => _headers[k] = v);
+        };
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = resultData200 ? UserList.fromJS(resultData200) : new UserList();
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<UserList>(<any>null);
+    }
+}
+
+export class UserGridClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+        this.instance = instance ? instance : axios.create();
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param dm (optional) 
+     * @return Success
+     */
+    userGrid(dm: DataManagerRequest | null | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/UserGrid";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(dm);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json", 
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processUserGrid(_response);
+        });
+    }
+
+    protected processUserGrid(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; 
+        if (response.headers && response.headers.forEach) { 
+            response.headers.forEach((v: any, k: any) => _headers[k] = v);
+        };
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @param userValue (optional) 
+     * @return Success
+     */
+    update(userValue: AppUserValue | null | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/UserGrid/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(userValue);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json", 
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processUpdate(_response);
+        });
+    }
+
+    protected processUpdate(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; 
+        if (response.headers && response.headers.forEach) { 
+            response.headers.forEach((v: any, k: any) => _headers[k] = v);
+        };
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @param userValue (optional) 
+     * @return Success
+     */
+    insert(userValue: AppUserValue | null | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/UserGrid/Insert";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(userValue);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json", 
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processInsert(_response);
+        });
+    }
+
+    protected processInsert(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; 
+        if (response.headers && response.headers.forEach) { 
+            response.headers.forEach((v: any, k: any) => _headers[k] = v);
+        };
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @param user (optional) 
+     * @return Success
+     */
+    remove(user: AppUserKey | null | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/UserGrid/Remove";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(user);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json", 
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processRemove(_response);
+        });
+    }
+
+    protected processRemove(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; 
+        if (response.headers && response.headers.forEach) { 
+            response.headers.forEach((v: any, k: any) => _headers[k] = v);
+        };
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+}
+
+export class IFormFile implements IIFormFile {
+    contentType?: string | null;
+    contentDisposition?: string | null;
+    headers?: { [key: string] : string[]; } | null;
+    length?: number | null;
+    name?: string | null;
+    fileName?: string | null;
+
+    constructor(data?: IIFormFile) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.contentType = data["ContentType"] !== undefined ? data["ContentType"] : <any>null;
+            this.contentDisposition = data["ContentDisposition"] !== undefined ? data["ContentDisposition"] : <any>null;
+            if (data["Headers"]) {
+                this.headers = {} as any;
+                for (let key in data["Headers"]) {
+                    if (data["Headers"].hasOwnProperty(key))
+                        this.headers![key] = data["Headers"][key] !== undefined ? data["Headers"][key] : [];
+                }
+            }
+            this.length = data["Length"] !== undefined ? data["Length"] : <any>null;
+            this.name = data["Name"] !== undefined ? data["Name"] : <any>null;
+            this.fileName = data["FileName"] !== undefined ? data["FileName"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): IFormFile {
+        data = typeof data === 'object' ? data : {};
+        let result = new IFormFile();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["ContentType"] = this.contentType !== undefined ? this.contentType : <any>null;
+        data["ContentDisposition"] = this.contentDisposition !== undefined ? this.contentDisposition : <any>null;
+        if (this.headers) {
+            data["Headers"] = {};
+            for (let key in this.headers) {
+                if (this.headers.hasOwnProperty(key))
+                    data["Headers"][key] = this.headers[key] !== undefined ? this.headers[key] : <any>null;
+            }
+        }
+        data["Length"] = this.length !== undefined ? this.length : <any>null;
+        data["Name"] = this.name !== undefined ? this.name : <any>null;
+        data["FileName"] = this.fileName !== undefined ? this.fileName : <any>null;
+        return data; 
+    }
+}
+
+export interface IIFormFile {
+    contentType?: string | null;
+    contentDisposition?: string | null;
+    headers?: { [key: string] : string[]; } | null;
+    length?: number | null;
+    name?: string | null;
+    fileName?: string | null;
+}
+
+export class UploadResult implements IUploadResult {
+    errors?: { [key: string] : string; } | null;
+    message?: string | null;
+    operation?: string | null;
+
+    constructor(data?: IUploadResult) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["Errors"]) {
+                this.errors = {} as any;
+                for (let key in data["Errors"]) {
+                    if (data["Errors"].hasOwnProperty(key))
+                        this.errors![key] = data["Errors"][key];
+                }
+            }
+            this.message = data["Message"] !== undefined ? data["Message"] : <any>null;
+            this.operation = data["Operation"] !== undefined ? data["Operation"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UploadResult {
+        data = typeof data === 'object' ? data : {};
+        let result = new UploadResult();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.errors) {
+            data["Errors"] = {};
+            for (let key in this.errors) {
+                if (this.errors.hasOwnProperty(key))
+                    data["Errors"][key] = this.errors[key] !== undefined ? this.errors[key] : <any>null;
+            }
+        }
+        data["Message"] = this.message !== undefined ? this.message : <any>null;
+        data["Operation"] = this.operation !== undefined ? this.operation : <any>null;
+        return data; 
+    }
+}
+
+export interface IUploadResult {
+    errors?: { [key: string] : string; } | null;
+    message?: string | null;
+    operation?: string | null;
 }
 
 export class UserList implements IUserList {
     items?: AppUser[] | null;
-    count!: number;
+    count?: number | null;
 
     constructor(data?: IUserList) {
         if (data) {
@@ -426,7 +554,7 @@ export class UserList implements IUserList {
 
 export interface IUserList {
     items?: AppUser[] | null;
-    count: number;
+    count?: number | null;
 }
 
 export class AppUser implements IAppUser {
@@ -478,10 +606,10 @@ export interface IAppUser {
 }
 
 export class DataManagerRequest implements IDataManagerRequest {
-    skip!: number;
-    take!: number;
+    skip?: number | null;
+    take?: number | null;
     antiForgery?: string | null;
-    requiresCounts!: boolean;
+    requiresCounts?: boolean | null;
     table?: string | null;
     group?: string[] | null;
     select?: string[] | null;
@@ -599,10 +727,10 @@ export class DataManagerRequest implements IDataManagerRequest {
 }
 
 export interface IDataManagerRequest {
-    skip: number;
-    take: number;
+    skip?: number | null;
+    take?: number | null;
     antiForgery?: string | null;
-    requiresCounts: boolean;
+    requiresCounts?: boolean | null;
     table?: string | null;
     group?: string[] | null;
     select?: string[] | null;
@@ -707,8 +835,8 @@ export interface ISearchFilter {
 
 export class WhereFilter implements IWhereFilter {
     field?: string | null;
-    ignoreCase!: boolean;
-    isComplex!: boolean;
+    ignoreCase?: boolean | null;
+    isComplex?: boolean | null;
     operator?: string | null;
     condition?: string | null;
     value?: any | null;
@@ -765,8 +893,8 @@ export class WhereFilter implements IWhereFilter {
 
 export interface IWhereFilter {
     field?: string | null;
-    ignoreCase: boolean;
-    isComplex: boolean;
+    ignoreCase?: boolean | null;
+    isComplex?: boolean | null;
     operator?: string | null;
     condition?: string | null;
     value?: any | null;
@@ -883,67 +1011,6 @@ export class AppUserKey implements IAppUserKey {
 
 export interface IAppUserKey {
     key?: string | null;
-}
-
-export class UploadResult implements IUploadResult {
-    errors?: { [key: string] : string; } | null;
-    message?: string | null;
-    operation?: string | null;
-
-    constructor(data?: IUploadResult) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            if (data["Errors"]) {
-                this.errors = {} as any;
-                for (let key in data["Errors"]) {
-                    if (data["Errors"].hasOwnProperty(key))
-                        this.errors![key] = data["Errors"][key];
-                }
-            }
-            this.message = data["Message"] !== undefined ? data["Message"] : <any>null;
-            this.operation = data["Operation"] !== undefined ? data["Operation"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): UploadResult {
-        data = typeof data === 'object' ? data : {};
-        let result = new UploadResult();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (this.errors) {
-            data["Errors"] = {};
-            for (let key in this.errors) {
-                if (this.errors.hasOwnProperty(key))
-                    data["Errors"][key] = this.errors[key] !== undefined ? this.errors[key] : <any>null;
-            }
-        }
-        data["Message"] = this.message !== undefined ? this.message : <any>null;
-        data["Operation"] = this.operation !== undefined ? this.operation : <any>null;
-        return data; 
-    }
-}
-
-export interface IUploadResult {
-    errors?: { [key: string] : string; } | null;
-    message?: string | null;
-    operation?: string | null;
-}
-
-export interface FileParameter {
-    data: any;
-    fileName: string;
 }
 
 export class SwaggerException extends Error {

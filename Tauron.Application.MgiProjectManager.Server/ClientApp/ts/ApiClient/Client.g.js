@@ -8,268 +8,814 @@
 //----------------------
 // ReSharper disable InconsistentNaming
 Object.defineProperty(exports, "__esModule", { value: true });
-const jQuery = require("jquery");
-var ApiClient;
-(function (ApiClient) {
-    class ValuesClient {
-        constructor(baseUrl) {
-            this.beforeSend = undefined;
+const axios_1 = require("axios");
+var ApiModule;
+(function (ApiModule) {
+    class FilesClient {
+        constructor(baseUrl, instance) {
             this.jsonParseReviver = undefined;
-            this.baseUrl = baseUrl ? baseUrl : "http://localhost:40000";
+            this.instance = instance ? instance : axios_1.default.create();
+            this.baseUrl = baseUrl ? baseUrl : "";
         }
-        getAll() {
-            return new Promise((resolve, reject) => {
-                this.getAllWithCallbacks((result) => resolve(result), (exception, _reason) => reject(exception));
-            });
-        }
-        getAllWithCallbacks(onSuccess, onFail) {
-            let url_ = this.baseUrl + "/api/Values";
+        /**
+         * @param files (optional)
+         * @return Success
+         */
+        files(files) {
+            let url_ = this.baseUrl + "/api/Files";
             url_ = url_.replace(/[?&]$/, "");
-            jQuery.ajax({
+            const content_ = new FormData();
+            if (files !== null && files !== undefined)
+                content_.append("files", files.toString());
+            let options_ = {
+                data: content_,
+                method: "POST",
                 url: url_,
-                beforeSend: this.beforeSend,
-                type: "get",
-                dataType: "text",
                 headers: {
                     "Accept": "application/json"
                 }
-            }).done((_data, _textStatus, xhr) => {
-                this.processGetAllWithCallbacks(url_, xhr, onSuccess, onFail);
-            }).fail((xhr) => {
-                this.processGetAllWithCallbacks(url_, xhr, onSuccess, onFail);
+            };
+            return this.instance.request(options_).then((_response) => {
+                return this.processFiles(_response);
             });
         }
-        processGetAllWithCallbacks(_url, xhr, onSuccess, onFail) {
-            try {
-                let result = this.processGetAll(xhr);
-                if (onSuccess !== undefined)
-                    onSuccess(result);
-            }
-            catch (e) {
-                if (onFail !== undefined)
-                    onFail(e, "http_service_exception");
-            }
-        }
-        processGetAll(xhr) {
-            const status = xhr.status;
+        processFiles(response) {
+            const status = response.status;
             let _headers = {};
+            if (response.headers && response.headers.forEach) {
+                response.headers.forEach((v, k) => _headers[k] = v);
+            }
+            ;
             if (status === 200) {
-                const _responseText = xhr.responseText;
+                const _responseText = response.data;
                 let result200 = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                if (resultData200 && resultData200.constructor === Array) {
-                    result200 = [];
-                    for (let item of resultData200)
-                        result200.push(item);
-                }
+                let resultData200 = _responseText;
+                result200 = resultData200 ? UploadResult.fromJS(resultData200) : new UploadResult();
                 return result200;
             }
             else if (status !== 200 && status !== 204) {
-                const _responseText = xhr.responseText;
+                const _responseText = response.data;
                 return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-            return null;
+            return Promise.resolve(null);
         }
-        post(value) {
-            return new Promise((resolve, reject) => {
-                this.postWithCallbacks(value, (result) => resolve(result), (exception, _reason) => reject(exception));
-            });
+    }
+    ApiModule.FilesClient = FilesClient;
+    class TemplateClient {
+        constructor(baseUrl, instance) {
+            this.jsonParseReviver = undefined;
+            this.instance = instance ? instance : axios_1.default.create();
+            this.baseUrl = baseUrl ? baseUrl : "";
         }
-        postWithCallbacks(value, onSuccess, onFail) {
-            let url_ = this.baseUrl + "/api/Values";
+        /**
+         * @param jObject (optional)
+         * @return Success
+         */
+        adminGridError(jObject) {
+            let url_ = this.baseUrl + "/api/Template/AdminGridError?";
+            if (jObject !== undefined)
+                url_ += "jObject=" + encodeURIComponent("" + jObject) + "&";
             url_ = url_.replace(/[?&]$/, "");
-            const content_ = JSON.stringify(value);
-            jQuery.ajax({
+            let options_ = {
+                method: "POST",
                 url: url_,
-                beforeSend: this.beforeSend,
-                type: "post",
-                data: content_,
-                dataType: "text",
                 headers: {
-                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
                 }
-            }).done((_data, _textStatus, xhr) => {
-                this.processPostWithCallbacks(url_, xhr, onSuccess, onFail);
-            }).fail((xhr) => {
-                this.processPostWithCallbacks(url_, xhr, onSuccess, onFail);
+            };
+            return this.instance.request(options_).then((_response) => {
+                return this.processAdminGridError(_response);
             });
         }
-        processPostWithCallbacks(_url, xhr, onSuccess, onFail) {
-            try {
-                let result = this.processPost(xhr);
-                if (onSuccess !== undefined)
-                    onSuccess(result);
-            }
-            catch (e) {
-                if (onFail !== undefined)
-                    onFail(e, "http_service_exception");
-            }
-        }
-        processPost(xhr) {
-            const status = xhr.status;
+        processAdminGridError(response) {
+            const status = response.status;
             let _headers = {};
+            if (response.headers && response.headers.forEach) {
+                response.headers.forEach((v, k) => _headers[k] = v);
+            }
+            ;
             if (status === 200) {
-                const _responseText = xhr.responseText;
-                return;
-            }
-            else if (status !== 200 && status !== 204) {
-                const _responseText = xhr.responseText;
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }
-            return;
-        }
-        get(id) {
-            return new Promise((resolve, reject) => {
-                this.getWithCallbacks(id, (result) => resolve(result), (exception, _reason) => reject(exception));
-            });
-        }
-        getWithCallbacks(id, onSuccess, onFail) {
-            let url_ = this.baseUrl + "/api/Values/{id}";
-            if (id === undefined || id === null)
-                throw new Error("The parameter 'id' must be defined.");
-            url_ = url_.replace("{id}", encodeURIComponent("" + id));
-            url_ = url_.replace(/[?&]$/, "");
-            jQuery.ajax({
-                url: url_,
-                beforeSend: this.beforeSend,
-                type: "get",
-                dataType: "text",
-                headers: {
-                    "Accept": "application/json"
-                }
-            }).done((_data, _textStatus, xhr) => {
-                this.processGetWithCallbacks(url_, xhr, onSuccess, onFail);
-            }).fail((xhr) => {
-                this.processGetWithCallbacks(url_, xhr, onSuccess, onFail);
-            });
-        }
-        processGetWithCallbacks(_url, xhr, onSuccess, onFail) {
-            try {
-                let result = this.processGet(xhr);
-                if (onSuccess !== undefined)
-                    onSuccess(result);
-            }
-            catch (e) {
-                if (onFail !== undefined)
-                    onFail(e, "http_service_exception");
-            }
-        }
-        processGet(xhr) {
-            const status = xhr.status;
-            let _headers = {};
-            if (status === 200) {
-                const _responseText = xhr.responseText;
+                const _responseText = response.data;
                 let result200 = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                let resultData200 = _responseText;
                 result200 = resultData200 !== undefined ? resultData200 : null;
                 return result200;
             }
             else if (status !== 200 && status !== 204) {
-                const _responseText = xhr.responseText;
+                const _responseText = response.data;
                 return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-            return null;
+            return Promise.resolve(null);
         }
-        put(id, value) {
-            return new Promise((resolve, reject) => {
-                this.putWithCallbacks(id, value, (result) => resolve(result), (exception, _reason) => reject(exception));
+        /**
+         * @param result (optional)
+         * @return Success
+         */
+        fileUploadError(result) {
+            let url_ = this.baseUrl + "/api/Template/FileUploadError";
+            url_ = url_.replace(/[?&]$/, "");
+            const content_ = JSON.stringify(result);
+            let options_ = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                }
+            };
+            return this.instance.request(options_).then((_response) => {
+                return this.processFileUploadError(_response);
             });
         }
-        putWithCallbacks(id, value, onSuccess, onFail) {
-            let url_ = this.baseUrl + "/api/Values/{id}";
-            if (id === undefined || id === null)
-                throw new Error("The parameter 'id' must be defined.");
-            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        processFileUploadError(response) {
+            const status = response.status;
+            let _headers = {};
+            if (response.headers && response.headers.forEach) {
+                response.headers.forEach((v, k) => _headers[k] = v);
+            }
+            ;
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200 = null;
+                let resultData200 = _responseText;
+                result200 = resultData200 !== undefined ? resultData200 : null;
+                return result200;
+            }
+            else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve(null);
+        }
+    }
+    ApiModule.TemplateClient = TemplateClient;
+    class UserClient {
+        constructor(baseUrl, instance) {
+            this.jsonParseReviver = undefined;
+            this.instance = instance ? instance : axios_1.default.create();
+            this.baseUrl = baseUrl ? baseUrl : "";
+        }
+        /**
+         * @return Success
+         */
+        user() {
+            let url_ = this.baseUrl + "/api/User";
             url_ = url_.replace(/[?&]$/, "");
-            const content_ = JSON.stringify(value);
-            jQuery.ajax({
+            let options_ = {
+                method: "GET",
                 url: url_,
-                beforeSend: this.beforeSend,
-                type: "put",
+                headers: {
+                    "Accept": "application/json"
+                }
+            };
+            return this.instance.request(options_).then((_response) => {
+                return this.processUser(_response);
+            });
+        }
+        processUser(response) {
+            const status = response.status;
+            let _headers = {};
+            if (response.headers && response.headers.forEach) {
+                response.headers.forEach((v, k) => _headers[k] = v);
+            }
+            ;
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200 = null;
+                let resultData200 = _responseText;
+                result200 = resultData200 ? UserList.fromJS(resultData200) : new UserList();
+                return result200;
+            }
+            else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve(null);
+        }
+    }
+    ApiModule.UserClient = UserClient;
+    class UserGridClient {
+        constructor(baseUrl, instance) {
+            this.jsonParseReviver = undefined;
+            this.instance = instance ? instance : axios_1.default.create();
+            this.baseUrl = baseUrl ? baseUrl : "";
+        }
+        /**
+         * @param dm (optional)
+         * @return Success
+         */
+        userGrid(dm) {
+            let url_ = this.baseUrl + "/api/UserGrid";
+            url_ = url_.replace(/[?&]$/, "");
+            const content_ = JSON.stringify(dm);
+            let options_ = {
                 data: content_,
-                dataType: "text",
+                method: "POST",
+                url: url_,
                 headers: {
                     "Content-Type": "application/json",
                 }
-            }).done((_data, _textStatus, xhr) => {
-                this.processPutWithCallbacks(url_, xhr, onSuccess, onFail);
-            }).fail((xhr) => {
-                this.processPutWithCallbacks(url_, xhr, onSuccess, onFail);
+            };
+            return this.instance.request(options_).then((_response) => {
+                return this.processUserGrid(_response);
             });
         }
-        processPutWithCallbacks(_url, xhr, onSuccess, onFail) {
-            try {
-                let result = this.processPut(xhr);
-                if (onSuccess !== undefined)
-                    onSuccess(result);
-            }
-            catch (e) {
-                if (onFail !== undefined)
-                    onFail(e, "http_service_exception");
-            }
-        }
-        processPut(xhr) {
-            const status = xhr.status;
+        processUserGrid(response) {
+            const status = response.status;
             let _headers = {};
+            if (response.headers && response.headers.forEach) {
+                response.headers.forEach((v, k) => _headers[k] = v);
+            }
+            ;
             if (status === 200) {
-                const _responseText = xhr.responseText;
-                return;
+                const _responseText = response.data;
+                return Promise.resolve(null);
             }
             else if (status !== 200 && status !== 204) {
-                const _responseText = xhr.responseText;
+                const _responseText = response.data;
                 return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-            return;
+            return Promise.resolve(null);
         }
-        delete(id) {
-            return new Promise((resolve, reject) => {
-                this.deleteWithCallbacks(id, (result) => resolve(result), (exception, _reason) => reject(exception));
-            });
-        }
-        deleteWithCallbacks(id, onSuccess, onFail) {
-            let url_ = this.baseUrl + "/api/Values/{id}";
-            if (id === undefined || id === null)
-                throw new Error("The parameter 'id' must be defined.");
-            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        /**
+         * @param userValue (optional)
+         * @return Success
+         */
+        update(userValue) {
+            let url_ = this.baseUrl + "/api/UserGrid/Update";
             url_ = url_.replace(/[?&]$/, "");
-            jQuery.ajax({
+            const content_ = JSON.stringify(userValue);
+            let options_ = {
+                data: content_,
+                method: "POST",
                 url: url_,
-                beforeSend: this.beforeSend,
-                type: "delete",
-                dataType: "text",
-                headers: {}
-            }).done((_data, _textStatus, xhr) => {
-                this.processDeleteWithCallbacks(url_, xhr, onSuccess, onFail);
-            }).fail((xhr) => {
-                this.processDeleteWithCallbacks(url_, xhr, onSuccess, onFail);
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            };
+            return this.instance.request(options_).then((_response) => {
+                return this.processUpdate(_response);
             });
         }
-        processDeleteWithCallbacks(_url, xhr, onSuccess, onFail) {
-            try {
-                let result = this.processDelete(xhr);
-                if (onSuccess !== undefined)
-                    onSuccess(result);
-            }
-            catch (e) {
-                if (onFail !== undefined)
-                    onFail(e, "http_service_exception");
-            }
-        }
-        processDelete(xhr) {
-            const status = xhr.status;
+        processUpdate(response) {
+            const status = response.status;
             let _headers = {};
+            if (response.headers && response.headers.forEach) {
+                response.headers.forEach((v, k) => _headers[k] = v);
+            }
+            ;
             if (status === 200) {
-                const _responseText = xhr.responseText;
-                return;
+                const _responseText = response.data;
+                return Promise.resolve(null);
             }
             else if (status !== 200 && status !== 204) {
-                const _responseText = xhr.responseText;
+                const _responseText = response.data;
                 return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-            return;
+            return Promise.resolve(null);
+        }
+        /**
+         * @param userValue (optional)
+         * @return Success
+         */
+        insert(userValue) {
+            let url_ = this.baseUrl + "/api/UserGrid/Insert";
+            url_ = url_.replace(/[?&]$/, "");
+            const content_ = JSON.stringify(userValue);
+            let options_ = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            };
+            return this.instance.request(options_).then((_response) => {
+                return this.processInsert(_response);
+            });
+        }
+        processInsert(response) {
+            const status = response.status;
+            let _headers = {};
+            if (response.headers && response.headers.forEach) {
+                response.headers.forEach((v, k) => _headers[k] = v);
+            }
+            ;
+            if (status === 200) {
+                const _responseText = response.data;
+                return Promise.resolve(null);
+            }
+            else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve(null);
+        }
+        /**
+         * @param user (optional)
+         * @return Success
+         */
+        remove(user) {
+            let url_ = this.baseUrl + "/api/UserGrid/Remove";
+            url_ = url_.replace(/[?&]$/, "");
+            const content_ = JSON.stringify(user);
+            let options_ = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            };
+            return this.instance.request(options_).then((_response) => {
+                return this.processRemove(_response);
+            });
+        }
+        processRemove(response) {
+            const status = response.status;
+            let _headers = {};
+            if (response.headers && response.headers.forEach) {
+                response.headers.forEach((v, k) => _headers[k] = v);
+            }
+            ;
+            if (status === 200) {
+                const _responseText = response.data;
+                return Promise.resolve(null);
+            }
+            else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve(null);
         }
     }
-    ApiClient.ValuesClient = ValuesClient;
+    ApiModule.UserGridClient = UserGridClient;
+    class IFormFile {
+        constructor(data) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        this[property] = data[property];
+                }
+            }
+        }
+        init(data) {
+            if (data) {
+                this.contentType = data["ContentType"] !== undefined ? data["ContentType"] : null;
+                this.contentDisposition = data["ContentDisposition"] !== undefined ? data["ContentDisposition"] : null;
+                if (data["Headers"]) {
+                    this.headers = {};
+                    for (let key in data["Headers"]) {
+                        if (data["Headers"].hasOwnProperty(key))
+                            this.headers[key] = data["Headers"][key] !== undefined ? data["Headers"][key] : [];
+                    }
+                }
+                this.length = data["Length"] !== undefined ? data["Length"] : null;
+                this.name = data["Name"] !== undefined ? data["Name"] : null;
+                this.fileName = data["FileName"] !== undefined ? data["FileName"] : null;
+            }
+        }
+        static fromJS(data) {
+            data = typeof data === 'object' ? data : {};
+            let result = new IFormFile();
+            result.init(data);
+            return result;
+        }
+        toJSON(data) {
+            data = typeof data === 'object' ? data : {};
+            data["ContentType"] = this.contentType !== undefined ? this.contentType : null;
+            data["ContentDisposition"] = this.contentDisposition !== undefined ? this.contentDisposition : null;
+            if (this.headers) {
+                data["Headers"] = {};
+                for (let key in this.headers) {
+                    if (this.headers.hasOwnProperty(key))
+                        data["Headers"][key] = this.headers[key] !== undefined ? this.headers[key] : null;
+                }
+            }
+            data["Length"] = this.length !== undefined ? this.length : null;
+            data["Name"] = this.name !== undefined ? this.name : null;
+            data["FileName"] = this.fileName !== undefined ? this.fileName : null;
+            return data;
+        }
+    }
+    ApiModule.IFormFile = IFormFile;
+    class UploadResult {
+        constructor(data) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        this[property] = data[property];
+                }
+            }
+        }
+        init(data) {
+            if (data) {
+                if (data["Errors"]) {
+                    this.errors = {};
+                    for (let key in data["Errors"]) {
+                        if (data["Errors"].hasOwnProperty(key))
+                            this.errors[key] = data["Errors"][key];
+                    }
+                }
+                this.message = data["Message"] !== undefined ? data["Message"] : null;
+                this.operation = data["Operation"] !== undefined ? data["Operation"] : null;
+            }
+        }
+        static fromJS(data) {
+            data = typeof data === 'object' ? data : {};
+            let result = new UploadResult();
+            result.init(data);
+            return result;
+        }
+        toJSON(data) {
+            data = typeof data === 'object' ? data : {};
+            if (this.errors) {
+                data["Errors"] = {};
+                for (let key in this.errors) {
+                    if (this.errors.hasOwnProperty(key))
+                        data["Errors"][key] = this.errors[key] !== undefined ? this.errors[key] : null;
+                }
+            }
+            data["Message"] = this.message !== undefined ? this.message : null;
+            data["Operation"] = this.operation !== undefined ? this.operation : null;
+            return data;
+        }
+    }
+    ApiModule.UploadResult = UploadResult;
+    class UserList {
+        constructor(data) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        this[property] = data[property];
+                }
+            }
+        }
+        init(data) {
+            if (data) {
+                if (data["Items"] && data["Items"].constructor === Array) {
+                    this.items = [];
+                    for (let item of data["Items"])
+                        this.items.push(AppUser.fromJS(item));
+                }
+                this.count = data["Count"] !== undefined ? data["Count"] : null;
+            }
+        }
+        static fromJS(data) {
+            data = typeof data === 'object' ? data : {};
+            let result = new UserList();
+            result.init(data);
+            return result;
+        }
+        toJSON(data) {
+            data = typeof data === 'object' ? data : {};
+            if (this.items && this.items.constructor === Array) {
+                data["Items"] = [];
+                for (let item of this.items)
+                    data["Items"].push(item.toJSON());
+            }
+            data["Count"] = this.count !== undefined ? this.count : null;
+            return data;
+        }
+    }
+    ApiModule.UserList = UserList;
+    class AppUser {
+        constructor(data) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        this[property] = data[property];
+                }
+            }
+        }
+        init(data) {
+            if (data) {
+                this.id = data["Id"] !== undefined ? data["Id"] : null;
+                this.email = data["Email"] !== undefined ? data["Email"] : null;
+                this.name = data["Name"] !== undefined ? data["Name"] : null;
+                this.role = data["Role"] !== undefined ? data["Role"] : null;
+            }
+        }
+        static fromJS(data) {
+            data = typeof data === 'object' ? data : {};
+            let result = new AppUser();
+            result.init(data);
+            return result;
+        }
+        toJSON(data) {
+            data = typeof data === 'object' ? data : {};
+            data["Id"] = this.id !== undefined ? this.id : null;
+            data["Email"] = this.email !== undefined ? this.email : null;
+            data["Name"] = this.name !== undefined ? this.name : null;
+            data["Role"] = this.role !== undefined ? this.role : null;
+            return data;
+        }
+    }
+    ApiModule.AppUser = AppUser;
+    class DataManagerRequest {
+        constructor(data) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        this[property] = data[property];
+                }
+            }
+        }
+        init(data) {
+            if (data) {
+                this.skip = data["skip"] !== undefined ? data["skip"] : null;
+                this.take = data["take"] !== undefined ? data["take"] : null;
+                this.antiForgery = data["antiForgery"] !== undefined ? data["antiForgery"] : null;
+                this.requiresCounts = data["requiresCounts"] !== undefined ? data["requiresCounts"] : null;
+                this.table = data["table"] !== undefined ? data["table"] : null;
+                if (data["group"] && data["group"].constructor === Array) {
+                    this.group = [];
+                    for (let item of data["group"])
+                        this.group.push(item);
+                }
+                if (data["select"] && data["select"].constructor === Array) {
+                    this.select = [];
+                    for (let item of data["select"])
+                        this.select.push(item);
+                }
+                if (data["expand"] && data["expand"].constructor === Array) {
+                    this.expand = [];
+                    for (let item of data["expand"])
+                        this.expand.push(item);
+                }
+                if (data["sorted"] && data["sorted"].constructor === Array) {
+                    this.sorted = [];
+                    for (let item of data["sorted"])
+                        this.sorted.push(Sort.fromJS(item));
+                }
+                if (data["search"] && data["search"].constructor === Array) {
+                    this.search = [];
+                    for (let item of data["search"])
+                        this.search.push(SearchFilter.fromJS(item));
+                }
+                if (data["where"] && data["where"].constructor === Array) {
+                    this.where = [];
+                    for (let item of data["where"])
+                        this.where.push(WhereFilter.fromJS(item));
+                }
+                if (data["aggregates"] && data["aggregates"].constructor === Array) {
+                    this.aggregates = [];
+                    for (let item of data["aggregates"])
+                        this.aggregates.push(Aggregate.fromJS(item));
+                }
+            }
+        }
+        static fromJS(data) {
+            data = typeof data === 'object' ? data : {};
+            let result = new DataManagerRequest();
+            result.init(data);
+            return result;
+        }
+        toJSON(data) {
+            data = typeof data === 'object' ? data : {};
+            data["skip"] = this.skip !== undefined ? this.skip : null;
+            data["take"] = this.take !== undefined ? this.take : null;
+            data["antiForgery"] = this.antiForgery !== undefined ? this.antiForgery : null;
+            data["requiresCounts"] = this.requiresCounts !== undefined ? this.requiresCounts : null;
+            data["table"] = this.table !== undefined ? this.table : null;
+            if (this.group && this.group.constructor === Array) {
+                data["group"] = [];
+                for (let item of this.group)
+                    data["group"].push(item);
+            }
+            if (this.select && this.select.constructor === Array) {
+                data["select"] = [];
+                for (let item of this.select)
+                    data["select"].push(item);
+            }
+            if (this.expand && this.expand.constructor === Array) {
+                data["expand"] = [];
+                for (let item of this.expand)
+                    data["expand"].push(item);
+            }
+            if (this.sorted && this.sorted.constructor === Array) {
+                data["sorted"] = [];
+                for (let item of this.sorted)
+                    data["sorted"].push(item.toJSON());
+            }
+            if (this.search && this.search.constructor === Array) {
+                data["search"] = [];
+                for (let item of this.search)
+                    data["search"].push(item.toJSON());
+            }
+            if (this.where && this.where.constructor === Array) {
+                data["where"] = [];
+                for (let item of this.where)
+                    data["where"].push(item.toJSON());
+            }
+            if (this.aggregates && this.aggregates.constructor === Array) {
+                data["aggregates"] = [];
+                for (let item of this.aggregates)
+                    data["aggregates"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+    ApiModule.DataManagerRequest = DataManagerRequest;
+    class Sort {
+        constructor(data) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        this[property] = data[property];
+                }
+            }
+        }
+        init(data) {
+            if (data) {
+                this.name = data["Name"] !== undefined ? data["Name"] : null;
+                this.direction = data["Direction"] !== undefined ? data["Direction"] : null;
+            }
+        }
+        static fromJS(data) {
+            data = typeof data === 'object' ? data : {};
+            let result = new Sort();
+            result.init(data);
+            return result;
+        }
+        toJSON(data) {
+            data = typeof data === 'object' ? data : {};
+            data["Name"] = this.name !== undefined ? this.name : null;
+            data["Direction"] = this.direction !== undefined ? this.direction : null;
+            return data;
+        }
+    }
+    ApiModule.Sort = Sort;
+    class SearchFilter {
+        constructor(data) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        this[property] = data[property];
+                }
+            }
+        }
+        init(data) {
+            if (data) {
+                if (data["Fields"] && data["Fields"].constructor === Array) {
+                    this.fields = [];
+                    for (let item of data["Fields"])
+                        this.fields.push(item);
+                }
+                this.key = data["Key"] !== undefined ? data["Key"] : null;
+                this.operator = data["Operator"] !== undefined ? data["Operator"] : null;
+            }
+        }
+        static fromJS(data) {
+            data = typeof data === 'object' ? data : {};
+            let result = new SearchFilter();
+            result.init(data);
+            return result;
+        }
+        toJSON(data) {
+            data = typeof data === 'object' ? data : {};
+            if (this.fields && this.fields.constructor === Array) {
+                data["Fields"] = [];
+                for (let item of this.fields)
+                    data["Fields"].push(item);
+            }
+            data["Key"] = this.key !== undefined ? this.key : null;
+            data["Operator"] = this.operator !== undefined ? this.operator : null;
+            return data;
+        }
+    }
+    ApiModule.SearchFilter = SearchFilter;
+    class WhereFilter {
+        constructor(data) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        this[property] = data[property];
+                }
+            }
+        }
+        init(data) {
+            if (data) {
+                this.field = data["Field"] !== undefined ? data["Field"] : null;
+                this.ignoreCase = data["IgnoreCase"] !== undefined ? data["IgnoreCase"] : null;
+                this.isComplex = data["IsComplex"] !== undefined ? data["IsComplex"] : null;
+                this.operator = data["Operator"] !== undefined ? data["Operator"] : null;
+                this.condition = data["Condition"] !== undefined ? data["Condition"] : null;
+                this.value = data["value"] !== undefined ? data["value"] : null;
+                if (data["predicates"] && data["predicates"].constructor === Array) {
+                    this.predicates = [];
+                    for (let item of data["predicates"])
+                        this.predicates.push(WhereFilter.fromJS(item));
+                }
+            }
+        }
+        static fromJS(data) {
+            data = typeof data === 'object' ? data : {};
+            let result = new WhereFilter();
+            result.init(data);
+            return result;
+        }
+        toJSON(data) {
+            data = typeof data === 'object' ? data : {};
+            data["Field"] = this.field !== undefined ? this.field : null;
+            data["IgnoreCase"] = this.ignoreCase !== undefined ? this.ignoreCase : null;
+            data["IsComplex"] = this.isComplex !== undefined ? this.isComplex : null;
+            data["Operator"] = this.operator !== undefined ? this.operator : null;
+            data["Condition"] = this.condition !== undefined ? this.condition : null;
+            data["value"] = this.value !== undefined ? this.value : null;
+            if (this.predicates && this.predicates.constructor === Array) {
+                data["predicates"] = [];
+                for (let item of this.predicates)
+                    data["predicates"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+    ApiModule.WhereFilter = WhereFilter;
+    class Aggregate {
+        constructor(data) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        this[property] = data[property];
+                }
+            }
+        }
+        init(data) {
+            if (data) {
+                this.field = data["Field"] !== undefined ? data["Field"] : null;
+                this.type = data["Type"] !== undefined ? data["Type"] : null;
+            }
+        }
+        static fromJS(data) {
+            data = typeof data === 'object' ? data : {};
+            let result = new Aggregate();
+            result.init(data);
+            return result;
+        }
+        toJSON(data) {
+            data = typeof data === 'object' ? data : {};
+            data["Field"] = this.field !== undefined ? this.field : null;
+            data["Type"] = this.type !== undefined ? this.type : null;
+            return data;
+        }
+    }
+    ApiModule.Aggregate = Aggregate;
+    class AppUserValue {
+        constructor(data) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        this[property] = data[property];
+                }
+            }
+        }
+        init(data) {
+            if (data) {
+                this.value = data["Value"] ? AppUser.fromJS(data["Value"]) : null;
+            }
+        }
+        static fromJS(data) {
+            data = typeof data === 'object' ? data : {};
+            let result = new AppUserValue();
+            result.init(data);
+            return result;
+        }
+        toJSON(data) {
+            data = typeof data === 'object' ? data : {};
+            data["Value"] = this.value ? this.value.toJSON() : null;
+            return data;
+        }
+    }
+    ApiModule.AppUserValue = AppUserValue;
+    class AppUserKey {
+        constructor(data) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        this[property] = data[property];
+                }
+            }
+        }
+        init(data) {
+            if (data) {
+                this.key = data["Key"] !== undefined ? data["Key"] : null;
+            }
+        }
+        static fromJS(data) {
+            data = typeof data === 'object' ? data : {};
+            let result = new AppUserKey();
+            result.init(data);
+            return result;
+        }
+        toJSON(data) {
+            data = typeof data === 'object' ? data : {};
+            data["Key"] = this.key !== undefined ? this.key : null;
+            return data;
+        }
+    }
+    ApiModule.AppUserKey = AppUserKey;
     class SwaggerException extends Error {
         constructor(message, status, response, headers, result) {
             super();
@@ -284,12 +830,12 @@ var ApiClient;
             return obj.isSwaggerException === true;
         }
     }
-    ApiClient.SwaggerException = SwaggerException;
+    ApiModule.SwaggerException = SwaggerException;
     function throwException(message, status, response, headers, result) {
         if (result !== null && result !== undefined)
             throw result;
         else
             throw new SwaggerException(message, status, response, headers, null);
     }
-})(ApiClient = exports.ApiClient || (exports.ApiClient = {}));
+})(ApiModule = exports.ApiModule || (exports.ApiModule = {}));
 //# sourceMappingURL=Client.g.js.map

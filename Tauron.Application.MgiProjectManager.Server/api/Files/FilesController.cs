@@ -32,13 +32,13 @@ namespace Tauron.Application.MgiProjectManager.Server.api.Files
         }
 
         [HttpPost]
-        public async Task<ActionResult<UploadResult>> UploadFilesAsync([FromForm]UploadedFile filesContent)
+        public async Task<ActionResult<UploadResult>> UploadFiles([FromForm]List<IFormFile> files)//([FromForm]UploadedFile filesContent)
         {
             Dictionary<string, string> errors = new Dictionary<string, string>();
             List<string> filesToAdd = new List<string>();
 
             long size = 0;
-            List<IFormFile> files = new List<IFormFile>(filesContent.Files ?? (IEnumerable<IFormFile>) Request.Form.Files);
+            files = new List<IFormFile>(files ?? (IEnumerable<IFormFile>) Request.Form.Files);
 
             string filedic = _baseSettingsManager.BaseSettings.FullSaveFilePath;
             if (!Directory.Exists(filedic))

@@ -1,0 +1,8 @@
+﻿@model Tauron.Application.MgiProjectManager.Server.Data.Api.UploadResult
+
+<ul>
+    @foreach (var err in Model.Errors)
+    {
+        <li class="text-danger">@($"{err.Key}--{err.Value}")</li>
+    }
+</ul>

@@ -1,11 +1,20 @@
 ﻿const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+//var webpack = require('webpack');
+
 
 module.exports = (env = {}, argv = {}) => {
 
 	const isProd = argv.mode === 'production';
+    let devtoolOption;
+    if (argv.mode === 'development') {
+        devtoolOption = 'eval-source-map';
+    } else {
+	    devtoolOption = false;
+    }
 
-	const config = {
+    const config = {
+        devtool: devtoolOption,
 		mode: argv.mode || 'development', // we default to development when no 'mode' arg is passed
 		entry: {
 			main: './js/main.js'
@@ -18,7 +27,7 @@ module.exports = (env = {}, argv = {}) => {
 		plugins: [
 			new MiniCssExtractPlugin({
 				filename: 'styles.css'
-			})
+            })
 		],
 		module: {
 			rules: [
@@ -31,7 +40,11 @@ module.exports = (env = {}, argv = {}) => {
 				}
 			]
 		}
-	}
+    }
+
+    //if (argv.mode === 'development') {
+    //    config.plugins.push(new webpack.SourceMapDevToolPlugin({}));
+    //}
 
 	return config;
 };

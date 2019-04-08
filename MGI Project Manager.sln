@@ -29,8 +29,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Diagramme", "Diagramme", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{8C5D9947-4E24-43D9-BF3F-0EC822048BEF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGIProjectManagerServer", "MGIProjectManagerServer\MGIProjectManagerServer.csproj", "{62DBE11C-0123-4EE3-AF80-93B6CD4645A3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{A6558C51-188E-49DD-876F-E7C7BF8ED6C5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.MgiProjectManager.Resources", "Tauron.Application.MgiProjectManager.Resources\Tauron.Application.MgiProjectManager.Resources.csproj", "{8E32D428-20CF-474E-B3EA-11B58EB2A20C}"
@@ -45,7 +43,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.MgiProjectManager.Server", "Tauron.Application.MgiProjectManager.Server\Tauron.Application.MgiProjectManager.Server.csproj", "{44BEB1C4-74C2-4FB8-B6AE-A8BDD53C6DAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.MgiProjectManager.Client", "Tauron.Application.MgiProjectManager.Client\Tauron.Application.MgiProjectManager.Client.csproj", "{A84080AF-A341-452B-A936-997193FBA1FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.MgiProjectManager.Client", "Tauron.Application.MgiProjectManager.Client\Tauron.Application.MgiProjectManager.Client.csproj", "{A84080AF-A341-452B-A936-997193FBA1FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,10 +71,6 @@ Global
 		{506D18F2-5B3F-44CC-B390-6FA0C49B4482}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{506D18F2-5B3F-44CC-B390-6FA0C49B4482}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{506D18F2-5B3F-44CC-B390-6FA0C49B4482}.Release|Any CPU.Build.0 = Release|Any CPU
-		{62DBE11C-0123-4EE3-AF80-93B6CD4645A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{62DBE11C-0123-4EE3-AF80-93B6CD4645A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{62DBE11C-0123-4EE3-AF80-93B6CD4645A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{62DBE11C-0123-4EE3-AF80-93B6CD4645A3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8E32D428-20CF-474E-B3EA-11B58EB2A20C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8E32D428-20CF-474E-B3EA-11B58EB2A20C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E32D428-20CF-474E-B3EA-11B58EB2A20C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -111,7 +105,6 @@ Global
 		{2C6E8030-C297-47EC-9DFF-55294CD0C9FE} = {5E9ED051-2D4E-4B29-8F4D-09B32E348E23}
 		{D4D088D2-22B9-49A8-B69F-5E07C0741D87} = {5E9ED051-2D4E-4B29-8F4D-09B32E348E23}
 		{506D18F2-5B3F-44CC-B390-6FA0C49B4482} = {5E9ED051-2D4E-4B29-8F4D-09B32E348E23}
-		{62DBE11C-0123-4EE3-AF80-93B6CD4645A3} = {8C5D9947-4E24-43D9-BF3F-0EC822048BEF}
 		{8E32D428-20CF-474E-B3EA-11B58EB2A20C} = {A6558C51-188E-49DD-876F-E7C7BF8ED6C5}
 		{BD1CF5B6-BF32-4E40-86B6-F377A80FBCE2} = {8C5D9947-4E24-43D9-BF3F-0EC822048BEF}
 		{60BF7676-1CD7-49EA-BC9A-924765E09690} = {8C5D9947-4E24-43D9-BF3F-0EC822048BEF}

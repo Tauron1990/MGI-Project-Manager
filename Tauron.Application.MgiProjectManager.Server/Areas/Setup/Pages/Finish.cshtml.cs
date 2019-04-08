@@ -4,6 +4,8 @@ using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Tauron.Application.MgiProjectManager.Server.Core;
+using Tauron.Application.MgiProjectManager.Server.Core.Setup;
 using Tauron.Application.MgiProjectManager.Server.Data.Core.Setup;
 using Tauron.Application.MgiProjectManager.Server.Data.Validators.Core;
 

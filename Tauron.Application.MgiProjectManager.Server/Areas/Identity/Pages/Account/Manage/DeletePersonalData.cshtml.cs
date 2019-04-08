@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Tauron.Application.MgiProjectManager.Resources.Web;
+using Tauron.Application.MgiProjectManager.Server.Core;
 
 namespace Tauron.Application.MgiProjectManager.Server.Areas.Identity.Pages.Account.Manage
 {

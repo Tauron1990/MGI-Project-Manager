@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Tauron.Application.MgiProjectManager.Server.Core.Setup;
 
 namespace Tauron.Application.MgiProjectManager.Server.Areas.Setup.Pages
 {

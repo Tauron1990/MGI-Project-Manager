@@ -13,13 +13,12 @@
     <script src="js/json2html.js"></script>*@
     
     <script>
-        var objects = null;
+        Admin.init();
 
         function onCreated() {
             var dialogObj = document.getElementById("ErrorList").ej2_instances[0];
             dialogObj.hide();
-            Admin.addDialog(dialogObj);
-            //addObject("ErrorList", dialogObj);
+            Admin.manager.dialog = dialogObj;
         }
     </script>
 }
