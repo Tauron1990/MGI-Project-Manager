@@ -1,0 +1,53 @@
+﻿@using Tauron.Application.MgiProjectManager.Server.Areas.Setup.Pages
+@{
+    var nextPage = SetupManageNavPages.GetNext(ViewContext);
+    var area = SetupManageNavPages.SelectArea(ViewContext);
+    var handler = SetupManageNavPages.GetHandler(ViewContext);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/dist/styles.css" asp-append-version="true" />
+    </environment>
+</head>
+<body style="height: 80vh">
+<header>
+    <h1 class="text-center m-5">Setup</h1>
+</header>
+<main role="main" class="container" style="height: 80%">
+    <div class="row h-100">
+        <div class="col-md-2 ">
+            <partial name="_SetupManageNav"/>
+        </div>
+        <div class="col-md-9 m-2">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            @RenderBody()
+        </div>
+    </div>
+    <div class="row align-self-end justify-content-end">
+        <button class="btn btn-primary" onclick="SetupFormCheck('@Html.Encode(Url.Page(nextPage, handler, new {area}))')">@ViewData[SetupManageNavPages.LabelName]</button>
+        @*<a class="btn btn-primary" asp-page="@SetupManageNavPages.GetNext(ViewContext)" asp-area="@SetupManageNavPages.SelectArea(ViewContext)"
+                   asp-page-handler="@SetupManageNavPages.GetHandler(ViewContext)" >@ViewData[SetupManageNavPages.LabelName]</a>*@
+    </div>
+</main>
+
+<footer class="border-top footer text-muted">
+    <div class="container">
+        &copy; 2019 - MGI Project Manager
+    </div>
+</footer>
+
+<environment names="Development">
+    <script src="~/dist/main.js"></script>
+</environment>
+<environment names="Staging,Production">
+    <script src="~/dist/main.js" asp-append-version="true"></script>
+</environment>
+@RenderSection("Scripts", false)
+</body>
+</html>

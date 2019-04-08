@@ -21,9 +21,10 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using Syncfusion.Licensing;
 using Tauron.Application.MgiProjectManager.BL;
-using Tauron.Application.MgiProjectManager.Data.Api;
+using Tauron.Application.MgiProjectManager.BL.Impl.Hubs;
 using Tauron.Application.MgiProjectManager.Resources.Web;
 using Tauron.Application.MgiProjectManager.Server.Data;
+using Tauron.Application.MgiProjectManager.Server.Data.Api;
 
 namespace MGIProjectManagerServer
 {
@@ -89,21 +90,9 @@ namespace MGIProjectManagerServer
 
             if (IsInDev) services.AddSwaggerDocument();
 
-            services.TryAddTransient<SimpleLoc, SimpleLoc>();
-            services.TryAddSingleton<IBaseSettingsManager, BaseSettingsManager>();
-            services.AddTransient<Func<ApplicationDbContext>>(provider =>
-            {
-                return () =>
-                {
-                    var scoper = provider.CreateScope();
+            services.AddSignalR();
 
-                    var context = scoper.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                    context.CurrentScope = scoper;
-                    return context;
-                };
-            });
-            services.AddSingleton(Configuration);
-
+            RegisterInternalServices(services);
             services.AddDBServices();
             services.AddBLServices();
         }
@@ -147,6 +136,7 @@ namespace MGIProjectManagerServer
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+            app.UseSignalR(builder => builder.MapHub<FilesHub>("/Hubs/Files"));
 
             app.UseMvc();
 
@@ -154,6 +144,24 @@ namespace MGIProjectManagerServer
             //{
             //    appBuilder.Run(context => Task.Run(() => context.Features.Get<IHttpMaxRequestBodySizeFeature>().MaxRequestBodySize = null));    
             //});
+        }
+
+        private void RegisterInternalServices(IServiceCollection services)
+        {
+            services.TryAddTransient<SimpleLoc, SimpleLoc>();
+            services.TryAddSingleton<IBaseSettingsManager, BaseSettingsManager>();
+            services.AddTransient<Func<ApplicationDbContext>>(provider =>
+            {
+                return () =>
+                {
+                    var scoper = provider.CreateScope();
+
+                    var context = scoper.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                    context.CurrentScope = scoper;
+                    return context;
+                };
+            });
+            services.AddSingleton(Configuration);
         }
     }
 }

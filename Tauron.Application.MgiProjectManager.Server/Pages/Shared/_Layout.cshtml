@@ -1,0 +1,50 @@
+﻿@using Tauron.Application.MgiProjectManager.Server.Core
+@inject SimpleLoc SimpleLoc
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Mgi File and Project Managment Software">
+    <meta name="author" content="Alexander Bachmaier">
+
+    <title>Mgi Project Manager - @ViewData["Title"]</title>
+
+    <link rel="icon" href="~/images/favicon.ico" type="image/x-icon">
+
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/dist/styles.css" asp-append-version="true" />
+    </environment>
+
+</head>
+
+<body>
+
+    @await Html.PartialAsync("_Header")
+
+    <div class="container">
+        <partial name="_CookieConsentPartial" />
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2019 - MGI Project Manager - <a asp-area="" asp-page="/Privacy">@SimpleLoc["_Layout_Link_Privacy"]</a>
+        </div>
+    </footer>
+
+    <environment names="Development">
+        <script src="~/dist/main.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/dist/main.js" asp-append-version="true"></script>
+    </environment>
+    @RenderSection("scripts", required: false)
+    @if (ViewData.TryGetValue(Consts.Ej2, out var value) && (bool)value)
+    {
+        <ejs-scripts></ejs-scripts>
+    }
+</body>
+</html>

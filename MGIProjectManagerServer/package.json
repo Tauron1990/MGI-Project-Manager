@@ -1,8 +1,21 @@
 {
+  "name": "mgiprojectmanager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bundle.js",
   "dependencies": {
-    "@syncfusion/ej2": "^17.1.38",
-    "@syncfusion/ej2-grids": "^17.1.38",
-    "@syncfusion/ej2-querybuilder": "^17.1.38",
-    "@types/jquery": "^3.3.29"
-  }
+    "@syncfusion/ej2": "^17.1.38"
+  },
+  "devDependencies": {
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "build": "webpack"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build":  "npx webpack" 
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

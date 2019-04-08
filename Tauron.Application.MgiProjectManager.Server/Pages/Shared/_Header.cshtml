@@ -1,0 +1,41 @@
+﻿@using Tauron.Application.MgiProjectManager.Server.Core
+@inject SimpleLoc SimpleLoc
+
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container">
+        <a class="navbar-brand" asp-area="" asp-page="/Index">
+            <img src="images/favicon.ico" width="30" />
+            MGI Project Manager
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+            <partial name="_LoginPartial" />
+            <div class="navbar dropdown">
+                <button class="btn btn-secondary btn-sm dropdown-toggle bg-transparent" style="color: black" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @SimpleLoc["_Layout_DropDown_Language"]
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" asp-page="/Index" asp-page-handler="SetCulture" asp-route-culture="de">Deutsch</a>
+                    <a class="dropdown-item" asp-page="/Index" asp-page-handler="SetCulture" asp-route-culture="en">English</a>
+                </div>
+            </div>
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-page="/Index">@SimpleLoc["_Layout_Link_Home"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="Admin" asp-page="/Index">@SimpleLoc["Shared_Layout_AdminLabel"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="File" asp-page="/Index">@SimpleLoc["Shared_Layout_FileLabel"]</a>
+                </li>
+                @*<li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">@SimpleLoc["_Layout_Link_Privacy"]</a>
+                    </li>*@
+            </ul>
+        </div>
+    </div>
+</nav>

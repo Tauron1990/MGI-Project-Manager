@@ -10,6 +10,8 @@ namespace Tauron.Application.MgiProjectManager.BL.Contracts
 
         Task<Operation[]> Execute(Operation op);
 
+        Task PostExecute(Operation op);
+
         Task<bool> Remove(Operation op);
 
         Task Error(Operation op, Exception e);

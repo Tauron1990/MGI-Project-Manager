@@ -9,10 +9,14 @@ namespace Tauron.Application.MgiProjectManager.BL.Contracts
 
         Task AddOperation(Operation op);
 
+        Task UpdateOperation(Operation op);
+
         Task<Operation> SearchOperation(string id);
 
         Task<IEnumerable<Operation>> ExecuteNext(Operation op);
 
         Task RemoveAction(Operation op);
+
+        Task CleanUpExpiryOperation();
     }
 }

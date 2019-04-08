@@ -19,8 +19,8 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\db\mgi.db" />
-    <Content Remove="wwwroot\js\Files\Index.ts" />
-    <Content Remove="wwwroot\js\Site.ts" />
+    <Content Remove="wwwroot\src\Files\Index.ts" />
+    <Content Remove="wwwroot\src\Site.ts" />
     <Content Remove="wwwroot\Settings.bin" />
   </ItemGroup>
 
@@ -35,13 +35,14 @@
 
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="8.2.0" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="8.2.0" />
+    <PackageReference Include="FluentValidation" Version="8.2.2" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.2.2" />
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
     <PackageReference Include="LigerShark.WebOptimizer.Core" Version="1.0.236" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="NSwag.AspNetCore" Version="12.1.0" />
@@ -53,7 +54,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Extern\Tauron.Application.Common\Tauron.Application.Common.csproj" />
     <ProjectReference Include="..\Tauron.Application.MgiProjectManager.BL\Tauron.Application.MgiProjectManager.BL.csproj" />
-    <ProjectReference Include="..\Tauron.Application.MgiProjectManager.Data\Tauron.Application.MgiProjectManager.Data.csproj" />
     <ProjectReference Include="..\Tauron.Application.MgiProjectManager.Resources\Tauron.Application.MgiProjectManager.Resources.csproj" />
     <ProjectReference Include="..\Tauron.Application.MgiProjectManager.Server.Data\Tauron.Application.MgiProjectManager.Server.Data.csproj" />
   </ItemGroup>
@@ -61,12 +61,30 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\db\" />
+    <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <TypeScriptCompile Include="wwwroot\js\Files\Index.ts" />
-    <TypeScriptCompile Include="wwwroot\js\Site.ts" />
+    <TypeScriptCompile Include="wwwroot\src\Files\Index.ts" />
+    <TypeScriptCompile Include="wwwroot\src\Site.ts" />
   </ItemGroup>
+
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
+    <TypeScriptModuleKind />
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
 
 </Project>

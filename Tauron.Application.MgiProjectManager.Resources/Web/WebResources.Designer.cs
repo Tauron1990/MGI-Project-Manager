@@ -502,6 +502,24 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Next ähnelt.
+        /// </summary>
+        public static string Files_Index_ErrorDialog_NexLabel {
+            get {
+                return ResourceManager.GetString("Files_Index_ErrorDialog_NexLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Upload Errors ähnelt.
+        /// </summary>
+        public static string Files_Index_ErrorDialog_Title {
+            get {
+                return ResourceManager.GetString("Files_Index_ErrorDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Drag-n-Drop files here. ähnelt.
         /// </summary>
         public static string Files_Index_FileLabel {

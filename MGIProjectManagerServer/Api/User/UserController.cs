@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Tauron.Application.MgiProjectManager.Data.Api;
+using Tauron.Application.MgiProjectManager.Server.Data.Api;
 
 namespace MGIProjectManagerServer.Api.User
 {

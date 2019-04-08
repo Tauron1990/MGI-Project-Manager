@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using MGIProjectManagerServer.Core;
 using MGIProjectManagerServer.Core.Setup;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Tauron.Application.MgiProjectManager.BL.Contracts;
-using Tauron.Application.MgiProjectManager.Data.Api;
 using Tauron.Application.MgiProjectManager.Resources.Web;
+using Tauron.Application.MgiProjectManager.Server.Data.Api;
 
 namespace MGIProjectManagerServer.Api.Files
 {
@@ -20,27 +20,25 @@ namespace MGIProjectManagerServer.Api.Files
     [DisableRequestSizeLimit]
     public class FilesController : ControllerBase
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IFileManager _fileManager;
         private readonly ILogger<FilesController> _logger;
         private readonly IBaseSettingsManager _baseSettingsManager;
 
-        public FilesController(IHostingEnvironment hostingEnvironment, IFileManager fileManager, ILogger<FilesController> logger, IBaseSettingsManager baseSettingsManager)
+        public FilesController(IFileManager fileManager, ILogger<FilesController> logger, IBaseSettingsManager baseSettingsManager)
         {
-            _hostingEnvironment = hostingEnvironment;
             _fileManager = fileManager;
             _logger = logger;
             _baseSettingsManager = baseSettingsManager;
         }
 
         [HttpPost]
-        public async Task<ActionResult<UploadResult>> UploadFilesAsync()
+        public async Task<ActionResult<UploadResult>> UploadFilesAsync([FromForm]UploadedFile filesContent)
         {
             Dictionary<string, string> errors = new Dictionary<string, string>();
             List<string> filesToAdd = new List<string>();
 
             long size = 0;
-            var files = Request.Form.Files;
+            List<IFormFile> files = new List<IFormFile>(filesContent.Files ?? (IEnumerable<IFormFile>) Request.Form.Files);
 
             string filedic = _baseSettingsManager.BaseSettings.FullSaveFilePath;
             if (!Directory.Exists(filedic))
@@ -48,10 +46,10 @@ namespace MGIProjectManagerServer.Api.Files
 
             foreach (var file in files)
             {
-                var canAdd = await _fileManager.CanAdd(file.FileName);
-                if (!canAdd.Ok)
+                var (ok, error) = await _fileManager.CanAdd(file.FileName);
+                if (!ok)
                 {
-                    errors[file.FileName] = canAdd.Error;
+                    errors[file.FileName] = error;
                     continue;
                 }
 
@@ -75,7 +73,7 @@ namespace MGIProjectManagerServer.Api.Files
                 }
             }
 
-            var result = await _fileManager.AddFiles(filesToAdd);
+            var result = await _fileManager.AddFiles(filesToAdd, User.Identity.Name);
 
             if (!result.Ok)
                 return BadRequest(result.Operation);

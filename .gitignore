@@ -267,3 +267,6 @@ __pycache__/
 
 CertificateGenerator/
 MGIProjectManagerServer/publish/
+MGIProjectManagerServer/Logs/
+Tauron.Application.MgiProjectManager.Server/Logs
+

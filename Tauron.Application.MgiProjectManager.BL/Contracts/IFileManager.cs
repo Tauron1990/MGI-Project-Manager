@@ -7,6 +7,8 @@ namespace Tauron.Application.MgiProjectManager.BL.Contracts
     {
         Task<(bool Ok, string Error)> CanAdd(string name);
 
-        Task<(bool Ok, string Operation)> AddFiles(IEnumerable<string> name);
+        Task<(bool Ok, string Operation)> AddFiles(IEnumerable<string> name, string userName);
+
+        Task DeleteFile(string path);
     }
 }

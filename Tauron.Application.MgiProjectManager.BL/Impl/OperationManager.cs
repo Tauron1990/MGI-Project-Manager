@@ -45,6 +45,37 @@ namespace Tauron.Application.MgiProjectManager.BL.Impl
             _operations.Add(op);
         }
 
+        public async Task UpdateOperation(Operation op)
+        {
+            await _operationRepository.UpdateOperation(op.OperationId, entity =>
+            {
+                var tempContext = entity.Context.ToList();
+                List<OperationContextEntity> contextEntities = new List<OperationContextEntity>();
+
+                foreach (var contextKey in op.OperationContext)
+                {
+                    var ent = tempContext.FirstOrDefault(e => e.Name == contextKey.Key);
+                    if (ent != null)
+                    {
+                        tempContext.Remove(ent);
+                        ent.Value = contextKey.Value;
+                        contextEntities.Add(ent);
+                    }
+                    else
+                    {
+                        contextEntities.Add(new OperationContextEntity
+                        {
+                            Name = contextKey.Key,
+                            Value = contextKey.Value
+                        });
+                    }
+                }
+
+                entity.Context.Clear();
+                entity.Context.AddRange(contextEntities);
+            });
+        }
+
         public Task<Operation> SearchOperation(string id) 
             => Task.FromResult(_operations.First(op => op.OperationId == id));
 
@@ -56,6 +87,7 @@ namespace Tauron.Application.MgiProjectManager.BL.Impl
             {
                 var operations = await action.Execute(op);
                 await _operationRepository.CompledOperation(op.OperationId);
+                await action.PostExecute(op);
                 await Task.WhenAll(operations.Select(AddOperation));
 
                 return operations;
@@ -76,6 +108,17 @@ namespace Tauron.Application.MgiProjectManager.BL.Impl
 
             if (result)
                 await _operationRepository.Remove(op.OperationId);
+        }
+
+        public async Task CleanUpExpiryOperation()
+        {
+            var currentDate = DateTime.Now;
+
+            foreach (var operation in Operations)
+            {
+                if (operation.ExpiryDate < currentDate)
+                    await RemoveAction(operation);
+            }
         }
 
         private OperationEntity CreateEntity(Operation op)

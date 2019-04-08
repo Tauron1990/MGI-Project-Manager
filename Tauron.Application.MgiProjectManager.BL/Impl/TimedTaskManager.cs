@@ -47,7 +47,7 @@ namespace Tauron.Application.MgiProjectManager.BL.Impl
             {
                 _logger.LogError(e, "Error Get TimeTask Entitys. Set List to null");
                 if (_list == null)
-                    _list = null;
+                    _list = new ConcurrentDictionary<string, TimedTaskEntity>();
             }
 
             foreach (var timeTask in _timeTasks.Where(NeedRun))

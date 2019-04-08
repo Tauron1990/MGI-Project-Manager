@@ -8,8 +8,12 @@
 @section Scripts
 {
     <script src="js/Files/Index.js"></script>
+    <script src=""></script>
     <script>
-        filesIndexUploadLabel = "@SimpleLoc["Files_Index_Upload_Label"]" + '<br/>';
+        resources = {};
+        resources["filesIndexUploadLabel"] = "@SimpleLoc["Files_Index_Upload_Label"]" + '<br/>';
+        operationId = "";
+        message = "";
 
         $(document).ready(function () {
             uploadInit();
@@ -18,9 +22,26 @@
 }
 
 <div class="container">
+    <div class="modal fade" tabindex="-1" role="dialog" id="UploadErrorsDialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@SimpleLoc["Files_Index_ErrorDialog_Title"]</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="UploadErrorsContent" class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">@SimpleLoc["Files_Index_ErrorDialog_NexLabel"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row justify-content-center">
         <form method="post" enctype="multipart/form-data" class="align-content-center w-50 m-5 text-center">
-            <div id="fileBasket" style="background: gainsboro;height: 400px" class="text-center">
+            <div id="fileBasket" style="background: gainsboro; height: 400px" class="text-center">
                 @SimpleLoc["Files_Index_FileLabel"]
             </div>
             <br/>
@@ -29,11 +50,13 @@
             </div>
         </form>
     </div>
-    <div id="uploadCompledBox" class="row">
-        <input class="m-1" type="checkbox" checked="checked"/>
-        <span class="m-1">Auto Next</span>
-        <span class="m-1">-- ID:</span>
-        <span class="m-1 text-info">@Guid.NewGuid().ToString("B")</span>
-        <input type="button"/>
-    </div>
+    @*<div id="uploadCompledBox" class="row flex-fill">
+        <form class="m-2 form-inline">
+            <input type="checkbox" checked="checked"/>
+        </form>
+        <span class="m-3">Auto Next</span>
+        <span class="m-3">-- ID:</span>
+        <span class="m-3 text-info">@Guid.NewGuid().ToString("B")</span>
+        <a class="m-2 btn btn-info active btn-sm" href="/Index">Weiter</a>
+    </div>*@
 </div>

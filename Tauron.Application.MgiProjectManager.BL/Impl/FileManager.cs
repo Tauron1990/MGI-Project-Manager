@@ -32,13 +32,15 @@ namespace Tauron.Application.MgiProjectManager.BL.Impl
             return Task.FromResult((Ok: ok, message));
         }
 
-        public async Task<(bool Ok, string Operation)> AddFiles(IEnumerable<string> name)
+        public async Task<(bool Ok, string Operation)> AddFiles(IEnumerable<string> name, string userName)
         {
             try
             {
                 string id = Guid.NewGuid().ToString("D");
                 var op = new Operation(id, OperationNames.MultiFileOperation, OperationNames.FileOperationType, name.ToDictionary(Path.GetFileName), 
                     DateTime.Now + TimeSpan.FromDays(3));
+                op.OperationContext["UserName"] = userName;
+
                 await _operationManager.AddOperation(op);
 
                 return (true, id);
@@ -49,6 +51,15 @@ namespace Tauron.Application.MgiProjectManager.BL.Impl
 
                 return (false, e.Message);
             }
+        }
+
+        public Task DeleteFile(string path)
+        {
+            _logger.LogInformation($"File Deleted: {path}");
+
+            File.Delete(path);
+
+            return Task.CompletedTask;
         }
     }
 }

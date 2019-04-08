@@ -9,11 +9,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Tauron.Application.MgiProjectManager.Data\Tauron.Application.MgiProjectManager.Data.csproj" />
     <ProjectReference Include="..\Tauron.Application.MgiProjectManager.Server.Data\Tauron.Application.MgiProjectManager.Server.Data.csproj" />
   </ItemGroup>
 

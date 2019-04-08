@@ -1,0 +1,43 @@
+﻿@page
+@using Tauron.Application.MgiProjectManager.Server.Areas.Setup.Pages
+@model SetFilePathModel
+@{
+    ViewData["Title"] = SimpleLoc["Setup_SetFilePath_Title"];
+    ViewData["ActivePage"] = SetupManageNavPages.SetFilePath;
+    ViewData[SetupManageNavPages.LabelName] = SimpleLoc["Setup_Layout_Button_Next"];
+}
+
+<div class="container">
+    <h4>@ViewData["Title"]</h4>
+    <p class="m-2">@SimpleLoc["Setup_SetFilePath_Summary"]</p>
+    <dl class="row m-2">
+
+        <dt class="col-sm-3" style="display: list-item">@SimpleLoc["Setup_SetFilePath_Emty_Title"]</dt>
+        <dd class="col-sm-9">@SimpleLoc["Setup_SetFilePath_Emty"]</dd>
+
+        <dt class="col-sm-3" style="display: list-item">%System%</dt>
+        <dd class="col-sm-9">@SimpleLoc["Setup_SetFilePath_System"]</dd>
+
+
+        <dt class="col-sm-3" style="display: list-item">%AppData%</dt>
+        <dd class="col-sm-9">@SimpleLoc["Setup_SetFilePath_AppData"]</dd>
+
+
+        <dt class="col-sm-3" style="display: list-item">%Roaming%</dt>
+        <dd class="col-sm-9">@SimpleLoc["Setup_SetFilePath_Roaming"]</dd>
+
+        <dt class="col-sm-3" style="display: list-item">%User%</dt>
+        <dd class="col-sm-9">@SimpleLoc["Setup_SetFilePath_User"]</dd>
+    </dl>
+
+    <div class="flex-row mt-5">
+        <form method="post" id="SetupForm" class="form-group">
+            <div class="form-group row">
+                <label asp-for="Model.Path" class="col-sm-2">@SimpleLoc["Setup_SetFilePath_FormLabel"]</label>
+            </div>
+            <div class="form-group row">
+                <input type="text" class="form-text flex-fill" asp-for="Model.Path"/>
+            </div>
+        </form>
+    </div>
+</div>

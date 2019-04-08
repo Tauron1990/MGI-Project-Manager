@@ -1,0 +1,12 @@
+﻿@page
+@using Tauron.Application.MgiProjectManager.Server.Core
+@model LockoutModel
+@inject SimpleLoc SimpleLoc
+@{
+    ViewData["Title"] = SimpleLoc["Lockout_Text_Title"];
+}
+
+<header>
+    <h1 class="text-danger">@ViewData["Title"]</h1>
+    <p class="text-danger">@SimpleLoc["Lockout_Text"]</p>
+</header>

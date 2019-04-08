@@ -453,4 +453,10 @@ Im falle von Wünschen und/oder Fehlern können hier Hilfe finden: </value>
   <data name="Api_FilesController_DisallowedExtension" xml:space="preserve">
     <value>Dieser Datei type wird nicht unterstützt. {0}</value>
   </data>
+  <data name="Files_Index_ErrorDialog_Title" xml:space="preserve">
+    <value>Upload Fehler</value>
+  </data>
+  <data name="Files_Index_ErrorDialog_NexLabel" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
 </root>

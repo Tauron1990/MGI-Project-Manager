@@ -44,9 +44,19 @@ namespace Tauron.Application.MgiProjectManager.Server.Data.Impl
         {
             using (var context = _contextBuilder())
             {
-                var ent = await context.Operations.FindAsync(id);
+                var ent = await context.Operations.Include(oe => oe.Context).FirstAsync(e => e.OperationId == id);
                 ent.Compled = true;
                 ent.Removed = true;
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateOperation(string id, Action<OperationEntity> update)
+        {
+            using (var context = _contextBuilder())
+            {
+                var op = await context.Operations.FindAsync(id);
+                update(op);
                 await context.SaveChangesAsync();
             }
         }

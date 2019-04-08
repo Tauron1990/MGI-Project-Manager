@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tauron.Application.MgiProjectManager.Server.Data.Entitys;
 
@@ -13,5 +14,7 @@ namespace Tauron.Application.MgiProjectManager.Server.Data.Repository
         Task CompledOperation(string id);
 
         Task Remove(string id);
+
+        Task UpdateOperation(string id, Action<OperationEntity> update);
     }
 }

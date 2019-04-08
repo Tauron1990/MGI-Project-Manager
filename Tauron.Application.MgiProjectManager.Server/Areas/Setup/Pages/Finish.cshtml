@@ -1,0 +1,26 @@
+﻿@page
+@using Tauron.Application.MgiProjectManager.Server.Areas.Setup.Pages
+@model FinishModel
+@{
+    ViewData["Title"] = SimpleLoc["Setup_Finish_Title"];
+    ViewData["ActivePage"] = SetupManageNavPages.Finish;
+    ViewData[SetupManageNavPages.LabelName] = SimpleLoc["Setup_Layout_Button_Finish"];
+}
+
+<div class="container">
+    <div class="row m-3">
+        @SimpleLoc["Setup_Finish_Summary"]
+    </div>
+    <div class="row">
+        <span class="col-3">@SimpleLoc["Setup_Finish_Span_UsernName"]</span>
+        <span class="col-9">@Model.BaseSettings.UserName</span>
+    </div>
+    <div class="row">
+        <span class="col-3">@SimpleLoc["Setup_Finsih_Span_Password"]</span>
+        <span class="col-9">@Model.BaseSettings.Password</span>
+    </div>
+    <div class="row">
+        <span class="col-3">@SimpleLoc["Setup_Finish_Span_FilePath"]</span>
+        <span class="col-9">@Model.BaseSettings.FullSaveFilePath</span>
+    </div>
+</div>

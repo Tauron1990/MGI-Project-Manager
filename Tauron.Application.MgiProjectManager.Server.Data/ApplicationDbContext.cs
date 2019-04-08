@@ -24,6 +24,8 @@ namespace Tauron.Application.MgiProjectManager.Server.Data
 
         public DbSet<OperationContextEntity> OperationContexts => Set<OperationContextEntity>();
 
+        public DbSet<FileEntity> Files => Set<FileEntity>();
+
         public override void Dispose()
         {
             if (!_scopeDisposed && CurrentScope != null)
