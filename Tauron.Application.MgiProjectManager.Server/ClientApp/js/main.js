@@ -10,6 +10,10 @@ import 'popper.js';
 import 'bootstrap';
 
 require("../ts/ApiClient/Client.g.js");
-require("../ts/Admin/main.js");
-require("../ts/File/Index.js");
-require("../ts/Identity/main.js");
+
+require("../ts/Admin/adminMain.js");
+
+require("../ts/File/FileIndex.js");
+require("../ts/File/FileLinking.js");
+
+require("../ts/Identity/identityMain.js");

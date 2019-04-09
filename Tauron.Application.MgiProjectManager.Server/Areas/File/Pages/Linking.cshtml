@@ -1,0 +1,13 @@
+﻿@page
+@model Tauron.Application.MgiProjectManager.Server.Areas.File.Pages.LinkingModel
+@{
+}
+
+@section scripts
+{
+    <script>
+        var operationId = '@Model.OperationId';
+
+        FileLinking.initOperation(operationId);
+    </script>
+}

@@ -58,4 +58,4 @@ var Admin;
     function actionFailure(args) { manager.actionFailure(args); }
     Admin.actionFailure = actionFailure;
 })(Admin = exports.Admin || (exports.Admin = {}));
-//# sourceMappingURL=main.js.map
+//# sourceMappingURL=adminMain.js.map

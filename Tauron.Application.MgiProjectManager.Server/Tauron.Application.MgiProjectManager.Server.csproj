@@ -9,9 +9,10 @@
 
   <ItemGroup>
     <None Remove="ClientApp\js\file.tsx" />
-    <None Remove="ClientApp\ts\Admin\main.ts" />
-    <None Remove="ClientApp\ts\File\Index.ts" />
-    <None Remove="ClientApp\ts\Identity\main.ts" />
+    <None Remove="ClientApp\ts\Admin\adminMain.ts" />
+    <None Remove="ClientApp\ts\File\FileIndex.ts" />
+    <None Remove="ClientApp\ts\File\FileLinking.ts" />
+    <None Remove="ClientApp\ts\Identity\identityMain.ts" />
   </ItemGroup>
   
   <ItemGroup>
@@ -40,10 +41,11 @@
   </ItemGroup>
   
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\ts\Admin\main.ts" />
+    <TypeScriptCompile Include="ClientApp\ts\Admin\adminMain.ts" />
     <TypeScriptCompile Include="ClientApp\ts\ApiClient\Client.g.ts" />
-    <TypeScriptCompile Include="ClientApp\ts\File\Index.ts" />
-    <TypeScriptCompile Include="ClientApp\ts\Identity\main.ts" />
+    <TypeScriptCompile Include="ClientApp\ts\File\FileIndex.ts" />
+    <TypeScriptCompile Include="ClientApp\ts\File\FileLinking.ts" />
+    <TypeScriptCompile Include="ClientApp\ts\Identity\identityMain.ts" />
   </ItemGroup>
   
   <ItemGroup>
