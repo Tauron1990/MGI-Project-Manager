@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Tauron.Application.MgiProjectManager.BL.Contracts
@@ -18,5 +19,7 @@ namespace Tauron.Application.MgiProjectManager.BL.Contracts
         Task RemoveAction(Operation op);
 
         Task CleanUpExpiryOperation();
+
+        Task<Operation[]> GetOperations(Predicate<Operation> filter);
     }
 }

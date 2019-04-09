@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -23,12 +24,14 @@ namespace Tauron.Application.MgiProjectManager.Server.api.Files
         private readonly IFileManager _fileManager;
         private readonly ILogger<FilesController> _logger;
         private readonly IBaseSettingsManager _baseSettingsManager;
+        private readonly IOperationManager _operationManager;
 
-        public FilesController(IFileManager fileManager, ILogger<FilesController> logger, IBaseSettingsManager baseSettingsManager)
+        public FilesController(IFileManager fileManager, ILogger<FilesController> logger, IBaseSettingsManager baseSettingsManager, IOperationManager operationManager)
         {
             _fileManager = fileManager;
             _logger = logger;
             _baseSettingsManager = baseSettingsManager;
+            _operationManager = operationManager;
         }
 
         [HttpPost]
@@ -81,6 +84,38 @@ namespace Tauron.Application.MgiProjectManager.Server.api.Files
             string message = string.Format(WebResources.Api_FilesController_SucessMessage, files.Count, size);
 
             return new UploadResult(errors, message, result.Operation);
+        }
+
+        [HttpPost]
+        [Route("GetUnAssociateFiles")]
+        public async Task<ActionResult<UnAssociateFile[]>> GetUnAssociateFiles(string opId)
+        {
+            var ops = await _operationManager.GetOperations(op =>
+            {
+                if (op.OperationType == OperationNames.LinkingFileOperation)
+                {
+                    if (string.IsNullOrWhiteSpace(opId)) return true;
+                    return op.OperationContext[OperationMeta.Linker.StartId] == opId;
+                }
+                return false;
+            });
+
+            return await ops.ToAsyncEnumerable().Select(op => new UnAssociateFile
+            {
+                FileName = op.OperationContext[OperationMeta.Linker.FileName],
+                OperationId = op.OperationId
+            }).ToArray();
+        }
+
+        [HttpPost]
+        [Route("PostAssociateFile")]
+        public async Task PostAssociateFile(AssociateFile file)
+        {
+            var op = await _operationManager.SearchOperation(file.OperationId);
+            op.OperationContext[OperationMeta.Linker.RequestedName] = file.JobNumber;
+
+            await _operationManager.UpdateOperation(op);
+            await _operationManager.ExecuteNext(op);
         }
     }
 }

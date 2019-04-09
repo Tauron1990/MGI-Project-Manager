@@ -39,7 +39,7 @@ namespace Tauron.Application.MgiProjectManager.BL.Impl
                 string id = Guid.NewGuid().ToString("D");
                 var op = new Operation(id, OperationNames.MultiFileOperation, OperationNames.FileOperationType, name.ToDictionary(Path.GetFileName), 
                     DateTime.Now + TimeSpan.FromDays(3));
-                op.OperationContext["UserName"] = userName;
+                op.OperationContext[OperationMeta.MultiFile.UserName] = userName;
 
                 await _operationManager.AddOperation(op);
 

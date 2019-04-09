@@ -1,7 +1,7 @@
 {
   "name": "clientapp",
   "version": "1.0.0",
-  "description": "",
+  "description": "Mgi Project Manager Client side scripts",
   "main": "webpack.config.js",
   "scripts": {
     "build": "webpack --mode development --progress",
@@ -9,8 +9,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "Mit",
   "dependencies": {
+    "@aspnet/signalr": "^1.1.4",
     "@syncfusion/ej2": "^17.1.38",
     "@types/jquery": "^3.3.29",
     "axios": "^0.18.0",

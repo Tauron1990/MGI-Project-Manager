@@ -121,6 +121,9 @@ namespace Tauron.Application.MgiProjectManager.BL.Impl
             }
         }
 
+        public async Task<Operation[]> GetOperations(Predicate<Operation> filter) 
+            => await _operations.ToAsyncEnumerable().Where(op => filter?.Invoke(op) ?? true).ToArray();
+
         private OperationEntity CreateEntity(Operation op)
         {
             return new OperationEntity
