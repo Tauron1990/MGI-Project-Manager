@@ -28,6 +28,7 @@ using Tauron.Application.MgiProjectManager.Server.Core.Setup;
 using Tauron.Application.MgiProjectManager.Server.Core.Setup.Impl;
 using Tauron.Application.MgiProjectManager.Server.Data;
 using Tauron.Application.MgiProjectManager.Server.Data.Api;
+using Tauron.Application.MgiProjectManager.Server.Data.Core;
 using Tauron.Application.MgiProjectManager.Server.Data.Migrations;
 
 namespace Tauron.Application.MgiProjectManager.Server

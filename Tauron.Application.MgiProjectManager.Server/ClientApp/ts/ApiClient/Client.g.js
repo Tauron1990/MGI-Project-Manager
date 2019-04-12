@@ -59,6 +59,87 @@ var ApiModule;
             }
             return Promise.resolve(null);
         }
+        /**
+         * @param opId (optional)
+         * @return Success
+         */
+        getUnAssociateFiles(opId) {
+            let url_ = this.baseUrl + "/api/Files/GetUnAssociateFiles?";
+            if (opId !== undefined)
+                url_ += "opId=" + encodeURIComponent("" + opId) + "&";
+            url_ = url_.replace(/[?&]$/, "");
+            let options_ = {
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Accept": "application/json"
+                }
+            };
+            return this.instance.request(options_).then((_response) => {
+                return this.processGetUnAssociateFiles(_response);
+            });
+        }
+        processGetUnAssociateFiles(response) {
+            const status = response.status;
+            let _headers = {};
+            if (response.headers && response.headers.forEach) {
+                response.headers.forEach((v, k) => _headers[k] = v);
+            }
+            ;
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200 = null;
+                let resultData200 = _responseText;
+                if (resultData200 && resultData200.constructor === Array) {
+                    result200 = [];
+                    for (let item of resultData200)
+                        result200.push(UnAssociateFile.fromJS(item));
+                }
+                return result200;
+            }
+            else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve(null);
+        }
+        /**
+         * @param file (optional)
+         * @return Success
+         */
+        postAssociateFile(file) {
+            let url_ = this.baseUrl + "/api/Files/PostAssociateFile";
+            url_ = url_.replace(/[?&]$/, "");
+            const content_ = JSON.stringify(file);
+            let options_ = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            };
+            return this.instance.request(options_).then((_response) => {
+                return this.processPostAssociateFile(_response);
+            });
+        }
+        processPostAssociateFile(response) {
+            const status = response.status;
+            let _headers = {};
+            if (response.headers && response.headers.forEach) {
+                response.headers.forEach((v, k) => _headers[k] = v);
+            }
+            ;
+            if (status === 200) {
+                const _responseText = response.data;
+                return Promise.resolve(null);
+            }
+            else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve(null);
+        }
     }
     ApiModule.FilesClient = FilesClient;
     class TemplateClient {
@@ -140,6 +221,47 @@ var ApiModule;
                 let result200 = null;
                 let resultData200 = _responseText;
                 result200 = resultData200 !== undefined ? resultData200 : null;
+                return result200;
+            }
+            else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve(null);
+        }
+        /**
+         * @param file (optional)
+         * @return Success
+         */
+        linkingFileTemplate(file) {
+            let url_ = this.baseUrl + "/api/Template/LinkingFileTemplate";
+            url_ = url_.replace(/[?&]$/, "");
+            const content_ = JSON.stringify(file);
+            let options_ = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                }
+            };
+            return this.instance.request(options_).then((_response) => {
+                return this.processLinkingFileTemplate(_response);
+            });
+        }
+        processLinkingFileTemplate(response) {
+            const status = response.status;
+            let _headers = {};
+            if (response.headers && response.headers.forEach) {
+                response.headers.forEach((v, k) => _headers[k] = v);
+            }
+            ;
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200 = null;
+                let resultData200 = _responseText;
+                result200 = resultData200 ? FileToNameTemplate.fromJS(resultData200) : new FileToNameTemplate();
                 return result200;
             }
             else if (status !== 200 && status !== 204) {
@@ -443,6 +565,105 @@ var ApiModule;
         }
     }
     ApiModule.UploadResult = UploadResult;
+    class UnAssociateFile {
+        constructor(data) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        this[property] = data[property];
+                }
+            }
+        }
+        init(data) {
+            if (data) {
+                this.operationId = data["OperationId"] !== undefined ? data["OperationId"] : null;
+                this.fileName = data["FileName"] !== undefined ? data["FileName"] : null;
+            }
+        }
+        static fromJS(data) {
+            data = typeof data === 'object' ? data : {};
+            let result = new UnAssociateFile();
+            result.init(data);
+            return result;
+        }
+        toJSON(data) {
+            data = typeof data === 'object' ? data : {};
+            data["OperationId"] = this.operationId !== undefined ? this.operationId : null;
+            data["FileName"] = this.fileName !== undefined ? this.fileName : null;
+            return data;
+        }
+    }
+    ApiModule.UnAssociateFile = UnAssociateFile;
+    class AssociateFile {
+        constructor(data) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        this[property] = data[property];
+                }
+            }
+        }
+        init(data) {
+            if (data) {
+                this.operationId = data["OperationId"] !== undefined ? data["OperationId"] : null;
+                this.jobNumber = data["JobNumber"] !== undefined ? data["JobNumber"] : null;
+            }
+        }
+        static fromJS(data) {
+            data = typeof data === 'object' ? data : {};
+            let result = new AssociateFile();
+            result.init(data);
+            return result;
+        }
+        toJSON(data) {
+            data = typeof data === 'object' ? data : {};
+            data["OperationId"] = this.operationId !== undefined ? this.operationId : null;
+            data["JobNumber"] = this.jobNumber !== undefined ? this.jobNumber : null;
+            return data;
+        }
+    }
+    ApiModule.AssociateFile = AssociateFile;
+    class FileToNameTemplate {
+        constructor(data) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        this[property] = data[property];
+                }
+            }
+        }
+        init(data) {
+            if (data) {
+                this.templateHtml = data["TemplateHtml"] !== undefined ? data["TemplateHtml"] : null;
+                this.submitButtonContent = data["SubmitButtonContent"] !== undefined ? data["SubmitButtonContent"] : null;
+                this.baseRowId = data["BaseRowId"] !== undefined ? data["BaseRowId"] : null;
+                this.errorCol = data["ErrorCol"] !== undefined ? data["ErrorCol"] : null;
+                this.errorColSpan = data["ErrorColSpan"] !== undefined ? data["ErrorColSpan"] : null;
+                this.fileNameSpan = data["FileNameSpan"] !== undefined ? data["FileNameSpan"] : null;
+                this.editorId = data["EditorId"] !== undefined ? data["EditorId"] : null;
+                this.submitButton = data["SubmitButton"] !== undefined ? data["SubmitButton"] : null;
+            }
+        }
+        static fromJS(data) {
+            data = typeof data === 'object' ? data : {};
+            let result = new FileToNameTemplate();
+            result.init(data);
+            return result;
+        }
+        toJSON(data) {
+            data = typeof data === 'object' ? data : {};
+            data["TemplateHtml"] = this.templateHtml !== undefined ? this.templateHtml : null;
+            data["SubmitButtonContent"] = this.submitButtonContent !== undefined ? this.submitButtonContent : null;
+            data["BaseRowId"] = this.baseRowId !== undefined ? this.baseRowId : null;
+            data["ErrorCol"] = this.errorCol !== undefined ? this.errorCol : null;
+            data["ErrorColSpan"] = this.errorColSpan !== undefined ? this.errorColSpan : null;
+            data["FileNameSpan"] = this.fileNameSpan !== undefined ? this.fileNameSpan : null;
+            data["EditorId"] = this.editorId !== undefined ? this.editorId : null;
+            data["SubmitButton"] = this.submitButton !== undefined ? this.submitButton : null;
+            return data;
+        }
+    }
+    ApiModule.FileToNameTemplate = FileToNameTemplate;
     class UserList {
         constructor(data) {
             if (data) {

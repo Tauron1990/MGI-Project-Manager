@@ -1,0 +1,51 @@
+<mat-card class="mat-elevation-z8" fxLayout="row wrap" fxLayout.lt-lg="column">
+  <div fxFlex="60">
+    <div class="chart-container">
+      <canvas baseChart width="600" height="250"
+              [datasets]="chartData"
+              [labels]="chartLabels"
+              [options]="chartOptions"
+              [colors]="chartColors"
+              [legend]="chartLegend"
+              [chartType]="chartType"
+              (chartHover)="chartHovered($event)"
+              (chartClick)="chartClicked($event)"></canvas>
+    </div>
+  </div>
+  <div fxFlex="40">
+    <table fxHide.xs class="demo-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th *ngFor="let label of chartLabels">{{label}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let d of chartData">
+          <th>{{d && d.label.split(' ').pop()}}</th>
+          <td *ngFor="let label of chartLabels; let j=index">{{d && d.data[j]}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <button mat-button color="primary" (click)="randomize();showMessage('Manual refresh!');">Refresh</button>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>insert_chart</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item [class.active]="chartType == 'bar'" (click)="changeChartType('bar')">Bar Chart</button>
+      <button mat-menu-item [class.active]="chartType == 'pie'" (click)="changeChartType('pie')">Pie Chart</button>
+      <button mat-menu-item [class.active]="chartType == 'doughnut'" (click)="changeChartType('doughnut')">Doughnut Chart</button>
+      <button mat-menu-item [class.active]="chartType == 'polarArea'" (click)="changeChartType('polarArea')">Polar Area Chart</button>
+      <button mat-menu-item [class.active]="chartType == 'radar'" (click)="changeChartType('radar')">Radar Chart</button>
+      <hr />
+      <button mat-menu-item [class.active]="chartType == 'line'" (click)="changeChartType('line')">Line Chart</button>
+    </mat-menu>
+
+    <button mat-icon-button (click)="showMessage('You\'ve clicked on the menu')">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <button mat-icon-button (click)="showDialog('Enter some value to do serious configuration...')">
+      <mat-icon>settings_application</mat-icon>
+    </button>
+  </div>
+</mat-card>

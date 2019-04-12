@@ -1,0 +1,20 @@
+<form #form="ngForm" [formGroup]="loginForm" (ngSubmit)="login()" novalidate class="app-login-form">
+  <mat-form-field class="app-validate">
+    <input matInput formControlName="userName" placeholder="Username" autocomplete="username" (keydown.enter)="enterKeyDown()">
+    <mat-error *ngIf="userName.hasError('required')">
+      User name is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="app-validate">
+    <input matInput formControlName="password" placeholder="Password" autocomplete="current-password" (keydown.enter)="enterKeyDown()" type="password">
+    <mat-error *ngIf="password.hasError('required')">
+      Password is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-checkbox formControlName="rememberMe" (keydown.enter)="enterKeyDown()">Remember me!</mat-checkbox>
+  <!-- https://github.com/angular/material2/issues/8798 -->
+  <div>&nbsp;</div>
+
+</form>

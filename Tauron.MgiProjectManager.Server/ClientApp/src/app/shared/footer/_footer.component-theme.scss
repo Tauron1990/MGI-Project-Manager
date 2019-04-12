@@ -1,0 +1,18 @@
+﻿@mixin footer-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    app-footer {
+        .app-footer {
+            background: mat-color($primary);
+            color: mat-color($primary, default-contrast);
+        }
+
+        .app-footer-link a {
+            color: mat-color($primary, default-contrast);
+        }
+    }
+}

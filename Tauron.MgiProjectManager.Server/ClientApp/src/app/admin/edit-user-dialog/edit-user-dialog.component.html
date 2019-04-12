@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>{{userName ? ('users.management.EditUser' | translate:userName) : ('users.management.NewUser' | translate)}}</h1>
+<div mat-dialog-content>
+    <user-editor [user]="data.user" [roles]="data.roles" isEditMode="true"></user-editor>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button (click)="editUser.save();" color="primary">Save</button>
+    <button mat-raised-button (click)="cancel()" color="warn">Cancel</button>
+</div>

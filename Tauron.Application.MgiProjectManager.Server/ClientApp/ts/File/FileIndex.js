@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("jquery");
-require("Bootstrap");
+//import "Bootstrap";
 const Client_g_1 = require("../ApiClient/Client.g");
 var FileIndex;
 (function (FileIndex) {

@@ -1,0 +1,45 @@
+<app-page-header title="Dashboard" icon="dashboard"></app-page-header>
+<div class="page-content">
+
+    <div [@fadeInOut]>
+        <mat-card class="mat-elevation-z8" *ngIf="!configurations.showDashboardStatistics && !configurations.showDashboardNotifications && !configurations.showDashboardTodo && !configurations.showDashboardBanner">
+            <h4>
+                {{'home.NoWidgets1' | translate}} <a routerLink="/settings" fragment="preferences"><i class="fa fa-sliders"></i> {{'settings.tab.Preferences' | translate}}</a>
+                {{'home.NoWidgets2' | translate}}
+            </h4>
+        </mat-card>
+
+        <div *ngIf="configurations.showDashboardStatistics" class="bottom-space">
+            <h4>{{'home.StatisticsTitle' | translate}}</h4>
+            <button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="configurations.showDashboardStatistics = false">
+                <mat-icon>close</mat-icon>
+            </button>
+            <div class="clearfix"></div>
+            <statistics-demo></statistics-demo>
+        </div>
+
+        <div *ngIf="configurations.showDashboardNotifications" class="bottom-space">
+            <button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="configurations.showDashboardNotifications = false">
+                <mat-icon>close</mat-icon>
+            </button>
+            <div class="clearfix"></div>
+            <notifications-viewer></notifications-viewer>
+        </div>
+
+        <div *ngIf="configurations.showDashboardTodo" class="bottom-space">
+            <button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="configurations.showDashboardTodo = false">
+                <mat-icon>close</mat-icon>
+            </button>
+            <div class="clearfix"></div>
+            <todo-demo></todo-demo>
+        </div>
+
+        <div *ngIf="configurations.showDashboardBanner">
+            <button mat-icon-button class="close" aria-label="Close" title="Close" style="float: right;" (click)="configurations.showDashboardBanner = false">
+                <mat-icon>close</mat-icon>
+            </button>
+            <div class="clearfix"></div>
+            <banner-demo></banner-demo>
+        </div>
+    </div>
+</div>

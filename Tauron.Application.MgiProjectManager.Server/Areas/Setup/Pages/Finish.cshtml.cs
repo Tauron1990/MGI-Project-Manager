@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Tauron.Application.MgiProjectManager.Server.Core;
 using Tauron.Application.MgiProjectManager.Server.Core.Setup;
+using Tauron.Application.MgiProjectManager.Server.Data.Core;
 using Tauron.Application.MgiProjectManager.Server.Data.Core.Setup;
 using Tauron.Application.MgiProjectManager.Server.Data.Validators.Core;
 
@@ -43,8 +45,10 @@ namespace Tauron.Application.MgiProjectManager.Server.Areas.Setup.Pages
             validator.ValidateAndThrow(_manager.BaseSettings);
             _manager.BaseSettings.IsConfigurated = true;
 
-            _manager.BaseSettings.FullSaveFilePath.CreateDirectoryIfNotExis();
+            string path = _manager.BaseSettings.FullSaveFilePath;
 
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
 
             foreach (var roleName in RoleNames.GetAllRoles())
             {

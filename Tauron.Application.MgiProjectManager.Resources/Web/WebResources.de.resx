@@ -459,4 +459,16 @@ Im falle von Wünschen und/oder Fehlern können hier Hilfe finden: </value>
   <data name="Files_Index_ErrorDialog_NexLabel" xml:space="preserve">
     <value>Weiter</value>
   </data>
+  <data name="LinkingFileOperation_Incompatible_JobName" xml:space="preserve">
+    <value>Der Job Name entspricht nicht den Vorgaben</value>
+  </data>
+  <data name="Template_FileToName_Submit" xml:space="preserve">
+    <value>Bestätigen</value>
+  </data>
+  <data name="Api_FilesController_NoOperationFound" xml:space="preserve">
+    <value>Die Operation wurde nicht gefunden.</value>
+  </data>
+  <data name="Api_FilesController_NotCompatible" xml:space="preserve">
+    <value>Die Operation ist nicht Kompatibel.</value>
+  </data>
 </root>

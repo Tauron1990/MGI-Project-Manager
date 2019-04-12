@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>{{'mainMenu.Login' | translate}}</h1>
+<div mat-dialog-content>
+  <app-login-control #loginControl [isModal]="true"></app-login-control>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="loginControl.login()">Login</button>
+  <button mat-raised-button (click)="onCancel()">Cancel</button>
+</div>

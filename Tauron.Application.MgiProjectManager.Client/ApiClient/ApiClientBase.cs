@@ -14,11 +14,10 @@ namespace Tauron.Application.MgiProjectManager.Client.ApiClient
         {
             var msg = new HttpRequestMessage();
 
-            if (RetrieveAuthorizationToken != null)
-            {
-                var token = await RetrieveAuthorizationToken();
-                msg.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            }
+            if (RetrieveAuthorizationToken == null) return msg;
+
+            var token = await RetrieveAuthorizationToken();
+            msg.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             return msg;
         }
     }

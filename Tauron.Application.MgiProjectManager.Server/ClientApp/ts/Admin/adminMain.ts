@@ -34,9 +34,9 @@ export module Admin {
                     .then(s => contentspan.html(s))
                     .catch(e => {
                         if (Array.isArray(e)) {
-                            contentspan.html(e[0]);
+                            contentspan.html(e[0].message);
                         } else {
-                            contentspan.html(e);
+                            contentspan.html(e.message);
                         }
                     });
 

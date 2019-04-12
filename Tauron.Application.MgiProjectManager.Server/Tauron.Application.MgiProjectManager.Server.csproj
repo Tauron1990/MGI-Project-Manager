@@ -34,7 +34,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Extern\Tauron.Application.Common\Tauron.Application.Common.csproj" />
     <ProjectReference Include="..\Tauron.Application.MgiProjectManager.BL\Tauron.Application.MgiProjectManager.BL.csproj" />
     <ProjectReference Include="..\Tauron.Application.MgiProjectManager.Resources\Tauron.Application.MgiProjectManager.Resources.csproj" />
     <ProjectReference Include="..\Tauron.Application.MgiProjectManager.Server.Data\Tauron.Application.MgiProjectManager.Server.Data.csproj" />

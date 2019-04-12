@@ -77,7 +77,7 @@ namespace Tauron.Application.MgiProjectManager.BL.Impl
         }
 
         public Task<Operation> SearchOperation(string id) 
-            => Task.FromResult(_operations.First(op => op.OperationId == id));
+            => Task.FromResult(_operations.FirstOrDefault(op => op.OperationId == id));
 
         public async Task<IEnumerable<Operation>> ExecuteNext(Operation op)
         {
@@ -94,7 +94,7 @@ namespace Tauron.Application.MgiProjectManager.BL.Impl
             }
             catch(Exception e)
             {
-                _logger.LogError(e, $"Error Runing Action: {action.Name}");
+                _logger.LogError(e, $"Error Running Action: {action.Name}");
                 await action.Error(op, e);
 
                 return new Operation[0];

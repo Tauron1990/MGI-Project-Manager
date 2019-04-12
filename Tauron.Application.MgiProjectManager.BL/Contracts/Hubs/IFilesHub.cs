@@ -6,6 +6,6 @@ namespace Tauron.Application.MgiProjectManager.BL.Contracts.Hubs
     {
         Task SendMultifileProcessingCompled(string guid, bool error, string msg);
 
-        Task SendLinkingCompled(string guid, bool ok);
+        Task SendLinkingCompled(string guid, bool ok, string msg);
     }
 }

@@ -1,0 +1,42 @@
+@import '../../node_modules/@angular/material/theming';
+
+@import './shared/footer/footer.component-theme.scss';
+@import './admin/role-editor/role-editor.component-theme.scss';
+
+
+@mixin clearfix() {
+  &:before,
+  &:after {
+    content: " ";
+    display: table;
+  }
+
+  &:after {
+    clear: both;
+  }
+}
+
+@mixin quickapp-pro-app-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+
+  mat-nav-list .mat-list-item.active {
+    background-color: mat-color($primary, 50);
+    color: mat-color($primary);
+  }
+
+  a {
+    text-decoration: none;
+    color: mat-color($primary, 400);
+  }
+
+  .clearfix {
+    @include clearfix();
+  }
+
+  @include footer-theme($theme);
+  @include role-editor-theme($theme);
+}

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using Tauron.Application.MgiProjectManager.Resources.Web;
 using Tauron.Application.MgiProjectManager.Server.Core;
 using Tauron.Application.MgiProjectManager.Server.Data.Api;
 
@@ -51,6 +52,25 @@ namespace Tauron.Application.MgiProjectManager.Server.api.Template
             try
             {
                 return await _renderer.RenderPartialToStringAsync(base.PartialView("Templates/UploadDialogError", result));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error Redering AdminDialogError");
+
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("LinkingFileTemplate")]
+        [ProducesErrorResponseType(typeof(string))]
+        public async Task<ActionResult<FileToNameTemplate>> GetLinkingFileTemplate(UnAssociateFile file)
+        {
+            try
+            {
+                var template = await _renderer.RenderPartialToStringAsync(base.PartialView("Templates/FileToNameElement", file));
+
+                return new FileToNameTemplate(file.OperationId, template, WebResources.Template_FileToName_Submit);
             }
             catch (Exception e)
             {

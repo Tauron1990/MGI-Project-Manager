@@ -10,6 +10,7 @@ using Syncfusion.EJ2.Base;
 using Tauron.Application.MgiProjectManager.Resources.Web;
 using Tauron.Application.MgiProjectManager.Server.Core;
 using Tauron.Application.MgiProjectManager.Server.Data.Api;
+using Tauron.Application.MgiProjectManager.Server.Data.Core;
 using Tauron.Application.MgiProjectManager.Server.Data.Validators;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

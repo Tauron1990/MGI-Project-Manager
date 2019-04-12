@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Tauron.Application.MgiProjectManager.BL.Contracts;
 using Tauron.Application.MgiProjectManager.Resources.Web;
-using Tauron.Application.MgiProjectManager.Server.Core;
 using Tauron.Application.MgiProjectManager.Server.Core.Setup;
 using Tauron.Application.MgiProjectManager.Server.Data.Api;
+using Tauron.Application.MgiProjectManager.Server.Data.Core;
 
 namespace Tauron.Application.MgiProjectManager.Server.api.Files
 {
@@ -92,12 +92,9 @@ namespace Tauron.Application.MgiProjectManager.Server.api.Files
         {
             var ops = await _operationManager.GetOperations(op =>
             {
-                if (op.OperationType == OperationNames.LinkingFileOperation)
-                {
-                    if (string.IsNullOrWhiteSpace(opId)) return true;
-                    return op.OperationContext[OperationMeta.Linker.StartId] == opId;
-                }
-                return false;
+                if (op.OperationType != OperationNames.LinkingFileOperation) return false;
+                if (string.IsNullOrWhiteSpace(opId)) return true;
+                return op.OperationContext[OperationMeta.Linker.StartId] == opId;
             });
 
             return await ops.ToAsyncEnumerable().Select(op => new UnAssociateFile
@@ -116,6 +113,34 @@ namespace Tauron.Application.MgiProjectManager.Server.api.Files
 
             await _operationManager.UpdateOperation(op);
             await _operationManager.ExecuteNext(op);
+        }
+
+        [HttpPost]
+        [Route("StartMultifile")]
+        [ProducesResponseType(200, Type = typeof(void))]
+        [ProducesErrorResponseType(typeof(string))]
+        public async Task<IActionResult> StartMultiFile(string id)
+        {
+            try
+            {
+                var op = await _operationManager.SearchOperation(id);
+                if (op == null)
+                    return BadRequest(WebResources.Api_FilesController_NoOperationFound);
+                if (op.OperationType != OperationNames.MultiFileOperation)
+                    return BadRequest(WebResources.Api_FilesController_NotCompatible);
+                var resultOps = await _operationManager.ExecuteNext(op);
+
+                foreach (var operation in resultOps)
+                    await _operationManager.AddOperation(operation);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error on start Multifile Operation: {id}");
+
+                return BadRequest(e.Message);
+            }
         }
     }
 }

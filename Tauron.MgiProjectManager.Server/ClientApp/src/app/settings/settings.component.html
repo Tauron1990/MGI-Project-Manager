@@ -1,0 +1,56 @@
+<app-page-header title="Settings" icon="settings"></app-page-header>
+
+<div [@fadeInOut] class="page-content">
+
+    <mat-accordion class="example-headers-align">
+        <mat-expansion-panel #profile hideToggle="true" (opened)="navigateToFragment('profile')">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{'settings.tab.Profile' | translate}}
+                </mat-panel-title>
+                <mat-panel-description>
+                    {{'settings.description.UserProfile' | translate}}
+                    <mat-icon>account_circle</mat-icon>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <user-editor #userProfile></user-editor>
+
+            <mat-action-row>
+                <button mat-raised-button *ngIf="!userProfile.isEditMode" (click)="userProfile.beginEdit()" color="primary">Edit</button>
+                <button mat-raised-button *ngIf="userProfile.isEditMode" (click)="userProfile.save()" color="primary" style="margin-right: 1em;">Save</button>
+                <button mat-raised-button *ngIf="userProfile.isEditMode" (click)="userProfile.cancel()" color="warn">Cancel</button>
+            </mat-action-row>
+
+        </mat-expansion-panel>
+
+        <mat-expansion-panel #preferences hideToggle="true" (opened)="navigateToFragment('preferences')">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{'settings.tab.Preferences' | translate}}
+                </mat-panel-title>
+                <mat-panel-description>
+                    {{'settings.description.UserPreferences' | translate}}
+                    <mat-icon>tune</mat-icon>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <user-preferences></user-preferences>
+
+            <mat-action-row>
+                <button mat-button (click)="userPreferences.reset()" 
+                        matTooltip="{{'preferences.ResetPreferencesHint' | translate}}"
+                        color="warn" style="margin-right: 1em;">{{'commands.Reset' | translate}}</button>
+                <button mat-raised-button (click)="userPreferences.save()"
+                        matTooltip="{{'preferences.SavePreferencesHint' | translate}}"
+                        color="primary" style="margin-right: 1em;">{{'commands.Save' | translate}}</button>
+                <button mat-raised-button (click)="userPreferences.reload()"
+                        matTooltip="{{'preferences.ReloadPreferencesHint' | translate}}"
+                        color="accent">{{'commands.Reload' | translate}}</button>
+            </mat-action-row>
+
+        </mat-expansion-panel>
+
+    </mat-accordion>
+
+</div>

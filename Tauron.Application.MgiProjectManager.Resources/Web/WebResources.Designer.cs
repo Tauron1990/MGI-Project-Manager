@@ -358,6 +358,24 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The operation was not found. ähnelt.
+        /// </summary>
+        public static string Api_FilesController_NoOperationFound {
+            get {
+                return ResourceManager.GetString("Api_FilesController_NoOperationFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Operation is not compatible. ähnelt.
+        /// </summary>
+        public static string Api_FilesController_NotCompatible {
+            get {
+                return ResourceManager.GetString("Api_FilesController_NotCompatible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die {0} file(s) / {1} bytes uploaded successfully! ähnelt.
         /// </summary>
         public static string Api_FilesController_SucessMessage {
@@ -624,6 +642,15 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         public static string Index_Header_Welcome {
             get {
                 return ResourceManager.GetString("Index_Header_Welcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The job name do not match the requirements. ähnelt.
+        /// </summary>
+        public static string LinkingFileOperation_Incompatible_JobName {
+            get {
+                return ResourceManager.GetString("LinkingFileOperation_Incompatible_JobName", resourceCulture);
             }
         }
         
@@ -1076,6 +1103,15 @@ namespace Tauron.Application.MgiProjectManager.Resources.Web {
         public static string Shared_Layout_FileLabel {
             get {
                 return ResourceManager.GetString("Shared_Layout_FileLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Submit ähnelt.
+        /// </summary>
+        public static string Template_FileToName_Submit {
+            get {
+                return ResourceManager.GetString("Template_FileToName_Submit", resourceCulture);
             }
         }
     }

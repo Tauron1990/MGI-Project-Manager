@@ -65,6 +65,130 @@ export class FilesClient {
         }
         return Promise.resolve<UploadResult>(<any>null);
     }
+
+    /**
+     * @param opId (optional) 
+     * @return Success
+     */
+    getUnAssociateFiles(opId: string | null | undefined): Promise<UnAssociateFile[]> {
+        let url_ = this.baseUrl + "/api/Files/GetUnAssociateFiles?";
+        if (opId !== undefined)
+            url_ += "opId=" + encodeURIComponent("" + opId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processGetUnAssociateFiles(_response);
+        });
+    }
+
+    protected processGetUnAssociateFiles(response: AxiosResponse): Promise<UnAssociateFile[]> {
+        const status = response.status;
+        let _headers: any = {}; 
+        if (response.headers && response.headers.forEach) { 
+            response.headers.forEach((v: any, k: any) => _headers[k] = v);
+        };
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(UnAssociateFile.fromJS(item));
+            }
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<UnAssociateFile[]>(<any>null);
+    }
+
+    /**
+     * @param file (optional) 
+     * @return Success
+     */
+    postAssociateFile(file: AssociateFile | null | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Files/PostAssociateFile";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(file);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json", 
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processPostAssociateFile(_response);
+        });
+    }
+
+    protected processPostAssociateFile(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; 
+        if (response.headers && response.headers.forEach) { 
+            response.headers.forEach((v: any, k: any) => _headers[k] = v);
+        };
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    startMultifile(id: string | null | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Files/StartMultifile?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processStartMultifile(_response);
+        });
+    }
+
+    protected processStartMultifile(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; 
+        if (response.headers && response.headers.forEach) { 
+            response.headers.forEach((v: any, k: any) => _headers[k] = v);
+        };
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
 }
 
 export class TemplateClient {
@@ -161,6 +285,50 @@ export class TemplateClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<string>(<any>null);
+    }
+
+    /**
+     * @param file (optional) 
+     * @return Success
+     */
+    linkingFileTemplate(file: UnAssociateFile | null | undefined): Promise<FileToNameTemplate> {
+        let url_ = this.baseUrl + "/api/Template/LinkingFileTemplate";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(file);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            }
+        };
+
+        return this.instance.request(options_).then((_response: AxiosResponse) => {
+            return this.processLinkingFileTemplate(_response);
+        });
+    }
+
+    protected processLinkingFileTemplate(response: AxiosResponse): Promise<FileToNameTemplate> {
+        const status = response.status;
+        let _headers: any = {}; 
+        if (response.headers && response.headers.forEach) { 
+            response.headers.forEach((v: any, k: any) => _headers[k] = v);
+        };
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = resultData200 ? FileToNameTemplate.fromJS(resultData200) : new FileToNameTemplate();
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<FileToNameTemplate>(<any>null);
     }
 }
 
@@ -507,6 +675,150 @@ export interface IUploadResult {
     errors?: { [key: string] : string; } | null;
     message?: string | null;
     operation?: string | null;
+}
+
+export class UnAssociateFile implements IUnAssociateFile {
+    operationId?: string | null;
+    fileName?: string | null;
+
+    constructor(data?: IUnAssociateFile) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.operationId = data["OperationId"] !== undefined ? data["OperationId"] : <any>null;
+            this.fileName = data["FileName"] !== undefined ? data["FileName"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UnAssociateFile {
+        data = typeof data === 'object' ? data : {};
+        let result = new UnAssociateFile();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["OperationId"] = this.operationId !== undefined ? this.operationId : <any>null;
+        data["FileName"] = this.fileName !== undefined ? this.fileName : <any>null;
+        return data; 
+    }
+}
+
+export interface IUnAssociateFile {
+    operationId?: string | null;
+    fileName?: string | null;
+}
+
+export class AssociateFile implements IAssociateFile {
+    operationId?: string | null;
+    jobNumber?: string | null;
+
+    constructor(data?: IAssociateFile) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.operationId = data["OperationId"] !== undefined ? data["OperationId"] : <any>null;
+            this.jobNumber = data["JobNumber"] !== undefined ? data["JobNumber"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): AssociateFile {
+        data = typeof data === 'object' ? data : {};
+        let result = new AssociateFile();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["OperationId"] = this.operationId !== undefined ? this.operationId : <any>null;
+        data["JobNumber"] = this.jobNumber !== undefined ? this.jobNumber : <any>null;
+        return data; 
+    }
+}
+
+export interface IAssociateFile {
+    operationId?: string | null;
+    jobNumber?: string | null;
+}
+
+export class FileToNameTemplate implements IFileToNameTemplate {
+    templateHtml?: string | null;
+    submitButtonContent?: string | null;
+    baseRowId?: string | null;
+    errorCol?: string | null;
+    errorColSpan?: string | null;
+    fileNameSpan?: string | null;
+    editorId?: string | null;
+    submitButton?: string | null;
+
+    constructor(data?: IFileToNameTemplate) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.templateHtml = data["TemplateHtml"] !== undefined ? data["TemplateHtml"] : <any>null;
+            this.submitButtonContent = data["SubmitButtonContent"] !== undefined ? data["SubmitButtonContent"] : <any>null;
+            this.baseRowId = data["BaseRowId"] !== undefined ? data["BaseRowId"] : <any>null;
+            this.errorCol = data["ErrorCol"] !== undefined ? data["ErrorCol"] : <any>null;
+            this.errorColSpan = data["ErrorColSpan"] !== undefined ? data["ErrorColSpan"] : <any>null;
+            this.fileNameSpan = data["FileNameSpan"] !== undefined ? data["FileNameSpan"] : <any>null;
+            this.editorId = data["EditorId"] !== undefined ? data["EditorId"] : <any>null;
+            this.submitButton = data["SubmitButton"] !== undefined ? data["SubmitButton"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): FileToNameTemplate {
+        data = typeof data === 'object' ? data : {};
+        let result = new FileToNameTemplate();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["TemplateHtml"] = this.templateHtml !== undefined ? this.templateHtml : <any>null;
+        data["SubmitButtonContent"] = this.submitButtonContent !== undefined ? this.submitButtonContent : <any>null;
+        data["BaseRowId"] = this.baseRowId !== undefined ? this.baseRowId : <any>null;
+        data["ErrorCol"] = this.errorCol !== undefined ? this.errorCol : <any>null;
+        data["ErrorColSpan"] = this.errorColSpan !== undefined ? this.errorColSpan : <any>null;
+        data["FileNameSpan"] = this.fileNameSpan !== undefined ? this.fileNameSpan : <any>null;
+        data["EditorId"] = this.editorId !== undefined ? this.editorId : <any>null;
+        data["SubmitButton"] = this.submitButton !== undefined ? this.submitButton : <any>null;
+        return data; 
+    }
+}
+
+export interface IFileToNameTemplate {
+    templateHtml?: string | null;
+    submitButtonContent?: string | null;
+    baseRowId?: string | null;
+    errorCol?: string | null;
+    errorColSpan?: string | null;
+    fileNameSpan?: string | null;
+    editorId?: string | null;
+    submitButton?: string | null;
 }
 
 export class UserList implements IUserList {

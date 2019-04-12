@@ -1,5 +1,5 @@
 ﻿import "jquery";
-import "Bootstrap";
+//import "Bootstrap";
 import { ApiModule } from "../ApiClient/Client.g";
 
 export module FileIndex {
@@ -71,9 +71,9 @@ export module FileIndex {
                 .catch(e => {
                     var text;
                     if (Array.isArray(e)) {
-                        text = e[0].toString();
+                        text = e[0].message.toString();
                     } else {
-                        text = e.toString();
+                        text = e.message.toString();
                     }
 
                     $("#fileBasket").html(text);

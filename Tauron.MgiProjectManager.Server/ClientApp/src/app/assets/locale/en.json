@@ -1,0 +1,197 @@
+{
+  "app": {
+    "Welcome": "Welcome",
+    "Notifications": "Notifications",
+    "New": "New"
+  },
+  "form": {
+    "ErrorCaption": "Missing Information",
+    "ErrorMessage": "You have entered invalid or incomplete information. Please correct any errors and try again."
+  },
+  "mainMenu": {
+    "Home": "Home",
+    "Appointments": "Appointments",
+    "Customers": "Customers",
+    "Products": "Products",
+    "Orders": "Orders",
+    "About": "About",
+    "Logout": "Logout",
+    "Login": "Login",
+    "Account": "Account",
+    "UserAccount": "User Account",
+    "Profile": "Profile",
+    "Settings": "Settings",
+    "Theme": "Select a theme"
+  },
+  "pageHeader": {
+    "Dashboard": "Dashboard",
+    "Customers": "Customers",
+    "Products": "Products",
+    "Orders": "Orders",
+    "NotFound": "Not Found",
+    "About": "About",
+    "Settings": "Settings",
+    "Users": "User Management",
+    "Roles": "Role Management"
+  },
+  "home": {
+    "NoWidgets1": "You have no widgets displayed. Goto",
+    "NoWidgets2": "to configure available widgets",
+    "StatisticsTitle": "Some Important Stuff"
+  },
+  "notFound": {
+    "404": "404",
+    "pageNotFound": "The page you are looking for does not exist",
+    "backToHome": "Back to home"
+  },
+  "settings": {
+    "tab": {
+      "Profile": "Profile",
+      "Preferences": "Preferences",
+      "Users": "Users",
+      "Roles": "Roles"
+    },
+    "description": {
+      "UserProfile": "Edit your profile",
+      "UserPreferences": "Edit your preferences",
+      "UserDepartments": "User Departments",
+      "UsersManagement": "Manage all users",
+      "RolesManagement": "Manage user roles"
+    }
+  },
+  "preferences": {
+    "SavePreferences": "Save preferences?",
+    "SavePreferencesHint": "Save preferences to the cloud (synchronized between devices)",
+    "ReloadPreferences": "Reload preferences?",
+    "ReloadPreferencesHint": "Load saved preferences (local changes are discarded)",
+    "ResetPreferences": "Reset default preferences?",
+    "ResetPreferencesHint": "Reset preferences to application defaults (local only)",
+    "Language": "Language",
+    "English": "English",
+    "French": "French",
+    "German": "German",
+    "Portuguese": "Portuguese",
+    "Arabic": "Arabic",
+    "Korean": "Korean",
+    "LanguageHint": "Select the preferred language for your account",
+    "HomePage": "Home Page",
+    "Dashboard": "Dashboard",
+    "Customers": "Customers",
+    "Products": "Products",
+    "Orders": "Orders",
+    "About": "About",
+    "Settings": "Settings",
+    "HomePageHint": "Select the default page to navigate to on login",
+    "DashboardStatistics": "Dashboard Statistics",
+    "DashboardStatisticsHint": "Show demo graph widget on the dashboard",
+    "DashboardNotifications": "Dashboard Notifications",
+    "DashboardNotificationsHint": "Show application notifications on the dashboard",
+    "DashboardTodo": "Dashboard Todo",
+    "DashboardTodoHint": "Shows demo todo widget on the dashboard",
+    "DashboardBanner": "Dashboard Banner",
+    "DashboardBannerHint": "Show demo information banner widget on the dashboard"
+  },
+  "users": {
+    "management": {
+      "Search": "Search for user",
+      "NewUser": "New User",
+      "Edit": "Edit User",
+      "Delete": "Delete User",
+      "EditUser": "Edit User \"{{name}}\"",
+      "Title": "Title",
+      "UserName": "User Name",
+      "FullName": "Full Name",
+      "Email": "Email",
+      "Roles": "Roles",
+      "PhoneNumber": "Phone Number"
+    },
+    "editor": {
+      "JobTitle": "Job Title",
+      "UserName": "User Name",
+      "UserNameRequired": "User name is required (minimum of 2 and maximum of 200 characters)",
+      "Password": "Password",
+      "PasswordHint": "Your password is required when changing user name",
+      "CurrentPasswordRequired": "Current password is required",
+      "Email": "Email",
+      "EmailRequired": "Email address is required (maximum of 200 characters)",
+      "InvalidEmail": "Specified email is not valid",
+      "ChangePassword": "Change Password",
+      "CurrentPassword": "Current Password",
+      "NewPassword": "New Password",
+      "NewPasswordRequired": "New password is required",
+      "NewPasswordRules": "The new password must contain at least: one uppercase letter, one lowercase letter, one digit, and any special character",
+      "ConfirmPassword": "Confirm Password",
+      "ConfirmationPasswordRequired": "Confirmation password is required",
+      "PasswordMismatch": "New password and confirmation password do not match",
+      "Roles": "Roles",
+      "FullName": " Full Name",
+      "RoleRequired": " Role is required",
+      "PhoneNumber": "Phone Number",
+      "Enabled": "Enabled",
+      "Unblock": "Unblock",
+      "Close": "Close",
+      "Edit": "Edit",
+      "Cancel": "Cancel",
+      "Save": "Save",
+      "Saving": "Saving..."
+    }
+  },
+  "roles": {
+    "management": {
+      "Search": "Search for role...",
+      "NewRole": "New Role",
+      "Edit": "Edit",
+      "Details": "Details",
+      "Delete": "Delete",
+      "RoleDetails": "Role Details \"{{name}}\"",
+      "EditRole": "Edit Role \"{{name}}\"",
+      "Name": "Name",
+      "Description": "Description",
+      "Users": "Users"
+    },
+    "editor": {
+      "Name": "Name:",
+      "Description": "Description:",
+      "RoleNameRequired": "Role name is required (minimum of 2 and maximum of 200 characters)",
+      "SelectAll": "Select all",
+      "SelectNone": "Select none",
+      "Close": "Close",
+      "Cancel": "Cancel",
+      "Save": "Save",
+      "Saving": "Saving..."
+    }
+  },
+  "notifications": {
+    "Delete": "Delete notification",
+    "Pin": "Pin notification",
+    "Date": "Date",
+    "Notification": "Notification"
+  },
+  "todoDemo": {
+    "management": {
+      "Search": "Search for task...",
+      "HideCompleted": "Hide Completed",
+      "ShowCompleted": "Show Completed",
+      "AddTask": "Add Task",
+      "Delete": "Delete task",
+      "Important": "Mark as important",
+      "Task": "Task",
+      "Description": "Description"
+    },
+    "editor": {
+      "NewTask": "New Task",
+      "Name": "Name",
+      "TaskNameRequired": "Task name is required",
+      "Description": "Description",
+      "Important": "Mark as important",
+      "AddTask": "Add Task"
+    }
+  },
+  "commands": {
+    "Edit": "Edit",
+    "Save": "Save",
+    "Cancel": "Cancel",
+    "Reset": "Reset",
+    "Reload": "Reload"
+  }
+}
