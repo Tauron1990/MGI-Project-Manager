@@ -24,6 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Diagramme", "Diagramme", "{
 		Diagramme\Fertig Stellen.png = Diagramme\Fertig Stellen.png
 		Diagramme\Gund Ablauf.png = Diagramme\Gund Ablauf.png
 		Help.txt = Help.txt
+		Ideen.txt = Ideen.txt
 		Diagramme\Produzieren.png = Diagramme\Produzieren.png
 	EndProjectSection
 EndProject

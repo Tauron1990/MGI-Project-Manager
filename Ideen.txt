@@ -1,0 +1,7 @@
+Backend> 
+	
+
+Jobmanagment>
+	Datensatz Lesen>
+		File Maker Datensaty export
+		Scanner OCR
