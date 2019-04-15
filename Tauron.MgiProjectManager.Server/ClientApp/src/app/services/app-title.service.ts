@@ -24,11 +24,13 @@ export class AppTitleService {
       map(_ => this.router.routerState.root),
       map(route => {
         while (route.firstChild) {
+// ReSharper disable once TsResolvedFromInaccessibleModule
           route = route.firstChild;
         }
 
         return route;
       }),
+// ReSharper disable once TsResolvedFromInaccessibleModule
       flatMap(route => route.data))
       .subscribe(data => {
         let title = data['title'];

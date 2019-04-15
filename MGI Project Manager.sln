@@ -49,7 +49,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Angular", "Angular", "{EF36
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.MgiProjectManager.Server", "Tauron.MgiProjectManager.Server\Tauron.MgiProjectManager.Server.csproj", "{9CCC9199-7B5B-4CDA-B47D-E041185B27DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.MgiProjectManager.Data", "Tauron.MgiProjectManager.Data\Tauron.MgiProjectManager.Data.csproj", "{D9E6E80E-0AAD-4F77-85F8-7554FFF98EC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.MgiProjectManager.Data", "Tauron.MgiProjectManager.Data\Tauron.MgiProjectManager.Data.csproj", "{D9E6E80E-0AAD-4F77-85F8-7554FFF98EC6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.MgiManager.Contracts", "Tauron.MgiManager.Contracts\Tauron.MgiManager.Contracts.csproj", "{F54CE690-5F0D-406C-AA12-9FCB1F6094FE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.MgiProjectManager.Helper", "Tauron.MgiProjectManager.Helper\Tauron.MgiProjectManager.Helper.csproj", "{0F2ABA57-ECE6-4ECD-960A-E478A202B04A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.MgiProjectManager.Dispatcher", "Tauron.MgiProjectManager.Dispatcher\Tauron.MgiProjectManager.Dispatcher.csproj", "{F308BCC9-479C-41ED-90FE-E225603BD547}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.MgiProjectManager.BL", "Tauron.MgiProjectManager.BL\Tauron.MgiProjectManager.BL.csproj", "{5E745FB8-AD1B-481E-B0AA-8DFDC82AE53B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,6 +117,22 @@ Global
 		{D9E6E80E-0AAD-4F77-85F8-7554FFF98EC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9E6E80E-0AAD-4F77-85F8-7554FFF98EC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9E6E80E-0AAD-4F77-85F8-7554FFF98EC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F54CE690-5F0D-406C-AA12-9FCB1F6094FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F54CE690-5F0D-406C-AA12-9FCB1F6094FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F54CE690-5F0D-406C-AA12-9FCB1F6094FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F54CE690-5F0D-406C-AA12-9FCB1F6094FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F2ABA57-ECE6-4ECD-960A-E478A202B04A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F2ABA57-ECE6-4ECD-960A-E478A202B04A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F2ABA57-ECE6-4ECD-960A-E478A202B04A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F2ABA57-ECE6-4ECD-960A-E478A202B04A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F308BCC9-479C-41ED-90FE-E225603BD547}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F308BCC9-479C-41ED-90FE-E225603BD547}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F308BCC9-479C-41ED-90FE-E225603BD547}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F308BCC9-479C-41ED-90FE-E225603BD547}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E745FB8-AD1B-481E-B0AA-8DFDC82AE53B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E745FB8-AD1B-481E-B0AA-8DFDC82AE53B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E745FB8-AD1B-481E-B0AA-8DFDC82AE53B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E745FB8-AD1B-481E-B0AA-8DFDC82AE53B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -128,6 +152,10 @@ Global
 		{EF367C46-2ED7-429B-8B16-125771E85A07} = {8C5D9947-4E24-43D9-BF3F-0EC822048BEF}
 		{9CCC9199-7B5B-4CDA-B47D-E041185B27DA} = {EF367C46-2ED7-429B-8B16-125771E85A07}
 		{D9E6E80E-0AAD-4F77-85F8-7554FFF98EC6} = {EF367C46-2ED7-429B-8B16-125771E85A07}
+		{F54CE690-5F0D-406C-AA12-9FCB1F6094FE} = {EF367C46-2ED7-429B-8B16-125771E85A07}
+		{0F2ABA57-ECE6-4ECD-960A-E478A202B04A} = {EF367C46-2ED7-429B-8B16-125771E85A07}
+		{F308BCC9-479C-41ED-90FE-E225603BD547} = {EF367C46-2ED7-429B-8B16-125771E85A07}
+		{5E745FB8-AD1B-481E-B0AA-8DFDC82AE53B} = {EF367C46-2ED7-429B-8B16-125771E85A07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}

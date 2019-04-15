@@ -80,7 +80,7 @@ export class RoleEditorComponent {
 
     } else {
       this.accountService.updateRole(editedRole).subscribe(
-        response => this.saveSuccessHelper(editedRole),
+        () => this.saveSuccessHelper(editedRole),
         error => this.saveFailedHelper(error));
     }
   }

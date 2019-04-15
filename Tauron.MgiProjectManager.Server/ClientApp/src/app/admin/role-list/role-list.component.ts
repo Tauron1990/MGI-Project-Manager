@@ -39,7 +39,7 @@ export class RoleListComponent implements OnInit, AfterViewInit {
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {
-    this.dataSource = new MatTableDataSource();
+    this.dataSource = new MatTableDataSource<Role>();
   }
 
   get canManageRoles() {

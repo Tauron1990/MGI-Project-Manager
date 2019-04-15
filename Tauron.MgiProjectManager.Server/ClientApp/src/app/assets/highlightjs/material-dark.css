@@ -8,6 +8,7 @@ Orginal Style from https://github.com/Kelbster/highlightjs-material-dark-theme  
   background: #2B2B2D;
   color: #CDD3D8;
   -webkit-font-smoothing: antialiased;
+  /* ReSharper disable once CssNotResolved */
   text-size-adjust: 100%;
   font: 300 100%/1 Roboto Mono,monospace;
   font-size: 14px;

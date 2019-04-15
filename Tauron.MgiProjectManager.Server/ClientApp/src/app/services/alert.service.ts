@@ -83,47 +83,45 @@ export class AlertService {
       }
     } else {
       if (error) {
-        const msg = `Severity: "${MessageSeverity[severity]}", Summary: "${data}", Detail: "${separatorOrDetail}", Error: "${Utilities.safeStringify(error)}"`;
+        const msg =
+          `Severity: "${MessageSeverity[severity]}", Summary: "${data}", Detail: "${separatorOrDetail}", Error: "${
+            Utilities.safeStringify(error)}"`;
 
         switch (severity) {
-          case MessageSeverity.default:
-            this.logInfo(msg);
-            break;
-          case MessageSeverity.info:
-            this.logInfo(msg);
-            break;
-          case MessageSeverity.success:
-            this.logMessage(msg);
-            break;
-          case MessageSeverity.error:
-            this.logError(msg);
-            break;
-          case MessageSeverity.warn:
-            this.logWarning(msg);
-            break;
-          case MessageSeverity.wait:
-            this.logTrace(msg);
-            break;
+        case MessageSeverity.default:
+          this.logInfo(msg);
+          break;
+        case MessageSeverity.info:
+          this.logInfo(msg);
+          break;
+        case MessageSeverity.success:
+          this.logMessage(msg);
+          break;
+        case MessageSeverity.error:
+          this.logError(msg);
+          break;
+        case MessageSeverity.warn:
+          this.logWarning(msg);
+          break;
+        case MessageSeverity.wait:
+          this.logTrace(msg);
+          break;
         }
+      } else {
+        this.showMessageHelper(String(data), separatorOrDetail, severity, true, onRemove);
       }
-
-      this.showMessageHelper(data, separatorOrDetail, severity, true, onRemove);
     }
   }
 
   private showMessageHelper(summary: string, detail: string, severity: MessageSeverity, isSticky: boolean, onRemove?: () => any) {
 
-    const alertCommand: AlertCommand = {
-      operation: isSticky ? 'add_sticky' : 'add',
-      message: { severity: severity, summary: summary, detail: detail },
-      onRemove: onRemove
-    };
+    const alertCommand: AlertCommand = new AlertCommand(isSticky ? 'add_sticky' : 'add', new AlertMessage(severity, summary, detail), onRemove);
 
     this.messages.next(alertCommand);
   }
 
   resetStickyMessage() {
-    this.messages.next({ operation: 'clear' });
+    this.messages.next(new AlertCommand('clear'));
   }
 
   startLoadingMessage(message = 'Loading...', caption = '') {

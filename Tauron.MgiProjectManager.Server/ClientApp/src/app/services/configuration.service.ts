@@ -231,7 +231,7 @@ export class ConfigurationService {
     const language = this.translationService.useBrowserLanguage();
 
     if (language) {
-      this._language = language;
+      this._language = String(language);
     } else {
       this._language = this.translationService.useDefaultLangage();
     }

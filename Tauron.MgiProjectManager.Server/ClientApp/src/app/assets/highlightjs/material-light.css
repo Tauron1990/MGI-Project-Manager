@@ -6,6 +6,7 @@
   background: #FAFAFA;
   color: #37474f;
   -webkit-font-smoothing: antialiased;
+  /* ReSharper disable once CssNotResolved */
   text-size-adjust: 100%;
   font: 300 100%/1 Roboto Mono,monospace;
   font-size: 14px;

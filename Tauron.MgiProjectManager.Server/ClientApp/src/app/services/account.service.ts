@@ -116,10 +116,10 @@ export class AccountService {
       this.accountEndpoint.getPermissionsEndpoint<Permission[]>());
   }
 
-  updateRole(role: Role) {
+  updateRole(role: Role) : Observable<any> {
     if (role.id) {
       return this.accountEndpoint.getUpdateRoleEndpoint(role, role.id).pipe(
-        tap(data => this.onRolesChanged([role], AccountService.roleModifiedOperation)));
+        tap(() => this.onRolesChanged([role], AccountService.roleModifiedOperation)));
     } else {
       return this.accountEndpoint.getRoleByRoleNameEndpoint<Role>(role.name).pipe(
         mergeMap(foundRole => {
