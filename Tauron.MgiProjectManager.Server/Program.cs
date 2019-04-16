@@ -22,7 +22,7 @@ namespace Tauron.MgiProjectManager.Server
                 try
                 {
                     var databaseInitializer = services.GetRequiredService<IDatabaseInitializer>();
-                    databaseInitializer.SeedAsync().Wait();
+                    databaseInitializer.SeedAsync(true).Wait();
                 }
                 catch (Exception ex)
                 {

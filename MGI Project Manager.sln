@@ -56,9 +56,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.MgiManager.Contracts
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.MgiProjectManager.Helper", "Tauron.MgiProjectManager.Helper\Tauron.MgiProjectManager.Helper.csproj", "{0F2ABA57-ECE6-4ECD-960A-E478A202B04A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.MgiProjectManager.Dispatcher", "Tauron.MgiProjectManager.Dispatcher\Tauron.MgiProjectManager.Dispatcher.csproj", "{F308BCC9-479C-41ED-90FE-E225603BD547}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.MgiProjectManager.Dispatcher", "Tauron.MgiProjectManager.Dispatcher\Tauron.MgiProjectManager.Dispatcher.csproj", "{F308BCC9-479C-41ED-90FE-E225603BD547}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.MgiProjectManager.BL", "Tauron.MgiProjectManager.BL\Tauron.MgiProjectManager.BL.csproj", "{5E745FB8-AD1B-481E-B0AA-8DFDC82AE53B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.MgiProjectManager.BL", "Tauron.MgiProjectManager.BL\Tauron.MgiProjectManager.BL.csproj", "{5E745FB8-AD1B-481E-B0AA-8DFDC82AE53B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D533528D-054F-4260-8FB1-64C93F837B01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerTest", "ServerTest\ServerTest.csproj", "{F25E883C-0E8C-49F3-8E2B-69F523ADEDE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -134,6 +138,10 @@ Global
 		{5E745FB8-AD1B-481E-B0AA-8DFDC82AE53B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E745FB8-AD1B-481E-B0AA-8DFDC82AE53B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E745FB8-AD1B-481E-B0AA-8DFDC82AE53B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F25E883C-0E8C-49F3-8E2B-69F523ADEDE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F25E883C-0E8C-49F3-8E2B-69F523ADEDE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F25E883C-0E8C-49F3-8E2B-69F523ADEDE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F25E883C-0E8C-49F3-8E2B-69F523ADEDE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -157,6 +165,8 @@ Global
 		{0F2ABA57-ECE6-4ECD-960A-E478A202B04A} = {EF367C46-2ED7-429B-8B16-125771E85A07}
 		{F308BCC9-479C-41ED-90FE-E225603BD547} = {EF367C46-2ED7-429B-8B16-125771E85A07}
 		{5E745FB8-AD1B-481E-B0AA-8DFDC82AE53B} = {EF367C46-2ED7-429B-8B16-125771E85A07}
+		{D533528D-054F-4260-8FB1-64C93F837B01} = {EF367C46-2ED7-429B-8B16-125771E85A07}
+		{F25E883C-0E8C-49F3-8E2B-69F523ADEDE3} = {D533528D-054F-4260-8FB1-64C93F837B01}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}

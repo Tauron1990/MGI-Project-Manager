@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Tauron.MgiProjectManager.Data.Contexts;
 using Tauron.MgiProjectManager.Data.Core;
@@ -39,9 +37,14 @@ namespace Tauron.MgiProjectManager.Data
             _configurationDbContext = configurationDbContext;
         }
 
-        public async Task SeedAsync()
+        public async Task SeedAsync(bool migrate)
         {
-            await _context.Database.MigrateAsync().ConfigureAwait(false);
+            if (migrate)
+            {
+                await _context.Database.MigrateAsync().ConfigureAwait(false);
+                await _persistedGrantDbContext.Database.MigrateAsync();
+                await _configurationDbContext.Database.MigrateAsync();
+            }
 
             if (!await _context.Users.AnyAsync())
             {
@@ -53,7 +56,7 @@ namespace Tauron.MgiProjectManager.Data
                 await EnsureRoleAsync(adminRoleName, "Administrator", ApplicationPermissions.GetAllPermissionValues());
                 //await EnsureRoleAsync(userRoleName, "Default user", new string[] { });
 
-                await CreateUserAsync("Admin", "Admin", "Inbuilt Administrator", "admin@ebenmonney.com", "+1 (123) 000-0000", new [] {adminRoleName});
+                await CreateUserAsync("Admin", "Admin", "Inbuilt Administrator", "admin@gmail.com", "+1 (123) 000-0000", new [] {adminRoleName});
                 //await CreateUserAsync("user", "tempP@ss123", "Inbuilt Standard User", "user@ebenmonney.com", "+1 (123) 000-0001", new [] {userRoleName});
 
                 _logger.LogInformation("Inbuilt account generation completed");
@@ -61,9 +64,6 @@ namespace Tauron.MgiProjectManager.Data
 
             await _context.SaveChangesAsync();
 
-            await _persistedGrantDbContext.Database.MigrateAsync();
-            await _configurationDbContext.Database.MigrateAsync();
-            
             if (!await _configurationDbContext.Clients.AnyAsync())
                 await _configurationDbContext.Clients.AddRangeAsync(IdentityServerConfig.GetClients().Select(m => m.ToEntity()));
 

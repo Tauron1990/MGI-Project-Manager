@@ -7,6 +7,8 @@ namespace Tauron.MgiProjectManager.Data.Contexts
     {
         public DbSet<FileBlobInfoEntity> FileInfos => Set<FileBlobInfoEntity>();
 
+        public DbSet<FileBlobEntity> Blobs => Set<FileBlobEntity>();
+
         public FilesDbContext(DbContextOptions options) : base(options)
         {
 

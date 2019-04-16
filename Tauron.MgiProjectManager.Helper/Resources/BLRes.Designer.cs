@@ -70,6 +70,15 @@ namespace Tauron.MgiProjectManager.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The file {0} could not be added or is already contained. ähnelt.
+        /// </summary>
+        public static string Api_FilesController_FileNotAddable {
+            get {
+                return ResourceManager.GetString("Api_FilesController_FileNotAddable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The operation was not found. ähnelt.
         /// </summary>
         public static string Api_FilesController_NoOperationFound {

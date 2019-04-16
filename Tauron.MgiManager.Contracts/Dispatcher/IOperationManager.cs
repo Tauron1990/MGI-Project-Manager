@@ -12,7 +12,7 @@ namespace Tauron.MgiProjectManager.Dispatcher
         Task UpdateOperation(string id, Action<IDictionary<string, string>> toUpdate);
 
         Task<IReadOnlyDictionary<string, string>> SearchOperation(string id);
-
+        
         Task<IEnumerable<string>> ExecuteNext(string id);
 
         Task RemoveAction(string id);
@@ -20,5 +20,7 @@ namespace Tauron.MgiProjectManager.Dispatcher
         Task CleanUpExpiryOperation();
 
         Task<string[]> GetOperations(Predicate<OperationFilter> filter);
+
+        Task<IDictionary<string, string>> GetContext(string id);
     }
 }

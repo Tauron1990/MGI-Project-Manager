@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Tauron.MgiManager.Data.Core;
+using Tauron.MgiProjectManager.Data.Core;
 
 namespace Tauron.MgiProjectManager.Server.Authorization
 {

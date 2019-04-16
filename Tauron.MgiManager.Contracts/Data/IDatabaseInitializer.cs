@@ -4,6 +4,6 @@ namespace Tauron.MgiProjectManager.Data
 {
     public interface IDatabaseInitializer
     {
-        Task SeedAsync();
+        Task SeedAsync(bool migrate);
     }
 }

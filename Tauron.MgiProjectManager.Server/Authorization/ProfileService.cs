@@ -6,8 +6,8 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
-using Tauron.MgiManager.Data.Core;
-using Tauron.MgiManager.Model;
+using Tauron.MgiProjectManager.Data.Core;
+using Tauron.MgiProjectManager.Model;
 
 namespace Tauron.MgiProjectManager.Server.Authorization
 {

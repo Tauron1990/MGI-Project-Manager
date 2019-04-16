@@ -20,9 +20,7 @@ namespace Tauron.MgiProjectManager.Data.Models
         public bool Removed { get; set; }
 
         public string CurrentOperation { get; set; }
-
-        public string NextOperation { get; set; }
-
+        
         public DateTime ExpiryDate { get; set; }
 
         public List<OperationContextEntity> Context

@@ -7,70 +7,51 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Tauron.Application.MgiProjectManager.BL.Contracts;
-using Tauron.Application.MgiProjectManager.Resources.Web;
-using Tauron.Application.MgiProjectManager.Server.Core.Setup;
-using Tauron.Application.MgiProjectManager.Server.Data.Api;
-using Tauron.Application.MgiProjectManager.Server.Data.Core;
 using Tauron.MgiProjectManager.BL.Services;
-using Tauron.MgiProjectManager.Dispatcher;
 using Tauron.MgiProjectManager.Model.Api;
+using Tauron.MgiProjectManager.Resources;
+using Tauron.MgiProjectManager.Server.Authorization;
 
-namespace Tauron.Application.MgiProjectManager.Server.api.Files
+namespace Tauron.MgiProjectManager.Server.Api
 {
     [Route("api/[controller]")]
-    [Authorize(Policy = RoleNames.Viewer)]
+    [Authorize(Policy = Policies.UploadFilesPolicy)]
     [ApiController]
     [DisableRequestSizeLimit]
     public class FilesController : ControllerBase
     {
         private readonly IFileManager _fileManager;
         private readonly ILogger<FilesController> _logger;
-        private readonly IBaseSettingsManager _baseSettingsManager;
-        private readonly IOperationManager _operationManager;
 
-        public FilesController(IFileManager fileManager, ILogger<FilesController> logger, IBaseSettingsManager baseSettingsManager, IOperationManager operationManager)
+        public FilesController(IFileManager fileManager, ILogger<FilesController> logger)
         {
             _fileManager = fileManager;
             _logger = logger;
-            _baseSettingsManager = baseSettingsManager;
-            _operationManager = operationManager;
         }
 
         [HttpPost]
         public async Task<ActionResult<UploadResult>> UploadFiles([FromForm]List<IFormFile> files)//([FromForm]UploadedFile filesContent)
         {
             Dictionary<string, string> errors = new Dictionary<string, string>();
-            List<string> filesToAdd = new List<string>();
+            List<(string Name, Stream Stream)> filesToAdd = new List<(string Name, Stream Stream)>();
 
             long size = 0;
             files = new List<IFormFile>(files ?? (IEnumerable<IFormFile>) Request.Form.Files);
-
-            string filedic = _baseSettingsManager.BaseSettings.FullSaveFilePath;
-            if (!Directory.Exists(filedic))
-                Directory.CreateDirectory(filedic);
+            
 
             foreach (var file in files)
             {
-                var (ok, error) = await _fileManager.CanAdd(file.FileName);
+                var realFileName = Path.GetFileName(file.FileName);
+                var (ok, error) = await _fileManager.CanAdd(realFileName);
                 if (!ok)
                 {
                     errors[file.FileName] = error;
                     continue;
                 }
 
-                string filename = filedic + file.FileName;
-
                 try
                 {
-                    size += file.Length;
-                    using (FileStream fs = System.IO.File.Create(filename))
-                    {
-                        file.CopyTo(fs);
-                        fs.Flush();
-                    }
-
-                    filesToAdd.Add(filename);
+                    filesToAdd.Add((realFileName, file.OpenReadStream()));
                 }
                 catch (Exception e)
                 {
@@ -79,44 +60,25 @@ namespace Tauron.Application.MgiProjectManager.Server.api.Files
                 }
             }
 
-            var result = await _fileManager.AddFiles(filesToAdd, User.Identity.Name);
+            var result = await _fileManager.AddFiles(filesToAdd, User.Identity.Name, s => errors[s] = string.Format(BLRes.Api_FilesController_FileNotAddable, s));
 
             if (!result.Ok)
                 return BadRequest(result.Operation);
 
-            string message = string.Format(WebResources.Api_FilesController_SucessMessage, files.Count, size);
+            string message = string.Format(BLRes.Api_FilesController_SucessMessage, filesToAdd.Count, size);
 
             return new UploadResult(errors, message, result.Operation);
         }
 
         [HttpPost]
         [Route("GetUnAssociateFiles")]
-        public async Task<ActionResult<UnAssociateFile[]>> GetUnAssociateFiles(string opId)
-        {
-            var ops = await _operationManager.GetOperations(op =>
-            {
-                if (op.OperationType != OperationNames.LinkingFileOperation) return false;
-                if (string.IsNullOrWhiteSpace(opId)) return true;
-                return op.OperationContext[OperationMeta.Linker.StartId] == opId;
-            });
-
-            return await ops.ToAsyncEnumerable().Select(op => new UnAssociateFile
-            {
-                FileName = op.OperationContext[OperationMeta.Linker.FileName],
-                OperationId = op.OperationId
-            }).ToArray();
-        }
+        public async Task<ActionResult<UnAssociateFile[]>> GetUnAssociateFiles(string opId) 
+            => (await _fileManager.GetUnAssociateFile(opId)).ToArray();
 
         [HttpPost]
         [Route("PostAssociateFile")]
-        public async Task PostAssociateFile(AssociateFile file)
-        {
-            var op = await _operationManager.SearchOperation(file.OperationId);
-            op.OperationContext[OperationMeta.Linker.RequestedName] = file.JobNumber;
-
-            await _operationManager.UpdateOperation(op);
-            await _operationManager.ExecuteNext(op);
-        }
+        public Task PostAssociateFile(AssociateFile file) 
+            => _fileManager.PostAssociateFile(file);
 
         [HttpPost]
         [Route("StartMultifile")]
@@ -126,17 +88,8 @@ namespace Tauron.Application.MgiProjectManager.Server.api.Files
         {
             try
             {
-                var op = await _operationManager.SearchOperation(id);
-                if (op == null)
-                    return BadRequest(WebResources.Api_FilesController_NoOperationFound);
-                if (op.OperationType != OperationNames.MultiFileOperation)
-                    return BadRequest(WebResources.Api_FilesController_NotCompatible);
-                var resultOps = await _operationManager.ExecuteNext(op);
-
-                foreach (var operation in resultOps)
-                    await _operationManager.AddOperation(operation);
-
-                return Ok();
+                var result = await _fileManager.StartMultiFile(id);
+                return result.Ok ? (IActionResult) Ok() : BadRequest(result.Error);
             }
             catch (Exception e)
             {

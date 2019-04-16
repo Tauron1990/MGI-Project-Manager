@@ -17,18 +17,18 @@ namespace Tauron.MgiProjectManager.Data.Core
         public static readonly ReadOnlyCollection<ApplicationPermission> AllPermissions;
 
 
-        public const string UsersPermissionGroupName = nameof(ContractsResources.ApplicationPermission_ViewUsers_GroupName);
-        public static readonly ApplicationPermission ViewUsers = new ApplicationPermission(nameof(ContractsResources.ApplicationPermissons_ViewUsers), "users.view", UsersPermissionGroupName, nameof(ContractsResources.ApplicationPermissions_ViewUsers_Description));
-        public static readonly ApplicationPermission ManageUsers = new ApplicationPermission(nameof(ContractsResources.ApplicationPermissons_ManageUser), "users.manage", UsersPermissionGroupName, nameof(ContractsResources.ApplicationPermission_ManageUser_Description));
+        public const string UsersPermissionGroupName = nameof(ContractsRes.ApplicationPermission_ViewUsers_GroupName);
+        public static readonly ApplicationPermission ViewUsers = new ApplicationPermission(nameof(ContractsRes.ApplicationPermissons_ViewUsers), "users.view", UsersPermissionGroupName, nameof(ContractsRes.ApplicationPermissions_ViewUsers_Description));
+        public static readonly ApplicationPermission ManageUsers = new ApplicationPermission(nameof(ContractsRes.ApplicationPermissons_ManageUser), "users.manage", UsersPermissionGroupName, nameof(ContractsRes.ApplicationPermission_ManageUser_Description));
 
-        public const string RolesPermissionGroupName = nameof(ContractsResources.ApplicationPermission_RolesPermission_GroupName);
-        public static readonly ApplicationPermission ViewRoles = new ApplicationPermission(nameof(ContractsResources.ApplicationPermission_ViewRoles), "roles.view", RolesPermissionGroupName, nameof(ContractsResources.ApplicationPermission_ViewRoles_Description));
-        public static readonly ApplicationPermission ManageRoles = new ApplicationPermission(nameof(ContractsResources.ApplicationPermission_ManageRoles), "roles.manage", RolesPermissionGroupName, nameof(ContractsResources.ApplicationPermission_ManageRoles_Description));
-        public static readonly ApplicationPermission AssignRoles = new ApplicationPermission(nameof(ContractsResources.ApplicationPermission_AssignRole), "roles.assign", RolesPermissionGroupName, nameof(ContractsResources.ApplicationPermission_AssignRole_Description));
+        public const string RolesPermissionGroupName = nameof(ContractsRes.ApplicationPermission_RolesPermission_GroupName);
+        public static readonly ApplicationPermission ViewRoles = new ApplicationPermission(nameof(ContractsRes.ApplicationPermission_ViewRoles), "roles.view", RolesPermissionGroupName, nameof(ContractsRes.ApplicationPermission_ViewRoles_Description));
+        public static readonly ApplicationPermission ManageRoles = new ApplicationPermission(nameof(ContractsRes.ApplicationPermission_ManageRoles), "roles.manage", RolesPermissionGroupName, nameof(ContractsRes.ApplicationPermission_ManageRoles_Description));
+        public static readonly ApplicationPermission AssignRoles = new ApplicationPermission(nameof(ContractsRes.ApplicationPermission_AssignRole), "roles.assign", RolesPermissionGroupName, nameof(ContractsRes.ApplicationPermission_AssignRole_Description));
 
-        public const string FilesPermissionGroupName = nameof(ContractsResources.ApplicationPermission_Files_GroupName);
-        public static readonly ApplicationPermission UploadFiles = new ApplicationPermission(nameof(ContractsResources.ApplicationPermission_Files_UploadFiles), "files.upload", FilesPermissionGroupName, nameof(ContractsResources.ApplicationPermission_Files_UploadFiles_Description));
-        public static readonly ApplicationPermission DownloadFiles = new ApplicationPermission(nameof(ContractsResources.ApplicationPermission_Files_DownloadFiles), "files.download", FilesPermissionGroupName, nameof(ContractsResources.ApplicationPermission_Files_DownloadFiles_Description));
+        public const string FilesPermissionGroupName = nameof(ContractsRes.ApplicationPermission_Files_GroupName);
+        public static readonly ApplicationPermission UploadFiles = new ApplicationPermission(nameof(ContractsRes.ApplicationPermission_Files_UploadFiles), "files.upload", FilesPermissionGroupName, nameof(ContractsRes.ApplicationPermission_Files_UploadFiles_Description));
+        public static readonly ApplicationPermission DownloadFiles = new ApplicationPermission(nameof(ContractsRes.ApplicationPermission_Files_DownloadFiles), "files.download", FilesPermissionGroupName, nameof(ContractsRes.ApplicationPermission_Files_DownloadFiles_Description));
 
         static ApplicationPermissions()
         {
@@ -82,10 +82,10 @@ namespace Tauron.MgiProjectManager.Data.Core
 
 
 
-        public string Name => ContractsResources.ResourceManager.GetString(NameKey);
+        public string Name => ContractsRes.ResourceManager.GetString(NameKey);
         public string Value { get; }
-        public string GroupName => ContractsResources.ResourceManager.GetString(GroupNameKey);
-        public string Description => ContractsResources.ResourceManager.GetString(DescriptionKey);
+        public string GroupName => ContractsRes.ResourceManager.GetString(GroupNameKey);
+        public string Description => ContractsRes.ResourceManager.GetString(DescriptionKey);
 
 
         public override string ToString()

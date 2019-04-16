@@ -15,5 +15,8 @@
         {
             public const string UserName = "UserName";
         }
+
+        public const string OperationType = nameof(OperationType);
+        public const string OperationName = nameof(OperationName);
     }
 }

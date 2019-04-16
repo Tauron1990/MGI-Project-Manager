@@ -137,6 +137,8 @@ namespace Tauron.MgiProjectManager.Server
                 options.AddPolicy(Policies.ManageAllRolesPolicy, policy => policy.RequireClaim(ClaimConstants.Permission, ApplicationPermissions.ManageRoles));
 
                 options.AddPolicy(Policies.AssignAllowedRolesPolicy, policy => policy.Requirements.Add(new AssignRolesAuthorizationRequirement()));
+                
+                options.AddPolicy(Policies.UploadFilesPolicy, builder => builder.RequireClaim(ClaimConstants.Permission, ApplicationPermissions.UploadFiles));
             });
 
 

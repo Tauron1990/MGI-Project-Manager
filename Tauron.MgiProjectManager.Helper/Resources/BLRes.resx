@@ -112,4 +112,7 @@
   <data name="Api_FilesController_SucessMessage" xml:space="preserve">
     <value>{0} file(s) / {1} bytes uploaded successfully!</value>
   </data>
+  <data name="Api_FilesController_FileNotAddable" xml:space="preserve">
+    <value>The file {0} could not be added or is already contained.</value>
+  </data>
 </root>

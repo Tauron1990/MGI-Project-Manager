@@ -71,7 +71,12 @@ namespace Tauron.MgiProjectManager.Dispatcher
         public async Task<IReadOnlyDictionary<string, string>> SearchOperation(string id)
         {
             var ent = await _operationRepository.Find(id);
-            return ent.Context.ToDictionary(e => e.Name, e => e.Value);
+            var dic = ent.Context.ToDictionary(e => e.Name, e => e.Value);
+
+            dic.Add(OperationMeta.OperationType, ent.OperationType);
+            dic.Add(OperationMeta.OperationName, ent.CurrentOperation);
+
+            return dic;
         }
 
         public async Task<IEnumerable<string>> ExecuteNext(string id)
@@ -130,5 +135,8 @@ namespace Tauron.MgiProjectManager.Dispatcher
                 .Select(of => of.OperationId)
                 .ToArray();
         }
+
+        public async Task<IDictionary<string, string>> GetContext(string id) 
+            => (await _operationRepository.Find(id)).ToOperation().OperationContext;
     }
 }

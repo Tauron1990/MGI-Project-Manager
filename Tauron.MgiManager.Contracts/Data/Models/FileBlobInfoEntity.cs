@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Tauron.MgiProjectManager.Data.Models
 {
@@ -9,6 +10,6 @@ namespace Tauron.MgiProjectManager.Data.Models
         [Key]
         public string FileName { get; set; }
 
-        public FileBlobEntity Blob { get; set; }
+        public DateTime CreationTime { get; set; }
     }
 }

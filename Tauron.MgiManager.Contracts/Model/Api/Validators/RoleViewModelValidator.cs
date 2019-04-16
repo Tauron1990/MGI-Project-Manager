@@ -10,8 +10,8 @@ namespace Tauron.MgiProjectManager.Model.Api.Validators
         public RoleViewModelValidator()
         {
             RuleFor(m => m.Name)
-                .NotEmpty().WithMessage(ContractsResources.Models_Api_RoleViewModel_Name_Empty)
-                .Length(2, 200).WithMessage(ContractsResources.Models_Api_RoleViewModel_Name_Lenght);
+                .NotEmpty().WithMessage(ContractsRes.Models_Api_RoleViewModel_Name_Empty)
+                .Length(2, 200).WithMessage(ContractsRes.Models_Api_RoleViewModel_Name_Lenght);
         }
     }
 }

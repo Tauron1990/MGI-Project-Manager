@@ -11,8 +11,8 @@ namespace Tauron.MgiProjectManager.Model.Api.Validators
         {
             Include(new UserBaseViewModelValidator());
 
-            RuleFor(m => m.NewPassword).MinimumLength(6).WithMessage(ContractsResources.Models_Api_UserEditViewModel_NewPassword_Lenght);
-            RuleFor(m => m.Roles).Must(arr => arr.Length > 0).WithMessage(ContractsResources.Models_Api_UserViewModel_Roles_Lenght);
+            RuleFor(m => m.NewPassword).MinimumLength(6).WithMessage(ContractsRes.Models_Api_UserEditViewModel_NewPassword_Lenght);
+            RuleFor(m => m.Roles).Must(arr => arr.Length > 0).WithMessage(ContractsRes.Models_Api_UserViewModel_Roles_Lenght);
         }
     }
 }
