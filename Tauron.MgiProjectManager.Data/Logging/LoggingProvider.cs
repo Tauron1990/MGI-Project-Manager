@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Serilog.Core;
 using Serilog.Events;
 using Tauron.MgiProjectManager.Data.Contexts;
@@ -11,12 +12,14 @@ namespace Tauron.MgiProjectManager.Data.Logging
 {
     public sealed class DatabaseLoggingProvider : ILogEventSink, IDisposable
     {
+        private readonly IOptions<AppSettings> _settings;
         private readonly Lazy<ILogger> _logger;
         private readonly List<LoggingEventEntity> _loggingEvents;
         private readonly object _lock = new object();
 
-        public DatabaseLoggingProvider(ILoggerFactory loggerFactory)
+        public DatabaseLoggingProvider(ILoggerFactory loggerFactory, IOptions<AppSettings> settings)
         {
+            _settings = settings;
             _loggingEvents = new List<LoggingEventEntity>();
             _logger = new Lazy<ILogger>(() => loggerFactory.CreateLogger(nameof(DatabaseLoggingProvider)));
         }
@@ -26,7 +29,7 @@ namespace Tauron.MgiProjectManager.Data.Logging
             lock (_lock)
             {
                 _loggingEvents.Add(new LoggingEventEntity(logEvent));
-                if (_loggingEvents.Count == 50) Task.Run(Start);
+                if (_loggingEvents.Count == _settings.Value.) Task.Run(Start);
             }
         }
 
