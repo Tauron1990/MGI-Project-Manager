@@ -4,7 +4,9 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Moq;
+using Xunit.Abstractions;
 
 namespace ServerTest.TestHelper
 {
@@ -29,6 +31,9 @@ namespace ServerTest.TestHelper
 
             return dependency as TDependency;
         }
+
+        public TestingObject<T> AddLogger(ITestOutputHelper testOutputHelper)
+            => AddDependency<ILogger<T>>(testOutputHelper.BuildLoggerFor<T>());
 
         public TestingObject<T> AddContextDependecy<TContext>(Func<DbContextOptions, TContext> factory)
         where TContext : DbContext

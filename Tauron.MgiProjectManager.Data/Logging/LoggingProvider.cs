@@ -29,7 +29,7 @@ namespace Tauron.MgiProjectManager.Data.Logging
             lock (_lock)
             {
                 _loggingEvents.Add(new LoggingEventEntity(logEvent));
-                if (_loggingEvents.Count == _settings.Value.) Task.Run(Start);
+                if (_loggingEvents.Count == _settings.Value.Logging.BatchEntries) Task.Run(Start);
             }
         }
 
