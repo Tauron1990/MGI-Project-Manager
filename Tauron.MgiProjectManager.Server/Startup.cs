@@ -46,7 +46,7 @@ namespace Tauron.MgiProjectManager.Server
         public void ConfigureServices(IServiceCollection services)
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
-            LoggingDbContext.ConnectionString = Configuration.GetConnectionString("LoggingConnection");
+            LoggingDbContext.ConnectionBuilder = builder => builder.UseSqlServer(Configuration.GetConnectionString("LoggingConnection"));
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
             services.AddDbContext<FilesDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("FileConnection")));

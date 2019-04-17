@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -11,9 +12,10 @@ namespace ServerTest.TestHelper
     {
         private Dictionary<Type, object> _dependencyMap { get; } = new Dictionary<Type, object>();
 
-        public void AddDependency<TDependency>(TDependency dependency)
+        public TestingObject<T> AddDependency<TDependency>(TDependency dependency)
         {
             _dependencyMap.Add(typeof(TDependency), dependency);
+            return this;
         }
 
         public TDependency GetDependency<TDependency>() where TDependency : class
@@ -28,12 +30,12 @@ namespace ServerTest.TestHelper
             return dependency as TDependency;
         }
 
-        public void AddContextDependecy<TContext>(Func<DbContextOptions, TContext> factory)
+        public TestingObject<T> AddContextDependecy<TContext>(Func<DbContextOptions, TContext> factory)
         where TContext : DbContext
         {
-            var ops = new DbContextOptionsBuilder<TContext>().UseInMemoryDatabase(typeof(TContext).Name).Options;
+            var ops = new DbContextOptionsBuilder<TContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
 
-            AddDependency(factory(ops));
+            return AddDependency(factory(ops));
         }
 
         public T GetResolvedTestingObject()
