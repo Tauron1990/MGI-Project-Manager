@@ -17,37 +17,31 @@ using Xunit.Abstractions;
 
 namespace ServerTest.Data
 {
-    public class DatabaseInitializerTest : TestBaseClass
+    public class DatabaseInitializerTest : TestBaseClass<DatabaseInitializer>
     {
         public DatabaseInitializerTest(ITestOutputHelper testOutputHelper) 
             : base(testOutputHelper)
         {
         }
 
-        private TestingObject<DatabaseInitializer> GetTestingObject()
-        {
-            var obj = new TestingObject<DatabaseInitializer>().
-            AddContextDependecy(options => new ApplicationDbContext(options)).
-            AddContextDependecy(options => new PersistedGrantDbContext((DbContextOptions<PersistedGrantDbContext>) options, new OperationalStoreOptions())).
-            AddContextDependecy(options => new ConfigurationDbContext((DbContextOptions<ConfigurationDbContext>) options, new ConfigurationStoreOptions())).
+        protected override TestingObject<DatabaseInitializer> GetTestingObject() =>
+            new TestingObject<DatabaseInitializer>().
+                AddContextDependecy(options => new ApplicationDbContext(options)).
+                AddContextDependecy(options => new PersistedGrantDbContext((DbContextOptions<PersistedGrantDbContext>) options, new OperationalStoreOptions())).
+                AddContextDependecy(options => new ConfigurationDbContext((DbContextOptions<ConfigurationDbContext>) options, new ConfigurationStoreOptions())).
 
-            AddDependency(new Mock<ITimedTaskManager>()).
+                AddDependency(new Mock<ITimedTaskManager>()).
 
-            AddDependency(BuildMock(CreateMockBuilder<IAccountManager>(
-                m => m.Setup(am => am.GetRoleByNameAsync(""))
-                    .ReturnsAsync(() => null),
+                BuildMock<IAccountManager>(
+                    m => m.Setup(am => am.GetRoleByNameAsync(""))
+                        .ReturnsAsync(() => null),
 
-                m => m.Setup(am => am.CreateRoleAsync(It.IsAny<ApplicationRole>(), It.IsAny<IEnumerable<string>>()))
-                    .Returns(() => Task.FromResult((true, Array.Empty<string>()))),
+                    m => m.Setup(am => am.CreateRoleAsync(It.IsAny<ApplicationRole>(), It.IsAny<IEnumerable<string>>()))
+                        .Returns(() => Task.FromResult((true, Array.Empty<string>()))),
 
-                m => m.Setup(am => am.CreateUserAsync(It.IsAny<ApplicationUser>(), It.IsAny<IEnumerable<string>>(), It.IsAny<string>()))
-                    .Returns(() => Task.FromResult((true, Array.Empty<string>())))
-            )));
-
-            AddLogger(obj);
-
-            return obj;
-        }
+                    m => m.Setup(am => am.CreateUserAsync(It.IsAny<ApplicationUser>(), It.IsAny<IEnumerable<string>>(), It.IsAny<string>()))
+                        .Returns(() => Task.FromResult((true, Array.Empty<string>())))
+                ).AddLogger(TestOutputHelper);
 
         [Fact(DisplayName = "Database Initalizer: Check Correct Inital Data")]
         public async Task SeedAsync_InitalData()

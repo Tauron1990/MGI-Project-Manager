@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using Xunit.Abstractions;
 
@@ -12,6 +13,13 @@ namespace ServerTest.TestHelper
 {
     public class TestingObject<T> where T : class
     {
+        private class OptionsHolder<TType> : IOptions<TType> where TType : class, new()
+        {
+            public TType Value { get; }
+
+            public OptionsHolder(TType value) => Value = value;
+        }
+
         private Dictionary<Type, object> _dependencyMap { get; } = new Dictionary<Type, object>();
 
         public TestingObject<T> AddDependency<TDependency>(TDependency dependency)
@@ -32,8 +40,20 @@ namespace ServerTest.TestHelper
             return dependency as TDependency;
         }
 
+        public TestingObject<T> BuildMock<TType>(params Action<Mock<TType>>[] config) where TType : class
+        {
+            var mock = new Mock<TType>();
+
+            foreach (var action in config)
+                action(mock);
+            return AddDependency(mock);
+        }
+
         public TestingObject<T> AddLogger(ITestOutputHelper testOutputHelper)
             => AddDependency<ILogger<T>>(testOutputHelper.BuildLoggerFor<T>());
+
+        public TestingObject<T> AddOption<TType>(TType option) where TType : class, new() 
+            => AddDependency<IOptions<TType>>(new OptionsHolder<TType>(option));
 
         public TestingObject<T> AddContextDependecy<TContext>(Func<DbContextOptions, TContext> factory)
         where TContext : DbContext

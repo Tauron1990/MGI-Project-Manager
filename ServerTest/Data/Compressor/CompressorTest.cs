@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace ServerTest.Data.Compressor
 {
-    public class CompressorTest : TestBaseClass
+    public class CompressorTest : TestBaseClass<string>
     {
         private readonly string _finalString;
 
@@ -47,6 +47,6 @@ namespace ServerTest.Data.Compressor
             TestOutputHelper.WriteLine($"Decopression Compled:  {outPut1.Length / 1024d / 1024d} MB");
 
             Assert.Equal(_finalString, Encoding.UTF8.GetString(outPut1.ToArray()));
-        } 
+        }
     }
 }
