@@ -98,8 +98,8 @@ namespace Tauron.MgiProjectManager.BL.Helper
 
         public JobNameMatcher(AppSettings configuration)
         {
-            _nameMatch = new Regex(configuration.FilsConfig.NameExpression, RegexOptions.Compiled);
-            _rangeHelper = new RangeHelper(configuration.FilsConfig.CaseRange);
+            _nameMatch = new Regex(configuration.FilesConfig.NameExpression, RegexOptions.Compiled);
+            _rangeHelper = new RangeHelper(configuration.FilesConfig.CaseRange);
         }
 
         public Match GetMatch(string name) 

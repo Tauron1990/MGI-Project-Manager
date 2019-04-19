@@ -22,7 +22,7 @@ namespace Tauron.MgiProjectManager.Data
                 new IdentityResources.Profile(),
                 new IdentityResources.Phone(),
                 new IdentityResources.Email(),
-                new IdentityResource(ScopeConstants.Roles, new List<string> { JwtClaimTypes.Role })
+                new IdentityResource(ScopeConstants.Roles, new List<string> {JwtClaimTypes.Role})
             };
         }
 
@@ -31,8 +31,10 @@ namespace Tauron.MgiProjectManager.Data
         {
             return new List<ApiResource>
             {
-                new ApiResource(ApiName) {
-                    UserClaims = {
+                new ApiResource(ApiName)
+                {
+                    UserClaims =
+                    {
                         JwtClaimTypes.Name,
                         JwtClaimTypes.Email,
                         JwtClaimTypes.PhoneNumber,
@@ -56,8 +58,9 @@ namespace Tauron.MgiProjectManager.Data
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword, // Resource Owner Password Credential grant.
                     AllowAccessTokensViaBrowser = true,
                     RequireClientSecret = false, // This client does not need a secret to request tokens from the token endpoint.
-                    
-                    AllowedScopes = {
+
+                    AllowedScopes =
+                    {
                         IdentityServerConstants.StandardScopes.OpenId, // For UserInfo endpoint.
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Phone,
@@ -67,7 +70,7 @@ namespace Tauron.MgiProjectManager.Data
                     },
                     AllowOfflineAccess = true, // For refresh token.
                     RefreshTokenExpiration = TokenExpiration.Sliding,
-                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                    RefreshTokenUsage = TokenUsage.OneTimeOnly
                     //AccessTokenLifetime = 900, // Lifetime of access token in seconds.
                     //AbsoluteRefreshTokenLifetime = 7200,
                     //SlidingRefreshTokenLifetime = 900,
@@ -81,7 +84,8 @@ namespace Tauron.MgiProjectManager.Data
                     AllowAccessTokensViaBrowser = true,
                     RequireClientSecret = false,
 
-                    AllowedScopes = {
+                    AllowedScopes =
+                    {
                         ApiName
                     }
                 }

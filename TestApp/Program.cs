@@ -86,24 +86,19 @@ namespace TestApp
 
         static void Main()
         {
-            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            StringBuilder builder = new StringBuilder(10485760);
-            var random = new Random();
+            const string path = @"G:\ForTest";
 
-            for (int i = 0; i < 10485760; i++)
+            foreach (var filePath in Directory.EnumerateFiles(path))
             {
-                builder.Append(chars[random.Next(chars.Length)]);
-            }
-
-            var finalString = builder.ToString();
-
-            using (var file = new FileStream("testCompress.bin", FileMode.Create))
-            {
-                using (var zip = new GZipStream(file, CompressionLevel.Optimal))
+                using (var sourceFile = new FileStream(filePath, FileMode.Open))
                 {
-                    var bytes = Encoding.ASCII.GetBytes(finalString);
-
-                    zip.Write(bytes, 0, bytes.Length);
+                    using (var output = new FileStream(Path.GetFileName(filePath) + ".bin", FileMode.Create))
+                    {
+                        using (var zip = new GZipStream(output, CompressionLevel.Optimal))
+                        {
+                            sourceFile.CopyTo(zip);
+                        }
+                    }
                 }
             }
 

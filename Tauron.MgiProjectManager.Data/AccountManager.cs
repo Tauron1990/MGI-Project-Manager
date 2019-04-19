@@ -20,8 +20,8 @@ namespace Tauron.MgiProjectManager.Data
     public class AccountManager : IAccountManager
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
 
         public AccountManager(
@@ -34,10 +34,7 @@ namespace Tauron.MgiProjectManager.Data
             _context.CurrentUserId = httpAccessor.HttpContext?.User.FindFirst(ClaimConstants.Subject)?.Value?.Trim();
             _userManager = userManager;
             _roleManager = roleManager;
-
         }
-
-
 
 
         public async Task<ApplicationUser> GetUserByIdAsync(string userId)
@@ -175,7 +172,7 @@ namespace Tauron.MgiProjectManager.Data
 
         public async Task<(bool Succeeded, string[] Errors)> ResetPasswordAsync(ApplicationUser user, string newPassword)
         {
-            string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             var result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
             if (!result.Succeeded)
@@ -231,9 +228,6 @@ namespace Tauron.MgiProjectManager.Data
             var result = await _userManager.DeleteAsync(user);
             return (result.Succeeded, result.Errors.Select(e => e.Description).ToArray());
         }
-        
-
-
 
 
         public async Task<ApplicationRole> GetRoleByIdAsync(string roleId)
@@ -285,9 +279,9 @@ namespace Tauron.MgiProjectManager.Data
                 claims = new string[] { };
 
             var claimsArray = claims as string[] ?? claims.ToArray();
-            string[] invalidClaims = claimsArray.Where(c => ApplicationPermissions.GetPermissionByValue(c) == null).ToArray();
+            var invalidClaims = claimsArray.Where(c => ApplicationPermissions.GetPermissionByValue(c) == null).ToArray();
             if (invalidClaims.Any())
-                return (false, new[] { "The following claim types are invalid: " + string.Join(", ", invalidClaims) });
+                return (false, new[] {"The following claim types are invalid: " + string.Join(", ", invalidClaims)});
 
 
             var result = await _roleManager.CreateAsync(role);
@@ -297,7 +291,7 @@ namespace Tauron.MgiProjectManager.Data
 
             role = await _roleManager.FindByNameAsync(role.Name);
 
-            foreach (string claim in claimsArray.Distinct())
+            foreach (var claim in claimsArray.Distinct())
             {
                 result = await _roleManager.AddClaimAsync(role, new Claim(ClaimConstants.Permission, ApplicationPermissions.GetPermissionByValue(claim)));
 
@@ -316,9 +310,9 @@ namespace Tauron.MgiProjectManager.Data
             var claimsArray = claims as string[] ?? claims?.ToArray();
             if (claimsArray != null)
             {
-                string[] invalidClaims = claimsArray.Where(c => ApplicationPermissions.GetPermissionByValue(c) == null).ToArray();
+                var invalidClaims = claimsArray.Where(c => ApplicationPermissions.GetPermissionByValue(c) == null).ToArray();
                 if (invalidClaims.Any())
-                    return (false, new[] { "The following claim types are invalid: " + string.Join(", ", invalidClaims) });
+                    return (false, new[] {"The following claim types are invalid: " + string.Join(", ", invalidClaims)});
             }
 
 
@@ -336,24 +330,20 @@ namespace Tauron.MgiProjectManager.Data
             var claimsToAdd = claimsArray.Except(roleClaimValues).Distinct().ToArray();
 
             if (claimsToRemove.Any())
-            {
-                foreach (string claim in claimsToRemove)
+                foreach (var claim in claimsToRemove)
                 {
                     result = await _roleManager.RemoveClaimAsync(role, roleClaims.FirstOrDefault(c => c.Value == claim));
                     if (!result.Succeeded)
                         return (false, result.Errors.Select(e => e.Description).ToArray());
                 }
-            }
 
             if (claimsToAdd.Any())
-            {
-                foreach (string claim in claimsToAdd)
+                foreach (var claim in claimsToAdd)
                 {
                     result = await _roleManager.AddClaimAsync(role, new Claim(ClaimConstants.Permission, ApplicationPermissions.GetPermissionByValue(claim)));
                     if (!result.Succeeded)
                         return (false, result.Errors.Select(e => e.Description).ToArray());
                 }
-            }
 
             return (true, new string[] { });
         }

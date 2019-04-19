@@ -7,7 +7,6 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using IdentityServer4.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +20,10 @@ namespace Tauron.MgiProjectManager.Data.Contexts
     {
         private string _currentUserId;
 
+        public ApplicationDbContext(DbContextOptions options) : base(options)
+        {
+        }
+
         public string CurrentUserId
         {
             private get { return _currentUserId; }
@@ -32,9 +35,6 @@ namespace Tauron.MgiProjectManager.Data.Contexts
 
         public DbSet<FileEntity> Files => Set<FileEntity>();
 
-        public ApplicationDbContext(DbContextOptions options) : base(options)
-        { }
-        
         public override int SaveChanges()
         {
             UpdateAuditEntities();
@@ -49,14 +49,14 @@ namespace Tauron.MgiProjectManager.Data.Contexts
         }
 
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             UpdateAuditEntities();
             return base.SaveChangesAsync(cancellationToken);
         }
 
 
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             UpdateAuditEntities();
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
@@ -71,8 +71,8 @@ namespace Tauron.MgiProjectManager.Data.Contexts
 
             foreach (var entry in modifiedEntries)
             {
-                var entity = (IAuditableEntity)entry.Entity;
-                DateTime now = DateTime.UtcNow;
+                var entity = (IAuditableEntity) entry.Entity;
+                var now = DateTime.UtcNow;
 
                 if (entry.State == EntityState.Added)
                 {

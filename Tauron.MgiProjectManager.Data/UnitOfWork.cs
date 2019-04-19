@@ -3,7 +3,6 @@
 // www.ebenmonney.com/templates
 // =============================
 
-using System;
 using System.Threading.Tasks;
 using Tauron.MgiProjectManager.Data.Contexts;
 using Tauron.MgiProjectManager.Data.Repositorys;
@@ -25,6 +24,10 @@ namespace Tauron.MgiProjectManager.Data
         public IFileRepository FileRepository { get; }
         public ITimedTaskRepository TimedTaskRepository { get; }
         public IOperationRepository OperationRepository { get; }
-        public async Task<int> SaveChanges() => await _context.SaveChangesAsync();
+
+        public async Task<int> SaveChanges()
+        {
+            return await _context.SaveChangesAsync();
+        }
     }
 }

@@ -17,7 +17,7 @@ using Xunit.Abstractions;
 
 namespace ServerTest.Data
 {
-    public class DatabaseInitializerTest : TestBaseClass<DatabaseInitializer>
+    public class DatabaseInitializerTest : TestClassBase<DatabaseInitializer>
     {
         public DatabaseInitializerTest(ITestOutputHelper testOutputHelper) 
             : base(testOutputHelper)

@@ -14,19 +14,23 @@ namespace Tauron.MgiProjectManager.Data.Repositorys
     {
         private readonly FilesDbContext _context;
 
-        public FileDatabase(FilesDbContext context) 
-            => _context = context;
+        public FileDatabase(FilesDbContext context)
+        {
+            _context = context;
+        }
 
-        public Task<long> ComputeSize() 
-            => _context.FileInfos.SumAsync(m => m.Size);
+        public Task<long> ComputeSize()
+        {
+            return _context.FileInfos.SumAsync(m => m.Size);
+        }
 
         public async Task<IEnumerable<FileBlobInfoEntity>> GetOldestBySize(long maxSize)
         {
             long currentSize = 0;
 
             var erg = (await _context.FileInfos
-                .OrderBy(m => m.CreationTime)
-                .ToListAsync())
+                    .OrderBy(m => m.CreationTime)
+                    .ToListAsync())
                 .Where(i =>
                 {
                     currentSize += i.Size;
@@ -45,8 +49,10 @@ namespace Tauron.MgiProjectManager.Data.Repositorys
             }
         }
 
-        public async Task SaveChanges() 
-            => await _context.SaveChangesAsync();
+        public async Task SaveChanges()
+        {
+            await _context.SaveChangesAsync();
+        }
 
         public async Task<bool> AddFile(string name, Func<Task<Stream>> binaryData)
         {
@@ -60,7 +66,7 @@ namespace Tauron.MgiProjectManager.Data.Repositorys
             };
             var blob = new FileBlobEntity
             {
-                Key = name,
+                Key = name
             };
 
             using var input = await binaryData();

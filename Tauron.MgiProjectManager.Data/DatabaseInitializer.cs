@@ -20,11 +20,11 @@ namespace Tauron.MgiProjectManager.Data
     [Export(typeof(IDatabaseInitializer), LiveCycle = LiveCycle.Transistent)]
     public class DatabaseInitializer : IDatabaseInitializer
     {
-        private readonly ApplicationDbContext _context;
         private readonly IAccountManager _accountManager;
+        private readonly ConfigurationDbContext _configurationDbContext;
+        private readonly ApplicationDbContext _context;
         private readonly ILogger<DatabaseInitializer> _logger;
         private readonly PersistedGrantDbContext _persistedGrantDbContext;
-        private readonly ConfigurationDbContext _configurationDbContext;
 
         public DatabaseInitializer(ApplicationDbContext context, IAccountManager accountManager, ILogger<DatabaseInitializer> logger, PersistedGrantDbContext persistedGrantDbContext,
             ConfigurationDbContext configurationDbContext, ITimedTaskManager timedTaskManager)
@@ -56,7 +56,7 @@ namespace Tauron.MgiProjectManager.Data
                 await EnsureRoleAsync(adminRoleName, "Administrator", ApplicationPermissions.GetAllPermissionValues());
                 //await EnsureRoleAsync(userRoleName, "Default user", new string[] { });
 
-                await CreateUserAsync("Admin", "Admin", "Inbuilt Administrator", "admin@gmail.com", "+1 (123) 000-0000", new [] {adminRoleName});
+                await CreateUserAsync("Admin", "Admin", "Inbuilt Administrator", "admin@gmail.com", "+1 (123) 000-0000", new[] {adminRoleName});
                 //await CreateUserAsync("user", "tempP@ss123", "Inbuilt Standard User", "user@ebenmonney.com", "+1 (123) 000-0001", new [] {userRoleName});
 
                 _logger.LogInformation("Inbuilt account generation completed");
@@ -76,16 +76,14 @@ namespace Tauron.MgiProjectManager.Data
             await _configurationDbContext.SaveChangesAsync();
 
             _logger.LogInformation("Seeding initial data completed");
-
         }
-
 
 
         private async Task EnsureRoleAsync(string roleName, string description, string[] claims)
         {
-            if ((await _accountManager.GetRoleByNameAsync(roleName)) == null)
+            if (await _accountManager.GetRoleByNameAsync(roleName) == null)
             {
-                ApplicationRole applicationRole = new ApplicationRole(roleName, description);
+                var applicationRole = new ApplicationRole(roleName, description);
 
                 var result = await _accountManager.CreateRoleAsync(applicationRole, claims);
 
@@ -96,7 +94,7 @@ namespace Tauron.MgiProjectManager.Data
 
         private async Task CreateUserAsync(string userName, string password, string fullName, string email, string phoneNumber, string[] roles)
         {
-            ApplicationUser applicationUser = new ApplicationUser
+            var applicationUser = new ApplicationUser
             {
                 UserName = userName,
                 FullName = fullName,

@@ -118,13 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="EERNoOffsetBM19_1000Limits" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\EERNoOffsetBM19_1000Limits.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="bm19_07777_Covers_FB_001_Einzelform_Umschlagen_LACK_pdf" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bm19_07777_Covers_FB 001_Einzelform Umschlagen_LACK.pdf.bin;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="i18n" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\i18n.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Open_Command_Line_v2_3_999" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Open_Command_Line_v2.3.999.vsix;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="bm19_07777_Covers_FB_001_Einzelform_Umschlagen_LACK_tif" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bm19_07777_Covers_FB 001_Einzelform Umschlagen_LACK.tif.bin;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

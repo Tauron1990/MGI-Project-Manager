@@ -7,7 +7,7 @@ namespace Tauron.MgiProjectManager.Data.Repositorys
     {
         Task AddFile(FileEntity entity);
 
-        Task<FileEntity[]> GetUnRequetedFiles();
+        Task<FileEntity[]> GetUnRequestedFiles();
 
         Task DeleteFile(int id);
     }

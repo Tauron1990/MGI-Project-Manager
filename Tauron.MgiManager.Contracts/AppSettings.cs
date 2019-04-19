@@ -4,7 +4,7 @@
     {
         public SmtpConfig SmtpConfig { get; set; }
 
-        public FilsConfig FilsConfig { get; set; }
+        public FilesConfig FilesConfig { get; set; }
 
         public LoggingConfig Logging { get; set; }
 

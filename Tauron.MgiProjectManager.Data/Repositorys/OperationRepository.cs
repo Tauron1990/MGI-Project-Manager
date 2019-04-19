@@ -12,18 +12,17 @@ namespace Tauron.MgiProjectManager.Data.Repositorys
     {
         private readonly ApplicationDbContext _context;
 
-        public OperationRepository(ApplicationDbContext contextBuilder)
+        public OperationRepository(ApplicationDbContext contextBuilder) 
             => _context = contextBuilder;
 
-        public async Task<IEnumerable<OperationEntity>> GetAllOperations()
-        {
-            return await _context.Operations.AsNoTracking().Include(oe => oe.Context).Where(o => !o.Compled).ToArrayAsync();
-        }
+        public async Task<IEnumerable<OperationEntity>> GetAllOperations() 
+            => await _context.Operations.AsNoTracking().Include(oe => oe.Context).Where(o => !o.Compled).ToArrayAsync();
 
         public Task<OperationEntity> Find(string id) 
             => _context.Operations.AsNoTracking().Include(e => e.Context).FirstOrDefaultAsync(e => e.OperationId == id);
 
-        public async Task AddOperation(OperationEntity entity) => await _context.Operations.AddAsync(entity);
+        public async Task AddOperation(OperationEntity entity) 
+            => await _context.Operations.AddAsync(entity);
 
         public async Task CompledOperation(string id)
         {

@@ -12,16 +12,21 @@ namespace Tauron.MgiProjectManager.Data.Logging
 {
     public sealed class DatabaseLoggingProvider : ILogEventSink, IDisposable
     {
-        private readonly IOptions<AppSettings> _settings;
+        private readonly object _lock = new object();
         private readonly Lazy<ILogger> _logger;
         private readonly List<LoggingEventEntity> _loggingEvents;
-        private readonly object _lock = new object();
+        private readonly IOptions<AppSettings> _settings;
 
         public DatabaseLoggingProvider(ILoggerFactory loggerFactory, IOptions<AppSettings> settings)
         {
             _settings = settings;
             _loggingEvents = new List<LoggingEventEntity>();
             _logger = new Lazy<ILogger>(() => loggerFactory.CreateLogger(nameof(DatabaseLoggingProvider)));
+        }
+
+        public void Dispose()
+        {
+            Start();
         }
 
         public void Emit(LogEvent logEvent)
@@ -60,8 +65,5 @@ namespace Tauron.MgiProjectManager.Data.Logging
                 }
             }
         }
-
-        public void Dispose() 
-            => Start();
     }
 }

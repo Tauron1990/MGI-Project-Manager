@@ -18,7 +18,7 @@ namespace Tauron.MgiProjectManager.BL.Tasks.TimedTasks
             var repository = serviceProvider.GetRequiredService<IUnitOfWork>();
             var fileManager = serviceProvider.GetRequiredService<IFileManager>();
             
-            var files = await repository.FileRepository.GetUnRequetedFiles();
+            var files = await repository.FileRepository.GetUnRequestedFiles();
             var date = DateTime.Now - TimeSpan.FromDays(6 * 30);
 
             foreach (var fileEntity in files)

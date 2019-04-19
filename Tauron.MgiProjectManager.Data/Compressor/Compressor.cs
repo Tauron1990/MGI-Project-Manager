@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Tauron.MgiProjectManager.Data.Compressor._7zip.Compress.LZMA;
 
 namespace Tauron.MgiProjectManager.Data.Compressor
 {
@@ -8,7 +9,7 @@ namespace Tauron.MgiProjectManager.Data.Compressor
     {
         public static async Task CompressFileLzma(Stream input, Stream output)
         {
-            SevenZip.Compression.LZMA.Encoder coder = new SevenZip.Compression.LZMA.Encoder();
+            var coder = new Encoder();
 
             // Write the encoder properties
             coder.WriteCoderProperties(output);
@@ -23,16 +24,16 @@ namespace Tauron.MgiProjectManager.Data.Compressor
 
         public static async Task DecompressFileLzma(Stream input, Stream output)
         {
-            SevenZip.Compression.LZMA.Decoder coder = new SevenZip.Compression.LZMA.Decoder();
+            var coder = new Decoder();
 
             // Read the decoder properties
-            byte[] properties = new byte[5];
+            var properties = new byte[5];
             await input.ReadAsync(properties, 0, 5);
 
             // Read in the decompress file size.
-            byte[] fileLengthBytes = new byte[8];
+            var fileLengthBytes = new byte[8];
             input.Read(fileLengthBytes, 0, 8);
-            long fileLength = BitConverter.ToInt64(fileLengthBytes, 0);
+            var fileLength = BitConverter.ToInt64(fileLengthBytes, 0);
 
             coder.SetDecoderProperties(properties);
             coder.Code(input, output, input.Length, fileLength, null);

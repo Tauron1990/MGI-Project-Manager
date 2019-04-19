@@ -12,10 +12,14 @@ namespace Tauron.MgiProjectManager.Data.Repositorys
         private readonly ApplicationDbContext _context;
 
         public TimedTaskRepository(ApplicationDbContext contextFactory)
-            => _context = contextFactory;
+        {
+            _context = contextFactory;
+        }
 
-        public async Task<IEnumerable<TimedTaskEntity>> GetTaskAsync() 
-            => await _context.TimedTasks.AsNoTracking().ToArrayAsync();
+        public async Task<IEnumerable<TimedTaskEntity>> GetTaskAsync()
+        {
+            return await _context.TimedTasks.AsNoTracking().ToArrayAsync();
+        }
 
         public async Task<TimedTaskEntity> UpdateTime(string name)
         {
