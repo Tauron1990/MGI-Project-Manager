@@ -61,6 +61,8 @@ namespace ServerTest.Dispatcher
             public Task Error(Operation op, Exception e)
             {
                 ErrorCalled = true;
+
+                return Task.CompletedTask;
             }
         }
 
@@ -105,13 +107,13 @@ namespace ServerTest.Dispatcher
         public async Task AddOperation_Test()
         {
             var testingObject = GetTestingObject();
-            var opMen = testingObject.GetResolvedTestingObject();
+            var opMan = testingObject.GetResolvedTestingObject();
 
             const string targetOperationName = "TestOperation";
 
             var testSetup = new OperationSetup(targetOperationName, "Test", new Dictionary<string, string> {{"Test", "Test"}}, DateTime.Now);
 
-            var test = await opMen.AddOperation(testSetup);
+            var test = await opMan.AddOperation(testSetup);
 
             Assert.NotNull(_createdOp);
             Assert.Equal(test, _createdOp.OperationId);
@@ -122,16 +124,40 @@ namespace ServerTest.Dispatcher
         [Fact]
         public async Task UpdateOperation_Test()
         {
-            var testingObject = GetTestingObject();
-            var opMen         = testingObject.GetResolvedTestingObject();
+            _createOp = true;
 
-            await opMen.UpdateOperation(_createdOp.OperationId, dictionary =>
+            var testingObject = GetTestingObject();
+            var opMan         = testingObject.GetResolvedTestingObject();
+
+            await opMan.UpdateOperation(_createdOp.OperationId, dictionary =>
                                                                 {
                                                                     dictionary.Remove("Test2");
                                                                     dictionary.Add("Test5", "Test5");
                                                                 });
 
-            Assert.Null(_createdOp.Context.Find());
+            Assert.Null(_createdOp.Context.Find(oce => oce.Name == "Test2"));
+            Assert.NotNull(_createdOp.Context.Find(oce => oce.Name == "Test5"));
+        }
+
+        [Fact]
+        public async Task SearchOperation_Test()
+        {
+            _createOp = true;
+
+            var testingObject = GetTestingObject();
+            var opMan = testingObject.GetResolvedTestingObject();
+
+            var result = await opMan.SearchOperation(_createdOp.OperationId);
+
+            Assert.NotNull(result);
+            Assert.Equal(4, result.Count);
+            Assert.Equal("Test1", result["Test1"]);
+        }
+
+        [Fact]
+        public async Task ExecuteNext_Test()
+        {
+
         }
     }
 }
