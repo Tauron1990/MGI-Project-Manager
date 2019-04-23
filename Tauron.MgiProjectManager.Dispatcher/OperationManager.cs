@@ -96,10 +96,18 @@ namespace Tauron.MgiProjectManager.Dispatcher
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error Running Action: {action.Name}");
-                await action.Error(op, e);
+                try
+                {
+                    _logger.LogError(e, $"Error Running Action: {action.Name}");
+                    await action.Error(op, e);
 
-                return new string[0];
+                    return new string[0];
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, $"Error Error notify Action: {action.Name}");
+                    return new string[0];
+                }
             }
         }
 

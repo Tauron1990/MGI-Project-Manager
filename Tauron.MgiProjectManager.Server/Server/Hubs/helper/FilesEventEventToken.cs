@@ -4,12 +4,12 @@ using Tauron.MgiProjectManager.Dispatcher.Model;
 
 namespace Tauron.MgiProjectManager.Server.Hubs
 {
-    [Export(typeof(IHubHelper), LiveCycle = LiveCycle.Transistent)]
-    public class FilesHubEventToken : IHubHelper
+    [Export(typeof(IEventHelper), LiveCycle = LiveCycle.Transistent)]
+    public class FilesEventEventToken : IEventHelper
     {
         private readonly IHubContext<FilesHub, IFilesHub> _hub;
 
-        public FilesHubEventToken(IHubContext<FilesHub, IFilesHub> hub) 
+        public FilesEventEventToken(IHubContext<FilesHub, IFilesHub> hub) 
             => _hub = hub;
 
         public EventToken GetEventToken() 

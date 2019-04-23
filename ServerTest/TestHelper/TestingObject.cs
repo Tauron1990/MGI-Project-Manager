@@ -71,18 +71,24 @@ namespace ServerTest.TestHelper
             {
                 TypeInfo typeInfo = dependency.Key.GetTypeInfo();
 
-                if (typeInfo.IsGenericType && typeInfo.GetGenericTypeDefinition() == typeof(Mock<>))
+                if (typeInfo.IsGenericType)
                 {
-                    PropertyInfo propertyInfo = dependency.Key.GetProperty("Object",
-                        BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
-                    object value = propertyInfo.GetValue(dependency.Value);
+                    var definition = typeInfo.GetGenericTypeDefinition();
+                    if (definition == typeof(Mock<>))
+                    {
+                        PropertyInfo propertyInfo = dependency.Key.GetProperty("Object",
+                                                                               BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
+                        object value = propertyInfo.GetValue(dependency.Value);
 
-                    serviceCollection.AddSingleton(dependency.Key.GenericTypeArguments[0], value);
+                        serviceCollection.AddSingleton(dependency.Key.GenericTypeArguments[0], value);
+                    }
+                    else if (definition == typeof(Func<,>))
+                        serviceCollection.AddTransient(typeInfo.GenericTypeParameters[1], (Func<IServiceProvider, object>) dependency.Value);
+                    else
+                        serviceCollection.AddSingleton(dependency.Key, dependency.Value);
                 }
                 else
-                {
                     serviceCollection.AddSingleton(dependency.Key, dependency.Value);
-                }
             }
 
             IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();

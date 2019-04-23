@@ -41,7 +41,7 @@ namespace Tauron.MgiProjectManager.Dispatcher
                         .ServiceProvider
                         .GetRequiredService<IUnitOfWork>()
                         .TimedTaskRepository
-                        .GetTaskAsync())
+                        .GetTasks())
                         .ToDictionary(te => te.Name));
             }
             catch (Exception e)

@@ -7,7 +7,7 @@ namespace Tauron.MgiProjectManager.Server.Hubs
     where THub : Hub<TInterfaceHub> where TInterfaceHub : class
     {
         private readonly IHubContext<THub, TInterfaceHub> _hubContext;
-        public override TInterfaceHub Hub => _hubContext.Clients.All;
+        public override TInterfaceHub EventElement => _hubContext.Clients.All;
 
         public EventTokenImpl(IHubContext<THub, TInterfaceHub> hubContext) 
             => _hubContext = hubContext;

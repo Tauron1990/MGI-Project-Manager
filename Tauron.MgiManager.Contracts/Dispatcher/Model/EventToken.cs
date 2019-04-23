@@ -4,7 +4,7 @@ namespace Tauron.MgiProjectManager.Dispatcher.Model
 {
     public abstract class EventToken
     {
-        public abstract Type HubType { get; }
+        public abstract Type EventType { get; }
 
         protected EventToken()
         {

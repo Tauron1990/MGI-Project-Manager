@@ -10,10 +10,10 @@ namespace Tauron.MgiProjectManager.Dispatcher
     {
         private readonly Dictionary<Type, EventToken> _eventTokens;
 
-        public EventDispatcher(IEnumerable<IHubHelper> helper) 
-            => _eventTokens = helper.Select(h => h.GetEventToken()).ToDictionary(t => t.HubType);
+        public EventDispatcher(IEnumerable<IEventHelper> helper) 
+            => _eventTokens = helper.Select(h => h.GetEventToken()).ToDictionary(t => t.EventType);
 
         public TypedEventToken<TEvent> GetToken<TEvent>() 
-            => (TypedEventToken<TEvent>) _eventTokens[typeof(TEvent)];
+            => _eventTokens[typeof(TEvent)] as TypedEventToken<TEvent>;
     }
 }

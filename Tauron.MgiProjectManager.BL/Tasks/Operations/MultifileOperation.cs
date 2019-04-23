@@ -25,7 +25,7 @@ namespace Tauron.MgiProjectManager.BL.Tasks.Operations
 
         public MultifileOperation(IEventDispatcher eventDispatcher, IUnitOfWork repository, IJobNameMatcher jobNameMatcher, ILogger<MultifileOperation> logger)
         {
-            _filesHub = eventDispatcher.GetToken<IFilesHub>().Hub;
+            _filesHub = eventDispatcher.GetToken<IFilesHub>().EventElement;
             _unitOfWork = repository;
             _jobNameMatcher = jobNameMatcher;
             _logger = logger;

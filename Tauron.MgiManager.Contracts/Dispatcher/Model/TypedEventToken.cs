@@ -4,11 +4,11 @@ namespace Tauron.MgiProjectManager.Dispatcher.Model
 {
     public abstract class TypedEventToken<TEvent> : EventToken
     {
-        public override Type HubType => typeof(TEvent);
+        public override Type EventType => typeof(TEvent);
 
-        public abstract TEvent Hub { get; }
+        public abstract TEvent EventElement { get; }
 
 
-        public static implicit operator TEvent(TypedEventToken<TEvent> token) => token.Hub;
+        public static implicit operator TEvent(TypedEventToken<TEvent> token) => token.EventElement;
     }
 }

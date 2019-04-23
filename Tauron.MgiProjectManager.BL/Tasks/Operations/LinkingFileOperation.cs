@@ -27,7 +27,7 @@ namespace Tauron.MgiProjectManager.BL.Tasks.Operations
         public LinkingFileOperation(IJobNameMatcher matcher, IEventDispatcher eventDispatcher, ILogger<LinkingFileOperation> logger, IUnitOfWork repository)
         {
             _matcher = matcher;
-            _filesHub = eventDispatcher.GetToken<IFilesHub>().Hub;
+            _filesHub = eventDispatcher.GetToken<IFilesHub>().EventElement;
             _logger = logger;
             _unitOfWork = repository;
         }
