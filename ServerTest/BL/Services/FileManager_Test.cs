@@ -7,14 +7,15 @@ using ServerTest.TestHelper;
 using Tauron.MgiProjectManager.BL.Services;
 using Tauron.MgiProjectManager.Data.Repositorys;
 using Tauron.MgiProjectManager.Dispatcher;
+using Tauron.MgiProjectManager.Dispatcher.Model;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace ServerTest.BL.Services
 {
-    public class FileManager_Test : TestClassBase<FileManager>
+    public class FileManagerTest : TestClassBase<FileManager>
     {
-        public FileManager_Test(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public FileManagerTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {}
 
         #region Overrides of TestClassBase<FileManager>
@@ -23,7 +24,8 @@ namespace ServerTest.BL.Services
         {
             var obj = base.GetTestingObject()
                           .AddLogger(TestOutputHelper)
-                          .BuildMock<IOperationManager>()
+                          .BuildMock<IOperationManager>(
+                              m => m.Setup(om => om.AddOperation(It.IsAny<OperationSetup>())).Returns())
                           .BuildMock<IFileDatabase>(m => m.Setup(d => d.AddFile(It.IsAny<string>(), It.IsAny<Func<Task<Stream>>>())).Returns(Task.FromResult(true)));
 
 
@@ -63,6 +65,7 @@ namespace ServerTest.BL.Services
         {
             var fm = GetTestingObject().GetResolvedTestingObject();
 
+            var fakeData = new MemoryStream();
         }
     }
 }
