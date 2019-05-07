@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
@@ -21,15 +22,15 @@ namespace ServerTest.Dispatcher
         {
             public string Name => "Test";
 
-            public static bool ThrowException { get; set; }
+            public bool ThrowException { private get; set; }
 
-            public static bool ExecuteCalled { get; set; }
+            public bool ExecuteCalled { get; private set; }
 
-            public static bool PostExecuteCalled { get; set; }
+            public bool PostExecuteCalled { get; private set; }
 
-            public static bool RemoveCalled { get; set; }
+            public bool RemoveCalled { get; private set; }
 
-            public static bool ErrorCalled { get; set; }
+            public bool ErrorCalled { get; private set; }
 
             public Task<OperationSetup[]> Execute(Operation op)
             {
@@ -40,7 +41,7 @@ namespace ServerTest.Dispatcher
                 if(ThrowException)
                     throw new InvalidOperationException("Expectet Exception");
 
-                return Task.FromResult(Array.Empty<OperationSetup>());
+                return Task.FromResult(new []{new OperationSetup("Test", "Test", ImmutableDictionary<string, string>.Empty, DateTime.Now) });
             }
 
             public Task PostExecute(Operation op)
@@ -66,8 +67,11 @@ namespace ServerTest.Dispatcher
             }
         }
 
-        private bool _createOp = false;
+        private bool _removeCalled;
 
+        private bool _createOp;
+
+        private TestAction _testAction;
         private OperationEntity _createdOp;
 
         public OperationManagerTest(ITestOutputHelper testOutputHelper) 
@@ -91,14 +95,18 @@ namespace ServerTest.Dispatcher
                                                                .Callback<OperationEntity>(op => _createdOp = op),
                                                          m => m.Setup(or => or.UpdateOperation(It.IsAny<string>(), It.IsAny<Action<OperationEntity>>()))
                                                                .Returns(Task.CompletedTask)
-                                                               .Callback<string, Action<OperationEntity>>(((s, action) => action(_createdOp))));
+                                                               .Callback<string, Action<OperationEntity>>(((s, action) => action(_createdOp))),
+                                                         m => m.Setup(or => or.Remove(It.Is<string>(e => e == _createdOp.OperationId)))
+                                                               .Returns(Task.CompletedTask).Callback(() => _removeCalled = true));
+
+            _testAction = new TestAction();
 
             var unitMock = BuildMock<IUnitOfWork>(m => m.Setup(u => u.SaveChanges()).Returns(Task.FromResult(0)),
                                                   m => m.Verify(u => u.SaveChanges(), Times.Never),
                                                   m => m.SetupGet(u => u.OperationRepository).Returns(opRepo));
-
+            
             return base.GetTestingObject()
-                       .AddDependency<IEnumerable<IOperationAction>>(new[] {new TestAction()})
+                       .AddDependency<IEnumerable<IOperationAction>>(new[] { _testAction })
                        .AddLogger(TestOutputHelper)
                        .AddDependency(unitMock);
         }
@@ -157,7 +165,98 @@ namespace ServerTest.Dispatcher
         [Fact]
         public async Task ExecuteNext_Test()
         {
+            _createOp = true;
 
+            var testingObject = GetTestingObject();
+            var opMan         = testingObject.GetResolvedTestingObject();
+
+            var result = await opMan.ExecuteNext(_createdOp.OperationId);
+
+            Assert.Single(result);
+            Assert.True(_testAction.ExecuteCalled);
+            Assert.False(_testAction.ErrorCalled);
+            Assert.False(_testAction.RemoveCalled);
+            Assert.True(_testAction.PostExecuteCalled);
+        }
+
+        [Fact]
+        public async Task ExecuteNext_Test_Exceoption()
+        {
+            _createOp = true;
+            _testAction.ThrowException = true;
+
+            var testingObject = GetTestingObject();
+            var opMan         = testingObject.GetResolvedTestingObject();
+
+            var result = await opMan.ExecuteNext(_createdOp.OperationId);
+
+            Assert.Empty(result);
+            Assert.True(_testAction.ExecuteCalled);
+            Assert.True(_testAction.ErrorCalled);
+            Assert.False(_testAction.RemoveCalled);
+            Assert.False(_testAction.PostExecuteCalled);
+        }
+
+        [Fact]
+        public async Task RemoveAction_Test()
+        {
+            _createOp                  = true;
+
+            var testingObject = GetTestingObject();
+            var opMan         = testingObject.GetResolvedTestingObject();
+
+            await opMan.RemoveAction(_createdOp.OperationId);
+
+            Assert.True(_removeCalled);
+            Assert.True(_testAction.RemoveCalled);
+        }
+
+        [Fact]
+        public async Task CleanUpExpiryOperation_Test()
+        {
+            _createOp = true;
+
+            var testingObject = GetTestingObject();
+            var opMan         = testingObject.GetResolvedTestingObject();
+
+            await opMan.CleanUpExpiryOperation();
+
+            Assert.True(_removeCalled);
+            Assert.True(_testAction.RemoveCalled);
+        }
+
+        [Fact]
+        public async Task GetOperations_Test()
+        {
+            _createOp = true;
+
+            var testingObject = GetTestingObject();
+            var opMan         = testingObject.GetResolvedTestingObject();
+            
+            var ops = await opMan.GetOperations(of =>
+                                      {
+                                          Assert.Equal(_createdOp.OperationId, of.OperationId);
+                                          Assert.Equal(of.CurrentOperation, _createdOp.CurrentOperation);
+                                          Assert.Equal(of.OperationType, _createdOp.OperationType);
+                                          Assert.Equal(of.Context.Select(p => p.Key), _createdOp.Context.Select(oce => oce.Name));
+                                          return true;
+                                      });
+
+            Assert.Single(ops);
+            Assert.Equal(ops[0], _createdOp.OperationId);
+        }
+
+        [Fact]
+        public async Task GetContext_Test()
+        {
+            _createOp = true;
+
+            var testingObject = GetTestingObject();
+            var opMan         = testingObject.GetResolvedTestingObject();
+
+            var context = await opMan.GetContext(_createdOp.OperationId);
+
+            Assert.Equal(context.Select(p => p.Key), _createdOp.Context.Select(oce => oce.Name));
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Tauron.MgiProjectManager.BL.Services
         public Task<(bool Ok, string Error)> CanAdd(string name)
         {
             string message = string.Empty;
-            bool ok = AllowedEndings.Any(name.EndsWith);
+            bool ok = AllowedEndings.Any(name.EndsWith) && name.Split(new []{'.'}, StringSplitOptions.RemoveEmptyEntries).Length == 2;
             if (ok)
                 message = string.Format(BLRes.Api_FilesController_DisallowedExtension, Path.GetFileName(name));
 
@@ -48,7 +48,7 @@ namespace Tauron.MgiProjectManager.BL.Services
 
                 foreach (var (name, stream) in files)
                 {
-                    // ReSharper disable once UseUsingVarLocalVariable
+                    // ReSharper disable once ConvertToUsingDeclaration
                     using (stream)
                     {
                         if (await _fileDatabase.AddFile(name, () => Task.FromResult(stream)))

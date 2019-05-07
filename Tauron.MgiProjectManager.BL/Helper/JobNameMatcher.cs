@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Tauron.MgiProjectManager.BL.Helper
 {
+    [Export(typeof(IJobNameMatcher))]
     public class JobNameMatcher : IJobNameMatcher
     {
         private class RangeHelper
@@ -94,7 +95,7 @@ namespace Tauron.MgiProjectManager.BL.Helper
         }
 
         private readonly Regex _nameMatch;
-        private RangeHelper _rangeHelper;
+        private readonly RangeHelper _rangeHelper;
 
         public JobNameMatcher(AppSettings configuration)
         {
