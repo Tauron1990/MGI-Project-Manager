@@ -5,6 +5,6 @@ namespace Tauron.MgiProjectManager.Dispatcher
 {
     public interface IBackgroundTaskDispatcher
     {
-        Task SheduleTest(Func<Task> task);
+        Task SheduleTask(Func<IServiceProvider, Task> task);
     }
 }

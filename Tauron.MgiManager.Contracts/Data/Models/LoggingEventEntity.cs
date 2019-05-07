@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using Serilog.Events;
 
@@ -22,7 +23,7 @@ namespace Tauron.MgiProjectManager.Data.Models
 
         public LoggingEventEntity(LogEvent logEvent)
         {
-            Exception = logEvent.Exception?.ToString() ?? string.Empty;
+            Exception = logEvent.Exception?.ToStringDemystified() ?? string.Empty;
             Message = logEvent.RenderMessage();
             Properties = string.Join(", ", logEvent.Properties.Select(p => $"{{{p.Key}, {p.Value.ToString()}}}"));
             Level = logEvent.Level;

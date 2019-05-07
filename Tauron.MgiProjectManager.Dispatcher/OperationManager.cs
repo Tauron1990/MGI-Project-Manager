@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tauron.MgiProjectManager.Data;
 using Tauron.MgiProjectManager.Data.Models;
@@ -14,16 +15,17 @@ namespace Tauron.MgiProjectManager.Dispatcher
     [Export(typeof(IOperationManager))]
     public class OperationManager : IOperationManager
     {
-        private readonly IEnumerable<IOperationAction> _operationActions;
         private readonly IOperationRepository _operationRepository;
         private readonly ILogger<OperationManager> _logger;
+        private readonly IBackgroundTaskDispatcher _dispatcher;
+        private readonly IServiceProvider _serviceProvider;
 
-
-        public OperationManager(IEnumerable<IOperationAction> operationActions, IUnitOfWork unitOfWork, ILogger<OperationManager> logger)
+        public OperationManager(IUnitOfWork unitOfWork, ILogger<OperationManager> logger, IBackgroundTaskDispatcher dispatcher, IServiceProvider serviceProvider)
         {
-            _operationActions = operationActions;
             _operationRepository = unitOfWork.OperationRepository;
             _logger = logger;
+            _dispatcher = dispatcher;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task<string> AddOperation(OperationSetup op)
@@ -79,36 +81,36 @@ namespace Tauron.MgiProjectManager.Dispatcher
             return dic;
         }
 
-        public async Task<IEnumerable<string>> ExecuteNext(string id)
+        public async Task ExecuteNext(string id)
         {
             var opE = await _operationRepository.Find(id);
             var op = opE.ToOperation();
 
-            var action = _operationActions.First(a => a.Name == op.CurrentOperation);
-
-            try
+            await _dispatcher.SheduleTask(async (prov) =>
             {
-                var operations = await action.Execute(op);
-                await _operationRepository.CompledOperation(op.OperationId);
-                await action.PostExecute(op);
+                var action = prov.GetRequiredService<IEnumerable<IOperationAction>>().First(a => a.Name == op.CurrentOperation);
 
-                return await Task.WhenAll(operations.Select(AddOperation));
-            }
-            catch (Exception e)
-            {
                 try
                 {
-                    _logger.LogError(e, $"Error Running Action: {action.Name}");
-                    await action.Error(op, e);
+                    var operations = await action.Execute(op);
+                    await _operationRepository.CompledOperation(op.OperationId);
+                    await action.PostExecute(op);
 
-                    return new string[0];
+                    await Task.WhenAll(operations.Select(AddOperation));
                 }
-                catch (Exception exception)
+                catch (Exception e)
                 {
-                    _logger.LogError(exception, $"Error Error notify Action: {action.Name}");
-                    return new string[0];
+                    try
+                    {
+                        _logger.LogError(e, $"Error Running Action: {action.Name}");
+                        await action.Error(op, e);
+                    }
+                    catch (Exception exception)
+                    {
+                        _logger.LogError(exception, $"Error Error notify Action: {action.Name}");
+                    }
                 }
-            }
+            });
         }
 
         public async Task RemoveAction(string id)
@@ -116,7 +118,7 @@ namespace Tauron.MgiProjectManager.Dispatcher
             var ent = await _operationRepository.Find(id);
             var op = ent.ToOperation();
 
-            var action = await _operationActions.ToAsyncEnumerable().First(e => e.Name == ent.CurrentOperation);
+            var action = await GetActions().ToAsyncEnumerable().First(e => e.Name == ent.CurrentOperation);
             var result = await action.Remove(op);
 
             if (result)
@@ -146,5 +148,8 @@ namespace Tauron.MgiProjectManager.Dispatcher
 
         public async Task<IDictionary<string, string>> GetContext(string id) 
             => (await _operationRepository.Find(id)).ToOperation().OperationContext;
+
+        private IEnumerable<IOperationAction> GetActions() 
+            => _serviceProvider.GetRequiredService<IEnumerable<IOperationAction>>();
     }
 }

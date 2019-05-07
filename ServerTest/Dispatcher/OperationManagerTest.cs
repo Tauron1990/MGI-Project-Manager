@@ -108,7 +108,8 @@ namespace ServerTest.Dispatcher
             return base.GetTestingObject()
                        .AddDependency<IEnumerable<IOperationAction>>(new[] { _testAction })
                        .AddLogger(TestOutputHelper)
-                       .AddDependency(unitMock);
+                       .AddDependency(unitMock)
+                       .AddDependencyWithProvider<IBackgroundTaskDispatcher>(p => new SyncTaskSheduler(p));
         }
 
         [Fact]
@@ -170,9 +171,8 @@ namespace ServerTest.Dispatcher
             var testingObject = GetTestingObject();
             var opMan         = testingObject.GetResolvedTestingObject();
 
-            var result = await opMan.ExecuteNext(_createdOp.OperationId);
+            await opMan.ExecuteNext(_createdOp.OperationId);
 
-            Assert.Single(result);
             Assert.True(_testAction.ExecuteCalled);
             Assert.False(_testAction.ErrorCalled);
             Assert.False(_testAction.RemoveCalled);
@@ -188,9 +188,8 @@ namespace ServerTest.Dispatcher
             var testingObject = GetTestingObject();
             var opMan         = testingObject.GetResolvedTestingObject();
 
-            var result = await opMan.ExecuteNext(_createdOp.OperationId);
+            await opMan.ExecuteNext(_createdOp.OperationId);
 
-            Assert.Empty(result);
             Assert.True(_testAction.ExecuteCalled);
             Assert.True(_testAction.ErrorCalled);
             Assert.False(_testAction.RemoveCalled);

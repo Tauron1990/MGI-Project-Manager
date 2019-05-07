@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -11,7 +10,7 @@ using Xunit.Abstractions;
 
 namespace ServerTest.TestHelper
 {
-    public class TestingObject<T> where T : class
+    public class TestingObject<T> : IServiceProvider where T : class
     {
         private class OptionsHolder<TType> : IOptions<TType> where TType : class, new()
         {
@@ -20,11 +19,20 @@ namespace ServerTest.TestHelper
             public OptionsHolder(TType value) => Value = value;
         }
 
-        private Dictionary<Type, object> _dependencyMap { get; } = new Dictionary<Type, object>();
+        private Dictionary<Type, object> DependencyMap { get; } = new Dictionary<Type, object>();
+
+        private IServiceProvider _serviceProvider;
+
 
         public TestingObject<T> AddDependency<TDependency>(TDependency dependency)
         {
-            _dependencyMap.Add(typeof(TDependency), dependency);
+            DependencyMap.Add(typeof(TDependency), dependency);
+            return this;
+        }
+
+        public TestingObject<T> AddDependencyWithProvider<TDependency>(Func<IServiceProvider, TDependency> dependency)
+        {
+            DependencyMap.Add(typeof(TDependency), dependency(this));
             return this;
         }
 
@@ -32,7 +40,7 @@ namespace ServerTest.TestHelper
         {
             Type type = typeof(TDependency);
 
-            if (!_dependencyMap.TryGetValue(type, out var dependency))
+            if (!DependencyMap.TryGetValue(type, out var dependency))
             {
                 throw new Exception($"Testing object doesn't contain dependency of type {type}.");
             }
@@ -67,7 +75,7 @@ namespace ServerTest.TestHelper
         {
             IServiceCollection serviceCollection = new ServiceCollection();
 
-            foreach (var dependency in _dependencyMap)
+            foreach (var dependency in DependencyMap)
             {
                 TypeInfo typeInfo = dependency.Key.GetTypeInfo();
 
@@ -91,9 +99,12 @@ namespace ServerTest.TestHelper
                     serviceCollection.AddSingleton(dependency.Key, dependency.Value);
             }
 
-            IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
-            return ActivatorUtilities.CreateInstance<T>(serviceProvider);
+            _serviceProvider = serviceCollection.BuildServiceProvider();
+            return ActivatorUtilities.CreateInstance<T>(_serviceProvider);
         }
+
+        public object GetService(Type serviceType) 
+            => _serviceProvider?.GetService(serviceType);
     }
 
 }

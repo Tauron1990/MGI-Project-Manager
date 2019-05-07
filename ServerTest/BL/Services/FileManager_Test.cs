@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using IdentityServer4.Validation;
 using Moq;
 using ServerTest.TestHelper;
 using Tauron.MgiProjectManager.BL.Services;
@@ -60,6 +61,7 @@ namespace ServerTest.BL.Services
         [Fact]
         public async Task AddFiles_Test()
         {
+            var fm = GetTestingObject().GetResolvedTestingObject();
 
         }
     }

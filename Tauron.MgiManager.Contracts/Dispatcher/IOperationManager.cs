@@ -13,7 +13,7 @@ namespace Tauron.MgiProjectManager.Dispatcher
 
         Task<IReadOnlyDictionary<string, string>> SearchOperation(string id);
         
-        Task<IEnumerable<string>> ExecuteNext(string id);
+        Task ExecuteNext(string id);
 
         Task RemoveAction(string id);
 

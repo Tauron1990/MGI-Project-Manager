@@ -6,7 +6,13 @@ namespace ServerTest.TestHelper
 {
     public class SyncTaskSheduler : IBackgroundTaskDispatcher
     {
-        public async Task SheduleTest(Func<Task> task) 
-            => await task();
+        private readonly IServiceProvider _serviceProvider;
+
+        public SyncTaskSheduler(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
+        public async Task SheduleTask(Func<IServiceProvider, Task> task) => await task(_serviceProvider);
     }
 }
