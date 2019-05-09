@@ -1,0 +1,7 @@
+Ein Web Servcie Nimmt eine oder zwei der untengenannten Aufgaben war. Er muss im Dispatcher registriert werden
+um Ordnugemäs zu funktionieren. 
+	Aufgaben:
+	1: Evnts und Commandos:
+		Verabeiten von eingehenden Commandos und ausgeben von Events.
+	2: Api:
+		Bereitstellen von Daten und Informationen.
