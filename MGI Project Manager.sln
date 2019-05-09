@@ -69,6 +69,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.MgiProjectManager.Se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventSourcingTest", "EventSourcingTest\EventSourcingTest.csproj", "{1138CA1B-DF10-4BBE-AEAD-F0DEB2535DE7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Architektur", "Architektur", "{188A087C-E11E-4F18-ABFE-871413FFBE26}"
+	ProjectSection(SolutionItems) = preProject
+		Dispatcher.txt = Dispatcher.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -173,6 +178,7 @@ Global
 		{3A8BE571-1229-4BB9-A360-855F39760300} = {EF367C46-2ED7-429B-8B16-125771E85A07}
 		{041D315D-570E-44DB-94CC-77AD3F6B7C00} = {EF367C46-2ED7-429B-8B16-125771E85A07}
 		{1138CA1B-DF10-4BBE-AEAD-F0DEB2535DE7} = {574D22A4-A56A-4496-BC14-C32212C058E4}
+		{188A087C-E11E-4F18-ABFE-871413FFBE26} = {8DD354E5-BBDB-4C25-AC42-885205CAE39B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}

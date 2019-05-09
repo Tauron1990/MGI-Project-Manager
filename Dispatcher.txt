@@ -1,0 +1,39 @@
+Aufgaben:
+	1: Verteilung von Ereignissen und Commandos an Verbundene Dinste.
+	2: Überwachen der Gesundheit der Verbundenen Dinste.
+	3: Verwaltung der der Verbundene dinste(Hinzufügen und Entfernen).
+	4: Weiterleitung von API Anfragen an Verbundenen Dinste.
+
+Implementierung:
+	1: Dispatcher:
+		Events:
+		Ereignisse werden entweder an alle oder an bestimmte dinste gesendet.
+		Sie transporieren nur Informationen zu bestimmten daten.
+		Bekannt sind Drei arten von ereignissen:
+			1: Transist. Werden gesendet ohne zu prüfen ob diese angekommen sind.
+			2: Importend. Werden gesendet und die zustellung sichergestellt.
+			3: Essential. Commandos und ereignisse werden Blockiert bis alle das ereigniss erhallten haben.
+
+		Commandos:
+		Commandos Triggern in verbudenen Dinsten die verabeitung von Daten.
+		Commandos sind alle essential aber können nur von einem Dinst Type Verabeitent werden.
+		Commandos und ereignisse werden Blockiert bis ein zuständiger Dinst das Comando erhallten haben.
+
+		Allgemeines:
+		Ereignisse und kommandos werden Intern gleich behandelt. Sie sollten in der Korrekten reihenfolge
+		Ausgeliefert werden.
+
+	2: Monitoring:
+		Der Dispatcher versucht alle verbundenen Dinste regelmäßg anzu pinngen. Er stellt die 
+		Informatione als api zur verfügung. Die Verabeitung von Ereignissen und Kommandos erfogen nur wenn
+		alle Essentiellen dinste zur verfügung stehen. Die Verfügbarkeit kann von jeden abgefragt werden.
+
+	3: Verbudenen Dinste:
+		Dinste können hinzugefügt und entfehrnt werden. Dopple Dinst instantzen werden untertstüzt.
+		Der Dispatcher stellt sich, dass nur ein Dinst das Kommando verabeited. Jeder dinst wird Durch die 
+		URI und einem ihm zugeordnetem Type Identifiziert.
+
+	4: Proxy:
+		API Anfragen für Verbundene Dinste Können über den Dispatcher an einen Dinst weitergeleitet werden.
+
+				
