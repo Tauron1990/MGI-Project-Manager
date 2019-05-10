@@ -76,6 +76,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Architektur", "Architektur"
 		Webservice.txt = Webservice.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAppWpf", "TestAppWpf\TestAppWpf.csproj", "{DC9E6398-75F0-49B0-ABA8-BCE05DD431CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -154,6 +156,10 @@ Global
 		{1138CA1B-DF10-4BBE-AEAD-F0DEB2535DE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1138CA1B-DF10-4BBE-AEAD-F0DEB2535DE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1138CA1B-DF10-4BBE-AEAD-F0DEB2535DE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC9E6398-75F0-49B0-ABA8-BCE05DD431CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC9E6398-75F0-49B0-ABA8-BCE05DD431CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC9E6398-75F0-49B0-ABA8-BCE05DD431CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC9E6398-75F0-49B0-ABA8-BCE05DD431CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -181,6 +187,7 @@ Global
 		{041D315D-570E-44DB-94CC-77AD3F6B7C00} = {EF367C46-2ED7-429B-8B16-125771E85A07}
 		{1138CA1B-DF10-4BBE-AEAD-F0DEB2535DE7} = {574D22A4-A56A-4496-BC14-C32212C058E4}
 		{188A087C-E11E-4F18-ABFE-871413FFBE26} = {8DD354E5-BBDB-4C25-AC42-885205CAE39B}
+		{DC9E6398-75F0-49B0-ABA8-BCE05DD431CA} = {574D22A4-A56A-4496-BC14-C32212C058E4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}
