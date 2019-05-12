@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{14CB23A9-E619-4338-803C-2B7554118D20}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>IISServiceManager</RootNamespace>
+    <AssemblyName>IISServiceManager</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\iconfinder_gnome-mime-text-x-install_79960.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Core\ServiceStadeColorConverter.cs" />
+    <Compile Include="Core\BoolMultiValue.cs" />
+    <Compile Include="Core\BoolToVisbleConverter.cs" />
+    <Compile Include="Core\ReverseBoolConverter.cs" />
+    <Compile Include="Core\UIObservableCollection.cs" />
+    <Compile Include="Processing\ClusterEntry.cs" />
+    <Compile Include="Processing\InstallableService.cs" />
+    <Compile Include="Processing\InstallEngine.cs" />
+    <Compile Include="Resources\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\AsyncCommand.cs" />
+    <Compile Include="Core\AwaitableExtensions.cs" />
+    <Compile Include="Core\IAsyncCommand.cs" />
+    <Compile Include="Core\IErrorHandler.cs" />
+    <Compile Include="Core\ObservableDictionary.cs" />
+    <Compile Include="Core\TaskUtilities.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Strings.de.resx" />
+    <EmbeddedResource Include="Resources\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations">
+      <Version>2019.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="MvvmLight">
+      <Version>5.4.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Ookii.Dialogs.Wpf">
+      <Version>1.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Syncfusion.Licensing">
+      <Version>17.1.0.44</Version>
+    </PackageReference>
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF">
+      <Version>17.1.0.44</Version>
+    </PackageReference>
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF">
+      <Version>17.1.0.44</Version>
+    </PackageReference>
+    <PackageReference Include="Syncfusion.Shared.WPF">
+      <Version>17.1.0.44</Version>
+    </PackageReference>
+    <PackageReference Include="Syncfusion.Themes.Office2010Black.WPF">
+      <Version>17.1.0.44</Version>
+    </PackageReference>
+    <PackageReference Include="WPFLocalizeExtension">
+      <Version>3.3.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\iconfinder_gnome-mime-text-x-install_79960.ico" />
+    <Resource Include="Resources\iconfinder_gnome-mime-text-x-install_79960.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IISServiceManager.Contratcs\IISServiceManager.Contratcs.csproj">
+      <Project>{1147c54c-6d6e-4a10-bc5b-8932e4934374}</Project>
+      <Name>IISServiceManager.Contratcs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IISServiceManager.MgiProjectManager\IISServiceManager.MgiProjectManager.csproj">
+      <Project>{52c2e87c-0e57-438a-b4a1-07389e52037f}</Project>
+      <Name>IISServiceManager.MgiProjectManager</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

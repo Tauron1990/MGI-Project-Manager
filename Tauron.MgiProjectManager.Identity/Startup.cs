@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
 using AutoMapper;
 using FluentValidation.AspNetCore;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -163,8 +165,26 @@ namespace Tauron.MgiProjectManager.Identity
         {
             loggerFactory.AddFile(Configuration.GetSection("Logging"));
 
+            var supportedCultures = new[]
+                                    {
+                                        new CultureInfo("en"),
+                                        new CultureInfo("de")
+                                    };
+            
+            app.UseRequestLocalization(new RequestLocalizationOptions
+                                       {
+                                           DefaultRequestCulture = new RequestCulture("en"),
+                                           // Formatting numbers, dates, etc.
+                                           SupportedCultures = supportedCultures,
+                                           // UI strings that we have localized.
+                                           SupportedUICultures = supportedCultures
+                                       });
+
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
+
+
+            app.UseIdentityServer();
 
             app.UseRouting();
 
