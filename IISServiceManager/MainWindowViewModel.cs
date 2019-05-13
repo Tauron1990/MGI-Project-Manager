@@ -52,9 +52,7 @@ namespace IISServiceManager
             set
             {
                 if (Set(ref _selectedEntry, value))
-                {
                     LoadServices();
-                }
             }
         }
 
@@ -80,7 +78,15 @@ namespace IISServiceManager
         
         public AsyncCommand ReCheckPrerequisites { get; }
 
-        public AsyncCommand CommonWebServiceClick { get; }
+        public AsyncCommand UpdateAllCommand { get; }
+
+        private AsyncCommand CommonWebServiceClick { get; }
+
+        private AsyncCommand InstallCommand { get; }
+
+        private AsyncCommand UnistallCommand { get; }
+
+        private AsyncCommand UpdateCommand { get; }
 
         public MainWindowViewModel()
         {
@@ -89,8 +95,55 @@ namespace IISServiceManager
 
             LoadedCommand = new AsyncCommand(LoadApp);
             ReCheckPrerequisites = new AsyncCommand(CheckPrerequisites, () => SelectedEntry != null);
+            CommonWebServiceClick = new AsyncCommand(ExecuteCommonClick);
+            InstallCommand = new AsyncCommand(InstallService);
+            UnistallCommand = new AsyncCommand(UninstallService);
+            UpdateCommand = new AsyncCommand(UpdateService);
+            UpdateAllCommand = new AsyncCommand(UpdateAll, () => SelectedEntry != null);
         }
 
+        #region  UI Commands
+
+        private async Task UpdateAll(object arg) 
+            => await InstallEngine.UpdateAll();
+
+        private async Task InstallService(object arg)
+        {
+            if (!(arg is InstallableService service)) return;
+
+            await InstallService(service.WebService);
+        }
+        private async Task UninstallService(object arg)
+        {
+            if (!(arg is InstallableService service)) return;
+
+            await UninstallService(service.WebService);
+        }
+        private async Task UpdateService(object arg)
+        {
+            if (!(arg is InstallableService service)) return;
+
+            await UpdateService(service.WebService);
+        }
+        private async Task ExecuteCommonClick(object arg)
+        {
+            if(!(arg is InstallableService service)) return;
+
+            switch (service.IsInstalled)
+            {
+                case ServiceStade.Running:
+                    await StopService(service.WebService);
+                    break;
+                case ServiceStade.Stopped:
+                    await StartService(service.WebService);
+                    break;
+                case ServiceStade.NotInstalled:
+                    await InstallService(service.WebService);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
         private async Task LoadApp(object arg)
         {
             IsBusy = true;
@@ -135,6 +188,9 @@ namespace IISServiceManager
 
             IsBusy = false;
         }
+        private async Task CheckPrerequisites(object arg)
+            => await CheckPrerequisites(_selectedEntry.Cluster);
+        #endregion
 
         private async void LoadServices()
         {
@@ -150,9 +206,26 @@ namespace IISServiceManager
                 EssentialServices.Clear();
                 NormalServices.Clear();
 
-                foreach (var service in await _selectedEntry.Cluster.GetServices())
+                await InstallEngine.Initialize(_selectedEntry.Cluster);
+
+                foreach (var service in InstallEngine.Services)
                 {
-                    
+                    service.CommonWebServiceClick = CommonWebServiceClick;
+                    service.InstallCommand = InstallCommand;
+                    service.UnInstallCommand = UnistallCommand;
+                    service.UpdateCommand = UpdateCommand;
+
+                    switch (service.WebService.ServiceType)
+                    {
+                        case ServiceType.Essential:
+                            EssentialServices.Add(service);
+                            break;
+                        case ServiceType.Normal:
+                            NormalServices.Add(service);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                 }
 
                 IsBusy = false;
@@ -163,9 +236,6 @@ namespace IISServiceManager
             }
         }
 
-        private async Task CheckPrerequisites(object arg) 
-            => await CheckPrerequisites(_selectedEntry.Cluster);
-
         private async Task CheckPrerequisites(IWebServiceCluster root)
         {
             var pre = await root.CheckPrerequisites();
@@ -175,6 +245,21 @@ namespace IISServiceManager
                 WarnignContent = pre;
                 ShowWarning    = true;
             }
+        }
+
+        private async Task StopService(IWebService service) 
+            => await InstallEngine.StopService(service);
+
+        private async Task StartService(IWebService service) 
+            => await InstallEngine.StartService(service);
+
+        private async Task InstallService(IWebService service) 
+            => await InstallEngine.InstallService(service);
+
+        private async Task UpdateService(IWebService service)
+        {
+            await InstallEngine.UpdateRepo();
+            await InstallEngine.UpdateSerivce(service);
         }
     }
 }

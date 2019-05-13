@@ -135,4 +135,19 @@
   <data name="MainWindow_Warning_CheckPrerequisites" xml:space="preserve">
     <value>Prüfe Voraussetzungen</value>
   </data>
+  <data name="MainWindow_InstallService" xml:space="preserve">
+    <value>Installieren</value>
+  </data>
+  <data name="MainWindow_UninstallService" xml:space="preserve">
+    <value>Deinstallieren</value>
+  </data>
+  <data name="MainWindow_UpdateService" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="MainWindow_CloseContext" xml:space="preserve">
+    <value>Schließen</value>
+  </data>
+  <data name="MainWindow_UpdateAll" xml:space="preserve">
+    <value>Alle Aktuallisieren</value>
+  </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using GalaSoft.MvvmLight;
 using IISServiceManager.Contratcs;
+using IISServiceManager.Core;
 
 namespace IISServiceManager.Processing
 {
@@ -15,6 +16,14 @@ namespace IISServiceManager.Processing
         }
 
         public IWebService WebService { get; }
+
+        public AsyncCommand CommonWebServiceClick { get; set; }
+
+        public AsyncCommand InstallCommand { get; set; }
+
+        public AsyncCommand UnInstallCommand { get; set; }
+
+        public AsyncCommand UpdateCommand { get; set; }
 
         public InstallableService(IWebService service)
         {

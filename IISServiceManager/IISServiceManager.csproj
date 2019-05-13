@@ -68,6 +68,7 @@
     <Compile Include="Core\ReverseBoolConverter.cs" />
     <Compile Include="Core\UIObservableCollection.cs" />
     <Compile Include="Processing\ClusterEntry.cs" />
+    <Compile Include="Processing\IISContainer.cs" />
     <Compile Include="Processing\InstallableService.cs" />
     <Compile Include="Processing\InstallEngine.cs" />
     <Compile Include="Resources\Strings.Designer.cs">

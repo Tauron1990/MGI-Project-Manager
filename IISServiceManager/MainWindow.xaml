@@ -19,7 +19,7 @@
         Title="IIS Deployer" Icon="Resources/iconfinder_gnome-mime-text-x-install_79960.png">
     <Window.Resources>
         <DataTemplate DataType="{x:Type processing:InstallableService}">
-            <Button Margin="5" ToolTip="{Binding WebService.Description}" CommandParameter="{Binding .}">
+            <Button Margin="5" ToolTip="{Binding WebService.Description}" CommandParameter="{Binding .}" Command="{Binding CommonWebServiceClick}">
                 <Border Margin="5" BorderThickness="1" BorderBrush="Gray">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -43,12 +43,12 @@
                         <Button Grid.Column="1" Grid.Row="1" Margin="2" Background="Transparent">
                             <Button.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Installieren"/>
-                                    <MenuItem Header="Deinstallieren"/>
+                                    <MenuItem Header="{lex:Loc MainWindow_InstallService}" CommandParameter="{Binding .}" Command="{Binding InstallCommand}"/>
+                                    <MenuItem Header="{lex:Loc MainWindow_UninstallService}" CommandParameter="{Binding .}" Command="{Binding UnInstallCommand}"/>
                                     <Separator/>
-                                    <MenuItem Header="Aktualisieren"/>
+                                    <MenuItem Header="{lex:Loc MainWindow_UpdateService}" CommandParameter="{Binding .}" Command="{Binding UpdateCommand}"/>
                                     <Separator/>
-                                    <MenuItem Header="Schliesen"/>
+                                    <MenuItem Header="{lex:Loc MainWindow_CloseContext}"/>
                                 </ContextMenu>
                             </Button.ContextMenu>
                             <Button.Style>
@@ -111,6 +111,7 @@
                 <RowDefinition Height="*"/>   
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">
+                <Button Content="{lex:Loc MainWindow_UpdateAll}" Margin="5" Command="{Binding UpdateAllCommand}"/>
                 <ComboBox Margin="5" MinWidth="200" ItemsSource="{Binding Clusters}" SelectedItem="{Binding SelectedEntry}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>

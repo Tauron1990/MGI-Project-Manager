@@ -61,6 +61,15 @@ namespace IISServiceManager.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Clsoe ähnelt.
+        /// </summary>
+        internal static string MainWindow_CloseContext {
+            get {
+                return ResourceManager.GetString("MainWindow_CloseContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Service Group ähnelt.
         /// </summary>
         internal static string MainWindow_ClusterSelector {
@@ -79,6 +88,15 @@ namespace IISServiceManager.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Install ähnelt.
+        /// </summary>
+        internal static string MainWindow_InstallService {
+            get {
+                return ResourceManager.GetString("MainWindow_InstallService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Root path to install the web pages is required. ähnelt.
         /// </summary>
         internal static string MainWindow_Load_SelectPathError {
@@ -93,6 +111,33 @@ namespace IISServiceManager.Resources {
         internal static string MainWindow_NormalServices {
             get {
                 return ResourceManager.GetString("MainWindow_NormalServices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die UnInstall ähnelt.
+        /// </summary>
+        internal static string MainWindow_UninstallService {
+            get {
+                return ResourceManager.GetString("MainWindow_UninstallService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update All ähnelt.
+        /// </summary>
+        internal static string MainWindow_UpdateAll {
+            get {
+                return ResourceManager.GetString("MainWindow_UpdateAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update ähnelt.
+        /// </summary>
+        internal static string MainWindow_UpdateService {
+            get {
+                return ResourceManager.GetString("MainWindow_UpdateService", resourceCulture);
             }
         }
         
