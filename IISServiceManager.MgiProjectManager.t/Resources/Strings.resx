@@ -97,46 +97,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Progress_Common_Loading" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="MainWindow_Load_SelectPathError" xml:space="preserve">
-    <value>Root path to install the web pages is required.</value>
-  </data>
-  <data name="MainWindow_ClusterSelector" xml:space="preserve">
-    <value>Service Group</value>
-  </data>
-  <data name="MainWindow_EssentialServices" xml:space="preserve">
-    <value>Essential Services</value>
-  </data>
-  <data name="MainWindow_NormalServices" xml:space="preserve">
-    <value>Services</value>
-  </data>
-  <data name="MainWindow_Warning_CheckPrerequisites" xml:space="preserve">
-    <value>Check Prerequisites</value>
-  </data>
-  <data name="MainWindow_InstallService" xml:space="preserve">
-    <value>Install</value>
-  </data>
-  <data name="MainWindow_UninstallService" xml:space="preserve">
-    <value>UnInstall</value>
-  </data>
-  <data name="MainWindow_UpdateService" xml:space="preserve">
-    <value>Update</value>
-  </data>
-  <data name="MainWindow_CloseContext" xml:space="preserve">
-    <value>Clsoe</value>
-  </data>
-  <data name="MainWindow_UpdateAll" xml:space="preserve">
-    <value>Update All</value>
-  </data>
-  <data name="MainWindow_Progress_Updating" xml:space="preserve">
-    <value>Updating...</value>
-  </data>
-  <data name="MainWindow_Progress_Installing" xml:space="preserve">
-    <value>Installing...</value>
-  </data>
-  <data name="MainWindow_Progress_UnInstalling" xml:space="preserve">
-    <value>Uninstalling...</value>
+  <data name="MgiServiceClusterName" xml:space="preserve">
+    <value>Mgi Project Manager</value>
   </data>
 </root>

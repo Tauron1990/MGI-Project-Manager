@@ -6,6 +6,8 @@ namespace IISServiceManager.Contratcs
     {
         string GitRepo { get; }
 
-        IEnumerable<(string ID, string Project)> Webservices { get; }
+        IReadOnlyDictionary<string, string> Webservices { get; }
+
+        IReadOnlyDictionary<string, int> Ports { get; }
     }
 }

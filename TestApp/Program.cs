@@ -1,26 +1,31 @@
-﻿using System;
+﻿//using System;
+//using System.IO;
+//using System.IO.Compression;
+//using System.Security.Cryptography.X509Certificates;
+//using System.Text;
+//using Org.BouncyCastle.Asn1.Pkcs;
+//using Org.BouncyCastle.Asn1.Sec;
+//using Org.BouncyCastle.Asn1.X509;
+//using Org.BouncyCastle.Asn1.X9;
+//using Org.BouncyCastle.Crypto;
+//using Org.BouncyCastle.Crypto.Generators;
+//using Org.BouncyCastle.Crypto.Operators;
+//using Org.BouncyCastle.Crypto.Parameters;
+//using Org.BouncyCastle.Math;
+//using Org.BouncyCastle.Security;
+//using Org.BouncyCastle.X509;
+//using X509Certificate = Org.BouncyCastle.X509.X509Certificate;
+
+using System;
+using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using Org.BouncyCastle.Asn1.Pkcs;
-using Org.BouncyCastle.Asn1.Sec;
-using Org.BouncyCastle.Asn1.X509;
-using Org.BouncyCastle.Asn1.X9;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Generators;
-using Org.BouncyCastle.Crypto.Operators;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Math;
-using Org.BouncyCastle.Security;
-using Org.BouncyCastle.X509;
-using X509Certificate = Org.BouncyCastle.X509.X509Certificate;
+using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace TestApp
 {
     static class Programm
     {
-
         //static readonly SecureRandom secureRandom = new SecureRandom();
 
         //static AsymmetricCipherKeyPair GenerateRsaKeyPair(int length)
@@ -86,21 +91,60 @@ namespace TestApp
 
         static void Main()
         {
-            const string path = @"G:\ForTest";
+            string test = Environment.GetEnvironmentVariable("Path").Split(';').First(p => p.Contains("dotnet"));
 
-            foreach (var filePath in Directory.EnumerateFiles(path))
+            //dotnet publish Tauron.MgiProjectManager.Server.csproj
+
+            //* Create your Process
+            Process process = new Process
             {
-                using (var sourceFile = new FileStream(filePath, FileMode.Open))
+                StartInfo =
                 {
-                    using (var output = new FileStream(Path.GetFileName(filePath) + ".bin", FileMode.Create))
-                    {
-                        using (var zip = new GZipStream(output, CompressionLevel.Optimal))
-                        {
-                            sourceFile.CopyTo(zip);
-                        }
-                    }
+                    FileName = Path.Combine(test, "dotnet.exe"),
+                    Arguments =
+                        $"publish {Path.Combine(@"C:\Users\PC\Desktop\test\MGI\Alt\Tauron.MgiProjectManager.Server", "Tauron.MgiProjectManager.Server.csproj")}",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
                 }
-            }
+            };
+            //* Set your output and error (asynchronous) handlers
+            process.OutputDataReceived += OutputHandler;
+            process.ErrorDataReceived += OutputHandler;
+            //* Start process and handlers
+            process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+            process.WaitForExit();
+
+            Console.WriteLine();
+            Console.WriteLine(process.ExitCode);
+
+            Console.ReadKey();
+            //using (var server = Microsoft.Web.Administration.ServerManager.OpenRemote("http://192.168.105.18"))
+            //{
+            //    foreach (var serverSite in server.Sites)
+            //    {
+            //        Console.WriteLine(serverSite.Name);
+            //    }
+            //}
+
+            //Console.ReadKey();
+            //const string path = @"G:\ForTest";
+
+            //foreach (var filePath in Directory.EnumerateFiles(path))
+            //{
+            //    using (var sourceFile = new FileStream(filePath, FileMode.Open))
+            //    {
+            //        using (var output = new FileStream(Path.GetFileName(filePath) + ".bin", FileMode.Create))
+            //        {
+            //            using (var zip = new GZipStream(output, CompressionLevel.Optimal))
+            //            {
+            //                sourceFile.CopyTo(zip);
+            //            }
+            //        }
+            //    }
+            //}
 
             //var caName = new X509Name("CN=MgiProjectManagerCA");
             //var eeName = new X509Name("CN=MgiProjectManagerEE");
@@ -125,6 +169,12 @@ namespace TestApp
             //    var buf = eeCert.GetEncoded();
             //    f.Write(buf, 0, buf.Length);
             //}
+        }
+
+        static void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            //* Do your stuff with the output (write to console/log/StringBuilder)
+            Console.WriteLine(outLine.Data);
         }
     }
 }

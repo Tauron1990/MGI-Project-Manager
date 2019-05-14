@@ -34,7 +34,7 @@
                         <TextBlock Text="{Binding WebService.Name}" Margin="5" FontSize="20" Grid.Column="0" Grid.Row="0"/>
                         <Path HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="1" Margin="3" StrokeThickness="5" Stretch="Fill">
                             <Path.Stroke>
-                                <SolidColorBrush Color="{Binding IsInstalled, Converter={core:ServiceStadeColorConverter}, Mode=OneWay}"/>
+                                <SolidColorBrush Color="{Binding ServiceStade, Converter={core:ServiceStadeColorConverter}, Mode=OneWay}"/>
                             </Path.Stroke>
                             <Path.Data>
                                 <LineGeometry StartPoint="0,0" EndPoint="1,0"/>

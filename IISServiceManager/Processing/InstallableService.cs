@@ -7,12 +7,12 @@ namespace IISServiceManager.Processing
 {
     public class InstallableService : ViewModelBase
     {
-        private ServiceStade _isInstalled;
+        private ServiceStade _serviceStade;
 
-        public ServiceStade IsInstalled
+        public ServiceStade ServiceStade
         {
-            get => _isInstalled;
-            set => Set(ref _isInstalled, value);
+            get => _serviceStade;
+            set => Set(ref _serviceStade, value);
         }
 
         public IWebService WebService { get; }

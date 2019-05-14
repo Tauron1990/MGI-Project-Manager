@@ -117,46 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Progress_Common_Loading" xml:space="preserve">
-    <value>Laden...</value>
-  </data>
-  <data name="MainWindow_Load_SelectPathError" xml:space="preserve">
-    <value>Rootpfad zur Installation der Webseiten wird benötigt.</value>
-  </data>
-  <data name="MainWindow_ClusterSelector" xml:space="preserve">
-    <value>Service Gruppe</value>
-  </data>
-  <data name="MainWindow_EssentialServices" xml:space="preserve">
-    <value>Essentielle Services</value>
-  </data>
-  <data name="MainWindow_NormalServices" xml:space="preserve">
-    <value>Services</value>
-  </data>
-  <data name="MainWindow_Warning_CheckPrerequisites" xml:space="preserve">
-    <value>Prüfe Voraussetzungen</value>
-  </data>
-  <data name="MainWindow_InstallService" xml:space="preserve">
-    <value>Installieren</value>
-  </data>
-  <data name="MainWindow_UninstallService" xml:space="preserve">
-    <value>Deinstallieren</value>
-  </data>
-  <data name="MainWindow_UpdateService" xml:space="preserve">
-    <value>Aktualisieren</value>
-  </data>
-  <data name="MainWindow_CloseContext" xml:space="preserve">
-    <value>Schließen</value>
-  </data>
-  <data name="MainWindow_UpdateAll" xml:space="preserve">
-    <value>Alle Aktuallisieren</value>
-  </data>
-  <data name="MainWindow_Progress_Updating" xml:space="preserve">
-    <value>Aktualisieren...</value>
-  </data>
-  <data name="MainWindow_Progress_Installing" xml:space="preserve">
-    <value>Installieren...</value>
-  </data>
-  <data name="MainWindow_Progress_UnInstalling" xml:space="preserve">
-    <value>Deinstallieren...</value>
+  <data name="MgiServiceClusterName" xml:space="preserve">
+    <value>Mgi Project Manager</value>
   </data>
 </root>

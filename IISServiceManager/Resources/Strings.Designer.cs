@@ -115,6 +115,33 @@ namespace IISServiceManager.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Installing... ähnelt.
+        /// </summary>
+        internal static string MainWindow_Progress_Installing {
+            get {
+                return ResourceManager.GetString("MainWindow_Progress_Installing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uninstalling... ähnelt.
+        /// </summary>
+        internal static string MainWindow_Progress_UnInstalling {
+            get {
+                return ResourceManager.GetString("MainWindow_Progress_UnInstalling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Updating... ähnelt.
+        /// </summary>
+        internal static string MainWindow_Progress_Updating {
+            get {
+                return ResourceManager.GetString("MainWindow_Progress_Updating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die UnInstall ähnelt.
         /// </summary>
         internal static string MainWindow_UninstallService {

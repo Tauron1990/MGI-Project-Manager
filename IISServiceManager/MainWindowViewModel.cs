@@ -16,14 +16,6 @@ namespace IISServiceManager
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private class DummyWebService : IWebService
-        {
-            public string Name => "Test Service";
-            public string Id => nameof(DummyWebService);
-            public string Description => "This is a Test";
-            public ServiceType ServiceType => ServiceType.Essential;
-        }
-
         private Dispatcher Dispatcher { get; } = Application.Current.Dispatcher;
 
         private bool _isBusy;
@@ -104,45 +96,59 @@ namespace IISServiceManager
 
         #region  UI Commands
 
-        private async Task UpdateAll(object arg) 
-            => await InstallEngine.UpdateAll();
+        private async Task UpdateAll(object arg)
+        {
+            await StartAction(async log =>
+            {
+                await InstallEngine.UpdateRepo(log);
+                await InstallEngine.UpdateAll(log);
+            }, Strings.MainWindow_Progress_Updating);
+        }
 
         private async Task InstallService(object arg)
         {
             if (!(arg is InstallableService service)) return;
 
-            await InstallService(service.WebService);
+            await StartAction(async log => { await InstallService(service.WebService, log); },
+                Strings.MainWindow_Progress_Installing);
         }
         private async Task UninstallService(object arg)
         {
             if (!(arg is InstallableService service)) return;
-
-            await UninstallService(service.WebService);
+            
+            await StartAction(async log => { await InstallEngine.Unitstall(service.WebService, log); }, Strings.MainWindow_Progress_UnInstalling);
         }
         private async Task UpdateService(object arg)
         {
             if (!(arg is InstallableService service)) return;
 
-            await UpdateService(service.WebService);
+            await StartAction(async log =>
+            {
+                await InstallEngine.UpdateRepo(log);
+                await UpdateService(service.WebService, log);
+            }, Strings.MainWindow_Progress_Updating);
         }
         private async Task ExecuteCommonClick(object arg)
         {
             if(!(arg is InstallableService service)) return;
 
-            switch (service.IsInstalled)
+            await StartAction(async log =>
             {
-                case ServiceStade.Running:
-                    await StopService(service.WebService);
-                    break;
-                case ServiceStade.Stopped:
-                    await StartService(service.WebService);
-                    break;
-                case ServiceStade.NotInstalled:
-                    await InstallService(service.WebService);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                switch (service.ServiceStade)
+                {
+                    case ServiceStade.Running:
+                        await StopService(service.WebService, log);
+                        break;
+                    case ServiceStade.Stopped:
+                        await StartService(service.WebService, log);
+                        break;
+                    case ServiceStade.NotInstalled:
+                        await InstallService(service.WebService, log);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }, Strings.MainWindow_Progress_Updating);
         }
         private async Task LoadApp(object arg)
         {
@@ -158,6 +164,7 @@ namespace IISServiceManager
 
                                                         if (dialog.ShowDialog(Application.Current.MainWindow) == true)
                                                             return dialog.SelectedPath;
+                                                        // ReSharper disable once AssignNullToNotNullAttribute
                                                         if(MessageBox.Show(Application.Current.MainWindow, Strings.MainWindow_Load_SelectPathError, "Error", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
                                                             Application.Current.MainWindow.Close();
                                                         return string.Empty;
@@ -247,19 +254,47 @@ namespace IISServiceManager
             }
         }
 
-        private async Task StopService(IWebService service) 
-            => await InstallEngine.StopService(service);
+        private async Task StopService(IWebService service, ILog log) 
+            => await InstallEngine.StopService(service, log);
 
-        private async Task StartService(IWebService service) 
-            => await InstallEngine.StartService(service);
+        private async Task StartService(IWebService service, ILog log) 
+            => await InstallEngine.StartService(service, log);
 
-        private async Task InstallService(IWebService service) 
-            => await InstallEngine.InstallService(service);
-
-        private async Task UpdateService(IWebService service)
+        private async Task InstallService(IWebService service, ILog log)
         {
-            await InstallEngine.UpdateRepo();
-            await InstallEngine.UpdateSerivce(service);
+            await InstallEngine.UpdateRepo(log);
+            await InstallEngine.InstallService(service, log);
+        }
+
+        private async Task UpdateService(IWebService service, ILog log)
+        {
+            await InstallEngine.UpdateRepo(log);
+            await InstallEngine.UpdateSerivce(service, log);
+        }
+
+        private async Task StartAction(Func<ILog, Task> action, string message)
+        {
+            ProgessMessage = message;
+            IsBusy = true;
+            var window = new LogWindow(Application.Current.MainWindow);
+            var log = window.Log;
+            await log.EnterOperation();
+
+            try
+            {
+                await action(log);
+            }
+            catch (Exception e)
+            {
+                log.WriteLine(e.ToString());
+                log.AutoClose = false;
+                //MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                await log.ExitOperation();
+                IsBusy = false;
+            }
         }
     }
 }
