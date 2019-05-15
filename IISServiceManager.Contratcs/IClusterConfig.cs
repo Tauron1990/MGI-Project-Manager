@@ -4,9 +4,7 @@ namespace IISServiceManager.Contratcs
 {
     public interface IClusterConfig
     {
-        string GitRepo { get; }
-
-        IReadOnlyDictionary<string, string> Webservices { get; }
+        IGitConfig GitRepo { get; }
 
         IReadOnlyDictionary<string, int> Ports { get; }
     }

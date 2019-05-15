@@ -41,5 +41,13 @@ namespace IISServiceManager.Processing
             log.WriteLine("Start Web Service...");
             return await StartSite(site);
         }
+
+        public Task DeleteSite(Site site)
+        {
+            _serverManager.Sites.Remove(site);
+            _serverManager.CommitChanges();
+
+            return Task.CompletedTask;
+        }
     }
 }

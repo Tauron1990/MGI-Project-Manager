@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IClusterConfig.cs" />
+    <Compile Include="IGitConfig.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="IWebServiceCluster.cs" />
     <Compile Include="IWebServices.cs" />

@@ -68,5 +68,23 @@ namespace IISServiceManager.MgiProjectManager.Resources {
                 return ResourceManager.GetString("MgiServiceClusterName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Distributes commands and queries among the registered services ähnelt.
+        /// </summary>
+        internal static string ServiceDescription_Dispatcher {
+            get {
+                return ResourceManager.GetString("ServiceDescription_Dispatcher", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Dispatcher ähnelt.
+        /// </summary>
+        internal static string ServiceName_Dispatcher {
+            get {
+                return ResourceManager.GetString("ServiceName_Dispatcher", resourceCulture);
+            }
+        }
     }
 }

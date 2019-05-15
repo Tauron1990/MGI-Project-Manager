@@ -100,4 +100,10 @@
   <data name="MgiServiceClusterName" xml:space="preserve">
     <value>Mgi Project Manager</value>
   </data>
+  <data name="ServiceName_Dispatcher" xml:space="preserve">
+    <value>Dispatcher</value>
+  </data>
+  <data name="ServiceDescription_Dispatcher" xml:space="preserve">
+    <value>Distributes commands and queries among the registered services</value>
+  </data>
 </root>

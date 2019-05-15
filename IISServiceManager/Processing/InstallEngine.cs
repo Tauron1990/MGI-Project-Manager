@@ -32,7 +32,6 @@ namespace IISServiceManager.Processing
         {
             _webServiceCluster = serviceCluster;
             _repoLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Repos", serviceCluster.Id);
-            _repoBase = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Repos");
 
             List<InstallableService> services = (from webService in await serviceCluster.GetServices() select new InstallableService(webService)).ToList();
             Services = services.AsReadOnly();
@@ -149,7 +148,7 @@ namespace IISServiceManager.Processing
 
             await StopService(service, log);
             
-            _ = await TryUpdateBuild(service, log);
+            await TryUpdateBuild(service, log);
 
             await StartService(service, log);
         }
@@ -246,7 +245,7 @@ namespace IISServiceManager.Processing
                     {
                         log.WriteLine("Revert updates");
 
-                        string binaryPath = GetBuildPath(apply.Services);
+                        var binaryPath = GetBuildPath(apply.Services);
 
                         Directory.Delete(binaryPath, true);
                         Directory.CreateDirectory(binaryPath);
@@ -267,30 +266,67 @@ namespace IISServiceManager.Processing
             log.WriteLine("Update Compled...");
         }
 
-        public async Task UpdateRepo(ILog log)
+        public Task UpdateRepo(ILog log)
         {
             if (Repository.IsValid(_repoLocation))
             {
+                log.WriteLine("Update Repository");
+
                 using (var repo = new Repository(_backupPath))
                 {
                     var commit = Commands.Pull(repo,
-                        new Signature("IIServiceManager", "IIServiceManager@fake.com", DateTimeOffset.Now),
-                        new PullOptions());
+                                               new Signature("IIServiceManager", "IIServiceManager@fake.com", DateTimeOffset.Now),
+                                               new PullOptions());
 
                     _updateNeed = commit.Status != MergeStatus.UpToDate;
+
+                    log.WriteLine($"Repository Update: {_updateNeed}");
                 }
-            }
-            else
-            {
 
-
-                _updateNeed = true;
+                return Task.CompletedTask;
             }
+
+            log.WriteLine("Create Repository");
+            _updateNeed = true;
+
+            Repository.Clone(_webServiceCluster.Config.GitRepo.RepoUrl, _repoLocation,
+                             new CloneOptions
+                             {
+                                 OnCheckoutProgress = (path, steps, totalSteps) => log.WriteLine($"Step:{steps}/{totalSteps}"),
+                                 BranchName         = _webServiceCluster.Config.GitRepo.RepoBrunch,
+                                 OnProgress = output =>
+                                              {
+                                                  log.WriteLine(output);
+                                                  return true;
+                                              },
+                                 OnTransferProgress = progress =>
+                                                      {
+                                                          log.WriteLine($"Objects: {progress.ReceivedObjects}/{progress.TotalObjects} -- {progress.ReceivedBytes} bytes");
+                                                          return true;
+                                                      }
+                             });
+
+            return Task.CompletedTask;
         }
-    
+
         public async Task Unitstall(IWebService webService, ILog log)
         {
+            var site = await _iisContainer.FindSite(webService.Id);
+            if (site == null)
+            {
+                log.AutoClose = false;
+                log.WriteLine("Web Service Does not Exist");
+                return;
+            }
+            log.WriteLine("Delete Service");
 
+            await StopService(webService, log);
+            await _iisContainer.DeleteSite(site);
+
+            log.WriteLine("Delete Binarys");
+            string binaryPath = GetBuildPath(webService);
+
+            Directory.Delete(binaryPath, true);
         }
 
         public bool CanInstallNormal

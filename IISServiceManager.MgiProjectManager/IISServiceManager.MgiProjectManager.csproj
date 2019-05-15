@@ -49,6 +49,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="XmlClusterConfig.cs" />
+    <Compile Include="XmlGitConfig.cs" />
+    <Compile Include="XmlWebService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IISServiceManager.Contratcs\IISServiceManager.Contratcs.csproj">
@@ -62,6 +65,11 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ServiceConfig.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
