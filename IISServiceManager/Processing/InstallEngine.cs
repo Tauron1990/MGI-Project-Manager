@@ -133,6 +133,14 @@ namespace IISServiceManager.Processing
 
         public async Task UpdateSerivce(IWebService service, ILog log)
         {
+            var site = await _iisContainer.FindSite(service.Id);
+            if (site == null)
+            {
+                log.WriteLine("Service not Installed");
+                log.AutoClose = false;
+                return;
+            }
+
             if (_updateNeed)
             {
                 log.WriteLine("No Update Needed...");
@@ -199,10 +207,15 @@ namespace IISServiceManager.Processing
 
             foreach (var service in Services)
             {
+                var site = await _iisContainer.FindSite(service.WebService.Id);
+                if(site == null) continue;
+
                 if(failed) break;
 
                 try
                 {
+                    await StopService(service.WebService, log);
+
                     var (ok, backup) = await TryUpdateBuild(service.WebService, log);
 
                     if (!ok)
@@ -212,6 +225,8 @@ namespace IISServiceManager.Processing
                     }
 
                     services.Add((backup, service.WebService));
+
+                    await StartService(service.WebService, log);
                 }
                 catch (Exception e)
                 {
@@ -256,9 +271,20 @@ namespace IISServiceManager.Processing
         {
             if (Repository.IsValid(_repoLocation))
             {
-                var repo = new Repository(_backupPath);
+                using (var repo = new Repository(_backupPath))
+                {
+                    var commit = Commands.Pull(repo,
+                        new Signature("IIServiceManager", "IIServiceManager@fake.com", DateTimeOffset.Now),
+                        new PullOptions());
 
-                PullOptions
+                    _updateNeed = commit.Status != MergeStatus.UpToDate;
+                }
+            }
+            else
+            {
+
+
+                _updateNeed = true;
             }
         }
     
