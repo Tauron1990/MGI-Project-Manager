@@ -95,7 +95,7 @@ namespace TestApp
         {
             using (var repo = new Repository(@"C:\Users\PC\Desktop\test\MGI\TestApp\bin\Debug\Test"))
             {
-                Commands.Pull(repo, new Signature(new Identity("TestApp", "Jetvarnish@blueprint.de"), DateTimeOffset.Now), new PullOptions());
+                var result = Commands.Pull(repo, new Signature(new Identity("TestApp", "test@TestApp.de"), DateTimeOffset.Now), new PullOptions());
             }
 
             //var test2 = Repository.Clone(@"https://github.com/Tauron1990/MGI-Project-Manager.git",
