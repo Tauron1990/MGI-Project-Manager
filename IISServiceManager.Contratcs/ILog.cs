@@ -9,8 +9,6 @@ namespace IISServiceManager.Contratcs
 
         void WriteLine(string content);
 
-        void Finish();
-
         Task EnterOperation();
 
         Task ExitOperation();

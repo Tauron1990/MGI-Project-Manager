@@ -39,10 +39,7 @@ namespace IISServiceManager
             }
 
             public void WriteLine(string content) => Lines.Add(content);
-
-            public void Finish() 
-                => _manualReset.WaitOne();
-
+            
             public async Task EnterOperation() 
                 => await _logWindow.Dispatcher.InvokeAsync(() => _logWindow.Show());
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -286,7 +287,7 @@ namespace IISServiceManager
             }
             catch (Exception e)
             {
-                log.WriteLine(e.ToString());
+                log.WriteLine(e.ToStringDemystified());
                 log.AutoClose = false;
                 //MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }

@@ -21,6 +21,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
+using LibGit2Sharp;
 
 namespace TestApp
 {
@@ -91,36 +93,44 @@ namespace TestApp
 
         static void Main()
         {
-            string test = Environment.GetEnvironmentVariable("Path").Split(';').First(p => p.Contains("dotnet"));
-
-            //dotnet publish Tauron.MgiProjectManager.Server.csproj
-
-            //* Create your Process
-            Process process = new Process
+            using (var repo = new Repository(@"C:\Users\PC\Desktop\test\MGI\TestApp\bin\Debug\Test"))
             {
-                StartInfo =
-                {
-                    FileName = Path.Combine(test, "dotnet.exe"),
-                    Arguments =
-                        $"publish {Path.Combine(@"C:\Users\PC\Desktop\test\MGI\Alt\Tauron.MgiProjectManager.Server", "Tauron.MgiProjectManager.Server.csproj")}",
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true
-                }
-            };
-            //* Set your output and error (asynchronous) handlers
-            process.OutputDataReceived += OutputHandler;
-            process.ErrorDataReceived += OutputHandler;
-            //* Start process and handlers
-            process.Start();
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-            process.WaitForExit();
+                Commands.Pull(repo, new Signature(new Identity("TestApp", "Jetvarnish@blueprint.de"), DateTimeOffset.Now), new PullOptions());
+            }
 
-            Console.WriteLine();
-            Console.WriteLine(process.ExitCode);
+            //var test2 = Repository.Clone(@"https://github.com/Tauron1990/MGI-Project-Manager.git",
+            //    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Test"));
 
-            Console.ReadKey();
+            //string test = Environment.GetEnvironmentVariable("Path").Split(';').First(p => p.Contains("dotnet"));
+
+            ////dotnet publish Tauron.MgiProjectManager.Server.csproj
+
+            ////* Create your Process
+            //Process process = new Process
+            //{
+            //    StartInfo =
+            //    {
+            //        FileName = Path.Combine(test, "dotnet.exe"),
+            //        Arguments =
+            //            $"publish {Path.Combine(@"C:\Users\PC\Desktop\test\MGI\Alt\Tauron.MgiProjectManager.Server", "Tauron.MgiProjectManager.Server.csproj")}",
+            //        UseShellExecute = false,
+            //        RedirectStandardOutput = true,
+            //        RedirectStandardError = true
+            //    }
+            //};
+            ////* Set your output and error (asynchronous) handlers
+            //process.OutputDataReceived += OutputHandler;
+            //process.ErrorDataReceived += OutputHandler;
+            ////* Start process and handlers
+            //process.Start();
+            //process.BeginOutputReadLine();
+            //process.BeginErrorReadLine();
+            //process.WaitForExit();
+
+            //Console.WriteLine();
+            //Console.WriteLine(process.ExitCode);
+
+            //Console.ReadKey();
             //using (var server = Microsoft.Web.Administration.ServerManager.OpenRemote("http://192.168.105.18"))
             //{
             //    foreach (var serverSite in server.Sites)
