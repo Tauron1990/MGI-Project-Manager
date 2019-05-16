@@ -61,6 +61,15 @@ namespace IISServiceManager.MgiProjectManager.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Dot Net Core 3 not Found. ähnelt.
+        /// </summary>
+        internal static string MgiServiceCluster_NoDotnet {
+            get {
+                return ResourceManager.GetString("MgiServiceCluster_NoDotnet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Mgi Project Manager ähnelt.
         /// </summary>
         internal static string MgiServiceClusterName {

@@ -106,4 +106,7 @@
   <data name="ServiceDescription_Dispatcher" xml:space="preserve">
     <value>Distributes commands and queries among the registered services</value>
   </data>
+  <data name="MgiServiceCluster_NoDotnet" xml:space="preserve">
+    <value>Dot Net Core 3 not Found.</value>
+  </data>
 </root>

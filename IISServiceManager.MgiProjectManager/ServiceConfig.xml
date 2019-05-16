@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Config>
+<Config Configuration="Release" AppPool="MGI">
   <Git Repository="https://github.com/Tauron1990/MGI-Project-Manager.git" Brunch="Release"/>
   <Ports>
     <Port Name="Dispatcher" Port="85"/>

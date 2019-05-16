@@ -19,8 +19,20 @@ namespace IISServiceManager.Processing
         public Task<ObjectState> StopSite(Site site) 
             => Task.FromResult(site?.Stop() ?? ObjectState.Unknown);
 
-        public Task<ObjectState> StartSite(Site site) 
-            => Task.FromResult(site?.Start() ?? ObjectState.Unknown);
+        public Task<ObjectState> StartSite(Site site)
+        {
+            if (site == null)
+                return Task.FromResult(ObjectState.Unknown);
+
+            var pool = _serverManager.ApplicationPools[site.ApplicationDefaults.ApplicationPoolName];
+            if (pool.State == ObjectState.Started) return Task.FromResult(site.Start());
+
+            var result = pool.Start();
+            if (result != ObjectState.Started || result != ObjectState.Starting)
+                return Task.FromResult(result);
+
+            return Task.FromResult(site.Start());
+        }
 
         public async Task<ObjectState> CreateSite(string binaryPath, IWebService service, IWebServiceCluster cluster,
             ILog log)

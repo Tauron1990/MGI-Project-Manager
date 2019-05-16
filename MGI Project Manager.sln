@@ -76,15 +76,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Architektur", "Architektur"
 		Webservice.txt = Webservice.txt
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CQRS", "CQRS", "{30D134D9-DD39-4F8A-85BA-7C3533DDB104}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.CQRS.Common", "Tauron.CQRS.Common\Tauron.CQRS.Common.csproj", "{8040CED2-6DB9-47FB-BDE5-77C165FB0618}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.CQRS.Server", "Tauron.CQRS.Server\Tauron.CQRS.Server.csproj", "{206487FD-EF70-4031-A79D-E606EC32538B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.CQRS.Services", "Tauron.CQRS.Services\Tauron.CQRS.Services.csproj", "{148C41AB-FC95-433F-931F-0354DCC7CDDD}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{FE288348-C730-4E19-BC3E-554223628ECF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IISServiceManager", "IISServiceManager\IISServiceManager.csproj", "{14CB23A9-E619-4338-803C-2B7554118D20}"
 EndProject
@@ -95,6 +91,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IISServiceManager.Contratcs", "IISServiceManager.Contratcs\IISServiceManager.Contratcs.csproj", "{8EF6AC77-1D31-4048-B7F2-26CC38298BF7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IISServiceManager.MgiProjectManager", "IISServiceManager.MgiProjectManager\IISServiceManager.MgiProjectManager.csproj", "{3DA6E772-7880-4B93-8342-A0D94DF1398A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dispatcher", "Dispatcher", "{BC132441-E8FA-4E0C-AF42-096630DC94EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.MgiProjectManager.Dispatcher", "Tauron.MgiProjectManager.Dispatcher\Tauron.MgiProjectManager.Dispatcher.csproj", "{10203B26-DD24-4A87-BE4F-79C4212D313D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -198,6 +198,10 @@ Global
 		{3DA6E772-7880-4B93-8342-A0D94DF1398A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DA6E772-7880-4B93-8342-A0D94DF1398A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DA6E772-7880-4B93-8342-A0D94DF1398A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10203B26-DD24-4A87-BE4F-79C4212D313D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10203B26-DD24-4A87-BE4F-79C4212D313D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10203B26-DD24-4A87-BE4F-79C4212D313D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10203B26-DD24-4A87-BE4F-79C4212D313D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -233,6 +237,8 @@ Global
 		{45BB378F-015C-42EA-B27A-E75FF95911D9} = {F12CB168-0F85-47C7-A84C-5EE83D468E54}
 		{8EF6AC77-1D31-4048-B7F2-26CC38298BF7} = {45BB378F-015C-42EA-B27A-E75FF95911D9}
 		{3DA6E772-7880-4B93-8342-A0D94DF1398A} = {45BB378F-015C-42EA-B27A-E75FF95911D9}
+		{BC132441-E8FA-4E0C-AF42-096630DC94EE} = {F12CB168-0F85-47C7-A84C-5EE83D468E54}
+		{10203B26-DD24-4A87-BE4F-79C4212D313D} = {BC132441-E8FA-4E0C-AF42-096630DC94EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}

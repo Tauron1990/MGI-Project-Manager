@@ -126,4 +126,7 @@
   <data name="ServiceDescription_Dispatcher" xml:space="preserve">
     <value>Verteilt Kommandos und Querys auf die Registrierten Services</value>
   </data>
+  <data name="MgiServiceCluster_NoDotnet" xml:space="preserve">
+    <value>Dot Net 3.0 nicht Gefunden. Bitte Installieren sie die Aktuellste Version 3 SDK</value>
+  </data>
 </root>
