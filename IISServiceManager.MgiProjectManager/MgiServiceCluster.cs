@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using IISServiceManager.Contratcs;
 using IISServiceManager.MgiProjectManager.Resources;
+using JetBrains.Annotations;
 using Microsoft.Web.Administration;
 
 namespace IISServiceManager.MgiProjectManager
 {
+    [UsedImplicitly]
     public class MgiServiceCluster : IWebServiceCluster
     {
         private readonly XElement _configuration;
