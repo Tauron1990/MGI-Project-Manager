@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,13 +6,14 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tauron.CQRS.Common.ServerHubs;
+using Tauron.CQRS.Health;
 using Tauron.CQRS.Server.Hubs;
 
 namespace Tauron.MgiProjectManager.Dispatcher
 {
     public class Startup
     {
-        private void Test(IHubContext<CommandHub, ICommandBus> bus)
+        private void Test(IHubContext<EventHub, IEventBus> bus)
         {
             
         }
@@ -24,8 +22,11 @@ namespace Tauron.MgiProjectManager.Dispatcher
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealth();
+            services.AddMvc().AddHealthParts();
         }
 
+        [UsedImplicitly]
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -34,6 +35,7 @@ namespace Tauron.MgiProjectManager.Dispatcher
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHealth();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

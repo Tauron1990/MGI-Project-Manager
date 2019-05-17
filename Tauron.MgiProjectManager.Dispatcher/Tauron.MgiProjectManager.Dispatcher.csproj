@@ -5,7 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Tauron.CQRS.Common\Tauron.CQRS.Common.csproj" />
+    <ProjectReference Include="..\Tauron.CQRS.Health\Tauron.CQRS.Health.csproj" />
     <ProjectReference Include="..\Tauron.CQRS.Server\Tauron.CQRS.Server.csproj" />
   </ItemGroup>
 
