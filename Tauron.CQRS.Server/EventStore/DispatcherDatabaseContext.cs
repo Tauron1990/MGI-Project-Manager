@@ -1,16 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Tauron.CQRS.Common.Configuration;
+using Tauron.CQRS.Server.EventStore.Data;
 
-namespace Tauron.CQRS.Server.EventStore.Data
+namespace Tauron.CQRS.Server.EventStore
 {
-    public class EventStoreContext : DbContext
+    public class DispatcherDatabaseContext : DbContext
     {
         private readonly IOptions<ServerConfiguration> _serverOptions;
 
         public DbSet<EventEntity> EventEntities { get; set; }
 
-        public EventStoreContext(IOptions<ServerConfiguration> serverOptions) 
+        public DbSet<ApiKey> ApiKeys { get; set; }
+
+        public DispatcherDatabaseContext(IOptions<ServerConfiguration> serverOptions) 
             => _serverOptions = serverOptions;
 
         #region Overrides of DbContext

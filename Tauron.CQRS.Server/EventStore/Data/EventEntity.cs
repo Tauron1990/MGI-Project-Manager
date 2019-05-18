@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Tauron.CQRS.Common.ServerHubs;
 
 namespace Tauron.CQRS.Server.EventStore.Data
 {
@@ -15,6 +16,6 @@ namespace Tauron.CQRS.Server.EventStore.Data
 
         public string Origin { get; set; }
 
-        public string Cluster { get; set; }
+        public EventStatus EventStatus { get; set; }
     }
 }

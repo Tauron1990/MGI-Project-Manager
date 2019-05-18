@@ -5,11 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="EventStore\DTO\" />
+    <Compile Remove="EventStore\DTO\**" />
+    <EmbeddedResource Remove="EventStore\DTO\**" />
+    <None Remove="EventStore\DTO\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />

@@ -1,4 +1,4 @@
-﻿namespace Tauron.CQRS.Server.EventStore.Data
+﻿namespace Tauron.CQRS.Common.ServerHubs
 {
     public enum EventType
     {
