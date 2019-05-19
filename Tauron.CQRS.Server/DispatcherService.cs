@@ -51,7 +51,7 @@ namespace Tauron.CQRS.Server
                 if(stoppingToken.IsCancellationRequested) continue;
                 domainEvent.DomainEvent.SequenceNumber = entity.Entity.SequenceNumber;
 
-                if (await _eventManager.DeliverEvent(domainEvent))
+                if (await _eventManager.DeliverEvent(domainEvent, stoppingToken))
                 {
                     entity.Entity.EventStatus = EventStatus.Deliverd;
                     await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);

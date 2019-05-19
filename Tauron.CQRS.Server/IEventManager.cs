@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Threading;
 using System.Threading.Tasks;
 using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Server.Hubs;
@@ -9,7 +10,7 @@ namespace Tauron.CQRS.Server
     {
         BlockingCollection<RecivedDomainEvent> Dispatcher { get; }
 
-        Task<bool> DeliverEvent(RecivedDomainEvent @event);
+        Task<bool> DeliverEvent(RecivedDomainEvent @event, CancellationToken token);
 
         Task TryAccept(string connectionId, int sequenceNumber, string service);
 

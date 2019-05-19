@@ -7,6 +7,7 @@ using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Server.Core;
 using Tauron.CQRS.Server.Core.Impl;
 using Tauron.CQRS.Server.EventStore;
+using Tauron.CQRS.Server.Hubs;
 
 namespace Tauron.CQRS.Server.Extension
 {
@@ -18,6 +19,7 @@ namespace Tauron.CQRS.Server.Extension
             services.AddSignalR();
             services.TryAddSingleton<IEventManager, EventManager>();
             services.TryAddSingleton<IApiKeyStore, ApiKeyStore>();
+            services.TryAddSingleton<IConnectionManager, ConnectionManager>();
             services.AddHostedService<DispatcherService>();
             services.AddDbContext<DispatcherDatabaseContext>();
             services.Configure(configuration);
