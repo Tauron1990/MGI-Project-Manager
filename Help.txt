@@ -1,2 +1,3 @@
 https://github.com/aspnet/AspNetCore/issues/4873
 https://github.com/aspnet/Entropy
+https://stackoverflow.com/questions/47208844/net-core-signalr-connection-timeout-heartbeat-timer-connection-state-chan
