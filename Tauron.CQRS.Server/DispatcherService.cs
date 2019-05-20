@@ -35,7 +35,7 @@ namespace Tauron.CQRS.Server
         {
             foreach (var domainEvent in _eventManager.Dispatcher.GetConsumingEnumerable(stoppingToken))
             {
-                switch (domainEvent.DomainEvent.EventName)
+                switch (domainEvent.RealEvent.EventName)
                 {
                     case HubEventNames.DispatcherCommand.StartDispatcher:
                         _stopped = false;
@@ -58,15 +58,15 @@ namespace Tauron.CQRS.Server
                         var entity = _dispatcherDatabaseContext.EventEntities.Add(new EventEntity
                         {
                             Origin = await _apiKeyStore.GetServiceFromKey(domainEvent.ApiKey),
-                            Data = domainEvent.DomainEvent.EventData,
-                            EventName = domainEvent.DomainEvent.EventName,
-                            EventType = domainEvent.DomainEvent.EventType,
+                            Data = domainEvent.RealEvent.EventData,
+                            EventName = domainEvent.RealEvent.EventName,
+                            EventType = domainEvent.RealEvent.EventType,
                             EventStatus = EventStatus.Pending
                         });
 
                         await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
                         if (stoppingToken.IsCancellationRequested) continue;
-                        domainEvent.DomainEvent.SequenceNumber = entity.Entity.SequenceNumber;
+                        domainEvent.RealEvent.SequenceNumber = entity.Entity.SequenceNumber;
 
                         if (await _eventManager.DeliverEvent(domainEvent, stoppingToken))
                         {

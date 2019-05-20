@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tauron.CQRS.Health;
@@ -20,6 +21,7 @@ namespace Tauron.MgiProjectManager.Dispatcher
             services.AddHealth();
 
             services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddHealthParts()
                 .AddCQRS();
         }
@@ -35,6 +37,13 @@ namespace Tauron.MgiProjectManager.Dispatcher
 
             app.UseHealth();
             app.UseRouting();
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller}/{action=Index}/{id?}");
+            });
 
             app.UseEndpoints(endpoints =>
             {

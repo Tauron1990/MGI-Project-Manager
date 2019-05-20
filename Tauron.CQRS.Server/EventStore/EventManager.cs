@@ -28,21 +28,21 @@ namespace Tauron.CQRS.Server.EventStore
             {
                 _connectionManager = connectionManager;
                 DomainEvent = domainEvent;
-                _waitLock = new CountdownEvent(connectionManager.GetCurrentClients(domainEvent.DomainEvent.EventName));
+                _waitLock = new CountdownEvent(connectionManager.GetCurrentClients(domainEvent.RealEvent.EventName));
                 connectionManager.ClientAdded += ConnectionManagerOnClientAdded;
                 connectionManager.ClientRemoved += ConnectionManagerOnClientRemoved;
             }
 
             private void ConnectionManagerOnClientRemoved(string obj)
             {
-                if(obj != DomainEvent.DomainEvent.EventName || _waitLock.CurrentCount == 0) return;
+                if(obj != DomainEvent.RealEvent.EventName || _waitLock.CurrentCount == 0) return;
 
                 _waitLock.Signal();
             }
 
             private void ConnectionManagerOnClientAdded(string obj)
             {
-                if (obj != DomainEvent.DomainEvent.EventName) return;
+                if (obj != DomainEvent.RealEvent.EventName) return;
 
                 _waitLock.AddCount();
             }
@@ -97,9 +97,9 @@ namespace Tauron.CQRS.Server.EventStore
         public async Task<bool> DeliverEvent(RecivedDomainEvent @event, CancellationToken token)
         {
             var entry = new EventCookie(@event, _connectionManager);
-            if (!_eventCookies.TryAdd(@event.DomainEvent.SequenceNumber, entry)) return false;
+            if (!_eventCookies.TryAdd(@event.RealEvent.SequenceNumber, entry)) return false;
             
-            switch (@event.DomainEvent.EventType)
+            switch (@event.RealEvent.EventType)
             {
                 case EventType.ImportentEvent:
                 case EventType.EssentialEvent:
@@ -111,11 +111,11 @@ namespace Tauron.CQRS.Server.EventStore
                         if (_eventCookies.TryRemove(cookie.Key, out var cookie2)) cookie2.Dispose();
                     }
 
-                    await _eventHub.Clients.Group(entry.DomainEvent.DomainEvent.EventName).SendAsync(HubEventNames.PropagateEvent, entry.DomainEvent.DomainEvent, cancellationToken: token);
+                    await _eventHub.Clients.Group(entry.DomainEvent.RealEvent.EventName).SendAsync(HubEventNames.PropagateEvent, entry.DomainEvent.RealEvent, cancellationToken: token);
 
                     return entry.WaitForResponse(100_000);
                 case EventType.TransistentEvent:
-                    await _eventHub.Clients.Groups(entry.DomainEvent.DomainEvent.EventName).SendAsync(HubEventNames.PropagateEvent, entry.DomainEvent.DomainEvent, cancellationToken: token);
+                    await _eventHub.Clients.Groups(entry.DomainEvent.RealEvent.EventName).SendAsync(HubEventNames.PropagateEvent, entry.DomainEvent.RealEvent, cancellationToken: token);
                     return true;
                 default:
                     return false;
@@ -126,7 +126,7 @@ namespace Tauron.CQRS.Server.EventStore
         {
             if (_eventCookies.TryGetValue(sequenceNumber, out var eventCookie))
             {
-                switch (eventCookie.DomainEvent.DomainEvent.EventType)
+                switch (eventCookie.DomainEvent.RealEvent.EventType)
                 {
                     case EventType.Command:
                         try
