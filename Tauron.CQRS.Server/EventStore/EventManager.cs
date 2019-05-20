@@ -16,15 +16,36 @@ namespace Tauron.CQRS.Server.EventStore
     {
         private class EventCookie : IDisposable
         {
+            private readonly IConnectionManager _connectionManager;
             private readonly HashSet<string> _recivedServices = new HashSet<string>();
-            private readonly CountdownEvent _waitLock = new ManualResetEventSlim(); //TODO Change to Countdown an subscribe to Connection Manager
+            private readonly CountdownEvent _waitLock;
 
             public RecivedDomainEvent DomainEvent { get; }
 
             private DateTime CreationTime { get; } = DateTime.Now;
 
-            public EventCookie(RecivedDomainEvent domainEvent) 
-                => DomainEvent = domainEvent;
+            public EventCookie(RecivedDomainEvent domainEvent, IConnectionManager connectionManager)
+            {
+                _connectionManager = connectionManager;
+                DomainEvent = domainEvent;
+                _waitLock = new CountdownEvent(connectionManager.GetCurrentClients(domainEvent.DomainEvent.EventName));
+                connectionManager.ClientAdded += ConnectionManagerOnClientAdded;
+                connectionManager.ClientRemoved += ConnectionManagerOnClientRemoved;
+            }
+
+            private void ConnectionManagerOnClientRemoved(string obj)
+            {
+                if(obj != DomainEvent.DomainEvent.EventName || _waitLock.CurrentCount == 0) return;
+
+                _waitLock.Signal();
+            }
+
+            private void ConnectionManagerOnClientAdded(string obj)
+            {
+                if (obj != DomainEvent.DomainEvent.EventName) return;
+
+                _waitLock.AddCount();
+            }
 
             public bool CanAccept(string service)
             {
@@ -38,26 +59,44 @@ namespace Tauron.CQRS.Server.EventStore
             public bool WaitForResponse(int timeout) => _waitLock.Wait(timeout);
 
             public void Respond() 
-                => _waitLock.Set();
+                => _waitLock.Signal();
 
-            public void Dispose() 
-                => _waitLock?.Dispose();
+            public void Dispose()
+            {
+                _waitLock?.Dispose();
+                _connectionManager.ClientRemoved -= ConnectionManagerOnClientRemoved;
+                _connectionManager.ClientAdded -= ConnectionManagerOnClientAdded;
+            }
         }
 
         private readonly IHubContext<EventHub> _eventHub;
+        private readonly IConnectionManager _connectionManager;
         private readonly ConcurrentDictionary<int, EventCookie> _eventCookies = new ConcurrentDictionary<int, EventCookie>();
+
+        private int _dispatcherStopped;
+
+        private bool DispatcherStopped
+        {
+            get => (Interlocked.CompareExchange(ref _dispatcherStopped, 1, 1) == 1);
+            set
+            {
+                if (value) Interlocked.CompareExchange(ref _dispatcherStopped, 1, 0);
+                else Interlocked.CompareExchange(ref _dispatcherStopped, 0, 1);
+            }
+        }
 
         public BlockingCollection<RecivedDomainEvent> Dispatcher { get; }
 
         public EventManager(IHubContext<EventHub> eventHub, IConnectionManager connectionManager)
         {
             _eventHub = eventHub;
+            _connectionManager = connectionManager;
             Dispatcher = new BlockingCollection<RecivedDomainEvent>();
         }
 
         public async Task<bool> DeliverEvent(RecivedDomainEvent @event, CancellationToken token)
         {
-            var entry = new EventCookie(@event);
+            var entry = new EventCookie(@event, _connectionManager);
             if (!_eventCookies.TryAdd(@event.DomainEvent.SequenceNumber, entry)) return false;
             
             switch (@event.DomainEvent.EventType)
@@ -119,10 +158,34 @@ namespace Tauron.CQRS.Server.EventStore
                 await _eventHub.Clients.Client(connectionId).SendAsync(HubEventNames.RejectedEvent, HubEventNames.RejectionReasons.NoEvent);
         }
 
-        public Task ProvideEvent(DomainEvent domainEvent, string apiKey)
+        public async Task ProvideEvent(string sender, DomainEvent domainEvent, string apiKey)
         {
-            Dispatcher.Add(new RecivedDomainEvent(domainEvent, apiKey));
+            if (DispatcherStopped)
+            {
+                switch (domainEvent.EventName)
+                {
+                    case HubEventNames.DispatcherCommand.StartDispatcher:
+                    case HubEventNames.DispatcherCommand.StopDispatcher:
+                        Dispatcher.Add(new RecivedDomainEvent(domainEvent, apiKey));
+                        break;
+                    default:
+                        await _eventHub.Clients.Client(sender).SendAsync(HubEventNames.RejectedEvent, HubEventNames.RejectionReasons.DispatcherStoped);
+                        return;
+                }
+            }
 
+            Dispatcher.Add(new RecivedDomainEvent(domainEvent, apiKey));
+        }
+
+        public Task StopDispatching()
+        {
+            DispatcherStopped = true;
+            return Task.CompletedTask;
+        }
+
+        public Task StartDispatching()
+        {
+            DispatcherStopped = false;
             return Task.CompletedTask;
         }
     }

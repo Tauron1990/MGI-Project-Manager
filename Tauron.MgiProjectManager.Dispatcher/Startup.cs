@@ -1,29 +1,27 @@
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Health;
+using Tauron.CQRS.Server.Extension;
 using Tauron.CQRS.Server.Hubs;
 
 namespace Tauron.MgiProjectManager.Dispatcher
 {
     public class Startup
     {
-        private void Test(IHubContext<EventHub, IEventBus> bus)
-        {
-            
-        }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCQRS(c => c.WithDatabase("Test"));
             services.AddHealth();
-            services.AddMvc().AddHealthParts();
+
+            services.AddMvc()
+                .AddHealthParts()
+                .AddCQRS();
         }
 
         [UsedImplicitly]
@@ -40,9 +38,12 @@ namespace Tauron.MgiProjectManager.Dispatcher
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
+                endpoints.MapHub<EventHub>("EventBus");
+                endpoints.MapGet("/", context =>
                 {
-                    await context.Response.WriteAsync("Hello World!");
+                    context.Response.Redirect("/Health");
+
+                    return Task.CompletedTask;
                 });
             });
         }

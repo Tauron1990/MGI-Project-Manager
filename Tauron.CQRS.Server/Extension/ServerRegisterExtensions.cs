@@ -1,6 +1,5 @@
 ﻿using System;
 using JetBrains.Annotations;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Tauron.CQRS.Common.Configuration;
@@ -17,17 +16,21 @@ namespace Tauron.CQRS.Server.Extension
         public static IServiceCollection AddCQRS(this IServiceCollection services, Action<ServerConfiguration> configuration)
         {
             services.AddSignalR();
+
             services.TryAddSingleton<IEventManager, EventManager>();
             services.TryAddSingleton<IApiKeyStore, ApiKeyStore>();
             services.TryAddSingleton<IConnectionManager, ConnectionManager>();
+
             services.AddHostedService<DispatcherService>();
+            services.AddHostedService<HeartBeatService>();
+
             services.AddDbContext<DispatcherDatabaseContext>();
             services.Configure(configuration);
 
             return services;
         }
 
-        public static IMvcBuilder UseCQRS(this IMvcBuilder builder) 
+        public static IMvcBuilder AddCQRS(this IMvcBuilder builder) 
             => builder.AddApplicationPart(typeof(ServerRegisterExtensions).Assembly);
     }
 }

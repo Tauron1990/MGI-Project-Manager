@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.AspNetCore.SignalR;
 using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Server.Core;
@@ -19,8 +18,6 @@ namespace Tauron.CQRS.Server.Hubs
             _keyStore = keyStore;
             _eventManager = eventManager;
             _connectionManager = connectionManager;
-
-            Context.Features.Get<IConnectionHeartbeatFeature>() //TODO Implement Heartbeat
         }
 
         public override async Task OnConnectedAsync() => await _connectionManager.AddConnection(Context.ConnectionId);
@@ -48,7 +45,7 @@ namespace Tauron.CQRS.Server.Hubs
         {
             if (!await _keyStore.Validate(apiKey)) throw new HubException("Api Key Validation Failed");
 
-            await _eventManager.ProvideEvent(@event, apiKey);
+            await _eventManager.ProvideEvent(Context.ConnectionId, @event, apiKey);
         }
 
         [UsedImplicitly]
@@ -58,5 +55,9 @@ namespace Tauron.CQRS.Server.Hubs
 
             await _eventManager.TryAccept(Context.ConnectionId, sequenceNumber, service);
         }
+
+        [UsedImplicitly]
+        public async Task StillConnected() 
+            => await _connectionManager.StillConnected(Context.ConnectionId);
     }
 }

@@ -3,9 +3,11 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Server.Core;
 using Tauron.CQRS.Server.EventStore;
 using Tauron.CQRS.Server.EventStore.Data;
+using Tauron.CQRS.Server.Hubs;
 
 namespace Tauron.CQRS.Server
 {
@@ -16,6 +18,7 @@ namespace Tauron.CQRS.Server
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IApiKeyStore _apiKeyStore;
 
+        private bool _stopped;
         private IServiceScope _serviceScope;
         private DispatcherDatabaseContext _dispatcherDatabaseContext;
 
@@ -32,43 +35,60 @@ namespace Tauron.CQRS.Server
         {
             foreach (var domainEvent in _eventManager.Dispatcher.GetConsumingEnumerable(stoppingToken))
             {
-                if (_serviceScope == null || _dispatcherDatabaseContext == null)
+                switch (domainEvent.DomainEvent.EventName)
                 {
-                    _serviceScope = _scopeFactory.CreateScope();
-                    _dispatcherDatabaseContext = _serviceScope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>();
-                }
+                    case HubEventNames.DispatcherCommand.StartDispatcher:
+                        _stopped = false;
+                        await _eventManager.StartDispatching();
+                        break;
+                    case HubEventNames.DispatcherCommand.StopDispatcher:
+                        _stopped = true;
+                        await _eventManager.StopDispatching();
+                        break;
+                    default:
+                        if (_stopped)
+                            continue;
+                        if (_serviceScope == null || _dispatcherDatabaseContext == null)
+                        {
+                            _serviceScope = _scopeFactory.CreateScope();
+                            _dispatcherDatabaseContext = _serviceScope.ServiceProvider
+                                .GetRequiredService<DispatcherDatabaseContext>();
+                        }
 
-                var entity = _dispatcherDatabaseContext.EventEntities.Add(new EventEntity
-                {
-                    Origin = await _apiKeyStore.GetServiceFromKey(domainEvent.ApiKey),
-                    Data = domainEvent.DomainEvent.EventData,
-                    EventName = domainEvent.DomainEvent.EventName,
-                    EventType = domainEvent.DomainEvent.EventType,
-                    EventStatus = EventStatus.Pending
-                });
+                        var entity = _dispatcherDatabaseContext.EventEntities.Add(new EventEntity
+                        {
+                            Origin = await _apiKeyStore.GetServiceFromKey(domainEvent.ApiKey),
+                            Data = domainEvent.DomainEvent.EventData,
+                            EventName = domainEvent.DomainEvent.EventName,
+                            EventType = domainEvent.DomainEvent.EventType,
+                            EventStatus = EventStatus.Pending
+                        });
 
-                await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
-                if(stoppingToken.IsCancellationRequested) continue;
-                domainEvent.DomainEvent.SequenceNumber = entity.Entity.SequenceNumber;
+                        await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
+                        if (stoppingToken.IsCancellationRequested) continue;
+                        domainEvent.DomainEvent.SequenceNumber = entity.Entity.SequenceNumber;
 
-                if (await _eventManager.DeliverEvent(domainEvent, stoppingToken))
-                {
-                    entity.Entity.EventStatus = EventStatus.Deliverd;
-                    await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
-                }
-                else
-                {
-                    entity.Entity.EventStatus = EventStatus.Failed;
-                    await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
-                }
+                        if (await _eventManager.DeliverEvent(domainEvent, stoppingToken))
+                        {
+                            entity.Entity.EventStatus = EventStatus.Deliverd;
+                            await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
+                        }
+                        else
+                        {
+                            entity.Entity.EventStatus = EventStatus.Failed;
+                            await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
+                        }
 
-                if (_eventManager.Dispatcher.Count == 0 || stoppingToken.IsCancellationRequested)
-                {
-                    _dispatcherDatabaseContext?.Dispose();
-                    _serviceScope?.Dispose();
+                        if (_eventManager.Dispatcher.Count == 0 || stoppingToken.IsCancellationRequested)
+                        {
+                            _dispatcherDatabaseContext?.Dispose();
+                            _serviceScope?.Dispose();
 
-                    _dispatcherDatabaseContext = null;
-                    _serviceScope = null;
+                            _dispatcherDatabaseContext = null;
+                            _serviceScope = null;
+                        }
+
+                        break;
                 }
             }
         }
