@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Tauron.CQRS.Server.EventStore;
 using Tauron.CQRS.Server.EventStore.Data;
@@ -70,7 +71,7 @@ namespace Tauron.CQRS.Server.Core.Impl
 
             using (var scope = _serviceScopeFactory.CreateScope())
             using (var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>())
-                _keys = context.ApiKeys.ToList();
+                _keys = context.ApiKeys.AsNoTracking().ToList();
 
             return Task.CompletedTask;
         }

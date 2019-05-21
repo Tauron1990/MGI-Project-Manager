@@ -13,6 +13,8 @@ namespace Tauron.CQRS.Server.EventStore
 
         public DbSet<ApiKey> ApiKeys { get; set; }
 
+        public DbSet<ObjectStadeEntity> ObjectStades { get; set; }
+
         public DispatcherDatabaseContext(IOptions<ServerConfiguration> serverOptions) 
             => _serverOptions = serverOptions;
 
