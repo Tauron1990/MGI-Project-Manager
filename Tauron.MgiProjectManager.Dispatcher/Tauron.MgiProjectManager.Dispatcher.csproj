@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Tauron.CQRS.Server\Tauron.CQRS.Server.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Api\" />
+  </ItemGroup>
+
 </Project>
