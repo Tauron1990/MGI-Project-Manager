@@ -2,6 +2,11 @@
 {
     public static class HubEventNames
     {
+        public static class DispatcherEvent
+        {
+            public const string DeliveryFailedEvent = nameof(DeliveryFailedEvent);
+        }
+
         public static class DispatcherCommand
         {
             public const string StopDispatcher = nameof(StopDispatcher);
@@ -22,7 +27,7 @@
 
             public const string EventConsumed = nameof(EventConsumed);
 
-            public const string DispatcherStoped = nameof(DispatcherStoped); //TODO Make Dispatcher Stoppable via Command and Track Fails via Event
+            public const string DispatcherStoped = nameof(DispatcherStoped); 
         }
 
         public const string PropagateEvent = nameof(PropagateEvent);

@@ -55,30 +55,41 @@ namespace Tauron.CQRS.Server
                                 .GetRequiredService<DispatcherDatabaseContext>();
                         }
 
-                        var entity = _dispatcherDatabaseContext.EventEntities.Add(new EventEntity
+                        if (domainEvent.RealEvent.EventType != EventType.Command)
                         {
-                            Origin = await _apiKeyStore.GetServiceFromKey(domainEvent.ApiKey),
-                            Data = domainEvent.RealEvent.EventData,
-                            EventName = domainEvent.RealEvent.EventName,
-                            EventType = domainEvent.RealEvent.EventType,
-                            EventStatus = EventStatus.Pending
-                        });
+                            var entity = _dispatcherDatabaseContext.EventEntities.Add(new EventEntity
+                            {
+                                Origin = await _apiKeyStore.GetServiceFromKey(domainEvent.ApiKey),
+                                Data = domainEvent.RealEvent.EventData,
+                                EventName = domainEvent.RealEvent.EventName,
+                                EventType = domainEvent.RealEvent.EventType,
+                                EventStatus = EventStatus.Pending
+                            });
 
-                        await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
-                        if (stoppingToken.IsCancellationRequested) continue;
-                        domainEvent.RealEvent.SequenceNumber = entity.Entity.SequenceNumber;
-
-                        if (await _eventManager.DeliverEvent(domainEvent, stoppingToken))
-                        {
-                            entity.Entity.EventStatus = EventStatus.Deliverd;
                             await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
+                            if (stoppingToken.IsCancellationRequested) continue;
+                            domainEvent.RealEvent.SequenceNumber = entity.Entity.SequenceNumber;
+
+                            if (await _eventManager.DeliverEvent(domainEvent, stoppingToken))
+                            {
+                                entity.Entity.EventStatus = EventStatus.Deliverd;
+                                await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
+                            }
+                            else
+                            {
+                                entity.Entity.EventStatus = EventStatus.Failed;
+                                await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
+
+                                await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
+                            }
                         }
                         else
                         {
-                            entity.Entity.EventStatus = EventStatus.Failed;
-                            await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
+                            domainEvent.RealEvent.SequenceNumber = -1;
+                            if (!await _eventManager.DeliverEvent(domainEvent, stoppingToken))
+                                await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
                         }
-
+                        
                         if (_eventManager.Dispatcher.Count == 0 || stoppingToken.IsCancellationRequested)
                         {
                             _dispatcherDatabaseContext?.Dispose();
@@ -91,6 +102,17 @@ namespace Tauron.CQRS.Server
                         break;
                 }
             }
+        }
+
+
+        private RecivedDomainEvent CreateEventFailedEvent(RecivedDomainEvent original)
+        {
+            return new RecivedDomainEvent(new DomainEvent
+            {
+                EventData = original.RealEvent.EventName,
+                EventName = HubEventNames.DispatcherEvent.DeliveryFailedEvent,
+                EventType = EventType.TransistentEvent, SequenceNumber = -1
+            }, string.Empty);
         }
 
         #endregion
