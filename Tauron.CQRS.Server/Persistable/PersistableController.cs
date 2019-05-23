@@ -10,8 +10,8 @@ using Tauron.CQRS.Server.EventStore.Data;
 namespace Tauron.CQRS.Server.Persistable
 {
     [ApiController]
-    [Route("[controller]")]
-    public class PersistableController : Controller
+    [Route("Api/[controller]")]
+    public class PersistableController : ControllerBase
     {
         private readonly IApiKeyStore _apiKeyStore;
         private readonly DispatcherDatabaseContext _context;

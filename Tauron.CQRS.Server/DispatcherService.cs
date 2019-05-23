@@ -63,7 +63,8 @@ namespace Tauron.CQRS.Server
                                 Data = domainEvent.RealEvent.EventData,
                                 EventName = domainEvent.RealEvent.EventName,
                                 EventType = domainEvent.RealEvent.EventType,
-                                EventStatus = EventStatus.Pending
+                                EventStatus = EventStatus.Pending,
+                                Id = domainEvent.RealEvent.Id
                             });
 
                             await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
