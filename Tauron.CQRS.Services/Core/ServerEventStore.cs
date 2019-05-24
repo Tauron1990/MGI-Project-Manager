@@ -9,11 +9,11 @@ using Tauron.CQRS.Common.ServerHubs;
 
 namespace Tauron.CQRS.Services.Core
 {
-    public class EventStore : IEventStore
+    public class ServerEventStore : IEventStore
     {
         private readonly IDispatcherApi _api;
 
-        public EventStore(IDispatcherApi api) 
+        public ServerEventStore(IDispatcherApi api) 
             => _api = api;
 
         public async Task Save(IEnumerable<IEvent> events, CancellationToken cancellationToken = new CancellationToken())

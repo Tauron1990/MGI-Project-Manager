@@ -23,9 +23,9 @@ namespace Tauron.CQRS.Server.Persistable
             _store = store;
         }
 
-        [Route("AddEvents")]
+        [Route(nameof(AddEvents))]
         [HttpGet]
-        public async Task<ActionResult<bool>> AddEvents(IEnumerable<DomainEvent> events, string apiKey)
+        public async Task<ActionResult<bool>> AddEvents([FromBody]IEnumerable<DomainEvent> events, [FromQuery]string apiKey)
         {
             if (!await _store.Validate(apiKey)) return Forbid();
 
@@ -46,9 +46,9 @@ namespace Tauron.CQRS.Server.Persistable
             return true;
         }
 
-        [Route("GetEvents")]
+        [Route(nameof(GetEvents))]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DomainEvent>>> GetEvents(Guid aggregateId, int fromVersion, string apiKey)
+        public async Task<ActionResult<IEnumerable<DomainEvent>>> GetEvents([FromQuery]Guid aggregateId, [FromQuery]int fromVersion, [FromQuery]string apiKey)
         {
             if (!await _store.Validate(apiKey)) return Forbid();
 

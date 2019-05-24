@@ -22,8 +22,8 @@ namespace Tauron.CQRS.Server.Persistable
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<ObjectStade>> Get(string id, string apikey)
+        [HttpGet()]
+        public async Task<ActionResult<ObjectStade>> Get([FromBody]string id, [FromQuery]string apikey)
         {
             if (!await _apiKeyStore.Validate(apikey))
                 return base.Forbid();
@@ -33,8 +33,8 @@ namespace Tauron.CQRS.Server.Persistable
             return entity == null ? new ObjectStade{ Data = string.Empty, Identifer = id} : new ObjectStade {Data = entity.Data, Identifer = entity.Identifer};
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Put(ObjectStade stade, string apiKey)
+        [HttpPut()]
+        public async Task<IActionResult> Put([FromBody]ObjectStade stade, [FromQuery] string apiKey)
         {
             if (!await _apiKeyStore.Validate(apiKey))
                 return base.Forbid();

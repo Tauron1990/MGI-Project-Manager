@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using CQRSlite.Events;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Tauron.CQRS.Services.Core;
@@ -11,6 +12,8 @@ namespace Tauron.CQRS.Services.Extensions
         public static void AddCQRSServices(this IServiceCollection service)
         {
             service.TryAddSingleton<IDispatcherClient, DispatcherClient>();
+            service.TryAddTransient<IDispatcherApi, DispatcherApi>();
+            service.TryAddSingleton<IEventStore, ServerEventStore>();
         }
     }
 }
