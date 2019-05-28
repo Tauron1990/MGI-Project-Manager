@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Tauron.CQRS.Common.Persistable;
+using Tauron.CQRS.Common.Dto.Persistable;
 using Tauron.CQRS.Server.Core;
 using Tauron.CQRS.Server.EventStore;
 using Tauron.CQRS.Server.EventStore.Data;

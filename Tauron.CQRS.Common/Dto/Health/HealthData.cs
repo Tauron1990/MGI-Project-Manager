@@ -1,4 +1,4 @@
-﻿namespace Tauron.CQRS.Common.Health
+﻿namespace Tauron.CQRS.Common.Dto.Health
 {
     public class HealthData
     {

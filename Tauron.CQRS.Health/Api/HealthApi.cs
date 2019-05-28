@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Tauron.CQRS.Common.Health;
+using Tauron.CQRS.Common.Dto.Health;
 using Tauron.CQRS.Health.Core;
 
 namespace Tauron.CQRS.Health.Api

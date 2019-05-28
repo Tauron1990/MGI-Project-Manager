@@ -15,6 +15,8 @@ namespace Tauron.CQRS.Server.Extension
     {
         public static IServiceCollection AddCQRS(this IServiceCollection services, Action<ServerConfiguration> configuration)
         {
+            services.AddCQRSTypeHandling();
+
             services.AddSignalR();
 
             services.TryAddSingleton<IEventManager, EventManager>();

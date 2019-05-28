@@ -1,4 +1,4 @@
-﻿namespace Tauron.CQRS.Common.Persistable
+﻿namespace Tauron.CQRS.Common.Dto.Persistable
 {
     public class ObjectStade
     {
