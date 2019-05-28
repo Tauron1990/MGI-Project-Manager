@@ -6,6 +6,8 @@ using Tauron.CQRS.Common.ServerHubs;
 
 namespace Tauron.CQRS.Services.Core
 {
+
+
     public interface IEventServerApi
     {
         [Get(nameof(AddEvents))]
