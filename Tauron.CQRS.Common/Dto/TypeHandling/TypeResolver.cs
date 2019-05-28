@@ -32,11 +32,15 @@ namespace Tauron.CQRS.Common.Dto.TypeHandling
             if (!reader.Read()) return existingValue;
 
             var typeInfo = JProperty.Load(reader);
-            var targetType = TypeRegistry.Resolve( typeInfo.Value.Value<string>());
+            var targetType = TypeRegistry.Resolve(typeInfo.Value.Value<string>());
 
             if (!reader.Read()) return existingValue;
 
-            var obj = targetType == null ? existingValue : serializer.Deserialize(reader, targetType);
+            object obj;
+            if (targetType == typeof(JToken))
+                obj = JToken.Load(reader);
+            else
+                obj = targetType == null ? existingValue : serializer.Deserialize(reader, targetType);
 
             reader.Read();
             return obj;
