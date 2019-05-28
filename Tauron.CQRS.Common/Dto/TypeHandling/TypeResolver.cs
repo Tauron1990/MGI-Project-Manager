@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Tauron.CQRS.Common.Dto.TypeHandling.Impl;
 
 namespace Tauron.CQRS.Common.Dto.TypeHandling
@@ -21,64 +22,27 @@ namespace Tauron.CQRS.Common.Dto.TypeHandling
             writer.WriteValue(name);
 
             writer.WritePropertyName("Data");
-            serializer.Serialize(writer, serializer);
+            serializer.Serialize(writer, value);
 
             writer.WriteEndObject();
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (reader.Read())
-            {
-                switch (reader.TokenType)
-                {
-                    case JsonToken.None:
-                        break;
-                    case JsonToken.StartObject:
-                        break;
-                    case JsonToken.StartArray:
-                        break;
-                    case JsonToken.StartConstructor:
-                        break;
-                    case JsonToken.PropertyName:
-                        break;
-                    case JsonToken.Comment:
-                        break;
-                    case JsonToken.Raw:
-                        break;
-                    case JsonToken.Integer:
-                        break;
-                    case JsonToken.Float:
-                        break;
-                    case JsonToken.String:
-                        break;
-                    case JsonToken.Boolean:
-                        break;
-                    case JsonToken.Null:
-                        break;
-                    case JsonToken.Undefined:
-                        break;
-                    case JsonToken.EndObject:
-                        break;
-                    case JsonToken.EndArray:
-                        break;
-                    case JsonToken.EndConstructor:
-                        break;
-                    case JsonToken.Date:
-                        break;
-                    case JsonToken.Bytes:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
+            if (!reader.Read()) return existingValue;
 
-            return existingValue;
+            var typeInfo = JProperty.Load(reader);
+            var targetType = TypeRegistry.Resolve( typeInfo.Value.Value<string>());
+
+            if (!reader.Read()) return existingValue;
+
+            var obj = targetType == null ? existingValue : serializer.Deserialize(reader, targetType);
+
+            reader.Read();
+            return obj;
         }
 
-        public override bool CanConvert(Type objectType)
-        {
-            throw new NotImplementedException();
-        }
+        public override bool CanConvert(Type objectType) 
+            => TypeRegistry.Contains(objectType);
     }
 }

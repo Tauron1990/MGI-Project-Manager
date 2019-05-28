@@ -23,10 +23,12 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using LibGit2Sharp;
+using Newtonsoft.Json;
+using Tauron.CQRS.Common.Dto.TypeHandling;
 
 namespace TestApp
 {
-    static class Programm
+    public static class Programm
     {
         //static readonly SecureRandom secureRandom = new SecureRandom();
 
@@ -91,46 +93,35 @@ namespace TestApp
         //    return signer.VerifySignature(sig);
         //}
 
-        static void Main()
-        {
-            using (var repo = new Repository(@"C:\Users\PC\Desktop\test\MGI\TestApp\bin\Debug\Test"))
+            public class MyClass2 : IMyClass
             {
-                var result = Commands.Pull(repo, new Signature(new Identity("TestApp", "test@TestApp.de"), DateTimeOffset.Now), new PullOptions());
+                public string Message { get; set; }
             }
 
-            //var test2 = Repository.Clone(@"https://github.com/Tauron1990/MGI-Project-Manager.git",
-            //    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Test"));
+        public interface IMyClass
+        {
+            string Message { get; set; }
+        }
 
-            //string test = Environment.GetEnvironmentVariable("Path").Split(';').First(p => p.Contains("dotnet"));
+            public class MyClass
+            {
+                [JsonConverter(typeof(TypeResolver))]
+                public IMyClass Class { get; set; }
 
-            ////dotnet publish Tauron.MgiProjectManager.Server.csproj
+                public string Test { get; set; }
+            }
 
-            ////* Create your Process
-            //Process process = new Process
-            //{
-            //    StartInfo =
-            //    {
-            //        FileName = Path.Combine(test, "dotnet.exe"),
-            //        Arguments =
-            //            $"publish {Path.Combine(@"C:\Users\PC\Desktop\test\MGI\Alt\Tauron.MgiProjectManager.Server", "Tauron.MgiProjectManager.Server.csproj")}",
-            //        UseShellExecute = false,
-            //        RedirectStandardOutput = true,
-            //        RedirectStandardError = true
-            //    }
-            //};
-            ////* Set your output and error (asynchronous) handlers
-            //process.OutputDataReceived += OutputHandler;
-            //process.ErrorDataReceived += OutputHandler;
-            ////* Start process and handlers
-            //process.Start();
-            //process.BeginOutputReadLine();
-            //process.BeginErrorReadLine();
-            //process.WaitForExit();
+        static void Main()
+        {
+            TypeResolver.TypeRegistry.Register("Test", typeof(MyClass2));
 
-            //Console.WriteLine();
-            //Console.WriteLine(process.ExitCode);
+            var testValue = new MyClass {Class = new MyClass2 {Message = "HalloWelt"}, Test = "Test"};
 
-            //Console.ReadKey();
+            string text = JsonConvert.SerializeObject(testValue, Formatting.Indented);
+            testValue = JsonConvert.DeserializeObject<MyClass>(text);
+
+            Console.WriteLine(testValue.Class.Message);
+            Console.ReadKey();
             //using (var server = Microsoft.Web.Administration.ServerManager.OpenRemote("http://192.168.105.18"))
             //{
             //    foreach (var serverSite in server.Sites)
@@ -179,12 +170,6 @@ namespace TestApp
             //    var buf = eeCert.GetEncoded();
             //    f.Write(buf, 0, buf.Length);
             //}
-        }
-
-        static void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
-        {
-            //* Do your stuff with the output (write to console/log/StringBuilder)
-            Console.WriteLine(outLine.Data);
         }
     }
 }
