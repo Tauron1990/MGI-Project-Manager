@@ -1,9 +1,13 @@
-﻿namespace Tauron.CQRS.Common.Dto.Persistable
+﻿using Newtonsoft.Json;
+using Tauron.CQRS.Common.Dto.TypeHandling;
+
+namespace Tauron.CQRS.Common.Dto.Persistable
 {
     public class ObjectStade
     {
         public string Identifer { get; set; }
 
-        public string Data { get; set; }
+        [JsonConverter(typeof(TypeResolver))]
+        public IObjectData Data { get; set; }
     }
 }

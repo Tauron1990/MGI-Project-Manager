@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 using System.Security.Principal;
 using LibGit2Sharp;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Tauron.CQRS.Common.Dto.TypeHandling;
 
 namespace TestApp
@@ -111,6 +112,14 @@ namespace TestApp
                 public string Test { get; set; }
             }
 
+            public class MyClassTest
+            {
+                [JsonConverter(typeof(TypeResolver))]
+                public JToken Class { get; set; }
+
+                public string Test { get; set; }
+            }
+
         static void Main()
         {
             TypeResolver.TypeRegistry.Register("Test", typeof(MyClass2));
@@ -118,9 +127,9 @@ namespace TestApp
             var testValue = new MyClass {Class = new MyClass2 {Message = "HalloWelt"}, Test = "Test"};
 
             string text = JsonConvert.SerializeObject(testValue, Formatting.Indented);
-            testValue = JsonConvert.DeserializeObject<MyClass>(text);
+            var testValue2 = JsonConvert.DeserializeObject<MyClassTest>(text);
 
-            Console.WriteLine(testValue.Class.Message);
+            Console.WriteLine(testValue2.Class.ToString());
             Console.ReadKey();
             //using (var server = Microsoft.Web.Administration.ServerManager.OpenRemote("http://192.168.105.18"))
             //{

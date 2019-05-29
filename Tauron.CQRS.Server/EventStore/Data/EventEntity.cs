@@ -17,9 +17,7 @@ namespace Tauron.CQRS.Server.EventStore.Data
 
         public string EventName { get; set; }
 
-        public string Origin { get; set; }
-
-        public EventStatus EventStatus { get; set; }
+        public string OriginType { get; set; }
 
         public int Version { get; set; }
 

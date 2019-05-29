@@ -1,8 +1,9 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Tauron.CQRS.Common.Dto;
 using Tauron.CQRS.Common.Dto.Persistable;
+using Tauron.CQRS.Common.Dto.TypeHandling;
 using Tauron.CQRS.Server.Core;
 using Tauron.CQRS.Server.EventStore;
 using Tauron.CQRS.Server.EventStore.Data;
@@ -23,30 +24,43 @@ namespace Tauron.CQRS.Server.Persistable
         }
 
         [HttpGet()]
-        public async Task<ActionResult<ObjectStade>> Get([FromBody]string id, [FromQuery]string apikey)
+        public async Task<ActionResult<ObjectStade>> Get([FromBody] ApiObjectId id)
         {
-            if (!await _apiKeyStore.Validate(apikey))
+            if (!await _apiKeyStore.Validate(id.ApiKey))
                 return base.Forbid();
 
-            var entity = await _context.ObjectStades.AsNoTracking().FirstOrDefaultAsync(o => o.Identifer == id);
+            string realId = id.Id;
 
-            return entity == null ? new ObjectStade{ Data = string.Empty, Identifer = id} : new ObjectStade {Data = entity.Data, Identifer = entity.Identifer};
+            var entity = await _context.ObjectStades.AsNoTracking().FirstOrDefaultAsync(o => o.Identifer == realId);
+
+            return entity == null
+                ? new ObjectStade {Identifer = realId}
+                : new ObjectStade
+                {
+                    Data = TypeFactory.Create(entity.OriginType, entity.Data) as IObjectData,
+                    Identifer = entity.Identifer
+                };
         }
 
         [HttpPut()]
-        public async Task<IActionResult> Put([FromBody]ObjectStade stade, [FromQuery] string apiKey)
+        public async Task<IActionResult> Put([FromBody] ApiObjectStade stade)
         {
-            if (!await _apiKeyStore.Validate(apiKey))
+            if (!await _apiKeyStore.Validate(stade.ApiKey))
                 return base.Forbid();
 
-            string id = stade.Identifer;
+            string id = stade.ObjectStade.Identifer;
 
             var entity = await _context.ObjectStades.FirstOrDefaultAsync(o => o.Identifer == id);
 
             if (entity != null)
-                entity.Data = stade.Data;
+                entity.Data = TypeFactory.Serialize(stade.ObjectStade.Data);
             else
-                _context.ObjectStades.Add(new ObjectStadeEntity {Data = stade.Data, Identifer = stade.Identifer});
+                _context.ObjectStades.Add(new ObjectStadeEntity
+                {
+                    Data = TypeFactory.Serialize(stade.ObjectStade.Data),
+                    Identifer = stade.ObjectStade.Identifer,
+                    OriginType = stade.ObjectStade.Data.GetType().AssemblyQualifiedName
+                });
 
             await _context.SaveChangesAsync();
 

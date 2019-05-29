@@ -4,13 +4,13 @@ namespace Tauron.CQRS.Server.Hubs
 {
     public class RecivedDomainEvent
     {
-        public DomainEvent RealEvent { get; }
+        public DomainMessage RealMessage { get; }
 
         public string ApiKey { get; }
 
-        public RecivedDomainEvent(DomainEvent realEvent, string apiKey)
+        public RecivedDomainEvent(DomainMessage realMessage, string apiKey)
         {
-            RealEvent = realEvent;
+            RealMessage = realMessage;
             ApiKey = apiKey;
         }
     }

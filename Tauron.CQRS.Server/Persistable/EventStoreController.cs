@@ -1,8 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CQRSlite.Events;
+using CQRSlite.Messages;
 using Microsoft.AspNetCore.Mvc;
+using Tauron.CQRS.Common.Dto;
+using Tauron.CQRS.Common.Dto.TypeHandling;
 using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Server.Core;
 using Tauron.CQRS.Server.EventStore;
@@ -25,20 +28,22 @@ namespace Tauron.CQRS.Server.Persistable
 
         [Route(nameof(AddEvents))]
         [HttpGet]
-        public async Task<ActionResult<bool>> AddEvents([FromBody]IEnumerable<DomainEvent> events, [FromQuery]string apiKey)
+        public async Task<ActionResult<bool>> AddEvents([FromBody]ApiEventMessage events)
         {
-            if (!await _store.Validate(apiKey)) return Forbid();
+            if (!await _store.Validate(events.ApiKey)) return Forbid();
 
-            await _context.EventEntities.AddRangeAsync(events.Select(e => new EventEntity
+            await _context.EventEntities.AddRangeAsync(events.DomainMessages.Where(e => e.EventData is IEvent).Select(dm => new
             {
-                Data = e.EventData,
-                EventName = e.EventName,
-                EventStatus = EventStatus.Pending,
-                EventType = e.EventType,
-                Id = e.Id,
-                Origin = e.TypeName,
-                Version = e.Version,
-                TimeStamp = e.TimeStamp
+                Event = (IEvent)dm.EventData, Message = dm
+            }).Select(e => new EventEntity
+            {
+                Data = TypeFactory.Serialize(e.Event),
+                EventName = e.Message.EventName,
+                EventType = e.Message.EventType,
+                Id = e.Event.Id,
+                OriginType = e.Event.GetType().AssemblyQualifiedName,
+                Version = e.Event.Version,
+                TimeStamp = e.Event.TimeStamp
             }));
 
             await _context.SaveChangesAsync();
@@ -48,19 +53,17 @@ namespace Tauron.CQRS.Server.Persistable
 
         [Route(nameof(GetEvents))]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DomainEvent>>> GetEvents([FromQuery]Guid aggregateId, [FromQuery]int fromVersion, [FromQuery]string apiKey)
+        public async Task<ActionResult<IEnumerable<DomainMessage>>> GetEvents([FromQuery]ApiEventId eventId)
         {
-            if (!await _store.Validate(apiKey)) return Forbid();
+            if (!await _store.Validate(eventId.ApiKey)) return Forbid();
 
-            return _context.EventEntities.Where(ee => ee.Id == aggregateId).Where(ee => ee.Version > fromVersion)
-                .Select(ee => new DomainEvent
+            return _context.EventEntities.Where(ee => ee.Id == eventId.Id).Where(ee => ee.Version > eventId.Version)
+                .Select(ee => new DomainMessage
                 {
-                    EventData = ee.Data,
+                    EventData = (IMessage)TypeFactory.Create(ee.OriginType, ee.Data),
                     EventName = ee.EventName,
-                    Id = ee.Id,
-                    TypeName = ee.Origin,
                     EventType = ee.EventType,
-                    Version = ee.Version
+                    SequenceNumber = ee.SequenceNumber
                 }).ToList();
         }
     }

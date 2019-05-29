@@ -7,6 +7,8 @@ namespace Tauron.CQRS.Server.EventStore.Data
         [Key]
         public string Identifer { get; set; }
 
+        public string OriginType { get; set; }
+
         public string Data { get; set; }
     }
 }

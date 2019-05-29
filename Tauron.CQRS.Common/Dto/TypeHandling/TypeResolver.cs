@@ -37,7 +37,7 @@ namespace Tauron.CQRS.Common.Dto.TypeHandling
             if (!reader.Read()) return existingValue;
 
             object obj;
-            if (targetType == typeof(JToken))
+            if (targetType == typeof(JToken) || objectType == typeof(JToken))
                 obj = JToken.Load(reader);
             else
                 obj = targetType == null ? existingValue : serializer.Deserialize(reader, targetType);

@@ -4,7 +4,6 @@
     {
         Command,
         TransistentEvent,
-        ImportentEvent,
-        EssentialEvent
+        Query
     }
 }

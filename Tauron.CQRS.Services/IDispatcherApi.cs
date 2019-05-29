@@ -8,8 +8,8 @@ namespace Tauron.CQRS.Services
 {
     public interface IDispatcherApi
     {
-        Task Save(IEnumerable<DomainEvent> events, CancellationToken cancellationToken = new CancellationToken());
+        Task Save(IEnumerable<DomainMessage> events);
 
-        Task<IEnumerable<DomainEvent>> Get(Guid aggregateId, int fromVersion, CancellationToken cancellationToken = new CancellationToken());
+        Task<IEnumerable<DomainMessage>> Get(Guid aggregateId, int fromVersion, CancellationToken cancellationToken = new CancellationToken());
     }
 }

@@ -3,10 +3,9 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Tauron.CQRS.Common.Dto;
 using Tauron.CQRS.Common.ServerHubs;
-using Tauron.CQRS.Server.Core;
 using Tauron.CQRS.Server.EventStore;
-using Tauron.CQRS.Server.EventStore.Data;
 using Tauron.CQRS.Server.Hubs;
 
 namespace Tauron.CQRS.Server
@@ -16,17 +15,15 @@ namespace Tauron.CQRS.Server
     {
         private readonly IEventManager _eventManager;
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly IApiKeyStore _apiKeyStore;
 
         private bool _stopped;
         private IServiceScope _serviceScope;
         private DispatcherDatabaseContext _dispatcherDatabaseContext;
 
-        public DispatcherService(IEventManager eventManager, IServiceScopeFactory scopeFactory, IApiKeyStore apiKeyStore)
+        public DispatcherService(IEventManager eventManager, IServiceScopeFactory scopeFactory)
         {
             _eventManager = eventManager;
             _scopeFactory = scopeFactory;
-            _apiKeyStore = apiKeyStore;
         }
 
         #region Overrides of BackgroundService
@@ -35,7 +32,7 @@ namespace Tauron.CQRS.Server
         {
             foreach (var domainEvent in _eventManager.Dispatcher.GetConsumingEnumerable(stoppingToken))
             {
-                switch (domainEvent.RealEvent.EventName)
+                switch (domainEvent.RealMessage.EventName)
                 {
                     case HubEventNames.DispatcherCommand.StartDispatcher:
                         _stopped = false;
@@ -55,38 +52,17 @@ namespace Tauron.CQRS.Server
                                 .GetRequiredService<DispatcherDatabaseContext>();
                         }
 
-                        if (domainEvent.RealEvent.EventType != EventType.Command)
+                        if (domainEvent.RealMessage.EventType != EventType.Command)
                         {
-                            var entity = _dispatcherDatabaseContext.EventEntities.Add(new EventEntity
-                            {
-                                Origin = await _apiKeyStore.GetServiceFromKey(domainEvent.ApiKey),
-                                Data = domainEvent.RealEvent.EventData,
-                                EventName = domainEvent.RealEvent.EventName,
-                                EventType = domainEvent.RealEvent.EventType,
-                                EventStatus = EventStatus.Pending,
-                                Id = domainEvent.RealEvent.Id
-                            });
-
                             await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
                             if (stoppingToken.IsCancellationRequested) continue;
-                            domainEvent.RealEvent.SequenceNumber = entity.Entity.SequenceNumber;
 
-                            if (await _eventManager.DeliverEvent(domainEvent, stoppingToken))
-                            {
-                                entity.Entity.EventStatus = EventStatus.Deliverd;
-                                await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
-                            }
-                            else
-                            {
-                                entity.Entity.EventStatus = EventStatus.Failed;
-                                await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
-
+                            if (!await _eventManager.DeliverEvent(domainEvent, stoppingToken))
                                 await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
-                            }
                         }
                         else
                         {
-                            domainEvent.RealEvent.SequenceNumber = -1;
+                            domainEvent.RealMessage.SequenceNumber = -1;
                             if (!await _eventManager.DeliverEvent(domainEvent, stoppingToken))
                                 await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
                         }
@@ -106,11 +82,11 @@ namespace Tauron.CQRS.Server
         }
 
 
-        private RecivedDomainEvent CreateEventFailedEvent(RecivedDomainEvent original)
+        private static RecivedDomainEvent CreateEventFailedEvent(RecivedDomainEvent original)
         {
-            return new RecivedDomainEvent(new DomainEvent
+            return new RecivedDomainEvent(new DomainMessage
             {
-                EventData = original.RealEvent.EventName,
+                EventData = new EventFailedEventMessage{ EventName = original.RealMessage.EventName },
                 EventName = HubEventNames.DispatcherEvent.DeliveryFailedEvent,
                 EventType = EventType.TransistentEvent, SequenceNumber = -1
             }, string.Empty);

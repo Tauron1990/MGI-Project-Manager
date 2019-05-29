@@ -41,11 +41,11 @@ namespace Tauron.CQRS.Server.Hubs
         }
 
         [UsedImplicitly]
-        public async Task PublishEvent(DomainEvent @event, string apiKey)
+        public async Task PublishEvent(DomainMessage message, string apiKey)
         {
             if (!await _keyStore.Validate(apiKey)) throw new HubException("Api Key Validation Failed");
 
-            await _eventManager.ProvideEvent(Context.ConnectionId, @event, apiKey);
+            await _eventManager.ProvideEvent(Context.ConnectionId, message, apiKey);
         }
 
         [UsedImplicitly]

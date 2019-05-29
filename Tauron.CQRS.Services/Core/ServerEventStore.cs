@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Events;
-using Newtonsoft.Json;
 using Tauron.CQRS.Common.ServerHubs;
 
 namespace Tauron.CQRS.Services.Core
@@ -30,19 +29,16 @@ namespace Tauron.CQRS.Services.Core
                         type = EventType.TransistentEvent;
                 }
 
-                return new DomainEvent
+                return new DomainMessage
                 {
                     EventName = eventType.Name,
-                    EventData = JsonConvert.SerializeObject(e),
-                    EventType = type,
-                    Id = e.Id,
-                    TypeName = eventType.AssemblyQualifiedName,
-                    TimeStamp = e.TimeStamp
+                    EventData = e,
+                    EventType = type
                 };
-            }).ToList(), cancellationToken);
+            }).ToList());
         }
 
         public async Task<IEnumerable<IEvent>> Get(Guid aggregateId, int fromVersion, CancellationToken cancellationToken = new CancellationToken()) 
-            => (await _api.Get(aggregateId, fromVersion, cancellationToken)).Select(de => (IEvent)JsonConvert.DeserializeObject(de.EventData, Type.GetType(de.TypeName)));
+            => (await _api.Get(aggregateId, fromVersion, cancellationToken)).Select(de => (IEvent)de.EventData);
     }
 }

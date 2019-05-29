@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using RestEase;
 using Tauron.CQRS.Common.Configuration;
+using Tauron.CQRS.Common.Dto;
 using Tauron.CQRS.Common.ServerHubs;
 
 namespace Tauron.CQRS.Services.Core
@@ -21,16 +23,16 @@ namespace Tauron.CQRS.Services.Core
             _eventServerApi = new Lazy<IEventServerApi>(() => client.For<IEventServerApi>(), true);
         }
 
-        public async Task Save(IEnumerable<DomainEvent> events, CancellationToken cancellationToken = new CancellationToken())
+        public async Task Save(IEnumerable<DomainMessage> events)
         {
-            var result = await _eventServerApi.Value.AddEvents(events, _configuration.Value.ApiKey);
+            var result = await _eventServerApi.Value.AddEvents(new ApiEventMessage{DomainMessages = events.ToArray(), ApiKey = _configuration.Value.ApiKey});
             if (result)
                 return;
 
             throw new InvalidOperationException("AddEvents Failed");
         }
         
-        public Task<IEnumerable<DomainEvent>> Get(Guid aggregateId, int fromVersion, CancellationToken cancellationToken = new CancellationToken()) 
-            => _eventServerApi.Value.GetEvents(aggregateId, fromVersion, _configuration.Value.ApiKey);
+        public Task<IEnumerable<DomainMessage>> Get(Guid aggregateId, int fromVersion, CancellationToken cancellationToken = new CancellationToken()) 
+            => _eventServerApi.Value.GetEvents(new ApiEventId{Id =aggregateId, Version = fromVersion, ApiKey = _configuration.Value.ApiKey});
     }
 }

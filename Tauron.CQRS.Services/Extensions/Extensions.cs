@@ -16,6 +16,8 @@ namespace Tauron.CQRS.Services.Extensions
         public static void AddCQRSServices(this IServiceCollection services)
         {
             services.AddCQRSTypeHandling();
+            services.TryAddSingleton<ISnapshotStore, SnapshotServerStore>();
+            services.TryAddSingleton<IEventStore, ServerEventStore>();
             services.TryAddSingleton<IDispatcherClient, DispatcherClient>();
             services.TryAddTransient<IDispatcherApi, DispatcherApi>();
             services.TryAddSingleton<IEventStore, ServerEventStore>();

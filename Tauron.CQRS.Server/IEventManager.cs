@@ -14,7 +14,7 @@ namespace Tauron.CQRS.Server
 
         Task TryAccept(string connectionId, int sequenceNumber, string service);
 
-        Task ProvideEvent(string sender, DomainEvent domainEvent, string apiKey);
+        Task ProvideEvent(string sender, DomainMessage domainMessage, string apiKey);
 
         Task StopDispatching();
 
