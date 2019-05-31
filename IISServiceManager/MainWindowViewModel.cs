@@ -11,7 +11,6 @@ using IISServiceManager.Core;
 using IISServiceManager.Processing;
 using IISServiceManager.Resources;
 using Ookii.Dialogs.Wpf;
-using TwineSharpEditor.Core.Host;
 
 namespace IISServiceManager
 {

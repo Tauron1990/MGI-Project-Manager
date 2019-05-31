@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Threading;
 using JetBrains.Annotations;
 
-namespace TwineSharpEditor.Core.Host
+namespace IISServiceManager.Core
 {
     //[DebuggerNonUserCode]
     [PublicAPI]
