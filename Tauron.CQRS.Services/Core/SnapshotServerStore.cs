@@ -14,10 +14,10 @@ namespace Tauron.CQRS.Services.Core
         private readonly IOptions<ClientCofiguration> _confOptions;
         private readonly IPersistApi _persistApi;
 
-        public SnapshotServerStore(IOptions<ClientCofiguration> confOptions)
+        public SnapshotServerStore(IOptions<ClientCofiguration> confOptions, IPersistApi persistApi)
         {
             _confOptions = confOptions;
-            _persistApi = new RestEase.RestClient(confOptions.Value.PersistenceApiUrl).For<IPersistApi>();
+            _persistApi = persistApi;
         }
 
         public async Task<Snapshot> Get(Guid id, CancellationToken cancellationToken = new CancellationToken()) 

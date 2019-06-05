@@ -35,5 +35,7 @@
         public const string AcceptedEvent = nameof(AcceptedEvent);
 
         public const string RejectedEvent = nameof(RejectedEvent);
+
+        public const string PublishEvent = nameof(PublishEvent);
     }
 }

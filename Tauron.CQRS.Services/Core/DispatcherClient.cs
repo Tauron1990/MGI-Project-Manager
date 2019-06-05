@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using CQRSlite.Messages;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Tauron.CQRS.Common.Configuration;
+using Tauron.CQRS.Common.ServerHubs;
 
 namespace Tauron.CQRS.Services.Core
 {
@@ -29,11 +31,23 @@ namespace Tauron.CQRS.Services.Core
             _hubConnection.Closed += HubConnectionOnClosed;
         }
 
+        public async Task Stop()
+        {
+            _isCLoseOk = true;
+            await _hubConnection.StopAsync();
+            await _hubConnection.DisposeAsync();
+        }
+
         private async Task HubConnectionOnClosed(Exception arg)
         {
             if(_isCLoseOk) return;
 
             await _hubConnection.StartAsync();
+        }
+
+        public async Task Send(IMessage command, CancellationToken cancellationToken)
+        {
+            await _hubConnection.SendAsync(HubEventNames.PublishEvent)
         }
     }
 }
