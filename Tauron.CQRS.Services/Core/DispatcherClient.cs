@@ -47,7 +47,13 @@ namespace Tauron.CQRS.Services.Core
 
         public async Task Send(IMessage command, CancellationToken cancellationToken)
         {
-            await _hubConnection.SendAsync(HubEventNames.PublishEvent)
+            await _hubConnection.SendAsync(HubEventNames.PublishEvent, new DomainMessage
+            {
+                EventData = command,
+                EventName = command.GetType().Name,
+                EventType = EventType.Command,
+                SequenceNumber = -1
+            }, _config.Value.ApiKey, cancellationToken: cancellationToken);
         }
     }
 }
