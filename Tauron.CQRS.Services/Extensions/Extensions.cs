@@ -1,4 +1,6 @@
-﻿using CQRSlite.Caching;
+﻿using System;
+using System.Threading.Tasks;
+using CQRSlite.Caching;
 using CQRSlite.Commands;
 using CQRSlite.Domain;
 using CQRSlite.Events;
@@ -32,6 +34,7 @@ namespace Tauron.CQRS.Services.Extensions
             //Service Delegates for cqrs lite
             services.TryAddScoped<ICommandSender, CommandSender>();
             services.TryAddScoped<IEventPublisher, EventPublisher>();
+            services.TryAddSingleton<IHandlerManager, HandlerManager>();
 
             //Processing and Data Services
             services.TryAddSingleton(typeof(IPersistApi), 
@@ -48,6 +51,34 @@ namespace Tauron.CQRS.Services.Extensions
                         snapshot, new DefaultSnapshotStrategy(),
                         new Repository(store), store), store, s.GetRequiredService<ICache>());
             });
+        }
+
+        public static async Task StartCQRS(this IServiceProvider provider)
+        {
+            using (var scope = provider.CreateScope())
+                await scope.ServiceProvider.GetRequiredService<IHandlerManager>().Init(TODO)
+        }
+
+        public static ClientCofiguration ScanFrom<TType>(this ClientCofiguration config)
+        {
+            var asm = typeof(TType).Assembly;
+
+            foreach (var type in asm.GetTypes())
+            {
+                if(!type.IsDefined(typeof(CQRSHandlerAttribute), false)) continue;
+
+                foreach (var @interface in type.GetInterfaces())
+                {
+                    if(!@interface.IsGenericType) continue;
+
+                    if (@interface.GetGenericTypeDefinition() != typeof(ICancellableCommandHandler<>) && @interface.GetGenericTypeDefinition() != typeof(ICancellableEventHandler<>))
+                     continue;
+
+
+                }
+            }
+
+            return config;
         }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using CQRSlite.Snapshotting;
+using JetBrains.Annotations;
 using Tauron.CQRS.Services.Data;
 
 namespace Tauron.CQRS.Services
 {
+    [PublicAPI]
     public abstract class CoreAggregateRoot : SnapshotAggregateRoot<AggregateStade>
     {
         private AggregateStade _aggregateStade;
