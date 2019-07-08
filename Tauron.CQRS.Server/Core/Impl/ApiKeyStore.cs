@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Tauron.CQRS.Server.EventStore;
 using Tauron.CQRS.Server.EventStore.Data;
 
@@ -14,14 +15,18 @@ namespace Tauron.CQRS.Server.Core.Impl
     public class ApiKeyStore : IApiKeyStore
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly ILogger<ApiKeyStore> _logger;
 
         private readonly Lazy<HashAlgorithm> _hashAlgorithm =
             new Lazy<HashAlgorithm>(() => HashAlgorithm.Create("sha256"));
 
         private List<ApiKey> _keys;
 
-        public ApiKeyStore(IServiceScopeFactory serviceScopeFactory)
-            => _serviceScopeFactory = serviceScopeFactory;
+        public ApiKeyStore(IServiceScopeFactory serviceScopeFactory, ILogger<ApiKeyStore> logger)
+        {
+            _serviceScopeFactory = serviceScopeFactory;
+            _logger = logger;
+        }
 
         public async Task<string> GetServiceFromKey(string apiKey)
         {
@@ -39,29 +44,40 @@ namespace Tauron.CQRS.Server.Core.Impl
 
         public async Task<string> Register(string name)
         {
+            _logger.LogInformation($"Generate New Api-Key for {name}");
+
             await Init();
 
             if (_keys.Any(ak => ak.Name == name)) return null;
 
-            using (var scope = _serviceScopeFactory.CreateScope())
+            try
             {
-                using (var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>())
+                using (var scope = _serviceScopeFactory.CreateScope())
                 {
-
-                    string key =
-                        Convert.ToBase64String(
-                            _hashAlgorithm.Value.ComputeHash(Encoding.UTF8.GetBytes(DateTime.Now + name)));
-
-                    context.ApiKeys.Add(new ApiKey
+                    using (var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>())
                     {
-                        Key = key,
-                        Name = name
-                    });
 
-                    await context.SaveChangesAsync();
+                        string key =
+                            Convert.ToBase64String(
+                                _hashAlgorithm.Value.ComputeHash(Encoding.UTF8.GetBytes(DateTime.Now + name)));
 
-                    return key;
+                        context.ApiKeys.Add(new ApiKey
+                                            {
+                                                Key = key,
+                                                Name = name
+                                            });
+
+                        await context.SaveChangesAsync();
+
+                        return key;
+                    }
                 }
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, $"Error Generating Hash for {name}");
+
+                throw;
             }
         }
 
@@ -69,9 +85,13 @@ namespace Tauron.CQRS.Server.Core.Impl
         {
             if (_keys != null) return Task.CompletedTask;
 
+            _logger.LogInformation("Init Api Key Storage");
+
             using (var scope = _serviceScopeFactory.CreateScope())
-            using (var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>())
-                _keys = context.ApiKeys.AsNoTracking().ToList();
+            {
+                using (var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>())
+                    _keys = context.ApiKeys.AsNoTracking().ToList();
+            }
 
             return Task.CompletedTask;
         }

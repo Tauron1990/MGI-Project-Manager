@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Server.Hubs;
 
@@ -71,6 +72,7 @@ namespace Tauron.CQRS.Server.EventStore
 
         private readonly IHubContext<EventHub> _eventHub;
         private readonly IConnectionManager _connectionManager;
+        private readonly ILogger<IEventManager> _logger;
         private readonly ConcurrentDictionary<int, EventCookie> _eventCookies = new ConcurrentDictionary<int, EventCookie>();
 
         private int _dispatcherStopped;
@@ -87,15 +89,18 @@ namespace Tauron.CQRS.Server.EventStore
 
         public BlockingCollection<RecivedDomainEvent> Dispatcher { get; }
 
-        public EventManager(IHubContext<EventHub> eventHub, IConnectionManager connectionManager)
+        public EventManager(IHubContext<EventHub> eventHub, IConnectionManager connectionManager, ILogger<IEventManager> logger)
         {
             _eventHub = eventHub;
             _connectionManager = connectionManager;
+            _logger = logger;
             Dispatcher = new BlockingCollection<RecivedDomainEvent>();
         }
 
         public async Task<bool> DeliverEvent(RecivedDomainEvent @event, CancellationToken token)
         {
+            _logger.LogInformation($"Deliver Event: {@event.RealMessage.EventName} -- {@event.RealMessage.EventType}");
+
             var entry = new EventCookie(@event, _connectionManager);
             if (!_eventCookies.TryAdd(@event.RealMessage.SequenceNumber, entry)) return false;
             
@@ -123,6 +128,8 @@ namespace Tauron.CQRS.Server.EventStore
 
         public async Task TryAccept(string connectionId, int sequenceNumber, string service)
         {
+            _logger.LogInformation($"Try Accept: {connectionId} -- {service}");
+
             if (_eventCookies.TryGetValue(sequenceNumber, out var eventCookie))
             {
                 switch (eventCookie.DomainEvent.RealMessage.EventType)
@@ -133,9 +140,13 @@ namespace Tauron.CQRS.Server.EventStore
                             if (eventCookie.CanAccept(service))
                             {
                                 await _eventHub.Clients.Client(connectionId).SendAsync(HubEventNames.AcceptedEvent);
+                                _logger.LogInformation($"Accept: {connectionId} -- {service}");
                             }
                             else
+                            {
                                 await _eventHub.Clients.Client(connectionId).SendAsync(HubEventNames.RejectedEvent, HubEventNames.RejectionReasons.EventConsumed);
+                                _logger.LogInformation($"Reject: {connectionId} -- {service}");
+                            }
                         }
                         finally
                         {
@@ -158,6 +169,8 @@ namespace Tauron.CQRS.Server.EventStore
 
         public async Task ProvideEvent(string sender, DomainMessage domainMessage, string apiKey)
         {
+            _logger.LogInformation($"Provide Event: {sender} -- {domainMessage.EventName}");
+
             if (DispatcherStopped)
             {
                 switch (domainMessage.EventName)
