@@ -17,7 +17,7 @@ namespace Tauron.CQRS.Common.Configuration
 
         public string ApiKey { get; set; }
 
-        public ClientCofiguration RegisterEventHandler<TEvent, THandler>()
+        public ClientCofiguration RegisterCancellableEventHandler<TEvent, THandler>()
             where TEvent : IEvent 
             where THandler : ICancellableEventHandler<TEvent>
 
@@ -26,7 +26,7 @@ namespace Tauron.CQRS.Common.Configuration
             return this;
         }
 
-        public ClientCofiguration RegisterCommandHandler<TCommand, THandler>()
+        public ClientCofiguration RegisterCancellableCommandHandler<TCommand, THandler>()
             where TCommand : ICommand
             where THandler : ICancellableCommandHandler<TCommand>
 
@@ -34,5 +34,26 @@ namespace Tauron.CQRS.Common.Configuration
             HandlerRegistry[typeof(TCommand).Name] = typeof(THandler);
             return this;
         }
+
+        public ClientCofiguration RegisterEventHandler<TEvent, THandler>()
+            where TEvent : IEvent
+            where THandler : IEventHandler<TEvent>
+
+        {
+            HandlerRegistry[typeof(TEvent).Name] = typeof(THandler);
+            return this;
+        }
+
+        public ClientCofiguration RegisterCommandHandler<TCommand, THandler>()
+            where TCommand : ICommand
+            where THandler : ICommandHandler<TCommand>
+
+        {
+            HandlerRegistry[typeof(TCommand).Name] = typeof(THandler);
+            return this;
+        }
+
+        internal void RegisterHandler(string name, Type type) 
+            => HandlerRegistry[name] = type;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Caching;
 using CQRSlite.Commands;
@@ -48,15 +49,15 @@ namespace Tauron.CQRS.Services.Extensions
 
                 return new CacheRepository(
                     new SnapshotRepository(
-                        snapshot, new DefaultSnapshotStrategy(),
+                        snapshot, s.GetService<ISnapshotStrategy>() ?? new DefaultSnapshotStrategy(),
                         new Repository(store), store), store, s.GetRequiredService<ICache>());
             });
         }
 
-        public static async Task StartCQRS(this IServiceProvider provider)
+        public static async Task StartCQRS(this IServiceProvider provider, CancellationToken cancellationToken)
         {
             using (var scope = provider.CreateScope())
-                await scope.ServiceProvider.GetRequiredService<IHandlerManager>().Init(TODO)
+                await scope.ServiceProvider.GetRequiredService<IHandlerManager>().Init(cancellationToken);
         }
 
         public static ClientCofiguration ScanFrom<TType>(this ClientCofiguration config)
@@ -71,10 +72,11 @@ namespace Tauron.CQRS.Services.Extensions
                 {
                     if(!@interface.IsGenericType) continue;
 
-                    if (@interface.GetGenericTypeDefinition() != typeof(ICancellableCommandHandler<>) && @interface.GetGenericTypeDefinition() != typeof(ICancellableEventHandler<>))
-                     continue;
+                    if (@interface.GetGenericTypeDefinition() != typeof(ICancellableCommandHandler<>) && @interface.GetGenericTypeDefinition() != typeof(ICancellableEventHandler<>) &&
+                        @interface.GetGenericTypeDefinition() != typeof(ICommandHandler<>)            && @interface.GetGenericTypeDefinition() != typeof(IEventHandler<>))
+                        continue;
 
-
+                    config.RegisterType(@interface.GetGenericArguments()[0].Name, type);
                 }
             }
 
