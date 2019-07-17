@@ -60,6 +60,29 @@ namespace Tauron.CQRS.Services.Extensions
                 await scope.ServiceProvider.GetRequiredService<IHandlerManager>().Init(cancellationToken);
         }
 
+        public static void AddFrom<TType>(this IServiceCollection serviceCollection, ClientCofiguration config)
+        {
+            var asm = typeof(TType).Assembly;
+
+            foreach (var type in asm.GetTypes())
+            {
+                if (!type.IsDefined(typeof(CQRSHandlerAttribute), false)) continue;
+
+                foreach (var @interface in type.GetInterfaces())
+                {
+                    if (!@interface.IsGenericType) continue;
+
+                    if (@interface.GetGenericTypeDefinition() != typeof(ICancellableCommandHandler<>) && @interface.GetGenericTypeDefinition() != typeof(ICancellableEventHandler<>) &&
+                        @interface.GetGenericTypeDefinition() != typeof(ICommandHandler<>) && @interface.GetGenericTypeDefinition() != typeof(IEventHandler<>))
+                        continue;
+
+                    config.RegisterType(@interface.GetGenericArguments()[0].Name, type);
+
+                    serviceCollection.AddTransient(@interface);
+                }
+            }
+        }
+
         public static ClientCofiguration ScanFrom<TType>(this ClientCofiguration config)
         {
             var asm = typeof(TType).Assembly;

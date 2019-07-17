@@ -7,7 +7,7 @@ namespace Tauron.CQRS.Common.Configuration
 {
     public class ClientCofiguration : CommonConfiguration
     {
-        internal readonly Dictionary<string, Type> HandlerRegistry = new Dictionary<string, Type>();
+        private readonly Dictionary<string, Type> HandlerRegistry = new Dictionary<string, Type>();
 
         public string EventHubUrl { get; set; }
 
@@ -16,6 +16,8 @@ namespace Tauron.CQRS.Common.Configuration
         public string PersistenceApiUrl { get; set; }
 
         public string ApiKey { get; set; }
+
+        public Dictionary<string, Type> GetHandlers () => new Dictionary<string, Type>(HandlerRegistry);
 
         public ClientCofiguration RegisterCancellableEventHandler<TEvent, THandler>()
             where TEvent : IEvent 
