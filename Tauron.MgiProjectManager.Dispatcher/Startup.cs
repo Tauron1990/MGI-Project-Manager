@@ -20,7 +20,7 @@ namespace Tauron.MgiProjectManager.Dispatcher
             services.AddCQRS(c => c.WithDatabase("Test"));
             services.AddHealth();
 
-            services.AddMvc()
+            services.AddMvc(o => o.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddHealthParts()
                 .AddCQRS();

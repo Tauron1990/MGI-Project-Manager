@@ -14,7 +14,7 @@ namespace Tauron.CQRS.Health
         public static void AddHealth(this IServiceCollection serviceCollection)
         {
             serviceCollection.TryAddSingleton<IStatisticsTracker, Tracker>();
-            serviceCollection.TryAddTransient<IMiddleware, StatisticsMiddleware>();
+            serviceCollection.TryAddScoped<StatisticsMiddleware>();
         }
 
         public static void UseHealth(this IApplicationBuilder builder) 
