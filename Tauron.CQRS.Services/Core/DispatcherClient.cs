@@ -55,5 +55,10 @@ namespace Tauron.CQRS.Services.Core
                 SequenceNumber = -1
             }, _config.Value.ApiKey, cancellationToken: cancellationToken);
         }
+
+        public Task Subsribe(string name, Func<IMessage, CancellationToken, Task> msg, bool isCommand)
+        {
+            _hubConnection.ResetSendPing();
+        }
     }
 }
