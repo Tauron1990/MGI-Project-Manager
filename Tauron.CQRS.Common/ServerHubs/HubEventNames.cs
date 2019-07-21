@@ -30,6 +30,10 @@
             public const string DispatcherStoped = nameof(DispatcherStoped); 
         }
 
+        public const string TryAccept = nameof(TryAccept);
+
+        public const string Subscribe = nameof(Subscribe);
+
         public const string PropagateEvent = nameof(PropagateEvent);
 
         public const string AcceptedEvent = nameof(AcceptedEvent);

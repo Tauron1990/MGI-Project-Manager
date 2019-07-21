@@ -73,7 +73,7 @@ namespace Tauron.CQRS.Server.EventStore
         private readonly IHubContext<EventHub> _eventHub;
         private readonly IConnectionManager _connectionManager;
         private readonly ILogger<IEventManager> _logger;
-        private readonly ConcurrentDictionary<int, EventCookie> _eventCookies = new ConcurrentDictionary<int, EventCookie>();
+        private readonly ConcurrentDictionary<long, EventCookie> _eventCookies = new ConcurrentDictionary<long, EventCookie>();
 
         private int _dispatcherStopped;
 
@@ -139,12 +139,12 @@ namespace Tauron.CQRS.Server.EventStore
                         {
                             if (eventCookie.CanAccept(service))
                             {
-                                await _eventHub.Clients.Client(connectionId).SendAsync(HubEventNames.AcceptedEvent);
+                                await _eventHub.Clients.Client(connectionId).SendAsync(HubEventNames.AcceptedEvent, sequenceNumber);
                                 _logger.LogInformation($"Accept: {connectionId} -- {service}");
                             }
                             else
                             {
-                                await _eventHub.Clients.Client(connectionId).SendAsync(HubEventNames.RejectedEvent, HubEventNames.RejectionReasons.EventConsumed);
+                                await _eventHub.Clients.Client(connectionId).SendAsync(HubEventNames.RejectedEvent, HubEventNames.RejectionReasons.EventConsumed, sequenceNumber);
                                 _logger.LogInformation($"Reject: {connectionId} -- {service}");
                             }
                         }
@@ -155,11 +155,11 @@ namespace Tauron.CQRS.Server.EventStore
 
                         break;
                     case EventType.TransistentEvent:
-                        await _eventHub.Clients.Client(connectionId).SendAsync(HubEventNames.AcceptedEvent);
+                        await _eventHub.Clients.Client(connectionId).SendAsync(HubEventNames.AcceptedEvent, sequenceNumber);
                         break;
                     default:
                         eventCookie.Respond();
-                        await _eventHub.Clients.Client(connectionId).SendAsync(HubEventNames.AcceptedEvent);
+                        await _eventHub.Clients.Client(connectionId).SendAsync(HubEventNames.AcceptedEvent, sequenceNumber);
                         break;
                 }
             }
