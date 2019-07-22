@@ -5,6 +5,7 @@ using CQRSlite.Caching;
 using CQRSlite.Commands;
 using CQRSlite.Domain;
 using CQRSlite.Events;
+using CQRSlite.Queries;
 using CQRSlite.Snapshotting;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +37,7 @@ namespace Tauron.CQRS.Services.Extensions
             services.TryAddScoped<ICommandSender, CommandSender>();
             services.TryAddScoped<IEventPublisher, EventPublisher>();
             services.TryAddSingleton<IHandlerManager, HandlerManager>();
+            services.TryAddScoped<IQueryProcessor, QueryProcessor>();
 
             //Processing and Data Services
             services.TryAddSingleton(typeof(IPersistApi), 

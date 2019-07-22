@@ -6,7 +6,7 @@ namespace Tauron.CQRS.Common.ServerHubs
 {
     public class DomainMessage
     {
-        public int SequenceNumber { get; set; }
+        public long SequenceNumber { get; set; }
 
         public string EventName { get; set; }
 

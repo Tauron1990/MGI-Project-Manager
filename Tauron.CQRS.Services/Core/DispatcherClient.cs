@@ -1,25 +1,59 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Messages;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Common.ServerHubs;
 
 namespace Tauron.CQRS.Services.Core
 {
+    [UsedImplicitly]
     public class DispatcherClient : IDispatcherClient
     {
+        private class EventRegistration
+        {
+            private readonly Func<IMessage, CancellationToken, Task> _msg;
+            private readonly ILogger<IDispatcherClient> _logger;
+
+            public EventRegistration(Func<IMessage, CancellationToken, Task> msg, ILogger<IDispatcherClient> logger)
+            {
+                _msg = msg;
+                _logger = logger;
+            }
+
+            public async Task Process(DomainMessage msg)
+            {
+                try
+                {
+                    await _msg.Invoke(msg.EventData, CancellationToken.None);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Error while Deligate to Messeage Handler {msg.EventName} {msg.EventType}");
+                }
+            }
+        }
+
+        private readonly Random _random = new Random();
         private readonly IOptions<ClientCofiguration> _config;
+        private readonly ILogger<IDispatcherClient> _logger;
         private readonly HubConnection _hubConnection;
+        private readonly ConcurrentDictionary<string, EventRegistration> _eventRegistrations = new ConcurrentDictionary<string, EventRegistration>();
+        private readonly IMemoryCache _memoryCache = new MemoryCache(new MemoryCacheOptions());
 
         private bool _isCLoseOk;
 
-        public DispatcherClient(IOptions<ClientCofiguration> config)
+        public DispatcherClient(IOptions<ClientCofiguration> config, ILogger<IDispatcherClient> logger)
         {
             _config = config;
+            _logger = logger;
 
             _hubConnection = new HubConnectionBuilder().AddJsonProtocol().WithUrl(config.Value.EventHubUrl).Build();
         }
@@ -29,6 +63,9 @@ namespace Tauron.CQRS.Services.Core
             await _hubConnection.StartAsync(token);
 
             _hubConnection.Closed += HubConnectionOnClosed;
+            _hubConnection.On(HubEventNames.PropagateEvent, new Action<DomainMessage>(ProcessMessage));
+            _hubConnection.On(HubEventNames.AcceptedEvent, new Action<int>(MessageAccept));
+            _hubConnection.On(HubEventNames.RejectedEvent, new Action<string, int>(MessageReject));
         }
 
         public async Task Stop()
@@ -52,12 +89,56 @@ namespace Tauron.CQRS.Services.Core
                 EventData = command,
                 EventName = command.GetType().Name,
                 EventType = EventType.Command,
-                SequenceNumber = -1
-            }, _config.Value.ApiKey, cancellationToken: cancellationToken);
+                SequenceNumber = DateTime.UtcNow.Ticks + _random.Next()
+            }, _config.Value.ApiKey, cancellationToken);
         }
 
-        public Task Subsribe(string name, Func<IMessage, CancellationToken, Task> msg, bool isCommand)
+        public async Task Subsribe(string name, Func<IMessage, CancellationToken, Task> msg, bool isCommand)
         {
+            try
+            {
+                var waiter = new EventRegistration(msg,_logger);
+                _eventRegistrations[name] = waiter;
+
+                await _hubConnection.InvokeAsync(HubEventNames.Subscribe, name, _config.Value.ApiKey);
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Error on Subscribe Event");
+                throw;
+            }
+        }
+
+        private async void ProcessMessage(DomainMessage domainMessage)
+        {
+            try
+            {
+                _memoryCache.Set(domainMessage.SequenceNumber, domainMessage);
+                await _hubConnection.SendAsync(HubEventNames.TryAccept, domainMessage.SequenceNumber, _config.Value.ServiceName, _config.Value.ApiKey);
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Error on Recieving Message");
+            }
+        }
+
+        private void MessageReject(string reason, int seqNumber) 
+            => _logger.LogInformation($"Command Rejected: {seqNumber} -- Reason: {reason}");
+
+        private async void MessageAccept(int seqNumber)
+        {
+            try
+            {
+                var domainMessage = _memoryCache.Get<DomainMessage>(seqNumber);
+                if (domainMessage != null && _eventRegistrations.TryGetValue(domainMessage.EventName, out var reg))
+                    await reg.Process(domainMessage);
+                else
+                    _logger.LogWarning($"Message Timeout Or Registration Error: {seqNumber}");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error on Processing Message");
+            }
         }
     }
 }

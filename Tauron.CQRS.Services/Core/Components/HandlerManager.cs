@@ -26,6 +26,11 @@ namespace Tauron.CQRS.Services.Core.Components
             {
                 private TDelegate _delegate;
 
+                protected InvokerHelper(Type targetType, Type targetInterface)
+                {
+                    
+                }
+
                 public override async Task Invoke(IMessage msg, CancellationToken token)
                 {
                     if (_delegate == null)
@@ -42,7 +47,7 @@ namespace Tauron.CQRS.Services.Core.Components
             {
                 private readonly object _handler;
 
-                public Command(object handler) => _handler = handler;
+                public Command(object handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
 
                 protected override Func<ICommand, Task> Create() 
                     => (Func<ICommand, Task>)Delegate.CreateDelegate(typeof(Func<ICommand, Task>), _handler, _handler.GetType().GetMethod("Handle") ?? throw new InvalidOperationException());
@@ -54,7 +59,7 @@ namespace Tauron.CQRS.Services.Core.Components
             {
                 private readonly object _handler;
 
-                public CancelCommand(object handler) => _handler = handler;
+                public CancelCommand(object handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
 
                 protected override Func<ICommand, CancellationToken, Task> Create()
                     => (Func<ICommand, CancellationToken, Task>) Delegate.CreateDelegate(typeof(Func<ICommand, CancellationToken, Task>),
@@ -67,7 +72,7 @@ namespace Tauron.CQRS.Services.Core.Components
             {
                 private readonly object _handler;
 
-                public Event(object handler) => _handler = handler;
+                public Event(object handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
 
                 protected override Func<IEvent, Task> Create()
                     => (Func<IEvent, Task>)Delegate.CreateDelegate(typeof(Func<IEvent, Task>), _handler, _handler.GetType().GetMethod("Handle") ?? throw new InvalidOperationException());
@@ -79,7 +84,7 @@ namespace Tauron.CQRS.Services.Core.Components
             {
                 private readonly object _handler;
 
-                public CancelEvent(object handler) => _handler = handler;
+                public CancelEvent(object handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
                 
                 protected override Func<IEvent, CancellationToken, Task> Create()
                     => (Func<IEvent, CancellationToken, Task>)Delegate.CreateDelegate(typeof(Func<IEvent, CancellationToken, Task>),
@@ -105,10 +110,10 @@ namespace Tauron.CQRS.Services.Core.Components
                     Type key = i.GetGenericArguments()[0];
 
 
-                    if (targetType == typeof(ICommandHandler<>)) _invoker[key] = new Command(target);
-                    else if (targetType == typeof(ICancellableCommandHandler<>)) _invoker[key] = new CancelCommand(target);
-                    else if (targetType == typeof(IEventHandler<>)) _invoker[key] = new Event(target);
-                    else if (targetType == typeof(ICancellableEventHandler<>)) _invoker[key] = new CancelEvent(target);
+                    if (targetType == typeof(ICommandHandler<>)) _invoker[key] = new Command(target, target.GetType(), i);
+                    else if (targetType == typeof(ICancellableCommandHandler<>)) _invoker[key] = new CancelCommand(target, target.GetType(), i);
+                    else if (targetType == typeof(IEventHandler<>)) _invoker[key] = new Event(target, target.GetType(), i);
+                    else if (targetType == typeof(ICancellableEventHandler<>)) _invoker[key] = new CancelEvent(target, target.GetType(), i);
                 }
 
                 if(_invoker.Count == 0)
