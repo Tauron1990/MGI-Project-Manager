@@ -58,7 +58,6 @@ namespace Tauron.CQRS.Services.Core
 
         public Task Subsribe(string name, Func<IMessage, CancellationToken, Task> msg, bool isCommand)
         {
-            _hubConnection.ResetSendPing();
         }
     }
 }
