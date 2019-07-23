@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Commands;
@@ -24,17 +25,33 @@ namespace Tauron.CQRS.Services.Core.Components
             }
             private abstract class InvokerHelper<TDelegate> : InvokerBase
             {
+                private Type _targetType;
+                private Type _targetInterface;
                 private TDelegate _delegate;
 
                 protected InvokerHelper(Type targetType, Type targetInterface)
                 {
-                    
+                    _targetType = targetType;
+                    _targetInterface = targetInterface;
                 }
+
+                protected MethodInfo GetMethod() 
+                    => _targetType.GetInterfaceMap(_targetInterface).InterfaceMethods.Single();
 
                 public override async Task Invoke(IMessage msg, CancellationToken token)
                 {
                     if (_delegate == null)
-                        _delegate = Create();
+                    {
+                        lock (this)
+                        {
+                            if (_delegate == null)
+                            {
+                                _targetType = null;
+                                _targetInterface = null;
+                                _delegate = Create();
+                            }
+                        }
+                    }
 
                     await Invoke(msg, token, _delegate);
                 }
@@ -50,7 +67,7 @@ namespace Tauron.CQRS.Services.Core.Components
                 public Command(object handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
 
                 protected override Func<ICommand, Task> Create() 
-                    => (Func<ICommand, Task>)Delegate.CreateDelegate(typeof(Func<ICommand, Task>), _handler, _handler.GetType().GetMethod("Handle") ?? throw new InvalidOperationException());
+                    => (Func<ICommand, Task>)Delegate.CreateDelegate(typeof(Func<ICommand, Task>), _handler, GetMethod());
 
                 protected override async Task Invoke(IMessage msg, CancellationToken token, Func<ICommand, Task> del)
                     => await del((ICommand) msg);
@@ -63,7 +80,7 @@ namespace Tauron.CQRS.Services.Core.Components
 
                 protected override Func<ICommand, CancellationToken, Task> Create()
                     => (Func<ICommand, CancellationToken, Task>) Delegate.CreateDelegate(typeof(Func<ICommand, CancellationToken, Task>),
-                        _handler, _handler.GetType().GetMethod("Handle") ?? throw new InvalidOperationException());
+                        _handler, GetMethod());
 
                 protected override async Task Invoke(IMessage msg, CancellationToken token, Func<ICommand, CancellationToken, Task> del)
                     => await del((ICommand)msg, token);
@@ -75,7 +92,7 @@ namespace Tauron.CQRS.Services.Core.Components
                 public Event(object handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
 
                 protected override Func<IEvent, Task> Create()
-                    => (Func<IEvent, Task>)Delegate.CreateDelegate(typeof(Func<IEvent, Task>), _handler, _handler.GetType().GetMethod("Handle") ?? throw new InvalidOperationException());
+                    => (Func<IEvent, Task>)Delegate.CreateDelegate(typeof(Func<IEvent, Task>), _handler, GetMethod());
 
                 protected override async Task Invoke(IMessage msg, CancellationToken token, Func<IEvent, Task> del)
                     => await del((IEvent)msg);
@@ -88,7 +105,7 @@ namespace Tauron.CQRS.Services.Core.Components
                 
                 protected override Func<IEvent, CancellationToken, Task> Create()
                     => (Func<IEvent, CancellationToken, Task>)Delegate.CreateDelegate(typeof(Func<IEvent, CancellationToken, Task>),
-                        _handler, _handler.GetType().GetMethod("Handle") ?? throw new InvalidOperationException());
+                        _handler, GetMethod());
 
                 protected override async Task Invoke(IMessage msg, CancellationToken token, Func<IEvent, CancellationToken, Task> del)
                     => await del((IEvent)msg, token);

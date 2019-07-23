@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Tauron.CQRS.Services
 {
+    
     public abstract class AwaiterBase<TMessage, TRespond>
     {
         private readonly IServiceScopeFactory _scopeFactory;
@@ -13,5 +14,10 @@ namespace Tauron.CQRS.Services
         protected abstract TMessage Create();
 
         protected abstract Task Handle(TRespond respond);
+
+        public void Send(TMessage msg)
+        {
+
+        }
     }
 }

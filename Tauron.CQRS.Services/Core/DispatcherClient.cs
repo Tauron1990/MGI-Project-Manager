@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Messages;
+using CQRSlite.Queries;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Caching.Memory;
@@ -107,6 +108,11 @@ namespace Tauron.CQRS.Services.Core
                 _logger.LogError(e, "Error on Subscribe Event");
                 throw;
             }
+        }
+
+        public Task<TResponse> Query<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         private async void ProcessMessage(DomainMessage domainMessage)
