@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using CQRSlite.Commands;
 using CQRSlite.Events;
+using JetBrains.Annotations;
 
 namespace Tauron.CQRS.Common.Configuration
 {
+    [PublicAPI]
     public class ClientCofiguration : CommonConfiguration
     {
-        private readonly Dictionary<string, Type> HandlerRegistry = new Dictionary<string, Type>();
+        private readonly Dictionary<string, HashSet<Type>> _handlerRegistry = new Dictionary<string, HashSet<Type>>();
         private string _serviceName;
 
         public string EventHubUrl { get; set; }
@@ -29,14 +31,20 @@ namespace Tauron.CQRS.Common.Configuration
             set => _serviceName = value;
         }
 
-        public Dictionary<string, Type> GetHandlers () => new Dictionary<string, Type>(HandlerRegistry);
+        public Dictionary<string, HashSet<Type>> GetHandlers () => new Dictionary<string, HashSet<Type>>(_handlerRegistry);
+
+        private void AddHandler(string name, Type type)
+        {
+            if (_handlerRegistry.TryGetValue(name, out var list)) list.Add(type);
+            else _handlerRegistry.Add(name, new HashSet<Type> {type});
+        }
 
         public ClientCofiguration RegisterCancellableEventHandler<TEvent, THandler>()
             where TEvent : IEvent 
             where THandler : ICancellableEventHandler<TEvent>
 
         {
-            HandlerRegistry[typeof(TEvent).Name] = typeof(THandler);
+            AddHandler(typeof(TEvent).Name, typeof(THandler));
             return this;
         }
 
@@ -45,7 +53,7 @@ namespace Tauron.CQRS.Common.Configuration
             where THandler : ICancellableCommandHandler<TCommand>
 
         {
-            HandlerRegistry[typeof(TCommand).Name] = typeof(THandler);
+            AddHandler(typeof(TCommand).Name, typeof(THandler));
             return this;
         }
 
@@ -54,7 +62,7 @@ namespace Tauron.CQRS.Common.Configuration
             where THandler : IEventHandler<TEvent>
 
         {
-            HandlerRegistry[typeof(TEvent).Name] = typeof(THandler);
+            AddHandler(typeof(TEvent).Name, typeof(THandler));
             return this;
         }
 
@@ -63,11 +71,11 @@ namespace Tauron.CQRS.Common.Configuration
             where THandler : ICommandHandler<TCommand>
 
         {
-            HandlerRegistry[typeof(TCommand).Name] = typeof(THandler);
+            AddHandler(typeof(TCommand).Name, typeof(THandler));
             return this;
         }
 
-        internal void RegisterHandler(string name, Type type) 
-            => HandlerRegistry[name] = type;
+        internal void RegisterHandler(string name, Type type)
+            => AddHandler(name, type);
     }
 }

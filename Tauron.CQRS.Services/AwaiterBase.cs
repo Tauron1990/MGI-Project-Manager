@@ -1,23 +1,36 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using CQRSlite.Commands;
+using CQRSlite.Events;
+using CQRSlite.Messages;
 
 namespace Tauron.CQRS.Services
 {
-    
-    public abstract class AwaiterBase<TMessage, TRespond>
+    public abstract class AwaiterBase<TMessage, TRespond> : IEventHandler<TRespond> where TRespond : IEvent where TMessage : class, ICommand
     {
-        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly ICommandSender _commandSender;
 
-        public AwaiterBase(IServiceScopeFactory scopeFactory) 
-            => _scopeFactory = scopeFactory;
+        protected AwaiterBase(ICommandSender commandSender) 
+            => _commandSender = commandSender;
 
-        protected abstract TMessage Create();
+        public abstract TRespond Last { get; }
 
-        protected abstract Task Handle(TRespond respond);
+        protected abstract Task PrepareForWait();
 
-        public void Send(TMessage msg)
+        protected abstract Task HandleImpl(TRespond respond);
+
+        protected abstract Task<(bool, TRespond)> WaitForEvent(int timeout);
+
+        public async Task Send(TMessage msg, CancellationToken token = default) 
+            => await _commandSender.Send(msg, token);
+
+        public async Task<(bool, TRespond)> SendAndAwait(TMessage msg, int timeout = 30_000, CancellationToken token = default)
         {
-
+            await PrepareForWait();
+            await _commandSender.Send(msg, token);
+            return await WaitForEvent(timeout);
         }
+
+        Task IHandler<TRespond>.Handle(TRespond message) => HandleImpl(message);
     }
 }

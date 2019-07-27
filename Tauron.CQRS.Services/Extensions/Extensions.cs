@@ -20,8 +20,12 @@ namespace Tauron.CQRS.Services.Extensions
     [PublicAPI]
     public static class Extensions
     {
-        public static void AddCQRSServices(this IServiceCollection services)
+        public static void AddCQRSServices(this IServiceCollection services, Action<ClientCofiguration> config)
         {
+            var clientCofiguration = new ClientCofiguration();
+            services.TryAddSingleton<IOptions<ClientCofiguration>>(new OptionsWrapper<ClientCofiguration>(clientCofiguration));
+            config(clientCofiguration);
+
             //Dynamic TypeHandling for Serialization
             services.AddCQRSTypeHandling();
 
@@ -58,8 +62,19 @@ namespace Tauron.CQRS.Services.Extensions
 
         public static async Task StartCQRS(this IServiceProvider provider, CancellationToken cancellationToken)
         {
-            using (var scope = provider.CreateScope())
-                await scope.ServiceProvider.GetRequiredService<IHandlerManager>().Init(cancellationToken);
+            using var scope = provider.CreateScope();
+            await scope.ServiceProvider.GetRequiredService<IHandlerManager>().Init(cancellationToken);
+        }
+
+        public static ClientCofiguration AddAwaiter<TMessage, TRespond>(this ClientCofiguration clientCofiguration, IServiceCollection serviceCollection)
+        {
+            //TODO Global Await Handler!!
+
+            serviceCollection.AddTransient<AwaiterBase<TMessage, TRespond>, SimpleAwaiter<TMessage, TRespond>>();
+            clientCofiguration.RegisterEventHandler<TRespond, ()
+
+
+            return clientCofiguration;
         }
 
         public static void AddFrom<TType>(this IServiceCollection serviceCollection, ClientCofiguration config)

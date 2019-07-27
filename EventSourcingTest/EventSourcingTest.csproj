@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EventFlow" Version="0.73.3933" />
+    <PackageReference Include="EventFlow" Version="0.74.3948" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0-preview4.19216.2" />
   </ItemGroup>
 </Project>
