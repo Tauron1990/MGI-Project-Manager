@@ -112,7 +112,7 @@ namespace Tauron.CQRS.Services.Core
 
         public Task<TResponse> Query<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         private async void ProcessMessage(DomainMessage domainMessage)
