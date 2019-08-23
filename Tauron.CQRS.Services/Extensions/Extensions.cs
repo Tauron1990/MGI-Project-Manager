@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Caching;
@@ -66,14 +67,18 @@ namespace Tauron.CQRS.Services.Extensions
             await scope.ServiceProvider.GetRequiredService<IHandlerManager>().Init(cancellationToken);
         }
 
-        public static ClientCofiguration AddAwaiter<TMessage, TRespond>(this ClientCofiguration clientCofiguration, IServiceCollection serviceCollection)
+        public static ClientCofiguration AddAwaiter<TMessage, TRespond>(this ClientCofiguration clientCofiguration, IServiceCollection serviceCollection) 
+            where TMessage : class, ICommand where TRespond : IEvent
         {
             //TODO Global Await Handler!!
 
             serviceCollection.AddTransient<AwaiterBase<TMessage, TRespond>, SimpleAwaiter<TMessage, TRespond>>();
-            clientCofiguration.RegisterEventHandler<TRespond, ()
 
+            if (clientCofiguration.IsHandlerRegistrated<TRespond, GlobalEventHandler<TRespond>>()) return clientCofiguration;
 
+            serviceCollection.TryAddSingleton<GlobalEventHandler<TRespond>, GlobalEventHandler<TRespond>>();
+            clientCofiguration.RegisterEventHandler<TRespond, GlobalEventHandler<TRespond>>();
+            
             return clientCofiguration;
         }
 

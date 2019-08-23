@@ -1,20 +1,23 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Commands;
 using CQRSlite.Events;
+using JetBrains.Annotations;
 using Nito.AsyncEx;
 
 namespace Tauron.CQRS.Services.Core.Components
 {
-    public sealed class SimpleAwaiter<TMessage, TRespoand> : AwaiterBase<TMessage, TRespoand> where TRespoand : IEvent where TMessage : class, ICommand
+    [PublicAPI]
+    public sealed class SimpleAwaiter<TMessage, TRespoand> : AwaiterBase<TMessage, TRespoand>
+        where TRespoand : IEvent where TMessage : class, ICommand
     {
         private AsyncManualResetEvent _resetEvent;
         private TRespoand _last;
-        private bool _finish; 
+        private bool _finish;
+        private IDisposable _handler;
 
-        public SimpleAwaiter(ICommandSender commandSender) : base(commandSender)
-        {
-        }
+        public SimpleAwaiter(ICommandSender commandSender, GlobalEventHandler<TRespoand> handlerRegistry) : base(commandSender) => _handler = handlerRegistry.Register(HandleImpl);
 
         public override TRespoand Last => _last;
 
@@ -46,5 +49,7 @@ namespace Tauron.CQRS.Services.Core.Components
 
             return (_finish, Last);
         }
+
+        protected override void Dispose(bool disposing) => _handler.Dispose();
     }
 }

@@ -39,6 +39,9 @@ namespace Tauron.CQRS.Common.Configuration
             else _handlerRegistry.Add(name, new HashSet<Type> {type});
         }
 
+        public bool IsHandlerRegistrated<TCommand, THandler>() =>
+            _handlerRegistry.TryGetValue(typeof(TCommand).Name, out var list) && list.Contains(typeof(THandler));
+
         public ClientCofiguration RegisterCancellableEventHandler<TEvent, THandler>()
             where TEvent : IEvent 
             where THandler : ICancellableEventHandler<TEvent>

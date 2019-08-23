@@ -1,12 +1,16 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Commands;
 using CQRSlite.Events;
 using CQRSlite.Messages;
+using JetBrains.Annotations;
 
 namespace Tauron.CQRS.Services
 {
-    public abstract class AwaiterBase<TMessage, TRespond> : IEventHandler<TRespond> where TRespond : IEvent where TMessage : class, ICommand
+    [PublicAPI]
+    public abstract class AwaiterBase<TMessage, TRespond> : IEventHandler<TRespond>, IDisposable
+        where TRespond : IEvent where TMessage : class, ICommand
     {
         private readonly ICommandSender _commandSender;
 
@@ -32,5 +36,15 @@ namespace Tauron.CQRS.Services
         }
 
         Task IHandler<TRespond>.Handle(TRespond message) => HandleImpl(message);
+
+        protected abstract void Dispose(bool disposing);
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~AwaiterBase() => Dispose(false);
     }
 }

@@ -17,6 +17,7 @@
 //using X509Certificate = Org.BouncyCastle.X509.X509Certificate;
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -31,6 +32,10 @@ namespace TestApp
 {
     public static class Programm
     {
+        
+
+
+
         //static readonly SecureRandom secureRandom = new SecureRandom();
 
         //static AsymmetricCipherKeyPair GenerateRsaKeyPair(int length)
@@ -122,6 +127,11 @@ namespace TestApp
 
         static void Main()
         {
+            Dictionary<object, string> test = new Dictionary<object, string>();
+
+            test[new object()] = "Hallo Welt";
+            test[new object()] = "Hallo Welt 2";
+ 
             TypeResolver.TypeRegistry.Register("Test", typeof(MyClass2));
 
             var testValue = new MyClass {Class = new MyClass2 {Message = "HalloWelt"}, Test = "Test"};
