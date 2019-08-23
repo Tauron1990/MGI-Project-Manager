@@ -17,6 +17,17 @@ namespace Tauron.CQRS.Services.Core.Components
     [UsedImplicitly]
     public class HandlerManager : IHandlerManager, IDisposable
     {
+        private class HandlerListDelegator
+        {
+            private readonly List<HandlerInstace> _handlers;
+
+            public HandlerListDelegator(List<HandlerInstace> handlers) => _handlers = handlers;
+
+            public async Task Handle(IMessage msg, CancellationToken token)
+            {
+                foreach (var handlerInstace in _handlers) await handlerInstace.Handle(msg, token);
+            }
+        }
         private class HandlerInstace
         {
             private abstract class InvokerBase
@@ -144,7 +155,7 @@ namespace Tauron.CQRS.Services.Core.Components
         private readonly IDispatcherClient _client;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         // ReSharper disable once CollectionNeverQueried.Local
-        private readonly List<HandlerInstace> _handlerInstaces = new List<HandlerInstace>();
+        private readonly List<HandlerListDelegator> _handlerInstaces = new List<HandlerListDelegator>();
 
         public HandlerManager(IOptions<ClientCofiguration> configuration, IDispatcherClient client, IServiceScopeFactory serviceScopeFactory)
         {
@@ -159,13 +170,34 @@ namespace Tauron.CQRS.Services.Core.Components
 
             foreach (var handler in _configuration.Value.GetHandlers())
             {
-                var handlerObject = ActivatorUtilities.GetServiceOrCreateInstance(scope.ServiceProvider, handler.Value);
-                var inst = new HandlerInstace(handlerObject);
+                List<HandlerInstace> commands = new List<HandlerInstace>();
+                List<HandlerInstace> events = new List<HandlerInstace>();
 
-                await _client.Subsribe(handler.Key, inst.Handle, inst.IsCommand);
-                _handlerInstaces.Add(inst);
+                foreach (var handlerInstace in handler.Value
+                                .Select(h => ActivatorUtilities.GetServiceOrCreateInstance(scope.ServiceProvider, h))
+                                .Select(t => new HandlerInstace(t)))
+                { 
+                    if(handlerInstace.IsCommand)
+                        commands.Add(handlerInstace);
+                    else
+                        events.Add(handlerInstace);
+                }
+
+
+                if (commands.Count != 0)
+                {
+                    var del = new HandlerListDelegator(commands);
+                    await _client.Subsribe(handler.Key, del.Handle, true);
+                    _handlerInstaces.Add(del);
+                }
+                else
+                {
+                    var del = new HandlerListDelegator(commands);
+                    await _client.Subsribe(handler.Key, del.Handle, false);
+                    _handlerInstaces.Add(del);
+                }
             }
-            
+
             await _client.Start(token);
         }
 
