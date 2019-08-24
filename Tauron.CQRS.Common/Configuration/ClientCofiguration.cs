@@ -51,6 +51,18 @@ namespace Tauron.CQRS.Common.Configuration
             return this;
         }
 
+        public ClientCofiguration SetUrls(Uri baseUrl, string serviceName, string apiKey)
+        {
+            ServiceName = serviceName;
+            ApiKey = apiKey;
+
+            EventHubUrl = new Uri(baseUrl, "EventBus").ToString();
+            EventServerApiUrl = new Uri(baseUrl, "Api/EventStore").ToString();
+            PersistenceApiUrl = new Uri(baseUrl, "Api/Persistable").ToString();
+
+            return this;
+        }
+
         public ClientCofiguration RegisterCancellableCommandHandler<TCommand, THandler>()
             where TCommand : ICommand
             where THandler : ICancellableCommandHandler<TCommand>

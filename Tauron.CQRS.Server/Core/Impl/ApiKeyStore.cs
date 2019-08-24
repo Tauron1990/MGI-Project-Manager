@@ -95,5 +95,14 @@ namespace Tauron.CQRS.Server.Core.Impl
 
             return Task.CompletedTask;
         }
+
+        public void AddTemporary(string key)
+        {
+            _keys.Add(new ApiKey
+            {
+                Key = key,
+                Name =  key
+            });
+        }
     }
 }

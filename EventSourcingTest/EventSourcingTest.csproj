@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UserSecretsId>dotnet-EventSourcingTest-32663F36-DA3C-4A18-A069-EF89E8FF0162</UserSecretsId>
+    <Configurations>Debug;Release;Debug Event Delivery</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

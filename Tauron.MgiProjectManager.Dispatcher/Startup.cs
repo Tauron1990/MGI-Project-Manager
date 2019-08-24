@@ -17,7 +17,11 @@ namespace Tauron.MgiProjectManager.Dispatcher
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCQRS(c => c.WithDatabase("Test"));
+            services.AddCQRS(c =>
+            {
+                c.WithDatabase("Test");
+                c.Memory = true;
+            });
             services.AddHealth();
 
             services.AddMvc(o => o.EnableEndpointRouting = false)

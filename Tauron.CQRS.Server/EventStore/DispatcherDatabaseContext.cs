@@ -22,7 +22,10 @@ namespace Tauron.CQRS.Server.EventStore
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_serverOptions.Value.ConnectionString, builder => builder.EnableRetryOnFailure());
+            if (_serverOptions.Value.Memory)
+                optionsBuilder.UseInMemoryDatabase(_serverOptions.Value.ConnectionString);
+            else
+                optionsBuilder.UseSqlServer(_serverOptions.Value.ConnectionString, builder => builder.EnableRetryOnFailure());
             base.OnConfiguring(optionsBuilder);
         }
 
