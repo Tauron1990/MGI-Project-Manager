@@ -70,8 +70,6 @@ namespace Tauron.CQRS.Services.Extensions
         public static ClientCofiguration AddAwaiter<TMessage, TRespond>(this ClientCofiguration clientCofiguration, IServiceCollection serviceCollection) 
             where TMessage : class, ICommand where TRespond : IEvent
         {
-            //TODO Global Await Handler!!
-
             serviceCollection.AddTransient<AwaiterBase<TMessage, TRespond>, SimpleAwaiter<TMessage, TRespond>>();
 
             if (clientCofiguration.IsHandlerRegistrated<TRespond, GlobalEventHandler<TRespond>>()) return clientCofiguration;

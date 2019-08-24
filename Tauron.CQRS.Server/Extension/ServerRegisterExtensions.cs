@@ -1,7 +1,9 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Server.Core;
 using Tauron.CQRS.Server.Core.Impl;
@@ -34,5 +36,18 @@ namespace Tauron.CQRS.Server.Extension
 
         public static IMvcBuilder AddCQRS(this IMvcBuilder builder) 
             => builder.AddApplicationPart(typeof(ServerRegisterExtensions).Assembly);
+
+        public static IApplicationBuilder EnableCQRSDevelopmentApiKey(this IApplicationBuilder builder)
+        {
+            if (!(builder.ApplicationServices.GetService<IApiKeyStore>() is ApiKeyStore store))
+            {
+                builder.ApplicationServices.GetRequiredService<ILogger<ApiKeyStore>>().LogWarning("ApiKeyStore Not Resolvable. Developent not Enabled!");
+                return builder;
+            }
+
+            store.AddTemporary("Develop");
+
+            return builder;
+        }
     }
 }

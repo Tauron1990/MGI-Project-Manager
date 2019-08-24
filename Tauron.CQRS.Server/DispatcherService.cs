@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Hosting;
@@ -19,6 +20,7 @@ namespace Tauron.CQRS.Server
         private bool _stopped;
         //private IServiceScope _serviceScope;
         //private DispatcherDatabaseContext _dispatcherDatabaseContext;
+        private Task _runningTask;
 
         public DispatcherService(IEventManager eventManager, ILogger<DispatcherService> logger)
         {
@@ -29,59 +31,70 @@ namespace Tauron.CQRS.Server
 
         #region Overrides of BackgroundService
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            foreach (var domainEvent in _eventManager.Dispatcher.GetConsumingEnumerable(stoppingToken))
+            _runningTask = Task.Run(async () =>
             {
-                switch (domainEvent.RealMessage.EventName)
+                try
                 {
-                    case HubEventNames.DispatcherCommand.StartDispatcher:
-                        _logger.LogInformation("Starting Dispatcher");
-                        _stopped = false;
-                        await _eventManager.StartDispatching();
-                        break;
-                    case HubEventNames.DispatcherCommand.StopDispatcher:
-                        _logger.LogInformation("Stopping Dispatcher");
-                        _stopped = true;
-                        await _eventManager.StopDispatching();
-                        break;
-                    default:
-                        if (_stopped)
-                            continue;
-                        //if (_serviceScope == null || _dispatcherDatabaseContext == null)
-                        //{
-                        //    _serviceScope = _scopeFactory.CreateScope();
-                        //    _dispatcherDatabaseContext = _serviceScope.ServiceProvider
-                        //        .GetRequiredService<DispatcherDatabaseContext>();
-                        //}
-
-                        if (domainEvent.RealMessage.EventType != EventType.Command)
+                    foreach (var domainEvent in _eventManager.Dispatcher.GetConsumingEnumerable(stoppingToken))
+                    {
+                        switch (domainEvent.RealMessage.EventName)
                         {
-                            //await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
-                            if (stoppingToken.IsCancellationRequested) continue;
+                            case HubEventNames.DispatcherCommand.StartDispatcher:
+                                _logger.LogInformation("Starting Dispatcher");
+                                _stopped = false;
+                                await _eventManager.StartDispatching();
+                                break;
+                            case HubEventNames.DispatcherCommand.StopDispatcher:
+                                _logger.LogInformation("Stopping Dispatcher");
+                                _stopped = true;
+                                await _eventManager.StopDispatching();
+                                break;
+                            default:
+                                if (_stopped)
+                                    continue;
+                                //if (_serviceScope == null || _dispatcherDatabaseContext == null)
+                                //{
+                                //    _serviceScope = _scopeFactory.CreateScope();
+                                //    _dispatcherDatabaseContext = _serviceScope.ServiceProvider
+                                //        .GetRequiredService<DispatcherDatabaseContext>();
+                                //}
 
-                            if (!await _eventManager.DeliverEvent(domainEvent, stoppingToken))
-                                await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
+                                if (domainEvent.RealMessage.EventType != EventType.Command)
+                                {
+                                    //await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
+                                    if (stoppingToken.IsCancellationRequested) continue;
+
+                                    if (!await _eventManager.DeliverEvent(domainEvent, stoppingToken))
+                                        await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
+                                }
+                                else
+                                {
+                                    domainEvent.RealMessage.SequenceNumber = -1;
+                                    if (!await _eventManager.DeliverEvent(domainEvent, stoppingToken))
+                                        await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
+                                }
+
+                                //if (_eventManager.Dispatcher.Count == 0 || stoppingToken.IsCancellationRequested)
+                                //{
+                                //    _dispatcherDatabaseContext?.Dispose();
+                                //    _serviceScope?.Dispose();
+
+                                //    _dispatcherDatabaseContext = null;
+                                //    _serviceScope = null;
+                                //}
+
+                                break;
                         }
-                        else
-                        {
-                            domainEvent.RealMessage.SequenceNumber = -1;
-                            if (!await _eventManager.DeliverEvent(domainEvent, stoppingToken))
-                                await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
-                        }
-                        
-                        //if (_eventManager.Dispatcher.Count == 0 || stoppingToken.IsCancellationRequested)
-                        //{
-                        //    _dispatcherDatabaseContext?.Dispose();
-                        //    _serviceScope?.Dispose();
-
-                        //    _dispatcherDatabaseContext = null;
-                        //    _serviceScope = null;
-                        //}
-
-                        break;
+                    }
                 }
-            }
+                catch (OperationCanceledException)
+                {
+                }
+            }, stoppingToken);
+
+            return Task.CompletedTask;
         }
 
 
@@ -96,5 +109,11 @@ namespace Tauron.CQRS.Server
         }
 
         #endregion
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _runningTask.Dispose();
+        }
     }
 }
