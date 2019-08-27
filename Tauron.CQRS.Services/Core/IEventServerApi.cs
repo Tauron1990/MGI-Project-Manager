@@ -12,6 +12,6 @@ namespace Tauron.CQRS.Services.Core
         Task<bool> AddEvents([Body]ApiEventMessage eventMessage);
 
         [Get(nameof(GetEvents))]
-        Task<IEnumerable<DomainMessage>> GetEvents([Body]ApiEventId eventId);
+        Task<IEnumerable<ServerDomainMessage>> GetEvents([Body]ApiEventId eventId);
     }
 }

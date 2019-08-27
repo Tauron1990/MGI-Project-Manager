@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using LibGit2Sharp;
@@ -32,7 +33,7 @@ namespace TestApp
 {
     public static class Programm
     {
-        
+
 
 
 
@@ -99,48 +100,48 @@ namespace TestApp
         //    return signer.VerifySignature(sig);
         //}
 
-            public class MyClass2 : IMyClass
-            {
-                public string Message { get; set; }
-            }
+        //    public class MyClass2 : IMyClass
+        //    {
+        //        public string Message { get; set; }
+        //    }
 
-        public interface IMyClass
-        {
-            string Message { get; set; }
-        }
+        //public interface IMyClass
+        //{
+        //    string Message { get; set; }
+        //}
 
-            public class MyClass
-            {
-                [JsonConverter(typeof(TypeResolver))]
-                public IMyClass Class { get; set; }
+        //    public class MyClass
+        //    {
+        //        [JsonConverter(typeof(TypeResolver))]
+        //        public IMyClass Class { get; set; }
 
-                public string Test { get; set; }
-            }
+        //        public string Test { get; set; }
+        //    }
 
-            public class MyClassTest
-            {
-                [JsonConverter(typeof(TypeResolver))]
-                public JToken Class { get; set; }
+        //    public class MyClassTest
+        //    {
+        //        [JsonConverter(typeof(TypeResolver))]
+        //        public JToken Class { get; set; }
 
-                public string Test { get; set; }
-            }
+        //        public string Test { get; set; }
+        //    }
 
         static void Main()
         {
-            Dictionary<object, string> test = new Dictionary<object, string>();
+            //Dictionary<object, string> test = new Dictionary<object, string>();
 
-            test[new object()] = "Hallo Welt";
-            test[new object()] = "Hallo Welt 2";
- 
-            TypeResolver.TypeRegistry.Register("Test", typeof(MyClass2));
+            //test[new object()] = "Hallo Welt";
+            //test[new object()] = "Hallo Welt 2";
 
-            var testValue = new MyClass {Class = new MyClass2 {Message = "HalloWelt"}, Test = "Test"};
+            //TypeResolver.TypeRegistry.Register("Test", typeof(MyClass2));
 
-            string text = JsonConvert.SerializeObject(testValue, Formatting.Indented);
-            var testValue2 = JsonConvert.DeserializeObject<MyClassTest>(text);
+            //var testValue = new MyClass {Class = new MyClass2 {Message = "HalloWelt"}, Test = "Test"};
 
-            Console.WriteLine(testValue2.Class.ToString());
-            Console.ReadKey();
+            //string text = JsonConvert.SerializeObject(testValue, Formatting.Indented);
+            //var testValue2 = JsonConvert.DeserializeObject<MyClassTest>(text);
+
+            //Console.WriteLine(testValue2.Class.ToString());
+            //Console.ReadKey();
             //using (var server = Microsoft.Web.Administration.ServerManager.OpenRemote("http://192.168.105.18"))
             //{
             //    foreach (var serverSite in server.Sites)

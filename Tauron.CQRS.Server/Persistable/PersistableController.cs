@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using Tauron.CQRS.Common.Dto;
 using Tauron.CQRS.Common.Dto.Persistable;
-using Tauron.CQRS.Common.Dto.TypeHandling;
 using Tauron.CQRS.Server.Core;
 using Tauron.CQRS.Server.EventStore;
 using Tauron.CQRS.Server.EventStore.Data;
@@ -37,8 +37,9 @@ namespace Tauron.CQRS.Server.Persistable
                 ? new ObjectStade {Identifer = realId}
                 : new ObjectStade
                 {
-                    Data = TypeFactory.Create(entity.OriginType, entity.Data) as IObjectData,
-                    Identifer = entity.Identifer
+                    Data = JToken.Parse(entity.Data), // TypeFactory.Create(entity.OriginType, entity.Data) as IObjectData,
+                    Identifer = entity.Identifer,
+                    OriginalType = entity.OriginType
                 };
         }
 
@@ -53,14 +54,16 @@ namespace Tauron.CQRS.Server.Persistable
             var entity = await _context.ObjectStades.FirstOrDefaultAsync(o => o.Identifer == id);
 
             if (entity != null)
-                entity.Data = TypeFactory.Serialize(stade.ObjectStade.Data);
+                entity.Data = stade.ObjectStade.Data.ToString();
             else
+            {
                 _context.ObjectStades.Add(new ObjectStadeEntity
-                {
-                    Data = TypeFactory.Serialize(stade.ObjectStade.Data),
-                    Identifer = stade.ObjectStade.Identifer,
-                    OriginType = stade.ObjectStade.Data.GetType().AssemblyQualifiedName
-                });
+                                          {
+                                              Data = stade.ObjectStade.Data.ToString(),
+                                              Identifer = stade.ObjectStade.Identifer,
+                                              OriginType = stade.ObjectStade.OriginalType
+                                          });
+            }
 
             await _context.SaveChangesAsync();
 

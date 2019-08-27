@@ -20,7 +20,7 @@ namespace Tauron.CQRS.Server.Core.Impl
         private readonly Lazy<HashAlgorithm> _hashAlgorithm =
             new Lazy<HashAlgorithm>(() => HashAlgorithm.Create("sha256"));
 
-        private List<ApiKey> _keys;
+        private readonly List<ApiKey> _keys = new List<ApiKey>();
 
         public ApiKeyStore(IServiceScopeFactory serviceScopeFactory, ILogger<ApiKeyStore> logger)
         {
@@ -90,7 +90,7 @@ namespace Tauron.CQRS.Server.Core.Impl
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 using (var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>())
-                    _keys = context.ApiKeys.AsNoTracking().ToList();
+                    _keys.AddRange(context.ApiKeys.AsNoTracking());
             }
 
             return Task.CompletedTask;

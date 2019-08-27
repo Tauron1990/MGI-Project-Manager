@@ -36,9 +36,9 @@ namespace Tauron.CQRS.Services.Core.Components
             }
             private abstract class InvokerHelper<TDelegate> : InvokerBase
             {
-                private Type _targetType;
-                private Type _targetInterface;
-                private TDelegate _delegate;
+                private readonly Type _targetType;
+                private readonly Type _targetInterface;
+                private MethodInfo _methodInfo;
 
                 protected InvokerHelper(Type targetType, Type targetInterface)
                 {
@@ -46,26 +46,14 @@ namespace Tauron.CQRS.Services.Core.Components
                     _targetInterface = targetInterface;
                 }
 
-                protected MethodInfo GetMethod() 
-                    => _targetType.GetInterfaceMap(_targetInterface).InterfaceMethods.Single();
-
-                public override async Task Invoke(IMessage msg, CancellationToken token)
+                protected MethodInfo GetMethod()
                 {
-                    if (_delegate == null)
-                    {
-                        lock (this)
-                        {
-                            if (_delegate == null)
-                            {
-                                _targetType = null;
-                                _targetInterface = null;
-                                _delegate = Create();
-                            }
-                        }
-                    }
-
-                    await Invoke(msg, token, _delegate);
+                    if (_methodInfo != null) return _methodInfo;
+                    _methodInfo = _targetType.GetInterfaceMap(_targetInterface).InterfaceMethods.Single();
+                    return _methodInfo;
                 }
+
+                public override async Task Invoke(IMessage msg, CancellationToken token) => await Invoke(msg, token, Create());
 
                 protected abstract TDelegate Create();
                 protected abstract Task Invoke(IMessage msg, CancellationToken token, TDelegate del);
@@ -73,50 +61,50 @@ namespace Tauron.CQRS.Services.Core.Components
 
             private class Command : InvokerHelper<Func<ICommand, Task>>
             {
-                private readonly object _handler;
+                private readonly Func<object> _handler;
 
-                public Command(object handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
+                public Command(Func<object> handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
 
                 protected override Func<ICommand, Task> Create() 
-                    => (Func<ICommand, Task>)Delegate.CreateDelegate(typeof(Func<ICommand, Task>), _handler, GetMethod());
+                    => (Func<ICommand, Task>)Delegate.CreateDelegate(typeof(Func<ICommand, Task>), _handler(), GetMethod());
 
                 protected override async Task Invoke(IMessage msg, CancellationToken token, Func<ICommand, Task> del)
                     => await del((ICommand) msg);
             }
             private class CancelCommand : InvokerHelper<Func<ICommand, CancellationToken, Task>>
             {
-                private readonly object _handler;
+                private readonly Func<object> _handler;
 
-                public CancelCommand(object handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
+                public CancelCommand(Func<object> handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
 
                 protected override Func<ICommand, CancellationToken, Task> Create()
                     => (Func<ICommand, CancellationToken, Task>) Delegate.CreateDelegate(typeof(Func<ICommand, CancellationToken, Task>),
-                        _handler, GetMethod());
+                        _handler(), GetMethod());
 
                 protected override async Task Invoke(IMessage msg, CancellationToken token, Func<ICommand, CancellationToken, Task> del)
                     => await del((ICommand)msg, token);
             }
             private class Event : InvokerHelper<Func<IEvent, Task>>
             {
-                private readonly object _handler;
+                private readonly Func<object> _handler;
 
-                public Event(object handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
+                public Event(Func<object> handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
 
                 protected override Func<IEvent, Task> Create()
-                    => (Func<IEvent, Task>)Delegate.CreateDelegate(typeof(Func<IEvent, Task>), _handler, GetMethod());
+                    => (Func<IEvent, Task>)Delegate.CreateDelegate(typeof(Func<IEvent, Task>), _handler(), GetMethod());
 
                 protected override async Task Invoke(IMessage msg, CancellationToken token, Func<IEvent, Task> del)
                     => await del((IEvent)msg);
             }
             private class CancelEvent : InvokerHelper<Func<IEvent, CancellationToken, Task>>
             {
-                private readonly object _handler;
+                private readonly Func<object> _handler;
 
-                public CancelEvent(object handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
+                public CancelEvent(Func<object> handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
                 
                 protected override Func<IEvent, CancellationToken, Task> Create()
                     => (Func<IEvent, CancellationToken, Task>)Delegate.CreateDelegate(typeof(Func<IEvent, CancellationToken, Task>),
-                        _handler, GetMethod());
+                        _handler(), GetMethod());
 
                 protected override async Task Invoke(IMessage msg, CancellationToken token, Func<IEvent, CancellationToken, Task> del)
                     => await del((IEvent)msg, token);
@@ -126,15 +114,16 @@ namespace Tauron.CQRS.Services.Core.Components
             
             public bool IsCommand { get; }
 
-            public HandlerInstace(object target)
+            public HandlerInstace(Func<object> target, Type handlerType)
             {
-                var inters = target.GetType().GetInterfaces();
+                var inters = handlerType.GetInterfaces();
 
                 foreach (var i in inters.Where(i => i.IsGenericType))
                 {
                     var targetType = i.GetGenericTypeDefinition();
 
-                    IsCommand = targetType == typeof(ICommandHandler<>) || targetType == typeof(ICancellableCommandHandler<>);
+                    if(!IsCommand)
+                        IsCommand = targetType == typeof(ICommandHandler<>) || targetType == typeof(ICancellableCommandHandler<>);
                     Type key = i.GetGenericArguments()[0];
 
 
@@ -166,16 +155,19 @@ namespace Tauron.CQRS.Services.Core.Components
 
         public async Task Init(CancellationToken token)
         {
-            using var scope = _serviceScopeFactory.CreateScope();
+            await _client.Start(token);
 
             foreach (var handler in _configuration.Value.GetHandlers())
             {
-                List<HandlerInstace> commands = new List<HandlerInstace>();
-                List<HandlerInstace> events = new List<HandlerInstace>();
+                var commands = new List<HandlerInstace>();
+                var events = new List<HandlerInstace>();
 
                 foreach (var handlerInstace in handler.Value
-                                .Select(h => ActivatorUtilities.GetServiceOrCreateInstance(scope.ServiceProvider, h))
-                                .Select(t => new HandlerInstace(t)))
+                                .Select(h => new HandlerInstace(() =>
+                                                                {
+                                                                    using var scope = _serviceScopeFactory.CreateScope();
+                                                                    return ActivatorUtilities.GetServiceOrCreateInstance(scope.ServiceProvider, h);
+                                                                }, h)))
                 { 
                     if(handlerInstace.IsCommand)
                         commands.Add(handlerInstace);
@@ -192,13 +184,11 @@ namespace Tauron.CQRS.Services.Core.Components
                 }
                 else
                 {
-                    var del = new HandlerListDelegator(commands);
+                    var del = new HandlerListDelegator(events);
                     await _client.Subsribe(handler.Key, del.Handle, false);
                     _handlerInstaces.Add(del);
                 }
             }
-
-            await _client.Start(token);
         }
 
         public void Dispose() 

@@ -90,7 +90,7 @@ namespace Tauron.CQRS.Common.Configuration
             return this;
         }
 
-        internal void RegisterHandler(string name, Type type)
+        public void RegisterHandler(string name, Type type)
             => AddHandler(name, type);
     }
 }

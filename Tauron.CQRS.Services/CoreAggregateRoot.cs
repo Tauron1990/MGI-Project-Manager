@@ -26,3 +26,4 @@ namespace Tauron.CQRS.Services
         protected void SetValue<TType>(TType value, [CallerMemberName] string name = null)
             => _aggregateStade.Objects[name ?? throw new ArgumentNullException(nameof(name))] = value;
     }
+}

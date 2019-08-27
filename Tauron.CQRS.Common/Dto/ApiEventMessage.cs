@@ -6,6 +6,6 @@ namespace Tauron.CQRS.Common.Dto
     {
         public string ApiKey { get; set; }
 
-        public DomainMessage[] DomainMessages { get; set; }
+        public ServerDomainMessage[] DomainMessages { get; set; }
     }
 }

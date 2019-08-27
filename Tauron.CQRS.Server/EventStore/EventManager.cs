@@ -167,7 +167,7 @@ namespace Tauron.CQRS.Server.EventStore
                 await _eventHub.Clients.Client(connectionId).SendAsync(HubEventNames.RejectedEvent, HubEventNames.RejectionReasons.NoEvent);
         }
 
-        public async Task ProvideEvent(string sender, DomainMessage domainMessage, string apiKey)
+        public async Task ProvideEvent(string sender, ServerDomainMessage domainMessage, string apiKey)
         {
             _logger.LogInformation($"Provide Event: {sender} -- {domainMessage.EventName}");
 

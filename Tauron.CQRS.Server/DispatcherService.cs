@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Tauron.CQRS.Common.Dto;
 using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Server.Hubs;
@@ -100,10 +101,11 @@ namespace Tauron.CQRS.Server
 
         private static RecivedDomainEvent CreateEventFailedEvent(RecivedDomainEvent original)
         {
-            return new RecivedDomainEvent(new DomainMessage
+            return new RecivedDomainEvent(new ServerDomainMessage
             {
-                EventData = new EventFailedEventMessage{ EventName = original.RealMessage.EventName },
+                EventData = JsonConvert.SerializeObject(new EventFailedEventMessage{ EventName = original.RealMessage.EventName }),
                 EventName = HubEventNames.DispatcherEvent.DeliveryFailedEvent,
+                TypeName = typeof(EventFailedEventMessage).AssemblyQualifiedName,
                 EventType = EventType.TransistentEvent, SequenceNumber = -1
             }, string.Empty);
         }

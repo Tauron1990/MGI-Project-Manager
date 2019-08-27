@@ -1,5 +1,4 @@
 ﻿using System;
-using CQRSlite.Domain;
 using Tauron.CQRS.Services;
 
 namespace EventDeliveryTest.Test
@@ -8,10 +7,7 @@ namespace EventDeliveryTest.Test
     {
         public static readonly Guid IdField = new Guid("10FC8F67-4F4F-427B-A734-D6F2BD22A376");
 
-        public TestAggregate()
-        {
-            Id = IdField;
-        }
+        public TestAggregate() => Id = IdField;
 
         public string LastValue
         {
@@ -22,7 +18,7 @@ namespace EventDeliveryTest.Test
         public void SetLastValue(string value)
         {
             LastValue = value;
-            ApplyChange(new TestEvent { Result = value });
+            ApplyChange(new TestEvent(IdField, Version, value));
         }
     }
 }

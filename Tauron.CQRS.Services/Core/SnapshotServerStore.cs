@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Snapshotting;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Common.Dto;
 using Tauron.CQRS.Common.Dto.Persistable;
@@ -20,8 +21,12 @@ namespace Tauron.CQRS.Services.Core
             _persistApi = persistApi;
         }
 
-        public async Task<Snapshot> Get(Guid id, CancellationToken cancellationToken = new CancellationToken()) 
-            => (Snapshot)(await _persistApi.Get(new ApiObjectId {Id = id.ToString(), ApiKey = _confOptions.Value.ApiKey})).Data;
+        public async Task<Snapshot> Get(Guid id, CancellationToken cancellationToken = new CancellationToken())
+        {
+            var stade = await _persistApi.Get(new ApiObjectId {Id = id.ToString(), ApiKey = _confOptions.Value.ApiKey});
+
+            return (Snapshot) stade.Data.ToObject(Type.GetType(stade.OriginalType));
+        }
 
         public async Task Save(Snapshot snapshot, CancellationToken cancellationToken = new CancellationToken())
         {
@@ -32,8 +37,9 @@ namespace Tauron.CQRS.Services.Core
                     ApiKey = _confOptions.Value.ApiKey,
                     ObjectStade = new ObjectStade
                     {
-                        Data = objectData,
-                        Identifer = snapshot.Id.ToString()
+                        Data = JToken.FromObject(objectData),
+                        Identifer = snapshot.Id.ToString(),
+                        OriginalType = objectData.GetType().AssemblyQualifiedName
                     }
                 });
             }

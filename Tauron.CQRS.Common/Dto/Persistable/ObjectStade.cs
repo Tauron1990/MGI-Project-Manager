@@ -1,13 +1,14 @@
-﻿using Newtonsoft.Json;
-using Tauron.CQRS.Common.Dto.TypeHandling;
+﻿using CQRSlite.Snapshotting;
+using Newtonsoft.Json.Linq;
 
 namespace Tauron.CQRS.Common.Dto.Persistable
 {
     public class ObjectStade
     {
+        public string OriginalType { get; set; }
+
         public string Identifer { get; set; }
 
-        [JsonConverter(typeof(TypeResolver))]
-        public IObjectData Data { get; set; }
+        public JToken Data { get; set; }
     }
 }

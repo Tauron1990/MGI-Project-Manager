@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CQRSlite.Events;
-using CQRSlite.Messages;
 using Microsoft.AspNetCore.Mvc;
 using Tauron.CQRS.Common.Dto;
-using Tauron.CQRS.Common.Dto.TypeHandling;
 using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Server.Core;
 using Tauron.CQRS.Server.EventStore;
@@ -32,18 +29,19 @@ namespace Tauron.CQRS.Server.Persistable
         {
             if (!await _store.Validate(events.ApiKey)) return Forbid();
 
-            await _context.EventEntities.AddRangeAsync(events.DomainMessages.Where(e => e.EventData is IEvent).Select(dm => new
+            await _context.EventEntities.AddRangeAsync(events.DomainMessages.Where(e => e.EventType == EventType.TransistentEvent).Select(dm => new
             {
-                Event = (IEvent)dm.EventData, Message = dm
+                Event = dm.EventData, 
+                Message = dm
             }).Select(e => new EventEntity
             {
-                Data = TypeFactory.Serialize(e.Event),
+                Data = e.Event.ToString(),
                 EventName = e.Message.EventName,
                 EventType = e.Message.EventType,
-                Id = e.Event.Id,
+                Id = e.Message.Id,
                 OriginType = e.Event.GetType().AssemblyQualifiedName,
-                Version = e.Event.Version,
-                TimeStamp = e.Event.TimeStamp
+                Version = e.Message.Version,
+                TimeStamp = e.Message.TimeStamp
             }));
 
             await _context.SaveChangesAsync();
@@ -53,17 +51,20 @@ namespace Tauron.CQRS.Server.Persistable
 
         [Route(nameof(GetEvents))]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DomainMessage>>> GetEvents([FromQuery]ApiEventId eventId)
+        public async Task<ActionResult<IEnumerable<ServerDomainMessage>>> GetEvents([FromQuery]ApiEventId eventId)
         {
             if (!await _store.Validate(eventId.ApiKey)) return Forbid();
 
             return _context.EventEntities.Where(ee => ee.Id == eventId.Id).Where(ee => ee.Version > eventId.Version)
-                .Select(ee => new DomainMessage
+                .Select(ee => new ServerDomainMessage
                 {
-                    EventData = (IMessage)TypeFactory.Create(ee.OriginType, ee.Data),
+                    EventData = ee.Data,
                     EventName = ee.EventName,
                     EventType = ee.EventType,
-                    SequenceNumber = ee.SequenceNumber
+                    SequenceNumber = ee.SequenceNumber,
+                    Id = ee.Id.Value,
+                    TimeStamp = ee.TimeStamp,
+                    Version = ee.Version
                 }).ToList();
         }
     }

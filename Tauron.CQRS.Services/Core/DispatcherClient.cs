@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using CQRSlite.Events;
 using CQRSlite.Messages;
 using CQRSlite.Queries;
 using JetBrains.Annotations;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Common.ServerHubs;
 
@@ -29,11 +31,11 @@ namespace Tauron.CQRS.Services.Core
                 _logger = logger;
             }
 
-            public async Task Process(DomainMessage msg)
+            public async Task Process(ServerDomainMessage msg)
             {
                 try
                 {
-                    await _msg.Invoke(msg.EventData, CancellationToken.None);
+                    await _msg.Invoke((IMessage) JsonConvert.DeserializeObject(msg.EventData, Type.GetType(msg.TypeName)), CancellationToken.None);
                 }
                 catch (Exception e)
                 {
@@ -64,7 +66,7 @@ namespace Tauron.CQRS.Services.Core
             await _hubConnection.StartAsync(token);
 
             _hubConnection.Closed += HubConnectionOnClosed;
-            _hubConnection.On(HubEventNames.PropagateEvent, new Action<DomainMessage>(ProcessMessage));
+            _hubConnection.On(HubEventNames.PropagateEvent, new Action<ServerDomainMessage>(ProcessMessage));
             _hubConnection.On(HubEventNames.AcceptedEvent, new Action<int>(MessageAccept));
             _hubConnection.On(HubEventNames.RejectedEvent, new Action<string, int>(MessageReject));
         }
@@ -85,13 +87,23 @@ namespace Tauron.CQRS.Services.Core
 
         public async Task Send(IMessage command, CancellationToken cancellationToken)
         {
-            await _hubConnection.SendAsync(HubEventNames.PublishEvent, new DomainMessage
+            ServerDomainMessage msg = new ServerDomainMessage
+                                      {
+                                          EventData = JsonConvert.SerializeObject(command),
+                                          TypeName = command.GetType().AssemblyQualifiedName,
+                                          EventName = command.GetType().Name,
+                                          EventType = EventType.Command,
+                                          SequenceNumber = DateTime.UtcNow.Ticks + _random.Next()
+                                      };
+
+            if (command is IEvent @event)
             {
-                EventData = command,
-                EventName = command.GetType().Name,
-                EventType = EventType.Command,
-                SequenceNumber = DateTime.UtcNow.Ticks + _random.Next()
-            }, _config.Value.ApiKey, cancellationToken);
+                msg.Id = @event.Id;
+                msg.Version = @event.Version;
+                msg.TimeStamp = @event.TimeStamp;
+            }
+
+            await _hubConnection.SendAsync(HubEventNames.PublishEvent, msg, _config.Value.ApiKey, cancellationToken);
         }
 
         public async Task Subsribe(string name, Func<IMessage, CancellationToken, Task> msg, bool isCommand)
@@ -115,7 +127,7 @@ namespace Tauron.CQRS.Services.Core
             throw new NotSupportedException();
         }
 
-        private async void ProcessMessage(DomainMessage domainMessage)
+        private async void ProcessMessage(ServerDomainMessage domainMessage)
         {
             try
             {
@@ -135,7 +147,7 @@ namespace Tauron.CQRS.Services.Core
         {
             try
             {
-                var domainMessage = _memoryCache.Get<DomainMessage>(seqNumber);
+                var domainMessage = _memoryCache.Get<ServerDomainMessage>(seqNumber);
                 if (domainMessage != null && _eventRegistrations.TryGetValue(domainMessage.EventName, out var reg))
                     await reg.Process(domainMessage);
                 else

@@ -37,6 +37,7 @@ namespace Tauron.MgiProjectManager.Dispatcher
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.EnableCQRSDevelopmentApiKey();
             }
 
             app.UseHealth();

@@ -23,16 +23,19 @@ namespace Tauron.CQRS.Services.Core
             _eventServerApi = new Lazy<IEventServerApi>(() => client.For<IEventServerApi>(), true);
         }
 
-        public async Task Save(IEnumerable<DomainMessage> events)
+        public async Task Save(IEnumerable<ServerDomainMessage> events)
         {
-            var result = await _eventServerApi.Value.AddEvents(new ApiEventMessage{DomainMessages = events.ToArray(), ApiKey = _configuration.Value.ApiKey});
+            var result = await _eventServerApi.Value.AddEvents(new ApiEventMessage
+                                                               {
+                                                                   DomainMessages = events.ToArray(), ApiKey = _configuration.Value.ApiKey
+                                                               });
             if (result)
                 return;
 
             throw new InvalidOperationException("AddEvents Failed");
         }
         
-        public Task<IEnumerable<DomainMessage>> Get(Guid aggregateId, int fromVersion, CancellationToken cancellationToken = new CancellationToken()) 
+        public Task<IEnumerable<ServerDomainMessage>> Get(Guid aggregateId, int fromVersion, CancellationToken cancellationToken = new CancellationToken()) 
             => _eventServerApi.Value.GetEvents(new ApiEventId{Id =aggregateId, Version = fromVersion, ApiKey = _configuration.Value.ApiKey});
     }
 }

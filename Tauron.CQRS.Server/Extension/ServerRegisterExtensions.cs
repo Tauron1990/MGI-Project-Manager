@@ -17,7 +17,7 @@ namespace Tauron.CQRS.Server.Extension
     {
         public static IServiceCollection AddCQRS(this IServiceCollection services, Action<ServerConfiguration> configuration)
         {
-            services.AddCQRSTypeHandling();
+            //services.AddCQRSTypeHandling();
 
             services.AddSignalR();
 

@@ -44,10 +44,17 @@ namespace Tauron.CQRS.Services.Core.Components
 
         protected override async Task<(bool, TRespoand)> WaitForEvent(int timeout)
         {
-            using var tokenSource = new CancellationTokenSource(timeout);
-            await _resetEvent.WaitAsync(tokenSource.Token);
+            try
+            {
+                using var tokenSource = new CancellationTokenSource(timeout);
+                await _resetEvent.WaitAsync(tokenSource.Token);
 
-            return (_finish, Last);
+                return (_finish, Last);
+            }
+            catch (OperationCanceledException)
+            {
+                return (false, _last);
+            }
         }
 
         protected override void Dispose(bool disposing) => _handler.Dispose();

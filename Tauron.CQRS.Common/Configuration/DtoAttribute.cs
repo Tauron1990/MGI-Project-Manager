@@ -2,13 +2,13 @@
 
 namespace Tauron.CQRS.Common.Configuration
 {
-    [AttributeUsage(AttributeTargets.Class)]
-    public class DtoAttribute : Attribute
-    {
-        public string Name { get; }
+    //[AttributeUsage(AttributeTargets.Class)]
+    //public class DtoAttribute : Attribute
+    //{
+    //    public string Name { get; }
 
-        public Type Type { get; set; }
+    //    public Type Type { get; set; }
 
-        public DtoAttribute(string name) => Name = name;
-    }
+    //    public DtoAttribute(string name) => Name = name;
+    //}
 }

@@ -46,7 +46,9 @@ namespace Tauron.MgiProjectManager.Identity
                     .AddEntityFrameworkStores<UserDbContext>()
                     .AddDefaultTokenProviders();
 
+            #pragma warning disable 618
             Mapper.Initialize(config =>
+                                  #pragma warning restore 618
                               {
                                   config.AddMaps(typeof(IdentityProfile));
                               });

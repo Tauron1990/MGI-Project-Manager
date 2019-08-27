@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Caching;
@@ -28,7 +27,7 @@ namespace Tauron.CQRS.Services.Extensions
             config(clientCofiguration);
 
             //Dynamic TypeHandling for Serialization
-            services.AddCQRSTypeHandling();
+            //services.AddCQRSTypeHandling();
 
             //Client for the Dispatcher
             services.TryAddSingleton<ISnapshotStore, SnapshotServerStore>();
@@ -61,7 +60,7 @@ namespace Tauron.CQRS.Services.Extensions
             });
         }
 
-        public static async Task StartCQRS(this IServiceProvider provider, CancellationToken cancellationToken)
+        public static async Task StartCQRS(this IServiceProvider provider, CancellationToken cancellationToken = default)
         {
             using var scope = provider.CreateScope();
             await scope.ServiceProvider.GetRequiredService<IHandlerManager>().Init(cancellationToken);
@@ -80,9 +79,19 @@ namespace Tauron.CQRS.Services.Extensions
             return clientCofiguration;
         }
 
-        public static void AddFrom<TType>(this IServiceCollection serviceCollection, ClientCofiguration config)
+        public static void AddFrom<TType>(this IServiceCollection serviceCollection, ClientCofiguration config) 
+            => ScanFrom(config, serviceCollection, typeof(TType));
+
+        public static ClientCofiguration ScanFrom<TType>(this ClientCofiguration config)
         {
-            var asm = typeof(TType).Assembly;
+            ScanFrom(config, null, typeof(TType));
+         
+            return config;
+        }
+
+        private static void ScanFrom(ClientCofiguration config, IServiceCollection serviceCollection, Type targetType)
+        {
+            var asm = targetType.Assembly;
 
             foreach (var type in asm.GetTypes())
             {
@@ -93,37 +102,19 @@ namespace Tauron.CQRS.Services.Extensions
                     if (!@interface.IsGenericType) continue;
 
                     if (@interface.GetGenericTypeDefinition() != typeof(ICancellableCommandHandler<>) && @interface.GetGenericTypeDefinition() != typeof(ICancellableEventHandler<>) &&
-                        @interface.GetGenericTypeDefinition() != typeof(ICommandHandler<>) && @interface.GetGenericTypeDefinition() != typeof(IEventHandler<>))
-                        continue;
-
-                    config.RegisterType(@interface.GetGenericArguments()[0].Name, type);
-
-                    serviceCollection.AddTransient(@interface);
-                }
-            }
-        }
-
-        public static ClientCofiguration ScanFrom<TType>(this ClientCofiguration config)
-        {
-            var asm = typeof(TType).Assembly;
-
-            foreach (var type in asm.GetTypes())
-            {
-                if(!type.IsDefined(typeof(CQRSHandlerAttribute), false)) continue;
-
-                foreach (var @interface in type.GetInterfaces())
-                {
-                    if(!@interface.IsGenericType) continue;
-
-                    if (@interface.GetGenericTypeDefinition() != typeof(ICancellableCommandHandler<>) && @interface.GetGenericTypeDefinition() != typeof(ICancellableEventHandler<>) &&
                         @interface.GetGenericTypeDefinition() != typeof(ICommandHandler<>)            && @interface.GetGenericTypeDefinition() != typeof(IEventHandler<>))
                         continue;
 
-                    config.RegisterType(@interface.GetGenericArguments()[0].Name, type);
-                }
-            }
+                    string name = @interface.GetGenericArguments()[0].Name;
 
-            return config;
+                    //config.RegisterType(name, @interface.GenericTypeArguments[0]);
+                    config.RegisterHandler(name, type);
+
+                    serviceCollection?.AddTransient(@interface);
+                }
+
+
+            }
         }
     }
 }
