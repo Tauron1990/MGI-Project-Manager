@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
@@ -35,13 +36,7 @@ namespace Tauron.CQRS.Server.Hubs
             _logger = logger;
         }
 
-        public int GetCurrentClients(string eventName)
-        {
-            if (!_connections.TryGetValue(eventName, out var connection)) return 0;
-
-            lock (connection)
-                return connection.Count;
-        }
+        public int GetCurrentClients(string eventName) => _connections.Select(c => c).Sum(c => c.Value.Contains(eventName) ? 1 : 0);
 
         public Task AddToGroup(string connectionId, string group)
         {

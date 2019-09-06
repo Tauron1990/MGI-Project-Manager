@@ -6,9 +6,7 @@ using CQRSlite.Events;
 using CQRSlite.Messages;
 using CQRSlite.Queries;
 using JetBrains.Annotations;
-using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -31,7 +29,7 @@ namespace Tauron.CQRS.Services.Core
                 _logger = logger;
             }
 
-            public async Task Process(ServerDomainMessage msg)
+            public async Task Process(DomainMessage msg)
             {
                 try
                 {
@@ -47,7 +45,6 @@ namespace Tauron.CQRS.Services.Core
         private readonly Random _random = new Random();
         private readonly IOptions<ClientCofiguration> _config;
         private readonly ILogger<IDispatcherClient> _logger;
-        private readonly HubConnection _hubConnection;
         private readonly ConcurrentDictionary<string, EventRegistration> _eventRegistrations = new ConcurrentDictionary<string, EventRegistration>();
         private readonly IMemoryCache _memoryCache = new MemoryCache(new MemoryCacheOptions());
 
@@ -57,37 +54,20 @@ namespace Tauron.CQRS.Services.Core
         {
             _config = config;
             _logger = logger;
-
-            _hubConnection = new HubConnectionBuilder().AddJsonProtocol().WithUrl(config.Value.EventHubUrl).Build();
         }
 
         public async Task Start(CancellationToken token)
         {
-            await _hubConnection.StartAsync(token);
-
-            _hubConnection.Closed += HubConnectionOnClosed;
-            _hubConnection.On(HubEventNames.PropagateEvent, new Action<ServerDomainMessage>(ProcessMessage));
-            _hubConnection.On(HubEventNames.AcceptedEvent, new Action<int>(MessageAccept));
-            _hubConnection.On(HubEventNames.RejectedEvent, new Action<string, int>(MessageReject));
         }
 
         public async Task Stop()
         {
             _isCLoseOk = true;
-            await _hubConnection.StopAsync();
-            await _hubConnection.DisposeAsync();
-        }
-
-        private async Task HubConnectionOnClosed(Exception arg)
-        {
-            if(_isCLoseOk) return;
-
-            await _hubConnection.StartAsync();
         }
 
         public async Task Send(IMessage command, CancellationToken cancellationToken)
         {
-            ServerDomainMessage msg = new ServerDomainMessage
+            DomainMessage msg = new DomainMessage
                                       {
                                           EventData = JsonConvert.SerializeObject(command),
                                           TypeName = command.GetType().AssemblyQualifiedName,
@@ -127,7 +107,7 @@ namespace Tauron.CQRS.Services.Core
             throw new NotSupportedException();
         }
 
-        private async void ProcessMessage(ServerDomainMessage domainMessage)
+        private async void ProcessMessage(DomainMessage domainMessage)
         {
             try
             {
@@ -143,11 +123,11 @@ namespace Tauron.CQRS.Services.Core
         private void MessageReject(string reason, int seqNumber) 
             => _logger.LogInformation($"Command Rejected: {seqNumber} -- Reason: {reason}");
 
-        private async void MessageAccept(int seqNumber)
+        private async void MessageAccept(long seqNumber)
         {
             try
             {
-                var domainMessage = _memoryCache.Get<ServerDomainMessage>(seqNumber);
+                var domainMessage = _memoryCache.Get<DomainMessage>(seqNumber);
                 if (domainMessage != null && _eventRegistrations.TryGetValue(domainMessage.EventName, out var reg))
                     await reg.Process(domainMessage);
                 else

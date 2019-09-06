@@ -33,7 +33,7 @@ namespace Tauron.CQRS.Services.Core
                         type = EventType.TransistentEvent;
                 }
 
-                return new ServerDomainMessage
+                return new DomainMessage
                 {
                     EventName = eventType.Name,
                     TypeName = e.GetType().AssemblyQualifiedName,

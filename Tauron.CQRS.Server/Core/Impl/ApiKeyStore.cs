@@ -21,6 +21,7 @@ namespace Tauron.CQRS.Server.Core.Impl
             new Lazy<HashAlgorithm>(() => HashAlgorithm.Create("sha256"));
 
         private readonly List<ApiKey> _keys = new List<ApiKey>();
+        private bool _isInit;
 
         public ApiKeyStore(IServiceScopeFactory serviceScopeFactory, ILogger<ApiKeyStore> logger)
         {
@@ -83,17 +84,23 @@ namespace Tauron.CQRS.Server.Core.Impl
 
         private Task Init()
         {
-            if (_keys != null) return Task.CompletedTask;
+            if (_isInit) return Task.CompletedTask;
 
-            _logger.LogInformation("Init Api Key Storage");
-
-            using (var scope = _serviceScopeFactory.CreateScope())
+            lock (this)
             {
-                using (var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>())
-                    _keys.AddRange(context.ApiKeys.AsNoTracking());
-            }
+                if(_isInit) return Task.CompletedTask;
 
-            return Task.CompletedTask;
+                _logger.LogInformation("Init Api Key Storage");
+
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    using (var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>())
+                        _keys.AddRange(context.ApiKeys.AsNoTracking());
+                }
+
+                _isInit = true;
+                return Task.CompletedTask;
+            }
         }
 
         public void AddTemporary(string key)

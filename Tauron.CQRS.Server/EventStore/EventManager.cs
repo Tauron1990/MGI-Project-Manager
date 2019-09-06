@@ -126,7 +126,7 @@ namespace Tauron.CQRS.Server.EventStore
             }
         }
 
-        public async Task TryAccept(string connectionId, int sequenceNumber, string service)
+        public async Task TryAccept(string connectionId, long sequenceNumber, string service)
         {
             _logger.LogInformation($"Try Accept: {connectionId} -- {service}");
 
@@ -139,6 +139,7 @@ namespace Tauron.CQRS.Server.EventStore
                         {
                             if (eventCookie.CanAccept(service))
                             {
+                                //await _eventHub.Clients.All.SendAsync(HubEventNames.AcceptedEvent, sequenceNumber);
                                 await _eventHub.Clients.Client(connectionId).SendAsync(HubEventNames.AcceptedEvent, sequenceNumber);
                                 _logger.LogInformation($"Accept: {connectionId} -- {service}");
                             }

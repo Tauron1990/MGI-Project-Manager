@@ -12,7 +12,7 @@ namespace Tauron.CQRS.Server
 
         Task<bool> DeliverEvent(RecivedDomainEvent @event, CancellationToken token);
 
-        Task TryAccept(string connectionId, int sequenceNumber, string service);
+        Task TryAccept(string connectionId, long sequenceNumber, string service);
 
         Task ProvideEvent(string sender, ServerDomainMessage domainMessage, string apiKey);
 

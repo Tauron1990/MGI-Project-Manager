@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Tauron.CQRS.Common.ServerHubs;
 
-namespace Tauron.CQRS.Server.EventStore.Data
+namespace Tauron.CQRS.Services.Data.Database
 {
     public class EventEntity
     {

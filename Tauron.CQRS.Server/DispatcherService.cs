@@ -72,7 +72,6 @@ namespace Tauron.CQRS.Server
                                 }
                                 else
                                 {
-                                    domainEvent.RealMessage.SequenceNumber = -1;
                                     if (!await _eventManager.DeliverEvent(domainEvent, stoppingToken))
                                         await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
                                 }

@@ -18,8 +18,6 @@ namespace Tauron.CQRS.Common.Configuration
 
         public string PersistenceApiUrl { get; set; }
 
-        public string ApiKey { get; set; }
-
         public string ServiceName
         {
             get
@@ -32,6 +30,18 @@ namespace Tauron.CQRS.Common.Configuration
         }
 
         public Dictionary<string, HashSet<Type>> GetHandlers () => new Dictionary<string, HashSet<Type>>(_handlerRegistry);
+
+        public string ConnectionString { get; set; }
+
+        public bool Memory { get; set; }
+
+        [PublicAPI]
+        public ClientCofiguration WithDatabase(string connectionString)
+        {
+            ConnectionString = connectionString;
+
+            return this;
+        }
 
         private void AddHandler(string name, Type type)
         {
@@ -51,10 +61,9 @@ namespace Tauron.CQRS.Common.Configuration
             return this;
         }
 
-        public ClientCofiguration SetUrls(Uri baseUrl, string serviceName, string apiKey)
+        public ClientCofiguration SetUrls(Uri baseUrl, string serviceName)
         {
             ServiceName = serviceName;
-            ApiKey = apiKey;
 
             EventHubUrl = new Uri(baseUrl, "EventBus").ToString();
             EventServerApiUrl = new Uri(baseUrl, "Api/EventStore").ToString();

@@ -49,7 +49,8 @@ namespace Tauron.CQRS.Services.Core.Components
                 protected MethodInfo GetMethod()
                 {
                     if (_methodInfo != null) return _methodInfo;
-                    _methodInfo = _targetType.GetInterfaceMap(_targetInterface).InterfaceMethods.Single();
+                    var temp = _targetType.GetInterfaceMap(_targetInterface.GetInterfaces().Single());
+                    _methodInfo = temp.InterfaceMethods.Single();
                     return _methodInfo;
                 }
 
@@ -127,10 +128,10 @@ namespace Tauron.CQRS.Services.Core.Components
                     Type key = i.GetGenericArguments()[0];
 
 
-                    if (targetType == typeof(ICommandHandler<>)) _invoker[key] = new Command(target, target.GetType(), i);
-                    else if (targetType == typeof(ICancellableCommandHandler<>)) _invoker[key] = new CancelCommand(target, target.GetType(), i);
-                    else if (targetType == typeof(IEventHandler<>)) _invoker[key] = new Event(target, target.GetType(), i);
-                    else if (targetType == typeof(ICancellableEventHandler<>)) _invoker[key] = new CancelEvent(target, target.GetType(), i);
+                    if (targetType == typeof(ICommandHandler<>)) _invoker[key] = new Command(target, handlerType, i);
+                    else if (targetType == typeof(ICancellableCommandHandler<>)) _invoker[key] = new CancelCommand(target, handlerType, i);
+                    else if (targetType == typeof(IEventHandler<>)) _invoker[key] = new Event(target, handlerType, i);
+                    else if (targetType == typeof(ICancellableEventHandler<>)) _invoker[key] = new CancelEvent(target, handlerType, i);
                 }
 
                 if(_invoker.Count == 0)

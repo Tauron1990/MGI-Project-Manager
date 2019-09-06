@@ -2,7 +2,7 @@
 
 namespace Tauron.CQRS.Common.ServerHubs
 {
-    public class ServerDomainMessage
+    public class DomainMessage
     {
         public long SequenceNumber { get; set; }
 
