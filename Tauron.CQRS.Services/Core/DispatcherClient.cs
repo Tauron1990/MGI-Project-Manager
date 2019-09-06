@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Events;
-using CQRSlite.Messages;
 using CQRSlite.Queries;
+using EasyNetQ;
+using EasyNetQ.Consumer;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -12,11 +14,12 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Common.ServerHubs;
+using IMessage = CQRSlite.Messages.IMessage;
 
 namespace Tauron.CQRS.Services.Core
 {
     [UsedImplicitly]
-    public class DispatcherClient : IDispatcherClient
+    public class DispatcherClient : IDispatcherClient, IDisposable
     {
         private class EventRegistration
         {
@@ -47,24 +50,16 @@ namespace Tauron.CQRS.Services.Core
         private readonly ILogger<IDispatcherClient> _logger;
         private readonly ConcurrentDictionary<string, EventRegistration> _eventRegistrations = new ConcurrentDictionary<string, EventRegistration>();
         private readonly IMemoryCache _memoryCache = new MemoryCache(new MemoryCacheOptions());
-
-        private bool _isCLoseOk;
+        private readonly IBus _bus;
 
         public DispatcherClient(IOptions<ClientCofiguration> config, ILogger<IDispatcherClient> logger)
         {
             _config = config;
             _logger = logger;
+            _bus = RabbitHutch.CreateBus($"host={config.Value.EventHubHost}", register => register.Register<IHandlerCollectionFactory, HandlerCollectionPerQueueFactory>());
+            
         }
-
-        public async Task Start(CancellationToken token)
-        {
-        }
-
-        public async Task Stop()
-        {
-            _isCLoseOk = true;
-        }
-
+        
         public async Task Send(IMessage command, CancellationToken cancellationToken)
         {
             DomainMessage msg = new DomainMessage
@@ -83,17 +78,24 @@ namespace Tauron.CQRS.Services.Core
                 msg.TimeStamp = @event.TimeStamp;
             }
 
-            await _hubConnection.SendAsync(HubEventNames.PublishEvent, msg, _config.Value.ApiKey, cancellationToken);
+            await _bus.PublishAsync(msg, configuration => configuration.WithQueueName(msg.EventName));
         }
 
-        public async Task Subsribe(string name, Func<IMessage, CancellationToken, Task> msg, bool isCommand)
+        public Task Subsribe(string name, Func<IMessage, CancellationToken, Task> msg, bool isCommand)
         {
             try
             {
                 var waiter = new EventRegistration(msg,_logger);
                 _eventRegistrations[name] = waiter;
 
-                await _hubConnection.InvokeAsync(HubEventNames.Subscribe, name, _config.Value.ApiKey);
+                _bus.SubscribeAsync<DomainMessage>(_config.Value.ServiceName, OnMessage, configuration =>
+                {
+                    configuration.WithQueueName(name).WithAutoDelete();
+                    if (isCommand)
+                        configuration.AsExclusive();
+                });
+
+                return Task.CompletedTask;
             }
             catch(Exception e)
             {
@@ -102,41 +104,17 @@ namespace Tauron.CQRS.Services.Core
             }
         }
 
+        private Task OnMessage(DomainMessage arg) => _eventRegistrations[arg.EventName].Process(arg);
+
         public Task<TResponse> Query<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken)
         {
-            throw new NotSupportedException();
+            return _eventRegistrations
         }
 
-        private async void ProcessMessage(DomainMessage domainMessage)
+        public void Dispose()
         {
-            try
-            {
-                _memoryCache.Set(domainMessage.SequenceNumber, domainMessage);
-                await _hubConnection.SendAsync(HubEventNames.TryAccept, domainMessage.SequenceNumber, _config.Value.ServiceName, _config.Value.ApiKey);
-            }
-            catch(Exception e)
-            {
-                _logger.LogError(e, "Error on Recieving Message");
-            }
-        }
-
-        private void MessageReject(string reason, int seqNumber) 
-            => _logger.LogInformation($"Command Rejected: {seqNumber} -- Reason: {reason}");
-
-        private async void MessageAccept(long seqNumber)
-        {
-            try
-            {
-                var domainMessage = _memoryCache.Get<DomainMessage>(seqNumber);
-                if (domainMessage != null && _eventRegistrations.TryGetValue(domainMessage.EventName, out var reg))
-                    await reg.Process(domainMessage);
-                else
-                    _logger.LogWarning($"Message Timeout Or Registration Error: {seqNumber}");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error on Processing Message");
-            }
+            _memoryCache?.Dispose();
+            _bus?.Dispose();
         }
     }
 }
