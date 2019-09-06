@@ -156,8 +156,6 @@ namespace Tauron.CQRS.Services.Core.Components
 
         public async Task Init(CancellationToken token)
         {
-            await _client.Start(token);
-
             foreach (var handler in _configuration.Value.GetHandlers())
             {
                 var commands = new List<HandlerInstace>();

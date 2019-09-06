@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Events;
@@ -108,7 +107,7 @@ namespace Tauron.CQRS.Services.Core
 
         public Task<TResponse> Query<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken)
         {
-            return _eventRegistrations
+            return _bus.RequestAsync<IQuery<TResponse>, TResponse>(query);
         }
 
         public void Dispose()
