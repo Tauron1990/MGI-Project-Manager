@@ -11,6 +11,6 @@ namespace Tauron.CQRS.Services.Data
 
         public JToken Create() => JToken.FromObject(Objects);
 
-        public void Read(JToken token) => Objects = token.ToObject<ConcurrentDictionary<string, object>>();
+        public void Read(JToken token) => Objects = token.ToObject<ConcurrentDictionary<string, object>>() ?? new ConcurrentDictionary<string, object>();
     }
 }

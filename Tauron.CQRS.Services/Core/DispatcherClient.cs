@@ -140,8 +140,11 @@ namespace Tauron.CQRS.Services.Core
             }
         }
 
-        private void MessageReject(string reason, int seqNumber) 
-            => _logger.LogInformation($"Command Rejected: {seqNumber} -- Reason: {reason}");
+        private void MessageReject(string reason, int seqNumber)
+        {
+            _memoryCache.Remove(seqNumber);
+            _logger.LogInformation($"Command Rejected: {seqNumber} -- Reason: {reason}");
+        }
 
         private async void MessageAccept(long seqNumber)
         {

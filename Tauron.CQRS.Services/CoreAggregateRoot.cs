@@ -11,11 +11,11 @@ namespace Tauron.CQRS.Services
     {
         private AggregateStade _aggregateStade;
 
-        protected internal AggregateStade AggregateStade => _aggregateStade ?? new AggregateStade();
+        protected internal AggregateStade AggregateStade => _aggregateStade ??= new AggregateStade();
 
         protected override AggregateStade CreateSnapshot() => AggregateStade;
 
-        protected override void RestoreFromSnapshot(AggregateStade snapshot) => _aggregateStade = snapshot;
+        protected override void RestoreFromSnapshot(AggregateStade snapshot) => _aggregateStade = snapshot ?? new AggregateStade();
 
         protected TType GetValue<TType>([CallerMemberName] string name = null)
         {
