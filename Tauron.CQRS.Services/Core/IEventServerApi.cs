@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using RestEase;
+using Tauron.CQRS.Common.Dto;
 using Tauron.CQRS.Common.ServerHubs;
 
 namespace Tauron.CQRS.Services.Core
 {
     public interface IEventServerApi
     {
-        Task AddEvents(IEnumerable<DomainMessage> eventMessage);
+        [Get(nameof(AddEvents))]
+        Task<bool> AddEvents([Body]ApiEventMessage eventMessage);
 
-        Task<IEnumerable<DomainMessage>> GetEvents(Guid id, int version);
+        [Get(nameof(GetEvents))]
+        Task<IEnumerable<ServerDomainMessage>> GetEvents([Body]ApiEventId eventId);
     }
 }

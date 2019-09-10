@@ -86,6 +86,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Alt", "Alt", "{04425821-322
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventDeliveryTest", "EventDeliveryTest\EventDeliveryTest.csproj", "{2B5E2E7F-971E-429E-8052-AE6B09584719}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{7CBEE00B-12E7-4B1C-B261-EAD080C01AFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Event Delivery|Any CPU = Debug Event Delivery|Any CPU
@@ -205,6 +207,12 @@ Global
 		{2B5E2E7F-971E-429E-8052-AE6B09584719}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B5E2E7F-971E-429E-8052-AE6B09584719}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B5E2E7F-971E-429E-8052-AE6B09584719}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CBEE00B-12E7-4B1C-B261-EAD080C01AFE}.Debug Event Delivery|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CBEE00B-12E7-4B1C-B261-EAD080C01AFE}.Debug Event Delivery|Any CPU.Build.0 = Debug|Any CPU
+		{7CBEE00B-12E7-4B1C-B261-EAD080C01AFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CBEE00B-12E7-4B1C-B261-EAD080C01AFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CBEE00B-12E7-4B1C-B261-EAD080C01AFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CBEE00B-12E7-4B1C-B261-EAD080C01AFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -238,6 +246,7 @@ Global
 		{10203B26-DD24-4A87-BE4F-79C4212D313D} = {BC132441-E8FA-4E0C-AF42-096630DC94EE}
 		{B2A28C29-3AA3-4AB3-9CA7-150290B8FDC7} = {21F42ED1-025F-4185-AC8C-E9AC9318A968}
 		{2B5E2E7F-971E-429E-8052-AE6B09584719} = {574D22A4-A56A-4496-BC14-C32212C058E4}
+		{7CBEE00B-12E7-4B1C-B261-EAD080C01AFE} = {574D22A4-A56A-4496-BC14-C32212C058E4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}

@@ -36,7 +36,7 @@ namespace Tauron.CQRS.Server.Hubs
             _logger = logger;
         }
 
-        public int GetCurrentClients(string eventName) => _connections.Select(c => c).Sum(c => c.Value.Contains(eventName) ? 1 : 0);
+        public int GetCurrentClients(string eventName) => _connections.Where(c => c.Value.Contains(eventName)).Sum(c => 1);
 
         public Task AddToGroup(string connectionId, string group)
         {

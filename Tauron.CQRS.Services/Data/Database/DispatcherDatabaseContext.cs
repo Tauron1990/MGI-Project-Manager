@@ -4,7 +4,7 @@ using Tauron.CQRS.Common.Configuration;
 
 namespace Tauron.CQRS.Services.Data.Database
 {
-    public class EventSourceContext : DbContext
+    public class DispatcherDatabaseContext : DbContext
     {
         private readonly IOptions<ClientCofiguration> _serverOptions;
 
@@ -12,7 +12,7 @@ namespace Tauron.CQRS.Services.Data.Database
 
         public DbSet<ObjectStadeEntity> ObjectStades { get; set; }
 
-        public EventSourceContext(IOptions<ClientCofiguration> serverOptions) 
+        public DispatcherDatabaseContext(IOptions<ClientCofiguration> serverOptions) 
             => _serverOptions = serverOptions;
 
         #region Overrides of DbContext

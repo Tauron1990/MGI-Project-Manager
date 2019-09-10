@@ -34,7 +34,7 @@ namespace Tauron.CQRS.Services.Core.Components
             {
                 public abstract Task Invoke(IMessage msg, CancellationToken token);
             }
-            private abstract class InvokerHelper<TDelegate> : InvokerBase
+            private abstract class InvokerHelper : InvokerBase
             {
                 private readonly Type _targetType;
                 private readonly Type _targetInterface;
@@ -53,24 +53,16 @@ namespace Tauron.CQRS.Services.Core.Components
                     _methodInfo = temp.InterfaceMethods.Single();
                     return _methodInfo;
                 }
-
-                public override async Task Invoke(IMessage msg, CancellationToken token) => await Invoke(msg, token, Create());
-
-                protected abstract TDelegate Create();
-                protected abstract Task Invoke(IMessage msg, CancellationToken token, TDelegate del);
             }
 
-            private class Command : InvokerHelper<Func<ICommand, Task>>
+            private class Command : InvokerHelper
             {
                 private readonly Func<object> _handler;
 
                 public Command(Func<object> handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
 
-                protected override Func<ICommand, Task> Create() 
-                    => (Func<ICommand, Task>)Delegate.CreateDelegate(typeof(Func<ICommand, Task>), _handler(), GetMethod());
-
                 protected override async Task Invoke(IMessage msg, CancellationToken token, Func<ICommand, Task> del)
-                    => await del((ICommand) msg);
+                    => await (Task)GetMethod().invoke;
             }
             private class CancelCommand : InvokerHelper<Func<ICommand, CancellationToken, Task>>
             {
@@ -156,6 +148,8 @@ namespace Tauron.CQRS.Services.Core.Components
 
         public async Task Init(CancellationToken token)
         {
+            await _client.Start(token);
+
             foreach (var handler in _configuration.Value.GetHandlers())
             {
                 var commands = new List<HandlerInstace>();

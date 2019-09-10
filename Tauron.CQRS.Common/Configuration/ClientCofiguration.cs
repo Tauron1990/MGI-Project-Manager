@@ -12,7 +12,13 @@ namespace Tauron.CQRS.Common.Configuration
         private readonly Dictionary<string, HashSet<Type>> _handlerRegistry = new Dictionary<string, HashSet<Type>>();
         private string _serviceName;
 
-        public string EventHubHost { get; set; }
+        public string EventHubUrl { get; set; }
+
+        public string EventServerApiUrl { get; set; }
+
+        public string PersistenceApiUrl { get; set; }
+
+        public string ApiKey { get; set; }
 
         public string ServiceName
         {
@@ -57,11 +63,14 @@ namespace Tauron.CQRS.Common.Configuration
             return this;
         }
 
-        public ClientCofiguration SetUrls(string host, string serviceName)
+        public ClientCofiguration SetUrls(Uri baseUrl, string serviceName, string apiKey)
         {
             ServiceName = serviceName;
+            ApiKey = apiKey;
 
-            EventHubHost = host;
+            EventHubUrl = new Uri(baseUrl, "EventBus").ToString();
+            EventServerApiUrl = new Uri(baseUrl, "Api/EventStore").ToString();
+            PersistenceApiUrl = new Uri(baseUrl, "Api/Persistable").ToString();
 
             return this;
         }
