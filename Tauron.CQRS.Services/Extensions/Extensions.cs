@@ -34,7 +34,6 @@ namespace Tauron.CQRS.Services.Extensions
             services.TryAddSingleton<IEventStore, ServerEventStore>();
             services.TryAddSingleton<IDispatcherClient, DispatcherClient>();
             services.TryAddTransient<IDispatcherApi, DispatcherApi>();
-            services.TryAddSingleton<IEventStore, ServerEventStore>();
             services.TryAddSingleton<ICache, MemoryCache>();
             
             //Service Delegates for cqrs lite

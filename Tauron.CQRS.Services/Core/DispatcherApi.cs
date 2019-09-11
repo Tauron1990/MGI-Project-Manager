@@ -35,7 +35,11 @@ namespace Tauron.CQRS.Services.Core
             throw new InvalidOperationException("AddEvents Failed");
         }
         
-        public Task<IEnumerable<ServerDomainMessage>> Get(Guid aggregateId, int fromVersion, CancellationToken cancellationToken = new CancellationToken()) 
-            => _eventServerApi.Value.GetEvents(new ApiEventId{Id =aggregateId, Version = fromVersion, ApiKey = _configuration.Value.ApiKey});
+        public Task<IEnumerable<ServerDomainMessage>> Get(Guid aggregateId, int fromVersion, CancellationToken cancellationToken = new CancellationToken())
+        {
+            var eventId = new ApiEventId {Id = aggregateId, Version = fromVersion, ApiKey = _configuration.Value.ApiKey};
+
+            return _eventServerApi.Value.GetEvents(eventId);
+        }
     }
 }

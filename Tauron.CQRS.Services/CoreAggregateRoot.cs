@@ -9,21 +9,26 @@ namespace Tauron.CQRS.Services
     [PublicAPI]
     public abstract class CoreAggregateRoot : SnapshotAggregateRoot<AggregateStade>
     {
-        private AggregateStade _aggregateStade;
+        private object _lock = new object();
 
-        protected internal AggregateStade AggregateStade => _aggregateStade ??= new AggregateStade();
+        protected internal AggregateStade AggregateStade { get; private set; } = new AggregateStade();
 
         protected override AggregateStade CreateSnapshot() => AggregateStade;
 
-        protected override void RestoreFromSnapshot(AggregateStade snapshot) => _aggregateStade = snapshot ?? new AggregateStade();
+        protected override void RestoreFromSnapshot(AggregateStade snapshot)
+        {
+            if (snapshot == null) return;
+
+            AggregateStade = snapshot;
+        }
 
         protected TType GetValue<TType>([CallerMemberName] string name = null)
         {
-            if (_aggregateStade.Objects.TryGetValue(name ?? throw new ArgumentNullException(nameof(name)), out var value) && value is TType typedValue) return typedValue;
+            if (AggregateStade.Objects.TryGetValue(name ?? throw new ArgumentNullException(nameof(name)), out var value) && value is TType typedValue) return typedValue;
             return default;
         }
 
         protected void SetValue<TType>(TType value, [CallerMemberName] string name = null)
-            => _aggregateStade.Objects[name ?? throw new ArgumentNullException(nameof(name))] = value;
+            => AggregateStade.Objects[name ?? throw new ArgumentNullException(nameof(name))] = value;
     }
 }

@@ -10,6 +10,7 @@ namespace EventDeliveryTest.Test
 
         public TestEvent(Guid id, int version, string result) : base(id, version)
         {
+            Result = result;
         }
     }
 }

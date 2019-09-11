@@ -51,7 +51,7 @@ namespace Tauron.CQRS.Server.Persistable
 
         [Route(nameof(GetEvents))]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ServerDomainMessage>>> GetEvents([FromQuery]ApiEventId eventId)
+        public async Task<ActionResult<IEnumerable<ServerDomainMessage>>> GetEvents([FromBody]ApiEventId eventId)
         {
             if (!await _store.Validate(eventId.ApiKey)) return Forbid();
 
