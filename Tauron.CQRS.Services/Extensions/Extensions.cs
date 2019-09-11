@@ -14,7 +14,6 @@ using Microsoft.Extensions.Options;
 using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Services.Core;
 using Tauron.CQRS.Services.Core.Components;
-using Session = Tauron.CQRS.Services.Core.Components.Session;
 
 namespace Tauron.CQRS.Services.Extensions
 {

@@ -10,12 +10,11 @@ namespace Tauron.CQRS.Services.Core.Components
 {
     public class CqrsSession : ISession
     {
-        private static readonly object _globalLock = new object();
-        private readonly IEventPublisher _eventPublisher;
+        private readonly IDispatcherClient _eventPublisher;
         private readonly IRepository _repository;
         private readonly Dictionary<Guid, AggregateDescriptor> _trackedAggregates;
 
-        public CqrsSession(IRepository repository, IEventPublisher eventPublisher)
+        public CqrsSession(IRepository repository, IDispatcherClient eventPublisher)
         {
             _eventPublisher = eventPublisher;
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
@@ -86,8 +85,7 @@ namespace Tauron.CQRS.Services.Core.Components
                 }
 
                 await Task.WhenAll(taskArray).ConfigureAwait(false);
-                foreach (var @event in events)
-                    await _eventPublisher.Publish(@event, cancellationToken);
+                await _eventPublisher.SendEvents(events, cancellationToken);
             }
             finally
             {

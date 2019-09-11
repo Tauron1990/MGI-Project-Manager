@@ -41,5 +41,7 @@
         public const string RejectedEvent = nameof(RejectedEvent);
 
         public const string PublishEvent = nameof(PublishEvent);
+
+        public const string PublishEventGroup = nameof(PublishEventGroup);
     }
 }

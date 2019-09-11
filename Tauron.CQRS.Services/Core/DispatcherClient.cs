@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Events;
@@ -139,6 +141,11 @@ namespace Tauron.CQRS.Services.Core
             }
 
             await _hubConnection.SendAsync(HubEventNames.PublishEvent, msg, _config.Value.ApiKey, cancellationToken);
+        }
+
+        public async Task SendEvents(IEnumerable<IEvent> events, CancellationToken cancellationToken)
+        {
+            await _hubConnection.SendAsync(HubEventNames.PublishEventGroup, events.OfType<IMessage>().ToArray(), cancellationToken);
         }
 
         public async Task Subsribe(string name, Func<IMessage, CancellationToken, Task> msg, bool isCommand)
