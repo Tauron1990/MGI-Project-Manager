@@ -20,6 +20,23 @@ namespace Tauron.CQRS.Services.Core
     [UsedImplicitly]
     public class DispatcherClient : IDispatcherClient
     {
+        private class MessageDelivery
+        {
+            private readonly EventRegistration _eventRegistration;
+            private readonly ServerDomainMessage _message;
+
+            public MessageDelivery(EventRegistration eventRegistration, ServerDomainMessage message)
+            {
+                _eventRegistration = eventRegistration;
+                _message = message;
+            }
+
+            public Task Start()
+            {
+                return _eventRegistration.Process(_message);
+            }
+        }
+
         private class EventRegistration
         {
             private readonly Func<IMessage, CancellationToken, Task> _msg;
@@ -50,6 +67,7 @@ namespace Tauron.CQRS.Services.Core
         private readonly HubConnection _hubConnection;
         private readonly ConcurrentDictionary<string, EventRegistration> _eventRegistrations = new ConcurrentDictionary<string, EventRegistration>();
         private readonly IMemoryCache _memoryCache = new MemoryCache(new MemoryCacheOptions());
+        private BlockingCollection<MessageDelivery> _messageDeliveries;
 
         private bool _isCLoseOk;
 
@@ -63,6 +81,7 @@ namespace Tauron.CQRS.Services.Core
 
         public async Task Start(CancellationToken token)
         {
+            InvokeProcessor();
             await _hubConnection.StartAsync(token);
 
             _hubConnection.Closed += HubConnectionOnClosed;
@@ -71,8 +90,24 @@ namespace Tauron.CQRS.Services.Core
             _hubConnection.On(HubEventNames.RejectedEvent, new Action<string, int>(MessageReject));
         }
 
+        private void InvokeProcessor()
+        {
+            Task.Run(async () =>
+            {
+                _messageDeliveries = new BlockingCollection<MessageDelivery>();
+
+                foreach (var messageDelivery in _messageDeliveries.GetConsumingEnumerable())
+                {
+                    await messageDelivery.Start();
+                }
+
+                _messageDeliveries.Dispose();
+            });
+        }
+
         public async Task Stop()
         {
+            _messageDeliveries.CompleteAdding();
             _isCLoseOk = true;
             await _hubConnection.StopAsync();
             await _hubConnection.DisposeAsync();
@@ -146,13 +181,13 @@ namespace Tauron.CQRS.Services.Core
             _logger.LogInformation($"Command Rejected: {seqNumber} -- Reason: {reason}");
         }
 
-        private async void MessageAccept(long seqNumber)
+        private void MessageAccept(long seqNumber)
         {
             try
             {
                 var domainMessage = _memoryCache.Get<ServerDomainMessage>(seqNumber);
                 if (domainMessage != null && _eventRegistrations.TryGetValue(domainMessage.EventName, out var reg))
-                    await reg.Process(domainMessage);
+                    _messageDeliveries.Add(new MessageDelivery(reg, domainMessage));
                 else
                     _logger.LogWarning($"Message Timeout Or Registration Error: {seqNumber}");
             }

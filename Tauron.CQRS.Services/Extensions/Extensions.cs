@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Services.Core;
 using Tauron.CQRS.Services.Core.Components;
+using Session = Tauron.CQRS.Services.Core.Components.Session;
 
 namespace Tauron.CQRS.Services.Extensions
 {
@@ -46,7 +47,7 @@ namespace Tauron.CQRS.Services.Extensions
             services.TryAddSingleton(typeof(IPersistApi), 
                 provider => new RestEase.RestClient(provider.GetRequiredService<IOptions<ClientCofiguration>>().Value.PersistenceApiUrl).For<IPersistApi>());
 
-            services.AddScoped<ISession, Session>();
+            services.AddScoped<ISession, CqrsSession>();
             services.AddScoped<IRepository>(s =>
             {
                 var store = s.GetRequiredService<IEventStore>();
