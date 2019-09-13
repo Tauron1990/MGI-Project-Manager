@@ -73,7 +73,7 @@ namespace Tauron.CQRS.Services.Core.Components
         {
             try
             {
-                List<IEvent> events = new List<IEvent>();
+                var events = new List<IEvent>();
 
                 var taskArray = new Task[_trackedAggregates.Count];
                 var index = 0;

@@ -66,7 +66,7 @@ namespace EventDeliveryTest
 
         private static async Task TestEventDeleivery(IServiceProvider serviceProvider)
         {
-            Console.WriteLine("Event Delivery Test:");
+            Console.Write("Event Delivery Test:");
 
             using var scope = serviceProvider.CreateScope();
             await scope.ServiceProvider.StartCQRS();

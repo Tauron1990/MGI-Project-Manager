@@ -101,12 +101,12 @@ namespace Tauron.CQRS.Server.EventStore
         {
             _logger.LogInformation($"Deliver Event: {@event.RealMessage.EventName} -- {@event.RealMessage.EventType}");
 
-            var entry = new EventCookie(@event, _connectionManager);
-            if (!_eventCookies.TryAdd(@event.RealMessage.SequenceNumber, entry)) return false;
-            
             switch (@event.RealMessage.EventType)
             {
                 case EventType.Command:
+                    var entry = new EventCookie(@event, _connectionManager);
+                    if (!_eventCookies.TryAdd(@event.RealMessage.SequenceNumber, entry)) return false;
+
                     var currentTime = DateTime.Now;
                     var outdated    = _eventCookies.Where(e => e.Value.IsOld(currentTime)).ToList();
                     foreach (var cookie in outdated)
@@ -119,7 +119,7 @@ namespace Tauron.CQRS.Server.EventStore
                     return entry.WaitForResponse(100_000);
                 case EventType.Query:
                 case EventType.TransistentEvent:
-                    await _eventHub.Clients.Groups(entry.DomainEvent.RealMessage.EventName).SendAsync(HubEventNames.PropagateEvent, entry.DomainEvent.RealMessage, cancellationToken: token);
+                    await _eventHub.Clients.Groups(@event.RealMessage.EventName).SendAsync(HubEventNames.PropagateEvent, @event.RealMessage, cancellationToken: token);
                     return true;
                 default:
                     return false;

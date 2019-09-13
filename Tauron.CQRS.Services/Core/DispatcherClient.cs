@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Events;
@@ -138,6 +137,7 @@ namespace Tauron.CQRS.Services.Core
                 msg.Id = @event.Id;
                 msg.Version = @event.Version;
                 msg.TimeStamp = @event.TimeStamp;
+                msg.EventType = EventType.TransistentEvent;
             }
 
             await _hubConnection.SendAsync(HubEventNames.PublishEvent, msg, _config.Value.ApiKey, cancellationToken);
@@ -145,7 +145,26 @@ namespace Tauron.CQRS.Services.Core
 
         public async Task SendEvents(IEnumerable<IEvent> events, CancellationToken cancellationToken)
         {
-            await _hubConnection.SendAsync(HubEventNames.PublishEventGroup, events.OfType<IMessage>().ToArray(), cancellationToken);
+            List<ServerDomainMessage> serverDomainMessages = new List<ServerDomainMessage>();
+
+            foreach (var @event in events)
+            {
+                ServerDomainMessage msg = new ServerDomainMessage
+                                          {
+                                              EventData = JsonConvert.SerializeObject(@event),
+                                              TypeName = @event.GetType().AssemblyQualifiedName,
+                                              EventName = @event.GetType().Name,
+                                              EventType = EventType.TransistentEvent,
+                                              SequenceNumber = DateTime.UtcNow.Ticks + _random.Next(),
+                                              Id = @event.Id,
+                                              Version = @event.Version,
+                                              TimeStamp = @event.TimeStamp
+                                          };
+
+                serverDomainMessages.Add(msg);
+            }
+
+            await _hubConnection.SendAsync(HubEventNames.PublishEventGroup, serverDomainMessages.ToArray(), _config.Value.ApiKey, cancellationToken);
         }
 
         public async Task Subsribe(string name, Func<IMessage, CancellationToken, Task> msg, bool isCommand)
@@ -173,8 +192,16 @@ namespace Tauron.CQRS.Services.Core
         {
             try
             {
-                _memoryCache.Set(domainMessage.SequenceNumber, domainMessage);
-                await _hubConnection.SendAsync(HubEventNames.TryAccept, domainMessage.SequenceNumber, _config.Value.ServiceName, _config.Value.ApiKey);
+                if (domainMessage.EventType == EventType.TransistentEvent)
+                {
+                    if (_eventRegistrations.TryGetValue(domainMessage.EventName, out var reg))
+                        _messageDeliveries.Add(new MessageDelivery(reg, domainMessage));
+                }
+                else
+                {
+                    _memoryCache.Set(domainMessage.SequenceNumber, domainMessage);
+                    await _hubConnection.SendAsync(HubEventNames.TryAccept, domainMessage.SequenceNumber, _config.Value.ServiceName, _config.Value.ApiKey);
+                }
             }
             catch(Exception e)
             {
