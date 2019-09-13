@@ -15,6 +15,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Common.ServerHubs;
+using Tauron.CQRS.Services.Core.Components;
 
 namespace Tauron.CQRS.Services.Core
 {
@@ -185,7 +186,7 @@ namespace Tauron.CQRS.Services.Core
 
         public Task<TResponse> Query<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken)
         {
-            throw new NotSupportedException();
+            
         }
 
         private async void ProcessMessage(ServerDomainMessage domainMessage)

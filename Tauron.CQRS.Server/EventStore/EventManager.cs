@@ -103,6 +103,7 @@ namespace Tauron.CQRS.Server.EventStore
 
             switch (@event.RealMessage.EventType)
             {
+                case EventType.Query:
                 case EventType.Command:
                     var entry = new EventCookie(@event, _connectionManager);
                     if (!_eventCookies.TryAdd(@event.RealMessage.SequenceNumber, entry)) return false;
@@ -117,7 +118,6 @@ namespace Tauron.CQRS.Server.EventStore
                     await _eventHub.Clients.Group(entry.DomainEvent.RealMessage.EventName).SendAsync(HubEventNames.PropagateEvent, entry.DomainEvent.RealMessage, cancellationToken: token);
 
                     return entry.WaitForResponse(100_000);
-                case EventType.Query:
                 case EventType.TransistentEvent:
                     await _eventHub.Clients.Groups(@event.RealMessage.EventName).SendAsync(HubEventNames.PropagateEvent, @event.RealMessage, cancellationToken: token);
                     return true;
