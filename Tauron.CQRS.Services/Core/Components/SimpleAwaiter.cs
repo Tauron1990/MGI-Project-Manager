@@ -17,7 +17,8 @@ namespace Tauron.CQRS.Services.Core.Components
         private bool _finish;
         private IDisposable _handler;
 
-        public SimpleAwaiter(ICommandSender commandSender, GlobalEventHandler<TRespoand> handlerRegistry) : base(commandSender) => _handler = handlerRegistry.Register(HandleImpl);
+        public SimpleAwaiter(ICommandSender commandSender, GlobalEventHandler<TRespoand> handlerRegistry) : base(commandSender) 
+            => _handler = handlerRegistry.Register(this, t => HandleImpl(t));
 
         public override TRespoand Last => _last;
 

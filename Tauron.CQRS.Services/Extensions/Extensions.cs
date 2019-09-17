@@ -35,6 +35,7 @@ namespace Tauron.CQRS.Services.Extensions
             services.TryAddSingleton<IDispatcherClient, DispatcherClient>();
             services.TryAddTransient<IDispatcherApi, DispatcherApi>();
             services.TryAddSingleton<ICache, MemoryCache>();
+            services.TryAddSingleton(typeof(GlobalEventHandler<>), typeof(GlobalEventHandler<>));
             
             //Service Delegates for cqrs lite
             services.TryAddScoped<ICommandSender, CommandSender>();
@@ -72,7 +73,7 @@ namespace Tauron.CQRS.Services.Extensions
 
             if (clientCofiguration.IsHandlerRegistrated<TRespond, GlobalEventHandler<TRespond>>()) return clientCofiguration;
 
-            serviceCollection.TryAddSingleton<GlobalEventHandler<TRespond>, GlobalEventHandler<TRespond>>();
+            //serviceCollection.TryAddSingleton<GlobalEventHandler<TRespond>, GlobalEventHandler<TRespond>>();
             clientCofiguration.RegisterEventHandler<TRespond, GlobalEventHandler<TRespond>>();
             
             return clientCofiguration;
@@ -99,6 +100,10 @@ namespace Tauron.CQRS.Services.Extensions
                 foreach (var @interface in type.GetInterfaces())
                 {
                     if (!@interface.IsGenericType) continue;
+
+                    if (@interface.GetGenericTypeDefinition() == typeof(IReadModel<>))
+                    {
+                    }
 
                     if (@interface.GetGenericTypeDefinition() != typeof(ICancellableCommandHandler<>) && @interface.GetGenericTypeDefinition() != typeof(ICancellableEventHandler<>) &&
                         @interface.GetGenericTypeDefinition() != typeof(ICommandHandler<>)            && @interface.GetGenericTypeDefinition() != typeof(IEventHandler<>))
