@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
 using System.Net.NetworkInformation;
-using System.Reflection;
 using System.Threading.Tasks;
-using CQRSlite.Commands;
+using CQRSlite.Queries;
 using EventDeliveryTest.Test;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -23,8 +21,10 @@ namespace EventDeliveryTest
         }
     }
 
-    class Program
+    static class Program
     {
+        private const string Msg = "Hallo-Welt";
+
         static async Task Main()
         {
             Console.Title = "Event Delivery Test";
@@ -49,6 +49,7 @@ namespace EventDeliveryTest
                 await HealthTest(ip);
                 var temp = ServiceCreationTest(ip);
                 await TestEventDeleivery(temp);
+                await TestQuery(temp);
 
                 Console.WriteLine();
                 Console.WriteLine("Tests Completed");
@@ -64,6 +65,23 @@ namespace EventDeliveryTest
             Console.ReadKey();
         }
 
+        private static async Task TestQuery(IServiceProvider serviceProvider)
+        {
+            Console.Write("Event Query Test:");
+
+            using var scope = serviceProvider.CreateScope();
+            var queryProcessor = scope.ServiceProvider.GetRequiredService<IQueryProcessor>();
+
+            var result = await queryProcessor.Query(new TestQueryData());
+
+            if(result == null)
+                throw new TestFailed("Query Result was Null");
+            if(result.Parameter != Msg)
+                throw new TestFailed($"Query Result is Not Correct: {result.Parameter}");
+
+            Console.WriteLine(" Success");
+        }
+
         private static async Task TestEventDeleivery(IServiceProvider serviceProvider)
         {
             Console.Write("Event Delivery Test:");
@@ -73,11 +91,11 @@ namespace EventDeliveryTest
 
             var awaiter = scope.ServiceProvider.GetRequiredService<AwaiterBase<TestCommand, TestEvent>>();
 
-            const string msg = "Hallo-Welt";
 
-            var (ok, testEvent) = await awaiter.SendAndAwait(new TestCommand { Parameter = msg });
 
-            if (!ok || msg != testEvent.Result) throw new TestFailed($"No Correct repond. Timeout: {!ok}");
+            var (ok, testEvent) = await awaiter.SendAndAwait(new TestCommand { Parameter = Msg });
+
+            if (!ok || Msg != testEvent.Result) throw new TestFailed($"No Correct repond. Timeout: {!ok}");
 
             Console.WriteLine(" Success");
         }
@@ -89,10 +107,7 @@ namespace EventDeliveryTest
             IServiceCollection collection = new ServiceCollection();
 
             collection.AddLogging(lb => lb.AddConsole());
-            collection.AddCQRSServices(c => c
-                .ScanFrom<Program>()
-                .SetUrls(ip, "Temp", "Develop")
-                .AddAwaiter<TestCommand, TestEvent>(collection));
+            collection.AddCQRSServices(c => c.AddFrom<TestAggregate>(collection).SetUrls(ip, "Temp", "Develop"));
 
             var temp = collection.BuildServiceProvider();
             Console.WriteLine(" Success");

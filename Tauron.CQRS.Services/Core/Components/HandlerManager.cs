@@ -197,7 +197,16 @@ namespace Tauron.CQRS.Services.Core.Components
                 private readonly Func<object> _handler;
 
                 public CancelEvent(Func<object> handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
-                
+
+                public override async Task Invoke(IMessage msg, CancellationToken token)
+                    => await (Task)GetMethod()(_handler(), msg, token);
+            }
+            private class ReadModel : InvokerHelper
+            {
+                private readonly Func<object> _handler;
+
+                public ReadModel(Func<object> handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
+
                 public override async Task Invoke(IMessage msg, CancellationToken token)
                     => await (Task)GetMethod()(_handler(), msg, token);
             }
@@ -215,7 +224,7 @@ namespace Tauron.CQRS.Services.Core.Components
                     var targetType = i.GetGenericTypeDefinition();
 
                     if(!IsCommand)
-                        IsCommand = targetType == typeof(ICommandHandler<>) || targetType == typeof(ICancellableCommandHandler<>);
+                        IsCommand = targetType == typeof(ICommandHandler<>) || targetType == typeof(ICancellableCommandHandler<>) || targetType == typeof(IReadModel<>);
                     Type key = i.GetGenericArguments()[0];
 
 
@@ -223,6 +232,7 @@ namespace Tauron.CQRS.Services.Core.Components
                     else if (targetType == typeof(ICancellableCommandHandler<>)) _invoker[key] = new CancelCommand(target, handlerType, i);
                     else if (targetType == typeof(IEventHandler<>)) _invoker[key] = new Event(target, handlerType, i);
                     else if (targetType == typeof(ICancellableEventHandler<>)) _invoker[key] = new CancelEvent(target, handlerType, i);
+                    else if(targetType == typeof(IReadModel<>)) _invoker[key] = new ReadModel(target, targetType, i);
                 }
 
                 if(_invoker.Count == 0)

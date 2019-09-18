@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Events;
@@ -149,26 +150,17 @@ namespace Tauron.CQRS.Services.Core
 
         public async Task SendEvents(IEnumerable<IEvent> events, CancellationToken cancellationToken)
         {
-            var serverDomainMessages = new List<ServerDomainMessage>();
-
-            foreach (var @event in events)
+            await _hubConnection.SendAsync(HubEventNames.PublishEventGroup, events.Select(@event => new ServerDomainMessage
             {
-                ServerDomainMessage msg = new ServerDomainMessage
-                                          {
-                                              EventData = JsonConvert.SerializeObject(@event),
-                                              TypeName = @event.GetType().AssemblyQualifiedName,
-                                              EventName = @event.GetType().Name,
-                                              EventType = EventType.TransistentEvent,
-                                              SequenceNumber = DateTime.UtcNow.Ticks + _random.Next(),
-                                              Id = @event.Id,
-                                              Version = @event.Version,
-                                              TimeStamp = @event.TimeStamp
-                                          };
-
-                serverDomainMessages.Add(msg);
-            }
-
-            await _hubConnection.SendAsync(HubEventNames.PublishEventGroup, serverDomainMessages.ToArray(), _config.Value.ApiKey, cancellationToken);
+                EventData = JsonConvert.SerializeObject(@event),
+                TypeName = @event.GetType().AssemblyQualifiedName,
+                EventName = @event.GetType().Name,
+                EventType = EventType.TransistentEvent,
+                SequenceNumber = DateTime.UtcNow.Ticks + _random.Next(),
+                Id = @event.Id,
+                Version = @event.Version,
+                TimeStamp = @event.TimeStamp
+            }).ToArray(), _config.Value.ApiKey, cancellationToken);
         }
 
         public async Task Subsribe(string name, Func<IMessage, CancellationToken, Task> msg, bool isCommand)

@@ -82,10 +82,10 @@ namespace Tauron.CQRS.Services.Extensions
         //    return clientCofiguration;
         //}
 
-        public static ClientCofiguration AddReadModel<TModel, TRespond>(this ClientCofiguration configuration, IServiceCollection serviceCollection)
+        public static ClientCofiguration AddReadModel<TModel, TRespond>(this ClientCofiguration configuration)
             where TModel : IReadModel<TRespond>
         {
-            AddReadModel(configuration, serviceCollection, typeof(TModel), typeof(IReadModel<TRespond>));
+            AddReadModel(configuration, typeof(TModel), typeof(IReadModel<TRespond>));
 
             return configuration;
         }
@@ -93,17 +93,15 @@ namespace Tauron.CQRS.Services.Extensions
         public static void AddFrom<TType>(this IServiceCollection serviceCollection, ClientCofiguration config) 
             => ScanFrom(config, serviceCollection, typeof(TType));
 
-        public static ClientCofiguration ScanFrom<TType>(this ClientCofiguration config)
+        public static ClientCofiguration AddFrom<TType>(this ClientCofiguration config, IServiceCollection serviceCollection)
         {
-            ScanFrom(config, null, typeof(TType));
-         
+            ScanFrom(config, serviceCollection, typeof(TType));
             return config;
         }
 
-        public static void AddReadModel(ClientCofiguration configuration, IServiceCollection serviceCollection, Type readModel, Type interfaceType)
-        {
 
-        }
+        public static void AddReadModel(ClientCofiguration configuration, Type readModel, Type @interface) 
+            => configuration.RegisterHandler(@interface.GetGenericArguments()[0].FullName, readModel);
 
         private static void ScanFrom(ClientCofiguration config, IServiceCollection serviceCollection, Type targetType)
         {
@@ -119,7 +117,7 @@ namespace Tauron.CQRS.Services.Extensions
 
                     if (@interface.GetGenericTypeDefinition() == typeof(IReadModel<>))
                     {
-                        AddReadModel(config, serviceCollection, type, @interface);
+                        AddReadModel(config, type, @interface);
                         continue;
                     }
 
@@ -132,7 +130,7 @@ namespace Tauron.CQRS.Services.Extensions
                     //config.RegisterType(name, @interface.GenericTypeArguments[0]);
                     config.RegisterHandler(name, type);
 
-                    serviceCollection?.AddTransient(@interface);
+                    //serviceCollection?.AddTransient(@interface);
                 }
 
 
