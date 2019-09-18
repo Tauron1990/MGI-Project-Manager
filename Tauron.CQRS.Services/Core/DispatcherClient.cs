@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Services.Core.Components;
@@ -66,6 +67,7 @@ namespace Tauron.CQRS.Services.Core
         private readonly Random _random = new Random();
         private readonly IOptions<ClientCofiguration> _config;
         private readonly ILogger<IDispatcherClient> _logger;
+        private readonly IServiceScopeFactory _scopeFactory;
         private readonly HubConnection _hubConnection;
         private readonly ConcurrentDictionary<string, EventRegistration> _eventRegistrations = new ConcurrentDictionary<string, EventRegistration>();
         private readonly IMemoryCache _memoryCache = new MemoryCache(new MemoryCacheOptions());
@@ -73,10 +75,11 @@ namespace Tauron.CQRS.Services.Core
 
         private bool _isCLoseOk;
 
-        public DispatcherClient(IOptions<ClientCofiguration> config, ILogger<IDispatcherClient> logger)
+        public DispatcherClient(IOptions<ClientCofiguration> config, ILogger<IDispatcherClient> logger, IServiceScopeFactory scopeFactory)
         {
             _config = config;
             _logger = logger;
+            _scopeFactory = scopeFactory;
 
             _hubConnection = new HubConnectionBuilder().AddJsonProtocol().WithUrl(config.Value.EventHubUrl).Build();
         }
@@ -146,7 +149,7 @@ namespace Tauron.CQRS.Services.Core
 
         public async Task SendEvents(IEnumerable<IEvent> events, CancellationToken cancellationToken)
         {
-            List<ServerDomainMessage> serverDomainMessages = new List<ServerDomainMessage>();
+            var serverDomainMessages = new List<ServerDomainMessage>();
 
             foreach (var @event in events)
             {
@@ -184,9 +187,23 @@ namespace Tauron.CQRS.Services.Core
             }
         }
 
-        public Task<TResponse> Query<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken)
+        public async Task<TResponse> Query<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken)
         {
-            
+            using var scope = _scopeFactory.CreateScope();
+
+            var awaiter = scope.ServiceProvider.GetRequiredService<QueryAwaiter<TResponse>>();
+
+            return await awaiter.SendQuery(query, cancellationToken, async query1 =>
+                                                                     {
+                                                                         var msg = new ServerDomainMessage
+                                                                                   {
+                                                                                       EventType = EventType.Query,
+                                                                                       EventName = typeof(TResponse).FullName,
+                                                                                       EventData = JsonConvert.SerializeObject(query)
+                                                                                   };
+
+                                                                         await _hubConnection.InvokeAsync(HubEventNames.PublishEvent, msg, _config.Value.ApiKey, cancellationToken);
+                                                                     });
         }
 
         private async void ProcessMessage(ServerDomainMessage domainMessage)

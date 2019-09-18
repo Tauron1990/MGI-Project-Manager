@@ -35,7 +35,10 @@ namespace Tauron.CQRS.Services.Extensions
             services.TryAddSingleton<IDispatcherClient, DispatcherClient>();
             services.TryAddTransient<IDispatcherApi, DispatcherApi>();
             services.TryAddSingleton<ICache, MemoryCache>();
+
             services.TryAddSingleton(typeof(GlobalEventHandler<>), typeof(GlobalEventHandler<>));
+            services.TryAddScoped(typeof(QueryAwaiter<>), typeof(QueryAwaiter<>));
+            services.TryAddTransient(typeof(AwaiterBase<,>), typeof(SimpleAwaiter<,>));
             
             //Service Delegates for cqrs lite
             services.TryAddScoped<ICommandSender, CommandSender>();
@@ -66,17 +69,25 @@ namespace Tauron.CQRS.Services.Extensions
             await scope.ServiceProvider.GetRequiredService<IHandlerManager>().Init(cancellationToken);
         }
 
-        public static ClientCofiguration AddAwaiter<TMessage, TRespond>(this ClientCofiguration clientCofiguration, IServiceCollection serviceCollection) 
-            where TMessage : class, ICommand where TRespond : IEvent
-        {
-            serviceCollection.AddTransient<AwaiterBase<TMessage, TRespond>, SimpleAwaiter<TMessage, TRespond>>();
+        //public static ClientCofiguration AddAwaiter<TMessage, TRespond>(this ClientCofiguration clientCofiguration, IServiceCollection serviceCollection) 
+        //    where TMessage : class, ICommand where TRespond : IEvent
+        //{
+        //    serviceCollection.AddTransient<AwaiterBase<TMessage, TRespond>, SimpleAwaiter<TMessage, TRespond>>();
 
-            if (clientCofiguration.IsHandlerRegistrated<TRespond, GlobalEventHandler<TRespond>>()) return clientCofiguration;
+        //    if (clientCofiguration.IsHandlerRegistrated<TRespond, GlobalEventHandler<TRespond>>()) return clientCofiguration;
 
-            //serviceCollection.TryAddSingleton<GlobalEventHandler<TRespond>, GlobalEventHandler<TRespond>>();
-            clientCofiguration.RegisterEventHandler<TRespond, GlobalEventHandler<TRespond>>();
+        //    //serviceCollection.TryAddSingleton<GlobalEventHandler<TRespond>, GlobalEventHandler<TRespond>>();
+        //    clientCofiguration.RegisterEventHandler<TRespond, GlobalEventHandler<TRespond>>();
             
-            return clientCofiguration;
+        //    return clientCofiguration;
+        //}
+
+        public static ClientCofiguration AddReadModel<TModel, TRespond>(this ClientCofiguration configuration, IServiceCollection serviceCollection)
+            where TModel : IReadModel<TRespond>
+        {
+            AddReadModel(configuration, serviceCollection, typeof(TModel), typeof(IReadModel<TRespond>));
+
+            return configuration;
         }
 
         public static void AddFrom<TType>(this IServiceCollection serviceCollection, ClientCofiguration config) 
@@ -87,6 +98,11 @@ namespace Tauron.CQRS.Services.Extensions
             ScanFrom(config, null, typeof(TType));
          
             return config;
+        }
+
+        public static void AddReadModel(ClientCofiguration configuration, IServiceCollection serviceCollection, Type readModel, Type interfaceType)
+        {
+
         }
 
         private static void ScanFrom(ClientCofiguration config, IServiceCollection serviceCollection, Type targetType)
@@ -103,6 +119,8 @@ namespace Tauron.CQRS.Services.Extensions
 
                     if (@interface.GetGenericTypeDefinition() == typeof(IReadModel<>))
                     {
+                        AddReadModel(config, serviceCollection, type, @interface);
+                        continue;
                     }
 
                     if (@interface.GetGenericTypeDefinition() != typeof(ICancellableCommandHandler<>) && @interface.GetGenericTypeDefinition() != typeof(ICancellableEventHandler<>) &&
