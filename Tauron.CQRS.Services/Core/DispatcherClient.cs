@@ -102,10 +102,8 @@ namespace Tauron.CQRS.Services.Core
             {
                 _messageDeliveries = new BlockingCollection<MessageDelivery>();
 
-                foreach (var messageDelivery in _messageDeliveries.GetConsumingEnumerable())
-                {
+                foreach (var messageDelivery in _messageDeliveries.GetConsumingEnumerable()) 
                     await messageDelivery.Start();
-                }
 
                 _messageDeliveries.Dispose();
             });

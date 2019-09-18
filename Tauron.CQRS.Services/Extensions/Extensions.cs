@@ -69,18 +69,18 @@ namespace Tauron.CQRS.Services.Extensions
             await scope.ServiceProvider.GetRequiredService<IHandlerManager>().Init(cancellationToken);
         }
 
-        //public static ClientCofiguration AddAwaiter<TMessage, TRespond>(this ClientCofiguration clientCofiguration, IServiceCollection serviceCollection) 
-        //    where TMessage : class, ICommand where TRespond : IEvent
-        //{
-        //    serviceCollection.AddTransient<AwaiterBase<TMessage, TRespond>, SimpleAwaiter<TMessage, TRespond>>();
+        public static ClientCofiguration AddAwaiter<TMessage, TRespond>(this ClientCofiguration clientCofiguration)
+            where TMessage : class, ICommand where TRespond : IEvent
+        {
+            //serviceCollection.AddTransient<AwaiterBase<TMessage, TRespond>, SimpleAwaiter<TMessage, TRespond>>();
 
-        //    if (clientCofiguration.IsHandlerRegistrated<TRespond, GlobalEventHandler<TRespond>>()) return clientCofiguration;
+            if (clientCofiguration.IsHandlerRegistrated<TRespond, GlobalEventHandler<TRespond>>()) return clientCofiguration;
 
-        //    //serviceCollection.TryAddSingleton<GlobalEventHandler<TRespond>, GlobalEventHandler<TRespond>>();
-        //    clientCofiguration.RegisterEventHandler<TRespond, GlobalEventHandler<TRespond>>();
-            
-        //    return clientCofiguration;
-        //}
+            //serviceCollection.TryAddSingleton<GlobalEventHandler<TRespond>, GlobalEventHandler<TRespond>>();
+            clientCofiguration.RegisterEventHandler<TRespond, GlobalEventHandler<TRespond>>();
+
+            return clientCofiguration;
+        }
 
         public static ClientCofiguration AddReadModel<TModel, TRespond>(this ClientCofiguration configuration)
             where TModel : IReadModel<TRespond>

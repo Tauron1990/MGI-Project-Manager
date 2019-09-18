@@ -24,11 +24,13 @@ namespace Tauron.CQRS.Services.Core.Components
         public Task Add<T>(T aggregate, CancellationToken cancellationToken = default) where T : AggregateRoot
         {
             if (!IsTracked(aggregate.Id))
+            {
                 _trackedAggregates.Add(aggregate.Id, new AggregateDescriptor()
-                {
-                    Aggregate =  aggregate,
-                    Version = aggregate.Version
-                });
+                                                     {
+                                                         Aggregate =  aggregate,
+                                                         Version = aggregate.Version
+                                                     });
+            }
             else if (_trackedAggregates[aggregate.Id].Aggregate != aggregate)
                 throw new ConcurrencyException(aggregate.Id);
             return Task.FromResult(0);

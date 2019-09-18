@@ -107,7 +107,10 @@ namespace EventDeliveryTest
             IServiceCollection collection = new ServiceCollection();
 
             collection.AddLogging(lb => lb.AddConsole());
-            collection.AddCQRSServices(c => c.AddFrom<TestAggregate>(collection).SetUrls(ip, "Temp", "Develop"));
+            collection.AddCQRSServices(c => c
+                                          .AddFrom<TestAggregate>(collection)
+                                          .SetUrls(ip, "Temp", "Develop")
+                                          .AddAwaiter<TestCommand, TestEvent>());
 
             var temp = collection.BuildServiceProvider();
             Console.WriteLine(" Success");
