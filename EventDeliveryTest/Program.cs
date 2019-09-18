@@ -36,8 +36,8 @@ namespace EventDeliveryTest
             Uri ip = new Uri("http://localhost:54005");// Console.ReadLine();
             
             Console.WriteLine();
-            Console.WriteLine("Press Enter to Start...");
-            Console.ReadKey();
+            //Console.WriteLine("Press Enter to Start...");
+            //Console.ReadKey();
             Console.WriteLine();
 
             Console.WriteLine("---Tests---");
@@ -110,7 +110,7 @@ namespace EventDeliveryTest
             collection.AddCQRSServices(c => c
                                           .AddFrom<TestAggregate>(collection)
                                           .SetUrls(ip, "Temp", "Develop")
-                                          .AddAwaiter<TestCommand, TestEvent>());
+                                          .AddAwaiter<TestEvent>());
 
             var temp = collection.BuildServiceProvider();
             Console.WriteLine(" Success");

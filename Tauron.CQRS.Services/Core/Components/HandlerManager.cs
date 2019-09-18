@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CQRSlite.Commands;
 using CQRSlite.Events;
 using CQRSlite.Messages;
+using CQRSlite.Queries;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -52,8 +53,10 @@ namespace Tauron.CQRS.Services.Core.Components
                 protected FastInvokeHandler GetMethod()
                 {
                     if (_methodInfo != null) return _methodInfo;
-                    var temp = _targetType.GetInterfaceMap(_targetInterface.GetInterfaces().Single());
-                    _methodInfo = GetMethodInvoker(temp.InterfaceMethods.Single());
+                    var interfaceMapping = _targetType.GetInterfaceMap(_targetInterface.GetGenericTypeDefinition() == typeof(IReadModel<,>) 
+                                                                           ? _targetInterface 
+                                                                           : _targetInterface.GetInterfaces().Single());
+                    _methodInfo = GetMethodInvoker(interfaceMapping.InterfaceMethods.Single());
                     return _methodInfo;
                 }
 
@@ -224,7 +227,7 @@ namespace Tauron.CQRS.Services.Core.Components
                     var targetType = i.GetGenericTypeDefinition();
 
                     if(!IsCommand)
-                        IsCommand = targetType == typeof(ICommandHandler<>) || targetType == typeof(ICancellableCommandHandler<>) || targetType == typeof(IReadModel<>);
+                        IsCommand = targetType == typeof(ICommandHandler<>) || targetType == typeof(ICancellableCommandHandler<>) || targetType == typeof(IReadModel<,>);
                     Type key = i.GetGenericArguments()[0];
 
 
@@ -232,7 +235,7 @@ namespace Tauron.CQRS.Services.Core.Components
                     else if (targetType == typeof(ICancellableCommandHandler<>)) _invoker[key] = new CancelCommand(target, handlerType, i);
                     else if (targetType == typeof(IEventHandler<>)) _invoker[key] = new Event(target, handlerType, i);
                     else if (targetType == typeof(ICancellableEventHandler<>)) _invoker[key] = new CancelEvent(target, handlerType, i);
-                    else if(targetType == typeof(IReadModel<>)) _invoker[key] = new ReadModel(target, targetType, i);
+                    else if(targetType == typeof(IReadModel<,>)) _invoker[i.GetGenericArguments()[1]] = new ReadModel(target, handlerType, i);
                 }
 
                 if(_invoker.Count == 0)

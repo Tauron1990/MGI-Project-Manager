@@ -39,7 +39,7 @@ namespace Tauron.CQRS.Services.Core.Components
 
             try
             {
-                _asyncManualReset.Set();
+                _asyncManualReset.Reset();
 
                 await sender(query);
                 await _asyncManualReset.WaitAsync(linkedSource.Token);

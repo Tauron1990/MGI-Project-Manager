@@ -14,7 +14,7 @@ namespace Tauron.CQRS.Services.Core.Components
     {
         private abstract class WeakAction<T> where T : class
         {
-            protected readonly MethodInfo _Method;
+            private readonly MethodInfo _method;
 
             private class WeakActionStatic : WeakAction<T>
             {
@@ -37,7 +37,7 @@ namespace Tauron.CQRS.Services.Core.Components
 
                 protected override T GetMethod()
                 {
-                    return System.Delegate.CreateDelegate(typeof(T), _Owner, _Method.Name) as T;
+                    return System.Delegate.CreateDelegate(typeof(T), _Owner, _method.Name) as T;
                 }
             }
 
@@ -72,13 +72,13 @@ namespace Tauron.CQRS.Services.Core.Components
                     object localTarget = _WeakRef.Target;
                     if (localTarget == null) { return null; }
 
-                    return System.Delegate.CreateDelegate(typeof(T), localTarget, _Method.Name) as T;
+                    return System.Delegate.CreateDelegate(typeof(T), localTarget, _method.Name) as T;
                 }
             }
 
             protected WeakAction(MethodInfo method)
             {
-                _Method = method;
+                _method = method;
             }
 
             public static WeakAction<T> Create(Expression expression)
@@ -153,7 +153,7 @@ namespace Tauron.CQRS.Services.Core.Components
         {
             var key = new object();
 
-            _handlerRegistry[key] = WeakAction<Func<TMessage, Task>>.Create(this, awaiter);
+            _handlerRegistry[key] = WeakAction<Func<TMessage, Task>>.Create(instance, awaiter);
 
             return new RegisterDispose(this, key);
         }

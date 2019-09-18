@@ -69,8 +69,7 @@ namespace Tauron.CQRS.Services.Extensions
             await scope.ServiceProvider.GetRequiredService<IHandlerManager>().Init(cancellationToken);
         }
 
-        public static ClientCofiguration AddAwaiter<TMessage, TRespond>(this ClientCofiguration clientCofiguration)
-            where TMessage : class, ICommand where TRespond : IEvent
+        public static ClientCofiguration AddAwaiter<TRespond>(this ClientCofiguration clientCofiguration) where TRespond : IEvent
         {
             //serviceCollection.AddTransient<AwaiterBase<TMessage, TRespond>, SimpleAwaiter<TMessage, TRespond>>();
 
@@ -82,10 +81,10 @@ namespace Tauron.CQRS.Services.Extensions
             return clientCofiguration;
         }
 
-        public static ClientCofiguration AddReadModel<TModel, TRespond>(this ClientCofiguration configuration)
-            where TModel : IReadModel<TRespond>
+        public static ClientCofiguration AddReadModel<TModel, TRespond, TQuery>(this ClientCofiguration configuration)
+            where TModel : IReadModel<TRespond, TQuery> where TQuery : IQuery<TRespond>
         {
-            AddReadModel(configuration, typeof(TModel), typeof(IReadModel<TRespond>));
+            AddReadModel(configuration, typeof(TModel), typeof(IReadModel<TRespond, TQuery>));
 
             return configuration;
         }
@@ -115,7 +114,7 @@ namespace Tauron.CQRS.Services.Extensions
                 {
                     if (!@interface.IsGenericType) continue;
 
-                    if (@interface.GetGenericTypeDefinition() == typeof(IReadModel<>))
+                    if (@interface.GetGenericTypeDefinition() == typeof(IReadModel<,>))
                     {
                         AddReadModel(config, type, @interface);
                         continue;

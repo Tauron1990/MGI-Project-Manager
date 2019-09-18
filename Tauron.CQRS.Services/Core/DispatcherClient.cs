@@ -189,7 +189,8 @@ namespace Tauron.CQRS.Services.Core
                                                                                    {
                                                                                        EventType = EventType.Query,
                                                                                        EventName = typeof(TResponse).FullName,
-                                                                                       EventData = JsonConvert.SerializeObject(query)
+                                                                                       EventData = JsonConvert.SerializeObject(query),
+                                                                                       TypeName = query1.GetType().AssemblyQualifiedName
                                                                                    };
 
                                                                          await _hubConnection.InvokeAsync(HubEventNames.PublishEvent, msg, _config.Value.ApiKey, cancellationToken);

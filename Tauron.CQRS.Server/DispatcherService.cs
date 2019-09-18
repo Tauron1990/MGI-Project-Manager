@@ -62,7 +62,7 @@ namespace Tauron.CQRS.Server
                                 //        .GetRequiredService<DispatcherDatabaseContext>();
                                 //}
 
-                                if (domainEvent.RealMessage.EventType != EventType.Command)
+                                if (domainEvent.RealMessage.EventType == EventType.TransistentEvent)
                                 {
                                     //await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
                                     if (stoppingToken.IsCancellationRequested) continue;
