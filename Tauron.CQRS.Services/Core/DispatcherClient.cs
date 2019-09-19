@@ -101,8 +101,7 @@ namespace Tauron.CQRS.Services.Core
             {
                 _messageDeliveries = new BlockingCollection<MessageDelivery>();
 
-                foreach (var messageDelivery in _messageDeliveries.GetConsumingEnumerable()) 
-                    await messageDelivery.Start();
+                foreach (var messageDelivery in _messageDeliveries.GetConsumingEnumerable()) await messageDelivery.Start();
 
                 _messageDeliveries.Dispose();
             });
@@ -145,10 +144,8 @@ namespace Tauron.CQRS.Services.Core
             await _hubConnection.SendAsync(HubEventNames.PublishEvent, msg, _config.Value.ApiKey, cancellationToken);
         }
 
-        public async Task SendToClient(string client, ServerDomainMessage serverDomainMessage, CancellationToken token)
-        {
-            await _hubConnection.StreamAsChannelAsync<>()
-        }
+        public async Task SendToClient(string client, ServerDomainMessage serverDomainMessage, CancellationToken token) 
+            => await _hubConnection.SendAsync(HubEventNames.PublishEventToClient, client, serverDomainMessage, _config.Value.ApiKey, token);
 
         public async Task SendEvents(IEnumerable<IEvent> events, CancellationToken cancellationToken)
         {
@@ -194,8 +191,9 @@ namespace Tauron.CQRS.Services.Core
                                                                                        EventType = EventType.Query,
                                                                                        EventName = typeof(TResponse).FullName,
                                                                                        EventData = JsonConvert.SerializeObject(query),
-                                                                                       TypeName = query1.GetType().AssemblyQualifiedName
-                                                                                   };
+                                                                                       TypeName = query1.GetType().AssemblyQualifiedName,
+                                                                                       SequenceNumber = DateTime.UtcNow.Ticks + _random.Next()
+                                                                         };
 
                                                                          await _hubConnection.InvokeAsync(HubEventNames.PublishEvent, msg, _config.Value.ApiKey, cancellationToken);
                                                                      });
@@ -205,15 +203,19 @@ namespace Tauron.CQRS.Services.Core
         {
             try
             {
-                if (domainMessage.EventType == EventType.TransistentEvent)
+                switch (domainMessage.EventType)
                 {
-                    if (_eventRegistrations.TryGetValue(domainMessage.EventName, out var reg))
-                        _messageDeliveries.Add(new MessageDelivery(reg, domainMessage));
-                }
-                else
-                {
-                    _memoryCache.Set(domainMessage.SequenceNumber, domainMessage);
-                    await _hubConnection.SendAsync(HubEventNames.TryAccept, domainMessage.SequenceNumber, _config.Value.ServiceName, _config.Value.ApiKey);
+                    case EventType.QueryResult:
+                    case EventType.TransistentEvent:
+                    {
+                        if (_eventRegistrations.TryGetValue(domainMessage.EventName, out var reg))
+                            _messageDeliveries.Add(new MessageDelivery(reg, domainMessage));
+                        break;
+                    }
+                    default:
+                        _memoryCache.Set(domainMessage.SequenceNumber, domainMessage);
+                        await _hubConnection.SendAsync(HubEventNames.TryAccept, domainMessage.SequenceNumber, _config.Value.ServiceName, _config.Value.ApiKey);
+                        break;
                 }
             }
             catch(Exception e)

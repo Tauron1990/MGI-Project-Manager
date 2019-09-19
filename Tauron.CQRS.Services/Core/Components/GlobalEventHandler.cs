@@ -5,47 +5,28 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using CQRSlite.Events;
+using CQRSlite.Messages;
 using JetBrains.Annotations;
 
 namespace Tauron.CQRS.Services.Core.Components
 {
+    public abstract class GlobalEventHandlerBase
+    {
+        public abstract Task Handle(IMessage message);
+    }
+
     [UsedImplicitly(ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature)]
-    public sealed class GlobalEventHandler<TMessage> : IEventHandler<TMessage> where TMessage : IEvent
+    public sealed class GlobalEventHandler<TMessage> : GlobalEventHandlerBase, IEventHandler<TMessage> where TMessage : IEvent
     {
         private abstract class WeakAction<T> where T : class
         {
             private readonly MethodInfo _method;
 
-            private class WeakActionStatic : WeakAction<T>
+            private sealed class WeakActionInstance : WeakAction<T>
             {
-                private readonly Type _Owner;
+                private readonly WeakReference _weakRef;
 
-                public WeakActionStatic(MethodInfo method)
-                    : base(method)
-                {
-                    if (!method.IsStatic)
-                    {
-                        throw new ArgumentException("static method expected", "method");
-                    }
-                    _Owner = method.DeclaringType;
-                }
-
-                public override bool HasBeenCollected
-                {
-                    get { return false; }
-                }
-
-                protected override T GetMethod()
-                {
-                    return System.Delegate.CreateDelegate(typeof(T), _Owner, _method.Name) as T;
-                }
-            }
-
-            private class WeakActionInstance : WeakAction<T>
-            {
-                private readonly WeakReference _WeakRef;
-
-                protected WeakActionInstance(MethodInfo method)
+                private WeakActionInstance(MethodInfo method)
                     : base(method)
                 {
                 }
@@ -54,71 +35,41 @@ namespace Tauron.CQRS.Services.Core.Components
                     : this(method)
                 {
                     if (instance == null)
-                    {
-                        throw new ArgumentNullException("instance must not be null", "instance");
-                    }
-                    _WeakRef = new WeakReference(instance);
+                        throw new ArgumentNullException(nameof(instance), "instance must not be null");
+                    _weakRef = new WeakReference(instance);
                 }
 
-                public override bool HasBeenCollected
-                {
-                    get { return !_WeakRef.IsAlive; }
-                }
+                private bool HasBeenCollected => !_weakRef.IsAlive;
 
                 protected override T GetMethod()
                 {
                     if (HasBeenCollected) { return null; }
 
-                    object localTarget = _WeakRef.Target;
+                    var localTarget = _weakRef.Target;
                     if (localTarget == null) { return null; }
 
                     return System.Delegate.CreateDelegate(typeof(T), localTarget, _method.Name) as T;
                 }
             }
 
-            protected WeakAction(MethodInfo method)
-            {
-                _method = method;
-            }
+            private WeakAction(MethodInfo method) => _method = method;
 
-            public static WeakAction<T> Create(Expression expression)
-            {
-                return new WeakActionStatic(GetMethodInfo(expression));
-            }
-
-            public static WeakAction<T> Create(object instance, Expression expression)
-            {
-                return new WeakActionInstance(instance, GetMethodInfo(expression));
-            }
+            public static WeakAction<T> Create(object instance, Expression expression) => new WeakActionInstance(instance, GetMethodInfo(expression));
 
             protected abstract T GetMethod();
 
-            public T Delegate
-            {
-                get { return GetMethod(); }
-            }
-
-            public abstract bool HasBeenCollected { get; }
-
-            public bool IsInvokable
-            {
-                get { return !HasBeenCollected; }
-            }
+            public T Delegate => GetMethod();
 
             private static MethodInfo GetMethodInfo(Expression expression)
             {
-                LambdaExpression lambda = expression as LambdaExpression;
+                var lambda = expression as LambdaExpression;
                 if (lambda == null)
-                {
                     throw new ArgumentException("expression is not LambdaExpression");
-                }
 
-                MethodCallExpression outermostExpression = lambda.Body as MethodCallExpression;
+                var outermostExpression = lambda.Body as MethodCallExpression;
 
                 if (outermostExpression == null)
-                {
                     throw new ArgumentException("Invalid Expression. Expression should consist of a Method call only.");
-                }
 
                 return outermostExpression.Method;
             }
@@ -165,5 +116,7 @@ namespace Tauron.CQRS.Services.Core.Components
                 .Where(t => t != null)) 
                 await task;
         }
+
+        public override Task Handle(IMessage message) => Handle((TMessage) message);
     }
 }

@@ -22,12 +22,28 @@ namespace Tauron.CQRS.Services.Core.Components
         private class HandlerListDelegator
         {
             private readonly List<HandlerInstace> _handlers;
+            private readonly IServiceScopeFactory _serviceScopeFactory;
 
-            public HandlerListDelegator(List<HandlerInstace> handlers) => _handlers = handlers;
+            public HandlerListDelegator(List<HandlerInstace> handlers, IServiceScopeFactory serviceScopeFactory)
+            {
+                _handlers = handlers;
+                _serviceScopeFactory = serviceScopeFactory;
+            }
 
             public async Task Handle(IMessage msg, ServerDomainMessage rawMessage, CancellationToken token)
             {
-                foreach (var handlerInstace in _handlers) await handlerInstace.Handle(msg, rawMessage, token);
+                if (rawMessage.EventType == EventType.QueryResult)
+                {
+                    using var scope = _serviceScopeFactory.CreateScope();
+
+                    var handler = (GlobalEventHandlerBase) scope.ServiceProvider.GetRequiredService(typeof(GlobalEventHandler<>).MakeGenericType(msg.GetType()));
+
+                    await handler.Handle(msg);
+                }
+                else
+                {
+                    foreach (var handlerInstace in _handlers) await handlerInstace.Handle(msg, rawMessage, token);
+                }
             }
         }
         private class HandlerInstace
@@ -283,13 +299,13 @@ namespace Tauron.CQRS.Services.Core.Components
 
                 if (commands.Count != 0)
                 {
-                    var del = new HandlerListDelegator(commands);
+                    var del = new HandlerListDelegator(commands, _serviceScopeFactory);
                     await _client.Subsribe(handler.Key, del.Handle);
                     _handlerInstaces.Add(del);
                 }
                 else
                 {
-                    var del = new HandlerListDelegator(events);
+                    var del = new HandlerListDelegator(events, _serviceScopeFactory);
                     await _client.Subsribe(handler.Key, del.Handle);
                     _handlerInstaces.Add(del);
                 }

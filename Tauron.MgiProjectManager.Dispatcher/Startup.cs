@@ -1,10 +1,14 @@
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Serilog.Extensions.Logging;
 using Tauron.CQRS.Health;
 using Tauron.CQRS.Server.Extension;
 using Tauron.CQRS.Server.Hubs;
@@ -13,14 +17,23 @@ namespace Tauron.MgiProjectManager.Dispatcher
 {
     public class Startup
     {
+        private readonly IConfiguration _config;
+
+        public Startup(IConfiguration config) => _config = config;
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCQRS(c =>
             {
-                c.WithDatabase("Test");
-                c.Memory = true;
+                c.WithDatabase(new SqlConnectionStringBuilder
+                {
+                    DataSource = _config.GetValue<string>("ConnectionString"),
+                    IntegratedSecurity = _config.GetValue<bool>("Memory"),
+                    
+                }.ConnectionString);
+                //c.Memory = true;
             });
             services.AddHealth();
 
@@ -32,8 +45,10 @@ namespace Tauron.MgiProjectManager.Dispatcher
 
         [UsedImplicitly]
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddFile("C:\\Logs\\Log-{Date}.txt", fileSizeLimitBytes: 100 * 1024 * 1024, retainedFileCountLimit: 5);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

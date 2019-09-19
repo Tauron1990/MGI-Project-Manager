@@ -32,9 +32,13 @@ namespace EventDeliveryTest
             Console.WriteLine("---Welcome To Event Delivery Test---");
             Console.WriteLine("Please Enter The IP of the Server to Test:");
             Console.Write("IP: ");
-            Console.WriteLine("http://localhost:54005");
-            Uri ip = new Uri("http://localhost:54005");// Console.ReadLine();
-            
+            //Console.WriteLine("http://localhost:54005");
+            //Uri ip = new Uri("http://localhost:54005");// Console.ReadLine();
+
+            //http://192.168.105.18:81
+            Console.WriteLine("http://192.168.105.18:81");
+            Uri ip = new Uri("http://192.168.105.18:81");// Console.ReadLine();
+
             Console.WriteLine();
             //Console.WriteLine("Press Enter to Start...");
             //Console.ReadKey();
