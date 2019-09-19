@@ -145,6 +145,11 @@ namespace Tauron.CQRS.Services.Core
             await _hubConnection.SendAsync(HubEventNames.PublishEvent, msg, _config.Value.ApiKey, cancellationToken);
         }
 
+        public async Task SendToClient(string client, ServerDomainMessage serverDomainMessage, CancellationToken token)
+        {
+            await _hubConnection.StreamAsChannelAsync<>()
+        }
+
         public async Task SendEvents(IEnumerable<IEvent> events, CancellationToken cancellationToken)
         {
             await _hubConnection.SendAsync(HubEventNames.PublishEventGroup, events.Select(@event => new ServerDomainMessage

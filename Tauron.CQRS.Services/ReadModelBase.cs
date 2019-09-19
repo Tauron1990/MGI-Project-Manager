@@ -1,13 +1,14 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Queries;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Services.Core;
 
 namespace Tauron.CQRS.Services
 {
+    [PublicAPI]
     public abstract class ReadModelBase<TRespond, TQuery> : IReadModel<TRespond, TQuery>
         where TQuery : IQuery<TRespond>
     {
@@ -25,8 +26,8 @@ namespace Tauron.CQRS.Services
             {
                 EventName = rawMessage.EventName,
                 EventType = EventType.QueryResult,
-                EventData = JsonConvert.SerializeObject(new QueryEvent(rawMessage.EventName, JToken.FromObject(result))),
-                TypeName = typeof(QueryEvent).AssemblyQualifiedName
+                EventData = JsonConvert.SerializeObject(new QueryEvent<TRespond>(rawMessage.EventName, result)),
+                TypeName = typeof(QueryEvent<TRespond>).AssemblyQualifiedName
             }, CancellationToken.None);
         }
 

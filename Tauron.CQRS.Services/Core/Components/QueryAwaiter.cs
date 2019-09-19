@@ -7,25 +7,25 @@ using Nito.AsyncEx;
 
 namespace Tauron.CQRS.Services.Core.Components
 {
-    public sealed class QueryAwaiter<TRespond> : IEventHandler<QueryEvent>, IDisposable
+    public sealed class QueryAwaiter<TRespond> : IEventHandler<QueryEvent<TRespond>>, IDisposable
     {
         private readonly IDisposable _disposable;
         private readonly AsyncManualResetEvent _asyncManualReset;
 
         private TRespond _respond;
 
-        public QueryAwaiter(GlobalEventHandler<QueryEvent> globalEventHandler)
+        public QueryAwaiter(GlobalEventHandler<QueryEvent<TRespond>> globalEventHandler)
         {
             _disposable = globalEventHandler.Register(this, t => Handle(t));
             _asyncManualReset = new AsyncManualResetEvent(false);
         }
 
 
-        public Task Handle(QueryEvent message)
+        public Task Handle(QueryEvent<TRespond> message)
         {
             if (message.EventName != typeof(TRespond).FullName) return Task.CompletedTask;
 
-            _respond = message.Data != null ? message.Data.ToObject<TRespond>() : default;
+            _respond = message.Data;
 
             _asyncManualReset.Set();
 
