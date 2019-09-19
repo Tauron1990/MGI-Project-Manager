@@ -2,8 +2,10 @@
 {
     public enum EventType
     {
+        Unkowen,
         Command,
         TransistentEvent,
-        Query
+        Query,
+        QueryResult
     }
 }

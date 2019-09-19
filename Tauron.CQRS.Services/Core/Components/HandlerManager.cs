@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 using CQRSlite.Commands;
 using CQRSlite.Events;
 using CQRSlite.Messages;
-using CQRSlite.Queries;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Tauron.CQRS.Common.Configuration;
+using Tauron.CQRS.Common.ServerHubs;
 
 namespace Tauron.CQRS.Services.Core.Components
 {
@@ -25,16 +25,16 @@ namespace Tauron.CQRS.Services.Core.Components
 
             public HandlerListDelegator(List<HandlerInstace> handlers) => _handlers = handlers;
 
-            public async Task Handle(IMessage msg, CancellationToken token)
+            public async Task Handle(IMessage msg, ServerDomainMessage rawMessage, CancellationToken token)
             {
-                foreach (var handlerInstace in _handlers) await handlerInstace.Handle(msg, token);
+                foreach (var handlerInstace in _handlers) await handlerInstace.Handle(msg, rawMessage, token);
             }
         }
         private class HandlerInstace
         {
             private abstract class InvokerBase
             {
-                public abstract Task Invoke(IMessage msg, CancellationToken token);
+                public abstract Task Invoke(IMessage msg, ServerDomainMessage rawMessage, CancellationToken token);
             }
             private abstract class InvokerHelper : InvokerBase
             {
@@ -174,7 +174,7 @@ namespace Tauron.CQRS.Services.Core.Components
 
                 public Command(Func<object> handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
 
-                public override async Task Invoke(IMessage msg, CancellationToken token)
+                public override async Task Invoke(IMessage msg, ServerDomainMessage rawMessage, CancellationToken token)
                     => await (Task)GetMethod()(_handler(), msg);
             }
             private class CancelCommand : InvokerHelper
@@ -183,7 +183,7 @@ namespace Tauron.CQRS.Services.Core.Components
 
                 public CancelCommand(Func<object> handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
 
-                public override async Task Invoke(IMessage msg, CancellationToken token)
+                public override async Task Invoke(IMessage msg, ServerDomainMessage rawMessage, CancellationToken token)
                     => await (Task)GetMethod()(_handler(), msg, token);
             }
             private class Event : InvokerHelper
@@ -192,7 +192,7 @@ namespace Tauron.CQRS.Services.Core.Components
 
                 public Event(Func<object> handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
 
-                public override async Task Invoke(IMessage msg, CancellationToken token)
+                public override async Task Invoke(IMessage msg, ServerDomainMessage rawMessage, CancellationToken token)
                     => await (Task)GetMethod()(_handler(), msg);
             }
             private class CancelEvent : InvokerHelper
@@ -201,7 +201,7 @@ namespace Tauron.CQRS.Services.Core.Components
 
                 public CancelEvent(Func<object> handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
 
-                public override async Task Invoke(IMessage msg, CancellationToken token)
+                public override async Task Invoke(IMessage msg, ServerDomainMessage rawMessage, CancellationToken token)
                     => await (Task)GetMethod()(_handler(), msg, token);
             }
             private class ReadModel : InvokerHelper
@@ -210,8 +210,8 @@ namespace Tauron.CQRS.Services.Core.Components
 
                 public ReadModel(Func<object> handler, Type targetType, Type targetInterface) : base(targetType, targetInterface) => _handler = handler;
 
-                public override async Task Invoke(IMessage msg, CancellationToken token)
-                    => await (Task)GetMethod()(_handler(), msg, token);
+                public override async Task Invoke(IMessage msg, ServerDomainMessage rawMessage, CancellationToken token)
+                    => await (Task)GetMethod()(_handler(), msg, rawMessage, token);
             }
 
             private readonly Dictionary<Type, InvokerBase> _invoker = new Dictionary<Type, InvokerBase>();
@@ -242,7 +242,7 @@ namespace Tauron.CQRS.Services.Core.Components
                     throw new InvalidOperationException("No Invoker Found!");
             }
 
-            public async Task Handle(IMessage msg, CancellationToken token) => await _invoker[msg.GetType()].Invoke(msg, token);
+            public async Task Handle(IMessage msg, ServerDomainMessage rawMessage, CancellationToken token) => await _invoker[msg.GetType()].Invoke(msg, rawMessage, token);
         }
 
         private readonly IOptions<ClientCofiguration> _configuration;
@@ -284,13 +284,13 @@ namespace Tauron.CQRS.Services.Core.Components
                 if (commands.Count != 0)
                 {
                     var del = new HandlerListDelegator(commands);
-                    await _client.Subsribe(handler.Key, del.Handle, true);
+                    await _client.Subsribe(handler.Key, del.Handle);
                     _handlerInstaces.Add(del);
                 }
                 else
                 {
                     var del = new HandlerListDelegator(events);
-                    await _client.Subsribe(handler.Key, del.Handle, false);
+                    await _client.Subsribe(handler.Key, del.Handle);
                     _handlerInstaces.Add(del);
                 }
             }

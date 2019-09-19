@@ -106,7 +106,7 @@ namespace Tauron.CQRS.Server.EventStore
                 case EventType.Query:
                 case EventType.Command:
                     var entry = new EventCookie(@event, _connectionManager);
-                    if (!_eventCookies.TryAdd(@event.RealMessage.SequenceNumber, entry)) return false;
+                    if (!_eventCookies.TryAdd(@event.RealMessage.SequenceNumber ?? -1, entry)) return false;
 
                     var currentTime = DateTime.Now;
                     var outdated    = _eventCookies.Where(e => e.Value.IsOld(currentTime)).ToList();
@@ -171,6 +171,8 @@ namespace Tauron.CQRS.Server.EventStore
         public async Task ProvideEvent(string sender, ServerDomainMessage domainMessage, string apiKey)
         {
             _logger.LogInformation($"Provide Event: {sender} -- {domainMessage.EventName}");
+
+            domainMessage.Sender = sender;
 
             if (DispatcherStopped)
             {

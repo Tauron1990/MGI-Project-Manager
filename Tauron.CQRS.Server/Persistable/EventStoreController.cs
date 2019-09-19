@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -37,11 +38,11 @@ namespace Tauron.CQRS.Server.Persistable
             {
                 Data = e.Event.ToString(),
                 EventName = e.Message.EventName,
-                EventType = e.Message.EventType,
+                EventType = e.Message.EventType ?? EventType.Unkowen,
                 Id = e.Message.Id,
                 OriginType = e.Event.GetType().AssemblyQualifiedName,
-                Version = e.Message.Version,
-                TimeStamp = e.Message.TimeStamp
+                Version = e.Message.Version ?? -1,
+                TimeStamp = e.Message.TimeStamp ?? DateTimeOffset.Now
             }));
 
             await _context.SaveChangesAsync();

@@ -13,5 +13,16 @@ namespace Tauron.CQRS.Services.Core
         public string EventName { get; set; }
 
         public JToken Data { get; set; }
+
+        public QueryEvent()
+        {
+            
+        }
+
+        public QueryEvent(string eventName, JToken data)
+        {
+            EventName = eventName;
+            Data = data;
+        }
     }
 }

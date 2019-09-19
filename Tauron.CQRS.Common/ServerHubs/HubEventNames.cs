@@ -43,5 +43,7 @@
         public const string PublishEvent = nameof(PublishEvent);
 
         public const string PublishEventGroup = nameof(PublishEventGroup);
+
+        public const string PublishEventToClient = nameof(PublishEventToClient);
     }
 }

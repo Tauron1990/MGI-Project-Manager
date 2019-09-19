@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Services.Core.Components;
@@ -43,10 +42,10 @@ namespace Tauron.CQRS.Services.Core
 
         private class EventRegistration
         {
-            private readonly Func<IMessage, CancellationToken, Task> _msg;
+            private readonly Func<IMessage, ServerDomainMessage, CancellationToken, Task> _msg;
             private readonly ILogger<IDispatcherClient> _logger;
 
-            public EventRegistration(Func<IMessage, CancellationToken, Task> msg, ILogger<IDispatcherClient> logger)
+            public EventRegistration(Func<IMessage, ServerDomainMessage, CancellationToken, Task> msg, ILogger<IDispatcherClient> logger)
             {
                 _msg = msg;
                 _logger = logger;
@@ -56,7 +55,7 @@ namespace Tauron.CQRS.Services.Core
             {
                 try
                 {
-                    await _msg.Invoke((IMessage) JsonConvert.DeserializeObject(msg.EventData, Type.GetType(msg.TypeName)), CancellationToken.None);
+                    await _msg.Invoke((IMessage) JsonConvert.DeserializeObject(msg.EventData, Type.GetType(msg.TypeName)), msg, CancellationToken.None);
                 }
                 catch (Exception e)
                 {
@@ -161,7 +160,7 @@ namespace Tauron.CQRS.Services.Core
             }).ToArray(), _config.Value.ApiKey, cancellationToken);
         }
 
-        public async Task Subsribe(string name, Func<IMessage, CancellationToken, Task> msg, bool isCommand)
+        public async Task Subsribe(string name, Func<IMessage, ServerDomainMessage, CancellationToken, Task> msg)
         {
             try
             {

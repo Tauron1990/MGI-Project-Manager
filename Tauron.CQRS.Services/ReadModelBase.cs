@@ -1,5 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using CQRSlite.Queries;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Services.Core;
 
 namespace Tauron.CQRS.Services
@@ -11,11 +15,19 @@ namespace Tauron.CQRS.Services
 
         protected ReadModelBase(IDispatcherClient client) => _client = client;
 
-        async Task IReadModel<TRespond, TQuery>.ResolveQuery(TQuery query)
+        async Task IReadModel<TRespond, TQuery>.ResolveQuery(TQuery query, ServerDomainMessage rawMessage)
         {
             var result = await Query(query);
 
-            
+            if(result == null) return;
+
+            await _client.SendToClient(rawMessage.Sender, new ServerDomainMessage
+            {
+                EventName = rawMessage.EventName,
+                EventType = EventType.QueryResult,
+                EventData = JsonConvert.SerializeObject(new QueryEvent(rawMessage.EventName, JToken.FromObject(result))),
+                TypeName = typeof(QueryEvent).AssemblyQualifiedName
+            }, CancellationToken.None);
         }
 
         protected abstract Task<TRespond> Query(TQuery query);
