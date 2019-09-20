@@ -21,7 +21,7 @@ namespace Tauron.CQRS.Services
 
         Task SendEvents(IEnumerable<IEvent> events, CancellationToken cancellationToken);
 
-        Task Subsribe(string name, Func<IMessage, ServerDomainMessage, CancellationToken, Task> msg);
+        Task Subscribe(string name, Func<IMessage, ServerDomainMessage, CancellationToken, Task> msg);
 
         Task<TResponse> Query<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken);
     }

@@ -162,7 +162,7 @@ namespace Tauron.CQRS.Services.Core
             }).ToArray(), _config.Value.ApiKey, cancellationToken);
         }
 
-        public async Task Subsribe(string name, Func<IMessage, ServerDomainMessage, CancellationToken, Task> msg)
+        public async Task Subscribe(string name, Func<IMessage, ServerDomainMessage, CancellationToken, Task> msg)
         {
             try
             {

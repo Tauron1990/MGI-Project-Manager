@@ -27,14 +27,10 @@ namespace Tauron.MgiProjectManager.Dispatcher
         {
             services.AddCQRS(c =>
             {
-                c.WithDatabase(new SqlConnectionStringBuilder
-                {
-                    DataSource = _config.GetValue<string>("ConnectionString"),
-                    IntegratedSecurity = _config.GetValue<bool>("Memory"),
-                    
-                }.ConnectionString);
-                //c.Memory = true;
+                c.WithDatabase(_config.GetValue<string>("ConnectionString"));
+                c.Memory = _config.GetValue<bool>("Memory");
             });
+
             services.AddHealth();
 
             services.AddMvc(o => o.EnableEndpointRouting = false)
@@ -47,7 +43,7 @@ namespace Tauron.MgiProjectManager.Dispatcher
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddFile("C:\\Logs\\Log-{Date}.txt", fileSizeLimitBytes: 100 * 1024 * 1024, retainedFileCountLimit: 5);
+            loggerFactory.AddFile("C:\\Dispatcher Logs\\Log-{Date}.txt", fileSizeLimitBytes: 100 * 1024 * 1024, retainedFileCountLimit: 5);
 
             if (env.IsDevelopment())
             {

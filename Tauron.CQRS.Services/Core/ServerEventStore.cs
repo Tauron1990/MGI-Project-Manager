@@ -26,12 +26,12 @@ namespace Tauron.CQRS.Services.Core
                 var eventType = e.GetType();
 
                 // ReSharper disable once InvertIf
-                if (e is CQRSEvent cqrs)
-                {
-                    type = cqrs.EventType;
-                    if (type == EventType.Command)
-                        type = EventType.TransistentEvent;
-                }
+                //if (e is CQRSEvent cqrs)
+                //{
+                //    type = cqrs.EventType;
+                //    if (type == EventType.Command)
+                //        type = EventType.TransistentEvent;
+                //}
 
                 return new ServerDomainMessage
                 {

@@ -2,11 +2,14 @@
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Tauron.CQRS.Common.Dto;
 using Tauron.CQRS.Common.ServerHubs;
+using Tauron.CQRS.Server.EventStore;
 using Tauron.CQRS.Server.Hubs;
 
 namespace Tauron.CQRS.Server
@@ -15,7 +18,7 @@ namespace Tauron.CQRS.Server
     public class DispatcherService : BackgroundService
     {
         private readonly IEventManager _eventManager;
-        //private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<DispatcherService> _logger;
 
         private bool _stopped;
@@ -23,10 +26,10 @@ namespace Tauron.CQRS.Server
         //private DispatcherDatabaseContext _dispatcherDatabaseContext;
         private Task _runningTask;
 
-        public DispatcherService(IEventManager eventManager, ILogger<DispatcherService> logger)
+        public DispatcherService(IEventManager eventManager, ILogger<DispatcherService> logger, IServiceScopeFactory scopeFactory)
         {
             _eventManager = eventManager;
-            //_scopeFactory = scopeFactory;
+            _scopeFactory = scopeFactory;
             _logger = logger;
         }
 
@@ -34,6 +37,14 @@ namespace Tauron.CQRS.Server
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            using (var prov = _scopeFactory.CreateScope())
+            {
+                using (var context = prov.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
+
             _runningTask = Task.Run(async () =>
             {
                 try

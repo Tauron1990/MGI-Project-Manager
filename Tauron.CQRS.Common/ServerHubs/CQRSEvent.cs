@@ -5,7 +5,7 @@ namespace Tauron.CQRS.Common.ServerHubs
 {
     public class CQRSEvent : IEvent
     {
-        public EventType EventType { get; set; }
+        //public EventType EventType { get; set; }
 
         public Guid Id { get; set; }
 

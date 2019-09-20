@@ -300,13 +300,13 @@ namespace Tauron.CQRS.Services.Core.Components
                 if (commands.Count != 0)
                 {
                     var del = new HandlerListDelegator(commands, _serviceScopeFactory);
-                    await _client.Subsribe(handler.Key, del.Handle);
+                    await _client.Subscribe(handler.Key, del.Handle);
                     _handlerInstaces.Add(del);
                 }
                 else
                 {
                     var del = new HandlerListDelegator(events, _serviceScopeFactory);
-                    await _client.Subsribe(handler.Key, del.Handle);
+                    await _client.Subscribe(handler.Key, del.Handle);
                     _handlerInstaces.Add(del);
                 }
             }
