@@ -41,7 +41,7 @@ namespace Tauron.CQRS.Server
             {
                 using (var context = prov.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>())
                 {
-                    context.Database.Migrate();
+                    //context.Database.Migrate();
                 }
             }
 

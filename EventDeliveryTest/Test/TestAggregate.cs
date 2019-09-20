@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Tauron.CQRS.Services;
 
 namespace EventDeliveryTest.Test
@@ -9,16 +10,15 @@ namespace EventDeliveryTest.Test
 
         public TestAggregate() => Id = IdField;
 
+        [UsedImplicitly]
+        private void Apply(TestEvent testEvent) => LastValue = testEvent.Result;
+
         public string LastValue
         {
             get => GetValue<string>();
             private set => SetValue(value);
         }
 
-        public void SetLastValue(string value)
-        {
-            LastValue = value;
-            ApplyChange(new TestEvent(IdField, Version, value));
-        }
+        public void SetLastValue(string value) => ApplyChange(new TestEvent(IdField, Version, value));
     }
 }
