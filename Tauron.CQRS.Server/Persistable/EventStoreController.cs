@@ -30,7 +30,7 @@ namespace Tauron.CQRS.Server.Persistable
         {
             if (!await _store.Validate(events.ApiKey)) return Forbid();
 
-            await _context.EventEntities.AddRangeAsync(events.DomainMessages.Where(e => e.EventType == EventType.TransistentEvent).Select(dm => new
+            await _context.EventEntities.AddRangeAsync(events.DomainMessages.Where(e => e.EventType == EventType.Event).Select(dm => new
             {
                 Event = dm.EventData, 
                 Message = dm

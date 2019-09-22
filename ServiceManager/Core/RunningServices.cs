@@ -6,8 +6,12 @@ namespace ServiceManager.Core
 {
     public sealed class RunningServices
     {
+        public string Url { get; set; }
+
+        public string ApiKey { get; set; }
+
         public static async Task<RunningServices> Read(string path) 
-            => File.Exists(path) ? new RunningServices() : JsonConvert.DeserializeObject<RunningServices>(await File.ReadAllTextAsync(path));
+            => !File.Exists(path) ? new RunningServices() : JsonConvert.DeserializeObject<RunningServices>(await File.ReadAllTextAsync(path));
 
         public static async Task Write(RunningServices runningServices, string path) 
             => await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(runningServices));

@@ -4,7 +4,8 @@
     {
         Unkowen,
         Command,
-        TransistentEvent,
+        AmbientCommand,
+        Event,
         Query,
         QueryResult
     }

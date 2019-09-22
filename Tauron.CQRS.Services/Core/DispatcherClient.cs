@@ -138,7 +138,7 @@ namespace Tauron.CQRS.Services.Core
                 msg.Id = @event.Id;
                 msg.Version = @event.Version;
                 msg.TimeStamp = @event.TimeStamp;
-                msg.EventType = EventType.TransistentEvent;
+                msg.EventType = EventType.Event;
             }
 
             await _hubConnection.SendAsync(HubEventNames.PublishEvent, msg, _config.Value.ApiKey, cancellationToken);
@@ -154,7 +154,7 @@ namespace Tauron.CQRS.Services.Core
                 EventData = JsonConvert.SerializeObject(@event),
                 TypeName = @event.GetType().AssemblyQualifiedName,
                 EventName = @event.GetType().Name,
-                EventType = EventType.TransistentEvent,
+                EventType = EventType.Event,
                 SequenceNumber = DateTime.UtcNow.Ticks + _random.Next(),
                 Id = @event.Id,
                 Version = @event.Version,
@@ -205,8 +205,9 @@ namespace Tauron.CQRS.Services.Core
             {
                 switch (domainMessage.EventType)
                 {
+                    case EventType.AmbientCommand:
                     case EventType.QueryResult:
-                    case EventType.TransistentEvent:
+                    case EventType.Event:
                     {
                         if (_eventRegistrations.TryGetValue(domainMessage.EventName, out var reg))
                             _messageDeliveries.Add(new MessageDelivery(reg, domainMessage));

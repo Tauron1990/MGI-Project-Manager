@@ -118,7 +118,8 @@ namespace Tauron.CQRS.Server.EventStore
                     await _eventHub.Clients.Group(entry.DomainEvent.RealMessage.EventName).SendAsync(HubEventNames.PropagateEvent, entry.DomainEvent.RealMessage, cancellationToken: token);
 
                     return entry.WaitForResponse(100_000);
-                case EventType.TransistentEvent:
+                case EventType.AmbientCommand:
+                case EventType.Event:
                     await _eventHub.Clients.Groups(@event.RealMessage.EventName).SendAsync(HubEventNames.PropagateEvent, @event.RealMessage, cancellationToken: token);
                     return true;
                 default:
@@ -155,7 +156,7 @@ namespace Tauron.CQRS.Server.EventStore
                         }
 
                         break;
-                    case EventType.TransistentEvent:
+                    case EventType.Event:
                         await _eventHub.Clients.Client(connectionId).SendAsync(HubEventNames.AcceptedEvent, sequenceNumber);
                         break;
                     default:

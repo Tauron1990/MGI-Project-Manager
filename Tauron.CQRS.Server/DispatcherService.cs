@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Common.Dto;
 using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Server.EventStore;
@@ -19,6 +21,7 @@ namespace Tauron.CQRS.Server
     {
         private readonly IEventManager _eventManager;
         private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IOptions<ServerConfiguration> _config;
         private readonly ILogger<DispatcherService> _logger;
 
         private bool _stopped;
@@ -26,10 +29,11 @@ namespace Tauron.CQRS.Server
         //private DispatcherDatabaseContext _dispatcherDatabaseContext;
         private Task _runningTask;
 
-        public DispatcherService(IEventManager eventManager, ILogger<DispatcherService> logger, IServiceScopeFactory scopeFactory)
+        public DispatcherService(IEventManager eventManager, ILogger<DispatcherService> logger, IServiceScopeFactory scopeFactory, IOptions<ServerConfiguration> config)
         {
             _eventManager = eventManager;
             _scopeFactory = scopeFactory;
+            _config = config;
             _logger = logger;
         }
 
@@ -37,11 +41,12 @@ namespace Tauron.CQRS.Server
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            using (var prov = _scopeFactory.CreateScope())
+            if (!_config.Value.Memory)
             {
-                using (var context = prov.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>())
+                using (var prov = _scopeFactory.CreateScope())
                 {
-                    //context.Database.Migrate();
+                    using (var context = prov.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>())
+                        context.Database.Migrate();
                 }
             }
 
@@ -73,7 +78,7 @@ namespace Tauron.CQRS.Server
                                 //        .GetRequiredService<DispatcherDatabaseContext>();
                                 //}
 
-                                if (domainEvent.RealMessage.EventType == EventType.TransistentEvent)
+                                if (domainEvent.RealMessage.EventType == EventType.Event)
                                 {
                                     //await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
                                     if (stoppingToken.IsCancellationRequested) continue;
@@ -116,7 +121,7 @@ namespace Tauron.CQRS.Server
                 EventData = JsonConvert.SerializeObject(new EventFailedEventMessage{ EventName = original.RealMessage.EventName }),
                 EventName = HubEventNames.DispatcherEvent.DeliveryFailedEvent,
                 TypeName = typeof(EventFailedEventMessage).AssemblyQualifiedName,
-                EventType = EventType.TransistentEvent, SequenceNumber = -1
+                EventType = EventType.Event, SequenceNumber = -1
             }, string.Empty);
         }
 

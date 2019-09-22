@@ -5,17 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ServiceManager"
         mc:Ignorable="d" Loaded="MainWindow_OnLoaded"
-        Title="Service Manager" Height="450" Width="800" IsEnabled="{Binding IsReady}">
-    <Window.DataContext>
-        <local:MainWindowsModel/>
-    </Window.DataContext>
-    <DockPanel LastChildFill="True">
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-            <Button Content="Installieren" Margin="5"/>
-            <Button Content="Deistallieren" Margin="5"/>
-        </StackPanel>
-        <ListBox Margin="5">
+        Title="Service Manager" Height="450" Width="800" IsEnabled="{Binding IsReady}" WindowState="Maximized" d:DataContext="{d:DesignInstance local:MainWindowsModel}">
+    <TabControl>
+        <TabItem Header="Services">
+            <DockPanel LastChildFill="True">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+                    <Button Content="Installieren" Margin="5" />
+                    <Button Content="Deistallieren" Margin="5" />
+                </StackPanel>
+                <ListBox Margin="5">
 
-        </ListBox>
-    </DockPanel>
+                </ListBox>
+            </DockPanel>
+        </TabItem>
+        <TabItem Header="Logs">
+            <TabControl Margin="3" ItemsSource="{Binding LogEntries}">
+                <TabControl.ItemTemplate>
+                    <DataTemplate>
+                        <TabItem Header="{Binding Key}">
+                            <ListBox ItemsSource="{Binding Value}" local:ListBoxBehavior.ScrollOnNewItem="True">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" Margin="3"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </TabItem>
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+            </TabControl>
+        </TabItem>
+    </TabControl>
 </Window>

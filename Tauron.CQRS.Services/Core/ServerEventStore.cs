@@ -22,7 +22,7 @@ namespace Tauron.CQRS.Services.Core
         {
             await _api.Save(events.Select(e =>
             {
-                var type = EventType.TransistentEvent;
+                var type = EventType.Event;
                 var eventType = e.GetType();
 
                 // ReSharper disable once InvertIf
@@ -30,7 +30,7 @@ namespace Tauron.CQRS.Services.Core
                 //{
                 //    type = cqrs.EventType;
                 //    if (type == EventType.Command)
-                //        type = EventType.TransistentEvent;
+                //        type = EventType.Event;
                 //}
 
                 return new ServerDomainMessage

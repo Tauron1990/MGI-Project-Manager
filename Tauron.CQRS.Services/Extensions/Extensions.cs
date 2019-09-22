@@ -114,14 +114,16 @@ namespace Tauron.CQRS.Services.Extensions
                 {
                     if (!@interface.IsGenericType) continue;
 
-                    if (@interface.GetGenericTypeDefinition() == typeof(IReadModel<,>))
+                    var genericDefinition = @interface.GetGenericTypeDefinition();
+
+                    if (genericDefinition == typeof(IReadModel<,>))
                     {
                         AddReadModel(config, type, @interface);
                         continue;
                     }
 
-                    if (@interface.GetGenericTypeDefinition() != typeof(ICancellableCommandHandler<>) && @interface.GetGenericTypeDefinition() != typeof(ICancellableEventHandler<>) &&
-                        @interface.GetGenericTypeDefinition() != typeof(ICommandHandler<>)            && @interface.GetGenericTypeDefinition() != typeof(IEventHandler<>))
+                    if (genericDefinition != typeof(ICancellableCommandHandler<>) && genericDefinition != typeof(ICancellableEventHandler<>) &&
+                        genericDefinition != typeof(ICommandHandler<>)            && genericDefinition != typeof(IEventHandler<>))
                         continue;
 
                     string name = @interface.GetGenericArguments()[0].Name;
