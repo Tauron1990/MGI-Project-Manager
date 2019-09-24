@@ -13,7 +13,7 @@ namespace ServiceManager
     public sealed class MainWindowsModel : INotifyPropertyChanged
     {
         public static readonly string SettingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Tauron\\ServiceManager\\Settings.json");
-        private RunningServices _runningServices;
+        private ServiceSettings _serviceSettings;
         private bool _isReady;
 
         public bool IsReady
@@ -39,18 +39,18 @@ namespace ServiceManager
             if (!Directory.Exists(dic))
                 Directory.CreateDirectory(dic);
 
-            _runningServices = await RunningServices.Read(SettingsPath);
+            _serviceSettings = await ServiceSettings.Read(SettingsPath);
             Uri targetUri = null;
 
 
-            while (string.IsNullOrWhiteSpace(_runningServices.Url) || !Uri.TryCreate(_runningServices.Url, UriKind.RelativeOrAbsolute, out targetUri))
+            while (string.IsNullOrWhiteSpace(_serviceSettings.Url) || !Uri.TryCreate(_serviceSettings.Url, UriKind.RelativeOrAbsolute, out targetUri))
             {
                 var window = new ValueRequesterWindow("Bitte Adresse des Dispatchers Eingeben.");
 
                 if (window.ShowDialog() == true)
                 {
-                    _runningServices.Url = window.Result;
-                    await RunningServices.Write(_runningServices, SettingsPath);
+                    _serviceSettings.Url = window.Result;
+                    await ServiceSettings.Write(_serviceSettings, SettingsPath);
                     break;
                 }
 
@@ -63,7 +63,7 @@ namespace ServiceManager
 
 
             
-            App.ClientCofiguration.SetUrls(targetUri, "ServiceManager", "");
+            App.ClientCofiguration.SetUrls(targetUri, "ServiceManager", _serviceSettings.ApiKey);
 
             IsReady = true;
         } 
