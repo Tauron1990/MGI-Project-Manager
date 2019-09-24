@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using PresentationTheme.Aero;
+using PresentationTheme.Aero.Win8;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
@@ -35,10 +36,10 @@ namespace ServiceManager
 
         public App()
         {
-            Resources.MergedDictionaries.Add(new ResourceDictionary
+            Resources = new ResourceDictionary
             {
-                Source = AeroTheme.ResourceUri
-            });
+                Source = AeroWin8Theme.ResourceUri
+            };
         }
 
 
@@ -72,7 +73,10 @@ namespace ServiceManager
                         new Uri(provider.GetRequiredService<ServiceSettings>().Url), "Api/ApiRequester"))
                     .For<IApiRequester>());
 
+            collection.AddSingleton(_ => (MainWindow)Current.MainWindow);
             collection.AddTransient(CreateControl<ApiControl>);
+            collection.AddTransient(CreateControl<ApiWindow>);
+            collection.AddTransient(CreateControl<ValueRequesterWindow>);
 
             return collection.BuildServiceProvider();
         }

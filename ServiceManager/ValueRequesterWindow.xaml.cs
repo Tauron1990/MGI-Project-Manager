@@ -9,17 +9,23 @@ namespace ServiceManager
     /// </summary>
     public partial class ValueRequesterWindow
     {
-        public ValueRequesterWindow(string message)
+        public ValueRequesterWindow(MainWindow mainWindow)
         {
             InitializeComponent();
-            
-            Icon = BitmapFrame.Create(File.Open("AppIcon.ico", FileMode.Open));
-            Message.Text = message;
+
+            Owner = mainWindow;
         }
 
         public string Result { get; private set; }
 
         public bool Shutdown { get; private set; }
+
+        public string MessageText
+        {
+            get => Message.Text;
+            // ReSharper disable once PossibleNullReferenceException
+            set => Dispatcher.Invoke(() =>  Message.Text = value);
+        }
 
         private void Ok_OnClick(object sender, RoutedEventArgs e)
         {

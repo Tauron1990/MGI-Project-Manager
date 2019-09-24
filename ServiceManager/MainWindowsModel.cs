@@ -1,20 +1,34 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Threading;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
+using ServiceManager.ApiRequester;
 using ServiceManager.Core;
+using ServiceManager.Installation;
+using ServiceManager.Services;
+using Application = System.Windows.Application;
 
 namespace ServiceManager
 {
     [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
     public sealed class MainWindowsModel : INotifyPropertyChanged
     {
+        private const string ServiceName = "Service_Manager";
         public static readonly string SettingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Tauron\\ServiceManager\\Settings.json");
-        private ServiceSettings _serviceSettings;
+
+        private readonly ServiceSettings _serviceSettings;
+        private readonly Dispatcher _dispatcher;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly IApiRequester _apiRequester;
+        private readonly IInstallerSystem _installerSystem;
         private bool _isReady;
+        private RunningService _selectedService;
 
         public bool IsReady
         {
@@ -29,8 +43,29 @@ namespace ServiceManager
 
         public LogEntries LogEntries { get; }
 
-        public MainWindowsModel(LogEntries logEntries) 
-            => LogEntries = logEntries;
+        public ObservableCollection<RunningService> RunningServices { get; } = new ObservableCollection<RunningService>();
+
+        public RunningService SelectedService
+        {
+            get => _selectedService;
+            set
+            {
+                if (Equals(value, _selectedService)) return;
+                _selectedService = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public MainWindowsModel(LogEntries logEntries, ServiceSettings serviceSettings, Dispatcher dispatcher, IServiceScopeFactory serviceScopeFactory, IApiRequester apiRequester,
+                                IInstallerSystem installerSystem)
+        {
+            _serviceSettings = serviceSettings;
+            _dispatcher = dispatcher;
+            _serviceScopeFactory = serviceScopeFactory;
+            _apiRequester = apiRequester;
+            _installerSystem = installerSystem;
+            LogEntries = logEntries;
+        }
 
         public async Task BeginLoad()
         {
@@ -39,15 +74,17 @@ namespace ServiceManager
             if (!Directory.Exists(dic))
                 Directory.CreateDirectory(dic);
 
-            _serviceSettings = await ServiceSettings.Read(SettingsPath);
             Uri targetUri = null;
 
 
             while (string.IsNullOrWhiteSpace(_serviceSettings.Url) || !Uri.TryCreate(_serviceSettings.Url, UriKind.RelativeOrAbsolute, out targetUri))
             {
-                var window = new ValueRequesterWindow("Bitte Adresse des Dispatchers Eingeben.");
+                using var scope = _serviceScopeFactory.CreateScope();
 
-                if (window.ShowDialog() == true)
+                var window = scope.ServiceProvider.GetRequiredService<ValueRequesterWindow>();
+                window.MessageText = "Bitte Adresse des Dispatchers Eingeben.";
+
+                if (await _dispatcher.InvokeAsync(window.ShowDialog) == true)
                 {
                     _serviceSettings.Url = window.Result;
                     await ServiceSettings.Write(_serviceSettings, SettingsPath);
@@ -58,15 +95,50 @@ namespace ServiceManager
 
                 if (Application.Current.Dispatcher != null) 
                     await Application.Current.Dispatcher.InvokeAsync(Application.Current.Shutdown);
-                return;
+                
+
             }
 
+            if (string.IsNullOrWhiteSpace(_serviceSettings.ApiKey))
+            {
+                try
+                {
+                    string key = await _apiRequester.RegisterApiKey(ServiceName);
+                    if (string.IsNullOrWhiteSpace(key))
+                    {
+                        MessageBox.Show("Fehler beim Anfordern eines Api Keys.", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (Application.Current.Dispatcher != null)
+                            await Application.Current.Dispatcher.InvokeAsync(Application.Current.Shutdown);
+                    }
 
+                    _serviceSettings.ApiKey = key;
+                    await ServiceSettings.Write(_serviceSettings, SettingsPath);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show($"Fehler: {e}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                }
+            }
             
-            App.ClientCofiguration.SetUrls(targetUri, "ServiceManager", _serviceSettings.ApiKey);
+            App.ClientCofiguration.SetUrls(targetUri, ServiceName, _serviceSettings.ApiKey);
+
+            foreach (var runningService in _serviceSettings.RunningServices) 
+                RunningServices.Add(runningService);
 
             IsReady = true;
-        } 
+        }
+
+        public async Task Install()
+        {
+           
+        }
+
+        public async Task UnInstall()
+        {
+            if(SelectedService == null) return;
+
+            await _installerSystem.Unistall(SelectedService);
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

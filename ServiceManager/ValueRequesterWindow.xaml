@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ServiceManager"
         mc:Ignorable="d"
-        Title="Service Manager" ResizeMode="NoResize" SizeToContent="WidthAndHeight" MinWidth="400">
+        Title="Service Manager" ResizeMode="NoResize" SizeToContent="WidthAndHeight" MinWidth="400" WindowStartupLocation="CenterOwner">
     <StackPanel>
         <TextBlock Name="Message" Margin="5"/>
         <TextBox Name="ResultBox" Margin="5"/>
