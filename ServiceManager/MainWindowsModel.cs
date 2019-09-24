@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using System.Windows.Threading;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,12 +15,26 @@ using ServiceManager.Core;
 using ServiceManager.Installation;
 using ServiceManager.Services;
 using Application = System.Windows.Application;
+using IWin32Window = System.Windows.Forms.IWin32Window;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace ServiceManager
 {
     [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
     public sealed class MainWindowsModel : INotifyPropertyChanged
     {
+        private class Wind32Proxy : IWin32Window
+        {
+            public Wind32Proxy(Window window)
+            {
+                var handle = new WindowInteropHelper(window);
+
+                Handle = handle.EnsureHandle();
+            }
+
+            public IntPtr Handle { get; }
+        }
+
         private const string ServiceName = "Service_Manager";
         public static readonly string SettingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Tauron\\ServiceManager\\Settings.json");
 
@@ -130,7 +146,24 @@ namespace ServiceManager
 
         public async Task Install()
         {
-           
+           var folderBrowser = new FolderBrowserDialog
+                                               {
+                                                   AutoUpgradeEnabled = true,
+                                                   Description = "Zip Datei für die Installation.",
+                                                   RootFolder = Environment.SpecialFolder.ProgramFiles,
+                                                   ShowNewFolderButton = true
+                                               };
+
+           folderBrowser.ShowDialog(new Wind32Proxy(Application.Current.MainWindow));
+
+           var result = await _installerSystem.Install(folderBrowser.SelectedPath);
+
+           if (result == null) return;
+
+           RunningServices.Add(result);
+           _serviceSettings.RunningServices.Add(result);
+
+           await ServiceSettings.Write(_serviceSettings, SettingsPath);
         }
 
         public async Task UnInstall()

@@ -10,6 +10,8 @@ using Serilog.Core;
 using Serilog.Events;
 using ServiceManager.ApiRequester;
 using ServiceManager.Core;
+using ServiceManager.Installation;
+using ServiceManager.Installation.Core;
 using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Services.Extensions;
 
@@ -66,6 +68,7 @@ namespace ServiceManager
             collection.AddSingleton(provider => ServiceSettings.Read(MainWindowsModel.SettingsPath));
 
             collection.AddSingleton<MainWindowsModel, MainWindowsModel>();
+            collection.AddTransient<IInstallerSystem, InstallerSystem>();
 
             collection.AddSingleton(provider
                 => new RestEase.RestClient(
