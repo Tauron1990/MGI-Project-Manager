@@ -80,6 +80,7 @@ namespace ServiceManager
             collection.AddTransient(CreateControl<ApiControl>);
             collection.AddTransient(CreateControl<ApiWindow>);
             collection.AddTransient(CreateControl<ValueRequesterWindow>);
+            collection.AddTransient(CreateControl<ServiceNameEnteringWindow>);
 
             return collection.BuildServiceProvider();
         }

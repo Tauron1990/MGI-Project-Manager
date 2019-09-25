@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,9 +18,11 @@ namespace ServiceManager.Core
     /// </summary>
     public partial class ServiceNameEnteringWindow : Window
     {
-        public ServiceNameEnteringWindow()
+        public ServiceNameEnteringWindow(ServiceSettings serviceSettings)
         {
             InitializeComponent();
+
+            DataContext = new ServiceNameEnteringWindowModel(serviceSettings);
         }
     }
 }

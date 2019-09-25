@@ -5,8 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ServiceManager.Core"
         mc:Ignorable="d"
-        Title="ServiceNameEnteringWindow" Height="450" Width="800">
+        Title="Service Name Entering Eingabe" Height="350" Width="800" d:DataContext="{d:DesignInstance local:ServiceNameEnteringWindowModel}">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0" LastChildFill="True">
+            <TextBlock Text="Name:" Margin="5"/>
+            <TextBox Margin="5" Text="{Binding NameText, UpdateSourceTrigger=PropertyChanged, Delay=1000}"/>
+        </DockPanel>
+        <ListBox Grid.Row="1" ItemsSource="{Binding NameList}" SelectedItem="{Binding NameText}" Margin="5"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Abbrechen" Margin="5" IsCancel="True"/>
+            <Button Content="OK" Margin="5" IsDefault="True"/>
+        </StackPanel>
     </Grid>
 </Window>

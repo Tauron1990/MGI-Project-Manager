@@ -33,15 +33,19 @@ namespace ServiceManager.Installation.Core
                 if (nameWindow.Dispatcher == null || await nameWindow.Dispatcher.InvokeAsync(nameWindow.ShowDialog) != true)
                 {
                     _logger.LogWarning("No Service Name Entered. Prodcedure canceled");
+                    return null;
                 }
 
                 using ZipArchive archive = new ZipArchive(File.Open(path, FileMode.Open), ZipArchiveMode.Read, false);
 
+                return null;
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Error on Install");
             }
+
+            return null;
         }
 
         public Task Unistall(RunningService service)
