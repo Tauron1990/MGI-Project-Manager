@@ -1,0 +1,29 @@
+﻿<Window x:Class="ServiceManager.Installation.InstallerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ServiceManager.Installation"
+        xmlns:core="clr-namespace:ServiceManager.Installation.Core"
+        mc:Ignorable="d"
+        Title="Installation" Height="350" Width="500" Loaded="InstallerWindow_OnLoaded"
+        d:DataContext="{d:DesignInstance core:InstallerProcedure}">
+    <Window.Resources>
+        <core:BrushConverter x:Key="BrushConverter"/>
+    </Window.Resources>
+    <DockPanel LastChildFill="True">
+        <Border DockPanel.Dock="Left" BorderBrush="Black" BorderThickness="1" MinWidth="100">
+            <ItemsControl ItemsSource="{Binding Tasks}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="3" BorderBrush="Black" BorderThickness="1" Background="{Binding Running, Converter={StaticResource BrushConverter}}">
+                            <TextBlock Text="{Binding Title}" Margin="3" TextAlignment="Center"/>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+        <TextBlock DockPanel.Dock="Top" Margin="5" Text="{Binding CurrentTask.Title}"/>
+        <ContentControl DockPanel.Dock="Left" Margin="10" Content="{Binding CurrentTask.Content}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+    </DockPanel>
+</Window>

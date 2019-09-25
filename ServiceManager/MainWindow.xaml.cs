@@ -26,13 +26,6 @@ namespace ServiceManager
 
         private async void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            FolderBrowserDialog diag =new FolderBrowserDialog();
-
-            if (diag.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
-            {
-
-            }
-
             _serviceProvider = App.CreateServiceCollection();
             _model = _serviceProvider.GetRequiredService<MainWindowsModel>();
             

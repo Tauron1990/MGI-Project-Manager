@@ -1,10 +1,7 @@
-﻿using System;
-using System.IO;
-using System.IO.Compression;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using ServiceManager.Core;
 using ServiceManager.Services;
 
 namespace ServiceManager.Installation.Core
@@ -12,40 +9,51 @@ namespace ServiceManager.Installation.Core
     public class InstallerSystem : IInstallerSystem
     {
         private readonly ILogger<InstallerSystem> _logger;
-        private readonly ServiceSettings _serviceSettings;
         private readonly IServiceScopeFactory _scopeFactory;
+        private readonly Dispatcher _dispatcher;
 
-        public InstallerSystem(ILogger<InstallerSystem> logger, ServiceSettings serviceSettings, IServiceScopeFactory scopeFactory)
+        public InstallerSystem(ILogger<InstallerSystem> logger, IServiceScopeFactory scopeFactory, Dispatcher dispatcher)
         {
             _logger = logger;
-            _serviceSettings = serviceSettings;
             _scopeFactory = scopeFactory;
+            _dispatcher = dispatcher;
         }
 
         public async Task<RunningService> Install(string path)
         {
-            try
-            {
-                using var scope = _scopeFactory.CreateScope();
-                var nameWindow = scope.ServiceProvider.GetRequiredService<ValueRequesterWindow>();
-                nameWindow.MessageText = "Name des Services?";
+            using var scope = _scopeFactory.CreateScope();
 
-                if (nameWindow.Dispatcher == null || await nameWindow.Dispatcher.InvokeAsync(nameWindow.ShowDialog) != true)
-                {
-                    _logger.LogWarning("No Service Name Entered. Prodcedure canceled");
-                    return null;
-                }
+            var window = scope.ServiceProvider.GetRequiredService<InstallerWindow>();
 
-                using ZipArchive archive = new ZipArchive(File.Open(path, FileMode.Open), ZipArchiveMode.Read, false);
+            window.Path = path;
 
-                return null;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error on Install");
-            }
+            if (await _dispatcher.InvokeAsync(() => window.ShowDialog()) != true) return null;
+            
+            _logger.LogInformation("Install Completed");
+            return window.RunningService;
 
-            return null;
+            //try
+            //{
+            //    using var scope = _scopeFactory.CreateScope();
+            //    var nameWindow = scope.ServiceProvider.GetRequiredService<ValueRequesterWindow>();
+            //    nameWindow.MessageText = "Name des Services?";
+
+            //    if (nameWindow.Dispatcher == null || await nameWindow.Dispatcher.InvokeAsync(nameWindow.ShowDialog) != true)
+            //    {
+            //        _logger.LogWarning("No Service Name Entered. Prodcedure canceled");
+            //        return null;
+            //    }
+
+            //    using ZipArchive archive = new ZipArchive(File.Open(path, FileMode.Open), ZipArchiveMode.Read, false);
+
+            //    return null;
+            //}
+            //catch (Exception e)
+            //{
+            //    _logger.LogError(e, "Error on Install");
+            //}
+
+            //return null;
         }
 
         public Task Unistall(RunningService service)

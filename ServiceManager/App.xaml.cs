@@ -69,6 +69,7 @@ namespace ServiceManager
 
             collection.AddSingleton<MainWindowsModel, MainWindowsModel>();
             collection.AddTransient<IInstallerSystem, InstallerSystem>();
+            collection.AddScoped<InstallerProcedure, InstallerProcedure>();
 
             collection.AddSingleton(provider
                 => new RestEase.RestClient(
@@ -81,6 +82,7 @@ namespace ServiceManager
             collection.AddTransient(CreateControl<ApiWindow>);
             collection.AddTransient(CreateControl<ValueRequesterWindow>);
             collection.AddTransient(CreateControl<ServiceNameEnteringWindow>);
+            collection.AddTransient(CreateControl<InstallerWindow>);
 
             return collection.BuildServiceProvider();
         }
