@@ -6,9 +6,19 @@
              xmlns:local="clr-namespace:ServiceManager.Installation.Tasks.Ui"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel>
-        <TextBlock Text="Service Name:" Margin="3"></TextBlock>
-        <TextBox MinWidth="200" Margin="3" Name="NameBox"/>
-        <Button HorizontalAlignment="Right" Margin="3" Content="Bestätigen"/>
-    </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0" LastChildFill="True">
+            <TextBlock Text="Name:" Margin="5"/>
+            <TextBox Margin="5" Text="{Binding NameText, UpdateSourceTrigger=PropertyChanged, Delay=1000}"/>
+        </DockPanel>
+        <ListBox Grid.Row="1" ItemsSource="{Binding NameList}" SelectedItem="{Binding NameText}" Margin="5"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="OK" Margin="5" IsDefault="True" Click="Ok_OnClick"/>
+        </StackPanel>
+    </Grid>
 </UserControl>

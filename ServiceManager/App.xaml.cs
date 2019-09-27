@@ -12,6 +12,7 @@ using ServiceManager.ApiRequester;
 using ServiceManager.Core;
 using ServiceManager.Installation;
 using ServiceManager.Installation.Core;
+using ServiceManager.Installation.Tasks.Ui;
 using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Services.Extensions;
 
@@ -70,6 +71,7 @@ namespace ServiceManager
             collection.AddSingleton<MainWindowsModel, MainWindowsModel>();
             collection.AddTransient<IInstallerSystem, InstallerSystem>();
             collection.AddScoped<InstallerProcedure, InstallerProcedure>();
+            collection.AddScoped<NameSelectionModel, NameSelectionModel>();
 
             collection.AddSingleton(provider
                 => new RestEase.RestClient(
@@ -81,7 +83,7 @@ namespace ServiceManager
             collection.AddTransient(CreateControl<ApiControl>);
             collection.AddTransient(CreateControl<ApiWindow>);
             collection.AddTransient(CreateControl<ValueRequesterWindow>);
-            collection.AddTransient(CreateControl<ServiceNameEnteringWindow>);
+            collection.AddTransient(CreateControl<NameSelection>);
             collection.AddTransient(CreateControl<InstallerWindow>);
 
             return collection.BuildServiceProvider();

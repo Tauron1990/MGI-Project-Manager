@@ -146,17 +146,11 @@ namespace ServiceManager
 
         public async Task Install()
         {
-           var folderBrowser = new FolderBrowserDialog
-                                               {
-                                                   AutoUpgradeEnabled = true,
-                                                   Description = "Zip Datei für die Installation.",
-                                                   RootFolder = Environment.SpecialFolder.ProgramFiles,
-                                                   ShowNewFolderButton = true
-                                               };
+            var folderBrowser = new OpenFileDialog {AutoUpgradeEnabled = true};
 
-           folderBrowser.ShowDialog(new Wind32Proxy(Application.Current.MainWindow));
+            folderBrowser.ShowDialog(new Wind32Proxy(Application.Current.MainWindow));
 
-           var result = await _installerSystem.Install(folderBrowser.SelectedPath);
+           var result = await _installerSystem.Install(folderBrowser.FileName);
 
            if (result == null) return;
 

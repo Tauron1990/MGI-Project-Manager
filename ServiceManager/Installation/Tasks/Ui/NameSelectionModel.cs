@@ -2,12 +2,16 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Nito.AsyncEx;
+using ServiceManager.Core;
 
-namespace ServiceManager.Core
+namespace ServiceManager.Installation.Tasks.Ui
 {
-    public sealed class ServiceNameEnteringWindowModel : INotifyPropertyChanged
+    public sealed class NameSelectionModel : INotifyPropertyChanged
     {
+        private readonly AsyncManualResetEvent _manualResetEvent = new AsyncManualResetEvent(false);
         private string _nameText;
 
         public string NameText
@@ -23,8 +27,12 @@ namespace ServiceManager.Core
 
         public ObservableCollection<string> NameList { get; }
 
-        public ServiceNameEnteringWindowModel(ServiceSettings serviceSettings) 
+        public NameSelectionModel(ServiceSettings serviceSettings) 
             => NameList = new ObservableCollection<string>(serviceSettings.RunningServices.Select(r => r.Name));
+
+        public Task Wait() => _manualResetEvent.WaitAsync();
+
+        public void Click() => _manualResetEvent.Set();
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -18,9 +18,16 @@ namespace ServiceManager.Installation.Tasks.Ui
     /// </summary>
     public partial class NameSelection : UserControl
     {
-        public NameSelection()
+        private readonly NameSelectionModel _model;
+
+        public NameSelection(NameSelectionModel model)
         {
             InitializeComponent();
+
+            _model = model;
+            DataContext = model;
         }
+
+        private void Ok_OnClick(object sender, RoutedEventArgs e) => _model.Click();
     }
 }
