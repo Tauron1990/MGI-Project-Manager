@@ -6,20 +6,21 @@
         xmlns:local="clr-namespace:ServiceManager"
         xmlns:services="clr-namespace:ServiceManager.Services"
         mc:Ignorable="d" Loaded="MainWindow_OnLoaded"
-        Title="Service Manager" Height="450" Width="800" IsEnabled="{Binding IsReady}" WindowState="Maximized" d:DataContext="{d:DesignInstance local:MainWindowsModel}">
+        Title="Service Manager" Height="450" Width="800" IsEnabled="{Binding IsReady}" WindowState="Maximized"
+        d:DataContext="{d:DesignInstance local:MainWindowsModel}">
     <TabControl>
         <TabItem Header="Services">
             <DockPanel LastChildFill="True">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-                    <Button Content="Installieren" Margin="5" Click="Install_OnClick"/>
-                    <Button Content="Deistallieren" Margin="5" Click="Unistall_OnClick"/>
+                    <Button Content="Installieren" Margin="5" Click="Install_OnClick" />
+                    <Button Content="Deistallieren" Margin="5" Click="Unistall_OnClick" />
                 </StackPanel>
                 <ListBox Margin="5" SelectedItem="{Binding SelectedService}" ItemsSource="{Binding RunningServices}">
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="{x:Type services:RunningService}">
                             <DockPanel LastChildFill="True">
-                                <TextBlock DockPanel.Dock="Left" Text="Name: " Margin="5,5,0,5"/>
-                                <TextBlock DockPanel.Dock="Left" Text="{Binding Name}" Margin="5"/>
+                                <TextBlock DockPanel.Dock="Left" Text="Name: " Margin="5,5,0,5" />
+                                <TextBlock DockPanel.Dock="Left" Text="{Binding Name}" Margin="5" />
                             </DockPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -34,7 +35,7 @@
                             <ListBox ItemsSource="{Binding Value}" local:ListBoxBehavior.ScrollOnNewItem="True">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding}" Margin="3"/>
+                                        <TextBlock Text="{Binding}" Margin="3" />
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>

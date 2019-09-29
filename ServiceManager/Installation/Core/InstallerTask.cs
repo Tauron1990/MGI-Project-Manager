@@ -24,14 +24,14 @@ namespace ServiceManager.Installation.Core
             }
         }
 
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public virtual Task Rollback() => Task.CompletedTask;
 
         public virtual Task Prepare(InstallerContext context) => Task.CompletedTask;
 
         public abstract Task<string> RunInstall(InstallerContext context);
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

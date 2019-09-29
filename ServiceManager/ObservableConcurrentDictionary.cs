@@ -9,53 +9,49 @@ namespace ServiceManager
     public class ObservableConcurrentDictionary<TKey, TValue> : ConcurrentDictionary<TKey, TValue>, INotifyCollectionChanged, INotifyPropertyChanged
     {
         public ObservableConcurrentDictionary()
-            : base()
         {
-
         }
 
         public ObservableConcurrentDictionary(IEnumerable<KeyValuePair<TKey, TValue>> collection)
             : base(collection)
         {
-
         }
 
         public ObservableConcurrentDictionary(IEqualityComparer<TKey> comparer)
             : base(comparer)
         {
-
         }
 
         public ObservableConcurrentDictionary(int concurrencyLevel, int capacity)
             : base(concurrencyLevel, capacity)
         {
-
         }
 
         public ObservableConcurrentDictionary(IEnumerable<KeyValuePair<TKey, TValue>> collection, IEqualityComparer<TKey> comparer)
             : base(collection, comparer)
         {
-
         }
 
         public ObservableConcurrentDictionary(int concurrencyLevel, int capacity, IEqualityComparer<TKey> comparer)
             : base(concurrencyLevel, capacity, comparer)
         {
-
         }
 
         public ObservableConcurrentDictionary(int concurrencyLevel, IEnumerable<KeyValuePair<TKey, TValue>> collection, IEqualityComparer<TKey> comparer)
             : base(concurrencyLevel, collection, comparer)
         {
-
         }
+
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public new TValue AddOrUpdate(TKey key, Func<TKey, TValue> addValueFactory, Func<TKey, TValue, TValue> updateValueFactory)
         {
             // Stores the value
             TValue value;
             // If key exists
-            if (base.ContainsKey(key))
+            if (ContainsKey(key))
             {
                 // Update value and raise event
                 value = base.AddOrUpdate(key, addValueFactory, updateValueFactory);
@@ -86,7 +82,7 @@ namespace ServiceManager
             // Stores the value
             TValue value;
             // If key exists
-            if (base.ContainsKey(key))
+            if (ContainsKey(key))
                 // Get value
                 value = base.GetOrAdd(key, valueFactory);
             // Else if key does not exist
@@ -104,7 +100,7 @@ namespace ServiceManager
         public new TValue GetOrAdd(TKey key, TValue value)
         {
             // If key exists
-            if (base.ContainsKey(key))
+            if (ContainsKey(key))
                 // Get value
                 base.GetOrAdd(key, value);
             // Else if key does not exist
@@ -160,9 +156,5 @@ namespace ServiceManager
             if (CollectionChanged != null)
                 CollectionChanged(this, e);
         }
-
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

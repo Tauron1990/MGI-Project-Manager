@@ -8,19 +8,13 @@ using ServiceManager.Services;
 namespace ServiceManager.Installation
 {
     /// <summary>
-    /// Interaktionslogik für IstallerWindow.xaml
+    ///     Interaktionslogik für IstallerWindow.xaml
     /// </summary>
-    public partial class InstallerWindow 
+    public partial class InstallerWindow
     {
-        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly Dispatcher _dispatcher;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public string Path { get; set; }
-
-        public string Error { get; private set; }
-        
-        public RunningService RunningService { get; private set; }
-        
 
         public InstallerWindow(MainWindow mainWindow, IServiceScopeFactory serviceScopeFactory, Dispatcher dispatcher)
         {
@@ -30,6 +24,12 @@ namespace ServiceManager.Installation
 
             Owner = mainWindow;
         }
+
+        public string Path { get; set; }
+
+        public string Error { get; private set; }
+
+        public RunningService RunningService { get; private set; }
 
         private async void InstallerWindow_OnLoaded(object sender, RoutedEventArgs e)
         {

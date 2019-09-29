@@ -1,6 +1,4 @@
-﻿using System.Collections.Concurrent;
-
-namespace ServiceManager.Core
+﻿namespace ServiceManager.Core
 {
     public class LogEntries : ObservableConcurrentDictionary<string, ObservableQueue<string>>
     {

@@ -14,6 +14,9 @@ namespace ServiceManager.Installation.Tasks.Ui
         private readonly AsyncManualResetEvent _manualResetEvent = new AsyncManualResetEvent(false);
         private string _nameText;
 
+        public NameSelectionModel(ServiceSettings serviceSettings)
+            => NameList = new ObservableCollection<string>(serviceSettings.RunningServices.Select(r => r.Name));
+
         public string NameText
         {
             get => _nameText;
@@ -27,14 +30,11 @@ namespace ServiceManager.Installation.Tasks.Ui
 
         public ObservableCollection<string> NameList { get; }
 
-        public NameSelectionModel(ServiceSettings serviceSettings) 
-            => NameList = new ObservableCollection<string>(serviceSettings.RunningServices.Select(r => r.Name));
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public Task Wait() => _manualResetEvent.WaitAsync();
 
         public void Click() => _manualResetEvent.Set();
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         private void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

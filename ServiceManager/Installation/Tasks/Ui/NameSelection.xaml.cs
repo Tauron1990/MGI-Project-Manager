@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ServiceManager.Installation.Tasks.Ui
 {
     /// <summary>
-    /// Interaktionslogik für NameSelection.xaml
+    ///     Interaktionslogik für NameSelection.xaml
     /// </summary>
     public partial class NameSelection : UserControl
     {

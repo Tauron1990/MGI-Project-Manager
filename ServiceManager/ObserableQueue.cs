@@ -23,10 +23,20 @@ namespace ServiceManager
         }
 
 
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+
+        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+        {
+            add => PropertyChanged += value;
+            remove => PropertyChanged -= value;
+        }
+
+
         public new void Clear()
         {
             base.Clear();
-            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         public new T Dequeue()
@@ -41,9 +51,6 @@ namespace ServiceManager
             base.Enqueue(item);
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
         }
-
-
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
 
 
         private void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
@@ -61,12 +68,5 @@ namespace ServiceManager
         private void RaiseCollectionChanged(NotifyCollectionChangedEventArgs e) => CollectionChanged?.Invoke(this, e);
 
         private void RaisePropertyChanged(PropertyChangedEventArgs e) => PropertyChanged?.Invoke(this, e);
-
-
-        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
-        {
-            add => PropertyChanged += value;
-            remove => PropertyChanged -= value;
-        }
     }
 }

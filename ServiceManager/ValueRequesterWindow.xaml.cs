@@ -1,11 +1,9 @@
-﻿using System.IO;
-using System.Windows;
-using System.Windows.Media.Imaging;
+﻿using System.Windows;
 
 namespace ServiceManager
 {
     /// <summary>
-    /// Interaktionslogik für ValueRequesterWindow.xaml
+    ///     Interaktionslogik für ValueRequesterWindow.xaml
     /// </summary>
     public partial class ValueRequesterWindow
     {
@@ -24,7 +22,7 @@ namespace ServiceManager
         {
             get => Message.Text;
             // ReSharper disable once PossibleNullReferenceException
-            set => Dispatcher.Invoke(() =>  Message.Text = value);
+            set => Dispatcher.Invoke(() => Message.Text = value);
         }
 
         private void Ok_OnClick(object sender, RoutedEventArgs e)
@@ -33,7 +31,7 @@ namespace ServiceManager
             DialogResult = true;
         }
 
-        private void Cancel_OnClick(object sender, RoutedEventArgs e) 
+        private void Cancel_OnClick(object sender, RoutedEventArgs e)
             => DialogResult = false;
 
         private void ShutdownClick(object sender, RoutedEventArgs e)

@@ -23,28 +23,27 @@ namespace ServiceManager
     [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
     public sealed class MainWindowsModel : INotifyPropertyChanged
     {
-        private class Wind32Proxy : IWin32Window
-        {
-            public Wind32Proxy(Window window)
-            {
-                var handle = new WindowInteropHelper(window);
-
-                Handle = handle.EnsureHandle();
-            }
-
-            public IntPtr Handle { get; }
-        }
-
         private const string ServiceName = "Service_Manager";
         public static readonly string SettingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Tauron\\ServiceManager\\Settings.json");
+        private readonly IApiRequester _apiRequester;
+        private readonly Dispatcher _dispatcher;
+        private readonly IInstallerSystem _installerSystem;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
         private readonly ServiceSettings _serviceSettings;
-        private readonly Dispatcher _dispatcher;
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly IApiRequester _apiRequester;
-        private readonly IInstallerSystem _installerSystem;
         private bool _isReady;
         private RunningService _selectedService;
+
+        public MainWindowsModel(LogEntries logEntries, ServiceSettings serviceSettings, Dispatcher dispatcher, IServiceScopeFactory serviceScopeFactory, IApiRequester apiRequester,
+                                IInstallerSystem installerSystem)
+        {
+            _serviceSettings = serviceSettings;
+            _dispatcher = dispatcher;
+            _serviceScopeFactory = serviceScopeFactory;
+            _apiRequester = apiRequester;
+            _installerSystem = installerSystem;
+            LogEntries = logEntries;
+        }
 
         public bool IsReady
         {
@@ -72,16 +71,7 @@ namespace ServiceManager
             }
         }
 
-        public MainWindowsModel(LogEntries logEntries, ServiceSettings serviceSettings, Dispatcher dispatcher, IServiceScopeFactory serviceScopeFactory, IApiRequester apiRequester,
-                                IInstallerSystem installerSystem)
-        {
-            _serviceSettings = serviceSettings;
-            _dispatcher = dispatcher;
-            _serviceScopeFactory = serviceScopeFactory;
-            _apiRequester = apiRequester;
-            _installerSystem = installerSystem;
-            LogEntries = logEntries;
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public async Task BeginLoad()
         {
@@ -109,17 +99,15 @@ namespace ServiceManager
 
                 if (!window.Shutdown) continue;
 
-                if (Application.Current.Dispatcher != null) 
+                if (Application.Current.Dispatcher != null)
                     await Application.Current.Dispatcher.InvokeAsync(Application.Current.Shutdown);
-                
-
             }
 
             if (string.IsNullOrWhiteSpace(_serviceSettings.ApiKey))
             {
                 try
                 {
-                    string key = await _apiRequester.RegisterApiKey(ServiceName);
+                    var key = await _apiRequester.RegisterApiKey(ServiceName);
                     if (string.IsNullOrWhiteSpace(key))
                     {
                         MessageBox.Show("Fehler beim Anfordern eines Api Keys.", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -135,10 +123,10 @@ namespace ServiceManager
                     MessageBox.Show($"Fehler: {e}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 }
             }
-            
+
             App.ClientCofiguration.SetUrls(targetUri, ServiceName, _serviceSettings.ApiKey);
 
-            foreach (var runningService in _serviceSettings.RunningServices) 
+            foreach (var runningService in _serviceSettings.RunningServices)
                 RunningServices.Add(runningService);
 
             IsReady = true;
@@ -150,27 +138,37 @@ namespace ServiceManager
 
             folderBrowser.ShowDialog(new Wind32Proxy(Application.Current.MainWindow));
 
-           var result = await _installerSystem.Install(folderBrowser.FileName);
+            var result = await _installerSystem.Install(folderBrowser.FileName);
 
-           if (result == null) return;
+            if (result == null) return;
 
-           RunningServices.Add(result);
-           _serviceSettings.RunningServices.Add(result);
+            RunningServices.Add(result);
+            _serviceSettings.RunningServices.Add(result);
 
-           await ServiceSettings.Write(_serviceSettings, SettingsPath);
+            await ServiceSettings.Write(_serviceSettings, SettingsPath);
         }
 
         public async Task UnInstall()
         {
-            if(SelectedService == null) return;
+            if (SelectedService == null) return;
 
             await _installerSystem.Unistall(SelectedService);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         [NotifyPropertyChangedInvocator]
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null) 
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private class Wind32Proxy : IWin32Window
+        {
+            public Wind32Proxy(Window window)
+            {
+                var handle = new WindowInteropHelper(window);
+
+                Handle = handle.EnsureHandle();
+            }
+
+            public IntPtr Handle { get; }
+        }
     }
 }

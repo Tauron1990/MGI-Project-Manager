@@ -10,6 +10,12 @@ namespace ServiceManager.Installation.Core
     {
         private ZipArchive _packageArchive;
 
+        public InstallerContext(IServiceScope serviceScope, string packagePath)
+        {
+            ServiceScope = serviceScope;
+            PackagePath = packagePath;
+        }
+
         public string PackagePath { get; }
 
         public string ServiceName { get; set; }
@@ -36,16 +42,10 @@ namespace ServiceManager.Installation.Core
             }
         }
 
-        public InstallerContext(IServiceScope serviceScope, string packagePath)
-        {
-            ServiceScope = serviceScope;
-            PackagePath = packagePath;
-        }
+
+        public void Dispose()
+            => _packageArchive?.Dispose();
 
         public RunningService CreateRunningService();
-
-
-        public void Dispose() 
-            => _packageArchive?.Dispose();
     }
 }

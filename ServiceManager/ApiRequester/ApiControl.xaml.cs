@@ -6,14 +6,12 @@ using Microsoft.Extensions.Logging;
 namespace ServiceManager.ApiRequester
 {
     /// <summary>
-    /// Interaktionslogik für ApiControl.xaml
+    ///     Interaktionslogik für ApiControl.xaml
     /// </summary>
     public partial class ApiControl
     {
-        private readonly ILogger<ApiControl> _logger;
         private readonly IApiRequester _apiRequester;
-
-        public event Func<string, Task> KeyRecived;
+        private readonly ILogger<ApiControl> _logger;
 
         public ApiControl(ILogger<ApiControl> logger, IApiRequester apiRequester)
         {
@@ -22,11 +20,13 @@ namespace ServiceManager.ApiRequester
             InitializeComponent();
         }
 
+        public event Func<string, Task> KeyRecived;
+
         private async void Send_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                string key = await _apiRequester.RegisterApiKey(ServiceName.Text);
+                var key = await _apiRequester.RegisterApiKey(ServiceName.Text);
 
                 if (string.IsNullOrEmpty(key))
                 {
@@ -37,7 +37,7 @@ namespace ServiceManager.ApiRequester
                 Error.Text = $"Schlüssel: {key}";
 
                 var invoker = KeyRecived;
-                if( invoker == null) return;
+                if (invoker == null) return;
 
                 await invoker(key);
             }

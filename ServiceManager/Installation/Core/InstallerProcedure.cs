@@ -2,20 +2,30 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ServiceManager.Installation.Tasks;
 
 namespace ServiceManager.Installation.Core
 {
-    public class InstallerProcedure : INotifyPropertyChanged
+    public sealed class InstallerProcedure : INotifyPropertyChanged
     {
         private readonly ILogger<InstallerProcedure> _logger;
         private InstallerTask _currentTask;
 
-        public ObservableCollection<InstallerTask> Tasks { get; } = new ObservableCollection<InstallerTask>();
+        public InstallerProcedure(ILogger<InstallerProcedure> logger)
+        {
+            _logger = logger;
+
+            Tasks.Add(TaskCreator<NameSelectionTask>);
+            Tasks.Add(TaskCreator<CopyTask>);
+        }
+
+        public ObservableCollection<Func<InstallerContext, InstallerTask>> Tasks { get; } = new ObservableCollection<Func<InstallerContext, InstallerTask>>();
 
         public InstallerTask CurrentTask
         {
@@ -28,19 +38,14 @@ namespace ServiceManager.Installation.Core
             }
         }
 
-        public InstallerProcedure(ILogger<InstallerProcedure> logger)
-        {
-            _logger = logger;
-
-            Tasks.Add(new NameSelectionTask());
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public async Task<string> Install(InstallerContext context)
         {
-            List<InstallerTask> rollback = new List<InstallerTask>();
+            var rollback = new List<InstallerTask>();
             string error = null;
 
-            foreach (var installerTask in Tasks)
+            foreach (var installerTask in Tasks.Select(f => f(context)))
             {
                 try
                 {
@@ -88,10 +93,12 @@ namespace ServiceManager.Installation.Core
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        private static InstallerTask TaskCreator<TType>(InstallerContext context)
+            where TType : InstallerTask =>
+            ActivatorUtilities.CreateInstance<TType>(context.ServiceScope.ServiceProvider);
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
