@@ -84,6 +84,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{FF6C98F0-B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceManager", "ServiceManager\ServiceManager.csproj", "{2B86F53A-39B3-4317-910B-289DE08C0A86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceManager.CQRS", "ServiceManager.CQRS\ServiceManager.CQRS.csproj", "{5762E79A-0D8D-476E-84A6-1896BD3EE759}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Event Delivery|Any CPU = Debug Event Delivery|Any CPU
@@ -197,6 +199,12 @@ Global
 		{2B86F53A-39B3-4317-910B-289DE08C0A86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B86F53A-39B3-4317-910B-289DE08C0A86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B86F53A-39B3-4317-910B-289DE08C0A86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5762E79A-0D8D-476E-84A6-1896BD3EE759}.Debug Event Delivery|Any CPU.ActiveCfg = Debug|Any CPU
+		{5762E79A-0D8D-476E-84A6-1896BD3EE759}.Debug Event Delivery|Any CPU.Build.0 = Debug|Any CPU
+		{5762E79A-0D8D-476E-84A6-1896BD3EE759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5762E79A-0D8D-476E-84A6-1896BD3EE759}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5762E79A-0D8D-476E-84A6-1896BD3EE759}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5762E79A-0D8D-476E-84A6-1896BD3EE759}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -229,6 +237,7 @@ Global
 		{7CBEE00B-12E7-4B1C-B261-EAD080C01AFE} = {574D22A4-A56A-4496-BC14-C32212C058E4}
 		{FF6C98F0-BFF2-46A8-8239-D53CE53B78FE} = {F12CB168-0F85-47C7-A84C-5EE83D468E54}
 		{2B86F53A-39B3-4317-910B-289DE08C0A86} = {FF6C98F0-BFF2-46A8-8239-D53CE53B78FE}
+		{5762E79A-0D8D-476E-84A6-1896BD3EE759} = {FF6C98F0-BFF2-46A8-8239-D53CE53B78FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}

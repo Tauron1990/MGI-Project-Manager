@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.IO.Compression;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,16 +36,19 @@ namespace ServiceManager.Installation.Tasks
                                                           });
         }
 
-        public override async Task<string> RunInstall(InstallerContext context)
+        public override Task<string> RunInstall(InstallerContext context)
         {
             var path = Path.Combine("Apps", context.ServiceName).ToApplicationPath();
             if (!Directory.Exists(path))
             {
-                _logger.LogInformation(EventId);
+                _logger.LogInformation("Create Service Directory");
                 Directory.CreateDirectory(path);
             }
 
-            context.PackageArchive.e
+            context.PackageArchive.ExtractToDirectory(path, true);
+
+            _logger.LogInformation("Extraction Compled");
+            return Task.FromResult<string>(null);
         }
     }
 }

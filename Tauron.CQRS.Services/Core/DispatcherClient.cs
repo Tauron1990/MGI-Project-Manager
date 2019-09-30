@@ -124,7 +124,7 @@ namespace Tauron.CQRS.Services.Core
 
         public async Task Send(IMessage command, CancellationToken cancellationToken)
         {
-            ServerDomainMessage msg = new ServerDomainMessage
+            var msg = new ServerDomainMessage
                                       {
                                           EventData = JsonConvert.SerializeObject(command),
                                           TypeName = command.GetType().AssemblyQualifiedName,
@@ -133,12 +133,17 @@ namespace Tauron.CQRS.Services.Core
                                           SequenceNumber = DateTime.UtcNow.Ticks + _random.Next()
                                       };
 
-            if (command is IEvent @event)
+            switch (command)
             {
-                msg.Id = @event.Id;
-                msg.Version = @event.Version;
-                msg.TimeStamp = @event.TimeStamp;
-                msg.EventType = EventType.Event;
+                case IEvent @event:
+                    msg.Id = @event.Id;
+                    msg.Version = @event.Version;
+                    msg.TimeStamp = @event.TimeStamp;
+                    msg.EventType = EventType.Event;
+                    break;
+                case IAmbientCommand _:
+                    msg.EventType = EventType.AmbientCommand;
+                    break;
             }
 
             await _hubConnection.SendAsync(HubEventNames.PublishEvent, msg, _config.Value.ApiKey, cancellationToken);

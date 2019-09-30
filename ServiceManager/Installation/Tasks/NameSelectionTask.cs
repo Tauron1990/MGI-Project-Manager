@@ -19,8 +19,8 @@ namespace ServiceManager.Installation.Tasks
     public sealed class NameSelectionTask : InstallerTask
     {
         private readonly ILogger<NameSelectionTask> _logger;
-        private object _content;
         private NameSelectionModel _nameSelectionModel;
+        private object _content;
 
         public NameSelectionTask(ILogger<NameSelectionTask> logger) => _logger = logger;
 

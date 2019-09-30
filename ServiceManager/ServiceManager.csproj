@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ServiceManager.CQRS\ServiceManager.CQRS.csproj" />
     <ProjectReference Include="..\Tauron.CQRS.Common\Tauron.CQRS.Common.csproj" />
     <ProjectReference Include="..\Tauron.CQRS.Services\Tauron.CQRS.Services.csproj" />
   </ItemGroup>
@@ -42,6 +43,10 @@
       <HintPath>bin\Debug\netcoreapp3.0\PresentationTheme.Aero.Win8.dll</HintPath>
       <Private>false</Private>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ProcessManager\" />
   </ItemGroup>
 
 </Project>
