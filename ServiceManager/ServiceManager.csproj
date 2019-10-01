@@ -45,8 +45,4 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ProcessManager\" />
-  </ItemGroup>
-
 </Project>

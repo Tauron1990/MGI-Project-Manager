@@ -41,13 +41,13 @@ namespace ServiceManager.Installation.Tasks
             var path = Path.Combine("Apps", context.ServiceName).ToApplicationPath();
             if (!Directory.Exists(path))
             {
-                _logger.LogInformation("Create Service Directory");
+                _logger.LogInformation($"{context.ServiceName}: Create Service Directory");
                 Directory.CreateDirectory(path);
             }
 
             context.PackageArchive.ExtractToDirectory(path, true);
 
-            _logger.LogInformation("Extraction Compled");
+            _logger.LogInformation($"{context.ServiceName}: Extraction Compled");
             return Task.FromResult<string>(null);
         }
     }

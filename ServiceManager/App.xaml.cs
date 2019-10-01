@@ -13,6 +13,7 @@ using ServiceManager.Core;
 using ServiceManager.Installation;
 using ServiceManager.Installation.Core;
 using ServiceManager.Installation.Tasks.Ui;
+using ServiceManager.ProcessManager;
 using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Services.Extensions;
 
@@ -56,6 +57,7 @@ namespace ServiceManager
             collection.AddSingleton(Current.Dispatcher);
             collection.AddSingleton(LogEntries);
             collection.AddSingleton(provider => ServiceSettings.Read(MainWindowsModel.SettingsPath));
+            collection.AddSingleton<IProcessManager, ProcessManager.ProcessManager>();
 
             collection.AddSingleton<MainWindowsModel, MainWindowsModel>();
             collection.AddTransient<IInstallerSystem, InstallerSystem>();
