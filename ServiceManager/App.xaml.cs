@@ -59,10 +59,11 @@ namespace ServiceManager
             collection.AddSingleton(provider => ServiceSettings.Read(MainWindowsModel.SettingsPath));
             collection.AddSingleton<IProcessManager, ProcessManager.ProcessManager>();
 
-            collection.AddSingleton<MainWindowsModel, MainWindowsModel>();
+            collection.AddTransient<ServiceStopWaiter>();
+            collection.AddSingleton<MainWindowsModel>();
             collection.AddTransient<IInstallerSystem, InstallerSystem>();
-            collection.AddScoped<InstallerProcedure, InstallerProcedure>();
-            collection.AddScoped<NameSelectionModel, NameSelectionModel>();
+            collection.AddScoped<InstallerProcedure>();
+            collection.AddScoped<NameSelectionModel>();
 
             collection.AddSingleton(provider
                                         => new RestClient(

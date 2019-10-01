@@ -23,6 +23,7 @@ namespace ServiceManager.Installation.Core
 
             Tasks.Add(TaskCreator<NameSelectionTask>);
             Tasks.Add(TaskCreator<CopyTask>);
+            Tasks.Add(TaskCreator<StartTask>);
         }
 
         public ObservableCollection<Func<InstallerContext, InstallerTask>> Tasks { get; } = new ObservableCollection<Func<InstallerContext, InstallerTask>>();

@@ -8,16 +8,18 @@
 
         public string Name { get; set; }
 
-        public RunningService(string installationPath, ServiceStade serviceStade, string name)
+        public string Exe { get; set; }
+
+        public RunningService(string installationPath, ServiceStade serviceStade, string name, string exe)
         {
             InstallationPath = installationPath;
             ServiceStade = serviceStade;
             Name = name;
+            Exe = exe;
         }
 
         public RunningService()
         {
-            
         }
     }
 }

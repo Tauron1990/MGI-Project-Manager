@@ -5,8 +5,8 @@ namespace ServiceManager.ProcessManager
 {
     public interface IProcessManager
     {
-        Task Start(RunningService service);
+        Task<bool> Start(RunningService service);
 
-        Task Stop(RunningService service, int timeToKill);
+        Task<bool> Stop(RunningService service, int timeToKill);
     }
 }
