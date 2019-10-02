@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Tauron.CQRS.Common;
 using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Services.Core.Components;
@@ -71,7 +72,7 @@ namespace Tauron.CQRS.Services.Core
         private readonly HubConnection _hubConnection;
         private readonly ConcurrentDictionary<string, EventRegistration> _eventRegistrations = new ConcurrentDictionary<string, EventRegistration>();
         private readonly IMemoryCache _memoryCache = new MemoryCache(new MemoryCacheOptions());
-        private BlockingCollection<MessageDelivery> _messageDeliveries;
+        private MessageQueue<MessageDelivery> _messageDeliveries;
 
         private bool _isCLoseOk;
 
@@ -99,9 +100,16 @@ namespace Tauron.CQRS.Services.Core
         {
             Task.Run(async () =>
             {
-                _messageDeliveries = new BlockingCollection<MessageDelivery>();
+                _messageDeliveries = new MessageQueue<MessageDelivery>(Environment.ProcessorCount);
 
-                foreach (var messageDelivery in _messageDeliveries.GetConsumingEnumerable()) await messageDelivery.Start();
+                _messageDeliveries.OnWork += m => m.Start();
+                _messageDeliveries.OnError += e =>
+                {
+                    _logger.LogError(e, "Error on Message Dispatch");
+                    return Task.CompletedTask;
+                };
+
+                await _messageDeliveries.Start();
 
                 _messageDeliveries.Dispose();
             });
@@ -109,7 +117,7 @@ namespace Tauron.CQRS.Services.Core
 
         public async Task Stop()
         {
-            _messageDeliveries.CompleteAdding();
+            _messageDeliveries.Stop();
             _isCLoseOk = true;
             await _hubConnection.StopAsync();
             await _hubConnection.DisposeAsync();
@@ -215,7 +223,7 @@ namespace Tauron.CQRS.Services.Core
                     case EventType.Event:
                     {
                         if (_eventRegistrations.TryGetValue(domainMessage.EventName, out var reg))
-                            _messageDeliveries.Add(new MessageDelivery(reg, domainMessage));
+                            _messageDeliveries.Enqueue(new MessageDelivery(reg, domainMessage));
                         break;
                     }
                     default:
@@ -242,7 +250,7 @@ namespace Tauron.CQRS.Services.Core
             {
                 var domainMessage = _memoryCache.Get<ServerDomainMessage>(seqNumber);
                 if (domainMessage != null && _eventRegistrations.TryGetValue(domainMessage.EventName, out var reg))
-                    _messageDeliveries.Add(new MessageDelivery(reg, domainMessage));
+                    _messageDeliveries.Enqueue(new MessageDelivery(reg, domainMessage));
                 else
                     _logger.LogWarning($"Message Timeout Or Registration Error: {seqNumber}");
             }

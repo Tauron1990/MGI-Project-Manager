@@ -11,7 +11,6 @@ namespace ServiceManager.Installation.Tasks
 
         public override Task<string> RunInstall(InstallerContext context)
         {
-            throw new System.NotImplementedException();
         }
     }
 }

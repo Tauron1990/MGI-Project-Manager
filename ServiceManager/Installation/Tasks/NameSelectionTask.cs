@@ -72,10 +72,13 @@ namespace ServiceManager.Installation.Tasks
         }
 
         private static string GetName(ZipArchive zipArchive) 
-            => new ConfigurationBuilder()
-               .AddJsonFile(new ZipFileProvider(zipArchive), "appsettings.json", false, false)
-               .Build()
+            => GetConfiguration(zipArchive)
                .GetValue<string>("ServiceName");
+
+        private static IConfiguration GetConfiguration(ZipArchive zipArchive)
+            =>  new ConfigurationBuilder()
+                .AddJsonFile(new ZipFileProvider(zipArchive), "appsettings.json", false, false)
+                .Build();
 
         private sealed class ZipFileProvider : IFileProvider
         {

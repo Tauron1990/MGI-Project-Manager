@@ -43,72 +43,72 @@ namespace Tauron.CQRS.Server
         {
             if (!_config.Value.Memory)
             {
-                using (var prov = _scopeFactory.CreateScope())
-                {
-                    using (var context = prov.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>())
-                        context.Database.Migrate();
-                }
+                using var prov = _scopeFactory.CreateScope();
+                using var context = prov.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>();
+                context.Database.Migrate();
             }
 
-            _runningTask = Task.Run(async () =>
+            _eventManager.Dispatcher.OnWork += async domainEvent =>
             {
+                if(stoppingToken.IsCancellationRequested) _eventManager.Dispatcher.Stop();
+
                 try
                 {
-                    foreach (var domainEvent in _eventManager.Dispatcher.GetConsumingEnumerable(stoppingToken))
+                    switch (domainEvent.RealMessage.EventName)
                     {
-                        switch (domainEvent.RealMessage.EventName)
-                        {
-                            case HubEventNames.DispatcherCommand.StartDispatcher:
-                                _logger.LogInformation("Starting Dispatcher");
-                                _stopped = false;
-                                await _eventManager.StartDispatching();
-                                break;
-                            case HubEventNames.DispatcherCommand.StopDispatcher:
-                                _logger.LogInformation("Stopping Dispatcher");
-                                _stopped = true;
-                                await _eventManager.StopDispatching();
-                                break;
-                            default:
-                                if (_stopped)
-                                    continue;
-                                //if (_serviceScope == null || _dispatcherDatabaseContext == null)
-                                //{
-                                //    _serviceScope = _scopeFactory.CreateScope();
-                                //    _dispatcherDatabaseContext = _serviceScope.ServiceProvider
-                                //        .GetRequiredService<DispatcherDatabaseContext>();
-                                //}
+                        case HubEventNames.DispatcherCommand.StartDispatcher:
+                            _logger.LogInformation("Starting Dispatcher");
+                            _stopped = false;
+                            await _eventManager.StartDispatching();
+                            break;
+                        case HubEventNames.DispatcherCommand.StopDispatcher:
+                            _logger.LogInformation("Stopping Dispatcher");
+                            _stopped = true;
+                            await _eventManager.StopDispatching();
+                            break;
+                        default:
+                            if (_stopped)
+                                return;
+                            //if (_serviceScope == null || _dispatcherDatabaseContext == null)
+                            //{
+                            //    _serviceScope = _scopeFactory.CreateScope();
+                            //    _dispatcherDatabaseContext = _serviceScope.ServiceProvider
+                            //        .GetRequiredService<DispatcherDatabaseContext>();
+                            //}
 
-                                if (domainEvent.RealMessage.EventType == EventType.Event)
-                                {
-                                    //await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
-                                    if (stoppingToken.IsCancellationRequested) continue;
+                            if (domainEvent.RealMessage.EventType == EventType.Event)
+                            {
+                                //await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
+                                if (stoppingToken.IsCancellationRequested) return;
 
-                                    if (!await _eventManager.DeliverEvent(domainEvent, stoppingToken))
-                                        await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
-                                }
-                                else
-                                {
-                                    if (!await _eventManager.DeliverEvent(domainEvent, stoppingToken))
-                                        await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
-                                }
+                                if (!await _eventManager.DeliverEvent(domainEvent, stoppingToken))
+                                    await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
+                            }
+                            else
+                            {
+                                if (!await _eventManager.DeliverEvent(domainEvent, stoppingToken))
+                                    await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
+                            }
 
-                                //if (_eventManager.Dispatcher.Count == 0 || stoppingToken.IsCancellationRequested)
-                                //{
-                                //    _dispatcherDatabaseContext?.Dispose();
-                                //    _serviceScope?.Dispose();
+                            //if (_eventManager.Dispatcher.Count == 0 || stoppingToken.IsCancellationRequested)
+                            //{
+                            //    _dispatcherDatabaseContext?.Dispose();
+                            //    _serviceScope?.Dispose();
 
-                                //    _dispatcherDatabaseContext = null;
-                                //    _serviceScope = null;
-                                //}
+                            //    _dispatcherDatabaseContext = null;
+                            //    _serviceScope = null;
+                            //}
 
-                                break;
-                        }
+                            break;
                     }
+
                 }
                 catch (OperationCanceledException)
                 {
                 }
-            }, stoppingToken);
+            };
+
+            _runningTask = _eventManager.Dispatcher.Start();
 
             return Task.CompletedTask;
         }

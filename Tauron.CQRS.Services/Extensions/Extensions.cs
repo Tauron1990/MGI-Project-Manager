@@ -51,6 +51,7 @@ namespace Tauron.CQRS.Services.Extensions
                 provider => new RestEase.RestClient(provider.GetRequiredService<IOptions<ClientCofiguration>>().Value.PersistenceApiUrl).For<IPersistApi>());
 
             services.AddScoped<ISession, CqrsSession>();
+            services.AddScoped<ILockSession, AsyncCqrsSession>();
             services.AddScoped<IRepository>(s =>
             {
                 var store = s.GetRequiredService<IEventStore>();

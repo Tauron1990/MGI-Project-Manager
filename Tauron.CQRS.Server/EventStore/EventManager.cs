@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Tauron.CQRS.Common;
 using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Server.Hubs;
 
@@ -87,14 +88,20 @@ namespace Tauron.CQRS.Server.EventStore
             }
         }
 
-        public BlockingCollection<RecivedDomainEvent> Dispatcher { get; }
+        public MessageQueue<RecivedDomainEvent> Dispatcher { get; }
 
         public EventManager(IHubContext<EventHub> eventHub, IConnectionManager connectionManager, ILogger<IEventManager> logger)
         {
             _eventHub = eventHub;
             _connectionManager = connectionManager;
             _logger = logger;
-            Dispatcher = new BlockingCollection<RecivedDomainEvent>();
+
+            Dispatcher = new MessageQueue<RecivedDomainEvent>(Environment.ProcessorCount);
+            Dispatcher.OnError += e =>
+            {
+                logger.LogError(e, "Error in dispatching Message");
+                return Task.CompletedTask;
+            };
         }
 
         public async Task<bool> DeliverEvent(RecivedDomainEvent @event, CancellationToken token)
@@ -181,7 +188,7 @@ namespace Tauron.CQRS.Server.EventStore
                 {
                     case HubEventNames.DispatcherCommand.StartDispatcher:
                     case HubEventNames.DispatcherCommand.StopDispatcher:
-                        Dispatcher.Add(new RecivedDomainEvent(domainMessage, apiKey));
+                        Dispatcher.Enqueue(new RecivedDomainEvent(domainMessage, apiKey));
                         break;
                     default:
                         await _eventHub.Clients.Client(sender).SendAsync(HubEventNames.RejectedEvent, HubEventNames.RejectionReasons.DispatcherStoped);
@@ -189,7 +196,7 @@ namespace Tauron.CQRS.Server.EventStore
                 }
             }
 
-            Dispatcher.Add(new RecivedDomainEvent(domainMessage, apiKey));
+            Dispatcher.Enqueue(new RecivedDomainEvent(domainMessage, apiKey));
         }
 
         public Task StopDispatching()
