@@ -8,5 +8,9 @@ namespace ServiceManager.ProcessManager
         Task<bool> Start(RunningService service);
 
         Task<bool> Stop(RunningService service, int timeToKill);
+
+        Task StartAll();
+
+        void StopAll();
     }
 }

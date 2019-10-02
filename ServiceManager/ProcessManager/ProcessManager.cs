@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CQRSlite.Commands;
 using Microsoft.Extensions.Logging;
@@ -32,12 +33,14 @@ namespace ServiceManager.ProcessManager
 
         private readonly ILogger<ProcessManager> _logger;
         private readonly ICommandSender _commandSender;
+        private readonly ServiceSettings _serviceSettings;
         private readonly ConcurrentDictionary<string, ProcessHolder> _processes = new ConcurrentDictionary<string, ProcessHolder>();
 
-        public ProcessManager(ILogger<ProcessManager> logger, ICommandSender commandSender)
+        public ProcessManager(ILogger<ProcessManager> logger, ICommandSender commandSender, ServiceSettings serviceSettings)
         {
             _logger = logger;
             _commandSender = commandSender;
+            _serviceSettings = serviceSettings;
         }
 
         public Task<bool> Start(RunningService service)
@@ -108,6 +111,18 @@ namespace ServiceManager.ProcessManager
             }
 
             return false;
+        }
+
+        public async Task StartAll()
+        {
+            foreach (var service in _serviceSettings.RunningServices) await Start(service);
+        }
+
+        public void StopAll()
+        {
+            Task.WaitAll(_serviceSettings.RunningServices.Select(s => Stop(s, 10_1000)).Cast<Task>().ToArray());
+
+            ServiceSettings.Write(_serviceSettings, MainWindowsModel.SettingsPath).Wait();
         }
 
         public void Dispose()

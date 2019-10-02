@@ -131,6 +131,8 @@ namespace ServiceManager
             foreach (var runningService in _serviceSettings.RunningServices)
                 RunningServices.Add(new UiService(runningService, _processManager));
 
+            await _processManager.StartAll();
+
             IsReady = true;
         }
 

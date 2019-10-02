@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using Microsoft.Extensions.DependencyInjection;
+using ServiceManager.ProcessManager;
 
 namespace ServiceManager
 {
@@ -44,9 +45,6 @@ namespace ServiceManager
         private async void Install_OnClick(object sender, RoutedEventArgs e)
             => await _model.Install();
 
-        private void MainWindow_OnClosed(object sender, EventArgs e)
-        {
-            TODO
-        }
+        private void MainWindow_OnClosed(object sender, EventArgs e) => _serviceProvider.GetRequiredService<IProcessManager>().StopAll();
     }
 }
