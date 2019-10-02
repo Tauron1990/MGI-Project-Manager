@@ -50,12 +50,15 @@ namespace ServiceManager.ProcessManager
 
                 _processes[service.Name] = new ProcessHolder(process);
 
+                service.ServiceStade = ServiceStade.Running;
+
                 return Task.FromResult(true);
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"{service.Name}: Error on Start Process");
 
+                service.ServiceStade = ServiceStade.Error;
                 return Task.FromResult(false);
             }
         }
@@ -66,6 +69,8 @@ namespace ServiceManager.ProcessManager
             {
                 return await process.Execute(async p =>
                 {
+                    bool error = false;
+
                     try
                     {
                         using var waiter = new ServiceStopWaiter(service.Name);
@@ -82,18 +87,22 @@ namespace ServiceManager.ProcessManager
                     }
                     catch (InvalidOperationException e)
                     {
+                        error = true;
+
                         _logger.LogError(e, $"{service.Name}: Invalid process Handle");
                         _processes.TryRemove(service.Name, out _);
                         return true;
                     }
                     catch (Exception e)
                     {
+                        error = true;
+
                         _logger.LogError(e, $"{service.Name}: Error on Stop");
                         return false;
                     }
                     finally
                     {
-                        service.ServiceStade = ServiceStade.Ready;
+                        service.ServiceStade = error ? ServiceStade.Error : ServiceStade.Ready;
                     }
                 });
             }

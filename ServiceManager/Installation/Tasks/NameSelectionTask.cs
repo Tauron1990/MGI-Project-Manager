@@ -68,12 +68,33 @@ namespace ServiceManager.Installation.Tasks
 
             context.ServiceName = name;
 
+            _logger.LogInformation($"{context.ServiceName}: Try Find Exe Name");
+            string exeName = GetExeName(context.PackageArchive);
+
+            if (string.IsNullOrEmpty(exeName))
+            {
+                _logger.LogInformation($"{context.ServiceName}: Search for Exe in Package");
+                exeName = context.PackageArchive.Entries.FirstOrDefault(e => e.Name.EndsWith(".exe"))?.FullName;
+
+                if (string.IsNullOrEmpty(exeName))
+                {
+                    _logger.LogWarning($"{context.ServiceName}: No Exe Found");
+                    return "Keine Ausfürbare Datei gefunden";
+                }
+            }
+
+            _logger.LogInformation($"{context.ServiceName}: Exe Found: {exeName}");
+            context.ExeName = exeName;
+
             return null;
         }
 
         private static string GetName(ZipArchive zipArchive) 
             => GetConfiguration(zipArchive)
                .GetValue<string>("ServiceName");
+
+        private static string GetExeName(ZipArchive zipArchive) 
+            => GetConfiguration(zipArchive).GetValue<string>("ExeName");
 
         private static IConfiguration GetConfiguration(ZipArchive zipArchive)
             =>  new ConfigurationBuilder()

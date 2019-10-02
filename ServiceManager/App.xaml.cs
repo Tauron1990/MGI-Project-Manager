@@ -77,6 +77,7 @@ namespace ServiceManager
             collection.AddTransient(CreateControl<ValueRequesterWindow>);
             collection.AddTransient(CreateControl<NameSelection>);
             collection.AddTransient(CreateControl<InstallerWindow>);
+            collection.AddTransient(CreateControl<UnistallWindow>);
 
             return collection.BuildServiceProvider();
         }

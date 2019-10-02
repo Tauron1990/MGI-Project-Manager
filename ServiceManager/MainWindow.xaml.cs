@@ -43,5 +43,10 @@ namespace ServiceManager
 
         private async void Install_OnClick(object sender, RoutedEventArgs e)
             => await _model.Install();
+
+        private void MainWindow_OnClosed(object sender, EventArgs e)
+        {
+            TODO
+        }
     }
 }

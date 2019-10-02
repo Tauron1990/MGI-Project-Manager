@@ -27,7 +27,7 @@ namespace ServiceManager.Installation.Core
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public virtual Task Rollback() => Task.CompletedTask;
+        public virtual Task Rollback(InstallerContext context) => Task.CompletedTask;
 
         public virtual Task Prepare(InstallerContext context) => Task.CompletedTask;
 

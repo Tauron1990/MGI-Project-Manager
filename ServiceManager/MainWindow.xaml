@@ -5,9 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ServiceManager"
         xmlns:services="clr-namespace:ServiceManager.Services"
+        xmlns:core="clr-namespace:ServiceManager.Core"
         mc:Ignorable="d" Loaded="MainWindow_OnLoaded"
         Title="Service Manager" Height="450" Width="800" IsEnabled="{Binding IsReady}" WindowState="Maximized"
-        d:DataContext="{d:DesignInstance local:MainWindowsModel}">
+        d:DataContext="{d:DesignInstance local:MainWindowsModel}" Closed="MainWindow_OnClosed">
+    <Window.Resources>
+        <core:ServiceStadeConverter x:Key="ServiceStadeConverter"/>
+        <core:ProgressBoolConverter x:Key="ProgressBoolConverter"/>
+    </Window.Resources>
     <TabControl>
         <TabItem Header="Services">
             <DockPanel LastChildFill="True">
@@ -17,10 +22,16 @@
                 </StackPanel>
                 <ListBox Margin="5" SelectedItem="{Binding SelectedService}" ItemsSource="{Binding RunningServices}">
                     <ListBox.ItemTemplate>
-                        <DataTemplate DataType="{x:Type services:RunningService}">
+                        <DataTemplate DataType="{x:Type local:UiService}">
                             <DockPanel LastChildFill="True">
                                 <TextBlock DockPanel.Dock="Left" Text="Name: " Margin="5,5,0,5" />
-                                <TextBlock DockPanel.Dock="Left" Text="{Binding Name}" Margin="5" />
+                                <Button DockPanel.Dock="Right" IsEnabled="{Binding CanClick}" Command="{Binding Click}">
+                                    <Grid>
+                                        <Rectangle Fill="{Binding Service.ServiceStade, Converter={StaticResource ServiceStadeConverter}}" Margin="1" RadiusX="10" RadiusY="10"/>
+                                        <core:ProgressCicle Width="20" Margin="1" Visibility="{Binding Progress, Converter={StaticResource ProgressBoolConverter}}"/>
+                                    </Grid>
+                                </Button>
+                                <TextBlock DockPanel.Dock="Left" Text="{Binding Service.Name}" Margin="5" />
                             </DockPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

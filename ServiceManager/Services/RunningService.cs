@@ -1,14 +1,54 @@
-﻿namespace ServiceManager.Services
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
+
+namespace ServiceManager.Services
 {
-    public sealed class RunningService
+    public sealed class RunningService : INotifyPropertyChanged
     {
-        public string InstallationPath { get; set; }
+        private string _installationPath;
+        private ServiceStade _serviceStade;
+        private string _name;
+        private string _exe;
 
-        public ServiceStade ServiceStade { get; set; }
+        public string InstallationPath
+        {
+            get => _installationPath;
+            set
+            {
+                if (value == _installationPath) return;
+                _installationPath = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public string Name { get; set; }
+        public ServiceStade ServiceStade
+        {
+            get => _serviceStade;
+            set
+            {
+                if (value == _serviceStade) return;
+                _serviceStade = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public string Exe { get; set; }
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                if (value == _name) return;
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Exe
+        {
+            get => _exe;
+            set => _exe = value;
+        }
 
         public RunningService(string installationPath, ServiceStade serviceStade, string name, string exe)
         {
@@ -21,5 +61,10 @@
         public RunningService()
         {
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

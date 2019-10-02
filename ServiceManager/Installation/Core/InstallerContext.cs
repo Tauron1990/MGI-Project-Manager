@@ -8,6 +8,7 @@ namespace ServiceManager.Installation.Core
 {
     public class InstallerContext : IDisposable
     {
+        private RunningService _runningService;
         private ZipArchive _packageArchive;
 
         public InstallerContext(IServiceScope serviceScope, string packagePath)
@@ -42,11 +43,14 @@ namespace ServiceManager.Installation.Core
             }
         }
 
+        public string ExeName { get; set; }
+
+        public string InstalledPath { get; set; }
 
         public void Dispose()
             => _packageArchive?.Dispose();
 
-        public RunningService CreateRunningService() 
-            => new RunningService(PackagePath, ServiceStade.Ready, ServiceName);
+        public RunningService CreateRunningService()
+            => _runningService ??= new RunningService(PackagePath, ServiceStade.Ready, ServiceName, ExeName);
     }
 }

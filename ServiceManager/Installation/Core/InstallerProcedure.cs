@@ -84,7 +84,7 @@ namespace ServiceManager.Installation.Core
         {
             try
             {
-                foreach (var installerTask in tasks) await installerTask.Rollback();
+                foreach (var installerTask in tasks) await installerTask.Rollback(installerContext);
 
                 _logger.LogInformation($"Rollback Compled: {installerContext.ServiceName}");
             }

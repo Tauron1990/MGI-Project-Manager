@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ServiceManager.ApiRequester;
 using ServiceManager.Core;
 using ServiceManager.Installation;
-using ServiceManager.Services;
+using ServiceManager.ProcessManager;
 using Application = System.Windows.Application;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -28,20 +28,22 @@ namespace ServiceManager
         private readonly IApiRequester _apiRequester;
         private readonly Dispatcher _dispatcher;
         private readonly IInstallerSystem _installerSystem;
+        private readonly IProcessManager _processManager;
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
         private readonly ServiceSettings _serviceSettings;
         private bool _isReady;
-        private RunningService _selectedService;
+        private UiService _selectedService;
 
         public MainWindowsModel(LogEntries logEntries, ServiceSettings serviceSettings, Dispatcher dispatcher, IServiceScopeFactory serviceScopeFactory, IApiRequester apiRequester,
-                                IInstallerSystem installerSystem)
+                                IInstallerSystem installerSystem, IProcessManager processManager)
         {
             _serviceSettings = serviceSettings;
             _dispatcher = dispatcher;
             _serviceScopeFactory = serviceScopeFactory;
             _apiRequester = apiRequester;
             _installerSystem = installerSystem;
+            _processManager = processManager;
             LogEntries = logEntries;
         }
 
@@ -58,9 +60,9 @@ namespace ServiceManager
 
         public LogEntries LogEntries { get; }
 
-        public ObservableCollection<RunningService> RunningServices { get; } = new ObservableCollection<RunningService>();
+        public ObservableCollection<UiService> RunningServices { get; } = new ObservableCollection<UiService>();
 
-        public RunningService SelectedService
+        public UiService SelectedService
         {
             get => _selectedService;
             set
@@ -127,7 +129,7 @@ namespace ServiceManager
             App.ClientCofiguration.SetUrls(targetUri, ServiceName, _serviceSettings.ApiKey);
 
             foreach (var runningService in _serviceSettings.RunningServices)
-                RunningServices.Add(runningService);
+                RunningServices.Add(new UiService(runningService, _processManager));
 
             IsReady = true;
         }
@@ -142,7 +144,7 @@ namespace ServiceManager
 
             if (result == null) return;
 
-            RunningServices.Add(result);
+            RunningServices.Add(new UiService(result, _processManager));
             _serviceSettings.RunningServices.Add(result);
 
             await ServiceSettings.Write(_serviceSettings, SettingsPath);
@@ -152,7 +154,13 @@ namespace ServiceManager
         {
             if (SelectedService == null) return;
 
-            await _installerSystem.Unistall(SelectedService);
+            await _installerSystem.Unistall(SelectedService.Service);
+            _serviceSettings.RunningServices.Remove(SelectedService.Service);
+
+            RunningServices.Remove(SelectedService);
+            SelectedService = null;
+
+            await ServiceSettings.Write(_serviceSettings, SettingsPath);
         }
 
         [NotifyPropertyChangedInvocator]

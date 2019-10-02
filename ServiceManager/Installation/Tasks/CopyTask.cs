@@ -48,7 +48,16 @@ namespace ServiceManager.Installation.Tasks
             context.PackageArchive.ExtractToDirectory(path, true);
 
             _logger.LogInformation($"{context.ServiceName}: Extraction Compled");
+            context.InstalledPath = path;
+
             return Task.FromResult<string>(null);
+        }
+
+        public override Task Rollback(InstallerContext context)
+        {
+            Directory.Delete(context.InstalledPath, true);
+
+            return Task.CompletedTask;
         }
     }
 }
