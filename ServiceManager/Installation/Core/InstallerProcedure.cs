@@ -23,6 +23,7 @@ namespace ServiceManager.Installation.Core
 
             Tasks.Add(TaskCreator<NameSelectionTask>);
             Tasks.Add(TaskCreator<CopyTask>);
+            Tasks.Add(TaskCreator<ApiRequestingTask>);
             Tasks.Add(TaskCreator<StartTask>);
         }
 

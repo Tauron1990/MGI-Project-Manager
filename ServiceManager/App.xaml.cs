@@ -66,14 +66,13 @@ namespace ServiceManager
             collection.AddScoped<NameSelectionModel>();
 
             collection.AddSingleton(provider
-                                        => new RestClient(
-                                                new Uri(
-                                                    new Uri(provider.GetRequiredService<ServiceSettings>().Url), "Api/ApiRequester"))
-                                           .For<IApiRequester>());
+                => new Lazy<IApiRequester>(() => new RestClient(
+                        new Uri(
+                            new Uri(provider.GetRequiredService<ServiceSettings>().Url), "Api/ApiRequester"))
+                    .For<IApiRequester>()));
 
             collection.AddSingleton(_ => (MainWindow) Current.MainWindow);
             collection.AddTransient(CreateControl<ApiControl>);
-            collection.AddTransient(CreateControl<ApiWindow>);
             collection.AddTransient(CreateControl<ValueRequesterWindow>);
             collection.AddTransient(CreateControl<NameSelection>);
             collection.AddTransient(CreateControl<InstallerWindow>);

@@ -25,7 +25,7 @@ namespace ServiceManager
     {
         private const string ServiceName = "Service_Manager";
         public static readonly string SettingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Tauron\\ServiceManager\\Settings.json");
-        private readonly IApiRequester _apiRequester;
+        private readonly Lazy<IApiRequester> _apiRequester;
         private readonly Dispatcher _dispatcher;
         private readonly IInstallerSystem _installerSystem;
         private readonly IProcessManager _processManager;
@@ -35,7 +35,7 @@ namespace ServiceManager
         private bool _isReady;
         private UiService _selectedService;
 
-        public MainWindowsModel(LogEntries logEntries, ServiceSettings serviceSettings, Dispatcher dispatcher, IServiceScopeFactory serviceScopeFactory, IApiRequester apiRequester,
+        public MainWindowsModel(LogEntries logEntries, ServiceSettings serviceSettings, Dispatcher dispatcher, IServiceScopeFactory serviceScopeFactory, Lazy<IApiRequester> apiRequester,
                                 IInstallerSystem installerSystem, IProcessManager processManager)
         {
             _serviceSettings = serviceSettings;
@@ -109,7 +109,7 @@ namespace ServiceManager
             {
                 try
                 {
-                    var key = await _apiRequester.RegisterApiKey(ServiceName);
+                    var key = await _apiRequester.Value.RegisterApiKey(ServiceName);
                     if (string.IsNullOrWhiteSpace(key))
                     {
                         MessageBox.Show("Fehler beim Anfordern eines Api Keys.", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);

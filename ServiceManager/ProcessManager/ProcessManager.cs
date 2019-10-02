@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CQRSlite.Commands;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
 using ServiceManager.Core;
@@ -32,14 +33,14 @@ namespace ServiceManager.ProcessManager
         }
 
         private readonly ILogger<ProcessManager> _logger;
-        private readonly ICommandSender _commandSender;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ServiceSettings _serviceSettings;
         private readonly ConcurrentDictionary<string, ProcessHolder> _processes = new ConcurrentDictionary<string, ProcessHolder>();
 
-        public ProcessManager(ILogger<ProcessManager> logger, ICommandSender commandSender, ServiceSettings serviceSettings)
+        public ProcessManager(ILogger<ProcessManager> logger, IServiceScopeFactory serviceScopeFactory, ServiceSettings serviceSettings)
         {
             _logger = logger;
-            _commandSender = commandSender;
+            _serviceScopeFactory = serviceScopeFactory;
             _serviceSettings = serviceSettings;
         }
 
@@ -72,12 +73,14 @@ namespace ServiceManager.ProcessManager
             {
                 return await process.Execute(async p =>
                 {
+                    using var scope = _serviceScopeFactory.CreateScope();
+
                     bool error = false;
 
                     try
                     {
                         using var waiter = new ServiceStopWaiter(service.Name);
-                        await _commandSender.Send(new StopServiceCommand {Name = service.Name});
+                        await scope.ServiceProvider.GetRequiredService<ICommandSender>().Send(new StopServiceCommand {Name = service.Name});
 
                         await waiter.Wait(20_000);
                         if (p.WaitForExit(10000))
