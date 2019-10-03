@@ -37,6 +37,17 @@ namespace Tauron.MgiProjectManager.Dispatcher
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddHealthParts()
                 .AddCQRS();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultChallengeScheme = "simple-scheme";
+
+                // you can also skip this to make the challenge scheme handle the forbid as well
+                options.DefaultForbidScheme = "simple-scheme";
+
+                // of course you also need to register that scheme, e.g. using
+                options.AddScheme<MySchemeHandler>("simple-scheme", "simple-scheme");
+            });
         }
 
         [UsedImplicitly]
