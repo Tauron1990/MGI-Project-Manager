@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Tauron.CQRS.Server.Core;
 
 namespace Tauron.MgiProjectManager.Dispatcher
@@ -9,8 +10,13 @@ namespace Tauron.MgiProjectManager.Dispatcher
     public class ApiRequesterController : ControllerBase
     {
         private readonly IApiKeyStore _keyStore;
+        private readonly IConfiguration _configuration;
 
-        public ApiRequesterController(IApiKeyStore keyStore) => _keyStore = keyStore;
+        public ApiRequesterController(IApiKeyStore keyStore, IConfiguration configuration)
+        {
+            _keyStore = keyStore;
+            _configuration = configuration;
+        }
 
         [Route(nameof(RegisterApiKey))]
         [HttpGet]
@@ -19,7 +25,7 @@ namespace Tauron.MgiProjectManager.Dispatcher
             var callingUrl = Request.Headers["Referer"].ToString();
             var isLocal = Url.IsLocalUrl(callingUrl);
 
-            if (!isLocal) return Forbid();
+            if (!_configuration.GetValue<bool>("FreeAcess") && !isLocal) return Forbid();
 
             return await _keyStore.Register(serviceName);
         }
