@@ -108,7 +108,7 @@ namespace Tauron.CQRS.Server
                 }
             };
 
-            _runningTask = _eventManager.Dispatcher.Start();
+            _runningTask = Task.Run( async () => await _eventManager.Dispatcher.Start(), stoppingToken);
 
             return Task.CompletedTask;
         }
