@@ -22,10 +22,7 @@ namespace Tauron.MgiProjectManager.Dispatcher
         [HttpGet]
         public async Task<ActionResult<string>> RegisterApiKey(string serviceName)
         {
-            var callingUrl = Request.Headers["Referer"].ToString();
-            var isLocal = Url.IsLocalUrl(callingUrl);
-
-            if (!_configuration.GetValue<bool>("FreeAcess") && !isLocal) return Forbid();
+            if (!_configuration.GetValue<bool>("FreeAcess")) return Forbid();
 
             return await _keyStore.Register(serviceName);
         }

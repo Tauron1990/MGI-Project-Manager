@@ -53,26 +53,19 @@ namespace Tauron.CQRS.Server.Core.Impl
 
             try
             {
-                using (var scope = _serviceScopeFactory.CreateScope())
-                {
-                    using (var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>())
-                    {
+                using var scope = _serviceScopeFactory.CreateScope();
+                await using var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>();
+                var key = Convert.ToBase64String(_hashAlgorithm.Value.ComputeHash(Encoding.UTF8.GetBytes(DateTime.Now + name)));
 
-                        string key =
-                            Convert.ToBase64String(
-                                _hashAlgorithm.Value.ComputeHash(Encoding.UTF8.GetBytes(DateTime.Now + name)));
+                context.ApiKeys.Add(new ApiKey
+                                    {
+                                        Key = key,
+                                        Name = name
+                                    });
 
-                        context.ApiKeys.Add(new ApiKey
-                                            {
-                                                Key = key,
-                                                Name = name
-                                            });
+                await context.SaveChangesAsync();
 
-                        await context.SaveChangesAsync();
-
-                        return key;
-                    }
-                }
+                return key;
             }
             catch(Exception e)
             {

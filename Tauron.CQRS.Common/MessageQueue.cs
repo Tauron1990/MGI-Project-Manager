@@ -8,7 +8,7 @@ namespace Tauron.CQRS.Common
     {
         private readonly bool _skipExceptions;
         private readonly BlockingCollection<TMessage> _incomming;
-        private readonly BlockingCollection<TMessage> _processorQueue;
+        private readonly BlockingCollection<Task> _processorQueue;
 
         public event Func<Exception, Task> OnError;
 
@@ -22,7 +22,7 @@ namespace Tauron.CQRS.Common
             _skipExceptions = skipExceptions;
 
             _incomming = new BlockingCollection<TMessage>();
-            _processorQueue = new BlockingCollection<TMessage>(maxParallel);
+            _processorQueue = new BlockingCollection<Task>(maxParallel);
         }
 
         public void Enqueue(TMessage msg) => _incomming.Add(msg);
@@ -34,35 +34,44 @@ namespace Tauron.CQRS.Common
             if (_dispatcher != null)
                 throw new InvalidOperationException("Message Queue started");
 
-            _dispatcher = Task.Run(() =>
+            _dispatcher = Task.Run(async () =>
             {
                 foreach (var message in _incomming.GetConsumingEnumerable())
-                    _processorQueue.Add(message);
-            });
+                {
+                    try
+                    {
+                        var worker = OnWork;
+                        if (worker == null) continue;
 
-            foreach (var message in _processorQueue.GetConsumingEnumerable())
+                        _processorQueue.Add(Task.Run(async () => await worker(message)));
+                    }
+                    catch (Exception e)
+                    {
+                        await ProcessError(e);
+
+                        if (_skipExceptions) continue;
+
+                        throw;
+                    }
+                }
+            }).ContinueWith(t => _processorQueue.CompleteAdding());
+
+            foreach (var task in _processorQueue.GetConsumingEnumerable())
             {
                 try
                 {
-                    var worker = OnWork;
-                    if(worker == null) continue;
-
-                    await worker(message);
+                    await task;
                 }
                 catch (Exception e)
                 {
-                    var invoker = OnError;
+                    await ProcessError(e);
 
-                    if (invoker != null)
-                        await invoker(e);
-
-                    if(_skipExceptions) continue;
+                    if (_skipExceptions) continue;
 
                     throw;
                 }
             }
 
-            _processorQueue.CompleteAdding();
             OnError = null;
             OnWork = null;
         }
@@ -72,6 +81,7 @@ namespace Tauron.CQRS.Common
             lock (this)
             {
                 if(_stop) return;
+
                 _stop = true;
                 _incomming.CompleteAdding();
             }
@@ -82,6 +92,14 @@ namespace Tauron.CQRS.Common
             _incomming.Dispose();
             _processorQueue.Dispose();
             _dispatcher?.Dispose();
+        }
+
+        private async Task ProcessError(Exception e)
+        {
+            var invoker = OnError;
+
+            if (invoker != null)
+                await invoker(e);
         }
     }
 }

@@ -1,18 +1,36 @@
 ﻿using System;
+using System.Threading.Tasks;
+using RestEase;
 
 namespace TestApp
 {
+    public interface IApiRequester
+    {
+        [Get(nameof(RegisterApiKey))]
+        Task<string> RegisterApiKey(string serviceName);
+    }
+
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            const string host = "amqp://192.168.178.43:5672";
+            try
+            {
+                const string URL = "http://localhost:81";
 
-            var test = EasyNetQ.RabbitHutch.CreateBus(host);
+                var client = new RestClient(
+                        new Uri(
+                            new Uri(URL), "Api/ApiRequester"))
+                   .For<IApiRequester>();
 
-            test.Publish("Hallo World", configuration => configuration.WithQueueName("Test"));
+                var key = await client.RegisterApiKey("TestService");
 
-            Console.WriteLine("Hello World!");
+                Console.ReadKey();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }
