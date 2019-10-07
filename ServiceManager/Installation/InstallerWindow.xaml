@@ -15,7 +15,7 @@
         <Border DockPanel.Dock="Left" BorderBrush="Black" BorderThickness="1" MinWidth="100">
             <ItemsControl ItemsSource="{Binding Tasks}">
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate DataType="{x:Type core:InstallerTask}">
                         <Border Margin="3" BorderBrush="Black" BorderThickness="1"
                                 Background="{Binding Running, Converter={StaticResource BrushConverter}}">
                             <TextBlock Text="{Binding Title}" Margin="3" TextAlignment="Center" />

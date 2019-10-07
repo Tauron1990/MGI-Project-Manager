@@ -53,6 +53,6 @@ namespace ServiceManager.Installation.Core
             => _packageArchive?.Dispose();
 
         public RunningService CreateRunningService()
-            => _runningService ??= new RunningService(PackagePath, ServiceStade.Ready, ServiceName, ExeName);
+            => _runningService ??= new RunningService(InstalledPath, ServiceStade.Ready, ServiceName, ExeName);
     }
 }

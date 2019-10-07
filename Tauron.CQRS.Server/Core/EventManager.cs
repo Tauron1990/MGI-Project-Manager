@@ -11,7 +11,7 @@ using Tauron.CQRS.Common;
 using Tauron.CQRS.Common.ServerHubs;
 using Tauron.CQRS.Server.Hubs;
 
-namespace Tauron.CQRS.Server.EventStore
+namespace Tauron.CQRS.Server.Core
 {
     [UsedImplicitly]
     public class EventManager : IEventManager
@@ -39,14 +39,26 @@ namespace Tauron.CQRS.Server.EventStore
             {
                 if(obj != DomainEvent.RealMessage.EventName || _waitLock.CurrentCount == 0) return;
 
-                _waitLock.Signal();
+                try
+                {
+                    _waitLock.Signal();
+                }
+                catch (InvalidOperationException)
+                {   
+                }
             }
 
             private void ConnectionManagerOnClientAdded(string obj)
             {
                 if (obj != DomainEvent.RealMessage.EventName) return;
 
-                _waitLock.AddCount();
+                try
+                {
+                    _waitLock.AddCount();
+                }
+                catch (InvalidOperationException)
+                {
+                }
             }
 
             public bool CanAccept(string service)

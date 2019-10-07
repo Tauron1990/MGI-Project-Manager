@@ -14,6 +14,7 @@ using ServiceManager.ApiRequester;
 using ServiceManager.Core;
 using ServiceManager.Installation;
 using ServiceManager.ProcessManager;
+using Tauron.CQRS.Services.Extensions;
 using Application = System.Windows.Application;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -77,6 +78,8 @@ namespace ServiceManager
 
         public async Task BeginLoad()
         {
+            using var scope = _serviceScopeFactory.CreateScope();
+
             var dic = Path.GetDirectoryName(SettingsPath);
 
             if (!Directory.Exists(dic))
@@ -87,8 +90,6 @@ namespace ServiceManager
 
             while (string.IsNullOrWhiteSpace(_serviceSettings.Url) || !Uri.TryCreate(_serviceSettings.Url, UriKind.RelativeOrAbsolute, out targetUri))
             {
-                using var scope = _serviceScopeFactory.CreateScope();
-
                 var window = scope.ServiceProvider.GetRequiredService<ValueRequesterWindow>();
                 window.MessageText = "Bitte Adresse des Dispatchers Eingeben.";
 
@@ -123,14 +124,17 @@ namespace ServiceManager
                 catch (Exception e)
                 {
                     MessageBox.Show($"Fehler: {e}", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                    await Application.Current.Dispatcher.InvokeAsync(Application.Current.Shutdown);
                 }
             }
 
             App.ClientCofiguration.SetUrls(targetUri, ServiceName, _serviceSettings.ApiKey);
 
+
             foreach (var runningService in _serviceSettings.RunningServices)
                 RunningServices.Add(new UiService(runningService, _processManager));
 
+            await scope.ServiceProvider.StartCQRS();
             await _processManager.StartAll();
 
             IsReady = true;

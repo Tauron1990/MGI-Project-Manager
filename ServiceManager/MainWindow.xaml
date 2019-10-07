@@ -17,17 +17,23 @@
         <TabItem Header="Services">
             <DockPanel LastChildFill="True">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-                    <Button Content="Installieren" Margin="5" Click="Install_OnClick" />
-                    <Button Content="Deistallieren" Margin="5" Click="Unistall_OnClick" />
+                    <Button Content="Installieren" Margin="5" Click="Install_OnClick" Padding="5"/>
+                    <Button Content="Deistallieren" Margin="5" Click="Unistall_OnClick" Padding="5"/>
                 </StackPanel>
                 <ListBox Margin="5" SelectedItem="{Binding SelectedService}" ItemsSource="{Binding RunningServices}">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="{x:Type local:UiService}">
                             <DockPanel LastChildFill="True">
                                 <TextBlock DockPanel.Dock="Left" Text="Name: " Margin="5,5,0,5" />
                                 <Button DockPanel.Dock="Right" IsEnabled="{Binding CanClick}" Command="{Binding Click}">
                                     <Grid>
-                                        <Rectangle Fill="{Binding Service.ServiceStade, Converter={StaticResource ServiceStadeConverter}}" Margin="1" RadiusX="10" RadiusY="10"/>
+                                        <Rectangle Fill="{Binding Service.ServiceStade, Converter={StaticResource ServiceStadeConverter}}" Margin="1" RadiusX="10" RadiusY="10"
+                                                   Width="20" Height="20"/>
                                         <core:ProgressCicle Width="20" Margin="1" Visibility="{Binding Progress, Converter={StaticResource ProgressBoolConverter}}"/>
                                     </Grid>
                                 </Button>

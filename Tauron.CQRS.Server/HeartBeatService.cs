@@ -31,7 +31,7 @@ namespace Tauron.CQRS.Server
                 {
                     while (!stoppingToken.IsCancellationRequested)
                     {
-                        _logger.LogInformation("Heartbeat");
+                        //_logger.LogInformation("Heartbeat");
                         await _hubContext.Clients.All.SendAsync(HubEventNames.HeartbeatNames.Heartbeat, DateTime.Now, stoppingToken);
                         await _connectionManager.UpdateAllConnection();
                         await Task.Delay(30000, stoppingToken);

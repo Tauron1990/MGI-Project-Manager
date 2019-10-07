@@ -21,7 +21,10 @@ namespace ServiceManager.ProcessManager
             private readonly AsyncLock _lock = new AsyncLock();
             private readonly Process _process;
 
-            public ProcessHolder(Process process) => _process = process;
+            public ProcessHolder(Process process)
+            {
+                _process = process;
+            }
 
             public async Task<TType> Execute<TType>(Func<Process, Task<TType>> runner)
             {
@@ -51,10 +54,18 @@ namespace ServiceManager.ProcessManager
             try
             {
                 var process = Process.Start(Path.Combine(service.InstallationPath, service.Exe));
+                process.EnableRaisingEvents = true;
 
                 _processes[service.Name] = new ProcessHolder(process);
 
                 service.ServiceStade = ServiceStade.Running;
+
+                process.Exited += (sender, args) =>
+                {
+                    service.ServiceStade = ServiceStade.Ready;
+                    if (_processes.TryRemove(service.Name, out var holder)) 
+                        holder.Dispose();
+                };
 
                 return Task.FromResult(true);
             }
@@ -82,8 +93,8 @@ namespace ServiceManager.ProcessManager
                         using var waiter = new ServiceStopWaiter(service.Name);
                         await scope.ServiceProvider.GetRequiredService<ICommandSender>().Send(new StopServiceCommand {Name = service.Name});
 
-                        await waiter.Wait(20_000);
-                        if (p.WaitForExit(10000))
+                        await waiter.Wait(2_000);
+                        if (p.WaitForExit(10_000))
                             return true;
                         else
                         {

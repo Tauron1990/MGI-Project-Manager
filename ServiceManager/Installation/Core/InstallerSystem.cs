@@ -41,7 +41,7 @@ namespace ServiceManager.Installation.Core
             return window.RunningService;
         }
 
-        public Task Unistall(RunningService service)
+        public Task<bool?> Unistall(RunningService service)
         {
             return _dispatcher.InvokeAsync(() =>
             {
@@ -51,23 +51,40 @@ namespace ServiceManager.Installation.Core
 
                 window.StartEvent += async () =>
                 {
-                    if (service.ServiceStade == ServiceStade.Running && await _processManager.Stop(service, 20_000))
+                    switch (service.ServiceStade)
                     {
-                        try
-                        {
-                            Directory.Delete(service.InstallationPath, true);
-                        }
-                        catch (Exception e)
-                        {
-                            MessageBox.Show(window, $"Fehler beim Löschen: \n {e.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
+                        case ServiceStade.Running:
+                            if (await _processManager.Stop(service, 20_000))
+                                return DeleteService(service, window);
+                            else
+                            {
+                                MessageBox.Show(window, "Service Konnte nicht gestopt werden", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                                return false;
+                            }
+                        case ServiceStade.Error:
+                        case ServiceStade.Ready:
+                            return DeleteService(service, window);
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
-                    else
-                        MessageBox.Show(window, "Service Konnte nicht gestopt werden", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
                 };
 
-                window.ShowDialog();
+                return window.ShowDialog();
             }).Task;
+        }
+
+        private static bool DeleteService(RunningService service, UnistallWindow window)
+        {
+            try
+            {
+                Directory.Delete(service.InstallationPath, true);
+                return true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(window, $"Fehler beim Löschen: \n {e.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
         }
     }
 }

@@ -105,7 +105,7 @@ namespace Tauron.CQRS.Server.Hubs
 
         public Task UpdateAllConnection()
         {
-            _logger.LogInformation("UpdateAllConnection");
+            //_logger.LogInformation("UpdateAllConnection");
 
             foreach (var connection in _connections)
             {

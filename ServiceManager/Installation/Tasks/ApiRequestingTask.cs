@@ -35,8 +35,11 @@ namespace ServiceManager.Installation.Tasks
             settings["ApiKey"] = key;
             settings["Dispatcher"] = App.ClientCofiguration.BaseUrl;
 
-            await using var file = File.OpenWrite(path);
-            await settings.WriteToAsync(new JsonTextWriter(new StreamWriter(file)));
+            await using (var file = File.OpenWrite(path))
+            {
+                await using var steamWriter = new StreamWriter(file);
+                await steamWriter.WriteAsync(settings.ToString(Formatting.Indented));
+            }
 
             return null;
         }

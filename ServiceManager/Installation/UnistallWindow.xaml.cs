@@ -18,10 +18,10 @@ namespace ServiceManager.Installation
     /// </summary>
     public partial class UnistallWindow : Window
     {
-        public event Func<Task> StartEvent; 
+        public event Func<Task<bool>> StartEvent; 
 
         public UnistallWindow() => InitializeComponent();
 
-        private async void UnistallWindow_OnLoaded(object sender, RoutedEventArgs e) => await StartEvent.Invoke();
+        private async void UnistallWindow_OnLoaded(object sender, RoutedEventArgs e) => DialogResult = await StartEvent.Invoke();
     }
 }

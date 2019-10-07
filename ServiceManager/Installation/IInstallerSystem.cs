@@ -7,6 +7,6 @@ namespace ServiceManager.Installation
     {
         Task<RunningService> Install(string path);
 
-        Task Unistall(RunningService service);
+        Task<bool?> Unistall(RunningService service);
     }
 }
