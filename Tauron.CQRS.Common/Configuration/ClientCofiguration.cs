@@ -20,6 +20,8 @@ namespace Tauron.CQRS.Common.Configuration
 
         public string ApiKey { get; set; }
 
+        public string BaseUrl { get; set; }
+
         public string ServiceName
         {
             get
@@ -67,6 +69,8 @@ namespace Tauron.CQRS.Common.Configuration
         {
             ServiceName = serviceName;
             ApiKey = apiKey;
+
+            BaseUrl = baseUrl.ToString();
 
             EventHubUrl = new Uri(baseUrl, "EventBus").ToString();
             EventServerApiUrl = new Uri(baseUrl, "Api/EventStore").ToString();

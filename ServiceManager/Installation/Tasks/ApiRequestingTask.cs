@@ -33,6 +33,7 @@ namespace ServiceManager.Installation.Tasks
             var settings = JToken.Parse(await File.ReadAllTextAsync(path));
 
             settings["ApiKey"] = key;
+            settings["Dispatcher"] = App.ClientCofiguration.BaseUrl;
 
             await using var file = File.OpenWrite(path);
             await settings.WriteToAsync(new JsonTextWriter(new StreamWriter(file)));

@@ -5,6 +5,7 @@ using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using CQRSlite.Queries;
 using EventDeliveryTest.Test;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tauron.CQRS.Services;
@@ -25,6 +26,8 @@ namespace EventDeliveryTest
     {
         private const string Msg = "Hallo-Welt";
 
+        private static IConfiguration _configuration;
+
         static async Task Main()
         {
             Console.Title = "Event Delivery Test";
@@ -32,12 +35,14 @@ namespace EventDeliveryTest
             Console.WriteLine("---Welcome To Event Delivery Test---");
             Console.WriteLine("Please Enter The IP of the Server to Test:");
             Console.Write("IP: ");
+            _configuration = GetConfiguration();
+            
             //Console.WriteLine("http://localhost:54005");
             //Uri ip = new Uri("http://localhost:54005");// Console.ReadLine();
 
             //http://192.168.105.18:81
             Console.WriteLine("http://192.168.105.18:81");
-            Uri ip = new Uri("http://192.168.105.18:81");// Console.ReadLine();
+            Uri ip = new Uri(_configuration.GetValue<string>("Dispatcher"));// Console.ReadLine();
 
             Console.WriteLine();
             //Console.WriteLine("Press Enter to Start...");
@@ -113,7 +118,7 @@ namespace EventDeliveryTest
             collection.AddLogging(lb => lb.AddConsole());
             collection.AddCQRSServices(c => c
                                           .AddFrom<TestAggregate>(collection)
-                                          .SetUrls(ip, "Temp", "Develop")
+                                          .SetUrls(ip, _configuration.GetValue<string>("ServiceName"), _configuration.GetValue<string>("ApiKey"))
                                           .AddAwaiter<TestEvent>());
 
             var temp = collection.BuildServiceProvider();
@@ -140,6 +145,15 @@ namespace EventDeliveryTest
 
             if (result?.Status == IPStatus.Success) Console.WriteLine(" Success");
             else throw new TestFailed($"Ping Failed: {result?.Status}");
+        }
+
+        private static IConfiguration GetConfiguration()
+        {
+            var builder = new ConfigurationBuilder();
+
+            builder.AddJsonFile("appsettings.json");
+
+            return builder.Build();
         }
     }
 }
