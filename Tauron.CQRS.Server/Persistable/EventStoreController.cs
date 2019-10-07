@@ -40,7 +40,7 @@ namespace Tauron.CQRS.Server.Persistable
                 EventName = e.Message.EventName,
                 EventType = e.Message.EventType ?? EventType.Unkowen,
                 Id = e.Message.Id,
-                OriginType = e.Event.GetType().AssemblyQualifiedName,
+                OriginType = e.Message.TypeName,
                 Version = e.Message.Version ?? -1,
                 TimeStamp = e.Message.TimeStamp ?? DateTimeOffset.Now
             }));
