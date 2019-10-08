@@ -28,7 +28,7 @@ namespace Tauron.CQRS.Server.Persistable
         [HttpGet]
         public async Task<ActionResult<bool>> AddEvents([FromBody]ApiEventMessage events)
         {
-            if (!await _store.Validate(events.ApiKey)) return Forbid();
+            if (!(await _store.Validate(events.ApiKey)).Ok) return Forbid();
 
             await _context.EventEntities.AddRangeAsync(events.DomainMessages.Where(e => e.EventType == EventType.Event).Select(dm => new
             {
@@ -54,7 +54,7 @@ namespace Tauron.CQRS.Server.Persistable
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ServerDomainMessage>>> GetEvents([FromBody]ApiEventId eventId)
         {
-            if (!await _store.Validate(eventId.ApiKey)) return Forbid();
+            if (!(await _store.Validate(eventId.ApiKey)).Ok) return Forbid();
 
             return _context.EventEntities.Where(ee => ee.Id == eventId.Id).Where(ee => ee.Version > eventId.Version)
                 .Select(ee => new ServerDomainMessage
@@ -65,7 +65,8 @@ namespace Tauron.CQRS.Server.Persistable
                     SequenceNumber = ee.SequenceNumber,
                     Id = ee.Id.Value,
                     TimeStamp = ee.TimeStamp,
-                    Version = ee.Version
+                    Version = ee.Version,
+                    TypeName = ee.OriginType
                 }).ToList();
         }
     }

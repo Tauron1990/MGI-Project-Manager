@@ -278,12 +278,12 @@ namespace Tauron.CQRS.Services.Core.Components
         {
             await _client.Start(token);
 
-            foreach (var handler in _configuration.Value.GetHandlers())
+            foreach (var (key, value) in _configuration.Value.GetHandlers())
             {
                 var commands = new List<HandlerInstace>();
                 var events = new List<HandlerInstace>();
 
-                foreach (var handlerInstace in handler.Value
+                foreach (var handlerInstace in value
                                 .Select(h => new HandlerInstace(() =>
                                                                 {
                                                                     using var scope = _serviceScopeFactory.CreateScope();
@@ -300,13 +300,13 @@ namespace Tauron.CQRS.Services.Core.Components
                 if (commands.Count != 0)
                 {
                     var del = new HandlerListDelegator(commands, _serviceScopeFactory);
-                    await _client.Subscribe(handler.Key, del.Handle);
+                    await _client.Subscribe(key, del.Handle);
                     _handlerInstaces.Add(del);
                 }
                 else
                 {
                     var del = new HandlerListDelegator(events, _serviceScopeFactory);
-                    await _client.Subscribe(handler.Key, del.Handle);
+                    await _client.Subscribe(key, del.Handle);
                     _handlerInstaces.Add(del);
                 }
             }

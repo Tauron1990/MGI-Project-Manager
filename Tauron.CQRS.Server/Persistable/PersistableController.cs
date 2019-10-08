@@ -23,10 +23,10 @@ namespace Tauron.CQRS.Server.Persistable
             _context = context;
         }
 
-        [HttpGet()]
+        [HttpGet]
         public async Task<ActionResult<ObjectStade>> Get([FromBody] ApiObjectId id)
         {
-            if (!await _apiKeyStore.Validate(id.ApiKey))
+            if (!(await _apiKeyStore.Validate(id.ApiKey)).Ok)
                 return base.Forbid();
 
             string realId = id.Id;
@@ -43,10 +43,10 @@ namespace Tauron.CQRS.Server.Persistable
                 };
         }
 
-        [HttpPut()]
+        [HttpPut]
         public async Task<IActionResult> Put([FromBody] ApiObjectStade stade)
         {
-            if (!await _apiKeyStore.Validate(stade.ApiKey))
+            if (!(await _apiKeyStore.Validate(stade.ApiKey)).Ok)
                 return base.Forbid();
 
             string id = stade.ObjectStade.Identifer;

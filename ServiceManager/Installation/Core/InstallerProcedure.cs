@@ -55,6 +55,9 @@ namespace ServiceManager.Installation.Core
                     rollback.Add(installerTask);
 
                     installerTask.Running = true;
+
+                    await Task.Delay(1_000);
+
                     CurrentTask = installerTask;
                     error = await installerTask.RunInstall(context);
 

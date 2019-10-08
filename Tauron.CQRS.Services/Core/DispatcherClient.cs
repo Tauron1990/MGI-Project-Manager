@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Events;
@@ -154,7 +155,10 @@ namespace Tauron.CQRS.Services.Core
                     break;
             }
 
-            await _hubConnection.SendAsync(HubEventNames.PublishEvent, msg, _config.Value.ApiKey, cancellationToken);
+            using var source = new CancellationTokenSource(10_000);
+            using var linked = CancellationTokenSource.CreateLinkedTokenSource(source.Token, cancellationToken);
+
+            await _hubConnection.SendAsync(HubEventNames.PublishEvent, msg, _config.Value.ApiKey, linked.Token).ConfigureAwait(false);
         }
 
         public async Task SendToClient(string client, ServerDomainMessage serverDomainMessage, CancellationToken token) 

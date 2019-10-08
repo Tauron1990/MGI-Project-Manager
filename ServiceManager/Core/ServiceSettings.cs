@@ -18,6 +18,6 @@ namespace ServiceManager.Core
             => !File.Exists(path) ? new ServiceSettings() : JsonConvert.DeserializeObject<ServiceSettings>(File.ReadAllText(path));
 
         public static async Task Write(ServiceSettings serviceSettings, string path)
-            => await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(serviceSettings));
+            => await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(serviceSettings, Formatting.Indented));
     }
 }

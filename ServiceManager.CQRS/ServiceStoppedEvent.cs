@@ -11,7 +11,7 @@ namespace ServiceManager.CQRS
         public string ServiceName { get; }
 
         public ServiceStoppedEvent(string serviceName) 
-            : base(IdGenerator.Generator.NewGuid(Namespace, serviceName, 0), 0)
+            : base(IdGenerator.Generator.NewGuid(Namespace, serviceName), 0)
         {
             ServiceName = serviceName;
         }

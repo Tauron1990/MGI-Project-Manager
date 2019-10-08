@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,6 +42,8 @@ namespace ServiceManager.Installation
                 await _dispatcher.InvokeAsync(() => DataContext = installerProcedure);
 
                 using var context = new InstallerContext(scope, Path);
+
+                await Task.Delay(2_000);
 
                 var error = await installerProcedure.Install(context);
                 Error = error;

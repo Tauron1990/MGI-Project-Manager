@@ -8,7 +8,7 @@
         xmlns:core="clr-namespace:ServiceManager.Core"
         mc:Ignorable="d" Loaded="MainWindow_OnLoaded"
         Title="Service Manager" Height="450" Width="800" IsEnabled="{Binding IsReady}" WindowState="Maximized"
-        d:DataContext="{d:DesignInstance local:MainWindowsModel}" Closed="MainWindow_OnClosed">
+        d:DataContext="{d:DesignInstance local:MainWindowsModel}" Closed="MainWindow_OnClosed" Closing="MainWindow_OnClosing">
     <Window.Resources>
         <core:ServiceStadeConverter x:Key="ServiceStadeConverter"/>
         <core:ProgressBoolConverter x:Key="ProgressBoolConverter"/>

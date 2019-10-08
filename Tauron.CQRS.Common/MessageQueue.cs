@@ -60,7 +60,7 @@ namespace Tauron.CQRS.Common
             {
                 try
                 {
-                    await task;
+                    await task.ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {

@@ -153,8 +153,13 @@ namespace ServiceManager
 
         private void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            if (CollectionChanged != null)
-                CollectionChanged(this, e);
+            try
+            {
+                CollectionChanged?.Invoke(this, e);
+            }
+            catch (NotSupportedException)
+            {
+            }
         }
     }
 }

@@ -67,6 +67,8 @@ namespace ServiceManager.ProcessManager
                         holder.Dispose();
                 };
 
+                _logger.LogInformation($"Service Started: {service.Name}");
+
                 return Task.FromResult(true);
             }
             catch (Exception e)
@@ -86,14 +88,14 @@ namespace ServiceManager.ProcessManager
                 {
                     using var scope = _serviceScopeFactory.CreateScope();
 
-                    bool error = false;
+                    var error = false;
 
                     try
                     {
                         using var waiter = new ServiceStopWaiter(service.Name);
-                        await scope.ServiceProvider.GetRequiredService<ICommandSender>().Send(new StopServiceCommand {Name = service.Name});
+                        await scope.ServiceProvider.GetRequiredService<ICommandSender>().Send(new StopServiceCommand {Name = service.Name}).ConfigureAwait(false);
 
-                        await waiter.Wait(2_000);
+                        await waiter.Wait(10_000);
                         if (p.WaitForExit(10_000))
                             return true;
                         else

@@ -24,8 +24,9 @@ namespace Tauron.CQRS.Services.Core
         public async Task<Snapshot> Get(Guid id, CancellationToken cancellationToken = new CancellationToken())
         {
             var stade = await _persistApi.Get(new ApiObjectId {Id = id.ToString(), ApiKey = _confOptions.Value.ApiKey});
+            if (stade?.OriginalType == null) return null;
 
-            return (Snapshot) stade.Data.ToObject(Type.GetType(stade.OriginalType));
+            return (Snapshot) stade.Data?.ToObject(Type.GetType(stade.OriginalType));
         }
 
         public async Task Save(Snapshot snapshot, CancellationToken cancellationToken = new CancellationToken())

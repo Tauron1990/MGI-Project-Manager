@@ -21,7 +21,7 @@ namespace EventDeliveryTest.Test
 
             Console.WriteLine("Delay Close");
 
-            await Task.Delay(10_000);
+            await Task.Delay(1_000);
 
             Process.GetCurrentProcess().Kill();
         }

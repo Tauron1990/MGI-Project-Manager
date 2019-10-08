@@ -35,6 +35,7 @@ namespace Tauron.MgiProjectManager.Dispatcher
             services.AddHealth();
 
             services.AddMvc(o => o.EnableEndpointRouting = false)
+                .AddNewtonsoftJson()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddHealthParts()
                 .AddCQRS();

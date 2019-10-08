@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -45,6 +46,8 @@ namespace ServiceManager
         private async void Install_OnClick(object sender, RoutedEventArgs e)
             => await _model.Install();
 
-        private void MainWindow_OnClosed(object sender, EventArgs e) => _serviceProvider.GetRequiredService<IProcessManager>().StopAll();
+        private void MainWindow_OnClosed(object sender, EventArgs e) => (_serviceProvider as IDisposable)?.Dispose();
+
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e) => _serviceProvider.GetRequiredService<IProcessManager>().StopAll();
     }
 }

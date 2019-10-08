@@ -36,11 +36,13 @@ namespace Tauron.CQRS.Server.Core.Impl
             return _keys.FirstOrDefault(a => a.Key == apiKey)?.Name;
         }
 
-        public async Task<bool> Validate(string apiKey)
+        public async Task<(bool, string)> Validate(string apiKey)
         {
             await Init();
 
-            return _keys.Any(ak => ak.Key == apiKey);
+            var ent = _keys.FirstOrDefault(ak => ak.Key == apiKey);
+
+            return ent == null ? (false, string.Empty) : (true, ent.Name);
         }
 
         public async Task<string> Register(string name)

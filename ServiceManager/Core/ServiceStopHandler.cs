@@ -14,10 +14,7 @@ namespace ServiceManager.Core
 
         private readonly ILogger<ServiceStopHandler> _logger;
 
-        public ServiceStopHandler(ILogger<ServiceStopHandler> logger)
-        {
-            _logger = logger;
-        }
+        public ServiceStopHandler(ILogger<ServiceStopHandler> logger) => _logger = logger;
 
         public async Task Handle(ServiceStoppedEvent message)
         {

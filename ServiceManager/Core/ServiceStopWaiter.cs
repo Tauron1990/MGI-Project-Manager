@@ -9,7 +9,7 @@ namespace ServiceManager.Core
     public class ServiceStopWaiter: IDisposable
     {
         private CancellationTokenSource _cancellationTokenSource;
-        private readonly AsyncManualResetEvent _manualReset = new AsyncManualResetEvent(false);
+        private readonly ManualResetEvent _manualReset = new ManualResetEvent(false);
         private readonly string _targetService;
 
         public ServiceStopWaiter(string targetService)
@@ -27,12 +27,14 @@ namespace ServiceManager.Core
 
         public Task Wait(int timeout)
         {
-            _cancellationTokenSource = new CancellationTokenSource(timeout);
-            return _manualReset.WaitAsync(_cancellationTokenSource.Token);
+            _manualReset.WaitOne(timeout);
+
+            return Task.CompletedTask;
         }
 
         public void Dispose()
         {
+            _manualReset.Dispose();
             _cancellationTokenSource?.Dispose();
             ServiceStopHandler.ServiceStoppedEvent -= ServiceStopHandlerOnServiceStoppedEvent;
         }

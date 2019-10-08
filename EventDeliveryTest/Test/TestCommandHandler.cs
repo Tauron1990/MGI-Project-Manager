@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CQRSlite.Domain;
+using CQRSlite.Domain.Exception;
 using Tauron.CQRS.Services;
 using Tauron.CQRS.Services.Extensions;
 
@@ -14,7 +16,17 @@ namespace EventDeliveryTest.Test
 
         public override async Task Handle(TestCommand message)
         {
-            var aggregate = new TestAggregate();
+            TestAggregate aggregate;
+
+            try
+            {
+                aggregate = await _session.Get<TestAggregate>(TestAggregate.IdField);
+            }
+            catch (AggregateNotFoundException)
+            {
+                aggregate = new TestAggregate();
+            }
+
             aggregate.SetLastValue(message.Parameter);
             
             await _session.Add(aggregate);
