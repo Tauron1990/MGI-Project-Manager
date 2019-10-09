@@ -29,11 +29,12 @@ namespace Tauron.CQRS.Server.Hubs
 
         public async Task Subscribe(string eventName, string apiKey)
         {
-            var vaildate = await _keyStore.Validate(apiKey);
-            if (!vaildate.Ok) throw new HubException("Api Key Validation Failed");
+            var (ok, serviceName) = await _keyStore.Validate(apiKey);
+            if (!ok) throw new HubException("Api Key Validation Failed");
             
-            _logger.LogInformation($"Subscribe: {vaildate.ServiceName} -- {eventName}");
+            _logger.LogInformation($"Subscribe: {serviceName} -- {eventName}");
             await Groups.AddToGroupAsync(Context.ConnectionId, eventName);
+            
             await _connectionManager.AddToGroup(Context.ConnectionId, eventName);
         }
 

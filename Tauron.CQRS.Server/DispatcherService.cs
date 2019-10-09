@@ -48,6 +48,12 @@ namespace Tauron.CQRS.Server
                 context.Database.Migrate();
             }
 
+            _eventManager.Dispatcher.OnError += exception =>
+            {
+                _logger.LogError(exception, "Error on Delivering Event");
+                return  Task.CompletedTask;
+            };
+
             _eventManager.Dispatcher.OnWork += async domainEvent =>
             {
                 if(stoppingToken.IsCancellationRequested) _eventManager.Dispatcher.Stop();
@@ -69,35 +75,13 @@ namespace Tauron.CQRS.Server
                         default:
                             if (_stopped)
                                 return;
-                            //if (_serviceScope == null || _dispatcherDatabaseContext == null)
-                            //{
-                            //    _serviceScope = _scopeFactory.CreateScope();
-                            //    _dispatcherDatabaseContext = _serviceScope.ServiceProvider
-                            //        .GetRequiredService<DispatcherDatabaseContext>();
-                            //}
+                            if (stoppingToken.IsCancellationRequested) return;
 
-                            if (domainEvent.RealMessage.EventType == EventType.Event)
+                            if (!await _eventManager.DeliverEvent(domainEvent, stoppingToken))
                             {
-                                //await _dispatcherDatabaseContext.SaveChangesAsync(stoppingToken);
-                                if (stoppingToken.IsCancellationRequested) return;
-
-                                if (!await _eventManager.DeliverEvent(domainEvent, stoppingToken))
-                                    await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
+                                _logger.LogWarning($"Failed to deliver Event: {domainEvent.RealMessage.EventName} -- {domainEvent.RealMessage.EventType}");
+                                await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
                             }
-                            else
-                            {
-                                if (!await _eventManager.DeliverEvent(domainEvent, stoppingToken))
-                                    await _eventManager.DeliverEvent(CreateEventFailedEvent(domainEvent), stoppingToken);
-                            }
-
-                            //if (_eventManager.Dispatcher.Count == 0 || stoppingToken.IsCancellationRequested)
-                            //{
-                            //    _dispatcherDatabaseContext?.Dispose();
-                            //    _serviceScope?.Dispose();
-
-                            //    _dispatcherDatabaseContext = null;
-                            //    _serviceScope = null;
-                            //}
 
                             break;
                     }

@@ -139,6 +139,7 @@ namespace Tauron.CQRS.Server.Core
                     return entry.WaitForResponse(100_000);
                 case EventType.AmbientCommand:
                 case EventType.Event:
+                    _logger.LogInformation($"{@event.RealMessage.EventName} GroupCount: {_connectionManager.GetCurrentClients(@event.RealMessage.EventName)}");
                     await _eventHub.Clients.Groups(@event.RealMessage.EventName).SendAsync(HubEventNames.PropagateEvent, @event.RealMessage, cancellationToken: token);
                     return true;
                 default:
