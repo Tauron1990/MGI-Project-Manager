@@ -8,6 +8,7 @@ using EventDeliveryTest.Test;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using Tauron.CQRS.Services;
 using Tauron.CQRS.Services.Extensions;
 
@@ -30,6 +31,10 @@ namespace EventDeliveryTest
 
         static async Task Main()
         {
+            var logger = new LoggerConfiguration()
+                .WriteTo.Console(outputTemplate:"{Message:lj}{NewLine}{Exception}")
+                .WriteTo.File("Test.log").CreateLogger();
+
             try
             {
                 Console.Title = "Event Delivery Test";
@@ -71,11 +76,13 @@ namespace EventDeliveryTest
                     Console.WriteLine();
                     Console.WriteLine("Tests Failed:");
                     Console.WriteLine(e.Demystify());
+                    logger.Error(e.Demystify(), "Tests Failed");
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
+                logger.Error(e, "Error Init");
             }
 
             Console.ReadKey();
@@ -158,7 +165,7 @@ namespace EventDeliveryTest
         {
             var builder = new ConfigurationBuilder();
 
-            builder.AddJsonFile("appsettings.json");
+            builder.AddJsonFile("ServiceSettings.json");
 
             return builder.Build();
         }

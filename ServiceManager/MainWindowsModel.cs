@@ -147,7 +147,7 @@ namespace ServiceManager
         {
             var folderBrowser = new OpenFileDialog {AutoUpgradeEnabled = true};
 
-            folderBrowser.ShowDialog(new Wind32Proxy(Application.Current.MainWindow));
+            if(folderBrowser.ShowDialog(new Wind32Proxy(Application.Current.MainWindow)) != DialogResult.OK) return;
 
             var result = await _installerSystem.Install(folderBrowser.FileName);
 

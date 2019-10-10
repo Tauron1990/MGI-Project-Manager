@@ -102,7 +102,7 @@ namespace ServiceManager.Installation.Tasks
 
         private static IConfiguration GetConfiguration(ZipArchive zipArchive)
         {
-            var file = zipArchive.GetEntry(InstallerContext.SettingsFileName);
+            var file = zipArchive.GetEntry(InstallerContext.ServiceSettingsFileName);
             if (file == null) return null;
             var mem = new MemoryStream();
             using (var fileStream = file.Open()) fileStream.CopyTo(mem);

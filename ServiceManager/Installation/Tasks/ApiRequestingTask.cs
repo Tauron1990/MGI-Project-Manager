@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ServiceManager.ApiRequester;
@@ -26,16 +25,16 @@ namespace ServiceManager.Installation.Tasks
 
             if (string.IsNullOrWhiteSpace(key)) return "Es konnte kein Api Key Abgerufen werden!";
 
-            var path = Path.Combine(context.InstalledPath, InstallerContext.SettingsFileName);
+            var path = Path.Combine(context.InstalledPath, InstallerContext.ServiceSettingsFileName);
 
-            if (!File.Exists(path)) return $"{InstallerContext.SettingsFileName} datei esisteirt nicht";
+            if (!File.Exists(path)) return $"{InstallerContext.ServiceSettingsFileName} datei esisteirt nicht";
 
             var settings = JToken.Parse(await File.ReadAllTextAsync(path));
 
             settings["ApiKey"] = key;
             settings["Dispatcher"] = App.ClientCofiguration.BaseUrl;
 
-            await using (var file = File.OpenWrite(path))
+            await using (var file = new FileStream(path, FileMode.Create))
             {
                 await using var steamWriter = new StreamWriter(file);
                 await steamWriter.WriteAsync(settings.ToString(Formatting.Indented));

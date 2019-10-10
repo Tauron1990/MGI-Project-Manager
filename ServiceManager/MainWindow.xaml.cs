@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,6 +49,16 @@ namespace ServiceManager
 
         private void MainWindow_OnClosed(object sender, EventArgs e) => (_serviceProvider as IDisposable)?.Dispose();
 
-        private void MainWindow_OnClosing(object sender, CancelEventArgs e) => _serviceProvider.GetRequiredService<IProcessManager>().StopAll();
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            _model.IsReady = false;
+            e.Cancel = true;
+
+            Task.Run(() =>
+            {
+                _serviceProvider.GetRequiredService<IProcessManager>().StopAll();
+                Dispatcher.Invoke(Application.Current.Shutdown);
+            });
+        }
     }
 }

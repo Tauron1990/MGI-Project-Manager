@@ -8,7 +8,7 @@ namespace ServiceManager.Installation.Core
 {
     public class InstallerContext : IDisposable
     {
-        public const string SettingsFileName = "appsettings.json";
+        public const string ServiceSettingsFileName = "ServiceSettings.json";
 
         private RunningService _runningService;
         private ZipArchive _packageArchive;
