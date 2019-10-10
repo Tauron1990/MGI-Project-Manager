@@ -30,45 +30,52 @@ namespace EventDeliveryTest
 
         static async Task Main()
         {
-            Console.Title = "Event Delivery Test";
-
-            Console.WriteLine("---Welcome To Event Delivery Test---");
-            Console.WriteLine("Please Enter The IP of the Server to Test:");
-            Console.Write("IP: ");
-            _configuration = GetConfiguration();
-            
-            //Console.WriteLine("http://localhost:54005");
-            //Uri ip = new Uri("http://localhost:54005");// Console.ReadLine();
-
-            //http://192.168.105.18:81
-            Console.WriteLine("http://192.168.105.18:81");
-            Uri ip = new Uri(_configuration.GetValue<string>("Dispatcher"));// Console.ReadLine();
-
-            Console.WriteLine();
-            //Console.WriteLine("Press Enter to Start...");
-            //Console.ReadKey();
-            Console.WriteLine();
-
-            Console.WriteLine("---Tests---");
             try
             {
+                Console.Title = "Event Delivery Test";
+
+                Console.WriteLine("---Welcome To Event Delivery Test---");
+                Console.WriteLine("Please Enter The IP of the Server to Test:");
+                Console.Write("IP: ");
+                _configuration = GetConfiguration();
+            
+                //Console.WriteLine("http://localhost:54005");
+                //Uri ip = new Uri("http://localhost:54005");// Console.ReadLine();
+
+                //http://192.168.105.18:81
+                Console.WriteLine("http://192.168.105.18:81");
+                Uri ip = new Uri(_configuration.GetValue<string>("Dispatcher"));// Console.ReadLine();
+
+                Console.WriteLine();
+                //Console.WriteLine("Press Enter to Start...");
+                //Console.ReadKey();
                 Console.WriteLine();
 
-                await PingTest(ip);
-                await HealthTest(ip);
-                var temp = ServiceCreationTest(ip);
-                await TestEventDeleivery(temp);
-                await TestQuery(temp);
+                Console.WriteLine("---Tests---");
+                try
+                {
+                    Console.WriteLine();
 
-                Console.WriteLine();
-                Console.WriteLine("Tests Completed");
+                    await PingTest(ip);
+                    await HealthTest(ip);
+                    var temp = ServiceCreationTest(ip);
+                    await TestEventDeleivery(temp);
+                    await TestQuery(temp);
+
+                    Console.WriteLine();
+                    Console.WriteLine("Tests Completed");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine("Tests Failed:");
+                    Console.WriteLine(e.Demystify());
+                }
             }
             catch (Exception e)
             {
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine("Tests Failed:");
-                Console.WriteLine(e.Demystify());
+                Console.WriteLine(e);
             }
 
             Console.ReadKey();

@@ -97,7 +97,10 @@ namespace ServiceManager
                 {
                     _serviceSettings.Url = window.Result;
                     await ServiceSettings.Write(_serviceSettings, SettingsPath);
-                    break;
+                    if(Uri.TryCreate(_serviceSettings.Url, UriKind.RelativeOrAbsolute, out targetUri))
+                        break;
+                    
+                    MessageBox.Show("Url ist nicht valid", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
                 if (!window.Shutdown) continue;

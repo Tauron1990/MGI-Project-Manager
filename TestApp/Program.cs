@@ -1,36 +1,53 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using NuGet.Common;
+using NuGet.Configuration;
+using NuGet.Packaging;
+using NuGet.Packaging.Signing;
 using RestEase;
 
 namespace TestApp
 {
-    public interface IApiRequester
+    class ConsoleLogger : LoggerBase
     {
-        [Get(nameof(RegisterApiKey))]
-        Task<string> RegisterApiKey(string serviceName);
+        public override void Log(ILogMessage message)
+        {
+            Console.WriteLine(message.FormatWithCode());
+        }
+
+        public override Task LogAsync(ILogMessage message)
+        {
+            Console.WriteLine(message.FormatWithCode());
+
+            return Task.CompletedTask;
+        }
     }
 
     class Program
     {
         static async Task Main(string[] args)
         {
-            try
-            {
-                const string URL = "http://localhost:81";
+            const string source = @"https://api.nuget.org/v3/index.json";
 
-                var client = new RestClient(
-                        new Uri(
-                            new Uri(URL), "Api/ApiRequester"))
-                   .For<IApiRequester>();
+            var logger = new ConsoleLogger();
+            var reader = new PackageArchiveReader(@"C:\Users\PC\Desktop\test\MGI\EventDeliveryTest\bin\Release\EventDeliveryTest.1.0.0.nupkg");
 
-                var key = await client.RegisterApiKey("TestService");
 
-                Console.ReadKey();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+
+            //await PackageExtractor.ExtractPackageAsync(
+            //    "",
+            //    reader,
+            //    new PackagePathResolver(
+            //        Path.Combine(
+            //            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+            //            "Test")),
+            //    new PackageExtractionContext(PackageSaveMode.None, XmlDocFileSaveMode.Skip, ClientPolicyContext.GetClientPolicy(new NullSettings(), new NullLogger()), new NullLogger()),
+            //    CancellationToken.None);
+
+            reader.Dispose();
         }
     }
 }
