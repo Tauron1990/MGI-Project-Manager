@@ -134,11 +134,12 @@ namespace ServiceManager.ProcessManager
             foreach (var service in _serviceSettings.RunningServices) await Start(service);
         }
 
-        public void StopAll()
+        public async Task StopAll()
         {
-            Task.WaitAll(_serviceSettings.RunningServices.Select(s => Stop(s, 10_1000)).Cast<Task>().ToArray());
+            foreach (var service in _serviceSettings.RunningServices) 
+                await Stop(service, 10_000);
 
-            ServiceSettings.Write(_serviceSettings, MainWindowsModel.SettingsPath).Wait();
+            await ServiceSettings.Write(_serviceSettings, MainWindowsModel.SettingsPath);
         }
 
         public void Dispose()

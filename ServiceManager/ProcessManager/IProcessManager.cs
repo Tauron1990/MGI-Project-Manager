@@ -11,6 +11,6 @@ namespace ServiceManager.ProcessManager
 
         Task StartAll();
 
-        void StopAll();
+        Task StopAll();
     }
 }

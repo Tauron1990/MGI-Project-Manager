@@ -26,5 +26,14 @@ namespace Tauron.MgiProjectManager.Dispatcher
 
             return await _keyStore.Register(serviceName);
         }
+
+        [Route(nameof(RemoveApiKey))]
+        [HttpGet]
+        public async Task<ActionResult<bool>> RemoveApiKey(string serviceName)
+        {
+            if (!_configuration.GetValue<bool>("FreeAcess")) return Forbid();
+
+            return await _keyStore.Remove(serviceName);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Tauron.CQRS.Server.Core
 {
@@ -9,5 +10,6 @@ namespace Tauron.CQRS.Server.Core
         Task<(bool Ok, string ServiceName)> Validate(string apiKey);
 
         Task<string> Register(string name);
+        Task<bool> Remove(string serviceName);
     }
 }

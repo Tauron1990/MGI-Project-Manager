@@ -7,5 +7,8 @@ namespace ServiceManager.ApiRequester
     {
         [Get(nameof(RegisterApiKey))]
         Task<string> RegisterApiKey(string serviceName);
+
+        [Get(nameof(RemoveApiKey))]
+        Task<bool> RemoveApiKey(string serviceName);
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Nito.AsyncEx;
 using Tauron.CQRS.Server.EventStore;
 using Tauron.CQRS.Server.EventStore.Data;
 
@@ -21,6 +22,7 @@ namespace Tauron.CQRS.Server.Core.Impl
             new Lazy<HashAlgorithm>(() => HashAlgorithm.Create("sha256"));
 
         private readonly List<ApiKey> _keys = new List<ApiKey>();
+        private readonly AsyncLock _asyncLock = new AsyncLock();
         private bool _isInit;
 
         public ApiKeyStore(IServiceScopeFactory serviceScopeFactory, ILogger<ApiKeyStore> logger)
@@ -47,57 +49,84 @@ namespace Tauron.CQRS.Server.Core.Impl
 
         public async Task<string> Register(string name)
         {
-            _logger.LogInformation($"Generate New Api-Key for {name}");
-
-            await Init();
-
-            if (_keys.Any(ak => ak.Name == name)) return null;
-
-            try
+            using (await _asyncLock.LockAsync())
             {
-                using var scope = _serviceScopeFactory.CreateScope();
-                await using var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>();
-                var key = Convert.ToBase64String(_hashAlgorithm.Value.ComputeHash(Encoding.UTF8.GetBytes(DateTime.Now + name)));
-                var ent = new ApiKey
+                _logger.LogInformation($"Generate New Api-Key for {name}");
+
+                await Init();
+
+                if (_keys.Any(ak => ak.Name == name)) return null;
+
+                try
                 {
-                    Key = key,
-                    Name = name
-                };
+                    using var scope = _serviceScopeFactory.CreateScope();
+                    await using var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>();
+                    var key = Convert.ToBase64String(_hashAlgorithm.Value.ComputeHash(Encoding.UTF8.GetBytes(DateTime.Now + name)));
+                    var ent = new ApiKey
+                    {
+                        Key = key,
+                        Name = name
+                    };
 
 
-                context.ApiKeys.Add(ent);
+                    context.ApiKeys.Add(ent);
 
-                await context.SaveChangesAsync();
+                    await context.SaveChangesAsync();
 
-                _keys.Add(ent);
-                return key;
-            }
-            catch(Exception e)
-            {
-                _logger.LogError(e, $"Error Generating Hash for {name}");
+                    _keys.Add(ent);
+                    return key;
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Error Generating Hash for {name}");
 
-                throw;
+                    throw;
+                }
             }
         }
 
-        private Task Init()
+        public async Task<bool> Remove(string serviceName)
         {
-            if (_isInit) return Task.CompletedTask;
-
-            lock (this)
+            using (await _asyncLock.LockAsync())
             {
-                if(_isInit) return Task.CompletedTask;
+                await Init();
+
+                var ent = _keys.FirstOrDefault(k => k.Name == serviceName);
+
+                if (ent == null) return false;
+                _keys.Remove(ent);
+
+                using var scope = _serviceScopeFactory.CreateScope();
+                await using var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>();
+
+                ent = await context.ApiKeys.FirstOrDefaultAsync(k => k.Name == serviceName);
+                if (ent == null) return false;
+
+                context.Remove(ent);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+        }
+
+        private async Task Init()
+        {
+            if (_isInit) return;
+
+            using (await  _asyncLock.LockAsync())
+            {
+                if(_isInit) return;
 
                 _logger.LogInformation("Init Api Key Storage");
 
                 using (var scope = _serviceScopeFactory.CreateScope())
                 {
-                    using (var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>())
-                        _keys.AddRange(context.ApiKeys.AsNoTracking());
+                    await using var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>();
+                    _keys.AddRange(context.ApiKeys.AsNoTracking());
                 }
 
                 _isInit = true;
-                return Task.CompletedTask;
+                return;
             }
         }
 

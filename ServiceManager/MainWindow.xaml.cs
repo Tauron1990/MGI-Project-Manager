@@ -49,16 +49,19 @@ namespace ServiceManager
 
         private void MainWindow_OnClosed(object sender, EventArgs e) => (_serviceProvider as IDisposable)?.Dispose();
 
-        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        private async void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
             _model.IsReady = false;
             e.Cancel = true;
 
-            Task.Run(() =>
+            try
             {
-                _serviceProvider.GetRequiredService<IProcessManager>().StopAll();
-                Dispatcher.Invoke(Application.Current.Shutdown);
-            });
+                await _serviceProvider.GetRequiredService<IProcessManager>().StopAll();
+                Dispatcher?.Invoke(Application.Current.Shutdown);
+            }
+            catch (TaskCanceledException)
+            {
+            }
         }
     }
 }
