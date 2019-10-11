@@ -17,16 +17,16 @@ namespace ServiceManager.CQRS.Logging
         public string CategoryName { get; set; }
         public LogLevel LogLevel { get; set; }
         public SaveableEventId EventId { get; set; }
-        public Exception Exception { get; set; }
         public string Message { get; set; }
         public int Scope { get; set; }
+        public string ServiceName { get; set; }
 
         public LoggingEvent()
         {
             
         }
 
-        public LoggingEvent(string categoryName, LogLevel logLevel, EventId eventId, Exception exception, string message, int scope)
+        public LoggingEvent(string categoryName, LogLevel logLevel, EventId eventId, string message, int scope, string serviceName)
         {
             EventId = new SaveableEventId
             {
@@ -35,9 +35,9 @@ namespace ServiceManager.CQRS.Logging
             };
             CategoryName = categoryName;
             LogLevel = logLevel;
-            Exception = exception;
             Message = message;
             Scope = scope;
+            ServiceName = serviceName;
             Id = IdGenerator.Generator.NewGuid(NameSpace, categoryName);
         }
     }

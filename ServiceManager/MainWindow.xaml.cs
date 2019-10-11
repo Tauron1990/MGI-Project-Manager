@@ -63,5 +63,10 @@ namespace ServiceManager
             {
             }
         }
+
+        private async void Update_OnClick(object sender, RoutedEventArgs e)
+        {
+            await _model.Update();
+        }
     }
 }

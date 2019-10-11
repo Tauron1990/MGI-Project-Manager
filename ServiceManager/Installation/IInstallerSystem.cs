@@ -8,5 +8,7 @@ namespace ServiceManager.Installation
         Task<RunningService> Install(string path);
 
         Task<bool?> Unistall(RunningService service);
+
+        Task<bool?> Update(RunningService service);
     }
 }

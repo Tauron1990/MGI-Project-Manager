@@ -7,9 +7,26 @@ namespace ServiceManager.Installation.Core
 {
     public abstract class InstallerTask : INotifyPropertyChanged
     {
-        private bool _running;
+        public static class MetaKeys
+        {
+            public const string UpdateFile = nameof(UpdateFile);
 
-        public abstract object Content { get; }
+            public const string ArchiveFile = nameof(ArchiveFile);
+        }
+
+        private bool _running;
+        private object _content;
+
+        public object Content
+        {
+            get => _content;
+            protected set
+            {
+                if (Equals(value, _content)) return;
+                _content = value;
+                OnPropertyChanged();
+            }
+        }
 
         public abstract string Title { get; }
 

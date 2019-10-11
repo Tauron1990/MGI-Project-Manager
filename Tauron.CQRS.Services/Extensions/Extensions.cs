@@ -91,11 +91,11 @@ namespace Tauron.CQRS.Services.Extensions
         }
 
         public static void AddFrom<TType>(this IServiceCollection serviceCollection, ClientCofiguration config) 
-            => ScanFrom(config, serviceCollection, typeof(TType));
+            => ScanFrom(config, typeof(TType));
 
-        public static ClientCofiguration AddFrom<TType>(this ClientCofiguration config, IServiceCollection serviceCollection)
+        public static ClientCofiguration AddFrom<TType>(this ClientCofiguration config)
         {
-            ScanFrom(config, serviceCollection, typeof(TType));
+            ScanFrom(config, typeof(TType));
             return config;
         }
 
@@ -103,7 +103,7 @@ namespace Tauron.CQRS.Services.Extensions
         public static void AddReadModel(ClientCofiguration configuration, Type readModel, Type @interface) 
             => configuration.RegisterHandler(@interface.GetGenericArguments()[0].FullName, readModel);
 
-        private static void ScanFrom(ClientCofiguration config, IServiceCollection serviceCollection, Type targetType)
+        private static void ScanFrom(ClientCofiguration config, Type targetType)
         {
             var asm = targetType.Assembly;
 

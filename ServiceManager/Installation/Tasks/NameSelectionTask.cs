@@ -2,7 +2,6 @@
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -17,7 +16,6 @@ namespace ServiceManager.Installation.Tasks
         private readonly ILogger<NameSelectionTask> _logger;
         private readonly ServiceSettings _serviceSettings;
         private NameSelectionModel _nameSelectionModel;
-        private object _content;
 
         public NameSelectionTask(ILogger<NameSelectionTask> logger, ServiceSettings serviceSettings)
         {
@@ -25,14 +23,12 @@ namespace ServiceManager.Installation.Tasks
             _serviceSettings = serviceSettings;
         }
 
-        public override object Content => _content;
-
         public override string Title => "Service Name";
 
         public override Task Prepare(InstallerContext context)
         {
             _nameSelectionModel = context.ServiceScope.ServiceProvider.GetRequiredService<NameSelectionModel>();
-            _content = context.ServiceScope.ServiceProvider.GetRequiredService<NameSelection>();
+            Content = context.ServiceScope.ServiceProvider.GetRequiredService<NameSelection>();
 
             return Task.CompletedTask;
         }

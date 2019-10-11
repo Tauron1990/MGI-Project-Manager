@@ -8,16 +8,20 @@ using ServiceManager.Installation.Core;
 
 namespace ServiceManager.Installation.Tasks
 {
-    public class ApiRequestingTask : InstallerTask
+    public sealed class ApiRequestingTask : InstallerTask
     {
         private readonly Lazy<IApiRequester> _apiRequester;
-
-        public override object Content => "Api Schlüssel wird Abgerufen...";
-
+        
         public override string Title => "Api Schlüssel";
 
         public ApiRequestingTask(Lazy<IApiRequester> apiRequester) 
             => _apiRequester = apiRequester;
+
+        public override Task Prepare(InstallerContext context)
+        {
+            Content = "Api Schlüssel wird Abgerufen...";
+            return base.Prepare(context);
+        }
 
         public override async Task<string> RunInstall(InstallerContext context)
         {

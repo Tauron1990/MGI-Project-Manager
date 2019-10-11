@@ -4,7 +4,9 @@ using CQRSlite.Events;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using ServiceManager.CQRS.Logging;
+using Tauron.CQRS.Common.Configuration;
 
 namespace Tauron.ServiceBootstrapper.Core
 {
@@ -22,17 +24,20 @@ namespace Tauron.ServiceBootstrapper.Core
             }
 
             private readonly string _category;
-            private readonly Func<IEventPublisher> _factory;
+            private readonly Func<(IEventPublisher, ClientCofiguration)> _factory;
             private int _scope;
 
-            public Logger(string category, Func<IEventPublisher> factory)
+            public Logger(string category, Func<(IEventPublisher, ClientCofiguration)> factory)
             {
                 _category = category;
                 _factory = factory;
             }
 
-            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter) 
-                => _factory()?.Publish(new LoggingEvent(_category, logLevel, eventId, exception, formatter(state, exception), _scope));
+            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+            {
+                var (sender, config) = _factory();
+                sender?.Publish(new LoggingEvent(_category, logLevel, eventId, formatter(state, exception), _scope, config.ServiceName));
+            }
 
             public bool IsEnabled(LogLevel logLevel)
             {
@@ -52,22 +57,21 @@ namespace Tauron.ServiceBootstrapper.Core
 
         public SendingProvider([NotNull]Func<IServiceScopeFactory> factory) => _factory = factory;
 
-        [CanBeNull]
-        private IEventPublisher GetEventPublisher()
+        private (IEventPublisher, ClientCofiguration) GetEventPublisher()
         {
             lock (this)
             {
-                if (_eventPublisher != null) return null;
+                if (_eventPublisher != null) return default;
 
                 var temp = _factory();
-                if (temp == null) return null;
+                if (temp == null) return default;
 
                 using var scope = temp.CreateScope();
                 _eventPublisher = scope.ServiceProvider.GetService<IEventPublisher>();
                 if (_eventPublisher != null)
                     _factory = null;
 
-                return _eventPublisher;
+                return (_eventPublisher, scope.ServiceProvider.GetRequiredService<IOptions<ClientCofiguration>>().Value);
             }
         }
 

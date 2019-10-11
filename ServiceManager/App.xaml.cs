@@ -50,7 +50,7 @@ namespace ServiceManager
             collection.AddCQRSServices(c =>
                                        {
                                            ClientCofiguration = c;
-                                           c.AddFrom<App>(collection);
+                                           c.AddFrom<App>();
                                        });
             collection.AddLogging(lb => lb.AddSerilog(dispose: true));
 

@@ -85,7 +85,7 @@ namespace ServiceManager
             if (!Directory.Exists(dic))
                 Directory.CreateDirectory(dic);
 
-            Uri targetUri = null;
+            Uri targetUri;
 
 
             while (string.IsNullOrWhiteSpace(_serviceSettings.Url) || !Uri.TryCreate(_serviceSettings.Url, UriKind.RelativeOrAbsolute, out targetUri))
@@ -145,9 +145,9 @@ namespace ServiceManager
 
         public async Task Install()
         {
-            var folderBrowser = new OpenFileDialog {AutoUpgradeEnabled = true};
+            using var folderBrowser = new OpenFileDialog {AutoUpgradeEnabled = true};
 
-            if(folderBrowser.ShowDialog(new Wind32Proxy(Application.Current.MainWindow)) != DialogResult.OK) return;
+            if(folderBrowser.ShowDialog(new Win32Proxy(Application.Current.MainWindow)) != DialogResult.OK) return;
 
             var result = await _installerSystem.Install(folderBrowser.FileName);
 
@@ -172,20 +172,30 @@ namespace ServiceManager
             await ServiceSettings.Write(_serviceSettings, SettingsPath);
         }
 
+        public async Task Update()
+        {
+            if(SelectedService == null) return;
+
+            if (await _installerSystem.Update(SelectedService.Service) == true)
+                return;
+
+            MessageBox.Show("Update ist Schiefgelaufen", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
         [NotifyPropertyChangedInvocator]
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 
-        private class Wind32Proxy : IWin32Window
+    public class Win32Proxy : IWin32Window
+    {
+        public Win32Proxy(Window window)
         {
-            public Wind32Proxy(Window window)
-            {
-                var handle = new WindowInteropHelper(window);
+            var handle = new WindowInteropHelper(window);
 
-                Handle = handle.EnsureHandle();
-            }
-
-            public IntPtr Handle { get; }
+            Handle = handle.EnsureHandle();
         }
+
+        public IntPtr Handle { get; }
     }
 }

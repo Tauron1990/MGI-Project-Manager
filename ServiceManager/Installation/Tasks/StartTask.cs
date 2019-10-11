@@ -4,13 +4,10 @@ using ServiceManager.ProcessManager;
 
 namespace ServiceManager.Installation.Tasks
 {
-    public class StartTask : InstallerTask
+    public sealed class StartTask : InstallerTask
     {
         private readonly IProcessManager _processManager;
-        private object _content;
-
-        public override object Content => _content;
-
+        
         public override string Title => "Start";
 
         public StartTask(IProcessManager processManager) 
@@ -18,7 +15,7 @@ namespace ServiceManager.Installation.Tasks
 
         public override Task Prepare(InstallerContext context)
         {
-            _content = $"Starte Service: {context.ServiceName}";
+            Content = $"Starte Service: {context.ServiceName}";
 
             return base.Prepare(context);
         }

@@ -17,13 +17,20 @@ namespace ServiceManager.Installation.Core
         private readonly ILogger<InstallerProcedure> _logger;
         private InstallerTask _currentTask;
 
-        public InstallerProcedure(ILogger<InstallerProcedure> logger, IServiceProvider serviceProvider)
-        {
-            _logger = logger;
+        public InstallerProcedure(ILogger<InstallerProcedure> logger) => _logger = logger;
 
+        public void InitInstall(IServiceProvider serviceProvider)
+        {
             Tasks.Add(TaskCreator<NameSelectionTask>(serviceProvider));
             Tasks.Add(TaskCreator<CopyTask>(serviceProvider));
             Tasks.Add(TaskCreator<ApiRequestingTask>(serviceProvider));
+            Tasks.Add(TaskCreator<StartTask>(serviceProvider));
+        }
+
+        public void InitUpdate(IServiceProvider serviceProvider)
+        {
+            Tasks.Add(TaskCreator<StopTask>(serviceProvider));
+            Tasks.Add(TaskCreator<SelectUpdateTask>(serviceProvider));
             Tasks.Add(TaskCreator<StartTask>(serviceProvider));
         }
 

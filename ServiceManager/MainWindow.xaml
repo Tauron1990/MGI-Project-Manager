@@ -19,6 +19,7 @@
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
                     <Button Content="Installieren" Margin="5" Click="Install_OnClick" Padding="5"/>
                     <Button Content="Deistallieren" Margin="5" Click="Unistall_OnClick" Padding="5"/>
+                    <Button Content="Update Service" Margin="5" Click="Update_OnClick" Padding="5"/>
                 </StackPanel>
                 <ListBox Margin="5" SelectedItem="{Binding SelectedService}" ItemsSource="{Binding RunningServices}">
                     <ListBox.ItemContainerStyle>

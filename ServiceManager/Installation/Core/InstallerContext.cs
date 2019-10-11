@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,8 @@ namespace ServiceManager.Installation.Core
             ServiceScope = serviceScope;
             PackagePath = packagePath;
         }
+
+        public Dictionary<string, object> MetaData { get; } = new Dictionary<string, object>();
 
         public string PackagePath { get; }
 
@@ -54,5 +57,17 @@ namespace ServiceManager.Installation.Core
 
         public RunningService CreateRunningService()
             => _runningService ??= new RunningService(InstalledPath, ServiceStade.Ready, ServiceName, ExeName);
+
+        private InstallerContext(RunningService runningService, IServiceScope serviceScope)
+        {
+            InstalledPath = runningService.InstallationPath;
+            ExeName = runningService.Exe;
+            ServiceScope = serviceScope;
+            ServiceName = runningService.Name;
+            _runningService = runningService;
+        }
+
+        public static InstallerContext CreateFrom(RunningService runningService, IServiceScope serviceScope) 
+            => new InstallerContext(runningService, serviceScope);
     }
 }

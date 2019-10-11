@@ -14,10 +14,7 @@ namespace ServiceManager.Installation.Tasks
     public sealed class CopyTask : InstallerTask
     {
         private readonly ILogger<CopyTask> _logger;
-        private object _content;
-
-        public override object Content => _content;
-
+       
         public override string Title => "Daten Kopieren";
 
         public CopyTask(ILogger<CopyTask> logger)
@@ -28,7 +25,7 @@ namespace ServiceManager.Installation.Tasks
         public override async Task Prepare(InstallerContext context)
         {
             var dispatcher = context.ServiceScope.ServiceProvider.GetRequiredService<Dispatcher>();
-            _content = await dispatcher.InvokeAsync(() => new TextBlock
+            Content = await dispatcher.InvokeAsync(() => new TextBlock
                                                           {
                                                               TextAlignment = TextAlignment.Center,
                                                               TextWrapping = TextWrapping.Wrap,

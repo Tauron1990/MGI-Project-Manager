@@ -73,6 +73,22 @@ namespace ServiceManager.Installation.Core
             }).Task;
         }
 
+        public async Task<bool?> Update(RunningService service)
+        {
+
+            using var scope = _scopeFactory.CreateScope();
+
+            var window = scope.ServiceProvider.GetRequiredService<InstallerWindow>();
+
+            window.Update = true;
+            window.RunningService = service;
+
+            var temp = await _dispatcher.InvokeAsync(() => window.ShowDialog());
+
+            _logger.LogInformation("Update Completed");
+            return temp;
+        }
+
         private static bool DeleteService(RunningService service, UnistallWindow window)
         {
             try

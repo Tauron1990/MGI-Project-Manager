@@ -30,7 +30,9 @@ namespace ServiceManager.Installation
 
         public string Error { get; private set; }
 
-        public RunningService RunningService { get; private set; }
+        public bool Update { get; set; }
+
+        public RunningService RunningService { get; set; }
 
         private async void InstallerWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -39,9 +41,17 @@ namespace ServiceManager.Installation
                 using var scope = _serviceScopeFactory.CreateScope();
 
                 var installerProcedure = scope.ServiceProvider.GetRequiredService<InstallerProcedure>();
+
+                if(Update)
+                    installerProcedure.InitUpdate(scope.ServiceProvider);
+                else
+                    installerProcedure.InitInstall(scope.ServiceProvider);
+
+
                 await _dispatcher.InvokeAsync(() => DataContext = installerProcedure);
 
-                using var context = new InstallerContext(scope, Path);
+                
+                using var context = Update ? InstallerContext.CreateFrom(RunningService, scope) : new InstallerContext(scope, Path);
 
                 await Task.Delay(2_000);
 

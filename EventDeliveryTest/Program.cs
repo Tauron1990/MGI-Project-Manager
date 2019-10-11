@@ -131,7 +131,7 @@ namespace EventDeliveryTest
 
             collection.AddLogging(lb => lb.AddConsole());
             collection.AddCQRSServices(c => c
-                                          .AddFrom<TestAggregate>(collection)
+                                          .AddFrom<TestAggregate>()
                                           .SetUrls(ip, _configuration.GetValue<string>("ServiceName"), _configuration.GetValue<string>("ApiKey"))
                                           .AddAwaiter<TestEvent>());
 
