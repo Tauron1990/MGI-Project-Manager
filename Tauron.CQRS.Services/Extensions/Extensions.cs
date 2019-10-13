@@ -20,6 +20,15 @@ namespace Tauron.CQRS.Services.Extensions
     [PublicAPI]
     public static class Extensions
     {
+        public static Task PublishEvent<T>(this ISession session, T @event, CancellationToken token = default)
+            where T : class, IEvent
+        {
+            if(!(session is CqrsSession internalSession)) 
+                throw new InvalidOperationException("Only CqrsSessions are Compatible");
+
+            return internalSession.EventPublisher.Publish(@event, token);
+        }
+
         public static void AddCQRSServices(this IServiceCollection services, Action<ClientCofiguration> config)
         {
             var clientCofiguration = new ClientCofiguration();
@@ -124,18 +133,14 @@ namespace Tauron.CQRS.Services.Extensions
                     }
 
                     if (genericDefinition != typeof(ICancellableCommandHandler<>) && genericDefinition != typeof(ICancellableEventHandler<>) &&
-                        genericDefinition != typeof(ICommandHandler<>)            && genericDefinition != typeof(IEventHandler<>))
+                        genericDefinition != typeof(ICommandHandler<>)            && genericDefinition != typeof(IEventHandler<>)            &&
+                        genericDefinition != typeof(ISpecificationCommandHandler<>))
                         continue;
 
-                    string name = @interface.GetGenericArguments()[0].Name;
+                    var name = @interface.GetGenericArguments()[0].Name;
 
-                    //config.RegisterType(name, @interface.GenericTypeArguments[0]);
                     config.RegisterHandler(name, type);
-
-                    //serviceCollection?.AddTransient(@interface);
                 }
-
-
             }
         }
     }

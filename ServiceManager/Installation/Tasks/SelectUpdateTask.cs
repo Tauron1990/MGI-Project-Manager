@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,6 +11,7 @@ namespace ServiceManager.Installation.Tasks
     {
         private readonly MainWindow _mainWindow;
         private readonly ILogger<SelectUpdateTask> _logger;
+        private ZipArchive _zipArchive;
 
         public override string Title => "Datei Wählen";
 
@@ -23,7 +23,7 @@ namespace ServiceManager.Installation.Tasks
 
         public override Task Prepare(InstallerContext context)
         {
-            Content = "Update Packed Wählen";
+            Content = "Update Packet Wählen";
 
             return base.Prepare(context);
         }
@@ -48,6 +48,8 @@ namespace ServiceManager.Installation.Tasks
 
                 context.MetaData[MetaKeys.UpdateFile] = path;
                 context.MetaData[MetaKeys.ArchiveFile] = archive;
+
+                _zipArchive = archive;
             }
             catch
             {
@@ -57,5 +59,8 @@ namespace ServiceManager.Installation.Tasks
 
             return Task.FromResult <string>(null);
         }
+
+        public override void Dispose() 
+            => _zipArchive?.Dispose();
     }
 }

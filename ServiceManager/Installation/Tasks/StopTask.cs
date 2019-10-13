@@ -38,6 +38,8 @@ namespace ServiceManager.Installation.Tasks
                     return "Das Stoppen des Services ist Fehlgeschlagen";
                 }
             }
+
+            return null;
         }
     }
 }

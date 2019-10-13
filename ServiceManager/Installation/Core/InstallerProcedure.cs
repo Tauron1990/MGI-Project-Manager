@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -31,6 +30,8 @@ namespace ServiceManager.Installation.Core
         {
             Tasks.Add(TaskCreator<StopTask>(serviceProvider));
             Tasks.Add(TaskCreator<SelectUpdateTask>(serviceProvider));
+            Tasks.Add(TaskCreator<ExtractToTempTask>(serviceProvider));
+            Tasks.Add(TaskCreator<UpdateFilesTask>(serviceProvider));
             Tasks.Add(TaskCreator<StartTask>(serviceProvider));
         }
 
@@ -87,6 +88,8 @@ namespace ServiceManager.Installation.Core
                     break;
                 }
             }
+
+            foreach (var installerTask in rollback) installerTask.Dispose();
 
             return error;
         }

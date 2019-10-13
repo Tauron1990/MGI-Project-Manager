@@ -6,9 +6,9 @@ namespace Tauron.CQRS.Common.ServerHubs
     {
         public long? SequenceNumber { get; set; }
 
-        public string EventName { get; set; }
+        public string EventName { get; set; } = string.Empty;
 
-        public string EventData { get; set; }
+        public string EventData { get; set; } = string.Empty;
 
         public EventType? EventType { get; set; }
         
@@ -18,9 +18,9 @@ namespace Tauron.CQRS.Common.ServerHubs
 
         public Guid? Id { get; set; }
 
-        public string TypeName { get; set; }
+        public string TypeName { get; set; } = string.Empty;
 
-        public string Sender { get; set; }
+        public string? Sender { get; set; }
     }
 
     //public class DomainMessage

@@ -11,6 +11,8 @@ namespace ServiceManager.Installation.Core
     {
         public const string ServiceSettingsFileName = "ServiceSettings.json";
 
+        public const string AppSettingsFileName = "AppSettings.json";
+
         private RunningService _runningService;
         private ZipArchive _packageArchive;
 

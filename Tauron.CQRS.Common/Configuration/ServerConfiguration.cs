@@ -5,7 +5,7 @@ namespace Tauron.CQRS.Common.Configuration
 {
     public class ServerConfiguration : CommonConfiguration
     {
-        public string ConnectionString { get; set; }
+        public string ConnectionString { get; private set; } = string.Empty;
 
         public bool Memory { get; set; }
 

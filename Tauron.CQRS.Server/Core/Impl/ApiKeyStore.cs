@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Nito.AsyncEx;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Nito.AsyncEx;
 using Tauron.CQRS.Server.EventStore;
 using Tauron.CQRS.Server.EventStore.Data;
 
@@ -31,14 +31,14 @@ namespace Tauron.CQRS.Server.Core.Impl
             _logger = logger;
         }
 
-        public async Task<string> GetServiceFromKey(string apiKey)
-        {
-            await Init();
+        //public async Task<string> GetServiceFromKey(string apiKey)
+        //{
+        //    await Init();
 
-            return _keys.FirstOrDefault(a => a.Key == apiKey)?.Name;
-        }
+        //    return _keys.FirstOrDefault(a => a.Key == apiKey)?.Name;
+        //}
 
-        public async Task<(bool, string)> Validate(string apiKey)
+        public async Task<(bool, string)> Validate(string? apiKey)
         {
             await Init();
 
@@ -47,7 +47,7 @@ namespace Tauron.CQRS.Server.Core.Impl
             return ent == null ? (false, string.Empty) : (true, ent.Name);
         }
 
-        public async Task<string> Register(string name)
+        public async Task<string?> Register(string name)
         {
             using (await _asyncLock.LockAsync())
             {
@@ -113,9 +113,9 @@ namespace Tauron.CQRS.Server.Core.Impl
         {
             if (_isInit) return;
 
-            using (await  _asyncLock.LockAsync())
+            using (await _asyncLock.LockAsync())
             {
-                if(_isInit) return;
+                if (_isInit) return;
 
                 _logger.LogInformation("Init Api Key Storage");
 
@@ -135,7 +135,7 @@ namespace Tauron.CQRS.Server.Core.Impl
             _keys.Add(new ApiKey
             {
                 Key = key,
-                Name =  key
+                Name = key
             });
         }
     }

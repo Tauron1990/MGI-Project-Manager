@@ -19,6 +19,12 @@ namespace Tauron.ServiceBootstrapper
         private static readonly ManualResetEvent ExitWaiter = new ManualResetEvent(false);
         private static IServiceProvider _serviceProvider;
 
+        public static Task Run(
+            string[] args, Action<ClientCofiguration> clientConfig = null,
+            Func<ServiceCollection, Task> config = null,
+            Func<IServiceProvider, StartOptions<EmtyOptions>, Task<bool>> startUp = null) =>
+            Run<EmtyOptions>(args, clientConfig, config, startUp);
+
         public static async Task Run<TStartOptions>(
             string[] args, Action<ClientCofiguration> clientConfig = null,
             Func<ServiceCollection, Task> config = null, 
@@ -82,7 +88,7 @@ namespace Tauron.ServiceBootstrapper
 
         private static IConfiguration GetAppConfig(string path)
         {
-            string realPath = Path.Combine(path, "AppSettings.json");
+            var realPath = Path.Combine(path, "AppSettings.json");
             if (!File.Exists(realPath)) return null;
 
             var configBuilder = new ConfigurationBuilder()

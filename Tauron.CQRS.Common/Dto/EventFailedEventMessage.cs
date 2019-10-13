@@ -9,6 +9,6 @@ namespace Tauron.CQRS.Common.Dto
         public int Version { get; set; } = -1;
         public DateTimeOffset TimeStamp { get; set; } = DateTimeOffset.Now;
 
-        public string EventName { get; set; }
+        public string EventName { get; set; } = string.Empty;
     }
 }

@@ -1,17 +1,20 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace ServiceManager.Installation.Core
 {
-    public abstract class InstallerTask : INotifyPropertyChanged
+    public abstract class InstallerTask : INotifyPropertyChanged, IDisposable
     {
         public static class MetaKeys
         {
             public const string UpdateFile = nameof(UpdateFile);
 
             public const string ArchiveFile = nameof(ArchiveFile);
+
+            public const string TempLocation = nameof(TempLocation);
         }
 
         private bool _running;
@@ -52,5 +55,10 @@ namespace ServiceManager.Installation.Core
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+
+        public virtual void Dispose()
+        {
+        }
     }
 }

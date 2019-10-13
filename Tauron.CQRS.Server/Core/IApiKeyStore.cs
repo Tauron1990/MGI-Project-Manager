@@ -7,9 +7,9 @@ namespace Tauron.CQRS.Server.Core
     {
         //Task<string> GetServiceFromKey(string apiKey);
 
-        Task<(bool Ok, string ServiceName)> Validate(string apiKey);
+        Task<(bool Ok, string ServiceName)> Validate(string? apiKey);
 
-        Task<string> Register(string name);
+        Task<string?> Register(string name);
         Task<bool> Remove(string serviceName);
     }
 }

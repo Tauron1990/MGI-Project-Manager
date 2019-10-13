@@ -229,13 +229,36 @@ namespace Tauron.CQRS.Services.Core.Components
                 public override async Task Invoke(IMessage msg, ServerDomainMessage rawMessage, CancellationToken token)
                     => await (Task)GetMethod()(_handler(), msg, rawMessage, token);
             }
+            private class SpecificationCommand : InvokerHelper
+            {
+                private readonly Func<object> _target;
+
+                public SpecificationCommand(Func<object> target, Type targetType, Type targetInterface) : base(targetType, targetInterface)
+                {
+                    _target = target;
+                }
+
+                public override async Task Invoke(IMessage msg, ServerDomainMessage rawMessage, CancellationToken token)
+                {
+                    var obj = _target();
+                    var spec = (obj as ISpecificationProviderBase)?.GetSpecification();
+                    string error = null;
+                    if (spec != null && !await spec.IsSatisfiedBy(msg))
+                        error = spec.Message;
+
+                    await (Task) GetMethod()(obj, msg, error);
+                }
+            }
 
             private readonly Dictionary<Type, InvokerBase> _invoker = new Dictionary<Type, InvokerBase>();
-            
+            private readonly Func<object> _target;
+            private object _realTarget;
+
             public bool IsCommand { get; }
 
             public HandlerInstace(Func<object> target, Type handlerType)
             {
+                _target = target;
                 var inters = handlerType.GetInterfaces();
 
                 foreach (var i in inters.Where(i => i.IsGenericType))
@@ -243,22 +266,46 @@ namespace Tauron.CQRS.Services.Core.Components
                     var targetType = i.GetGenericTypeDefinition();
 
                     if(!IsCommand)
-                        IsCommand = targetType == typeof(ICommandHandler<>) || targetType == typeof(ICancellableCommandHandler<>) || targetType == typeof(IReadModel<,>);
+                    {
+                        IsCommand = targetType == typeof(ICommandHandler<>)            ||
+                                    targetType == typeof(ICancellableCommandHandler<>) || 
+                                    targetType == typeof(IReadModel<,>)                ||
+                                    targetType == typeof(ISpecificationCommandHandler<>);
+                    }
+
                     Type key = i.GetGenericArguments()[0];
 
 
-                    if (targetType == typeof(ICommandHandler<>)) _invoker[key] = new Command(target, handlerType, i);
-                    else if (targetType == typeof(ICancellableCommandHandler<>)) _invoker[key] = new CancelCommand(target, handlerType, i);
-                    else if (targetType == typeof(IEventHandler<>)) _invoker[key] = new Event(target, handlerType, i);
-                    else if (targetType == typeof(ICancellableEventHandler<>)) _invoker[key] = new CancelEvent(target, handlerType, i);
-                    else if(targetType == typeof(IReadModel<,>)) _invoker[i.GetGenericArguments()[1]] = new ReadModel(target, handlerType, i);
+                    if (targetType == typeof(ICommandHandler<>)) _invoker[key] = new Command(() => _realTarget, handlerType, i);
+                    else if (targetType == typeof(ICancellableCommandHandler<>)) _invoker[key] = new CancelCommand(() => _realTarget, handlerType, i);
+                    else if (targetType == typeof(IEventHandler<>)) _invoker[key] = new Event(() => _realTarget, handlerType, i);
+                    else if (targetType == typeof(ICancellableEventHandler<>)) _invoker[key] = new CancelEvent(() => _realTarget, handlerType, i);
+                    else if (targetType == typeof(IReadModel<,>)) _invoker[i.GetGenericArguments()[1]] = new ReadModel(() => _realTarget, handlerType, i);
+                    else if (targetType == typeof(ISpecificationCommandHandler<>)) _invoker[key] = new SpecificationCommand(() => _realTarget, targetType, i);
                 }
 
                 if(_invoker.Count == 0)
                     throw new InvalidOperationException("No Invoker Found!");
             }
 
-            public async Task Handle(IMessage msg, ServerDomainMessage rawMessage, CancellationToken token) => await _invoker[msg.GetType()].Invoke(msg, rawMessage, token);
+            public async Task Handle(IMessage msg, ServerDomainMessage rawMessage, CancellationToken token)
+            {
+                _realTarget = _target();
+
+                var provider = _realTarget as ISpecificationProvider;
+                var spec = provider?.Specification(msg);
+                string result = null;
+
+                if (spec != null && !await spec.IsSatisfiedBy(msg))
+                    result = spec.Message;
+                
+                if(string.IsNullOrWhiteSpace(result))
+                    await _invoker[msg.GetType()].Invoke(msg, rawMessage, token);
+                else if (provider != null)
+                    await provider.Error(msg, result);
+
+                _realTarget = null;
+            }
         }
 
         private readonly IOptions<ClientCofiguration> _configuration;

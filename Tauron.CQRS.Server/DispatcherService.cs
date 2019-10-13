@@ -27,7 +27,7 @@ namespace Tauron.CQRS.Server
         private bool _stopped;
         //private IServiceScope _serviceScope;
         //private DispatcherDatabaseContext _dispatcherDatabaseContext;
-        private Task _runningTask;
+        private Task? _runningTask;
 
         public DispatcherService(IEventManager eventManager, ILogger<DispatcherService> logger, IServiceScopeFactory scopeFactory, IOptions<ServerConfiguration> config)
         {
@@ -114,7 +114,7 @@ namespace Tauron.CQRS.Server
         public override void Dispose()
         {
             base.Dispose();
-            _runningTask.Dispose();
+            _runningTask?.Dispose();
         }
     }
 }

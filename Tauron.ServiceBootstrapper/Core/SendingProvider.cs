@@ -33,10 +33,12 @@ namespace Tauron.ServiceBootstrapper.Core
                 _factory = factory;
             }
 
-            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+            public async void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
             {
                 var (sender, config) = _factory();
-                sender?.Publish(new LoggingEvent(_category, logLevel, eventId, formatter(state, exception), _scope, config.ServiceName));
+                if(sender == null) return;
+
+                await sender.Publish(new LoggingEvent(_category, logLevel, eventId, formatter(state, exception), _scope, config.ServiceName));
             }
 
             public bool IsEnabled(LogLevel logLevel)

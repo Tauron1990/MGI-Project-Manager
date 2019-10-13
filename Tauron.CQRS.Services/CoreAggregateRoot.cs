@@ -9,8 +9,6 @@ namespace Tauron.CQRS.Services
     [PublicAPI]
     public abstract class CoreAggregateRoot : SnapshotAggregateRoot<AggregateStade>
     {
-        private object _lock = new object();
-
         protected internal AggregateStade AggregateStade { get; private set; } = new AggregateStade();
 
         protected override AggregateStade CreateSnapshot() => AggregateStade;

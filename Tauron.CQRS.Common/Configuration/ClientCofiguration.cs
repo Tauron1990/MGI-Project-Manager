@@ -10,17 +10,17 @@ namespace Tauron.CQRS.Common.Configuration
     public class ClientCofiguration : CommonConfiguration
     {
         private readonly Dictionary<string, HashSet<Type>> _handlerRegistry = new Dictionary<string, HashSet<Type>>();
-        private string _serviceName;
+        private string _serviceName = String.Empty;
 
-        public string EventHubUrl { get; set; }
+        public string EventHubUrl { get; set; } = string.Empty;
 
-        public string EventServerApiUrl { get; set; }
+        public string EventServerApiUrl { get; set; } = string.Empty;
 
-        public string PersistenceApiUrl { get; set; }
+        public string PersistenceApiUrl { get; set; } = string.Empty;
 
-        public string ApiKey { get; set; }
+        public string ApiKey { get; set; } = string.Empty;
 
-        public string BaseUrl { get; set; }
+        public string BaseUrl { get; set; } = string.Empty;
 
         public string ServiceName
         {
@@ -35,7 +35,7 @@ namespace Tauron.CQRS.Common.Configuration
 
         public Dictionary<string, HashSet<Type>> GetHandlers () => new Dictionary<string, HashSet<Type>>(_handlerRegistry);
 
-        public string ConnectionString { get; set; }
+        public string? ConnectionString { get; set; }
 
         public bool Memory { get; set; }
 

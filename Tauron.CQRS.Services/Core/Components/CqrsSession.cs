@@ -10,13 +10,16 @@ namespace Tauron.CQRS.Services.Core.Components
 {
     public class CqrsSession : ISession
     {
-        private readonly IDispatcherClient _eventPublisher;
+        private readonly IDispatcherClient _dispatcherClient;
         private readonly IRepository _repository;
         private readonly Dictionary<Guid, AggregateDescriptor> _trackedAggregates;
 
-        public CqrsSession(IRepository repository, IDispatcherClient eventPublisher)
+        public IEventPublisher EventPublisher { get; }
+
+        public CqrsSession(IRepository repository, IDispatcherClient dispatcherClient, IEventPublisher eventPublisher)
         {
-            _eventPublisher = eventPublisher;
+            EventPublisher = eventPublisher;
+            _dispatcherClient = dispatcherClient;
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _trackedAggregates = new Dictionary<Guid, AggregateDescriptor>();
         }
@@ -33,7 +36,7 @@ namespace Tauron.CQRS.Services.Core.Components
             }
             else if (_trackedAggregates[aggregate.Id].Aggregate != aggregate)
                 throw new ConcurrencyException(aggregate.Id);
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
 
         public async Task<TAggregateRoot> Get<TAggregateRoot>(
@@ -87,7 +90,7 @@ namespace Tauron.CQRS.Services.Core.Components
                 }
 
                 await Task.WhenAll(taskArray).ConfigureAwait(false);
-                await _eventPublisher.SendEvents(events, cancellationToken);
+                await _dispatcherClient.SendEvents(events, cancellationToken);
             }
             finally
             {

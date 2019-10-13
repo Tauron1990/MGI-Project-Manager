@@ -2,8 +2,8 @@
 {
     public class ApiObjectId
     {
-        public string ApiKey { get; set; }
+        public string? ApiKey { get; set; }
 
-        public string Id { get; set; }
+        public string? Id { get; set; }
     }
 }
