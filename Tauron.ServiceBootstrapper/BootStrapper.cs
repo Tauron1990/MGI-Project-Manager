@@ -22,13 +22,13 @@ namespace Tauron.ServiceBootstrapper
         public static Task Run(
             string[] args, Action<ClientCofiguration> clientConfig = null,
             Func<ServiceCollection, Task> config = null,
-            Func<IServiceProvider, StartOptions<EmtyOptions>, Task<bool>> startUp = null) =>
+            Func<IServiceProvider, StartOptions<EmtyOptions>, Task> startUp = null) =>
             Run<EmtyOptions>(args, clientConfig, config, startUp);
 
         public static async Task Run<TStartOptions>(
             string[] args, Action<ClientCofiguration> clientConfig = null,
             Func<ServiceCollection, Task> config = null, 
-            Func<IServiceProvider, StartOptions<TStartOptions>, Task<bool>> startUp = null)
+            Func<IServiceProvider, StartOptions<TStartOptions>, Task> startUp = null)
         {
             var rootPath = AppContext.BaseDirectory;
             var collection = new ServiceCollection();
@@ -52,7 +52,6 @@ namespace Tauron.ServiceBootstrapper
                     new Uri(serviceConfig.GetValue<string>("Dispatcher"), UriKind.RelativeOrAbsolute),
                     serviceConfig.GetValue<string>("ServiceName"),
                     serviceConfig.GetValue<string>("ApiKey"))
-                    .AddFrom<TStartOptions>()
                     .AddFrom<ServiceStoppedHandler>();
                 
                 clientConfig?.Invoke(cofiguration);
@@ -79,7 +78,7 @@ namespace Tauron.ServiceBootstrapper
 
         private static IConfiguration GetServiceConfig(string path)
         {
-            string realPath = Path.Combine(path, "ServiceSettings.json");
+            var realPath = Path.Combine(path, "ServiceSettings.json");
             var configBuilder = new ConfigurationBuilder()
                 .AddJsonFile(realPath);
 

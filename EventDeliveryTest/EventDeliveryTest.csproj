@@ -23,6 +23,7 @@
     <ProjectReference Include="..\ServiceManager.CQRS\ServiceManager.CQRS.csproj" />
     <ProjectReference Include="..\Tauron.CQRS.Common\Tauron.CQRS.Common.csproj" />
     <ProjectReference Include="..\Tauron.CQRS.Services\Tauron.CQRS.Services.csproj" />
+    <ProjectReference Include="..\Tauron.ServiceBootstrapper\Tauron.ServiceBootstrapper.csproj" />
   </ItemGroup>
 
   <ItemGroup>

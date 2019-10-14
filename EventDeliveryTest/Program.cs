@@ -8,9 +8,12 @@ using EventDeliveryTest.Test;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Serilog;
+using Tauron.CQRS.Common.Configuration;
 using Tauron.CQRS.Services;
 using Tauron.CQRS.Services.Extensions;
+using Tauron.ServiceBootstrapper;
 
 namespace EventDeliveryTest
 {
@@ -29,63 +32,66 @@ namespace EventDeliveryTest
 
         private static IConfiguration _configuration;
 
-        static async Task Main()
+        private static async Task Main(string[] args)
         {
-            var logger = new LoggerConfiguration()
-                .WriteTo.Console(outputTemplate:"{Message:lj}{NewLine}{Exception}")
-                .WriteTo.File("Test.log").CreateLogger();
+            await BootStrapper.Run(args, startUp: async (sp, so) =>
+                                                  {
+                                                      var logger = new LoggerConfiguration()
+                                                         .WriteTo.Console(outputTemplate: "{Message:lj}{NewLine}{Exception}")
+                                                         .WriteTo.File("Test.log").CreateLogger();
 
-            try
-            {
-                Console.Title = "Event Delivery Test";
+                                                      try
+                                                      {
+                                                          Console.Title = "Event Delivery Test";
 
-                Console.WriteLine("---Welcome To Event Delivery Test---");
-                Console.WriteLine("Please Enter The IP of the Server to Test:");
-                Console.Write("IP: ");
-                _configuration = GetConfiguration();
-            
-                //Console.WriteLine("http://localhost:54005");
-                //Uri ip = new Uri("http://localhost:54005");// Console.ReadLine();
+                                                          Console.WriteLine("---Welcome To Event Delivery Test---");
+                                                          Console.WriteLine("Please Enter The IP of the Server to Test:");
+                                                          Console.Write("IP: ");
+                                                          //_configuration = GetConfiguration();
 
-                //http://192.168.105.18:81
-                Console.WriteLine("http://192.168.105.18:81");
-                Uri ip = new Uri(_configuration.GetValue<string>("Dispatcher"));// Console.ReadLine();
+                                                          //Console.WriteLine("http://localhost:54005");
+                                                          //Uri ip = new Uri("http://localhost:54005");// Console.ReadLine();
 
-                Console.WriteLine();
-                //Console.WriteLine("Press Enter to Start...");
-                //Console.ReadKey();
-                Console.WriteLine();
+                                                          //http://192.168.105.18:81
+                                                          Console.WriteLine("http://192.168.105.18:81");
+                                                          var ip = new Uri(sp.GetRequiredService<IOptions<ClientCofiguration>>().Value.BaseUrl);
+                                                          //new Uri(_configuration.GetValue<string>("Dispatcher")); // Console.ReadLine();
 
-                Console.WriteLine("---Tests---");
-                try
-                {
-                    Console.WriteLine();
+                                                          Console.WriteLine();
+                                                          //Console.WriteLine("Press Enter to Start...");
+                                                          //Console.ReadKey();
+                                                          Console.WriteLine();
 
-                    await PingTest(ip);
-                    await HealthTest(ip);
-                    var temp = ServiceCreationTest(ip);
-                    await TestEventDeleivery(temp);
-                    await TestQuery(temp);
+                                                          Console.WriteLine("---Tests---");
+                                                          try
+                                                          {
+                                                              Console.WriteLine();
 
-                    Console.WriteLine();
-                    Console.WriteLine("Tests Completed");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine("Tests Failed:");
-                    Console.WriteLine(e.Demystify());
-                    logger.Error(e.Demystify(), "Tests Failed");
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                logger.Error(e, "Error Init");
-            }
+                                                              await PingTest(ip);
+                                                              await HealthTest(ip);
+                                                              //var temp = ServiceCreationTest(ip);
+                                                              await TestEventDeleivery(sp);
+                                                              await TestQuery(sp);
 
-            Console.ReadKey();
+                                                              Console.WriteLine();
+                                                              Console.WriteLine("Tests Completed");
+                                                          }
+                                                          catch (Exception e)
+                                                          {
+                                                              Console.WriteLine();
+                                                              Console.WriteLine();
+                                                              Console.WriteLine("Tests Failed:");
+                                                              Console.WriteLine(e.Demystify());
+                                                              logger.Error(e.Demystify(), "Tests Failed");
+                                                          }
+                                                      }
+                                                      catch (Exception e)
+                                                      {
+                                                          Console.WriteLine(e);
+                                                          logger.Error(e, "Error Init");
+                                                      }
+
+                                                  }, clientConfig: c => c.AddAwaiter<TestEvent>().AddFrom<TestEvent>());
         }
 
         private static async Task TestQuery(IServiceProvider serviceProvider)
@@ -123,23 +129,23 @@ namespace EventDeliveryTest
             Console.WriteLine(" Success");
         }
 
-        private static IServiceProvider ServiceCreationTest(Uri ip)
-        {
-            Console.Write("Service Creation Test:");
+        //private static IServiceProvider ServiceCreationTest(Uri ip)
+        //{
+        //    Console.Write("Service Creation Test:");
 
-            IServiceCollection collection = new ServiceCollection();
+        //    IServiceCollection collection = new ServiceCollection();
 
-            collection.AddLogging(lb => lb.AddConsole());
-            collection.AddCQRSServices(c => c
-                                          .AddFrom<TestAggregate>()
-                                          .SetUrls(ip, _configuration.GetValue<string>("ServiceName"), _configuration.GetValue<string>("ApiKey"))
-                                          .AddAwaiter<TestEvent>());
+        //    collection.AddLogging(lb => lb.AddConsole());
+        //    collection.AddCQRSServices(c => c
+        //                                  .AddFrom<TestAggregate>()
+        //                                  .SetUrls(ip, _configuration.GetValue<string>("ServiceName"), _configuration.GetValue<string>("ApiKey"))
+        //                                  .AddAwaiter<TestEvent>());
 
-            var temp = collection.BuildServiceProvider();
-            Console.WriteLine(" Success");
+        //    var temp = collection.BuildServiceProvider();
+        //    Console.WriteLine(" Success");
 
-            return temp;
-        }
+        //    return temp;
+        //}
 
         private static async Task HealthTest(Uri url)
         {
@@ -161,13 +167,13 @@ namespace EventDeliveryTest
             else throw new TestFailed($"Ping Failed: {result?.Status}");
         }
 
-        private static IConfiguration GetConfiguration()
-        {
-            var builder = new ConfigurationBuilder();
+        //private static IConfiguration GetConfiguration()
+        //{
+        //    var builder = new ConfigurationBuilder();
 
-            builder.AddJsonFile("ServiceSettings.json");
+        //    builder.AddJsonFile("ServiceSettings.json");
 
-            return builder.Build();
-        }
+        //    return builder.Build();
+        //}
     }
 }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Tauron.CQRS.Server.EventStore;
 using Tauron.CQRS.Server.EventStore.Data;
 
@@ -17,6 +18,7 @@ namespace Tauron.CQRS.Server.Core.Impl
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger<ApiKeyStore> _logger;
+        private readonly IConfiguration _configuration;
 
         private readonly Lazy<HashAlgorithm> _hashAlgorithm =
             new Lazy<HashAlgorithm>(() => HashAlgorithm.Create("sha256"));
@@ -25,10 +27,11 @@ namespace Tauron.CQRS.Server.Core.Impl
         private readonly AsyncLock _asyncLock = new AsyncLock();
         private bool _isInit;
 
-        public ApiKeyStore(IServiceScopeFactory serviceScopeFactory, ILogger<ApiKeyStore> logger)
+        public ApiKeyStore(IServiceScopeFactory serviceScopeFactory, ILogger<ApiKeyStore> logger, IConfiguration configuration)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _logger = logger;
+            _configuration = configuration;
         }
 
         //public async Task<string> GetServiceFromKey(string apiKey)
@@ -44,7 +47,7 @@ namespace Tauron.CQRS.Server.Core.Impl
 
             var ent = _keys.FirstOrDefault(ak => ak.Key == apiKey);
 
-            return ent == null ? (false, string.Empty) : (true, ent.Name);
+            return ent == null ? _configuration.GetValue<bool>("DevelopKey") ? (true, "Develop") : (false, string.Empty) : (true, ent.Name);
         }
 
         public async Task<string?> Register(string name)
@@ -126,7 +129,6 @@ namespace Tauron.CQRS.Server.Core.Impl
                 }
 
                 _isInit = true;
-                return;
             }
         }
 
