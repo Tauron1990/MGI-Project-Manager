@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.NetworkInformation;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using CQRSlite.Queries;
 using EventDeliveryTest.Test;
@@ -34,7 +35,7 @@ namespace EventDeliveryTest
 
         private static async Task Main(string[] args)
         {
-            await BootStrapper.Run(args, startUp: async (sp, so) =>
+            await BootStrapper.Run<Empty>(args, startUp: async (sp, so) =>
                                                   {
                                                       var logger = new LoggerConfiguration()
                                                          .WriteTo.Console(outputTemplate: "{Message:lj}{NewLine}{Exception}")
@@ -91,7 +92,7 @@ namespace EventDeliveryTest
                                                           logger.Error(e, "Error Init");
                                                       }
 
-                                                  }, clientConfig: c => c.AddAwaiter<TestEvent>().AddFrom<TestEvent>());
+                                                  }, clientConfig: c => c.AddAwaiter<TestEvent>());
         }
 
         private static async Task TestQuery(IServiceProvider serviceProvider)
@@ -116,7 +117,6 @@ namespace EventDeliveryTest
             Console.Write("Event Delivery Test:");
 
             using var scope = serviceProvider.CreateScope();
-            await scope.ServiceProvider.StartCQRS();
 
             var awaiter = scope.ServiceProvider.GetRequiredService<AwaiterBase<TestCommand, TestEvent>>();
 

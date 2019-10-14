@@ -19,11 +19,11 @@ namespace Tauron.ServiceBootstrapper
         private static readonly ManualResetEvent ExitWaiter = new ManualResetEvent(false);
         private static IServiceProvider _serviceProvider;
 
-        public static Task Run(
-            string[] args, Action<ClientCofiguration> clientConfig = null,
-            Func<ServiceCollection, Task> config = null,
-            Func<IServiceProvider, StartOptions<EmtyOptions>, Task> startUp = null) =>
-            Run<EmtyOptions>(args, clientConfig, config, startUp);
+        //public static Task Run(
+        //    string[] args, Action<ClientCofiguration> clientConfig = null,
+        //    Func<ServiceCollection, Task> config = null,
+        //    Func<IServiceProvider, StartOptions<EmtyOptions>, Task> startUp = null) =>
+        //    Run<EmtyOptions>(args, clientConfig, config, startUp);
 
         public static async Task Run<TStartOptions>(
             string[] args, Action<ClientCofiguration> clientConfig = null,
@@ -52,8 +52,9 @@ namespace Tauron.ServiceBootstrapper
                     new Uri(serviceConfig.GetValue<string>("Dispatcher"), UriKind.RelativeOrAbsolute),
                     serviceConfig.GetValue<string>("ServiceName"),
                     serviceConfig.GetValue<string>("ApiKey"))
-                    .AddFrom<ServiceStoppedHandler>();
-                
+                    .AddFrom<ServiceStoppedHandler>()
+                    .AddFrom<TStartOptions>();
+
                 clientConfig?.Invoke(cofiguration);
             });
 

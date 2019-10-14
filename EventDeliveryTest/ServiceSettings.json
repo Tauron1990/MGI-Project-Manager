@@ -1,5 +1,5 @@
 {
   "ServiceName": "Temp",
-  "Dispatcher": "http://localhost/",
+  "Dispatcher": "http://192.168.105.18:81",
   "ApiKey": "2UaEHaUiQcHXrBbzk+hDECbzRJlTB9XwhtWGPsW02uo="
 }
