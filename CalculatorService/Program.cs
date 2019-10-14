@@ -7,6 +7,6 @@ namespace CalculatorService
     class Program
     {
         static async Task Main(string[] args) 
-            => await BootStrapper.Run(args);
+            => await BootStrapper.Run<Empty>(args);
     }
 }

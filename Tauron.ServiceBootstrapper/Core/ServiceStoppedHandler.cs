@@ -14,12 +14,10 @@ namespace Tauron.ServiceBootstrapper.Core
 
         public ServiceStoppedHandler(IOptions<ClientCofiguration> options) => _options = options;
 
-        public Task Handle(ServiceStoppedEvent message)
+        public async Task Handle(ServiceStoppedEvent message)
         {
             if(message.ServiceName == _options.Value.ServiceName)
-                BootStrapper.Shutdown();
-
-            return Task.CompletedTask;
+                await BootStrapper.Shutdown();
         }
     }
 }

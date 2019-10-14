@@ -19,6 +19,8 @@ namespace Tauron.ServiceBootstrapper
         private static readonly ManualResetEvent ExitWaiter = new ManualResetEvent(false);
         private static IServiceProvider _serviceProvider;
 
+        public static event Func<IServiceProvider, Task> ShutdownEvent; 
+
         //public static Task Run(
         //    string[] args, Action<ClientCofiguration> clientConfig = null,
         //    Func<ServiceCollection, Task> config = null,
@@ -97,6 +99,11 @@ namespace Tauron.ServiceBootstrapper
             return configBuilder.Build();
         }
 
-        internal static void Shutdown() => ExitWaiter.Set();
+        internal static async Task Shutdown()
+        {
+            if (ShutdownEvent != null)
+                await ShutdownEvent(_serviceProvider);
+            ExitWaiter.Set();
+        }
     }
 }

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Tauron.CQRS.Common
 {
     public sealed class MessageQueue<TMessage> : IDisposable
     {
+        private readonly ManualResetEvent _stopEvent = new ManualResetEvent(false);
         private readonly bool _skipExceptions;
         private readonly BlockingCollection<TMessage> _incomming;
         private readonly BlockingCollection<Task> _processorQueue;
@@ -72,6 +74,8 @@ namespace Tauron.CQRS.Common
                 }
             }
 
+            _stopEvent.Set();
+
             OnError = null;
             OnWork = null;
         }
@@ -85,6 +89,8 @@ namespace Tauron.CQRS.Common
                 _stop = true;
                 _incomming.CompleteAdding();
             }
+
+            _stopEvent.WaitOne(100_000);
         }
 
         public void Dispose()

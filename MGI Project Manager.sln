@@ -90,13 +90,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.ServiceBootstrapper"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Websites", "Websites", "{B0A7CB62-38CE-429C-BE7E-4BEF9CEB4C7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MgiManager", "MgiManager\MgiManager.csproj", "{72849F91-3F3A-4A2D-8D79-0FEB69470F91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MgiManager", "MgiManager\MgiManager.csproj", "{72849F91-3F3A-4A2D-8D79-0FEB69470F91}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{AD530279-AF8A-4663-B44A-BDD44BEC91BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorService", "CalculatorService\CalculatorService.csproj", "{3525EAF6-81A6-41B0-A76A-5E6894A4B5EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculatorService", "CalculatorService\CalculatorService.csproj", "{3525EAF6-81A6-41B0-A76A-5E6894A4B5EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.Shared", "Calculator.Shared\Calculator.Shared.csproj", "{10B410A4-EFA1-4C5C-BBFB-86924BABC146}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calculator.Shared", "Calculator.Shared\Calculator.Shared.csproj", "{10B410A4-EFA1-4C5C-BBFB-86924BABC146}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorUI", "CalculatorUI\CalculatorUI.csproj", "{7940A366-3FC4-4C05-8155-5FF3C2909558}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -241,6 +243,12 @@ Global
 		{10B410A4-EFA1-4C5C-BBFB-86924BABC146}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10B410A4-EFA1-4C5C-BBFB-86924BABC146}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10B410A4-EFA1-4C5C-BBFB-86924BABC146}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7940A366-3FC4-4C05-8155-5FF3C2909558}.Debug Event Delivery|Any CPU.ActiveCfg = Debug|Any CPU
+		{7940A366-3FC4-4C05-8155-5FF3C2909558}.Debug Event Delivery|Any CPU.Build.0 = Debug|Any CPU
+		{7940A366-3FC4-4C05-8155-5FF3C2909558}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7940A366-3FC4-4C05-8155-5FF3C2909558}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7940A366-3FC4-4C05-8155-5FF3C2909558}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7940A366-3FC4-4C05-8155-5FF3C2909558}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -280,6 +288,7 @@ Global
 		{AD530279-AF8A-4663-B44A-BDD44BEC91BD} = {FF6C98F0-BFF2-46A8-8239-D53CE53B78FE}
 		{3525EAF6-81A6-41B0-A76A-5E6894A4B5EA} = {AD530279-AF8A-4663-B44A-BDD44BEC91BD}
 		{10B410A4-EFA1-4C5C-BBFB-86924BABC146} = {AD530279-AF8A-4663-B44A-BDD44BEC91BD}
+		{7940A366-3FC4-4C05-8155-5FF3C2909558} = {AD530279-AF8A-4663-B44A-BDD44BEC91BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}
