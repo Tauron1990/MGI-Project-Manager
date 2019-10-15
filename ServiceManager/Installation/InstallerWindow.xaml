@@ -26,6 +26,6 @@
         </Border>
         <TextBlock DockPanel.Dock="Top" Margin="5" Text="{Binding CurrentTask.Title}" />
         <ContentControl DockPanel.Dock="Left" Margin="10" Content="{Binding CurrentTask.Content}"
-                        VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
     </DockPanel>
 </Window>

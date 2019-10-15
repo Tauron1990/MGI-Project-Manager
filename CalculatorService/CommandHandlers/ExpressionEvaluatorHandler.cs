@@ -8,6 +8,7 @@ using CalculatorService.Aggregates;
 using CodingSeb.ExpressionEvaluator;
 using CQRSlite.Domain;
 using CQRSlite.Domain.Exception;
+using Microsoft.Extensions.Logging;
 using Tauron.CQRS.Services;
 using Tauron.CQRS.Services.Extensions;
 using Tauron.CQRS.Services.Specifications;
@@ -20,9 +21,13 @@ namespace CalculatorService.CommandHandlers
         private static readonly ExpressionEvaluator ExpressionEvaluator = new ExpressionEvaluator();
 
         private readonly ISession _session;
+        private readonly ILogger<ExpressionEvaluatorHandler> _logger;
 
-        public ExpressionEvaluatorHandler(ISession session) 
-            => _session = session;
+        public ExpressionEvaluatorHandler(ISession session, ILogger<ExpressionEvaluatorHandler> logger)
+        {
+            _session = session;
+            _logger = logger;
+        }
 
         public ISpecification GetSpecification()
         {
@@ -44,7 +49,9 @@ namespace CalculatorService.CommandHandlers
 
             try
             {
+                _logger.LogInformation($"Evaluate Expression: {command.Input}");
                 var result = ExpressionEvaluator.Evaluate<double>(command.Input).ToString(CultureInfo.InvariantCulture);
+                _logger.LogInformation($"Evaluate Result: {command.Input} = {result}");
 
                 ExpressionAggregate aggregate;
                 try
@@ -62,6 +69,7 @@ namespace CalculatorService.CommandHandlers
             }
             catch (Exception e)
             {
+                _logger.LogError(e, $"Error on Evaluate: {command.Input}");
                 await _session.PublishEvent(new ExpressionElevatedEvent(command.Input, e.Message, true));
             }
         }

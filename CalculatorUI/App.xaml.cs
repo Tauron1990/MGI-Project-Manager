@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
+using Tauron.CQRS.Services.Extensions;
 
 namespace CalculatorUI
 {
@@ -13,5 +15,17 @@ namespace CalculatorUI
     /// </summary>
     public partial class App : Application
     {
+        public static IServiceProvider ServiceProvider { get; private set; }
+
+        public App()
+        {
+            var collection = new ServiceCollection();
+
+            collection.AddCQRSServices(cofiguration => cofiguration
+                .SetUrls(new Uri("http://192.168.105.18:81/", UriKind.RelativeOrAbsolute), "CalculatorUI", "")
+                .AddFrom<App>());
+
+            ServiceProvider = collection.BuildServiceProvider();
+        }
     }
 }

@@ -20,9 +20,20 @@ namespace CalculatorUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private MainWindowModel _model;
+
+        public MainWindow() => InitializeComponent();
+
+        private async void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            InitializeComponent();
+            _model = new MainWindowModel();
+
+            await Dispatcher.InvokeAsync(() => DataContext = _model);
+
+            await _model.Load();
         }
+
+        private async void Eval_OnClick(object sender, RoutedEventArgs e) 
+            => await _model.Eval();
     }
 }

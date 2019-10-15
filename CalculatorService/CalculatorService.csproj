@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -14,5 +14,16 @@
     <ProjectReference Include="..\Tauron.CQRS.Services\Tauron.CQRS.Services.csproj" />
     <ProjectReference Include="..\Tauron.ServiceBootstrapper\Tauron.ServiceBootstrapper.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ServiceSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="ZipOutputPath" AfterTargets="Build">
+    <Delete Files="$(MSBuildProjectDirectory)\bin\TestService.zip" />
+    <ZipDirectory SourceDirectory="$(OutputPath)" DestinationFile="$(MSBuildProjectDirectory)\bin\CalculatorService.zip" />
+  </Target>
 
 </Project>

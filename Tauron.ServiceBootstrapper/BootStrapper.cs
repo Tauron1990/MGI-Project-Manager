@@ -46,13 +46,15 @@ namespace Tauron.ServiceBootstrapper
             if (config != null) 
                 collection.AddSingleton(configuration);
 
+            string serviceName = serviceConfig.GetValue<string>("ServiceName");
+            Console.Title = $"Service Name: {serviceName}";
 
             var serviceConfig = GetServiceConfig(rootPath);
             collection.AddCQRSServices(cofiguration =>
             {
                 cofiguration.SetUrls(
                     new Uri(serviceConfig.GetValue<string>("Dispatcher"), UriKind.RelativeOrAbsolute),
-                    serviceConfig.GetValue<string>("ServiceName"),
+                    serviceName,
                     serviceConfig.GetValue<string>("ApiKey"))
                     .AddFrom<ServiceStoppedHandler>()
                     .AddFrom<TStartOptions>();
