@@ -281,7 +281,7 @@ namespace Tauron.CQRS.Services.Core.Components
                     else if (targetType == typeof(IEventHandler<>)) _invoker[key] = new Event(() => _realTarget, handlerType, i);
                     else if (targetType == typeof(ICancellableEventHandler<>)) _invoker[key] = new CancelEvent(() => _realTarget, handlerType, i);
                     else if (targetType == typeof(IReadModel<,>)) _invoker[i.GetGenericArguments()[1]] = new ReadModel(() => _realTarget, handlerType, i);
-                    else if (targetType == typeof(ISpecificationCommandHandler<>)) _invoker[key] = new SpecificationCommand(() => _realTarget, targetType, i);
+                    else if (targetType == typeof(ISpecificationCommandHandler<>)) _invoker[key] = new SpecificationCommand(() => _realTarget, handlerType, i);
                 }
 
                 if(_invoker.Count == 0)

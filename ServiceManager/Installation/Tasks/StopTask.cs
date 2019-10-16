@@ -28,11 +28,13 @@ namespace ServiceManager.Installation.Tasks
 
         public override async Task<string> RunInstall(InstallerContext context)
         {
+            Content = "Service wird Gestoppt...";
+
             var service = context.CreateRunningService();
 
             if (service.ServiceStade == ServiceStade.Running)
             {
-                if (await _processManager.Stop(service, 10_000))
+                if (!await _processManager.Stop(service, 10_000))
                 {
                     _logger.LogWarning($"{service.Name}: Stopping failed");
                     return "Das Stoppen des Services ist Fehlgeschlagen";

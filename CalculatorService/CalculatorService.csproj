@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <Target Name="ZipOutputPath" AfterTargets="Build">
-    <Delete Files="$(MSBuildProjectDirectory)\bin\TestService.zip" />
+    <Delete Files="$(MSBuildProjectDirectory)\bin\CalculatorService.zip" />
     <ZipDirectory SourceDirectory="$(OutputPath)" DestinationFile="$(MSBuildProjectDirectory)\bin\CalculatorService.zip" />
   </Target>
 

@@ -28,11 +28,11 @@ namespace ServiceManager.Installation.Tasks
             var appSettings = Path.Combine(tempPath, InstallerContext.AppSettingsFileName);
 
             var result = await TryMerge(await TryCreateConfiguration(serviceSettings), Path.Combine(context.InstalledPath, InstallerContext.ServiceSettingsFileName), serviceSettings);
-            if (result)
+            if (!result)
                 return "Fehler beim mergen der Service Settings";
 
             result = await TryMerge(await TryCreateConfiguration(appSettings), Path.Combine(context.InstalledPath, InstallerContext.AppSettingsFileName), appSettings);
-            if (result)
+            if (!result)
                 return "Fehler beim mergen der App Settings";
 
             Content = "Alte Daten Löschen";
@@ -118,8 +118,7 @@ namespace ServiceManager.Installation.Tasks
 
         }
 
-        private static async Task<JToken> TryCreateConfiguration(string name)
-            => File.Exists(name) ? new JObject() : JToken.Parse(await File.ReadAllTextAsync(name));
-
+        private static async Task<JToken> TryCreateConfiguration(string name) 
+            => File.Exists(name) ? JToken.Parse(await File.ReadAllTextAsync(name)) : new JObject();
     }
 }

@@ -43,7 +43,11 @@ namespace Tauron.CQRS.Server.Core.Impl
 
         public async Task<(bool, string)> Validate(string? apiKey)
         {
-            await Init();
+            if (!_isInit)
+            {
+                using (await _asyncLock.LockAsync())
+                    await Init();
+            }
 
             var ent = _keys.FirstOrDefault(ak => ak.Key == apiKey);
 
@@ -116,20 +120,15 @@ namespace Tauron.CQRS.Server.Core.Impl
         {
             if (_isInit) return;
 
-            using (await _asyncLock.LockAsync())
+            _logger.LogInformation("Init Api Key Storage");
+
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
-                if (_isInit) return;
-
-                _logger.LogInformation("Init Api Key Storage");
-
-                using (var scope = _serviceScopeFactory.CreateScope())
-                {
-                    await using var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>();
-                    _keys.AddRange(context.ApiKeys.AsNoTracking());
-                }
-
-                _isInit = true;
+                await using var context = scope.ServiceProvider.GetRequiredService<DispatcherDatabaseContext>();
+                _keys.AddRange(context.ApiKeys.AsNoTracking());
             }
+
+            _isInit = true;
         }
 
         public void AddTemporary(string key)
