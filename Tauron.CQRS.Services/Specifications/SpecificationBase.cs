@@ -6,14 +6,14 @@ namespace Tauron.CQRS.Services.Specifications
     {
         public abstract string Message { get; }
 
-        public async Task<bool> IsSatisfiedBy(object obj)
+        public bool IsSatisfiedBy(object obj)
         {
             if (obj is TTarget target)
-                return await IsSatisfiedBy(target);
+                return IsSatisfiedBy(target);
 
             return false;
         }
 
-        protected abstract Task<bool> IsSatisfiedBy(TTarget target);
+        protected abstract bool IsSatisfiedBy(TTarget target);
     }
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CQRSlite.Caching;
 using CQRSlite.Commands;
 using CQRSlite.Domain;
+using CQRSlite.Domain.Exception;
 using CQRSlite.Events;
 using CQRSlite.Queries;
 using CQRSlite.Snapshotting;
@@ -20,6 +21,20 @@ namespace Tauron.CQRS.Services.Extensions
     [PublicAPI]
     public static class Extensions
     {
+        public static async Task<bool> Exis<TAggregate>(this ISession session, Guid id) 
+            where TAggregate : AggregateRoot
+        {
+            try
+            {
+                await session.Get<TAggregate>(id);
+                return true;
+            }
+            catch (AggregateNotFoundException)
+            {
+                return false;
+            }
+        }
+
         public static Task PublishEvent<T>(this ISession session, T @event, CancellationToken token = default)
             where T : class, IEvent
         {
@@ -60,7 +75,6 @@ namespace Tauron.CQRS.Services.Extensions
                 provider => new RestEase.RestClient(provider.GetRequiredService<IOptions<ClientCofiguration>>().Value.PersistenceApiUrl).For<IPersistApi>());
 
             services.AddScoped<ISession, CqrsSession>();
-            services.AddScoped<ILockSession, AsyncCqrsSession>();
             services.AddScoped<IRepository>(s =>
             {
                 var store = s.GetRequiredService<IEventStore>();
@@ -69,7 +83,7 @@ namespace Tauron.CQRS.Services.Extensions
                 return new CacheRepository(
                     new SnapshotRepository(
                         snapshot, s.GetService<ISnapshotStrategy>() ?? new DefaultSnapshotStrategy(),
-                        new Repository(store), store), store, s.GetRequiredService<ICache>());
+                        new InternalRepository(store), store), store, s.GetRequiredService<ICache>());
             });
         }
 

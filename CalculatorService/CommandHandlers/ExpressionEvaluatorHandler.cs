@@ -34,7 +34,7 @@ namespace CalculatorService.CommandHandlers
             return SpecificationFactory<RunExpressionCommand>
                .GetSpecification(() =>
                                      SpecOps.Simple<RunExpressionCommand>(
-                                         command => Task.FromResult(!string.IsNullOrWhiteSpace(command.Input)),
+                                         command => !string.IsNullOrWhiteSpace(command.Input),
                                          "Keine Expression wurde Angegeben."), 
                                  nameof(ExpressionEvaluatorHandler));
         }

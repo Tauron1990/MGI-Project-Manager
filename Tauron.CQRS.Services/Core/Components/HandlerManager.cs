@@ -253,7 +253,7 @@ namespace Tauron.CQRS.Services.Core.Components
                     var obj = _target();
                     var spec = (obj as ISpecificationProviderBase)?.GetSpecification();
                     string error = null;
-                    if (spec != null && !await spec.IsSatisfiedBy(msg))
+                    if (spec != null && !spec.IsSatisfiedBy(msg))
                         error = spec.Message;
 
                     await (Task) GetMethod()(obj, msg, error);
@@ -306,7 +306,7 @@ namespace Tauron.CQRS.Services.Core.Components
                 var spec = provider?.Specification(msg);
                 string result = null;
 
-                if (spec != null && !await spec.IsSatisfiedBy(msg))
+                if (spec != null && !spec.IsSatisfiedBy(msg))
                     result = spec.Message;
                 
                 if(string.IsNullOrWhiteSpace(result))

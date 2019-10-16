@@ -28,5 +28,7 @@ namespace Tauron.CQRS.Services
 
         protected void SetValue<TType>(TType value, [CallerMemberName] string name = null)
             => AggregateStade.Objects[name ?? throw new ArgumentNullException(nameof(name))] = value;
+
+        internal void SetId(Guid id) => Id = id;
     }
 }

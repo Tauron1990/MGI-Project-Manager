@@ -6,6 +6,6 @@ namespace Tauron.CQRS.Services.Specifications
     {
         string Message { get; }
 
-        Task<bool> IsSatisfiedBy(object obj);
+        bool IsSatisfiedBy(object obj);
     }
 }

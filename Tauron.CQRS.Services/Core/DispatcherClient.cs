@@ -139,7 +139,7 @@ namespace Tauron.CQRS.Services.Core
         {
             var msg = new ServerDomainMessage
                                       {
-                                          EventData = JsonConvert.SerializeObject(command),
+                                          EventData = JsonConvert.SerializeObject(command.Clear()),
                                           TypeName = command.GetType().AssemblyQualifiedName,
                                           EventName = command.GetType().Name,
                                           EventType = EventType.Command,
@@ -172,7 +172,7 @@ namespace Tauron.CQRS.Services.Core
         {
             await _hubConnection.SendAsync(HubEventNames.PublishEventGroup, events.Select(@event => new ServerDomainMessage
             {
-                EventData = JsonConvert.SerializeObject(@event),
+                EventData = JsonConvert.SerializeObject(@event.Clear()),
                 TypeName = @event.GetType().AssemblyQualifiedName,
                 EventName = @event.GetType().Name,
                 EventType = EventType.Event,

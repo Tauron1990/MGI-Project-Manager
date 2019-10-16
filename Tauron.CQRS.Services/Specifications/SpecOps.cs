@@ -9,9 +9,9 @@ namespace Tauron.CQRS.Services.Specifications
     {
         private sealed class SimpleSpec<TType> : SpecificationBase<TType>
         {
-            private readonly Func<TType, Task<bool>> _eval;
+            private readonly Func<TType, bool> _eval;
 
-            public SimpleSpec(Func<TType, Task<bool>> eval, string msg)
+            public SimpleSpec(Func<TType, bool> eval, string msg)
             {
                 _eval = eval;
                 Message = msg;
@@ -19,7 +19,7 @@ namespace Tauron.CQRS.Services.Specifications
 
             public override string Message { get; }
 
-            protected override Task<bool> IsSatisfiedBy(TType target) 
+            protected override bool IsSatisfiedBy(TType target) 
                 => _eval(target);
         }
 
@@ -36,11 +36,11 @@ namespace Tauron.CQRS.Services.Specifications
 
             public string Message { get; private set; }
 
-            public async Task<bool> IsSatisfiedBy(object obj)
+            public bool IsSatisfiedBy(object obj)
             {
-                if (await _left.IsSatisfiedBy(obj))
+                if (_left.IsSatisfiedBy(obj))
                 {
-                    if (await _right.IsSatisfiedBy(obj) != true)
+                    if (_right.IsSatisfiedBy(obj) != true)
                         return true;
 
                     Message = $"!{_right.Message}";
@@ -65,11 +65,11 @@ namespace Tauron.CQRS.Services.Specifications
 
             public string Message { get; private set; }
 
-            public async Task<bool> IsSatisfiedBy(object obj)
+            public bool IsSatisfiedBy(object obj)
             {
-                if (await _left.IsSatisfiedBy(obj))
+                if (_left.IsSatisfiedBy(obj))
                 {
-                    if (await _right.IsSatisfiedBy(obj))
+                    if (_right.IsSatisfiedBy(obj))
                         return true;
 
                     Message = _right.Message;
@@ -89,8 +89,8 @@ namespace Tauron.CQRS.Services.Specifications
             public NotSpecification(ISpecification right) 
                 => _right = right;
 
-            public async Task<bool> IsSatisfiedBy(object left) 
-                => !await _right.IsSatisfiedBy(left);
+            public bool IsSatisfiedBy(object left) 
+                => !_right.IsSatisfiedBy(left);
         }
 
         private class OrNotSpecification : ISpecification
@@ -106,11 +106,11 @@ namespace Tauron.CQRS.Services.Specifications
 
             public string Message { get; private set; }
 
-            public async Task<bool> IsSatisfiedBy(object obj)
+            public bool IsSatisfiedBy(object obj)
             {
-                if (await _left.IsSatisfiedBy(obj))
+                if (_left.IsSatisfiedBy(obj))
                     return true;
-                if (await _right.IsSatisfiedBy(obj) != true)
+                if (_right.IsSatisfiedBy(obj) != true)
                     return true;
 
                 Message = $"-- {_left.Message} -- !{_right.Message} --";
@@ -132,9 +132,9 @@ namespace Tauron.CQRS.Services.Specifications
 
             public string Message { get; private set; }
 
-            public async Task<bool> IsSatisfiedBy(object obj)
+            public bool IsSatisfiedBy(object obj)
             {
-                if (await _left.IsSatisfiedBy(obj) || await _right.IsSatisfiedBy(obj))
+                if (_left.IsSatisfiedBy(obj) || _right.IsSatisfiedBy(obj))
                     return true;
 
                 Message = $"-- {_left.Message} || {_right.Message}";
@@ -143,7 +143,7 @@ namespace Tauron.CQRS.Services.Specifications
             }
         }
 
-        public static ISpecification Simple<TType>(Func<TType, Task<bool>> eval, string msg) 
+        public static ISpecification Simple<TType>(Func<TType, bool> eval, string msg) 
             => new SimpleSpec<TType>(eval, msg);
 
         public static ISpecification AndNot(this ISpecification left, ISpecification right) 
