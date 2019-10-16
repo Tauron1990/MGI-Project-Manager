@@ -68,11 +68,21 @@ namespace Tauron.CQRS.Services.Core.Components
 
                 protected FastInvokeHandler GetMethod()
                 {
+                    Type GetCorrectType(Type inter)
+                    {
+                        var typeDef = inter.GetGenericTypeDefinition();
+
+                        if (typeDef == typeof(IReadModel<,>) || typeDef == typeof(ISpecificationCommandHandler<>))
+                            return inter;
+                        return inter.GetInterfaces().Single();
+                    }
+
+
                     if (_methodInfo != null) return _methodInfo;
-                    var interfaceMapping = _targetType.GetInterfaceMap(_targetInterface.GetGenericTypeDefinition() == typeof(IReadModel<,>) 
-                                                                           ? _targetInterface 
-                                                                           : _targetInterface.GetInterfaces().Single());
-                    _methodInfo = GetMethodInvoker(interfaceMapping.InterfaceMethods.Single());
+
+                    var interfaceMapping = _targetType.GetInterfaceMap(GetCorrectType(_targetInterface));
+
+                    _methodInfo = GetMethodInvoker(interfaceMapping.InterfaceMethods.Single(m => !m.Name.StartsWith("Get")));
                     return _methodInfo;
                 }
 

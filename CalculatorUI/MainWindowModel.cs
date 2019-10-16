@@ -11,6 +11,7 @@ using CQRSlite.Commands;
 using CQRSlite.Queries;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Tauron.CQRS.Common;
 using Tauron.CQRS.Services.Extensions;
 
 namespace CalculatorUI
@@ -21,7 +22,7 @@ namespace CalculatorUI
         private ExpressionEntry _selectedEntry;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private IServiceProvider ServiceProvider => App.ServiceProvider;
+        private static IServiceProvider ServiceProvider => App.ServiceProvider;
 
         public string EvaluationField
         {
@@ -53,6 +54,8 @@ namespace CalculatorUI
 
         public async Task Load()
         {
+            await new SynchronizationContextRemover();
+
             ResultReciver.Result += s =>
             {
                 EvaluationField = s.Error ? s.Result : $"{s.Expression} = {s.Result}"; ;
@@ -62,13 +65,15 @@ namespace CalculatorUI
 
             await ServiceProvider.StartCQRS();
 
-            foreach (var expressionEntry in await ServiceProvider.GetRequiredService<IQueryProcessor>().Query(new ExpressionsQuery())) 
+            foreach (var expressionEntry in (await ServiceProvider.GetRequiredService<IQueryProcessor>().Query(new ExpressionsQuery())).Entrys) 
                 ExpressionEntries.Add(expressionEntry);
         }
 
         public async Task Eval()
         {
-            if(string.IsNullOrWhiteSpace(EvaluationField)) return;
+            await new SynchronizationContextRemover();
+
+            if (string.IsNullOrWhiteSpace(EvaluationField)) return;
 
             var old = EvaluationField;
             EvaluationField = null;

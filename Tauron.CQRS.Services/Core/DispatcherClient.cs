@@ -94,6 +94,13 @@ namespace Tauron.CQRS.Services.Core
             _hubConnection.On(HubEventNames.RejectedEvent, new Action<string, int>(MessageReject));
         }
 
+        internal void AddHandler(string name, Func<IMessage, ServerDomainMessage, CancellationToken, Task> handler)
+        {
+            if(_eventRegistrations.ContainsKey(name)) return;
+
+            _eventRegistrations[name] = new EventRegistration(handler, _logger);
+        }
+
         private void InvokeProcessor()
         {
             Task.Run(async () =>

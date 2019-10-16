@@ -91,6 +91,9 @@ namespace Tauron.CQRS.Services.Core.Components
 
         private readonly Dictionary<object, WeakAction<Func<TMessage, Task>>> _handlerRegistry = new Dictionary<object, WeakAction<Func<TMessage, Task>>>();
 
+        public GlobalEventHandler(IDispatcherClient client) 
+            => ((DispatcherClient)client).AddHandler(typeof(TMessage).FullName, (message, domainMessage, token) => Handle(message));
+
         //public IDisposable Register(Func<TMessage, Task> awaiter)
         //{
         //    var key = new object();

@@ -62,6 +62,7 @@ namespace Tauron.CQRS.Common
             {
                 try
                 {
+                    await new SynchronizationContextRemover();
                     await task.ConfigureAwait(false);
                 }
                 catch (Exception e)

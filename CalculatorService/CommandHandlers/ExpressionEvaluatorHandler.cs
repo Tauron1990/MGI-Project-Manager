@@ -50,7 +50,7 @@ namespace CalculatorService.CommandHandlers
             try
             {
                 _logger.LogInformation($"Evaluate Expression: {command.Input}");
-                var result = ExpressionEvaluator.Evaluate<double>(command.Input).ToString(CultureInfo.InvariantCulture);
+                var result = ExpressionEvaluator.Evaluate<object>(command.Input).ToString();
                 _logger.LogInformation($"Evaluate Result: {command.Input} = {result}");
 
                 ExpressionAggregate aggregate;

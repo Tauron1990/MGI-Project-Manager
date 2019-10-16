@@ -13,7 +13,7 @@ using Tauron.CQRS.Services.Extensions;
 namespace CalculatorService.ReadModels
 {
     [CQRSHandler]
-    public sealed class ExpressionsReadModel : ReadModelBase<List<ExpressionEntry>, ExpressionsQuery>
+    public sealed class ExpressionsReadModel : ReadModelBase<ExpressionResult, ExpressionsQuery>
     {
         private readonly ISession _session;
         private readonly ILogger<ExpressionsReadModel> _logger;
@@ -25,7 +25,7 @@ namespace CalculatorService.ReadModels
             _logger = logger;
         }
 
-        protected override async Task<List<ExpressionEntry>> Query(ExpressionsQuery query)
+        protected override async Task<ExpressionResult> Query(ExpressionsQuery query)
         {
             _logger.LogInformation("Query Expression Entrys");
 
@@ -33,11 +33,11 @@ namespace CalculatorService.ReadModels
             {
                 var aggregates = await _session.Get<ExpressionAggregate>(ExpressionsNamespaces.ExpressionAggregate);
 
-                return new List<ExpressionEntry>(aggregates.Expressions);
+                return new ExpressionResult { Entrys = aggregates.Expressions.ToArray()};
             }
             catch (AggregateNotFoundException)
             {
-                return new List<ExpressionEntry>();
+                return new ExpressionResult { Entrys = new ExpressionEntry[0] };
             }
         }
     }

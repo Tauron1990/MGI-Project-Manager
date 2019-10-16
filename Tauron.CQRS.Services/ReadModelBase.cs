@@ -22,11 +22,13 @@ namespace Tauron.CQRS.Services
 
             if(result == null) return;
 
+            var data = new QueryEvent<TRespond>(rawMessage.EventName, result);
+
             await _client.SendToClient(rawMessage.Sender, new ServerDomainMessage
             {
-                EventName = rawMessage.EventName,
+                EventName = data.GetType().FullName,
                 EventType = EventType.QueryResult,
-                EventData = JsonConvert.SerializeObject(new QueryEvent<TRespond>(rawMessage.EventName, result)),
+                EventData = JsonConvert.SerializeObject(data),
                 TypeName = typeof(QueryEvent<TRespond>).AssemblyQualifiedName
             }, CancellationToken.None);
         }
