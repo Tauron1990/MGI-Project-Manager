@@ -10,14 +10,14 @@ namespace Tauron.CQRS.Services.Core.Components
     public sealed class QueryAwaiter<TRespond> : IEventHandler<QueryEvent<TRespond>>, IDisposable
     {
         private readonly IDisposable _disposable;
-        private readonly AsyncManualResetEvent _asyncManualReset;
+        private readonly ManualResetEvent _asyncManualReset;
 
         private TRespond _respond;
 
         public QueryAwaiter(GlobalEventHandler<QueryEvent<TRespond>> globalEventHandler)
         {
             _disposable = globalEventHandler.Register(this, t => Handle(t));
-            _asyncManualReset = new AsyncManualResetEvent(false);
+            _asyncManualReset = new ManualResetEvent(false);
         }
 
 
@@ -34,23 +34,12 @@ namespace Tauron.CQRS.Services.Core.Components
 
         public async Task<TRespond> SendQuery(IQuery<TRespond> query, CancellationToken cancellationToken, Func<IQuery<TRespond>, Task> sender)
         {
-            var cancelSource = new CancellationTokenSource(30_000);
-            var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancelSource.Token, cancellationToken);
+            _asyncManualReset.Reset();
 
-            try
-            {
-                _asyncManualReset.Reset();
+            await sender(query);
+            _asyncManualReset.WaitOne(30_000);
 
-                await sender(query);
-                await _asyncManualReset.WaitAsync(linkedSource.Token);
-
-                return _respond;
-            }
-            finally
-            {
-                cancelSource.Dispose();
-                linkedSource.Dispose();
-            }
+            return _respond;
         }
 
         public void Dispose() => _disposable.Dispose();

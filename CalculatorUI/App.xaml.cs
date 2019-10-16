@@ -23,8 +23,8 @@ namespace CalculatorUI
 
             collection.AddLogging();
             collection.AddCQRSServices(cofiguration => cofiguration
-                                          .SetUrls(new Uri("http://localhost:81/", UriKind.RelativeOrAbsolute), "CalculatorUI", "")
-                                           //.SetUrls(new Uri("http://192.168.105.18:81/", UriKind.RelativeOrAbsolute), "CalculatorUI", "")
+                                          //.SetUrls(new Uri("http://localhost:81/", UriKind.RelativeOrAbsolute), "CalculatorUI", "")
+                                           .SetUrls(new Uri("http://192.168.105.18:81/", UriKind.RelativeOrAbsolute), "CalculatorUI", "")
                                           .AddFrom<App>());
 
             ServiceProvider = collection.BuildServiceProvider();

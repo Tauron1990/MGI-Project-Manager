@@ -36,10 +36,7 @@ namespace Tauron.CQRS.Services.Core
                 _message = message;
             }
 
-            public Task Start()
-            {
-                return _eventRegistration.Process(_message);
-            }
+            public Task Start() => _eventRegistration.Process(_message);
         }
 
         private class EventRegistration
