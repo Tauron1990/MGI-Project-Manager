@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Calculator.Shared;
 using Calculator.Shared.Dto;
 using Calculator.Shared.Events;
 using JetBrains.Annotations;
@@ -15,7 +16,11 @@ namespace CalculatorService.Aggregates
             set => SetValue(value);
         }
 
-        public ExpressionAggregate() => Expressions = new Queue<ExpressionEntry>();
+        public ExpressionAggregate()
+        {
+            Expressions = new Queue<ExpressionEntry>();
+            Id = ExpressionsNamespaces.ExpressionAggregate;
+        }
 
         [UsedImplicitly]
         private void Apply(ExpressionElevatedEvent expressionElevated)

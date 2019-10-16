@@ -61,6 +61,7 @@ namespace CalculatorService.CommandHandlers
                 catch (AggregateNotFoundException)
                 {
                     aggregate = new ExpressionAggregate();
+                    await _session.Add(aggregate);
                 }
 
                 aggregate.AddExpression(new ExpressionElevatedEvent(command.Input, result, false));

@@ -6,7 +6,7 @@ namespace Tauron.CQRS.Services
 {
     public abstract class BaseEvent : IEvent
     {
-        public virtual Guid Id { get; set; } = IdGenerator.Generator.NewGuid();
+        public abstract Guid Id { get; set; }
 
         public virtual int Version { get; set; } = 0;
 

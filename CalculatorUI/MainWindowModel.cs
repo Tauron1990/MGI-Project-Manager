@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -35,7 +34,7 @@ namespace CalculatorUI
             }
         }
 
-        public ObservableCollection<ExpressionEntry> ExpressionEntries { get; } = new ObservableCollection<ExpressionEntry>();
+        public ExpressionCollection ExpressionEntries { get; } = new ExpressionCollection();
 
         public ExpressionEntry SelectedEntry
         {
@@ -58,7 +57,7 @@ namespace CalculatorUI
 
             ResultReciver.Result += s =>
             {
-                EvaluationField = s.Error ? s.Result : $"{s.Expression} = {s.Result}"; ;
+                EvaluationField = s.Error ? s.Result : $"{s.Expression} = {s.Result}";
 
                 ExpressionEntries.Add(new ExpressionEntry(s.Expression, s.Result));
             };
