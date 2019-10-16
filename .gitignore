@@ -264,9 +264,3 @@ __pycache__/
 #*.pfx
 #*.cer
 #*.p12
-
-CertificateGenerator/
-MGIProjectManagerServer/publish/
-MGIProjectManagerServer/Logs/
-Tauron.Application.MgiProjectManager.Server/Logs
-
