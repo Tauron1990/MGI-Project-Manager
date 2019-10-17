@@ -9,17 +9,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="UserService.Designer.cs">
+    <Compile Update="UserServiceResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>UserService.resx</DependentUpon>
+      <DependentUpon>UserServiceResources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="UserService.resx">
+    <EmbeddedResource Update="UserServiceResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>UserService.Designer.cs</LastGenOutput>
+      <LastGenOutput>UserServiceResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 
