@@ -55,6 +55,23 @@ namespace Tauron.CQRS.Services.Extensions
             return msg;
         }
 
+        public static async Task<TAggregate> GetOrAdd<TAggregate>(this ISession session, Guid id)
+            where TAggregate: CoreAggregateRoot, new()
+        {
+            try
+            {
+                return await session.Get<TAggregate>(id);
+            }
+            catch (AggregateNotFoundException)
+            {
+                var agg = new TAggregate();
+                agg.SetId(id);
+                await session.Add(agg);
+
+                return agg;
+            }
+        }
+
         public static async Task<bool> Exis<TAggregate>(this ISession session, Guid id) 
             where TAggregate : AggregateRoot
         {
@@ -97,6 +114,7 @@ namespace Tauron.CQRS.Services.Extensions
             services.TryAddSingleton(typeof(GlobalEventHandler<>), typeof(GlobalEventHandler<>));
             services.TryAddScoped(typeof(QueryAwaiter<>), typeof(QueryAwaiter<>));
             services.TryAddTransient(typeof(AwaiterBase<,>), typeof(SimpleAwaiter<,>));
+            services.TryAddTransient<IAwaiterFactory, AwaiterFactory>();
             
             //Service Delegates for cqrs lite
             services.TryAddScoped<ICommandSender, CommandSender>();

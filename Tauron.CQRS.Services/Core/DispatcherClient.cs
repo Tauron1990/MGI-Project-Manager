@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Events;
@@ -26,6 +25,31 @@ namespace Tauron.CQRS.Services.Core
     [UsedImplicitly]
     public class DispatcherClient : ICoreDispatcherClient
     {
+        private class DistapcherRetryPolicy : IRetryPolicy
+        {
+            public TimeSpan? NextRetryDelay(RetryContext retryContext)
+            {
+                switch (retryContext.PreviousRetryCount)
+                {
+                    case 1:
+                        return TimeSpan.FromSeconds(1);
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                        return TimeSpan.FromSeconds(2);
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                        return TimeSpan.FromSeconds(10);
+                    default:
+                        return TimeSpan.FromSeconds(30);
+                }
+            }
+        }
+
         private class MessageDelivery
         {
             private readonly EventRegistration _eventRegistration;
@@ -64,7 +88,6 @@ namespace Tauron.CQRS.Services.Core
             }
         }
 
-        private readonly Random _random = new Random();
         private readonly IOptions<ClientCofiguration> _config;
         private readonly ILogger<IDispatcherClient> _logger;
         private readonly IServiceScopeFactory _scopeFactory;
@@ -73,7 +96,7 @@ namespace Tauron.CQRS.Services.Core
         private readonly IMemoryCache _memoryCache = new MemoryCache(new MemoryCacheOptions());
         private MessageQueue<MessageDelivery> _messageDeliveries;
 
-        private bool _isCLoseOk;
+        //private bool _isCLoseOk;
 
         public DispatcherClient(IOptions<ClientCofiguration> config, ILogger<IDispatcherClient> logger, IServiceScopeFactory scopeFactory)
         {
@@ -81,7 +104,11 @@ namespace Tauron.CQRS.Services.Core
             _logger = logger;
             _scopeFactory = scopeFactory;
 
-            _hubConnection = new HubConnectionBuilder().AddJsonProtocol().WithUrl(config.Value.EventHubUrl).Build();
+            _hubConnection = new HubConnectionBuilder()
+               .AddJsonProtocol()
+               .WithUrl(config.Value.EventHubUrl)
+               .WithAutomaticReconnect(new DistapcherRetryPolicy())
+               .Build();
         }
 
         public async Task Start(CancellationToken token)
@@ -89,7 +116,7 @@ namespace Tauron.CQRS.Services.Core
             InvokeProcessor();
             await _hubConnection.StartAsync(token);
 
-            _hubConnection.Closed += HubConnectionOnClosed;
+            //_hubConnection.Closed += HubConnectionOnClosed;
             _hubConnection.On(HubEventNames.PropagateEvent, new Action<ServerDomainMessage>(ProcessMessage));
             _hubConnection.On(HubEventNames.AcceptedEvent, new Action<long>(MessageAccept));
             _hubConnection.On(HubEventNames.RejectedEvent, new Action<string, int>(MessageReject));
@@ -124,17 +151,17 @@ namespace Tauron.CQRS.Services.Core
         public async Task Stop()
         {
             _messageDeliveries.Stop();
-            _isCLoseOk = true;
+            //_isCLoseOk = true;
             await _hubConnection.StopAsync();
             await _hubConnection.DisposeAsync();
         }
 
-        private async Task HubConnectionOnClosed(Exception arg)
-        {
-            if(_isCLoseOk) return;
+        //private async Task HubConnectionOnClosed(Exception arg)
+        //{
+        //    //if(_isCLoseOk) return;
 
-            await _hubConnection.StartAsync();
-        }
+        //    //await _hubConnection.StartAsync();
+        //}
 
         public async Task Send(IMessage command, CancellationToken cancellationToken)
         {

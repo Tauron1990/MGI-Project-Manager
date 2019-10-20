@@ -1,8 +1,10 @@
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -76,7 +78,12 @@ namespace Tauron.MgiProjectManager.Dispatcher
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<EventHub>("EventBus");
+                endpoints.MapHub<EventHub>("EventBus", options =>
+                                                       {
+                                                           options.ApplicationMaxBufferSize = (32768 * 2) * 2;
+                                                           options.TransportMaxBufferSize = (32768 * 2) * 2;
+                                                           options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling;
+                                                       });
                 endpoints.MapGet("/", context =>
                 {
                     context.Response.Redirect("/Health");

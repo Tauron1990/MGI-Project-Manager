@@ -84,8 +84,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.ServiceBootstrapper"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Websites", "Websites", "{B0A7CB62-38CE-429C-BE7E-4BEF9CEB4C7A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MgiManager", "MgiManager\MgiManager.csproj", "{72849F91-3F3A-4A2D-8D79-0FEB69470F91}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Calculator_Test", "Calculator_Test", "{AD530279-AF8A-4663-B44A-BDD44BEC91BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculatorService", "CalculatorService\CalculatorService.csproj", "{3525EAF6-81A6-41B0-A76A-5E6894A4B5EA}"
@@ -100,21 +98,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User", "User", "{9D938697-7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.MgiManager.User.Shared", "Tauron.MgiManager.User.Shared\Tauron.MgiManager.User.Shared.csproj", "{42E07FE6-069A-4C02-AFD5-F5A5591C35A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.MgiManager.User.Service", "Tauron.MgiManager.User.Service\Tauron.MgiManager.User.Service.csproj", "{967BD60B-9477-4E64-AD87-AB8F7C899C11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.MgiManager.User.Service", "Tauron.MgiManager.User.Service\Tauron.MgiManager.User.Service.csproj", "{967BD60B-9477-4E64-AD87-AB8F7C899C11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMigrator", "DatabaseMigrator\DatabaseMigrator.csproj", "{BD4D19CB-C072-48BF-B5D1-7B3E83A906C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigrator", "DatabaseMigrator\DatabaseMigrator.csproj", "{BD4D19CB-C072-48BF-B5D1-7B3E83A906C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.SqliteDataBaseHelper", "Tauron.SqliteDataBaseHelper\Tauron.SqliteDataBaseHelper.csproj", "{DA8608B0-3BD7-4A1F-861D-C61E7080DF83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.SqliteDataBaseHelper", "Tauron.SqliteDataBaseHelper\Tauron.SqliteDataBaseHelper.csproj", "{DA8608B0-3BD7-4A1F-861D-C61E7080DF83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.MgiManager.Resources", "Tauron.MgiManager.Resources\Tauron.MgiManager.Resources.csproj", "{5AC1FFAC-DD77-424D-B181-9C964B471F5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.MgiManager.Resources", "Tauron.MgiManager.Resources\Tauron.MgiManager.Resources.csproj", "{5AC1FFAC-DD77-424D-B181-9C964B471F5B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1FC4C045-2656-4D54-A09D-5D5B613925A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.MgiManager.User.Service.Tests", "Tauron.MgiManager.User.Service.Tests\Tauron.MgiManager.User.Service.Tests.csproj", "{05EE04CF-3B9F-4E38-BBCC-E6A396CE4676}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.MgiManager.User.Service.Tests", "Tauron.MgiManager.User.Service.Tests\Tauron.MgiManager.User.Service.Tests.csproj", "{05EE04CF-3B9F-4E38-BBCC-E6A396CE4676}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{4D3BD557-2EF8-47D5-8FD1-5BACCD9FBEA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.TestHelper", "Tauron.TestHelper\Tauron.TestHelper.csproj", "{CBF13A17-D754-44B3-A79A-2FF14C5C5CF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.TestHelper", "Tauron.TestHelper\Tauron.TestHelper.csproj", "{CBF13A17-D754-44B3-A79A-2FF14C5C5CF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MgiManager", "MgiManager\MgiManager.csproj", "{70646911-65D6-4A40-BCEC-7B6739ED91E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -229,12 +229,6 @@ Global
 		{24D25C65-3D7F-4E72-A177-5A494834357C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24D25C65-3D7F-4E72-A177-5A494834357C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24D25C65-3D7F-4E72-A177-5A494834357C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{72849F91-3F3A-4A2D-8D79-0FEB69470F91}.Debug Event Delivery|Any CPU.ActiveCfg = Debug|Any CPU
-		{72849F91-3F3A-4A2D-8D79-0FEB69470F91}.Debug Event Delivery|Any CPU.Build.0 = Debug|Any CPU
-		{72849F91-3F3A-4A2D-8D79-0FEB69470F91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{72849F91-3F3A-4A2D-8D79-0FEB69470F91}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{72849F91-3F3A-4A2D-8D79-0FEB69470F91}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{72849F91-3F3A-4A2D-8D79-0FEB69470F91}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3525EAF6-81A6-41B0-A76A-5E6894A4B5EA}.Debug Event Delivery|Any CPU.ActiveCfg = Debug|Any CPU
 		{3525EAF6-81A6-41B0-A76A-5E6894A4B5EA}.Debug Event Delivery|Any CPU.Build.0 = Debug|Any CPU
 		{3525EAF6-81A6-41B0-A76A-5E6894A4B5EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -295,6 +289,12 @@ Global
 		{CBF13A17-D754-44B3-A79A-2FF14C5C5CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBF13A17-D754-44B3-A79A-2FF14C5C5CF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBF13A17-D754-44B3-A79A-2FF14C5C5CF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70646911-65D6-4A40-BCEC-7B6739ED91E6}.Debug Event Delivery|Any CPU.ActiveCfg = Debug|Any CPU
+		{70646911-65D6-4A40-BCEC-7B6739ED91E6}.Debug Event Delivery|Any CPU.Build.0 = Debug|Any CPU
+		{70646911-65D6-4A40-BCEC-7B6739ED91E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70646911-65D6-4A40-BCEC-7B6739ED91E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70646911-65D6-4A40-BCEC-7B6739ED91E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70646911-65D6-4A40-BCEC-7B6739ED91E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -327,7 +327,6 @@ Global
 		{5762E79A-0D8D-476E-84A6-1896BD3EE759} = {FF6C98F0-BFF2-46A8-8239-D53CE53B78FE}
 		{24D25C65-3D7F-4E72-A177-5A494834357C} = {FF6C98F0-BFF2-46A8-8239-D53CE53B78FE}
 		{B0A7CB62-38CE-429C-BE7E-4BEF9CEB4C7A} = {FF6C98F0-BFF2-46A8-8239-D53CE53B78FE}
-		{72849F91-3F3A-4A2D-8D79-0FEB69470F91} = {B0A7CB62-38CE-429C-BE7E-4BEF9CEB4C7A}
 		{AD530279-AF8A-4663-B44A-BDD44BEC91BD} = {FF6C98F0-BFF2-46A8-8239-D53CE53B78FE}
 		{3525EAF6-81A6-41B0-A76A-5E6894A4B5EA} = {AD530279-AF8A-4663-B44A-BDD44BEC91BD}
 		{10B410A4-EFA1-4C5C-BBFB-86924BABC146} = {AD530279-AF8A-4663-B44A-BDD44BEC91BD}
@@ -343,6 +342,7 @@ Global
 		{05EE04CF-3B9F-4E38-BBCC-E6A396CE4676} = {1FC4C045-2656-4D54-A09D-5D5B613925A7}
 		{4D3BD557-2EF8-47D5-8FD1-5BACCD9FBEA8} = {FF6C98F0-BFF2-46A8-8239-D53CE53B78FE}
 		{CBF13A17-D754-44B3-A79A-2FF14C5C5CF4} = {4D3BD557-2EF8-47D5-8FD1-5BACCD9FBEA8}
+		{70646911-65D6-4A40-BCEC-7B6739ED91E6} = {B0A7CB62-38CE-429C-BE7E-4BEF9CEB4C7A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}

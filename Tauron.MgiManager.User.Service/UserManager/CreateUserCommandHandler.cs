@@ -39,7 +39,7 @@ namespace Tauron.MgiManager.User.Service.UserManager
 
                         if (await _session.Exis<UserAggregate>(id))
                         {
-                            _logger.LogWarning(EventIds.UserManager.UserCreation, $"User Name {command.Name} is in Use");
+                            _logger.LogWarning(EventIds.UserManager.UserManagment, $"User Name {command.Name} is in Use");
                             await _session.PublishEvent(new UserCreatedEvent(command.Name, UserServiceResources.CreateUserValidationFailed_Duplicate));
                             return;
                         }
@@ -51,17 +51,17 @@ namespace Tauron.MgiManager.User.Service.UserManager
 
                         await _session.Add(aggregate);
                         await _session.Commit();
-                        _logger.LogInformation(EventIds.UserManager.UserCreation, $"{command.Name} User Created");
+                        _logger.LogInformation(EventIds.UserManager.UserManagment, $"{command.Name} User Created");
 
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError(EventIds.UserManager.UserCreation, e, $"Error on Creating {command.Name}");
+                        _logger.LogError(EventIds.UserManager.UserManagment, e, $"Error on Creating {command.Name}");
                     }
                 }
                 else
                 {
-                    _logger.LogWarning(EventIds.UserManager.UserCreation, $"{command.Name} Validation Failed");
+                    _logger.LogWarning(EventIds.UserManager.UserManagment, $"{command.Name} Validation Failed");
                     await _session.PublishEvent(new UserCreatedEvent(command.Name, error));
                 }
             }

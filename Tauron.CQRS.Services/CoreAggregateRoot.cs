@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using CQRSlite.Events;
 using CQRSlite.Snapshotting;
 using JetBrains.Annotations;
 using Tauron.CQRS.Services.Data;
@@ -30,5 +31,7 @@ namespace Tauron.CQRS.Services
             => AggregateStade.Objects[name ?? throw new ArgumentNullException(nameof(name))] = value;
 
         internal void SetId(Guid id) => Id = id;
+
+        public void PublicApplyEvent(IEvent e) => ApplyChange(e);
     }
 }

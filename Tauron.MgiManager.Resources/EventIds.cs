@@ -6,7 +6,8 @@ namespace Tauron.MgiManager.Resources
     {
         public static class UserManager
         {
-            public static EventId UserCreation { get; } = new EventId(1, "User Creation");
+            public static EventId UserManagment { get; } = new EventId(1, "UserManagment");
+            public static EventId RoleManagment { get; } = new EventId(2, "RoleManagment");
         }
     }
 }

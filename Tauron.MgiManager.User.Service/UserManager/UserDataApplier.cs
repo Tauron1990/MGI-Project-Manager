@@ -41,11 +41,11 @@ namespace Tauron.MgiManager.User.Service.UserManager
 
                     await _database.SaveChangesAsync();
 
-                    _logger.LogInformation(EventIds.UserManager.UserCreation, $"User {message.Name} added to the Readmodel");
+                    _logger.LogInformation(EventIds.UserManager.UserManagment, $"User {message.Name} added to the Readmodel");
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(EventIds.UserManager.UserCreation, e, $"User {message.Name} adding Failed");
+                    _logger.LogError(EventIds.UserManager.UserManagment, e, $"User {message.Name} adding Failed");
                 }
             }
         }
