@@ -10,7 +10,8 @@ using Tauron.MgiManager.User.Shared.Events;
 namespace Tauron.MgiManager.User.Service.UserManager.Roles
 {
     [CQRSHandler]
-    public sealed class RoleStoreApplier : IEventHandler<ClaimToRoleAddedEvent>
+    public sealed class RoleStoreApplier : IEventHandler<ClaimToRoleAddedEvent>,
+                                           IEventHandler<ClaimRemovedFromRoleEvent>
     {
         private readonly ILogger<RoleStoreApplier> _logger;
         private readonly UserDatabase _userDatabase;
@@ -41,6 +42,11 @@ namespace Tauron.MgiManager.User.Service.UserManager.Roles
 
             await _userDatabase.SaveChangesAsync();
             _logger.LogInformation(EventIds.UserManager.RoleManagment, "Claim Added To Role");
+        }
+
+        public async Task Handle(ClaimRemovedFromRoleEvent message)
+        {
+
         }
     }
 }

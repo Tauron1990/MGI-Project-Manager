@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CQRSlite.Domain;
 using Microsoft.Extensions.Logging;
+using Tauron.CQRS.Services.Core;
 using Tauron.CQRS.Services.Data;
 using Tauron.MgiManager.User.Service.UserManager.Roles;
+using Tauron.MgiManager.User.Shared;
 using Tauron.MgiManager.User.Shared.Command;
 using Tauron.TestHelper.Mocks;
 using Xunit;
@@ -64,7 +66,28 @@ namespace Tauron.MgiManager.User.Service.Tests.UserManager.Roles
         [Fact]
         public async Task Test_RemoveClaimFromRole()
         {
-            string Data1 = "Test1";
-        } 
+            string data1 = "Test1";
+            string data2 = "Test2";
+            Guid role = Guid.NewGuid();
+
+            var aggregate = new RoleClaimsAggregate(IdGenerator.Generator.NewGuid(UserNamespace.ClaimToRole, role.ToString()));
+            aggregate.Claims.Add(data1);
+            aggregate.Claims.Add(data2);
+            var database = new Dictionary<Guid, AggregateRoot>
+                           {
+                               {aggregate.Id, aggregate}
+                           };
+
+            var commitCalled = false;
+
+            var session = new MockSession(database, commit:() => commitCalled = true);
+            var handler = new RoleStoreHandler(_logger, session);
+
+            await handler.Handle(new RemoveClaimFromRoleCommand(role, data1));
+
+            Assert.True(commitCalled);
+            var data = Assert.Single(aggregate.Claims);
+            Assert.Equal(data2, data);
+        }
     }
 }
