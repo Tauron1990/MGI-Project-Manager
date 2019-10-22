@@ -42,7 +42,8 @@ namespace Tauron.CQRS.Services.Extensions
             
         }
 
-        public static TType ToRealMessage<TType>(this ServerDomainMessage message) 
+        public static TType ToRealMessage<TType>(this ServerDomainMessage message)
+                where TType : class
             => JsonConvert.DeserializeObject(message.EventData, Type.GetType(message.TypeName)) as TType;
 
         public static ServerDomainMessage ToDomainMessage(this IMessage message, bool query = false)

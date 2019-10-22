@@ -3,21 +3,21 @@ using CQRSlite.Commands;
 
 namespace Tauron.MgiManager.User.Shared.Command
 {
-    public sealed class AddClaimToRoleCommand : ICommand
+    public class RemoveClaimFromRoleCommand : ICommand
     {
         public Guid Role { get; set; }
 
         public string Data { get; set; }
 
-        public AddClaimToRoleCommand()
-        {
-            
-        }
-
-        public AddClaimToRoleCommand(Guid role, string data)
+        public RemoveClaimFromRoleCommand(Guid role, string data)
         {
             Role = role;
             Data = data;
+        }
+
+        public RemoveClaimFromRoleCommand()
+        {
+            
         }
     }
 }

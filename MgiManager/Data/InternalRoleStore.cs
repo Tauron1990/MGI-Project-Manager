@@ -26,14 +26,8 @@ namespace MgiManager.Data
             _queryProcessor = queryProcessor;
         }
 
-        public override async Task AddClaimAsync(InternalRole role, Claim claim, CancellationToken cancellationToken = new CancellationToken())
-        {
-            await using var mem = new MemoryStream();
-            await using var writer = new BinaryWriter(mem);
-            claim.WriteTo(writer);
-            
-            await _sender.Send(new AddClaimToRoleCommand(role.Id, Convert.ToBase64String(mem.ToArray()), ), cancellationToken);
-        }
+        public override async Task AddClaimAsync(InternalRole role, Claim claim, CancellationToken cancellationToken = new CancellationToken()) 
+            => await _sender.Send(new AddClaimToRoleCommand(role.Id, SerializeClaim(claim)), cancellationToken);
 
         public override async Task<IList<Claim>> GetClaimsAsync(InternalRole role, CancellationToken cancellationToken = new CancellationToken())
         {
@@ -53,21 +47,28 @@ namespace MgiManager.Data
             return result?.Claims.Select(ReadClaim).ToList();
         }
 
-        public override async Task RemoveClaimAsync(InternalRole role, Claim claim, CancellationToken cancellationToken = new CancellationToken())
-        {
-            
-        }
-
-        public override async Task<IdentityResult> UpdateAsync(InternalRole role, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
-
-        public override IQueryable<InternalRole> Roles { get; }
+        public override async Task RemoveClaimAsync(InternalRole role, Claim claim, CancellationToken cancellationToken = new CancellationToken()) 
+            => await _sender.Send(new RemoveClaimFromRoleCommand(role.Id, await SerializeClaim(claim)), cancellationToken);
 
         public override async Task<IdentityResult> CreateAsync(InternalRole role, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
+
+        public override async Task<IdentityResult> UpdateAsync(InternalRole role, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
 
         public override async Task<IdentityResult> DeleteAsync(InternalRole role, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
 
         public override async Task<InternalRole> FindByIdAsync(string id, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
 
         public override async Task<InternalRole> FindByNameAsync(string normalizedName, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
+
+        public override IQueryable<InternalRole> Roles { get; }
+
+        private async Task<string> SerializeClaim(Claim claim)
+        {
+            await using var mem = new MemoryStream();
+            await using var writer = new BinaryWriter(mem);
+            claim.WriteTo(writer);
+
+            return Convert.ToBase64String(mem.ToArray());
+        }
     }
 }

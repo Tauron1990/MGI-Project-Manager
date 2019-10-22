@@ -12,11 +12,11 @@ using Xunit.Abstractions;
 
 namespace Tauron.MgiManager.User.Service.Tests.UserManager.Roles
 {
-    public sealed class RoleStoreTests
+    public sealed class RoleStoreHandlerTests
     {
         private readonly ILogger<RoleStoreHandler> _logger;
 
-        public RoleStoreTests(ITestOutputHelper helper) 
+        public RoleStoreHandlerTests(ITestOutputHelper helper) 
             => _logger = new MockLogger<RoleStoreHandler>(helper);
 
         [Fact]
@@ -60,5 +60,11 @@ namespace Tauron.MgiManager.User.Service.Tests.UserManager.Roles
             Assert.Single(aggregate.Claims);
             Assert.Equal(id, aggregate.Id.ToString());
         }
+
+        [Fact]
+        public async Task Test_RemoveClaimFromRole()
+        {
+            string Data1 = "Test1";
+        } 
     }
 }

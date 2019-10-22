@@ -14,7 +14,7 @@ namespace Tauron.MgiManager.User.Service.Tests.UserManager.Roles
 {
     public class RoleStoreApplierTests
     {
-        private ILogger<RoleStoreApplier> _logger;
+        private readonly ILogger<RoleStoreApplier> _logger;
 
         public RoleStoreApplierTests(ITestOutputHelper helper) 
             => _logger = new MockLogger<RoleStoreApplier>(helper);

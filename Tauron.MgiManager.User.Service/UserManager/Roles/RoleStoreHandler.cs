@@ -13,7 +13,7 @@ using Tauron.MgiManager.User.Shared.Events;
 namespace Tauron.MgiManager.User.Service.UserManager.Roles
 {
     [CQRSHandler]
-    public sealed class RoleStoreHandler : ICommandHandler<AddClaimToRoleCommand>
+    public sealed class RoleStoreHandler : ICommandHandler<AddClaimToRoleCommand>, ICommandHandler<RemoveClaimFromRoleCommand>
     {
         private readonly ILogger<RoleStoreHandler> _logger;
         private readonly ISession _session;
@@ -31,9 +31,9 @@ namespace Tauron.MgiManager.User.Service.UserManager.Roles
             {
                 if(string.IsNullOrWhiteSpace(message.Data)) return;
 
-                var aggregate = await _session.GetOrAdd<RoleClaimsAggregate>(IdGenerator.Generator.NewGuid(UserNamespace.AddClaimToRole, message.Role.ToString()));
+                var aggregate = await _session.GetOrAdd<RoleClaimsAggregate>(IdGenerator.Generator.NewGuid(UserNamespace.ClaimToRole, message.Role.ToString()));
 
-                aggregate.PublicApplyEvent(new ClaimToRoleAddedEvent(aggregate.Id, message.Data, message.Role, message.));
+                aggregate.PublicApplyEvent(new ClaimToRoleAddedEvent(aggregate.Id, message.Data, message.Role));
 
                 await _session.Commit();
                 _logger.LogInformation(EventIds.UserManager.RoleManagment, $"{message.Role}: Claim Added");
@@ -41,6 +41,26 @@ namespace Tauron.MgiManager.User.Service.UserManager.Roles
             catch (Exception e)
             {
                 _logger.LogError(EventIds.UserManager.RoleManagment, e, "Error On Add Claim");
+            }
+        }
+
+        public async Task Handle(RemoveClaimFromRoleCommand message)
+        {
+            _logger.LogInformation(EventIds.UserManager.RoleManagment, "Remove Claim From Role");
+            try
+            {
+                if (string.IsNullOrWhiteSpace(message.Data)) return;
+
+                var aggregate = await _session.Get<RoleClaimsAggregate>(IdGenerator.Generator.NewGuid(UserNamespace.ClaimToRole, message.Role.ToString()));
+
+                aggregate.PublicApplyEvent(new ClaimRemovedFromRoleEvent(aggregate.Id, message.Data, message.Role));
+
+                await _session.Commit();
+                _logger.LogInformation(EventIds.UserManager.RoleManagment, $"{message.Role}: Claim Removed");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(EventIds.UserManager.RoleManagment, e, "Error On Remove Claim");
             }
         }
     }

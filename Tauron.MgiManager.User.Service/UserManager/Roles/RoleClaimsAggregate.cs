@@ -9,14 +9,14 @@ namespace Tauron.MgiManager.User.Service.UserManager.Roles
 {
     public sealed class RoleClaimsAggregate : CoreAggregateRoot
     {
-        public Dictionary<Guid, string> Claims
+        public List<string> Claims
         {
             get
             {
-                var list = GetValue<Dictionary<Guid, string>>();
+                var list = GetValue<List<string>>();
                 if (list != null) return list;
 
-                list = new Dictionary<Guid, string>();
+                list = new List<string>();
                 SetValue(list);
                 return list;
 
@@ -25,7 +25,7 @@ namespace Tauron.MgiManager.User.Service.UserManager.Roles
 
         [UsedImplicitly]
         private void Apply(ClaimToRoleAddedEvent revent) 
-            => Claims[revent.ClaimId] = revent.Data;
+            => Claims.Add(revent.Data);
 
         public RoleClaimsAggregate(Guid id) 
             => Id = id;
