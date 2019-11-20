@@ -27,7 +27,7 @@ namespace Tauron.MgiManager.User.Service.Tests.UserManager
         [Theory]
         [InlineData("TestUser", "TestPassword")]
         [InlineData("Short", "1")]
-        [InlineData("S", "Short")]
+        [InlineData("S", "Short")] 
         [InlineData("lfasjkhklafaklhfaöfhaslfjkklasflk", "kjhafkhjakklahjfasfklöhaösfhöklhjasf")]
         public async Task Test_CreateUserHandler_ValidUser(string name, string passwort)
         { 
