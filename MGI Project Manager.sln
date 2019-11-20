@@ -23,12 +23,34 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Architektur", "Architektur"
 		Webservice.txt = Webservice.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{C65A7611-D7FE-4174-B5DE-A966C5BC5A18}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Managment", "Managment", "{724A5231-8F02-4AFE-AE82-5AFA4444820A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{853C4CBB-4A8F-475D-BAA8-9E05885B6041}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.Deployment.AutoUpload", "Tauron.Application.Deployment.AutoUpload\Tauron.Application.Deployment.AutoUpload.csproj", "{7744BA70-4633-44E9-A6D7-34EC6DCB96AF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Upload", "Upload", "{D77A5F03-F25C-459F-97B0-B5F71A26A5FF}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7744BA70-4633-44E9-A6D7-34EC6DCB96AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7744BA70-4633-44E9-A6D7-34EC6DCB96AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7744BA70-4633-44E9-A6D7-34EC6DCB96AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7744BA70-4633-44E9-A6D7-34EC6DCB96AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{188A087C-E11E-4F18-ABFE-871413FFBE26} = {8DD354E5-BBDB-4C25-AC42-885205CAE39B}
+		{7744BA70-4633-44E9-A6D7-34EC6DCB96AF} = {D77A5F03-F25C-459F-97B0-B5F71A26A5FF}
+		{D77A5F03-F25C-459F-97B0-B5F71A26A5FF} = {C65A7611-D7FE-4174-B5DE-A966C5BC5A18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}
