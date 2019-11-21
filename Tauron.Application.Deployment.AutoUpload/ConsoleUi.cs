@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Threading;
 using Functional;
 using JetBrains.Annotations;
@@ -31,6 +33,8 @@ namespace Tauron.Application.Deployment.AutoUpload
             
             public override void Execute()
             {
+                Console.WriteLine();
+
                 var bColor = Console.BackgroundColor;
                 var fColor = Console.ForegroundColor;
 
@@ -46,12 +50,40 @@ namespace Tauron.Application.Deployment.AutoUpload
             }
         }
 
+        private class WriteEntry : ConsoleEntry
+        {
+            private readonly string _value;
+
+            public WriteEntry(string value) 
+                => _value = value;
+
+            public override void Execute() 
+                => Console.Write(_value);
+        }
+
+        private class EmptyLine : ConsoleEntry
+        {
+            private readonly int _count;
+
+            public EmptyLine(int count) 
+                => _count = count;
+
+            public override void Execute()
+            {
+                for (var i = 0; i < _count; i++) Console.WriteLine();
+            }
+        }
+
         private readonly object _lock = new object();
 
-        public static string Title
+        public string Title
         {
             get => Console.Title;
-            set => Console.Title = value;
+            set
+            {
+                Console.Title = value;
+                UpdateUI();
+            }
         }
 
         private ImmutableArray<ConsoleEntry> _persistent = ImmutableArray<ConsoleEntry>.Empty;
@@ -66,12 +98,12 @@ namespace Tauron.Application.Deployment.AutoUpload
                 Console.Clear();
 
                 var title = Title;
-                var singleLenght = (Console.BufferWidth - title.Length / 2) / 2;
+                var singleLenght = (Console.BufferWidth + Title.Length) / 2;
 
-                Console.WriteLine(title.PadLeft(singleLenght).PadRight(Console.BufferWidth));
+                Console.WriteLine(title.PadLeft(singleLenght, '-').PadRight(Console.BufferWidth, '-'));
 
-                _persistent.Do(e => e.Execute());
-                _lines.Do(e => e.Execute());
+                foreach (var consoleEntry in _persistent) consoleEntry.Execute();
+                foreach (var consoleEntry in _lines) consoleEntry.Execute();
             }
             finally
             {
@@ -87,22 +119,77 @@ namespace Tauron.Application.Deployment.AutoUpload
                 ImmutableInterlocked.InterlockedExchange(ref _lines, _lines.Add(entry));
         }
 
-        public void WriteError(Exception e, bool persistent = false)
+        public ConsoleUi WriteError(Exception e)
+        {
+            AddEntry(new WriteErrorEntry(e.Message), false);
+            UpdateUI();
+            return this;
+        }
+
+        public ConsoleUi WriteError(Exception e, bool persistent)
         {
             AddEntry(new WriteErrorEntry(e.Message), persistent);
             UpdateUI();
+            return this;
         }
 
-        public void WriteLine(string line, bool persistent = false)
+        public ConsoleUi PrintList<TType>(IEnumerable<TType> enumerable, Action<TType, ConsoleUi> elementAction)
+        {
+            foreach (var ele in enumerable) 
+                elementAction(ele, this);
+
+            return this;
+        }
+
+        public ConsoleUi ReplaceLast(string line)
+        {
+            ImmutableInterlocked.InterlockedExchange(ref _lines, _lines.Remove(_lines.Last()));
+            AddEntry(new WriteLineEntry(line), false);
+            UpdateUI();
+
+            return this;
+        }
+
+        public ConsoleUi WriteLine(string line, bool persistent = false)
         {
             AddEntry(new WriteLineEntry(line), persistent);
             UpdateUI();
+            return this;
         }
 
-        public void Clear()
+        public ConsoleUi WriteLine(int count = 1)
+        {
+            AddEntry(new EmptyLine(count), false);
+            UpdateUI();
+            return this;
+        }
+
+        public ConsoleUi Write(string value, bool persistent = false)
+        {
+            AddEntry(new WriteEntry(value), persistent);
+            UpdateUI();
+            return this;
+        }
+
+        public ConsoleUi Clear()
         {
             ImmutableInterlocked.InterlockedExchange(ref _lines, ImmutableArray<ConsoleEntry>.Empty);
             UpdateUI();
+            return this;
+        }
+
+        public string ReadLine() => Console.ReadLine();
+
+        public string ReadLine(string description)
+        {
+            Write(description);
+            return Console.ReadLine();
+        }
+
+        public bool Allow(string question)
+        {
+            WriteLine(question + "y/n");
+            return Console.ReadKey().Key == ConsoleKey.Y;
         }
     }
 }

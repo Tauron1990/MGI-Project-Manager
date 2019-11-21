@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -7,23 +8,57 @@ using Functional;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Nito.AsyncEx;
+using Tauron.Application.Deployment.AutoUpload.Github;
 
 namespace Tauron.Application.Deployment.AutoUpload.Core
 {
     public sealed class Settings
     {
         [UsedImplicitly]
+        public class RegistratedRepositoryComponent
+        {
+            public long Id { get; set; }
+
+            public string? BranchName { get; set; }
+
+            public string? ProjectName { get; set; }
+
+            public RegistratedRepositoryComponent()
+            {
+                
+            }
+
+            public RegistratedRepositoryComponent(long id, string branchName, string projectName)
+            {
+                Id = id;
+                BranchName = branchName;
+                ProjectName = projectName;
+            }
+        }
+
+        [UsedImplicitly]
         public class SettingsComponent
         {
             public int Version { get; set; }
+
+            public List<string>? KnowenRepositorys { get; set; }
+
+            public List<RegistratedRepositoryComponent>? RegistratedRepository { get; set; }
 
             public SettingsComponent()
             {
                 
             }
 
-            public SettingsComponent(Settings settings) 
-                => Version = settings._version;
+            public SettingsComponent(Settings settings)
+            {
+                Version = settings._version;
+                KnowenRepositorys = settings.KnowenRepositorys;
+                RegistratedRepository = new List<RegistratedRepositoryComponent>();
+
+                foreach (var repository in settings.RegistratedRepositories) 
+                    RegistratedRepository.Add(new RegistratedRepositoryComponent(repository.Id, repository.BranchName, repository.ProjectName));
+            }
         }
 
         private static readonly string[] SettingFiles = {"conig.1.json", "conig.2.json", "conig.3.json"};
@@ -34,9 +69,21 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
 
         private int _version;
 
+        public List<string> KnowenRepositorys { get; } = new List<string>();
+
+        public List<RegistratedRepository> RegistratedRepositories { get; } = new List<RegistratedRepository>();
+
         private Settings()
         {
             
+        }
+
+        public async Task AddRepoAndSave(string repo)
+        {
+            if(KnowenRepositorys.Contains(repo)) return;
+
+            KnowenRepositorys.Add(repo);
+            await Save();
         }
 
         public static Settings Create()
@@ -77,7 +124,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
             return settings;
         }
 
-        public async Task Save()
+        private async Task Save()
         {
             await _asyncLock.LockAsync();
             _version++;
@@ -108,6 +155,18 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
         private void ReadFromComponent(SettingsComponent component)
         {
             _version = component.Version;
+            KnowenRepositorys.Clear();
+            
+            if(component.KnowenRepositorys != null)
+                KnowenRepositorys.AddRange(component.KnowenRepositorys);
+
+            if (component.RegistratedRepository != null)
+            {
+                foreach (var repositoryComponent in component.RegistratedRepository) 
+                    RegistratedRepositories.Add(new RegistratedRepository(repositoryComponent.Id,
+                        repositoryComponent.BranchName ?? string.Empty, 
+                        repositoryComponent.ProjectName ?? string.Empty));
+            }
         }
     }
 }
