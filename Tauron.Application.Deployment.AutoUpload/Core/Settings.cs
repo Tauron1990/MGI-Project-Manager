@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using Functional;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Nito.AsyncEx;
@@ -63,7 +61,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
 
         private static readonly string[] SettingFiles = {"conig.1.json", "conig.2.json", "conig.3.json"};
 
-        private static readonly string SettingsDic = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Tauron", "Tauron.Application.Deployment.AutoUpload");
+        public static readonly string SettingsDic = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Tauron", "Tauron.Application.Deployment.AutoUpload");
 
         private readonly AsyncLock _asyncLock = new AsyncLock();
 
@@ -83,6 +81,12 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
             if(KnowenRepositorys.Contains(repo)) return;
 
             KnowenRepositorys.Add(repo);
+            await Save();
+        }
+
+        public async Task AddProjecktAndSave(RegistratedRepository repository)
+        {
+            RegistratedRepositories.Add(repository);
             await Save();
         }
 
@@ -134,7 +138,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                 if (!Directory.Exists(SettingsDic))
                     Directory.CreateDirectory(SettingsDic);
 
-                var filePath = Path.Combine(settingFile);
+                var filePath = Path.Combine(SettingsDic, settingFile);
 
                 try
                 {

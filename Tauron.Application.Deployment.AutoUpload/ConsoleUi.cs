@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using Functional;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace Tauron.Application.Deployment.AutoUpload
@@ -11,6 +12,17 @@ namespace Tauron.Application.Deployment.AutoUpload
     [PublicAPI]
     public sealed class ConsoleUi
     {
+        private class ActionDispose : IDisposable
+        {
+            private readonly Action _executor;
+            [DebuggerHidden]
+            public ActionDispose(Action executor) 
+                => _executor = executor;
+
+            [DebuggerHidden]
+            public void Dispose() => _executor();
+        }
+
         private abstract class ConsoleEntry
         {
             public abstract void Execute();
@@ -19,8 +31,9 @@ namespace Tauron.Application.Deployment.AutoUpload
         private class WriteLineEntry : ConsoleEntry
         {
             private readonly string _line;
-
+            [DebuggerHidden]
             public WriteLineEntry(string line) => _line = line;
+            [DebuggerHidden]
             public override void Execute() 
                 => Console.WriteLine(_line);
         }
@@ -28,9 +41,9 @@ namespace Tauron.Application.Deployment.AutoUpload
         private class WriteErrorEntry : ConsoleEntry
         {
             private readonly string _errorMessage;
-
+            [DebuggerHidden]
             public WriteErrorEntry(string errorMessage) => _errorMessage = errorMessage;
-            
+            [DebuggerHidden]
             public override void Execute()
             {
                 Console.WriteLine();
@@ -53,10 +66,10 @@ namespace Tauron.Application.Deployment.AutoUpload
         private class WriteEntry : ConsoleEntry
         {
             private readonly string _value;
-
+            [DebuggerHidden]
             public WriteEntry(string value) 
                 => _value = value;
-
+            [DebuggerHidden]
             public override void Execute() 
                 => Console.Write(_value);
         }
@@ -64,10 +77,10 @@ namespace Tauron.Application.Deployment.AutoUpload
         private class EmptyLine : ConsoleEntry
         {
             private readonly int _count;
-
+            [DebuggerHidden]
             public EmptyLine(int count) 
                 => _count = count;
-
+            [DebuggerHidden]
             public override void Execute()
             {
                 for (var i = 0; i < _count; i++) Console.WriteLine();
@@ -88,7 +101,7 @@ namespace Tauron.Application.Deployment.AutoUpload
 
         private ImmutableArray<ConsoleEntry> _persistent = ImmutableArray<ConsoleEntry>.Empty;
         private ImmutableArray<ConsoleEntry> _lines = ImmutableArray<ConsoleEntry>.Empty;
-
+        [DebuggerHidden]
         private void UpdateUI()
         {
             if(!Monitor.TryEnter(_lock)) return;
@@ -110,7 +123,7 @@ namespace Tauron.Application.Deployment.AutoUpload
                 Monitor.Exit(_lock);
             }
         }
-
+        [DebuggerHidden]
         private void AddEntry(ConsoleEntry entry, bool persistent)
         {
             if(persistent)
@@ -118,21 +131,32 @@ namespace Tauron.Application.Deployment.AutoUpload
             else
                 ImmutableInterlocked.InterlockedExchange(ref _lines, _lines.Add(entry));
         }
-
+        [DebuggerHidden]
+        public IDisposable SupressUpdate()
+        {
+            Monitor.Enter(_lock);
+            return new ActionDispose(StartUpdate);
+        }
+        [DebuggerHidden]
+        public void StartUpdate()
+        {
+            Monitor.Exit(_lock);
+        }
+        [DebuggerHidden]
         public ConsoleUi WriteError(Exception e)
         {
             AddEntry(new WriteErrorEntry(e.Message), false);
             UpdateUI();
             return this;
         }
-
+        [DebuggerHidden]
         public ConsoleUi WriteError(Exception e, bool persistent)
         {
             AddEntry(new WriteErrorEntry(e.Message), persistent);
             UpdateUI();
             return this;
         }
-
+        [DebuggerHidden]
         public ConsoleUi PrintList<TType>(IEnumerable<TType> enumerable, Action<TType, ConsoleUi> elementAction)
         {
             foreach (var ele in enumerable) 
@@ -140,56 +164,64 @@ namespace Tauron.Application.Deployment.AutoUpload
 
             return this;
         }
-
+        [DebuggerHidden]
         public ConsoleUi ReplaceLast(string line)
         {
-            ImmutableInterlocked.InterlockedExchange(ref _lines, _lines.Remove(_lines.Last()));
+            ImmutableInterlocked.InterlockedExchange(ref _lines, _lines.RemoveAt(_lines.Length - 1));
             AddEntry(new WriteLineEntry(line), false);
             UpdateUI();
 
             return this;
         }
-
+        [DebuggerHidden]
         public ConsoleUi WriteLine(string line, bool persistent = false)
         {
             AddEntry(new WriteLineEntry(line), persistent);
             UpdateUI();
             return this;
         }
-
+        [DebuggerHidden]
         public ConsoleUi WriteLine(int count = 1)
         {
             AddEntry(new EmptyLine(count), false);
             UpdateUI();
             return this;
         }
-
+        [DebuggerHidden]
         public ConsoleUi Write(string value, bool persistent = false)
         {
             AddEntry(new WriteEntry(value), persistent);
             UpdateUI();
             return this;
         }
-
+        [DebuggerHidden]
         public ConsoleUi Clear()
         {
             ImmutableInterlocked.InterlockedExchange(ref _lines, ImmutableArray<ConsoleEntry>.Empty);
             UpdateUI();
             return this;
         }
-
-        public string ReadLine() => Console.ReadLine();
-
-        public string ReadLine(string description)
+        [DebuggerHidden]
+        public Task<string> ReadLine()
         {
-            Write(description);
-            return Console.ReadLine();
+            var line = Console.ReadLine();
+
+            AddEntry(new WriteLineEntry(line), false);
+
+            return Task.FromResult(line);
         }
 
-        public bool Allow(string question)
+        [DebuggerHidden]
+        public  async Task<string> ReadLine(string description)
+        {
+            Write(description);
+            return await ReadLine();
+        }
+        [DebuggerHidden]
+        public Task<bool> Allow(string question)
         {
             WriteLine(question + "y/n");
-            return Console.ReadKey().Key == ConsoleKey.Y;
+            return Task.FromResult( Console.ReadKey().Key == ConsoleKey.Y);
         }
     }
 }
