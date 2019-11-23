@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Windows;
-using System.Xml.Serialization;
-using Catel;
 using Catel.IoC;
-using Catel.Runtime.Serialization;
-using Catel.Runtime.Serialization.Json;
-using Catel.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Syncfusion.SfSkinManager;
 using Tauron.Application.Deployment.AutoUpload.Core;
+using Tauron.Application.Deployment.AutoUpload.Models.Core;
 
 namespace Tauron.Application.Deployment.AutoUpload
 {
@@ -22,8 +13,6 @@ namespace Tauron.Application.Deployment.AutoUpload
     /// </summary>
     public partial class App
     {
-
-
         public const string SyncfusionKey = "MTc0Mjk2QDMxMzcyZTMzMmUzMElNUnVpcGhkMFhTMThkRzcvM2hSMENDc2c2YURtQS95bXhJSzVXaDduUEE9";
 
         public static IServiceProvider ServiceProvider => ((App) Current).ServiceLocator!;
@@ -42,7 +31,7 @@ namespace Tauron.Application.Deployment.AutoUpload
 
             ServiceLocator = IOCReplacer.Create(serviceCollection =>
                                                 {
-
+                                                    serviceCollection.AddSingleton(s => Settings.Create());
                                                     serviceCollection.Scan(
                                                         ts =>
                                                             ts.FromApplicationDependencies()

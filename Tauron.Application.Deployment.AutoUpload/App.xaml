@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Tauron.Application.Deployment.AutoUpload"
              Startup="App_OnStartup" ShutdownMode="OnMainWindowClose">
     <Application.Resources>
-         
+
     </Application.Resources>
 </Application>

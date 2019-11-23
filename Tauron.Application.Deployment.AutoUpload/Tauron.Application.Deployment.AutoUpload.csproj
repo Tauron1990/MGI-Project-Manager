@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <AssemblyName>AutoUpload</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,12 +29,6 @@
     <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="17.3.0.28" />
     <PackageReference Include="Syncfusion.Shared.WPF" Version="17.3.0.28" />
     <PackageReference Include="Syncfusion.Themes.Blend.WPF" Version="17.3.0.28" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="System\Core\" />
-    <Folder Include="System\Github\" />
   </ItemGroup>
 
 </Project>

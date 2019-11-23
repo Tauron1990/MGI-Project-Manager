@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
+using Tauron.Application.Deployment.AutoUpload.Core.UI;
 
 namespace Tauron.Application.Deployment.AutoUpload.Core
 {
@@ -26,6 +28,10 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
 
         public override void Apply(IServiceCollection services, ServiceDescriptor descriptor)
         {
+            var modelType = descriptor.ImplementationType.GetCustomAttribute<ControlAttribute>()?.ModelType;
+            if (modelType != null) 
+                AutoViewLocation.AddPair(descriptor.ImplementationType, modelType);
+
             var trampoline = new Trampoline(descriptor.ImplementationType);
 
             services.Add(

@@ -4,13 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tauron.Application.Deployment.AutoUpload.ViewModels"
+        xmlns:view="clr-namespace:Tauron.Application.Deployment.AutoUpload.Core.UI"
         xmlns:catel="clr-namespace:Catel.Windows;assembly=Catel.MVVM"
         xmlns:sync="http://schemas.syncfusion.com/wpf"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
         Title="{Binding Title}" Height="450" Width="800" WindowStartupLocation="CenterScreen">
-    <sync:SfBusyIndicator IsBusy="{Binding BusyService.Run}" Header="{Binding BusyService.Status}">
-        <Grid>
-            <Button Content="{Binding Test}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" />
-        </Grid>
-    </sync:SfBusyIndicator>
+    <sync:SfBusyIndicator IsBusy="{Binding BusyService.Run}" Header="{Binding BusyService.Status}" Content="{view:ViewModelBinding CurrentView}"/>
 </catel:DataWindow>
