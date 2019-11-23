@@ -21,6 +21,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Commands
             private readonly List<string> _output = new List<string>();
             private string _line = string.Empty;
 
+            private int _updateLimit;
+
             public ReportHelper(ConsoleUi ui)
                 => _ui = ui;
 
@@ -33,15 +35,20 @@ namespace Tauron.Application.Deployment.AutoUpload.Commands
             public void AddOutput(string output)
             {
                 if(_output.Count > 10)
-                    _output.RemoveAt(_output.Count - 1);
+                    _output.RemoveAt(0);
                 _output.Add(output);
                 Update();
             }
 
             private void Update()
             {
+                _updateLimit++;
+                if (_updateLimit != 30) return;
+
+                _updateLimit = 0;
+
                 _stringBuilder.Clear()
-                    .AppendLine();
+                   .AppendLine();
 
                 foreach (var line in _output)
                     _stringBuilder.AppendLine(line);
@@ -68,7 +75,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Commands
 
             using (ui.SupressUpdate())
             {
-                ui.WriteLine("Branche's:").WriteLine();
+                ui.WriteLine().WriteLine("Branches:");
 
                 foreach (var possibleBranch in await context.GitHubClient.Repository.Branch.GetAll(repository.Id)) 
                     ui.WriteLine(possibleBranch.Name);
@@ -76,7 +83,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Commands
 
             var branch = await RepositoryManager.GetBranch(repository, async () => await input.ReadLine("Name des Branches: "), context.GitHubClient);
 
-            var tempPath = Path.Combine(Settings.SettingsDic, "Tauron");
+            var tempPath = Path.Combine(Settings.SettingsDic, "TempGit");
 
             try
             {
@@ -97,12 +104,14 @@ namespace Tauron.Application.Deployment.AutoUpload.Commands
 
                 ui.WriteLine("Mögliche Projekte:");
 
-                var files = Directory.EnumerateFiles(target, "*.cs").Select(Path.GetFileName).ToArray();
+                var files = Directory.EnumerateFiles(target, "*.csproj", SearchOption.AllDirectories).Select(Path.GetFileName).ToArray();
                 using (ui.SupressUpdate())
                 {
-                    foreach (var projectFile in files) 
+                    foreach (var projectFile in files)
+                    {
                         if(projectFile != null)
                             ui.WriteLine(projectFile);
+                    }
                 }
 
                 var targetFile = await input.ReadLine("Name Des Projekts: ");
