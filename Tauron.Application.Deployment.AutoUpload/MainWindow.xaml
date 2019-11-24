@@ -9,5 +9,10 @@
         xmlns:sync="http://schemas.syncfusion.com/wpf"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
         Title="{Binding Title}" Height="450" Width="800" WindowStartupLocation="CenterScreen">
-    <sync:SfBusyIndicator IsBusy="{Binding BusyService.Run}" Header="{Binding BusyService.Status}" Content="{view:ViewModelBinding CurrentView}"/>
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </Window.Resources>
+    <ContentControl Content="{view:ViewModelBinding CurrentView}"/>
 </catel:DataWindow>

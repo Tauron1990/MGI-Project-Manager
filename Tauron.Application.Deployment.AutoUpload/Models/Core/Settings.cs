@@ -25,17 +25,19 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
 
             public string? RepositoryName { get; set; }
 
+            public string? RealPath { get; set; }
+
             public RegistratedRepositoryComponent()
             {
-                
             }
 
-            public RegistratedRepositoryComponent(long id, string branchName, string projectName, string reporitoryName)
+            public RegistratedRepositoryComponent(long id, string branchName, string projectName, string reporitoryName, string? realPath)
             {
                 Id = id;
                 BranchName = branchName;
                 ProjectName = projectName;
                 RepositoryName = reporitoryName;
+                RealPath = realPath;
             }
         }
 
@@ -48,6 +50,12 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
 
             public List<RegistratedRepositoryComponent>? RegistratedRepository { get; set; }
 
+            public string? UserName { get; set; }
+
+            public string? EMailAdress { get; set; }
+
+            public DateTimeOffset UserWhen { get; set; }
+
             public SettingsComponent()
             {
                 
@@ -59,8 +67,12 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
                 KnowenRepositorys = new List<string>(settings.KnowenRepositorys);
                 RegistratedRepository = new List<RegistratedRepositoryComponent>();
 
+                UserName = settings.UserName;
+                EMailAdress = settings.EMailAdress;
+                UserWhen = settings.UserWhen;
+
                 foreach (var repository in settings.RegistratedRepositories) 
-                    RegistratedRepository.Add(new RegistratedRepositoryComponent(repository.Id, repository.BranchName, repository.ProjectName, repository.RepositoryName));
+                    RegistratedRepository.Add(new RegistratedRepositoryComponent(repository.Id, repository.BranchName, repository.ProjectName, repository.RepositoryName, repository.RealPath));
             }
         }
 
@@ -75,6 +87,12 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
         public IList<string> KnowenRepositorys { get; } = new FastObservableCollection<string>();
 
         public IList<RegistratedRepository> RegistratedRepositories { get; } = new FastObservableCollection<RegistratedRepository>();
+
+        public string UserName { get; set; } = string.Empty;
+        
+        public string EMailAdress { get; set; } = string.Empty;
+
+        public DateTimeOffset UserWhen { get; set; }
 
         private Settings()
         {
@@ -133,37 +151,44 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
             return settings;
         }
 
-        private async Task Save()
+        public async Task Save()
         {
-            await _asyncLock.LockAsync();
-            _version++;
-
-            foreach (var settingFile in SettingFiles)
+            using (await _asyncLock.LockAsync())
             {
-                if (!Directory.Exists(SettingsDic))
-                    Directory.CreateDirectory(SettingsDic);
+                _version++;
 
-                var filePath = Path.Combine(SettingsDic, settingFile);
-
-                try
+                foreach (var settingFile in SettingFiles)
                 {
-                    if (File.Exists(filePath))
-                        File.Delete(filePath);
+                    if (!Directory.Exists(SettingsDic))
+                        Directory.CreateDirectory(SettingsDic);
 
-                    var json = JsonConvert.SerializeObject(new SettingsComponent(this));
-                    await File.WriteAllTextAsync(filePath, json);
-                }
-                catch
-                {
-                    // ignored
-                }
+                    var filePath = Path.Combine(SettingsDic, settingFile);
 
+                    try
+                    {
+                        if (File.Exists(filePath))
+                            File.Delete(filePath);
+
+                        var json = JsonConvert.SerializeObject(new SettingsComponent(this), Formatting.Indented);
+                        await File.WriteAllTextAsync(filePath, json);
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+
+                }
             }
         }
 
         private void ReadFromComponent(SettingsComponent component)
         {
             _version = component.Version;
+            if (component.EMailAdress != null) EMailAdress = component.EMailAdress;
+            if (component.UserName != null) UserName = component.UserName;
+            UserWhen = component.UserWhen;
+
+            RegistratedRepositories.Clear();
             KnowenRepositorys.Clear();
             
             if(component.KnowenRepositorys != null)
@@ -176,7 +201,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
                     RegistratedRepositories.Add(new RegistratedRepository(repositoryComponent.Id,
                                                                           repositoryComponent.BranchName     ?? string.Empty,
                                                                           repositoryComponent.ProjectName    ?? string.Empty,
-                                                                          repositoryComponent.RepositoryName ?? string.Empty));
+                                                                          repositoryComponent.RepositoryName ?? string.Empty,
+                                                                          repositoryComponent.RealPath ?? string.Empty));
                 }
             }
         }

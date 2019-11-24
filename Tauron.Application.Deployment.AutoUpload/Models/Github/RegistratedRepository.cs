@@ -1,4 +1,6 @@
-﻿namespace Tauron.Application.Deployment.AutoUpload.Models.Github
+﻿using System.IO;
+
+namespace Tauron.Application.Deployment.AutoUpload.Models.Github
 {
     public class RegistratedRepository
     {
@@ -10,14 +12,17 @@
 
         public string ProjectName { get; }
 
-        public RegistratedRepository(long id, string branchName, string projectName, string repositoryName)
+        public string RealPath { get; }
+
+        public RegistratedRepository(long id, string branchName, string projectName, string repositoryName, string realPath)
         {
             Id = id;
             BranchName = branchName;
             ProjectName = projectName;
             RepositoryName = repositoryName;
+            RealPath = realPath;
         }
 
-        public override string ToString() => $"{RepositoryName} -- {ProjectName}";
+        public override string ToString() => $"{RepositoryName} -- {Path.GetFileName(ProjectName)}";
     }
 }

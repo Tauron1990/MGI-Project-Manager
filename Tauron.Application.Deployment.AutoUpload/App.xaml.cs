@@ -2,6 +2,7 @@
 using System.Windows;
 using Catel.IoC;
 using Microsoft.Extensions.DependencyInjection;
+using Octokit;
 using Syncfusion.SfSkinManager;
 using Tauron.Application.Deployment.AutoUpload.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
@@ -31,6 +32,7 @@ namespace Tauron.Application.Deployment.AutoUpload
 
             ServiceLocator = IOCReplacer.Create(serviceCollection =>
                                                 {
+                                                    serviceCollection.AddSingleton(sp => new GitHubClient(new ProductHeaderValue("Tauron.Application.Deployment.AutoUpload")));
                                                     serviceCollection.AddSingleton(s => Settings.Create());
                                                     serviceCollection.Scan(
                                                         ts =>
@@ -44,7 +46,6 @@ namespace Tauron.Application.Deployment.AutoUpload
                                                 });
 
 
-            SfSkinManager.ApplyStylesOnApplication = true;
             MainWindow = ServiceProvider.GetRequiredService<MainWindow>();
 
             MainWindow?.Show();

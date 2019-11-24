@@ -2,6 +2,11 @@
 {
     public abstract class OperationContextBase
     {
-        
+        class DummyContext : OperationContextBase
+        {
+            
+        }
+
+        public static readonly OperationContextBase Empty = new DummyContext();
     }
 }

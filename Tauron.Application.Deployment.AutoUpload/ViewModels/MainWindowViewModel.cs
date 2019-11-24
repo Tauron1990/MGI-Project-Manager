@@ -5,6 +5,7 @@ using Catel.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Core;
+using Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels
@@ -27,7 +28,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels
         }
 
 
-        public OperationViewModelBase CurrentView { get; set; }
+        public OperationViewModelBase? CurrentView { get; set; }
 
         private void ChangeView(OperationViewModelBase model)
         {

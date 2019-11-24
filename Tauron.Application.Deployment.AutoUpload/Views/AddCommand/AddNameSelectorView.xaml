@@ -5,9 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand"
              xmlns:catel="http://schemas.catelproject.com"
+             xmlns:helper="clr-namespace:Tauron.Application.Deployment.AutoUpload.Views.Helper"
              mc:Ignorable="d" Background="White" d:DataContext="{d:DesignInstance local:AddNameSelectorViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid Margin="5">
+        <Grid.Resources>
+            <catel:BooleanToHidingVisibilityConverter x:Key="VisibilityConverter"/>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
             <RowDefinition Height="Auto"/>
@@ -19,5 +23,16 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
+        <TextBlock Grid.ColumnSpan="4" Text="Repository Name" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Name (User/RepositoryName):" Margin="5" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" MinWidth="400" Text="{Binding RepositoryName, UpdateSourceTrigger=PropertyChanged, Delay=500, ValidatesOnNotifyDataErrors=True}"/>
+        <ListBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Settings.KnowenRepositorys}" SelectedItem="{Binding SelectedRepo}"/>
+        <Button Grid.Row="3" Grid.Column="2" MinWidth="70" Margin="5" Content="Weiter" Command="{Binding NextCommand}"/>
+        <Button Grid.Row="3" Grid.Column="1" Margin="5" HorizontalAlignment="Right" MinWidth="80" Content="Abbrechen" Command="{Binding CancelCommand}"/>
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal" 
+                    Visibility="{Binding IsFetching, Converter={StaticResource VisibilityConverter}}">
+            <TextBlock Text="Information werden abgerufen..." Margin="5"/>
+            <helper:CircularProgressBar Height="20"/>
+        </StackPanel>
     </Grid>
 </catel:UserControl>
