@@ -8,6 +8,8 @@
              mc:Ignorable="d" Background="White" d:DataContext="{d:DesignInstance local:BuildSelectProjectViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
     </Grid>
 </catel:UserControl>
