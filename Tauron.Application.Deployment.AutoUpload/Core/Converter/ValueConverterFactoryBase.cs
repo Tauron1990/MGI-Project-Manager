@@ -12,8 +12,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.Converter
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public abstract class ValueConverterFactoryBase : MarkupExtension
     {
-        [CanBeNull]
-        public IServiceProvider ServiceProvider { get; set; }
+        public IServiceProvider? ServiceProvider { get; set; }
 
         [NotNull]
         protected abstract IValueConverter Create();
@@ -44,7 +43,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.Converter
         {
             protected virtual bool CanConvertBack => false;
 
-            public virtual object Convert(object value, [NotNull] Type targetType, object parameter, [NotNull] CultureInfo culture)
+            public virtual object? Convert(object value, [NotNull] Type targetType, object parameter, [NotNull] CultureInfo culture)
             {
                 //if (value is TDest && typeof(TSource) != typeof(TDest)) return value;
                 if (!(value is TSource)) return null;
@@ -52,7 +51,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.Converter
                 return Convert((TSource) value);
             }
 
-            public virtual object ConvertBack(object value, [NotNull] Type targetType, object parameter, [NotNull] CultureInfo culture)
+            public virtual object? ConvertBack(object value, [NotNull] Type targetType, object parameter, [NotNull] CultureInfo culture)
             {
                 if (!CanConvertBack || !(value is TDest)) return null;
 
@@ -61,7 +60,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.Converter
 
             protected abstract TDest Convert(TSource value);
 
-            protected virtual TSource ConvertBack(TDest value) => default;
+            protected virtual TSource ConvertBack(TDest value) => default!;
         }
 
         protected static IValueConverter CreateStringConverter<TType>(Func<TType, string> converter) => new FuncStringConverter<TType>(converter);

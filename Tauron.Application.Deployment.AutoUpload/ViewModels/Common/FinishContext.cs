@@ -4,9 +4,11 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Common
 {
     public sealed class FinishContext : OperationContextBase
     {
+        public static readonly FinishContext Default = new FinishContext();
+
         public string Message { get; }
 
-        public FinishContext(string? message) 
+        public FinishContext(string? message = null) 
             => Message = message ?? "Die Operation wurde Erfolgreich Beendet";
     }
 }

@@ -1,11 +1,7 @@
 ﻿using System;
-using Catel.Fody;
 using Catel.MVVM;
-using Catel.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
-using Tauron.Application.Deployment.AutoUpload.Core;
-using Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels
@@ -15,14 +11,14 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels
     {
         private readonly IServiceProvider _serviceProvider;
 
-        [NoWeaving]
-        public BusyService BusyService { get; }
+        //[NoWeaving]
+        //public BusyService BusyService { get; }
 
-        public MainWindowViewModel(IPleaseWaitService pleaseWaitService, IServiceProvider serviceProvider)
+        public MainWindowViewModel(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             Title = "Auto Versionen und Uploads";
-            BusyService = (BusyService) pleaseWaitService;
+            //BusyService = (BusyService) pleaseWaitService;
 
             ModelOnCancelOperation();
         }

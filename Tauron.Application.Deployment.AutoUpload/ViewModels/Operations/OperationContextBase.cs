@@ -8,5 +8,7 @@
         }
 
         public static readonly OperationContextBase Empty = new DummyContext();
+
+        public Redirection? Redirection { get; set; }
     }
 }

@@ -9,6 +9,6 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 
         public Branch Branch { get; set; } = new Branch();
 
-        public string RealPath { get; set; }
+        public string RealPath { get; set; } = string.Empty;
     }
 }

@@ -13,12 +13,13 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.Converter
         {
             private static readonly BrushConverter ConverterImpl = new BrushConverter();
 
-            [CanBeNull]
             protected override Brush Convert([NotNull] string value)
             {
                 try
                 {
-                    return ConverterImpl.ConvertFrom(value) as Brush;
+                    if (ConverterImpl.ConvertFrom(value) is Brush brush)
+                        return brush;
+                    return Brushes.Black;
                 }
                 catch (FormatException)
                 {
