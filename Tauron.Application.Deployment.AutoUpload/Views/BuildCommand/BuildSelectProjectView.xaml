@@ -20,10 +20,14 @@
         </Grid.ColumnDefinitions>
         <TextBlock Grid.ColumnSpan="3" Text="Projekt Auswählen" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" Text="Projekt:"/>
-        <ListBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5">
-
+        <ListBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" ItemsSource="{Binding Projekts}" SelectedItem="{Binding Projekt}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type local:PotentialProjekt}">
+                    <TextBlock Text="{Binding Name}" FontSize="20"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
         <Button Grid.Row="2" Grid.Column="2" Margin="5" MinWidth="80" Content="Weiter"/>
-        <Button Grid.Row="2" Grid.Column="1" Margin="5" MinWidth="80" HorizontalAlignment="Right" Content="Abbrechen"/>
+        <Button Grid.Row="2" Grid.Column="1" Margin="5" MinWidth="80" HorizontalAlignment="Right" Content="Abbrechen" Command="{Binding CancelCommand}"/>
     </Grid>
 </catel:UserControl>
