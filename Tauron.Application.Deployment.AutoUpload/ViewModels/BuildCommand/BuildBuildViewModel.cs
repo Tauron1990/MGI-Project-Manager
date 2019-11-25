@@ -17,7 +17,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         {
             if (Context.BuildContext.CanBuild)
             {
-                if(await _messageService.ShowAsync("Dot Net Core Framework nicht gefunden. Webseite öffnen?", "Fehler", MessageButton.YesNo, MessageImage.Error) == MessageResult.Yes)
+                if(await _messageService.ShowAsync("Dot Net Core Framework nicht gefunden. Installieren?", "Fehler", MessageButton.YesNo, MessageImage.Error) == MessageResult.Yes)
 
                 const string website = "https://dotnet.microsoft.com/download";
                 UI.WriteLine("");
