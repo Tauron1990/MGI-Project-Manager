@@ -1,9 +1,9 @@
-﻿using System.Runtime.Serialization;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Catel.Collections;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
+using Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
@@ -24,21 +24,20 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         {
 
             foreach (var repository in _settings.RegistratedRepositories) 
-                Projekts.Add(new PotentialProjekt(repository.ToString(), async () => await NewProjectAction(repository)));
+                Projekts.Add(new PotentialProjekt(repository.ToString(), async () => await BuildProjectAction(repository)));
 
-            Projekts.Add(new PotentialProjekt("Neu...", BuildProjectAction));
+            Projekts.Add(new PotentialProjekt("Neu...", NewProjectAction));
 
             return Task.CompletedTask;
         }
 
-        private async Task NewProjectAction(RegistratedRepository registratedRepository)
+        private async Task BuildProjectAction(RegistratedRepository registratedRepository)
         {
-
+            Context.RegistratedRepository = registratedRepository;
+            await OnNextView<BuildBuildViewModel>();
         }
 
-        private async Task BuildProjectAction()
-        {
-
-        }
+        private async Task NewProjectAction() 
+            => await OnNextView<AddNameSelectorViewModel, AddCommandContext>(new AddCommandContext(), CreateRedirection<BuildBuildViewModel>());
     }
 }

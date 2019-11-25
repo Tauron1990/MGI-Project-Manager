@@ -44,5 +44,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
 
             base.SetContext(contextBase);
         }
+
+        protected Redirection CreateRedirection<TView>(RedirectionType redirectionType = RedirectionType.OnFinish)
+            where TView : OperationViewModel<TContext>
+            => new Redirection(Context, typeof(TView), redirectionType);
     }
 }
