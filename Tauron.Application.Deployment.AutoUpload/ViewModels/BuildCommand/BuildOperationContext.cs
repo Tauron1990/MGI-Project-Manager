@@ -17,6 +17,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
             set => _registratedRepository = value;
         }
 
+        public bool NoLocatonOpening { get; set; }
+
         public BuildOperationContext(BuildContext buildContext) => BuildContext = buildContext;
     }
 }
