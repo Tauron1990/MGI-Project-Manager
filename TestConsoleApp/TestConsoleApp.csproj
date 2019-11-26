@@ -13,10 +13,4 @@
     <PackageReference Include="System.Management.Automation" Version="6.2.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="dotnet-install.ps1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

@@ -43,7 +43,6 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
                     Directory.Delete(targetPath, true);
                 Directory.CreateDirectory(targetPath);
 
-                var argzments = 
             }
             catch (Exception e)
             {
