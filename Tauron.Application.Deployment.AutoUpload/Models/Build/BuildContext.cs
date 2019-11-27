@@ -18,7 +18,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
 
         public event Action Error;
 
-        public bool CanBuild => File.Exists(DotNetLocation);
+        public static bool CanBuild => File.Exists(DotNetLocation);
 
         public async Task<int> TryBuild(RegistratedRepository? repository, string output)
         {
@@ -30,38 +30,32 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
                .Append(" -c Release")
                .Append(" -v n");
 
-            using (var process = new Process())
-            {
-                process.ErrorDataReceived += ProcessOnErrorDataReceived;
-                process.OutputDataReceived += ProcessOnOutputDataReceived;
-                process.EnableRaisingEvents = true;
+            using var process = new Process();
+
+            process.ErrorDataReceived += ProcessOnErrorDataReceived;
+            process.OutputDataReceived += ProcessOnOutputDataReceived;
+            process.EnableRaisingEvents = true;
 
 
-                process.StartInfo = new ProcessStartInfo(DotNetLocation, arguments.ToString())
-                {
-                    UseShellExecute = false,
-                    RedirectStandardError = true,
-                    RedirectStandardOutput = true
-                };
+            process.StartInfo = new ProcessStartInfo(DotNetLocation, arguments.ToString())
+                                {
+                                    UseShellExecute = false,
+                                    RedirectStandardError = true,
+                                    RedirectStandardOutput = true
+                                };
 
-                process.Start();
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
-                if (!process.WaitForExit(10000))
-                {
-                    process.Kill(true);
-                }
+            process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+            if (!process.WaitForExit(30000)) 
+                process.Kill(true);
 
-                return process.ExitCode;
-            }
+            return process.ExitCode;
         }
 
         private void ProcessOnOutputDataReceived(object sender, DataReceivedEventArgs e) 
              => Output?.Invoke(e.Data);
 
-        private void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+        private void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e) => Error?.Invoke();
     }
 }

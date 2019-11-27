@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Catel.Services;
 using Scrutor;
+using Tauron.Application.Deployment.AutoUpload.Models.Build;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
@@ -21,7 +22,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
         protected override async Task InitializeAsync()
         {
-            if (Context.BuildContext.CanBuild)
+            if (BuildContext.CanBuild)
             {
 
                 const string website = "https://dotnet.microsoft.com/download";
@@ -42,6 +43,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
                 if(Directory.Exists(targetPath))
                     Directory.Delete(targetPath, true);
                 Directory.CreateDirectory(targetPath);
+
+                var buildContext = Context.BuildContext;
+                var result = buildContext.TryBuild(Context.RegistratedRepository, targetPath);
 
             }
             catch (Exception e)
