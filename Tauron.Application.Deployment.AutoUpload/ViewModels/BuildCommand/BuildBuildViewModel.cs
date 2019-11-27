@@ -17,6 +17,10 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
     {
         private readonly IMessageService _messageService;
 
+        public int ErrorCount { get; set; }
+
+        public string Console { get; set; } = string.Empty;
+
         public BuildBuildViewModel(IMessageService messageService) 
             => _messageService = messageService;
 
@@ -37,22 +41,34 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
         private async void RunBuild()
         {
+            var buildContext = Context.BuildContext;
+            buildContext.Output += BuildContextOnOutput;
+            buildContext.Error += BuildContextOnError;
+
             try
             {
                 var targetPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ?? string.Empty, "Output");
-                if(Directory.Exists(targetPath))
+                if (Directory.Exists(targetPath))
                     Directory.Delete(targetPath, true);
                 Directory.CreateDirectory(targetPath);
 
-                var buildContext = Context.BuildContext;
                 var result = buildContext.TryBuild(Context.RegistratedRepository, targetPath);
-
+                //TODO NextView
             }
             catch (Exception e)
             {
                 await _messageService.ShowErrorAsync(e);
             }
+            finally
+            {
+                buildContext.Output -= BuildContextOnOutput;
+                buildContext.Error -= BuildContextOnError;
+            }
         }
+
+        private void BuildContextOnError() => ErrorCount++;
+
+        private void BuildContextOnOutput(string obj) => Console = Console + Environment.NewLine + obj;
 
         private static void OpenWebsite(string url)
         {

@@ -34,10 +34,10 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         private async Task BuildProjectAction(RegistratedRepository registratedRepository)
         {
             Context.RegistratedRepository = registratedRepository;
-            await OnNextView<BuildBuildViewModel>();
+            await OnNextView<BuildVersionIncrementViewModel>();
         }
 
         private async Task NewProjectAction() 
-            => await OnNextView<AddNameSelectorViewModel, AddCommandContext>(new AddCommandContext(), CreateRedirection<BuildBuildViewModel>());
+            => await OnNextView<AddNameSelectorViewModel, AddCommandContext>(new AddCommandContext(), CreateRedirection<BuildVersionIncrementViewModel>());
     }
 }
