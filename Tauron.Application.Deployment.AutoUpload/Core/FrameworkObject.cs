@@ -1,10 +1,12 @@
 ﻿#region
 
+using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Media;
 using JetBrains.Annotations;
+using Tauron.Application.Deployment.AutoUpload.Core.Helper;
 
 #endregion
 
@@ -13,9 +15,9 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
     /// <summary>The framework object.</summary>
     [DebuggerStepThrough]
     [PublicAPI]
-    public sealed class FrameworkObject
+    public sealed class FrameworkObject : IInternalWeakReference
     {
-        public FrameworkObject(object? obj)
+        public FrameworkObject(object? obj, bool isWeak = true)
         {
             var fe = obj as FrameworkElement;
             var fce = obj as FrameworkContentElement;
@@ -25,20 +27,38 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
             IsValid = _isFce || _isFe;
 
             // ReSharper disable AssignNullToNotNullAttribute
-            if (fe != null) _fe = new ElementReference<FrameworkElement>(fe);
-            else if (fce != null) _fce = new ElementReference<FrameworkContentElement>(fce);
+            if (fe != null) _fe = new ElementReference<FrameworkElement>(fe, isWeak);
+            else if (fce != null) _fce = new ElementReference<FrameworkContentElement>(fce, isWeak);
             // ReSharper restore AssignNullToNotNullAttribute
         }
-        
+
+        bool IInternalWeakReference.IsAlive
+        {
+            get
+            {
+                if (_isFe) return _fe?.IsAlive ?? false;
+
+                return _isFce && (_fce?.IsAlive ?? false);
+            }
+        }
+
         [DebuggerStepThrough]
-        private class ElementReference<TReference>
+        private class ElementReference<TReference> : IInternalWeakReference
             where TReference : class
         {
-            public ElementReference([JetBrains.Annotations.NotNull] TReference reference) 
-                => Target = reference;
+            public ElementReference([JetBrains.Annotations.NotNull] TReference reference, bool isWeak)
+            {
+                if (isWeak) _weakRef = new WeakReference<TReference>(Argument.NotNull(reference, nameof(reference)));
+                else _reference = reference;
+            }
 
-            [JetBrains.Annotations.NotNull]
-            public TReference Target { get; }
+            private readonly TReference? _reference;
+
+            private readonly WeakReference<TReference>? _weakRef;
+
+            public TReference? Target => _weakRef != null ? _weakRef.TypedTarget() : _reference;
+
+            public bool IsAlive => _weakRef == null || _weakRef.IsAlive();
         }
 
         private readonly ElementReference<FrameworkContentElement>? _fce;
@@ -112,8 +132,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
         {
             get
             {
-                if (_isFe && _fe != null) return _fe.Target;
-                return _fce?.Target;
+                if (_isFe) return _fe?.Target;
+                return _isFce ? _fce?.Target : null;
             }
         }
 
@@ -138,18 +158,25 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
             }
         }
 
-        public bool TryGetFrameworkContentElement([MaybeNullWhen(false)]out FrameworkContentElement contentElement)
+        public bool TryGetFrameworkContentElement([NotNullWhen(true)]out FrameworkContentElement? contentElement)
         {
-            contentElement = _isFce ? _fce?.Target! : null!;
+            contentElement = _isFce ? _fce?.Target : null;
 
             return contentElement != null;
         }
 
-        public bool TryGetFrameworkElement([MaybeNullWhen(false)]out FrameworkElement frameworkElement)
+        public bool TryGetFrameworkElement([NotNullWhen(true)]out FrameworkElement? frameworkElement)
         {
-            frameworkElement = _isFe ? _fe?.Target! : null!;
+            var temp = _isFe ? _fe?.Target : null;
 
-            return frameworkElement != null;
+            if (temp == null)
+            {
+                frameworkElement = null;
+                return false;
+            }
+
+            frameworkElement = temp;
+            return true;
         }
     }
 }
