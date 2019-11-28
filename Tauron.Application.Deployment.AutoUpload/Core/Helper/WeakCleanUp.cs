@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using JetBrains.Annotations;
-using Tauron.Application.Deployment.AutoUpload.Core;
-using Tauron.Application.Deployment.AutoUpload.Core.Helper;
 
-namespace Tauron.Application
+namespace Tauron.Application.Deployment.AutoUpload.Core.Helper
 {
     [PublicAPI]
     public sealed class WeakDelegate : IInternalWeakReference, IEquatable<WeakDelegate>

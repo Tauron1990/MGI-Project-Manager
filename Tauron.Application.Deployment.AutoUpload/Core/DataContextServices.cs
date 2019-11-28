@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using Catel;
 using Catel.IoC;
 using Catel.Services;
 using JetBrains.Annotations;
@@ -33,18 +32,15 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
         [NotNull]
         ITask Generate([NotNull] WeakReference dataContext, [NotNull] ITaskScheduler scheduler);
         
-        [CanBeNull]
-        WeakReference DataContext { get; set; }
+        WeakReference? DataContext { get; set; }
         
-        [CanBeNull]
-        ITaskScheduler TaskScheduler { get; set; }
+        ITaskScheduler? TaskScheduler { get; set; }
     }
     
     [PublicAPI]
     public static class DataContextServices
     {
-        private static ITaskScheduler _taskScheduler = 
-            new InternalTaskScheduler(DependencyResolverManager.Default.GetServiceLocator().GetRequiredService<IDispatcherService>(), "Main");
+        public static ITaskScheduler Scheduler { get; } = new InternalTaskScheduler(DependencyResolverManager.Default.GetServiceLocator().GetRequiredService<IDispatcherService>());
 
         private class ObjectReference : IInternalWeakReference
         {
@@ -67,14 +63,16 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                     _task.SetResult(null!);
                 }
                 
-                public void Execute() => _info?.InvokeFast(_dataContext);
-
                 private readonly object? _dataContext;
 
                 private readonly MethodInfo? _info;
 
                 private readonly TaskCompletionSource<object> _task;
-                
+
+                public void ExecuteAsync() => _info?.InvokeFast(_dataContext);
+
+                public void ExecuteSync() => _info?.InvokeFast(_dataContext);
+
                 public bool Synchronize { get; }
                 
                 public Task Task => _task.Task;
@@ -84,8 +82,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
             private readonly List<IPipeLine> _pips;
 
             private readonly WeakReference<DependencyObject> _target;
-            
-            public DependencyObject? DependencyObject => _target.TypedTarget();
+
+            private DependencyObject? DependencyObject => _target.TypedTarget();
             
             public bool IsAlive => _target.IsAlive();
             
@@ -105,9 +103,9 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
 
             public void RemovePipline(IPipeLine pipeline) => _pips.Remove(pipeline);
 
-            public bool IsMatch([CanBeNull] object obj) => ReferenceEquals(_target.TypedTarget(), obj);
+            public bool IsMatch(object? obj) => ReferenceEquals(_target.TypedTarget(), obj);
 
-            public void NewDataContext([CanBeNull] object dataContext, [NotNull] ITaskScheduler scheduler)
+            public void NewDataContext(object? dataContext, [NotNull] ITaskScheduler scheduler)
             {
                 Argument.NotNull(scheduler, nameof(scheduler));
 
@@ -186,8 +184,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
         {
             var objRef = FindObjectRecusiv(Argument.NotNull(obj, nameof(obj)));
 
-            var depObj = objRef?.DependencyObject;
-            objRef?.NewDataContext(FindDataContext(obj), _taskScheduler);
+            objRef?.NewDataContext(FindDataContext(obj), Scheduler);
         }
 
         internal static void Activate([NotNull] DependencyObject element)
@@ -234,7 +231,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
             return false;
         }
 
-        internal static void UnregisterHandler([CanBeNull] DependencyObject element, [NotNull] IPipeLine pipeLine)
+        internal static void UnregisterHandler(DependencyObject? element, [NotNull] IPipeLine pipeLine)
         {
             var objRef = FindObjectRecusiv(element);
 
@@ -245,17 +242,15 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
         {
             var objRef = FindObject(d);
 
-            objRef?.NewDataContext(e.NewValue, CommonApplication.Scheduler);
+            objRef?.NewDataContext(e.NewValue, Scheduler);
         }
 
-        [CanBeNull]
         [DebuggerStepThrough]
-        private static ObjectReference FindObject([CanBeNull] object obj) => Objects.FirstOrDefault(@ref => @ref.IsMatch(obj));
+        private static ObjectReference? FindObject(object? obj) => Objects.FirstOrDefault(@ref => @ref.IsMatch(obj));
 
-        [CanBeNull]
-        private static ObjectReference FindObjectRecusiv([CanBeNull] DependencyObject element)
+        private static ObjectReference? FindObjectRecusiv(DependencyObject? element)
         {
-            ObjectReference objRef;
+            ObjectReference? objRef;
 
             do
             {
@@ -273,8 +268,12 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
         {
             if (DesignerProperties.GetIsInDesignMode(d)) return;
 
-            var after = e.NewValue.SafeCast<bool>();
-            var before = e.OldValue.SafeCast<bool>();
+            var after = false;
+            var before = false;
+            if (e.NewValue is bool newValue)
+                after = newValue;
+            if (e.OldValue is bool oldValue)
+                before = oldValue;
             if (after && before) return;
 
             if (before) Deactivate(d);
@@ -282,7 +281,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
             if (!before && after) Activate(d);
         }
 
-        private static void RegisterCore([NotNull] ObjectReference reference, [NotNull] IPipeLine pipline) => reference.AddPipline(pipline, CommonApplication.Scheduler);
+        private static void RegisterCore([NotNull] ObjectReference reference, [NotNull] IPipeLine pipline) => reference.AddPipline(pipline, Scheduler);
 
         private static void RegisterForRequesting([NotNull] DependencyObject obj, [NotNull] IPipeLine pipline) => RequestingCollection.Add(new RequestingElement(obj, pipline));
 
@@ -294,9 +293,9 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
             var dataContext = FindDataContext(obj);
             if (dataContext == null) return;
 
-            CommonApplication.Scheduler.QueueTask(
+            Scheduler.QueueTask(
                 pipline.Generate(new WeakReference(dataContext),
-                    CommonApplication.Scheduler));
+                    Scheduler));
         }
     }
 }

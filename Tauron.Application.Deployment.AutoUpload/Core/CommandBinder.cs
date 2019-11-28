@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -15,15 +16,14 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
     [PublicAPI]
     public static class CommandBinder
     {
-        public static bool AutoRegister { get; set; }
+        public static bool AutoRegister { get; set; } = true;
         
         private class CommandLinker : PipelineBase
         {
             public CommandLinker([NotNull] DependencyObject element)
                 : base(element, false) { }
             
-            [CanBeNull]
-            public string CommandTarget { get; set; }
+            public string? CommandTarget { get; set; }
             
             private class CommandFactory
             {
@@ -92,7 +92,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                 private class MemberInfoHelper
                 {
                     public static readonly MethodInfo CanExecuteMethod =
-                        typeof(MemberInfoHelper).GetMethod("CanExecute", new[] {typeof(object), typeof(CanExecuteRoutedEventArgs)});
+                        Argument.CheckResult(typeof(MemberInfoHelper).GetMethod("CanExecute", new[] {typeof(object), typeof(CanExecuteRoutedEventArgs)}), "MemberInfoHelper.CanExecute");
 
                     private readonly MemberInfo _info;
                     private readonly object _target;
@@ -107,16 +107,14 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                     public void CanExecute([NotNull] object sender, [NotNull] CanExecuteRoutedEventArgs e) => e.CanExecute = _info.GetInvokeMember<bool>(_target);
                 }
                 
-                [CanBeNull]
-                public ICommand LastCommand { get; private set; }
+                public ICommand? LastCommand { get; private set; }
                 
                 [NotNull]
                 public string Name { private get; set; }
                 
-                [CanBeNull]
-                public WeakReference Target { private get; set; }
+                public WeakReference? Target { private get; set; }
                 
-                public static void Free([CanBeNull] ICommand command, [NotNull] DependencyObject targetObject)
+                public static void Free(ICommand? command, [NotNull] DependencyObject targetObject)
                 {
                     Argument.NotNull(targetObject, nameof(targetObject));
 
@@ -151,14 +149,14 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                     if (binding == null || !ok || pair == null) return;
 
 
-                    ExecutedRoutedEventHandler del = null;
+                    ExecutedRoutedEventHandler? del = null;
                     if (pair.Item1 != null)
                     {
                         del = Delegate.CreateDelegate(typeof(ExecutedRoutedEventHandler), target, pair.Item1, false)
-                                  .As<ExecutedRoutedEventHandler>() ?? new ParameterMapper(pair.Item1, target).Execute;
+                                  as ExecutedRoutedEventHandler ?? new ParameterMapper(pair.Item1, target).Execute;
                     }
 
-                    CanExecuteRoutedEventHandler del2 = null;
+                    CanExecuteRoutedEventHandler? del2 = null;
                     if (pair.Item2 != null)
                     {
                         var method = pair.Item2 as MethodInfo;
@@ -172,21 +170,19 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
 
                         del2 =
                             Delegate.CreateDelegate(typeof(CanExecuteRoutedEventHandler), localTarget, method, false)
-                                .As<CanExecuteRoutedEventHandler>() ?? new ParameterMapper(method, localTarget).CanExecute;
+                                as CanExecuteRoutedEventHandler ?? new ParameterMapper(method, localTarget).CanExecute;
                     }
 
                     if (del != null) binding.Executed += new TaskFactory(del, scheduler, _isSync).Handler;
-                    else CommonWpfConstans.LogCommon(false, "CommandBinder: No Compatible method Found: {0}", commandName);
+                    else Debug.Print($"CommandBinder: No Compatible method Found: {commandName}");
 
                     if (del2 != null)
                         binding.CanExecute += del2;
                 }
                 
-                [CanBeNull]
-                public ICommand GetCommand() => LastCommand;
+                public ICommand? GetCommand() => LastCommand;
 
-                [CanBeNull]
-                private static CommandBinding SetCommandBinding([CanBeNull] DependencyObject obj, [CanBeNull] ICommand command)
+                private static CommandBinding? SetCommandBinding(DependencyObject? obj, ICommand? command)
                 {
                     while (obj != null && !(obj is Window || obj is UserControl || GetCommandScope(obj)))
                     {
@@ -206,8 +202,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                     return binding;
                 }
 
-                [CanBeNull]
-                private Tuple<MethodInfo, MemberInfo> FindCommandPair([NotNull] IReflect targetType, out bool finded)
+                private Tuple<MethodInfo, MemberInfo?>? FindCommandPair([NotNull] IReflect targetType, out bool finded)
                 {
                     finded = false;
                     var methods =
@@ -218,7 +213,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                         select new {Method = method, IsSync = attr.Synchronize}).FirstOrDefault();
                     if (main == null)
                     {
-                        CommonWpfConstans.LogCommon(false, "CommandBinder: No Command-Method Found: {0}", Name);
+                        Debug.Print($"CommandBinder: No Command-Method Found: {Name}");
                         return null;
                     }
 
@@ -227,7 +222,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                     _isSync = main.IsSync;
 
                     var mainAttr = main.Method.GetCustomAttribute<CommandTargetAttribute>();
-                    MemberInfo second = null;
+                    MemberInfo? second = null;
                     foreach (var m in targetType.GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
                     {
                         var attr = m.GetCustomAttribute<CommandTargetAttribute>();
@@ -265,7 +260,6 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                     _changedFlags = PropertyFlags.All;
                 }
                 
-                [NotNull]
                 private WeakReference<DependencyObject> Target { get; }
                 
                 public void SetCommand()
@@ -281,14 +275,14 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                             if (dependencyObject != null)
                             {
                                 var tarType = dependencyObject.GetType();
-                                _prop = tarType.GetProperty(CustomName);
+                                _prop = tarType.GetProperty(CustomName ?? string.Empty);
                                 if (_prop != null
                                     && (!_prop.CanWrite || !typeof(ICommand).IsAssignableFrom(_prop.PropertyType)))
                                 {
                                     var typeName = tarType.ToString();
                                     var propName = _prop == null ? CustomName + "(Not Found)" : _prop.Name;
 
-                                    CommonWpfConstans.LogCommon(false, "CommandBinder: FoundetProperty Incompatible: {0}:{1}", typeName, propName);
+                                    Debug.Print("CommandBinder: FoundetProperty Incompatible: {0}:{1}", typeName, propName);
                                     _prop = null;
                                 }
                                 else
@@ -316,25 +310,27 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                 }
                 
                 private PropertyFlags _changedFlags;
-                private WeakReference<ICommand> _command;
-                private string _customName;
-                private PropertyInfo _prop;
+                private WeakReference<ICommand>? _command;
+                private string? _customName;
+                private PropertyInfo? _prop;
                 
-                [CanBeNull]
-                public ICommand Command
+                public ICommand? Command
                 {
-                    private get { return _command.TypedTarget(); }
+                    private get { return _command?.TypedTarget(); }
                     set
                     {
                         if (_command != null && _command.TypedTarget() == value) return;
-
-                        _command = new WeakReference<ICommand>(value);
-                        _changedFlags |= PropertyFlags.Command;
+                        if (value == null)
+                            _command = null;
+                        else
+                        {
+                            _command = new WeakReference<ICommand>(value);
+                            _changedFlags |= PropertyFlags.Command;
+                        }
                     }
                 }
                 
-                [NotNull]
-                public string CustomName
+                public string? CustomName
                 {
                     private get { return _customName; }
                     set
@@ -347,8 +343,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                 }
             }
             
-            private CommandFactory _factory;
-            private PropertySearcher _searcher;
+            private CommandFactory? _factory;
+            private PropertySearcher? _searcher;
             
             public void Bind()
             {
@@ -361,7 +357,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                 var commandTarget = CommandTarget;
                 if (dataContext == null || target == null || commandTarget == null)
                 {
-                    CommonWpfConstans.LogCommon(false, "CommandBinder: No Binding: {0}", commandTarget ?? string.Empty);
+                    Debug.Print($"CommandBinder: No Binding: {commandTarget ?? string.Empty}");
                     return;
                 }
 
@@ -370,7 +366,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                 var targetCommand = GetTargetCommand(target);
                 if (targetCommand == null)
                 {
-                    CommonWpfConstans.LogCommon(false, "CommandBinder: No ICommand: {0}", commandTarget);
+                    Debug.Print($"CommandBinder: No ICommand: {commandTarget}");
                     return;
                 }
 
@@ -434,8 +430,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
 
         private static bool _isIn;
         
-        [CanBeNull]
-        public static RoutedCommand Find([NotNull] string name)
+        public static RoutedCommand? Find(string name)
         {
             var val = Commands.Find(com => com.Name == name);
             if (val == null && AutoRegister) val = Register(name, name);

@@ -14,7 +14,13 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.Helper
             _task = new TaskCompletionSource<TResult>();
         }
         
-        public void Execute()
+        private readonly Func<TResult> _callback;
+
+        private readonly TaskCompletionSource<TResult> _task;
+
+        public void ExecuteAsync() => Task.Run(ExecuteSync);
+
+        public void ExecuteSync()
         {
             try
             {
@@ -25,11 +31,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.Helper
                 _task.SetException(e);
             }
         }
-        
-        private readonly Func<TResult> _callback;
 
-        private readonly TaskCompletionSource<TResult> _task;
-        
         public bool Synchronize { get; }
         
         public Task Task => _task.Task;
@@ -46,7 +48,13 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.Helper
             _task = new TaskCompletionSource<object>();
         }
         
-        public void Execute()
+        private readonly Action _callback;
+
+        private readonly TaskCompletionSource<object> _task;
+
+        public void ExecuteAsync() => Task.Run(ExecuteSync);
+
+        public void ExecuteSync()
         {
             try
             {
@@ -59,11 +67,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.Helper
                 _task.SetException(e);
             }
         }
-        
-        private readonly Action _callback;
 
-        private readonly TaskCompletionSource<object> _task;
-        
         public bool Synchronize { get; }
         
         public Task Task => _task.Task;

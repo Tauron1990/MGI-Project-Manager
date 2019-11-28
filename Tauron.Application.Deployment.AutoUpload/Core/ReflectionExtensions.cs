@@ -324,8 +324,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
             return attributeTypes.SelectMany(attributeType => provider.GetCustomAttributes(attributeType, false));
         }
 
-        public static TType? GetInvokeMember<TType>(this MemberInfo info, object instance, params object[]? parameter)
-            where TType : Delegate
+        public static TType GetInvokeMember<TType>(this MemberInfo info, object instance, params object[]? parameter)
         {
             if (info == null) throw new ArgumentNullException(nameof(info));
 
@@ -348,7 +347,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                     return GetCreator(constructorInfo)(parameter) is TType ? (TType) GetCreator(constructorInfo)(parameter) : default;
             }
 
-            return default;
+            return default!;
         }
 
         public static RuntimeMethodHandle GetMethodHandle(this MethodBase method)
