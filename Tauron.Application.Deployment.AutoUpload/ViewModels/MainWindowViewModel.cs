@@ -2,6 +2,8 @@
 using Catel.MVVM;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
+using Tauron.Application.Deployment.AutoUpload.Models.Build;
+using Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels
@@ -52,7 +54,10 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels
                 ModelOnCancelOperation();
         }
 
-        private void ModelOnCancelOperation() 
-            => ChangeView(_serviceProvider.GetRequiredService<CommandViewModel>());
+        private void ModelOnCancelOperation()
+        {
+            ModelOnNextView(typeof(BuildVersionIncrementViewModel), new BuildOperationContext(new BuildContext()));
+            //ChangeView(_serviceProvider.GetRequiredService<CommandViewModel>());
+        }
     }
 }

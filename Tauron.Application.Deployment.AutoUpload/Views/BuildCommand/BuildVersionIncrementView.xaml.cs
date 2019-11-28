@@ -25,6 +25,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Views.BuildCommand
             : base(model)
         {
             InitializeComponent();
+            Background = Brushes.Transparent;
         }
     }
 }
