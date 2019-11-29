@@ -69,7 +69,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
 
                 private readonly TaskCompletionSource<object> _task;
 
-                public void ExecuteAsync() => _info?.InvokeFast(_dataContext);
+                public async Task ExecuteAsync() => await (_info?.InvokeFast<Task>(_dataContext) ?? Task.CompletedTask);
 
                 public void ExecuteSync() => _info?.InvokeFast(_dataContext);
 

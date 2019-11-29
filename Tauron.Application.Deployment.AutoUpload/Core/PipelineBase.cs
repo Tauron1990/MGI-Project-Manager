@@ -56,7 +56,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
 
         public ITaskScheduler? TaskScheduler { get; set; }
 
-        public void ExecuteAsync() => Task.Run(DataContextChanged);
+        public Task ExecuteAsync() => Task.Run(DataContextChanged);
 
         public void ExecuteSync() => DataContextChanged();
 

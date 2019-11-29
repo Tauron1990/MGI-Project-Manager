@@ -432,7 +432,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
             return attributes.Length != 0 && attributes.Any(attribute => attribute.Match(attributeToMatch));
         }
 
-        public static TType InvokeFast<TType>(this MethodBase method, [CanBeNull] object instance, params object[] args)
+        public static TType InvokeFast<TType>(this MethodBase method, object? instance, params object?[] args)
         {
             if (method == null) throw new ArgumentNullException(nameof(method));
             switch (method)
@@ -446,7 +446,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
             }
         }
 
-        public static void InvokeFast(this MethodInfo method, object? instance, params object[] args)
+        public static void InvokeFast(this MethodInfo method, object? instance, params object?[] args)
         {
             Argument.NotNull(method, nameof(method));
 

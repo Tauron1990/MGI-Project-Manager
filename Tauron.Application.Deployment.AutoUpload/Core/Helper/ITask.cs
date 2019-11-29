@@ -5,7 +5,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.Helper
 {
     public interface ITask
     {
-        void ExecuteAsync();
+        Task ExecuteAsync();
 
         void ExecuteSync();
 

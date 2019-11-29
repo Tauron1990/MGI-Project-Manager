@@ -39,5 +39,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels
 
         private async Task OnBuildCommandExecute()
             => await OnNextView<BuildSelectProjectViewModel, BuildOperationContext>(new BuildOperationContext(DependencyResolver.Resolve<BuildContext>()));
+
+        
     }
 }

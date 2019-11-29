@@ -62,11 +62,13 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                         e.CanExecute = _isAsync ? _method.InvokeFast<Task<bool>>(_firstArg, args).Result : _method.InvokeFast<bool>(_firstArg, args);
                     }
 
-                    public void Execute([NotNull] object sender, [NotNull] ExecutedRoutedEventArgs e)
+                    public async Task Execute([NotNull] object sender, [NotNull] ExecutedRoutedEventArgs e)
                     {
                         Argument.NotNull(sender, nameof(sender));
                         Argument.NotNull(e, nameof(e));
 
+                        if(_isAsync)
+                            await _method.InvokeFast<Task>(_firstArg, _isParameter ? new[] { e.Parameter } : new object[0]);
                         _method.InvokeFast(_firstArg, _isParameter ? new[] { e.Parameter } : new object[0]);
                     }
 
@@ -74,7 +76,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
 
                 private class TaskFactory
                 {
-                    public TaskFactory([NotNull] Delegate del, [NotNull] ITaskScheduler scheduler, bool sync)
+                    public TaskFactory([NotNull] Func<object, ExecutedRoutedEventArgs, Task> del, [NotNull] ITaskScheduler scheduler, bool sync)
                     {
                         _del = Argument.NotNull(del, nameof(del));
                         _scheduler = Argument.NotNull(scheduler, nameof(scheduler));
@@ -83,7 +85,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                     
                     public void Handler([NotNull] object parm1, [NotNull] object parm2) => _scheduler.QueueTask(new UserTask(() => _del.DynamicInvoke(parm1, parm2), _sync));
 
-                    private readonly Delegate _del;
+                    private readonly Func<object, ExecutedRoutedEventArgs, Task> _del;
                     private readonly ITaskScheduler _scheduler;
                     private readonly bool _sync;
                     
@@ -149,11 +151,11 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                     if (binding == null || !ok || pair == null) return;
 
 
-                    ExecutedRoutedEventHandler? del = null;
+                    Func<object, ExecutedRoutedEventArgs, Task>? del = null;
                     if (pair.Item1 != null)
                     {
-                        del = Delegate.CreateDelegate(typeof(ExecutedRoutedEventHandler), target, pair.Item1, false)
-                                  as ExecutedRoutedEventHandler ?? new ParameterMapper(pair.Item1, target).Execute;
+                        del = Delegate.CreateDelegate(typeof(Func<object, ExecutedRoutedEventArgs, Task>), target, pair.Item1, false)
+                                  as Func<object, ExecutedRoutedEventArgs, Task> ?? new ParameterMapper(pair.Item1, target).Execute;
                     }
 
                     CanExecuteRoutedEventHandler? del2 = null;

@@ -23,13 +23,11 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.Helper
         public Task QueueTask(ITask task)
         {
             if (task.Synchronize && _synchronizationContext != null)
-            {
                 return _synchronizationContext.InvokeAsync(task.ExecuteSync);
-            }
 
 
             task.ExecuteAsync();
-            return task.Task;
+            return Task.Run(async () => await Task.WhenAll(task.ExecuteAsync(), task.Task));
         }
 
     }

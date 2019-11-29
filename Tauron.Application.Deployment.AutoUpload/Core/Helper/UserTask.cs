@@ -18,7 +18,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.Helper
 
         private readonly TaskCompletionSource<TResult> _task;
 
-        public void ExecuteAsync() => Task.Run(ExecuteSync);
+        public Task ExecuteAsync() => Task.Run(ExecuteSync);
 
         public void ExecuteSync()
         {
@@ -47,19 +47,41 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.Helper
             Synchronize = sync;
             _task = new TaskCompletionSource<object>();
         }
-        
-        private readonly Action _callback;
+
+        public UserTask(Func<Task> asyncCallback, bool sync)
+        {
+            _asyncCallback = asyncCallback;
+            Synchronize = sync;
+            _task = new TaskCompletionSource<object>();
+        }
+
+        private readonly Action? _callback;
+        private readonly Func<Task>? _asyncCallback;
 
         private readonly TaskCompletionSource<object> _task;
 
-        public void ExecuteAsync() => Task.Run(ExecuteSync);
+        public async Task ExecuteAsync()
+        {
+
+            try
+            {
+                if (_callback != null)
+                    await Task.Run(ExecuteSync);
+                if (_asyncCallback != null)
+                    await _asyncCallback();
+            }
+            catch (Exception e)
+            {
+                _task.SetException(e);
+            }
+        }
 
         public void ExecuteSync()
         {
             try
             {
-
-                _callback();
+                _callback?.Invoke();
+                _asyncCallback?.Invoke().Wait();
                 _task.SetResult(null!);
             }
             catch (Exception e)
