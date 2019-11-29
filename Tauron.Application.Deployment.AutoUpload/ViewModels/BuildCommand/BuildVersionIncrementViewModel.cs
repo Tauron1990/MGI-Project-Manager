@@ -11,9 +11,13 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
     [ServiceDescriptor(typeof(BuildVersionIncrementViewModel))]
     public class BuildVersionIncrementViewModel : OperationViewModel<BuildOperationContext>
     {
-        public string FileVersion { get; set; }
+        public string? FileVersion { get; set; }
 
-        public string AssemblyVersion { get; set; }
+        public string? AssemblyVersion { get; set; }
+
+        public string? OldFileVersion { get; private set; }
+
+        public string? OldAssemblyVersion { get; private set; }
 
         public BuildVersionIncrementViewModel()
         {

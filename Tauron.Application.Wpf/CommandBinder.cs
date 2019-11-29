@@ -18,18 +18,15 @@ namespace Tauron.Application.Wpf
     {
         public static bool AutoRegister { get; set; } = true;
         
-        private class CommandLinker : PipelineBase
+        private class CommandLinker : ControlBindableBase
         {
-            public CommandLinker([NotNull] DependencyObject element)
-                : base(element, false) { }
-            
             public string? CommandTarget { get; set; }
             
             private class CommandFactory
             {
                 private bool _isSync;
                 
-                public CommandFactory([NotNull] WeakReference target, [NotNull] string name)
+                public CommandFactory([NotNull] object target, [NotNull] string name)
                 {
                     Target = Argument.NotNull(target, nameof(target));
                     Name = Argument.NotNull(name, nameof(name));
@@ -87,7 +84,6 @@ namespace Tauron.Application.Wpf
                     public void Handler([NotNull] object parm1, [NotNull] object parm2) => _scheduler.QueueTask(new UserTask(() => _del.DynamicInvoke(parm1, parm2), _sync));
 
                     private readonly Func<object, ExecutedRoutedEventArgs, Task> _del;
-                    private readonly ITaskScheduler _scheduler;
                     private readonly bool _sync;
                     
                 }
@@ -115,7 +111,7 @@ namespace Tauron.Application.Wpf
                 [NotNull]
                 public string Name { private get; set; }
                 
-                public WeakReference? Target { private get; set; }
+                public object Target { private get; set; }
                 
                 public static void Free(ICommand? command, [NotNull] DependencyObject targetObject)
                 {
@@ -133,11 +129,9 @@ namespace Tauron.Application.Wpf
                     }
                 }
                 
-                public void Connect([NotNull] ICommand command, [NotNull] DependencyObject targetObject, [NotNull] ITaskScheduler scheduler, [NotNull] string commandName)
+                public void Connect([NotNull] ICommand command, [NotNull] DependencyObject targetObject, [NotNull] string commandName)
                 {
-                    Argument.NotNull(scheduler, nameof(scheduler));
-
-                    var target = Target?.Target;
+                    var target = Target;
                     if (target == null) return;
 
                     var targetType = target.GetType();
@@ -253,7 +247,7 @@ namespace Tauron.Application.Wpf
             
             private class PropertySearcher
             {
-                public PropertySearcher([NotNull] WeakReference<DependencyObject> target, [NotNull] string customName,
+                public PropertySearcher(DependencyObject target, [NotNull] string customName,
                     [NotNull] ICommand command)
                 {
                     Target = Argument.NotNull(target, nameof(target));
@@ -263,7 +257,7 @@ namespace Tauron.Application.Wpf
                     _changedFlags = PropertyFlags.All;
                 }
                 
-                private WeakReference<DependencyObject> Target { get; }
+                private DependencyObject Target { get; }
                 
                 public void SetCommand()
                 {
@@ -274,7 +268,7 @@ namespace Tauron.Application.Wpf
 
                         if (customNameChanged)
                         {
-                            var dependencyObject = Target.TypedTarget();
+                            var dependencyObject = Target;
                             if (dependencyObject != null)
                             {
                                 var tarType = dependencyObject.GetType();
@@ -348,19 +342,17 @@ namespace Tauron.Application.Wpf
             
             private CommandFactory? _factory;
             private PropertySearcher? _searcher;
-            
-            public void Bind()
+
+            protected override void CleanUp() 
+                => Free();
+
+            protected override void Bind(object dataContext)
             {
-                Free();
-
-                if (DataContext == null) return;
-
-                var dataContext = DataContext.Target;
-                var target = Target;
+                var target = AffectedObject;
                 var commandTarget = CommandTarget;
-                if (dataContext == null || target == null || commandTarget == null)
+                if (commandTarget == null)
                 {
-                    Debug.Print($"CommandBinder: No Binding: {commandTarget ?? string.Empty}");
+                    Debug.Print($"CommandBinder: No Binding: CommandTarget");
                     return;
                 }
 
@@ -374,17 +366,17 @@ namespace Tauron.Application.Wpf
                 }
 
                 if (_factory == null)
-                    _factory = new CommandFactory(DataContext, commandTarget);
+                    _factory = new CommandFactory(dataContext, commandTarget);
                 else
                 {
                     _factory.Name = commandTarget;
-                    _factory.Target = DataContext;
+                    _factory.Target = dataContext;
                 }
 
                 if (!useDirect) _factory.Connect(targetCommand, target, Argument.CheckResult(TaskScheduler, "TaskScheduler not set"), commandTarget);
 
                 if (_searcher == null)
-                    _searcher = new PropertySearcher(Source ?? throw new InvalidOperationException(), customProperty, targetCommand);
+                    _searcher = new PropertySearcher(AffectedObject, customProperty, targetCommand);
                 else
                 {
                     _searcher.CustomName = customProperty;
@@ -396,20 +388,13 @@ namespace Tauron.Application.Wpf
             
             public void ResetCommand([NotNull] ICommand command)
             {
-                var target = Target;
-                if (target == null) return;
+                var target = AffectedObject;
 
                 SetTargetCommand(target, command);
             }
             
-            protected override void DataContextChanged() => Bind();
-
-            private void Free()
-            {
-                if (_factory != null && Target != null)
-                    CommandFactory.Free(_factory.LastCommand, Target);
-            }
-            
+            private void Free() 
+                => CommandFactory.Free(_factory?.LastCommand, AffectedObject);
         }
 
         public static readonly DependencyProperty CommandProperty = 
@@ -428,8 +413,6 @@ namespace Tauron.Application.Wpf
             "UseDirect", typeof(bool), typeof(CommandBinder), new UIPropertyMetadata(false, OnCommandStadeChanged));
 
         private static readonly List<RoutedCommand> Commands = new List<RoutedCommand>();
-
-        private static readonly WeakReferenceCollection<CommandLinker> LinkerCollection = new WeakReferenceCollection<CommandLinker>();
 
         private static bool _isIn;
         
@@ -459,14 +442,6 @@ namespace Tauron.Application.Wpf
             if (Commands.Any(com => com.Name == command.Name)) return;
 
             Commands.Add(command);
-
-            foreach (var linker in LinkerCollection)
-            {
-                if (linker.CommandTarget != command.Name) return;
-
-                linker.ResetCommand(command);
-                linker.Bind();
-            }
         }
         
         [NotNull]
@@ -490,7 +465,6 @@ namespace Tauron.Application.Wpf
         private static void OnCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (DesignerProperties.GetIsInDesignMode(d)) return;
-            DataContextServices.TryActivate(d);
 
             _isIn = true;
             var real = e.NewValue as string;
@@ -524,7 +498,6 @@ namespace Tauron.Application.Wpf
         private static void OnCommandStadeChanged([NotNull] DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (_isIn) return;
-            DataContextServices.TryActivate(d);
 
             foreach (var linker in LinkerCollection.Where(linker => Equals(linker.Target, d)))
             {
