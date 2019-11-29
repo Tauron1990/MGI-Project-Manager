@@ -4,8 +4,9 @@ using Catel.IoC;
 using Microsoft.Extensions.DependencyInjection;
 using Octokit;
 using Syncfusion.SfSkinManager;
-using Tauron.Application.Deployment.AutoUpload.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
+using Tauron.Application.Wpf;
+using InternalSplashScreen = Tauron.Application.Deployment.AutoUpload.Core.InternalSplashScreen;
 
 namespace Tauron.Application.Deployment.AutoUpload
 {

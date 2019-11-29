@@ -56,8 +56,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels
 
         private void ModelOnCancelOperation()
         {
-            ModelOnNextView(typeof(BuildVersionIncrementViewModel), new BuildOperationContext(new BuildContext()));
-            //ChangeView(_serviceProvider.GetRequiredService<CommandViewModel>());
+            //ModelOnNextView(typeof(BuildVersionIncrementViewModel), new BuildOperationContext(new BuildContext()));
+            ChangeView(_serviceProvider.GetRequiredService<CommandViewModel>());
         }
     }
 }

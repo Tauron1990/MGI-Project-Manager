@@ -3,6 +3,7 @@ using Catel.Windows;
 using Syncfusion.SfSkinManager;
 using Tauron.Application.Deployment.AutoUpload.Core;
 using Tauron.Application.Deployment.AutoUpload.ViewModels;
+using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload
 {

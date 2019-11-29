@@ -1,6 +1,7 @@
 ﻿using System.Windows.Media;
 using Tauron.Application.Deployment.AutoUpload.Core;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand;
+using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.Views.BuildCommand
 {

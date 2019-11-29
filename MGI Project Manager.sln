@@ -39,7 +39,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CC88EC76-1DB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5515CF2E-3206-4EE9-9024-070B13F4A65A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsoleApp", "TestConsoleApp\TestConsoleApp.csproj", "{1FF8851F-DB9B-40ED-856B-44A664486E29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestConsoleApp", "TestConsoleApp\TestConsoleApp.csproj", "{1FF8851F-DB9B-40ED-856B-44A664486E29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.Wpf", "Tauron.Application.Wpf\Tauron.Application.Wpf.csproj", "{A2FBE9D9-9E29-4488-9280-77ABC76B419C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{1FF8851F-DB9B-40ED-856B-44A664486E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FF8851F-DB9B-40ED-856B-44A664486E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FF8851F-DB9B-40ED-856B-44A664486E29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2FBE9D9-9E29-4488-9280-77ABC76B419C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2FBE9D9-9E29-4488-9280-77ABC76B419C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2FBE9D9-9E29-4488-9280-77ABC76B419C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2FBE9D9-9E29-4488-9280-77ABC76B419C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +74,7 @@ Global
 		{8BFFF8AC-9391-4D65-87E9-D873F559A05D} = {D77A5F03-F25C-459F-97B0-B5F71A26A5FF}
 		{97DB54DA-B117-4297-BD4F-7C4EB86ED2D4} = {CC88EC76-1DB4-41C8-9F2C-8C5C1AEED0BC}
 		{1FF8851F-DB9B-40ED-856B-44A664486E29} = {5515CF2E-3206-4EE9-9024-070B13F4A65A}
+		{A2FBE9D9-9E29-4488-9280-77ABC76B419C} = {97DB54DA-B117-4297-BD4F-7C4EB86ED2D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}

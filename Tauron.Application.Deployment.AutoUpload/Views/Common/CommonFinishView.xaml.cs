@@ -12,6 +12,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Tauron.Application.Deployment.AutoUpload.Core;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Common;
+using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.Views.Common
 {

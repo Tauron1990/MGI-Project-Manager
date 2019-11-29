@@ -4,9 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tauron.Application.Deployment.AutoUpload.ViewModels"
-        xmlns:view="clr-namespace:Tauron.Application.Deployment.AutoUpload.Core.UI"
         xmlns:catel="clr-namespace:Catel.Windows;assembly=Catel.MVVM"
-        xmlns:sync="http://schemas.syncfusion.com/wpf"
+        xmlns:ui="clr-namespace:Tauron.Application.Wpf.UI;assembly=Tauron.Application.Wpf"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
         Title="{Binding Title}" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Window.Resources>
@@ -14,5 +13,5 @@
             <Setter Property="Foreground" Value="White"/>
         </Style>
     </Window.Resources>
-    <ContentControl Content="{view:ViewModelBinding CurrentView}"/>
+    <ContentControl Content="{ui:ViewModelBinding CurrentView}"/>
 </catel:DataWindow>
