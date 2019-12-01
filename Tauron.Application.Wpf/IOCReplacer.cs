@@ -270,7 +270,7 @@ namespace Tauron.Application.Wpf
             config(locator.Collection);
 
             IoCFactory.CreateServiceLocatorFunc = () => Locator.Value;
-            IoCFactory.CreateTypeFactoryFunc = serviceLocator => TypeFactory.Value;
+            IoCFactory.CreateTypeFactoryFunc = _ => TypeFactory.Value;
 
             var serviceLocator = IoCFactory.CreateServiceLocatorFunc();
 

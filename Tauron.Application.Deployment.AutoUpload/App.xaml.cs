@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Input;
 using Catel.IoC;
 using Microsoft.Extensions.DependencyInjection;
 using Octokit;
@@ -47,6 +48,7 @@ namespace Tauron.Application.Deployment.AutoUpload
                                                 });
 
 
+            CommandBinder.Register(new RoutedUICommand("Weiter", "NextCommand", typeof(App), new InputGestureCollection { new KeyGesture(Key.Enter, ModifierKeys.Control) }));
             MainWindow = ServiceProvider.GetRequiredService<MainWindow>();
 
             MainWindow?.Show();

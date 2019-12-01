@@ -9,6 +9,7 @@ using Octokit;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
+using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 {
@@ -31,16 +32,14 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
         {
             _messageService = messageService;
             _manager = manager;
-            NextCommand = new TaskCommand(OnNextCommandExecute, OnNextCommandCanExecute);
             IsLoading = true;
         }
 
-        public TaskCommand NextCommand { get; }
+        [CommandTarget]
+        private bool CanOnNext() => IsReady && SelectedBrnach != null;
 
-        private bool OnNextCommandCanExecute() 
-            => IsReady && SelectedBrnach != null;
-
-        private async Task OnNextCommandExecute()
+        [CommandTarget]
+        private async Task OnNext()
         {
             if(SelectedBrnach == null) return;
 

@@ -14,13 +14,13 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
     {
         private const string DotNetLocation = @"C:\Program Files\dotnet\dotnet.exe";
 
-        public event Action<string> Output;
+        public event Action<string>? Output;
 
-        public event Action Error;
+        public event Action? Error;
 
         public static bool CanBuild => File.Exists(DotNetLocation);
 
-        public async Task<int> TryBuild(RegistratedRepository? repository, string output)
+        public Task<int> TryBuild(RegistratedRepository? repository, string output)
         {
             var arguments = new StringBuilder()
                .Append(DotNetLocation)
@@ -50,7 +50,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
             if (!process.WaitForExit(30000)) 
                 process.Kill(true);
 
-            return process.ExitCode;
+            return Task.FromResult(process.ExitCode);
         }
 
         private void ProcessOnOutputDataReceived(object sender, DataReceivedEventArgs e) 

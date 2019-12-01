@@ -5,33 +5,35 @@ using Tauron.Application.Wpf.Helper;
 
 namespace Tauron.Application.Wpf
 {
-    public class UserControl : Catel.Windows.Controls.UserControl, IBinderControllable
+    public class Window : Catel.Windows.DataWindow, IBinderControllable
     {
         private readonly IViewModel _viewModel;
         private readonly ControlLogic _controlLogic;
 
-        protected UserControl(IViewModel viewModel)
+        protected Window(IViewModel viewModel)
             : base(viewModel)
         {
             _viewModel = viewModel;
+            SizeToContent = SizeToContent.Manual;
+            ShowInTaskbar = true;
+            ResizeMode = ResizeMode.CanResize;
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
             _controlLogic = new ControlLogic(this, viewModel);
             DataContextChanged += (sender, args) =>
                                   {
                                       if (args.NewValue != _viewModel)
-                                          ((FrameworkElement) sender).DataContext = _viewModel;
+                                          ((FrameworkElement)sender).DataContext = _viewModel;
                                   };
         }
 
-        protected override void OnUnloaded(EventArgs e) 
+        protected override void OnUnloaded(EventArgs e)
             => _controlLogic.CleanUp();
 
         void IBinderControllable.Register(string key, IControlBindable bindable, DependencyObject affectedPart)
-        {
-            _controlLogic.Register(key, bindable, affectedPart);
-            System.Windows.Input.CommandManager.InvalidateRequerySuggested();
-        }
+            => _controlLogic.Register(key, bindable, affectedPart);
 
-        public void CleanUp(string key) 
+        public void CleanUp(string key)
             => _controlLogic.CleanUp(key);
     }
 }

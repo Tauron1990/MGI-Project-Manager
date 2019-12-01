@@ -10,6 +10,7 @@ using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
+using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 {
@@ -44,16 +45,14 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
             _repositoryManager = repositoryManager;
             _messageService = messageService;
             Settings = settings;
-            NextCommand = new TaskCommand(OnNextCommandExecute, OnNextCommandCanExecute);
         }
 
 
+        [CommandTarget]
+        private bool CanOnNext() => !HasErrors;
 
-        public TaskCommand NextCommand { get; }
-
-        private bool OnNextCommandCanExecute() => !HasErrors;
-
-        private async Task OnNextCommandExecute()
+        [CommandTarget]
+        private async Task OnNext()
         {
             try
             {
