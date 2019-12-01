@@ -19,8 +19,8 @@
         </Grid.ColumnDefinitions>
         <TextBlock Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" x:Name="TitleBox"/>
         <ContentControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="5" x:Name="ContentControl"/>
-        <Button Grid.Row="2" Content="Abbrechen" Grid.Column="1" Margin="5" MinWidth="70" Command="{Binding CancelCommand}"/>
-        <Button Grid.Row="2" Content="Weiter" Grid.Column="2" Margin="5" MinWidth="70" tau:CommandBinder.Command="NextCommand:OnNext"/>
+        <Button Grid.Row="2" Content="Abbrechen" Grid.Column="1" Margin="5" MinWidth="80" Command="{Binding CancelCommand}"/>
+        <Button Grid.Row="2" Content="Weiter" Grid.Column="2" Margin="5" MinWidth="80" tau:CommandBinder.Command="NextCommand:OnNext"/>
         <ContentControl Grid.Row="2" Grid.Column="0" x:Name="StatusControl"/>
     </Grid>
 </UserControl>

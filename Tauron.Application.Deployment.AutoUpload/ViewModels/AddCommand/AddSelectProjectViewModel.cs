@@ -13,6 +13,7 @@ using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Common;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
+using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 {
@@ -29,7 +30,6 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 
         public AddSelectProjectViewModel(Settings settings, IMessageService messageService)
         {
-            NextCommand = new TaskCommand(OnNextCommandExecute, OnNextCommandCanExecute);
             _settings = settings;
             _messageService = messageService;
         }
@@ -41,13 +41,13 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
                                 .Select(s => new ProjectUI(s)));
             await base.InitializeAsync();
         }
-
-        public TaskCommand NextCommand { get; }
-
-        private bool OnNextCommandCanExecute() 
+        
+        [CommandTarget]
+        private bool CanOnNext() 
             => SelectedProject != null;
 
-        private async Task OnNextCommandExecute()
+        [CommandTarget]
+        private async Task OnNext()
         {
             try
             {
