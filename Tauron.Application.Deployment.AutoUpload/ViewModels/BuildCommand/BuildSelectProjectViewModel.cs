@@ -5,6 +5,7 @@ using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
+using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 {
@@ -39,5 +40,15 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
         private async Task NewProjectAction() 
             => await OnNextView<AddNameSelectorViewModel, AddCommandContext>(new AddCommandContext(), CreateRedirection<BuildVersionIncrementViewModel>());
+
+        [CommandTarget]
+        public bool CanOnNext() => Projekt != null;
+
+        [CommandTarget]
+        public async Task OnNext()
+        {
+            if(Projekt != null)
+                await Projekt.Action();
+        }
     }
 }
