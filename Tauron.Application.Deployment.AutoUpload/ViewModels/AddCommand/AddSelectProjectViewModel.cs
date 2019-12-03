@@ -23,10 +23,12 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
         private readonly Settings _settings;
         private readonly IMessageService _messageService;
 
-        [NoWeaving]
-        public FastObservableCollection<ProjectUI> Projects { get; } = new FastObservableCollection<ProjectUI>();
+        //[NoWeaving]
+        //public FastObservableCollection<ProjectUI> Projects { get; } = new FastObservableCollection<ProjectUI>();
 
-        public ProjectUI? SelectedProject { get; set; }
+        //public ProjectUI? SelectedProject { get; set; }
+
+        public ICommonSelectorViewModel ProjectSelector { get; } = CommonSelectorViewModel.Create();
 
         public AddSelectProjectViewModel(Settings settings, IMessageService messageService)
         {
@@ -36,18 +38,15 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 
         protected override async Task InitializeAsync()
         {
-            Projects.AddItems(Directory.EnumerateFiles(Context.RealPath, "*.csproj", new EnumerationOptions {IgnoreInaccessible = true, RecurseSubdirectories = true})
-                                .Where(f => _settings.RegistratedRepositories.All(rr => rr.ProjectName != f))
-                                .Select(s => new ProjectUI(s)));
+            var projects = Directory.EnumerateFiles(Context.RealPath, "*.csproj", new EnumerationOptions {IgnoreInaccessible = true, RecurseSubdirectories = true})
+                .Where(f => _settings.RegistratedRepositories.All(rr => rr.ProjectName != f))
+                .Select(s => new ProjectUI(s));
+
+            ProjectSelector.Init(projects.Select(ui => new SelectorItem<ProjectUI>(ui)), false, );
             await base.InitializeAsync();
         }
-        
-        [CommandTarget]
-        private bool CanOnNext() 
-            => SelectedProject != null;
 
-        [CommandTarget]
-        private async Task OnNext()
+        private async Task OnNext(SelectorItemBase selectorItemBase)
         {
             try
             {
@@ -62,6 +61,16 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
                 await _messageService.ShowErrorAsync(e);
                 OnCancelOperation();
             }
+        }
+
+        [CommandTarget]
+        private bool CanOnNext() 
+            => SelectedProject != null;
+
+        [CommandTarget]
+        private async Task OnNext()
+        {
+
         }
 
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
