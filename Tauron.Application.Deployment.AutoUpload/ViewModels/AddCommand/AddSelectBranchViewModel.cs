@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
-using Catel.Collections;
-using Catel.Fody;
-using Catel.MVVM;
 using Catel.Services;
 using Octokit;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
+using Tauron.Application.Deployment.AutoUpload.ViewModels.Common;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 using Tauron.Application.Wpf;
 
@@ -16,6 +14,17 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
     [ServiceDescriptor(typeof(AddSelectBranchViewModel))]
     public sealed class AddSelectBranchViewModel : OperationViewModel<AddCommandContext>
     {
+        private class BranchElement : INameable
+        {
+            public Branch Branch { get; }
+            public string Name => Branch.Name;
+
+            public BranchElement(Branch branch)
+            {
+                Branch = branch;
+            }
+        }
+
         private readonly IMessageService _messageService;
         private readonly RepositoryManager _manager;
 
@@ -23,29 +32,36 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 
         public bool IsLoading { get; set; }
 
-        [NoWeaving]
-        public FastObservableCollection<Branch> Branches { get; } = new FastObservableCollection<Branch>();
+        public ICommonSelectorViewModel BranchSelector { get; set; }
 
-        public Branch? SelectedBrnach { get; set; }
+        //[NoWeaving]
+        //public FastObservableCollection<Branch> Branches { get; } = new FastObservableCollection<Branch>();
+
+        //public Branch? SelectedBrnach { get; set; }
 
         public AddSelectBranchViewModel(IMessageService messageService, RepositoryManager manager)
         {
             _messageService = messageService;
             _manager = manager;
             IsLoading = true;
+
+            BranchSelector = CommonSelectorViewModel.Create();
         }
 
-        [CommandTarget]
-        private bool CanOnNext() => IsReady && SelectedBrnach != null;
-
-        [CommandTarget]
-        private async Task OnNext()
+        private async Task OnNextImpl(SelectorItemBase item)
         {
-            if(SelectedBrnach == null) return;
+            if (!(item is SelectorItem<BranchElement> selectedBrnach)) return;
 
-            Context.Branch = SelectedBrnach;
+            Context.Branch = selectedBrnach.Target.Branch;
             await OnNextView<AddSyncRepositoryViewModel>();
         }
+
+        [CommandTarget]
+        private bool CanOnNext() => IsReady && BranchSelector.CanRun();
+
+        [CommandTarget]
+        private async Task OnNext() 
+            => await BranchSelector.Run();
 
         protected override Task InitializeAsync()
         {
@@ -57,7 +73,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
         {
             try
             {
-                Branches.AddItems(await _manager.GetBranchs(Context.Repository));
+                BranchSelector.Init((await _manager.GetBranchs(Context.Repository)).Select(e => new SelectorItem<BranchElement>(new BranchElement(e)))
+                , false, OnNextImpl);
             }
             catch (Exception e)
             {

@@ -25,13 +25,7 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <TextBlock Text="Name:" Grid.Row="0" Grid.Column="0" Margin="5"/>
-            <ListBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="5" IsEnabled="{Binding IsReady}" ItemsSource="{Binding Branches}" SelectedItem="{Binding SelectedBrnach}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type octokit:Branch}">
-                        <TextBlock Text="{Binding Name}" FontSize="20"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <ContentControl Grid.Row="0" Grid.Column="1" Margin="5" IsEnabled="{Binding IsReady}" Content="{Binding BranchSelector}" />
         </Grid>
         <com:PageTemplate.Status>
             <StackPanel Orientation="Horizontal" Visibility="{Binding IsLoading, Converter={StaticResource VisibilityConverter}}">
