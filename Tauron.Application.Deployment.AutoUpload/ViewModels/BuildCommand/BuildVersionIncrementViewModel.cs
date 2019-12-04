@@ -45,10 +45,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         }
 
         [CommandTarget]
-        private Task OnNext()
-        {
-            throw new System.NotImplementedException();
-        }
+        private async Task OnNext() 
+            => await OnNextView<BuildBuildViewModel>();
 
         [CommandTarget]
         private bool CanOnNext() => !HasErrors;
@@ -76,22 +74,29 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         [CommandTarget]
         public Task IncreaseAsm()
         {
-
-        }
-
-        [CommandTarget]
-        public Task IncreaseAll()
-        {
-            _internalFile = Increase(_internalFile);
-            FileVersion = _internalFile.ToString();
-
             _internalAssembly = Increase(_internalAssembly);
             AssemblyVersion = _internalAssembly.ToString();
 
             return Task.CompletedTask;
         }
 
-        private Version Increase(Version current)
+        [CommandTarget]
+        public Task IncreaseFile()
+        {
+            _internalFile = Increase(_internalFile);
+            FileVersion = _internalFile.ToString();
+
+            return Task.CompletedTask;
+        }
+
+        [CommandTarget]
+        public async Task IncreaseAll()
+        {
+            await IncreaseFile();
+            await IncreaseAsm();
+        }
+
+        private static Version Increase(Version current)
         {
             current = new Version(current.Major, current.Minor + 1, current.Build, current.Revision);
 

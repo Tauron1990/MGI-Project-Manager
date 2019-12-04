@@ -63,6 +63,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
             catch (Exception e)
             {
                 await _messageService.ShowErrorAsync(e);
+                await OnReturn();
             }
             finally
             {
