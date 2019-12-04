@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Catel.Collections;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand;
+using Tauron.Application.Deployment.AutoUpload.ViewModels.Common;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 using Tauron.Application.Wpf;
 
@@ -18,20 +20,34 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
         //public PotentialProjekt? Projekt { get; set; }
 
-
+        public ICommonSelectorViewModel ProjectSelector { get; } = CommonSelectorViewModel.Create();
 
         public BuildSelectProjectViewModel(Settings settings) 
             => _settings = settings;
 
         protected override Task InitializeAsync()
         {
+            var itemFac = _settings
+                .RegistratedRepositories
+                .Select(rr => new PotentialProjekt(rr))
+                .Select(pr => new SelectorItem<PotentialProjekt>(pr));
 
-            foreach (var repository in _settings.RegistratedRepositories) 
-                Projekts.Add(new PotentialProjekt(repository.ToString(), async () => await BuildProjectAction(repository)));
-
-            Projekts.Add(new PotentialProjekt("Neu...", NewProjectAction));
-
+            ProjectSelector.Init(itemFac, true, OnNext);
+            
             return Task.CompletedTask;
+        }
+
+        private async Task OnNext(SelectorItemBase arg)
+        {
+            switch (arg)
+            {
+                case NewSelectorItem _:
+                    await NewProjectAction();
+                    break;
+                case SelectorItem<PotentialProjekt> item:
+                    await BuildProjectAction(item.Target.Repository);
+                    break;
+            }
         }
 
         private async Task BuildProjectAction(RegistratedRepository registratedRepository)
@@ -44,13 +60,10 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
             => await OnNextView<AddNameSelectorViewModel, AddCommandContext>(new AddCommandContext(), CreateRedirection<BuildVersionIncrementViewModel>());
 
         [CommandTarget]
-        public bool CanOnNext() => Projekt != null;
+        public bool CanOnNext() => ProjectSelector.CanRun();
 
         [CommandTarget]
-        public async Task OnNext()
-        {
-            if(Projekt != null)
-                await Projekt.Action();
-        }
+        public async Task OnNext() 
+            => await ProjectSelector.Run();
     }
 }

@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using Catel.Services;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Build;
@@ -16,13 +17,17 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
     public class BuildBuildViewModel : OperationViewModel<BuildOperationContext>
     {
         private readonly IMessageService _messageService;
+        private readonly Dispatcher _dispatcher;
 
         public int ErrorCount { get; set; }
 
         public string Console { get; set; } = string.Empty;
 
-        public BuildBuildViewModel(IMessageService messageService) 
-            => _messageService = messageService;
+        public BuildBuildViewModel(IMessageService messageService, Dispatcher dispatcher)
+        {
+            _messageService = messageService;
+            _dispatcher = dispatcher;
+        }
 
         protected override async Task InitializeAsync()
         {
@@ -68,7 +73,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
         private void BuildContextOnError() => ErrorCount++;
 
-        private void BuildContextOnOutput(string obj) => Console = Console + Environment.NewLine + obj;
+        private void BuildContextOnOutput(string obj) => _dispatcher.Invoke(() => Console = Console + Environment.NewLine + obj, DispatcherPriority.Render);
 
         private static void OpenWebsite(string url)
         {

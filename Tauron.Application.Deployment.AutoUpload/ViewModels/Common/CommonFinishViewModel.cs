@@ -21,6 +21,6 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Common
         public TaskCommand ReturnCommand { get; }
 
         private async Task OnReturnCommandExecute() 
-            => await Return();
+            => await OnReturn();
     }
 }

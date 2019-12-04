@@ -30,6 +30,8 @@
             <TextBlock Text="{Binding OldFileVersion}" Margin="5" Grid.Row="2" Grid.Column="1"/>
             <TextBox Grid.Row="2" Grid.Column="2" Margin="5" Text="{Binding FileVersion, ValidatesOnNotifyDataErrors=True}"/>
             <Button Grid.Row="0" Content="Alle Erhöhen" VerticalAlignment="Bottom" Margin="5" Grid.Column="3" tau:CommandBinder.Command="IncreaseAll"/>
+            <Button Grid.Row="1" Content="Erhöhen" VerticalAlignment="Center" Margin="5" Grid.Column="3" tau:CommandBinder.Command="IncreaseAsm"/>
+            <Button Grid.Row="2" Content="Erhöhen" VerticalAlignment="Center" Margin="5" Grid.Column="3" tau:CommandBinder.Command="IncreaseFile"/>
         </Grid>
     </com:PageTemplate>
 </tau:UserControl>

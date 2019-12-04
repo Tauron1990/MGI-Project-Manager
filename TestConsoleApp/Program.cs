@@ -25,6 +25,18 @@ namespace TestConsoleApp
         static void Main(string[] args)
         {
             Margin test = (10, 11, 12, 13);
+            string test2 = "Retter";
+            test2 = test2.ToLower();
+
+            StringBuilder b = new StringBuilder();
+
+            for (int i = test2.Length - 1; i >= 0; i--)
+            {
+                b.Append(test2[i]);
+            }
+
+            Console.WriteLine(test2 == b.ToString());
+            Console.ReadKey();
         }
     }
 }

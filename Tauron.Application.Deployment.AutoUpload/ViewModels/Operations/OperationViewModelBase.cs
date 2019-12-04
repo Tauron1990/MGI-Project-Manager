@@ -58,7 +58,12 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
         }
 
 
-        protected Task Return()
+        protected async Task OnFinish(string? message = null)
+        {
+            await OnNextView<CommonFinishViewModel, FinishContext>(new FinishContext(message));
+        }
+
+        protected Task OnReturn()
             => OnNextView(typeof(CommandViewModel), OperationContextBase.Empty);
 
         public virtual void SetContext(OperationContextBase contextBase) 
