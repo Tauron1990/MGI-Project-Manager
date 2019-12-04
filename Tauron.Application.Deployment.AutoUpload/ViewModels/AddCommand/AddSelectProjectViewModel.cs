@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Catel.Collections;
 using Catel.Data;
-using Catel.Fody;
-using Catel.MVVM;
 using Catel.Services;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
-using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Common;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 using Tauron.Application.Wpf;
@@ -42,7 +38,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
                 .Where(f => _settings.RegistratedRepositories.All(rr => rr.ProjectName != f))
                 .Select(s => new ProjectUI(s));
 
-            ProjectSelector.Init(projects.Select(ui => new SelectorItem<ProjectUI>(ui)), false, );
+            ProjectSelector.Init(projects.Select(ui => new SelectorItem<ProjectUI>(ui)), false, OnNext);
             await base.InitializeAsync();
         }
 
@@ -50,10 +46,10 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
         {
             try
             {
-                if (SelectedProject == null)
+                if (!(selectorItemBase is SelectorItem<ProjectUI> selectedProject))
                     return;
 
-                await _settings.AddProjecktAndSave(Context.CreateRegistratedRepository(SelectedProject.File));
+                await _settings.AddProjecktAndSave(Context.CreateRegistratedRepository(selectedProject.Target.File));
                 await OnNextView<CommonFinishViewModel, FinishContext>(new FinishContext("Das Projekt wurde Erfolgreich Hinzugefügt."));
             }
             catch (Exception e)
@@ -65,18 +61,16 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 
         [CommandTarget]
         private bool CanOnNext() 
-            => SelectedProject != null;
+            => ProjectSelector.CanRun();
 
         [CommandTarget]
-        private async Task OnNext()
-        {
-
-        }
+        private async Task OnNext() 
+            => await ProjectSelector.Run();
 
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
         {
-            if(SelectedProject == null)
-                validationResults.Add(FieldValidationResult.CreateError(nameof(SelectedProject), "Kein Projekt gewählt"));
+            if(ProjectSelector.CanRun())
+                validationResults.Add(FieldValidationResult.CreateError(nameof(ProjectSelector), "Kein Projekt gewählt"));
 
             base.ValidateFields(validationResults);
         }

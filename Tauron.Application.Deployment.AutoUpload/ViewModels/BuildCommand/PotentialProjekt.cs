@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Tauron.Application.Deployment.AutoUpload.Models.Github;
+using Tauron.Application.Deployment.AutoUpload.ViewModels.Common;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 {
-    public sealed class PotentialProjekt
+    public sealed class PotentialProjekt : INameable
     {
-        public readonly Func<Task> Action; 
+        public RegistratedRepository Repository { get; }
 
-        public string Name { get; }
+        public string Name => Repository.ProjectName;
 
-        public PotentialProjekt(string name, Func<Task> action)
-        {
-            Name = name;
-            Action = action;
-        }
+        public PotentialProjekt(RegistratedRepository repository) 
+            => Repository = repository;
+
     }
 }

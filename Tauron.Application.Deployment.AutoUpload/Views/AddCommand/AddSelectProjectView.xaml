@@ -15,13 +15,7 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Projekt Name:" Margin="5"/>
-            <ListBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProject, ValidatesOnNotifyDataErrors=True}" Margin="5">
-                <ListBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type local:ProjectUI}">
-                        <TextBlock FontSize="17" Text="{Binding FileName}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <ContentControl Grid.Row="0" Grid.Column="1" Content="{Binding ProjectSelector}" Margin="5"/>
         </Grid>
     </com:PageTemplate>
 </tau:UserControl>

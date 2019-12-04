@@ -14,9 +14,11 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
     {
         private readonly Settings _settings;
 
-        public FastObservableCollection<PotentialProjekt> Projekts { get; } = new FastObservableCollection<PotentialProjekt>();
+        //public FastObservableCollection<PotentialProjekt> Projekts { get; } = new FastObservableCollection<PotentialProjekt>();
 
-        public PotentialProjekt? Projekt { get; set; }
+        //public PotentialProjekt? Projekt { get; set; }
+
+
 
         public BuildSelectProjectViewModel(Settings settings) 
             => _settings = settings;
