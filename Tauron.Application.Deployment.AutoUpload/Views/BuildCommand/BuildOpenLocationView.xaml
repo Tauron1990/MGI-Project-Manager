@@ -1,0 +1,16 @@
+﻿<tau:UserControl x:Class="Tauron.Application.Deployment.AutoUpload.Views.BuildCommand.BuildOpenLocationView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand"
+      xmlns:com="clr-namespace:Tauron.Application.Deployment.AutoUpload.Views.Common"
+      xmlns:tau="http://schemas.TauronWpf.com"
+      mc:Ignorable="d"  d:DataContext="{d:DesignInstance local:BuildOpenLocationViewModel}"
+      d:DesignHeight="450" d:DesignWidth="800" Background="White">
+    <com:PageTemplate Title="Erstellen Erfolgreich">
+        <StackPanel>
+            <TextBox></TextBox>
+        </StackPanel>
+    </com:PageTemplate>
+</tau:UserControl>

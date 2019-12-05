@@ -64,6 +64,11 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
                     Context.Failed = new BuildFailed(ErrorCount, result, Console);
                     await OnNextView<BuildErrorViewModel>();
                 }
+                else if (Context.NoLocatonOpening)
+                    await OnFinish("Erstellen erfolgreich");
+                else
+                    await OnNextView<BuildOpenLocationViewModel>();
+
                 //TODO NextView
             }
             catch (Exception e)

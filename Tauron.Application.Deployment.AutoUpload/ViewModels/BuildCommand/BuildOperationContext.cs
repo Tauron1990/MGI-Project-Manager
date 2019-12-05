@@ -38,6 +38,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
         public bool NoLocatonOpening { get; set; }
 
-        public BuildOperationContext(BuildContext buildContext) => BuildContext = buildContext;
+        public BuildOperationContext(BuildContext buildContext)
+        {
+            BuildContext = buildContext;
+        }
     }
 }

@@ -30,5 +30,6 @@
         <TextBlock Text="Prozess Ergebniss:" Margin="5" Grid.Row="1" Grid.Column="4"/>
         <TextBlock Text="{Binding ResultCode}" Margin="5" Grid.Row="1" Grid.Column="5"/>
         <TextBlock Text="{Binding Console}" Margin="5" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="6"/>
+        <Button Content="Zurück" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" MinWidth="100" Grid.ColumnSpan="8" tau:CommandBinder.Command="OnNext"/>
     </Grid>
 </tau:UserControl>
