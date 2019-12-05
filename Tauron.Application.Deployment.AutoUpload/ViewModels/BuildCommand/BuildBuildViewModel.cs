@@ -57,7 +57,13 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
                     Directory.Delete(targetPath, true);
                 Directory.CreateDirectory(targetPath);
 
-                var result = buildContext.TryBuild(Context.RegistratedRepository, targetPath);
+                var result = await buildContext.TryBuild(Context.RegistratedRepository, targetPath);
+
+                if (result != 0 && ErrorCount != 0)
+                {
+                    Context.Failed = new BuildFailed(ErrorCount, result, Console);
+                    await OnNextView<BuildErrorViewModel>();
+                }
                 //TODO NextView
             }
             catch (Exception e)

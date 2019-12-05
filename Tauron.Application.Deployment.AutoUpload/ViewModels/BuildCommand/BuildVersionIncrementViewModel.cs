@@ -45,8 +45,19 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         }
 
         [CommandTarget]
-        private async Task OnNext() 
-            => await OnNextView<BuildBuildViewModel>();
+        private async Task OnNext()
+        {
+            try
+            {
+                await _projectFile.ApplyVersion(_internalFile, _internalAssembly);
+                await OnNextView<BuildBuildViewModel>();
+            }
+            catch (Exception e)
+            {
+                await _messageService.ShowErrorAsync(e);
+                await OnReturn();
+            }
+        }
 
         [CommandTarget]
         private bool CanOnNext() => !HasErrors;
@@ -67,7 +78,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
             }
             catch (Exception e)
             {
-                await OnFinish($"Fehler: {e.GetType()}--{e.Message}");
+                await _messageService.ShowErrorAsync($"Fehler: {e.GetType()}--{e.Message}");
+                await OnReturn();
             }
         }
 
