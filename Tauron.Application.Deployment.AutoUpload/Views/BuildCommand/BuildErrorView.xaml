@@ -26,6 +26,9 @@
         </Grid.ColumnDefinitions>
         <TextBlock Text="Fehler Erstellen" FontSize="30" Grid.ColumnSpan="8" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <TextBlock Text="Fehler Anzahl:" Margin="5" Grid.Row="1" Grid.Column="2"/>
-        <TextBlock Text="{Binding ErrorCount}" Margin="5"></TextBlock>
+        <TextBlock Text="{Binding ErrorCount}" Margin="5" Grid.Row="1" Grid.Column="3"/>
+        <TextBlock Text="Prozess Ergebniss:" Margin="5" Grid.Row="1" Grid.Column="4"/>
+        <TextBlock Text="{Binding ResultCode}" Margin="5" Grid.Row="1" Grid.Column="5"/>
+        <TextBlock Text="{Binding Console}" Margin="5" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="6"/>
     </Grid>
 </tau:UserControl>
