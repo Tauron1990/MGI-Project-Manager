@@ -22,17 +22,11 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         }
     }
 
-    public class BuildOperationContext : OperationContextBase
+    public class BuildOperationContext : OperationContextBase, IContextApply
     {
-        private RegistratedRepository? _registratedRepository;
-
         public BuildContext BuildContext { get; }
 
-        public RegistratedRepository? RegistratedRepository
-        {
-            get => _registratedRepository ?? (Redirection?.ParentContext as AddCommandContext)?.RegistratedRepository;
-            set => _registratedRepository = value;
-        }
+        public RegistratedRepository? RegistratedRepository { get; set; }
 
         public BuildFailed? Failed { get; set; }
 
@@ -43,6 +37,16 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         public BuildOperationContext(BuildContext buildContext)
         {
             BuildContext = buildContext;
+        }
+
+        public void Apply(OperationContextBase context)
+        {
+            switch (context)
+            {
+                case AddCommandContext add:
+                    RegistratedRepository = add.RegistratedRepository;
+                    break;
+            }
         }
     }
 }

@@ -89,6 +89,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
             _internalAssembly = Increase(_internalAssembly);
             AssemblyVersion = _internalAssembly.ToString();
 
+            //Validate(true);
+
             return Task.CompletedTask;
         }
 
@@ -97,6 +99,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         {
             _internalFile = Increase(_internalFile);
             FileVersion = _internalFile.ToString();
+
+            //Validate(true);
 
             return Task.CompletedTask;
         }
@@ -110,9 +114,12 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
         private static Version Increase(Version current)
         {
-            current = new Version(current.Major, current.Minor + 1, current.Build, current.Revision);
+            int GraterThenZero(int input)
+                => input < 0 ? 0 : input;
 
-            return current.Minor > 10 ? new Version(current.Major + 1, 0, current.Build, current.Revision) : current;
+            current = new Version(current.Major, current.Minor + 1, GraterThenZero(current.Build), GraterThenZero(current.Revision));
+
+            return current.Minor > 10 ? new Version(current.Major + 1, 0, GraterThenZero(current.Build), GraterThenZero(current.Revision)) : current;
         }
 
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)

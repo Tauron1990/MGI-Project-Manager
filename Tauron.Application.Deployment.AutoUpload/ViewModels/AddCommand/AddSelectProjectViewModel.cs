@@ -50,7 +50,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
                     return;
 
                 await _settings.AddProjecktAndSave(Context.CreateRegistratedRepository(selectedProject.Target.File));
-                await OnNextView<CommonFinishViewModel, FinishContext>(new FinishContext("Das Projekt wurde Erfolgreich Hinzugefügt."));
+                await OnFinish("Das Projekt wurde Erfolgreich Hinzugefügt.");
             }
             catch (Exception e)
             {

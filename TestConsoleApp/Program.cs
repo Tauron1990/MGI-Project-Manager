@@ -24,6 +24,8 @@ namespace TestConsoleApp
     {
         static void Main(string[] args)
         {
+            var ver = Version.Parse("1.1.0.0");
+
             Margin test = (10, 11, 12, 13);
             string test2 = "Retter";
             test2 = test2.ToLower();

@@ -6,8 +6,6 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
     {
         public OperationContextBase RedirectionContext { get; }
 
-        public OperationContextBase? ParentContext { get; set; }
-
         public Type RedirectionView { get; }
 
         public RedirectionType RedirectionType { get; }

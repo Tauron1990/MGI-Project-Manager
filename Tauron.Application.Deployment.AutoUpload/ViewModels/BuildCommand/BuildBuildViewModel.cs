@@ -70,8 +70,6 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
                     await OnFinish("Erstellen erfolgreich");
                 else
                     await OnNextView<BuildOpenLocationViewModel>();
-
-                //TODO NextView
             }
             catch (Exception e)
             {

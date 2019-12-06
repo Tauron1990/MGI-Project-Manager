@@ -38,16 +38,13 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
             var currentRedirection = arg2.Redirection;
             if (currentRedirection != null)
             {
-                currentRedirection.ParentContext = _currentContext;
                 currentRedirection.RedirectionContext.Redirection = redirection;
 
                 // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (currentRedirection.RedirectionType)
                 {
                     case RedirectionType.FirstPage:
-                        NextView?.Invoke(currentRedirection.RedirectionView, currentRedirection.RedirectionContext);
-                        return;
-                    case RedirectionType.OnFinish when typeof(CommonFinishViewModel) == arg1:
+                        (currentRedirection.RedirectionContext as IContextApply)?.Apply(currentRedirection.RedirectionContext);
                         NextView?.Invoke(currentRedirection.RedirectionView, currentRedirection.RedirectionContext);
                         return;
                 }
@@ -60,6 +57,18 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
 
         protected async Task OnFinish(string? message = null)
         {
+            var currentRedirection = _currentContext?.Redirection;
+            if (currentRedirection != null)
+            {
+                if (currentRedirection.RedirectionType == RedirectionType.OnFinish)
+                {
+                    if(_currentContext != null)
+                        (currentRedirection.RedirectionContext as IContextApply)?.Apply(_currentContext);
+                    NextView?.Invoke(currentRedirection.RedirectionView, currentRedirection.RedirectionContext);
+                    return;
+                }
+            }
+            
             await OnNextView<CommonFinishViewModel, FinishContext>(new FinishContext(message));
         }
 

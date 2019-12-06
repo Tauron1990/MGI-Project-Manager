@@ -9,29 +9,29 @@
              mc:Ignorable="d" d:DataContext="{d:DesignInstance local:BuildVersionIncrementViewModel}"
              d:DesignHeight="450" d:DesignWidth="800" Background="White">
     <com:PageTemplate Title="Version">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Assembly version:" Margin="5" Grid.Row="1" Grid.Column="0"/>
-            <TextBlock Text="{Binding OldAssemblyVersion}" Margin="5" Grid.Row="1" Grid.Column="1"/>
-            <TextBox Grid.Row="1" Grid.Column="2" Margin="5" Text="{Binding AssemblyVersion, ValidatesOnNotifyDataErrors=True}"/>
-            <TextBlock Text="Datei Version" Margin="5" Grid.Row="2" Grid.Column="0"/>
-            <TextBlock Text="{Binding OldFileVersion}" Margin="5" Grid.Row="2" Grid.Column="1"/>
-            <TextBox Grid.Row="2" Grid.Column="2" Margin="5" Text="{Binding FileVersion, ValidatesOnNotifyDataErrors=True}"/>
-            <Button Grid.Row="0" Content="Alle Erhöhen" VerticalAlignment="Bottom" Margin="5" Grid.Column="3" tau:CommandBinder.Command="IncreaseAll"/>
-            <Button Grid.Row="1" Content="Erhöhen" VerticalAlignment="Center" Margin="5" Grid.Column="3" tau:CommandBinder.Command="IncreaseAsm"/>
-            <Button Grid.Row="2" Content="Erhöhen" VerticalAlignment="Center" Margin="5" Grid.Column="3" tau:CommandBinder.Command="IncreaseFile"/>
-        </Grid>
-    </com:PageTemplate>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Assembly version:" Margin="5" Grid.Row="1" Grid.Column="0"/>
+                <TextBlock Text="{Binding OldAssemblyVersion}" Margin="5" Grid.Row="1" Grid.Column="1"/>
+                <TextBox Grid.Row="1" Grid.Column="2" Margin="5" Text="{Binding AssemblyVersion, ValidatesOnNotifyDataErrors=True, Delay=1000, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="Datei Version" Margin="5" Grid.Row="2" Grid.Column="0"/>
+                <TextBlock Text="{Binding OldFileVersion}" Margin="5" Grid.Row="2" Grid.Column="1"/>
+                <TextBox Grid.Row="2" Grid.Column="2" Margin="5" Text="{Binding FileVersion, ValidatesOnNotifyDataErrors=True, Delay=1000, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Grid.Row="0" Content="Alle Erhöhen" VerticalAlignment="Bottom" Margin="5" Grid.Column="3" tau:CommandBinder.Command="IncreaseAll"/>
+                <Button Grid.Row="1" Content="Erhöhen" VerticalAlignment="Center" Margin="5" Grid.Column="3" tau:CommandBinder.Command="IncreaseAsm"/>
+                <Button Grid.Row="2" Content="Erhöhen" VerticalAlignment="Center" Margin="5" Grid.Column="3" tau:CommandBinder.Command="IncreaseFile"/>
+            </Grid>
+        </com:PageTemplate>
 </tau:UserControl>
