@@ -38,13 +38,31 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.RemoveCommand
             var repo = SelectedProject;
             if (repo == null) return;
 
-            var path = repo.RealPath;
-            if(_settings.RegistratedRepositories.All(rr => rr.RealPath != path))
-                Directory.Delete(path, true);
-
             await _settings.RemoveProjecktAndSave(repo);
 
+            var path = repo.RealPath;
+            if (_settings.RegistratedRepositories.All(rr => rr.RealPath != path))
+            {
+                var info = new DirectoryInfo(path);
+                if (info.Exists)
+                {
+                    SetAttributesNormal(info);
+                    info.Delete(true);
+                }
+            }
+
             await OnNextView<CommonFinishViewModel, FinishContext>(FinishContext.Default);
+        }
+
+
+        private static void SetAttributesNormal(DirectoryInfo dir)
+        {
+            foreach (var subDir in dir.GetDirectories())
+                SetAttributesNormal(subDir);
+            foreach (var file in dir.GetFiles())
+            {
+                file.Attributes = FileAttributes.Normal;
+            }
         }
 
         private bool OnNextCommandCanExecute() 

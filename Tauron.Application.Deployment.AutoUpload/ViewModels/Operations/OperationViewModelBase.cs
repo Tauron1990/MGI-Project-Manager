@@ -53,7 +53,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
                 }
             }
 
-            arg2.Redirection = redirection;
+            arg2.Redirection = redirection ?? currentRedirection;
             NextView?.Invoke(arg1, arg2);
         }
 
