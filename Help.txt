@@ -3,3 +3,5 @@ https://github.com/aspnet/Entropy
 
 https://github.com/gautema/CQRSlite
 https://www.codeproject.com/Articles/991648/CQRS-A-Cross-Examination-Of-How-It-Works#Asynchronous-Code-(Pseudo-Code)
+
+https://github.com/acdvorak/named-pipe-wrapper/
