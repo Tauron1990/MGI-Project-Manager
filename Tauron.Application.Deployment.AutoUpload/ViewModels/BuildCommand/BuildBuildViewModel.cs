@@ -53,6 +53,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
             try
             {
                 var targetPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ?? string.Empty, "Output");
+                Context.Location = targetPath;
+
                 if (Directory.Exists(targetPath))
                     Directory.Delete(targetPath, true);
                 Directory.CreateDirectory(targetPath);

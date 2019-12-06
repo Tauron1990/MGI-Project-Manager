@@ -36,6 +36,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
         public BuildFailed? Failed { get; set; }
 
+        public string Location { get; set; } = string.Empty;
+
         public bool NoLocatonOpening { get; set; }
 
         public BuildOperationContext(BuildContext buildContext)

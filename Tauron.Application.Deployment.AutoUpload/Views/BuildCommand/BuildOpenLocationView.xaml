@@ -10,7 +10,9 @@
       d:DesignHeight="450" d:DesignWidth="800" Background="White">
     <com:PageTemplate Title="Erstellen Erfolgreich">
         <StackPanel>
-            <TextBox></TextBox>
+            <TextBlock HorizontalAlignment="Center" Text="Ordner:" Margin="5, 20"/>
+            <TextBlock HorizontalAlignment="Center" Text="{Binding Location}" Margin="5, 20"/>
+            <Button HorizontalAlignment="Center" Content="Öffnen" Margin="5, 20" MinWidth="70" tau:CommandBinder.Command="OnOpen"/>
         </StackPanel>
     </com:PageTemplate>
 </tau:UserControl>
