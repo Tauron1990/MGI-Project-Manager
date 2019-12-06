@@ -23,10 +23,9 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
         public Task<int> TryBuild(RegistratedRepository? repository, string output)
         {
             var arguments = new StringBuilder()
-               .Append(DotNetLocation)
-               .Append("publish ")
-               .Append(repository?.ProjectName)
-               .Append($" -o {output}")
+               .Append(" publish ")
+               .Append($"\"{repository?.ProjectName}\"")
+               .Append($" -o \"{output}\"")
                .Append(" -c Release")
                .Append(" -v n");
 
@@ -39,7 +38,6 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
 
             process.StartInfo = new ProcessStartInfo(DotNetLocation, arguments.ToString())
                                 {
-                                    UseShellExecute = false,
                                     RedirectStandardError = true,
                                     RedirectStandardOutput = true
                                 };

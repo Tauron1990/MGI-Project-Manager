@@ -8,36 +8,12 @@ using System.Text;
 
 namespace TestConsoleApp
 {
-    class Margin
-    {
-        public int Top { get; set; }
-
-        public int Buttom { get; set; }
-        public int Left { get; set; }
-        public int Right { get; set; }
-
-        public static implicit operator Margin(ValueTuple<int, int, int, int> margin)
-            => new Margin {Top = margin.Item1, Right = margin.Item2, Buttom = margin.Item3, Left = margin.Item4};
-    }
-
     class Program
     {
         static void Main(string[] args)
         {
-            var ver = Version.Parse("1.1.0.0");
+            Process.Start(@"C:\Program Files\dotnet\dotnet.exe", "publish \"C:\\Users\\user\\AppData\\Roaming\\Tauron\\Tauron.Application.Deployment.AutoUpload\\Repos\\AutoFanControl\\master\\Auto Fan Control\\Auto Fan Control.csproj\" -o \"C:\\Users\\user\\Source\\Repos\\MGI-Project-Manager\\Tauron.Application.Deployment.AutoUpload\\bin\\Debug\\netcoreapp3.1\\Output\" -c Release -v n");
 
-            Margin test = (10, 11, 12, 13);
-            string test2 = "Retter";
-            test2 = test2.ToLower();
-
-            StringBuilder b = new StringBuilder();
-
-            for (int i = test2.Length - 1; i >= 0; i--)
-            {
-                b.Append(test2[i]);
-            }
-
-            Console.WriteLine(test2 == b.ToString());
             Console.ReadKey();
         }
     }

@@ -31,7 +31,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
         protected override async Task InitializeAsync()
         {
-            if (BuildContext.CanBuild)
+            if (!BuildContext.CanBuild)
             {
 
                 const string website = "https://dotnet.microsoft.com/download";
