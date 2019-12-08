@@ -11,9 +11,10 @@ namespace Tauron.Application.Pipes.IO
     {
         private readonly PipeStream _pipeStream;
         private readonly AsyncManualResetEvent _runLock = new AsyncManualResetEvent();
-
+        
         private Func<byte[], int, Task> _reader = (bytes, i) => Task.CompletedTask;
         private int _run = 1;
+        private byte[] _readBuffer = new byte[4096];
 
         protected PipeBase(PipeStream pipeStream) 
             => _pipeStream = pipeStream;
@@ -42,33 +43,46 @@ namespace Tauron.Application.Pipes.IO
         {
             while (_run == 1)
             {
-                
+                var buffer = await TryRead(4);
+                if(buffer == null) continue;
+
+                var lenght = BitConverter.ToInt32(buffer, 0);
+                buffer = await TryRead(lenght);
+                if(buffer == null) continue;
+
+                await _reader(buffer, lenght);
             }
 
             _runLock.Set();
         }
 
-        private async Task<byte[]> TryRead(int lenght)
+        private async Task<byte[]?> TryRead(int lenght)
         {
-            _pipeStream.ReadAsync(, new CancellationToken())
+            if(_readBuffer.Length < lenght)
+                Array.Resize(ref _readBuffer, (int)(lenght * 1.2));
+
+            var temp = await _pipeStream.ReadAsync(_readBuffer, 0, lenght);
+            return temp == 0 ? null : _readBuffer;
         }
 
         public void Dispose()
         {
             Interlocked.Exchange(ref _run, 0);
-            _runLock.Wait();
 
             _pipeStream.Write(BitConverter.GetBytes(int.MinValue));
             _pipeStream.Dispose();
+
+            _runLock.Wait();
         }
 
         public async ValueTask DisposeAsync()
         {
             Interlocked.Exchange(ref _run, 0);
-            await _runLock.WaitAsync();
 
             _pipeStream.Write(BitConverter.GetBytes(int.MinValue));
             _pipeStream.Dispose();
+
+            await _runLock.WaitAsync();
         }
     }
 }

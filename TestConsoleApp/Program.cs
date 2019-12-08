@@ -16,7 +16,6 @@ namespace TestConsoleApp
         static void Main(string[] args)
         {
             var test = new NamedPipeServerStream("test", PipeDirection.In);
-            test.co
             Reader(test);
             Thread.Sleep(20000);
             test.Dispose();
