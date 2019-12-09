@@ -23,14 +23,13 @@ namespace Tauron.Application.Pipes.IO
         public event Func<(Exception Exception, bool OnReader), Task<bool>>? OnError;
         public bool CanRead => _pipeStream.CanRead;
         public bool CanWrite => _pipeStream.CanWrite;
-        public Task Init(Func<byte[], int, Task> readHandler)
+        public async Task Init(Func<byte[], int, Task> readHandler)
         {
             _reader = readHandler;
+            await Connect();
 
             if(CanRead)
                 BeginRead();
-
-            return Task.CompletedTask;
         }
 
         public async Task Write(byte[] data, int lenght)
@@ -84,5 +83,7 @@ namespace Tauron.Application.Pipes.IO
 
             await _runLock.WaitAsync();
         }
+
+        protected abstract Task Connect();
     }
 }
