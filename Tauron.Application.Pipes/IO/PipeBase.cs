@@ -26,13 +26,13 @@ namespace Tauron.Application.Pipes.IO
         public async Task Init(Func<byte[], int, Task> readHandler)
         {
             _reader = readHandler;
-            await Connect();
+            await Connect(_pipeStream);
 
             if(CanRead)
                 BeginRead();
         }
 
-        public async Task Write(byte[] data, int lenght)
+        public async Task Write(ArraySegment<byte> data, int lenght)
         {
             await _pipeStream.WriteAsync(BitConverter.GetBytes(lenght));
             await _pipeStream.WriteAsync(data.AsMemory(..lenght));
@@ -84,6 +84,6 @@ namespace Tauron.Application.Pipes.IO
             await _runLock.WaitAsync();
         }
 
-        protected abstract Task Connect();
+        protected abstract Task Connect(PipeStream stream);
     }
 }

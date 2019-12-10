@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.IO.Pipes;
-using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
@@ -10,9 +9,10 @@ namespace Tauron.Application.Pipes.IO
     {
         private sealed class AStream : PipeBase
         {
-            public AStream(PipeStream pipeStream) : base(pipeStream) => _pipeStream = pipeStream;
+            public AStream(PipeStream pipeStream) : base(pipeStream)
+            { }
 
-            protected override Task Connect() 
+            protected override Task Connect(PipeStream stream) 
                 => Task.CompletedTask;
         }
 

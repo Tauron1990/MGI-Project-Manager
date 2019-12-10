@@ -13,6 +13,6 @@ namespace Tauron.Application.Pipes.IO
 
         Task Init(Func<byte[], int, Task> readHandler);
 
-        Task Write(byte[] data, int lenght);
+        Task Write( data);
     }
 }

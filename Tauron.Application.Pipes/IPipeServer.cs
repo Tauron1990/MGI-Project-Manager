@@ -6,11 +6,11 @@ using JetBrains.Annotations;
 namespace Tauron.Application.Pipes
 {
     [PublicAPI]
-    public interface IPipeServer<TMessage> : IDisposable
+    public interface IPipeServer<TMessage> : IDisposable, IAsyncDisposable
     {
-        event EventHandler<ErrorEventArgs> ReadErrorEvent;
+        event Func<(Exception Exception, bool OnReader), Task<bool>>? ReadErrorEvent;
 
-        event EventHandler<MessageRecivedEventArgs<TMessage>> MessageRecivedEvent;
+        event Func<MessageRecivedEventArgs<TMessage>, Task>? MessageRecivedEvent;
 
         bool CanRead { get; }
 
