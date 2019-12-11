@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using MessagePack;
@@ -38,7 +39,7 @@ namespace ProjectBuilder
     {
         private static PipeServer<string> _uploadapp = PipeServer<string>.Empty;
 
-        static async Task<int> Main(string[] args)
+        static async Task<int> Main()
         {
             try
             {
@@ -49,7 +50,11 @@ namespace ProjectBuilder
                 await using var file = File.OpenRead(path);
                 var info = await  MessagePackSerializer.DeserializeAsync<BuildInfo>(file);
 
-                _uploadapp = new PipeServer<string>(Anonymos.Create(PipeDirection.In, info.PipeHandle));
+                _uploadapp = new PipeServer<string>(Anonymos.Create(PipeDirection.Out, info.PipeHandle));
+                await _uploadapp.Connect();
+
+                var projectName = info.ProjectFile;
+                var output = info.Output;
 
                 var arguments = new StringBuilder()
                     .Append(" publish ")
@@ -84,5 +89,11 @@ namespace ProjectBuilder
                 return -1;
             }
         }
+
+        private static async void ProcessOnOutputDataReceived(object sender, DataReceivedEventArgs e) 
+            => await _uploadapp.SendMessage(e.Data);
+
+        private static async void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e) 
+            => await _uploadapp.SendMessage("error");
     }
 }

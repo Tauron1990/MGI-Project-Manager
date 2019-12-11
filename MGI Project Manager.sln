@@ -32,6 +32,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Upload", "Upload", "{D77A5F03-F25C-459F-97B0-B5F71A26A5FF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Deployment.AutoUpload", "Tauron.Application.Deployment.AutoUpload\Tauron.Application.Deployment.AutoUpload.csproj", "{8BFFF8AC-9391-4D65-87E9-D873F559A05D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1D0566E6-745C-40A8-AD89-D2CF8A0D2E67} = {1D0566E6-745C-40A8-AD89-D2CF8A0D2E67}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{97DB54DA-B117-4297-BD4F-7C4EB86ED2D4}"
 EndProject
@@ -45,7 +48,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Wpf", "T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Pipes", "Tauron.Application.Pipes\Tauron.Application.Pipes.csproj", "{071696D1-B090-4A87-8C4E-2840EEB79C45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectBuilder", "ProjectBuilder\ProjectBuilder.csproj", "{1D0566E6-745C-40A8-AD89-D2CF8A0D2E67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectBuilder", "ProjectBuilder\ProjectBuilder.csproj", "{1D0566E6-745C-40A8-AD89-D2CF8A0D2E67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
