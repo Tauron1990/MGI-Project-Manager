@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Tauron.Application.Pipes.IO
@@ -13,6 +14,6 @@ namespace Tauron.Application.Pipes.IO
 
         Task Init(Func<byte[], int, Task> readHandler);
 
-        Task Write( data);
+        Task Write(ArraySegment<byte> segment);
     }
 }

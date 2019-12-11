@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.IO.Pipes;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,10 +31,11 @@ namespace Tauron.Application.Pipes.IO
                 BeginRead();
         }
 
-        public async Task Write(ArraySegment<byte> data, int lenght)
+        public async Task Write(ArraySegment<byte> data)
         {
-            await _pipeStream.WriteAsync(BitConverter.GetBytes(lenght));
-            await _pipeStream.WriteAsync(data.AsMemory(..lenght));
+            var array = data.ToArray();
+            await _pipeStream.WriteAsync(BitConverter.GetBytes(array.Length));
+            await _pipeStream.WriteAsync(array);
         }
 
         private async void BeginRead()

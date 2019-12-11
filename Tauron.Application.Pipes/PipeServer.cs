@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MessagePack;
@@ -10,7 +9,32 @@ namespace Tauron.Application.Pipes
     [PublicAPI]
     public sealed class PipeServer<TMessage> : IPipeServer<TMessage>
     {
+        private class FakePipe : IPipe
+        {
+            public void Dispose()
+            {
+                
+            }
+
+            public ValueTask DisposeAsync() => new ValueTask(Task.CompletedTask);
+
+            public event Func<(Exception Exception, bool OnReader), Task<bool>>? OnError;
+            public bool CanRead => false;
+            public bool CanWrite => false;
+            public Task Init(Func<byte[], int, Task> readHandler) => Task.FromException(new NotSupportedException());
+
+            public Task Write(ArraySegment<byte> segment) => Task.FromException(new NotSupportedException());
+        }
+
+        public static readonly PipeServer<TMessage> Empty = new PipeServer<TMessage>();
+
         private readonly IPipe _pipe;
+
+        private PipeServer()
+            : this(new FakePipe())
+        {
+
+        }
 
         public PipeServer(IPipe pipe) => _pipe = pipe;
 
@@ -33,16 +57,18 @@ namespace Tauron.Application.Pipes
             await _pipe.Init(MessageRecived);
         }
 
-        private Task MessageRecived(byte[] arg1, int arg2)
+        private async Task MessageRecived(byte[] data, int lenght)
         {
-            
+            var msg = MessagePackSerializer.Deserialize<TMessage>(data[..lenght]);
+            if (MessageRecivedEvent != null)
+                await MessageRecivedEvent(new MessageRecivedEventArgs<TMessage>(msg));
         }
 
         public async Task SendMessage(TMessage msg)
         {
             var data = MessagePackSerializer.SerializeUnsafe(msg);
 
-            await _pipe.Write(data, data.Count);
+            await _pipe.Write(data);
         }
 
         public ValueTask DisposeAsync() 
