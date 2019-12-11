@@ -8,7 +8,5 @@
         }
 
         public TMessage Message { get; }
-
-        ´
     }
 }

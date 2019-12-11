@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Tauron.Application.Pipes.IO
 {
-    public interface IPipe : IDisposable, IAsyncDisposable
+    public interface IPipe : IDisposable
     {
         event Func<(Exception Exception, bool OnReader), Task<bool>>? OnError; 
 

@@ -28,28 +28,50 @@ namespace Tauron.Application.Pipes.IO
             await Connect(_pipeStream);
 
             if(CanRead)
-                BeginRead();
+#pragma warning disable 4014
+                Task.Run(BeginRead);
+#pragma warning restore 4014
         }
 
         public async Task Write(ArraySegment<byte> data)
         {
-            var array = data.ToArray();
-            await _pipeStream.WriteAsync(BitConverter.GetBytes(array.Length));
-            await _pipeStream.WriteAsync(array);
+            try
+            {
+                var array = data.ToArray();
+                await _pipeStream.WriteAsync(BitConverter.GetBytes(array.Length));
+                await _pipeStream.WriteAsync(array);
+            }
+            catch (Exception e)
+            {
+                if (OnError == null) throw ;
+                if (!await OnError((e, false)))
+                    throw ;
+            }
         }
 
         private async void BeginRead()
         {
             while (_run == 1)
             {
-                var buffer = await TryRead(4);
-                if(buffer == null) continue;
+                try
+                {
+                    var buffer = await TryRead(4);
+                    if (buffer == null) continue;
 
-                var lenght = BitConverter.ToInt32(buffer, 0);
-                buffer = await TryRead(lenght);
-                if(buffer == null) continue;
+                    var lenght = BitConverter.ToInt32(buffer, 0);
+                    if (lenght == int.MinValue) break;
 
-                await _reader(buffer, lenght);
+                    buffer = await TryRead(lenght);
+                    if (buffer == null) continue;
+
+                    await _reader(buffer, lenght);
+                }
+                catch (Exception e)
+                {
+                    if(OnError == null) continue;
+                    if(!await OnError((e, true)))
+                        break;
+                }
             }
 
             _runLock.Set();
@@ -68,20 +90,11 @@ namespace Tauron.Application.Pipes.IO
         {
             Interlocked.Exchange(ref _run, 0);
 
-            _pipeStream.Write(BitConverter.GetBytes(int.MinValue));
+            if(CanWrite)
+                _pipeStream.Write(BitConverter.GetBytes(int.MinValue));
             _pipeStream.Dispose();
 
             _runLock.Wait();
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            Interlocked.Exchange(ref _run, 0);
-
-            _pipeStream.Write(BitConverter.GetBytes(int.MinValue));
-            _pipeStream.Dispose();
-
-            await _runLock.WaitAsync();
         }
 
         protected abstract Task Connect(PipeStream stream);

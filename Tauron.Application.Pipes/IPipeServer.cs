@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 namespace Tauron.Application.Pipes
 {
     [PublicAPI]
-    public interface IPipeServer<TMessage> : IDisposable, IAsyncDisposable
+    public interface IPipeServer<TMessage> : IDisposable
     {
         event Func<(Exception Exception, bool OnReader), Task<bool>>? ReadErrorEvent;
 

@@ -7,8 +7,11 @@
 
   <ItemGroup>
     <PackageReference Include="MessagePack" Version="1.8.80" />
-    <PackageReference Include="MongoDB.Driver" Version="2.10.0" />
     <PackageReference Include="System.IO.Pipes" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tauron.Application.Pipes\Tauron.Application.Pipes.csproj" />
   </ItemGroup>
 
 </Project>

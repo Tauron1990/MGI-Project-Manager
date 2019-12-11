@@ -16,8 +16,6 @@ namespace Tauron.Application.Pipes
                 
             }
 
-            public ValueTask DisposeAsync() => new ValueTask(Task.CompletedTask);
-
             public event Func<(Exception Exception, bool OnReader), Task<bool>>? OnError;
             public bool CanRead => false;
             public bool CanWrite => false;
@@ -70,8 +68,5 @@ namespace Tauron.Application.Pipes
 
             await _pipe.Write(data);
         }
-
-        public ValueTask DisposeAsync() 
-            => _pipe.DisposeAsync();
     }
 }
