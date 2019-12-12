@@ -49,7 +49,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         {
             try
             {
-                await _projectFile.ApplyVersion(_internalFile, _internalAssembly);
+                await _projectFile.ApplyVersion(Version.Parse(FileVersion ?? string.Empty), Version.Parse(AssemblyVersion ?? string.Empty));
                 await OnNextView<BuildBuildViewModel>();
             }
             catch (Exception e)

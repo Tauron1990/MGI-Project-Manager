@@ -9,7 +9,6 @@ namespace Tauron.Application.Pipes.IO
     public abstract class PipeBase : IPipe
     {
         private readonly PipeStream _pipeStream;
-        private readonly AsyncManualResetEvent _runLock = new AsyncManualResetEvent();
         
         private Func<byte[], int, Task> _reader = (bytes, i) => Task.CompletedTask;
         private int _run = 1;
@@ -73,8 +72,6 @@ namespace Tauron.Application.Pipes.IO
                         break;
                 }
             }
-
-            _runLock.Set();
         }
 
         private async Task<byte[]?> TryRead(int lenght)
@@ -93,8 +90,6 @@ namespace Tauron.Application.Pipes.IO
             if(CanWrite)
                 _pipeStream.Write(BitConverter.GetBytes(int.MinValue));
             _pipeStream.Dispose();
-
-            _runLock.Wait();
         }
 
         protected abstract Task Connect(PipeStream stream);
