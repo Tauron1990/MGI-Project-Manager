@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Pipes;
 using System.Text;
 using System.Threading.Tasks;
+using Catel;
+using MessagePack;
+using Microsoft.DotNet.PlatformAbstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
+using Tauron.Application.Pipes;
+using Tauron.Application.Pipes.IO;
 
 namespace Tauron.Application.Deployment.AutoUpload.Models.Build
 {
@@ -20,40 +26,34 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
 
         public static bool CanBuild => File.Exists(DotNetLocation);
 
-        public Task<int> TryBuild(RegistratedRepository? repository, string output)
+        public async Task<int> TryBuild(RegistratedRepository? repository, string output)
         {
-            var arguments = new StringBuilder()
-               .Append(" publish ")
-               .Append($"\"{repository?.ProjectName}\"")
-               .Append($" -o \"{output}\"")
-               .Append(" -c Release")
-               .Append(" -v n");
+            using var infoReciver = new PipeServer<string>(Anonymos.Create(PipeDirection.In, out var pipeName));
+            infoReciver.MessageRecivedEvent += InfoReciverOnMessageRecivedEvent;
+            await infoReciver.Connect();
 
-            using var process = new Process();
+            var info = new BuildInfo(output, pipeName, repository?.ProjectName ?? string.Empty);
+            // ReSharper disable once UseAwaitUsing
+            using (var file = File.Open(Path.GetFullPath(BuildInfo.BuildFile, ApplicationEnvironment.ApplicationBasePath), FileMode.Create)) 
+                await MessagePackSerializer.SerializeAsync(file, info);
 
-            process.ErrorDataReceived += ProcessOnErrorDataReceived;
-            process.OutputDataReceived += ProcessOnOutputDataReceived;
-            process.EnableRaisingEvents = true;
-
-
-            process.StartInfo = new ProcessStartInfo(DotNetLocation, arguments.ToString())
-                                {
-                                    RedirectStandardError = true,
-                                    RedirectStandardOutput = true
-                                };
-
+            using var process = new Process {StartInfo = new ProcessStartInfo(Path.GetFullPath("ProjectBuilder.exe", ApplicationEnvironment.ApplicationBasePath))};
             process.Start();
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
             if (!process.WaitForExit(30000)) 
                 process.Kill(true);
 
-            return Task.FromResult(process.ExitCode);
+            return process.ExitCode;
         }
 
-        private void ProcessOnOutputDataReceived(object sender, DataReceivedEventArgs e) 
-             => Output?.Invoke(e.Data);
+        private Task InfoReciverOnMessageRecivedEvent(MessageRecivedEventArgs<string> arg)
+        {
+            var msg = arg.Message;
+            if(msg == "error")
+                Error?.Invoke();
+            else
+                Output?.Invoke(msg);
 
-        private void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e) => Error?.Invoke();
+            return Task.CompletedTask;
+        }
     }
 }

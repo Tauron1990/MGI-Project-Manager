@@ -35,7 +35,7 @@ namespace ProjectBuilder
         }
     }
 
-    class Program
+    static class Program
     {
         private static PipeServer<string> _uploadapp = PipeServer<string>.Empty;
 
@@ -50,8 +50,11 @@ namespace ProjectBuilder
                 await using var file = File.OpenRead(path);
                 var info = await  MessagePackSerializer.DeserializeAsync<BuildInfo>(file);
 
-                _uploadapp = new PipeServer<string>(Anonymos.Create(PipeDirection.Out, info.PipeHandle));
-                await _uploadapp.Connect();
+                if (!string.IsNullOrWhiteSpace(info.PipeHandle) && info.PipeHandle != "none")
+                {
+                    _uploadapp = new PipeServer<string>(Anonymos.Create(PipeDirection.Out, info.PipeHandle));
+                    await _uploadapp.Connect();
+                }
 
                 var projectName = info.ProjectFile;
                 var output = info.Output;
@@ -90,10 +93,16 @@ namespace ProjectBuilder
             }
         }
 
-        private static async void ProcessOnOutputDataReceived(object sender, DataReceivedEventArgs e) 
-            => await _uploadapp.SendMessage(e.Data);
+        private static async void ProcessOnOutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if(_uploadapp.CanWrite)
+                await _uploadapp.SendMessage(e.Data);
+        }
 
-        private static async void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e) 
-            => await _uploadapp.SendMessage("error");
+        private static async void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if(_uploadapp.CanWrite)
+                await _uploadapp.SendMessage("error");
+        }
     }
 }
