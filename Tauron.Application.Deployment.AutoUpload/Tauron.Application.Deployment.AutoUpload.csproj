@@ -40,7 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProjectBuilder\ProjectBuilder.csproj" />
     <ProjectReference Include="..\Tauron.Application.Pipes\Tauron.Application.Pipes.csproj" />
     <ProjectReference Include="..\Tauron.Application.Wpf\Tauron.Application.Wpf.csproj" />
   </ItemGroup>

@@ -7,6 +7,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using MessagePack;
+using Serilog;
+using Serilog.Sinks.File;
 using Tauron.Application.Pipes;
 using Tauron.Application.Pipes.IO;
 
@@ -41,15 +43,26 @@ namespace ProjectBuilder
 
         static async Task<int> Main()
         {
+            Log.Logger = new LoggerConfiguration().WriteTo.File("log.log", fileSizeLimitBytes: 10000).CreateLogger();
+
+            Console.Title = "Projekt Erstellen";
+
             try
             {
-                var path = Path.GetFullPath(BuildInfo.BuildFile, Assembly.GetEntryAssembly()?.Location);
+                var path = Path.GetFullPath(BuildInfo.BuildFile, Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location));
+                Log.Information($"Check BuildInfo: {path}");
                 if (!File.Exists(path))
+                {
+                    Log.Information("Build File not Found");
                     return -1;
+                }
 
+                Log.Information("Open Build File:");
                 await using var file = File.OpenRead(path);
                 var info = await  MessagePackSerializer.DeserializeAsync<BuildInfo>(file);
+                Log.Information($"{Path.GetFileName(info.ProjectFile)}--{Path.GetDirectoryName(info.Output)}--{info.PipeHandle}");
 
+                Log.Information("Create Pipe");
                 if (!string.IsNullOrWhiteSpace(info.PipeHandle) && info.PipeHandle != "none")
                 {
                     _uploadapp = new PipeServer<string>(Anonymos.Create(PipeDirection.Out, info.PipeHandle));
@@ -59,6 +72,7 @@ namespace ProjectBuilder
                 var projectName = info.ProjectFile;
                 var output = info.Output;
 
+                Log.Information("Create Process Infomation");
                 var arguments = new StringBuilder()
                     .Append(" publish ")
                     .Append($"\"{projectName}\"")
@@ -79,16 +93,26 @@ namespace ProjectBuilder
                     RedirectStandardOutput = true
                 };
 
+                Log.Information("Start Process");
                 process.Start();
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
-                if (!process.WaitForExit(30000))
-                    process.Kill(true);
 
+                await Task.Delay(1000);
+
+                Log.Information("Wait For Exit");
+                if (!process.WaitForExit(30000))
+                {
+                    Log.Information("Killing Process");
+                    process.Kill(true);
+                }
+
+                Log.Information("Build Compled");
                 return process.ExitCode;
             }
-            catch
+            catch (Exception e)
             {
+                Log.Error(e.ToString());
                 return -1;
             }
         }
@@ -97,6 +121,8 @@ namespace ProjectBuilder
         {
             if(_uploadapp.CanWrite)
                 await _uploadapp.SendMessage(e.Data);
+            else
+                Console.WriteLine(e.Data);
         }
 
         private static async void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e)

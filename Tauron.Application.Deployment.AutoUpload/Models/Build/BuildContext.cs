@@ -39,6 +39,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
 
             using var process = new Process {StartInfo = new ProcessStartInfo(Path.GetFullPath("ProjectBuilder.exe", ApplicationEnvironment.ApplicationBasePath))};
             process.Start();
+            await Task.Delay(1000);
             if (!process.WaitForExit(30000)) 
                 process.Kill(true);
 
