@@ -10,6 +10,8 @@ using Catel.MVVM;
 using Catel.Services;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Build;
+using Tauron.Application.Deployment.AutoUpload.Models.Git;
+using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 using Tauron.Application.Wpf;
 
@@ -19,6 +21,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
     public class BuildVersionIncrementViewModel : OperationViewModel<BuildOperationContext>
     {
         private readonly IMessageService _messageService;
+        private readonly GitManager _gitManager;
         private readonly ProjectFile _projectFile = new ProjectFile();
 
         private Version _internalAssembly = new Version();
@@ -33,9 +36,10 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
         public string? OldAssemblyVersion { get; private set; }
 
-        public BuildVersionIncrementViewModel(IMessageService messageService)
+        public BuildVersionIncrementViewModel(IMessageService messageService, GitManager gitManager)
         {
             _messageService = messageService;
+            _gitManager = gitManager;
         }
         
         protected override Task InitializeAsync()
@@ -50,6 +54,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
             try
             {
                 await _projectFile.ApplyVersion(Version.Parse(FileVersion ?? string.Empty), Version.Parse(AssemblyVersion ?? string.Empty));
+                var repo = Context.RegistratedRepository;
+                if( repo != null)
+                    _gitManager.CommitRepo(repo);
                 await OnNextView<BuildBuildViewModel>();
             }
             catch (Exception e)

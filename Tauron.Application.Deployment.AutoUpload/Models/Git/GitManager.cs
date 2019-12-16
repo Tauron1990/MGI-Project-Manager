@@ -56,6 +56,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
             using var repo = new Repository(repository.RealPath);
 
             StageChanges(repo);
+            CommitChanges(repo);
+            PushChanges(repo, repository.BranchName);
         }
 
         private static void StageChanges(IRepository repo)
