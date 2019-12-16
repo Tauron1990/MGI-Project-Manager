@@ -55,7 +55,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
             SetOrAdd(true, fileVersion.ToString());
             SetOrAdd(false, asmVersion.ToString());
 
-            await using var stream = File.OpenWrite(_fileName);
+            await using var stream = File.Open(_fileName, FileMode.Create);
             await _sourceElement.SaveAsync(stream, SaveOptions.None, CancellationToken.None);
         }
 
