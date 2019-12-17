@@ -62,17 +62,10 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
 
         private static void StageChanges(IRepository repo)
         {
-            try
-            {
 
-                var status = repo.RetrieveStatus();
-                var filePaths = status.Modified.Select(mods => mods.FilePath).ToList();
-                Commands.Stage(repo, filePaths);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Exception:RepoActions:StageChanges " + ex.Message);
-            }
+            var status = repo.RetrieveStatus();
+            var filePaths = status.Modified.Select(mods => mods.FilePath).ToList();
+            Commands.Stage(repo, filePaths);
         }
 
         private void CommitChanges(IRepository repo)
