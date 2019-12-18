@@ -6,6 +6,7 @@ using System.Net;
 using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
 using Scrutor;
+using Tauron.Application.Deployment.AutoUpload.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
 
@@ -15,12 +16,12 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
     public class GitManager
     {
         private readonly Settings _settings;
-
+        private readonly InputService _inputService;
         
-
-        public GitManager(Settings settings)
+        public GitManager(Settings settings, InputService inputService)
         {
             _settings = settings;
+            _inputService = inputService;
         }
 
         public void SyncBranch(string repository, string branch, string path, ProgressHandler progressHandler, TransferProgressHandler transferProgressHandler)
@@ -88,7 +89,15 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
 
         private Credentials CredentialsProvider(string url, string usernamefromurl, SupportedCredentialTypes types)
         {
-
+            switch (types)
+            {
+                case SupportedCredentialTypes.UsernamePassword:
+                    break;
+                case SupportedCredentialTypes.Default:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(types), types, null);
+            }
         }
     }
 }
