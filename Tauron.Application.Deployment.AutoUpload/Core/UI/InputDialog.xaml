@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Tauron.Application.Deployment.AutoUpload.Core.UI"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight" WindowStyle="ToolWindow" ShowInTaskbar="False">
-    <DockPanel>
+    <DockPanel FocusManager.FocusedElement="{Binding ElementName=InputText}">
         <TextBlock Name="MainTextBlock" DockPanel.Dock="Top" FontSize="18" Margin="10" />
         <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
             <Button Name="Cancelbutton" IsCancel="True" MinWidth="60" Content="Schließen" DockPanel.Dock="Right"

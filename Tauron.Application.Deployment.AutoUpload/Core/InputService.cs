@@ -1,4 +1,5 @@
-﻿    using System.Threading.Tasks;
+﻿    using System.Security;
+    using System.Threading.Tasks;
     using Catel.Services;
     using Scrutor;
     using Tauron.Application.Deployment.AutoUpload.Core.UI;
@@ -21,6 +22,11 @@
 
                     return diag.ShowDialog() == true ? diag.Result : string.Empty;
                 });
+            }
+
+            public async Task<(string UserName, SecureString Passwort)> Request(string userName)
+            {
+
             }
         }
     }

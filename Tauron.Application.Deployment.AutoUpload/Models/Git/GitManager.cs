@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
 using Scrutor;
@@ -14,6 +15,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
     public class GitManager
     {
         private readonly Settings _settings;
+
+        
 
         public GitManager(Settings settings)
         {
@@ -62,17 +65,9 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
 
         private static void StageChanges(IRepository repo)
         {
-            try
-            {
-
-                var status = repo.RetrieveStatus();
-                var filePaths = status.Modified.Select(mods => mods.FilePath).ToList();
-                Commands.Stage(repo, filePaths);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Exception:RepoActions:StageChanges " + ex.Message);
-            }
+            var status = repo.RetrieveStatus();
+            var filePaths = status.Modified.Select(mods => mods.FilePath).ToList();
+            Commands.Stage(repo, filePaths);
         }
 
         private void CommitChanges(IRepository repo)
@@ -84,10 +79,16 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
 
         private void PushChanges(IRepository repo, string branch)
         {
-            var remote = repo.Network.Remotes["origin"];
+            using var remote = repo.Network.Remotes["origin"];
             var pushRefSpec = @"refs/heads/" + branch;
 
-            repo.Network.Push(remote, pushRefSpec);
+            
+            repo.Network.Push(remote, new [] { pushRefSpec }, new PushOptions { CredentialsProvider = CredentialsProvider });
+        }
+
+        private Credentials CredentialsProvider(string url, string usernamefromurl, SupportedCredentialTypes types)
+        {
+
         }
     }
 }
