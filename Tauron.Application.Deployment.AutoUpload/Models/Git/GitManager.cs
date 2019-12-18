@@ -92,9 +92,10 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
             switch (types)
             {
                 case SupportedCredentialTypes.UsernamePassword:
-                    break;
+                    var (userName, password) = _inputService.Request(usernamefromurl);
+                    return new SecureUsernamePasswordCredentials{ Password = password, Username = userName};
                 case SupportedCredentialTypes.Default:
-                    break;
+                    return new DefaultCredentials();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(types), types, null);
             }

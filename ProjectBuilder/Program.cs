@@ -78,7 +78,7 @@ namespace ProjectBuilder
                     .Append($"\"{projectName}\"")
                     .Append($" -o \"{output}\"")
                     .Append(" -c Release")
-                    .Append(" -v n");
+                    .Append(" -v d");
 
                 using var process = new Process();
 

@@ -1,15 +1,31 @@
 ﻿    using System.Security;
     using System.Threading.Tasks;
     using Catel.Services;
+    using JetBrains.Annotations;
     using Scrutor;
     using Tauron.Application.Deployment.AutoUpload.Core.UI;
 
     namespace Tauron.Application.Deployment.AutoUpload.Core
     {
         [ServiceDescriptor]
+        [UsedImplicitly]
         public class InputService
         {
+            private class UserCredinals
+            {
+                public SecureString Password { get; }
+
+                public string UserName { get; }
+
+                public UserCredinals(SecureString password, string userName)
+                {
+                    Password = password;
+                    UserName = userName;
+                }
+            }
+
             private readonly IDispatcherService _dispatcherService;
+            private UserCredinals? _userCredinals;
 
             public InputService(IDispatcherService dispatcherService)
                 => _dispatcherService = dispatcherService;
@@ -17,16 +33,35 @@
             public async Task<string> Request(string caption, string description)
             {
                 return await _dispatcherService.InvokeAsync(() =>
-                {
-                    var diag = new InputDialog {AllowCancel = true, InstructionText = description, MainText = caption};
+                                                            {
+                                                                var diag = new InputDialog
+                                                                           {
+                                                                               AllowCancel = true, 
+                                                                               InstructionText = description, 
+                                                                               MainText = caption
+                                                                           };
 
-                    return diag.ShowDialog() == true ? diag.Result : string.Empty;
-                });
+                                                                return diag.ShowDialog() == true ? diag.Result : string.Empty;
+                                                            });
             }
 
-            public async Task<(string UserName, SecureString Passwort)> Request(string userName)
+            public (string? UserName, SecureString? Passwort) Request(string userName)
             {
+                if (_userCredinals != null)
+                    return (_userCredinals.UserName, _userCredinals.Password);
 
+                (string? UserName, SecureString? Passwort) result = default;
+
+                _dispatcherService.Invoke(() =>
+                                          {
+                                              var window = new UserNamePasswordRequesterWindow {UserName = userName};
+                                              if (window.ShowDialog() == true)
+                                                  result = (window.UserName, window.Password);
+                                          });
+
+                if (result.Passwort != null && result.UserName != null)
+                    _userCredinals = new UserCredinals(result.Passwort, result.UserName);
+                return result;
             }
         }
     }
