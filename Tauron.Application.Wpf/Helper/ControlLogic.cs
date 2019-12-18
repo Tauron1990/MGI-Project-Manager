@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 
 namespace Tauron.Application.Wpf.Helper
@@ -12,7 +11,7 @@ namespace Tauron.Application.Wpf.Helper
             private readonly FrameworkElement _target;
             private readonly string? _newValue;
             private readonly string? _oldValue;
-            private readonly Action<string, string, IBinderControllable, DependencyObject> _runner;
+            private readonly Action<string?, string?, IBinderControllable, DependencyObject> _runner;
 
             public LazyHelper(FrameworkElement target, string? newValue, string? oldValue, Action<string?, string?, IBinderControllable, DependencyObject> runner)
             {

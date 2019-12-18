@@ -14,6 +14,6 @@ namespace Tauron.Application.Pipes.IO
 
         Task Init(Func<byte[], int, Task> readHandler);
 
-        Task Write(ArraySegment<byte> segment);
+        Task Write(byte[] segment);
     }
 }

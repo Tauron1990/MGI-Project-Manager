@@ -32,13 +32,12 @@ namespace Tauron.Application.Pipes.IO
 #pragma warning restore 4014
         }
 
-        public async Task Write(ArraySegment<byte> data)
+        public async Task Write(byte[] data)
         {
             try
             {
-                var array = data.ToArray();
-                await _pipeStream.WriteAsync(BitConverter.GetBytes(array.Length));
-                await _pipeStream.WriteAsync(array);
+                await _pipeStream.WriteAsync(BitConverter.GetBytes(data.Length));
+                await _pipeStream.WriteAsync(data);
             }
             catch (Exception e)
             {

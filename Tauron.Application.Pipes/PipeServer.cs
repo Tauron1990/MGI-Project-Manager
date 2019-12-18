@@ -21,7 +21,7 @@ namespace Tauron.Application.Pipes
             public bool CanWrite => false;
             public Task Init(Func<byte[], int, Task> readHandler) => Task.FromException(new NotSupportedException());
 
-            public Task Write(ArraySegment<byte> segment) => Task.FromException(new NotSupportedException());
+            public Task Write(byte[] segment) => Task.FromException(new NotSupportedException());
         }
 
         public static readonly PipeServer<TMessage> Empty = new PipeServer<TMessage>();
@@ -64,8 +64,7 @@ namespace Tauron.Application.Pipes
 
         public async Task SendMessage(TMessage msg)
         {
-            var data = MessagePackSerializer.SerializeUnsafe(msg);
-
+            var data = MessagePackSerializer.Serialize(msg);
             await _pipe.Write(data);
         }
     }
