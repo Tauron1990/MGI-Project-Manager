@@ -10,6 +10,7 @@ using Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.RemoveCommand;
+using Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManagerCommand;
 using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels
@@ -41,5 +42,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels
 
         private async Task OnBuildCommandExecute()
             => await OnNextView<BuildSelectProjectViewModel, BuildOperationContext>(new BuildOperationContext(DependencyResolver.Resolve<BuildContext>()));
+
+        [CommandTarget]
+        public async Task OnVersionRepoManager() 
+            => await OnNextView<VersionRepoSelectViewModel, VersionRepoContext>(new VersionRepoContext());
     }
 }

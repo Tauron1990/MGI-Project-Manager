@@ -21,7 +21,7 @@
             <Button Content="Projekt Hinzufügen" Margin="20, 10" Command="{Binding AddClieck}"/>
             <Button Content="Projekt Entfernen" Margin="20, 10" Command="{Binding RemoveCommand}"/>
             <Button Content="Projekt Erstellen" Margin="20,10" Command="{Binding BuildCommand}"/>
-
+            <Button Content="Version Repository" Margin="20, 10" tau:CommandBinder.Command="OnVersionRepoManager"/>
         </StackPanel>
         <ItemsControl Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" ItemsSource="{Binding Settings.RegistratedRepositories}" 
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="True" Margin="5">
