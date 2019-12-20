@@ -9,11 +9,30 @@ using Catel.Threading;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
+using Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManagerCommand;
 
 namespace Tauron.Application.Deployment.AutoUpload.Models.Core
 {
     public sealed class Settings : ObservableObject
     {
+        public class VersionRepositoryComponent
+        {
+            public string? Name { get; set; }
+
+            public string? Path { get; set; }
+
+            public VersionRepositoryComponent()
+            {
+                
+            }
+
+            public VersionRepositoryComponent(string? name, string? path)
+            {
+                Name = name;
+                Path = path;
+            }
+        }
+
         [UsedImplicitly]
         public class RegistratedRepositoryComponent
         {
@@ -50,6 +69,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
 
             public List<RegistratedRepositoryComponent>? RegistratedRepository { get; set; }
 
+            public List<VersionRepositoryComponent>? VersionRepositorys { get; set; }
+
             public string? UserName { get; set; }
 
             public string? EMailAdress { get; set; }
@@ -66,6 +87,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
                 Version = settings._version;
                 KnowenRepositorys = new List<string>(settings.KnowenRepositorys);
                 RegistratedRepository = new List<RegistratedRepositoryComponent>();
+                VersionRepositorys = new List<VersionRepositoryComponent>();
 
                 UserName = settings.UserName;
                 EMailAdress = settings.EMailAdress;
@@ -73,6 +95,9 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
 
                 foreach (var repository in settings.RegistratedRepositories) 
                     RegistratedRepository.Add(new RegistratedRepositoryComponent(repository.Id, repository.BranchName, repository.ProjectName, repository.RepositoryName, repository.RealPath));
+
+                foreach (var repository in settings.VersionRepositories) 
+                    VersionRepositorys.Add(new VersionRepositoryComponent(repository.Name, repository.RealPath));
             }
         }
 
@@ -87,6 +112,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
         public IList<string> KnowenRepositorys { get; } = new FastObservableCollection<string>();
 
         public IList<RegistratedRepository> RegistratedRepositories { get; } = new FastObservableCollection<RegistratedRepository>();
+
+        public IList<VersionRepository> VersionRepositories { get; } = new FastObservableCollection<VersionRepository>();
 
         public string UserName { get; set; } = string.Empty;
         
@@ -116,6 +143,18 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
         public async Task RemoveProjecktAndSave(RegistratedRepository repository)
         {
             RegistratedRepositories.Remove(repository);
+            await Save();
+        }
+
+        public async Task AddVersionRepoAndSave(VersionRepository versionRepository)
+        {
+            VersionRepositories.Add(versionRepository);
+            await Save();
+        }
+
+        public async Task RemoveVersionRepoAndSave(VersionRepository versionRepository)
+        {
+            VersionRepositories.Remove(versionRepository);
             await Save();
         }
 
