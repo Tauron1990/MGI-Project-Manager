@@ -5,10 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManagerCommand"
              xmlns:com="clr-namespace:Tauron.Application.Deployment.AutoUpload.Views.Common"
+             xmlns:core="clr-namespace:Tauron.Application.Deployment.AutoUpload.Views.Helper"
              xmlns:tau="http://schemas.TauronWpf.com"
              mc:Ignorable="d" Background="White" d:DataContext="{d:DesignInstance local:VersionNewRepoViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <com:PageTemplate Title="Neues Versions Repository">
+        <com:PageTemplate.Status>
+            <StackPanel Orientation="Horizontal" Visibility="{Binding IsProcessActive, Converter={tau:BoolToVisibilityConverter IsHidden=True}}">
+                <TextBlock Text="Erstellen..." Margin="5"/>
+                <core:CircularProgressBar Margin="5" MaxHeight="15"/>
+            </StackPanel>
+        </com:PageTemplate.Status>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -19,8 +26,17 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Name:" Margin="5"/>
-            <TextBox Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding RepoName, UpdateSourceTrigger=PropertyChanged, Delay=500}" IsEnabled="{Binding IsActive}"/>
-            <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" IsReadOnly="True" Text="{Binding Concole}"/>
+            <TextBox Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding RepoName, UpdateSourceTrigger=PropertyChanged, Delay=500}" IsEnabled="{Binding IsInputActive}"/>
+            <ItemsControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,50" HorizontalAlignment="Center" MinWidth="200" ItemsSource="{Binding Concole}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="local:ProcesItem">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}" Margin="5" MinWidth="180"/>
+                            <core:CircularProgressBar Margin="5" MaxHeight="15" Visibility="{Binding Running, Converter={tau:BoolToVisibilityConverter IsHidden=True}}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </Grid>
     </com:PageTemplate>
 </tau:UserControl>

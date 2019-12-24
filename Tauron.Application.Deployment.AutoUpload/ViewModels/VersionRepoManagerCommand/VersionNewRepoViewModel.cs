@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Catel.Collections;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
@@ -17,9 +18,11 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
 
         public string RepoName { get; set; } = string.Empty;
 
-        public bool IsActive { get; set; } = true;
+        public bool IsInputActive { get; set; } = true;
 
-        public string Concole { get; set; } = string.Empty;
+        public bool IsProcessActive { get; set; }
+
+        public FastObservableCollection<ProcesItem> Concole { get; } = new FastObservableCollection<ProcesItem>();
 
         public VersionNewRepoViewModel(InputService inputService, Settings settings, RepositoryManager repositoryManager)
         {
@@ -28,13 +31,16 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
             _repositoryManager = repositoryManager;
         }
 
+        protected override bool CanCancelExecute() => IsInputActive;
+
         [CommandTarget]
-        public bool CanOnNext() => IsActive && RepoName.Contains('/');
+        public bool CanOnNext() => IsInputActive && RepoName.Contains('/');
 
         [CommandTarget]
         public async Task OnNext()
         {
-
+            IsInputActive = false;
+            IsProcessActive = true;
         }
     }
 }

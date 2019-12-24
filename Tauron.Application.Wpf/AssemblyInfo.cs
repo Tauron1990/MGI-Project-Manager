@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Markup;
 
 [assembly: XmlnsDefinition("http://schemas.TauronWpf.com", "Tauron.Application.Wpf")]
+[assembly: XmlnsDefinition("http://schemas.TauronWpf.com", "Tauron.Application.Wpf.Converter")]
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
                                      //(used if a resource is not found in the page,

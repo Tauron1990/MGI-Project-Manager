@@ -25,8 +25,10 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
         protected OperationViewModel()
 #pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
         {
-            CancelCommand = new Command(OnCancelCommandExecute);
+            CancelCommand = new Command(OnCancelCommandExecute, CanCancelExecute);
         }
+
+        protected virtual bool CanCancelExecute() => true;
 
         protected Task OnNextView<TType>(Redirection? redirection = null)
             where TType : OperationViewModel<TContext>

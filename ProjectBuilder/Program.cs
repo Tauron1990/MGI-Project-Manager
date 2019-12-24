@@ -121,8 +121,7 @@ namespace ProjectBuilder
         {
             if(_uploadapp.CanWrite)
                 await _uploadapp.SendMessage(e.Data);
-            else
-                Console.WriteLine(e.Data);
+            Console.WriteLine(e.Data);
         }
 
         private static async void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e)
