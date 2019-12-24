@@ -33,7 +33,16 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
 
         private async Task SelectedItemAction(SelectorItemBase arg)
         {
-            
+            switch (arg)
+            {
+                case VersionRepoItem repoItem:
+                    if (Context.Redirection != null)
+                        await OnFinish();
+                    break;
+                case NewSelectorItem _:
+                    await OnNextView<VersionNewRepoViewModel>();
+                    break;
+            }
         }
 
         [CommandTarget]

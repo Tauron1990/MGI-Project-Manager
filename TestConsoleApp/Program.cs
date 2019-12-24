@@ -1,40 +1,31 @@
-﻿using System;
-using System.IO.Pipes;
-using System.Threading.Tasks;
-using Tauron.Application.Pipes;
-using Tauron.Application.Pipes.IO;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace TestConsoleApp
 {
     class Program
     {
-        static async Task Main(string[] args)
+        class Test
         {
-            using var readServer = new PipeServer<string>(Anonymos.Create(PipeDirection.In, out var name));
-            readServer.MessageRecivedEvent += ea =>
+            public string Eins { get; }
+
+            public string Zwei { get; }
+
+            public Test(string eins, string zwei)
             {
-                Console.Write("Recived: ");
-                Console.WriteLine(ea.Message);
-                return Task.CompletedTask;
-            };
-
-            await readServer.Connect();
-
-#pragma warning disable 4014
-            Task.Run(() => ReadTest(name));
-#pragma warning restore 4014
-
-            Console.ReadKey();
+                Eins = eins;
+                Zwei = zwei;
+            }
         }
 
-        private static async void ReadTest(string name)
+        static void Main(string[] args)
         {
-            using var writeServer = new PipeServer<string>(Anonymos.Create(PipeDirection.Out, name));
-            await writeServer.Connect();
+            var test = new Test("Hallo", "Welt");
 
-            await writeServer.SendMessage($"1: {Console.ReadLine()}");
-            await writeServer.SendMessage($"2: {Console.ReadLine()}");
-            await writeServer.SendMessage($"3: {Console.ReadLine()}");
+            var testText = JsonConvert.SerializeObject(test);
+
+            test = JsonConvert.DeserializeObject<Test>(testText);
         }
     }
 }

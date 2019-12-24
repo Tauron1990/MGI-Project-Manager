@@ -1,4 +1,5 @@
-﻿    using System.Security;
+﻿    using System.Collections.Concurrent;
+    using System.Security;
     using System.Threading.Tasks;
     using Catel.Services;
     using JetBrains.Annotations;
@@ -25,7 +26,7 @@
             }
 
             private readonly IDispatcherService _dispatcherService;
-            private UserCredinals? _userCredinals;
+            private ConcurrentDictionary<string, UserCredinals> _userCredinals = new ConcurrentDictionary<string, UserCredinals>();
 
             public InputService(IDispatcherService dispatcherService)
                 => _dispatcherService = dispatcherService;
@@ -47,8 +48,10 @@
 
             public (string? UserName, SecureString? Passwort) Request(string userName)
             {
-                if (_userCredinals != null)
-                    return (_userCredinals.UserName, _userCredinals.Password);
+                if (userName == null)
+                    userName = string.Empty;
+                if (_userCredinals.TryGetValue(userName, out var credinals))
+                    return (credinals.UserName, credinals.Password);
 
                 (string? UserName, SecureString? Passwort) result = default;
 
@@ -60,7 +63,7 @@
                                           });
 
                 if (result.Passwort != null && result.UserName != null)
-                    _userCredinals = new UserCredinals(result.Passwort, result.UserName);
+                    _userCredinals[userName] = new UserCredinals(result.Passwort, result.UserName);
                 return result;
             }
         }

@@ -9,7 +9,6 @@ using Catel.Threading;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
-using Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManagerCommand;
 
 namespace Tauron.Application.Deployment.AutoUpload.Models.Core
 {
