@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Octokit;
 using Syncfusion.SfSkinManager;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
+using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Wpf;
 using InternalSplashScreen = Tauron.Application.Deployment.AutoUpload.Core.InternalSplashScreen;
 
@@ -34,7 +35,12 @@ namespace Tauron.Application.Deployment.AutoUpload
 
             ServiceLocator = IOCReplacer.Create(serviceCollection =>
                                                 {
-                                                    serviceCollection.AddSingleton(sp => new GitHubClient(new ProductHeaderValue("Tauron.Application.Deployment.AutoUpload")));
+                                                    serviceCollection
+                                                       .AddSingleton(
+                                                            sp 
+                                                                => new GitHubClient(
+                                                                    new ProductHeaderValue("Tauron.Application.Deployment.AutoUpload"),
+                                                                    sp.GetRequiredService<DynamicCredStore>()));
                                                     serviceCollection.AddSingleton(s => Settings.Create());
                                                     serviceCollection.Scan(
                                                         ts =>

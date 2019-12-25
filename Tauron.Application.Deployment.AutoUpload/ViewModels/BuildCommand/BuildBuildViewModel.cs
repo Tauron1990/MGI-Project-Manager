@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using Catel.Services;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Build;
+using Tauron.Application.Deployment.AutoUpload.Models.Git;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
@@ -18,15 +19,17 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
     {
         private readonly IMessageService _messageService;
         private readonly Dispatcher _dispatcher;
+        private readonly GitManager _gitManager;
 
         public int ErrorCount { get; set; }
 
         public string Console { get; set; } = string.Empty;
 
-        public BuildBuildViewModel(IMessageService messageService, Dispatcher dispatcher)
+        public BuildBuildViewModel(IMessageService messageService, Dispatcher dispatcher, GitManager gitManager)
         {
             _messageService = messageService;
             _dispatcher = dispatcher;
+            _gitManager = gitManager;
         }
 
         protected override async Task InitializeAsync()
@@ -58,6 +61,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
                 if (Directory.Exists(targetPath))
                     Directory.Delete(targetPath, true);
                 Directory.CreateDirectory(targetPath);
+
+                _gitManager.SyncRepo(Context.RegistratedRepository?.RealPath ?? string.Empty);
 
                 var result = await buildContext.TryBuild(Context.RegistratedRepository, targetPath);
 

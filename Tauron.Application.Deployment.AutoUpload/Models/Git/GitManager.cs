@@ -24,6 +24,9 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
             _inputService = inputService;
         }
 
+        public bool Exis(string path) 
+            => Directory.Exists(path) && Repository.IsValid(path);
+
         public void SyncBranch(string repository, string branch, string path, ProgressHandler progressHandler, TransferProgressHandler transferProgressHandler)
         {
             if (Directory.Exists(path))
@@ -33,7 +36,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
             Repository.Clone(repository, path, new CloneOptions {BranchName = branch, OnProgress = progressHandler, OnTransferProgress = transferProgressHandler});
         }
 
-        public MergeResult SyncRepo(string path, ProgressHandler progressHandler, TransferProgressHandler transferProgressHandler)
+        public MergeResult SyncRepo(string path, ProgressHandler? progressHandler = null, TransferProgressHandler? transferProgressHandler = null)
         {
             using var repo = new Repository(path);
             return Commands.Pull(repo,

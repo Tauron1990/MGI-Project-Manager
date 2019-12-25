@@ -1,8 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
 using Catel.Collections;
+using Octokit;
 using Scrutor;
-using Tauron.Application.Deployment.AutoUpload.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
+using Tauron.Application.Deployment.AutoUpload.Models.Git;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 using Tauron.Application.Wpf;
@@ -12,9 +16,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
     [ServiceDescriptor(typeof(VersionNewRepoViewModel))]
     public class VersionNewRepoViewModel : OperationViewModel<VersionRepoContext>
     {
-        private readonly InputService _inputService;
         private readonly Settings _settings;
         private readonly RepositoryManager _repositoryManager;
+        private readonly GitManager _gitManager;
 
         public string RepoName { get; set; } = string.Empty;
 
@@ -22,13 +26,13 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
 
         public bool IsProcessActive { get; set; }
 
-        public FastObservableCollection<ProcesItem> Concole { get; } = new FastObservableCollection<ProcesItem>();
+        public FastObservableCollection<ProcesItem> Tasks { get; } = new FastObservableCollection<ProcesItem>();
 
-        public VersionNewRepoViewModel(InputService inputService, Settings settings, RepositoryManager repositoryManager)
+        public VersionNewRepoViewModel(Settings settings, RepositoryManager repositoryManager, GitManager gitManager)
         {
-            _inputService = inputService;
             _settings = settings;
             _repositoryManager = repositoryManager;
+            _gitManager = gitManager;
         }
 
         protected override bool CanCancelExecute() => IsInputActive;
@@ -41,6 +45,41 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
         {
             IsInputActive = false;
             IsProcessActive = true;
+
+            var currentTask = new ProcesItem("Repository Erstellen", Tasks);
+            Tasks.Add(currentTask);
+
+            Repository repo;
+
+            try
+            {
+                repo = await _repositoryManager.GetRepository(RepoName);
+            }
+            catch (ApiException e)
+            {
+                if (e.StatusCode != HttpStatusCode.NotFound)
+                    throw;
+
+                repo = await _repositoryManager.CreateRepository(RepoName);
+            }
+
+            currentTask = currentTask.Next("Sync Repository");
+
+            string path = Path.Combine(Settings.SettingsDic, "SoftwareRepos", repo.FullName);
+
+            if (_gitManager.Exis(path))
+                _gitManager.SyncRepo(path);
+            else
+            {
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                _gitManager.SyncBranch(repo.CloneUrl, "master", path, _ => true, _ => true);
+            }
+
+            currentTask = currentTask.Next("Repository Vorbereiten");
+
+
+            currentTask.Finish();
         }
     }
 }
