@@ -7,18 +7,16 @@ namespace Tauron.Application.Wpf
 {
     public class UserControl : Catel.Windows.Controls.UserControl, IBinderControllable
     {
-        private readonly IViewModel _viewModel;
         private readonly ControlLogic _controlLogic;
 
         protected UserControl(IViewModel viewModel)
             : base(viewModel)
         {
-            _viewModel = viewModel;
             _controlLogic = new ControlLogic(this, viewModel);
             DataContextChanged += (sender, args) =>
                                   {
-                                      if (args.NewValue != _viewModel)
-                                          ((FrameworkElement) sender).DataContext = _viewModel;
+                                      if (args.NewValue != viewModel)
+                                          ((FrameworkElement) sender).DataContext = viewModel;
                                   };
         }
 

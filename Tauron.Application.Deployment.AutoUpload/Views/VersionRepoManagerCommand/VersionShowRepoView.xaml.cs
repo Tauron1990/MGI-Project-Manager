@@ -10,17 +10,22 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManagerCommand;
+using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.Views.VersionRepoManagerCommand
 {
     /// <summary>
     /// Interaktionslogik für VersionShowRepoView.xaml
     /// </summary>
-    public partial class VersionShowRepoView : UserControl
+    [Control(typeof(VersionNewRepoViewModel))]
+    public partial class VersionShowRepoView
     {
-        public VersionShowRepoView()
+        public VersionShowRepoView(VersionNewRepoViewModel model)
+            : base(model)
         {
             InitializeComponent();
+            Background = Brushes.Transparent;
         }
     }
 }
