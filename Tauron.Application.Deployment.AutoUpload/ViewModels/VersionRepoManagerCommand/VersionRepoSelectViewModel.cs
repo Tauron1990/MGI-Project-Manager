@@ -36,8 +36,11 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
             switch (arg)
             {
                 case VersionRepoItem repoItem:
+                    Context.VersionRepository = repoItem.VersionRepository;
                     if (Context.Redirection != null)
                         await OnFinish();
+                    else
+                        await OnNextView<VersionShowRepoViewModel>();
                     break;
                 case NewSelectorItem _:
                     await OnNextView<VersionNewRepoViewModel>();

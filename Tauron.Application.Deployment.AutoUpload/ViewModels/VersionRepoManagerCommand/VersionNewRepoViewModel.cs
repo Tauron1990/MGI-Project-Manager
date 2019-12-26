@@ -9,6 +9,7 @@ using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Git;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
+using Tauron.Application.SoftwareRepo;
 using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManagerCommand
@@ -21,6 +22,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
         private readonly GitManager _gitManager;
 
         public string RepoName { get; set; } = string.Empty;
+
+        public string Description { get; set; } = string.Empty;
 
         public bool IsInputActive { get; set; } = true;
 
@@ -78,8 +81,19 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
 
             currentTask = currentTask.Next("Repository Vorbereiten");
 
+            var softRepo = SoftwareRepository.IsValid(path) 
+                               ? await SoftwareRepository.Read(path) 
+                               : await SoftwareRepository.Create(path);
+
+            Context.VersionRepository = new VersionRepository(RepoName, path);
+            await softRepo.ChangeName(RepoName.Split("/")[0], Description);
+            await _settings.AddVersionRepoAndSave(Context.VersionRepository);
+
+            currentTask = currentTask.Next("Vorgang Abschliesen");
+            _gitManager.SyncRepo(path);
 
             currentTask.Finish();
+            await OnFinish("Des Repository wurde erfolgreich angelegt");
         }
     }
 }

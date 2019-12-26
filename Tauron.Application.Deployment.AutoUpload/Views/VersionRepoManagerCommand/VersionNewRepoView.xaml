@@ -19,6 +19,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -27,7 +28,11 @@
             </Grid.ColumnDefinitions>
             <TextBlock Text="Name:" Margin="5"/>
             <TextBox Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding RepoName, UpdateSourceTrigger=PropertyChanged, Delay=500}" IsEnabled="{Binding IsInputActive}"/>
-            <ItemsControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,50" HorizontalAlignment="Center" MinWidth="200" ItemsSource="{Binding Tasks}">
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Beschreibung:" Margin="5"/>
+            <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, Delay=500}" IsEnabled="{Binding IsInputActive}"/>
+
+            <ItemsControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,50" HorizontalAlignment="Center" MinWidth="200" ItemsSource="{Binding Tasks}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="local:ProcesItem">
                         <StackPanel Orientation="Horizontal">

@@ -20,12 +20,32 @@ namespace Tauron.Application.SoftwareRepo
 
         private async Task Init()
         {
-            var compledPath = Path.Combine(_path, FileName);
+            var compledPath = GetFullPath();
 
             if(!File.Exists(compledPath))
                 throw new InvalidOperationException("Apps File not found");
 
             ApplicationList = JsonConvert.DeserializeObject<ApplicationList>(await File.ReadAllTextAsync(compledPath));
+        }
+
+        private async Task InitNew()
+        {
+            var compledPath = GetFullPath();
+
+            if (!File.Exists(compledPath))
+                File.Delete(compledPath);
+
+            await File.WriteAllTextAsync(compledPath, JsonConvert.SerializeObject(ApplicationList));
+        }
+
+        private string GetFullPath()
+            => Path.Combine(_path, FileName);
+
+        public static async Task<SoftwareRepository> Create(string path)
+        {
+            var temp = new SoftwareRepository(path);
+            await temp.InitNew();
+            return temp;
         }
 
         public static async Task<SoftwareRepository> Read(string path)
@@ -37,5 +57,15 @@ namespace Tauron.Application.SoftwareRepo
 
         public static bool IsValid(string path)
             => File.Exists(Path.Combine(path, FileName));
+
+        public async Task ChangeName(string? name = null, string? description = null)
+        {
+            if (!string.IsNullOrWhiteSpace(name))
+                ApplicationList.Name = name;
+            if (!string.IsNullOrWhiteSpace(description))
+                ApplicationList.Description = description;
+
+            await File.WriteAllTextAsync(GetFullPath(), JsonConvert.SerializeObject(ApplicationList));
+        }
     }
 }
