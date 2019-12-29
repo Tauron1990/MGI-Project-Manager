@@ -15,7 +15,7 @@ namespace Tauron.Application.SoftwareRepo
 
         public ApplicationList ApplicationList { get; private set; } = new ApplicationList(ImmutableList<ApplicationEntry>.Empty);
 
-        protected SoftwareRepository(string path) 
+        private SoftwareRepository(string path) 
             => _path = path;
 
         private async Task Init()
