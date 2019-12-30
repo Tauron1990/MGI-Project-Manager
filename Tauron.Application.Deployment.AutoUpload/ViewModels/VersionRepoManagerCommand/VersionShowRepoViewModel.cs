@@ -4,6 +4,7 @@ using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 using Tauron.Application.SoftwareRepo;
 using Tauron.Application.SoftwareRepo.Data;
+using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManagerCommand
 {
@@ -33,5 +34,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
 
             await base.InitializeAsync();
         }
+
+        [CommandTarget]
+        public async Task Return() 
+            => await OnReturn();
     }
 }

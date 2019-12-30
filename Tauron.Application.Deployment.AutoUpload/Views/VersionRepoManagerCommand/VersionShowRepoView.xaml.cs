@@ -18,10 +18,10 @@ namespace Tauron.Application.Deployment.AutoUpload.Views.VersionRepoManagerComma
     /// <summary>
     /// Interaktionslogik für VersionShowRepoView.xaml
     /// </summary>
-    [Control(typeof(VersionNewRepoViewModel))]
+    [Control(typeof(VersionShowRepoViewModel))]
     public partial class VersionShowRepoView
     {
-        public VersionShowRepoView(VersionNewRepoViewModel model)
+        public VersionShowRepoView(VersionShowRepoViewModel model)
             : base(model)
         {
             InitializeComponent();
