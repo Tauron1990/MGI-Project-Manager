@@ -18,6 +18,11 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
                 Path.GetDirectoryName(registratedRepository.ProjectName) ?? string.Empty,
                 "build.xml");
 
+            return await Read(targetPath);
+        }
+        public static async Task<BuildFile> Read(string targetPath)
+        {
+
             if (!File.Exists(targetPath))
                 return new BuildFile();
 
@@ -27,6 +32,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
             foreach (var project in ele.Elements("Project"))
             {
                 var output = project.Element("Output")?.Value ?? string.Empty;
+                var file = project.Element("File")?.Value ?? string.Empty;
             }
 
             return file;
