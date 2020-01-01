@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Immutable;
+using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
@@ -7,6 +8,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
 {
     public class BuildFile
     {
+        public ImmutableArray<BuildEntry> Entries { get; private set; } = ImmutableArray<BuildEntry>.Empty;
+
         private BuildFile()
         {
 
@@ -32,7 +35,11 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
             foreach (var project in ele.Elements("Project"))
             {
                 var output = project.Element("Output")?.Value ?? string.Empty;
-                var file = project.Element("File")?.Value ?? string.Empty;
+                var filePath = project.Element("File")?.Value;
+
+                if(string.IsNullOrEmpty(filePath)) continue;
+
+                file.Entries = file.Entries.Add(new BuildEntry(output, filePath));
             }
 
             return file;
