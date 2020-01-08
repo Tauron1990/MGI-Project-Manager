@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -8,24 +9,47 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
 {
     public class BuildFile
     {
-        public ImmutableArray<BuildEntry> Entries { get; private set; } = ImmutableArray<BuildEntry>.Empty;
+        private ImmutableArray<BuildEntry> Entries { get; set; } = ImmutableArray<BuildEntry>.Empty;
 
         private BuildFile()
         {
 
         }
 
-        public static async Task<BuildFile> Read(RegistratedRepository registratedRepository)
+        public static async IAsyncEnumerable<(string FileName, string Output)> GetEntrysForRepository(RegistratedRepository repo)
         {
-            var targetPath = Path.Combine(
-                Path.GetDirectoryName(registratedRepository.ProjectName) ?? string.Empty,
-                "build.xml");
+            var repositoryRoot = repo.RealPath;
 
-            return await Read(targetPath);
+            var checkPaths = new Stack<(string Root, string Output)>();
+            checkPaths.Push((repo.ProjectName ?? string.Empty, string.Empty));
+
+            while (checkPaths.Count != 0)
+            {
+                var (root, output) = checkPaths.Pop();
+
+                var targetPath = Path.Combine(Path.GetDirectoryName(root) ?? string.Empty, "build.xml");
+                var buildFile = await Read(targetPath);
+
+                if(string.IsNullOrEmpty(root)) continue;
+
+                foreach (var entry in buildFile.Entries) 
+                    checkPaths.Push((Path.Combine(repositoryRoot, entry.File) ?? string.Empty, Path.Combine(output, entry.Output)));
+
+                yield return (root, output);
+            }
         }
-        public static async Task<BuildFile> Read(string targetPath)
-        {
 
+        //private static async Task<BuildFile> Read(RegistratedRepository registratedRepository)
+        //{
+        //    var targetPath = Path.Combine(
+        //        Path.GetDirectoryName(registratedRepository.ProjectName) ?? string.Empty,
+        //        "build.xml");
+
+        //    return await Read(targetPath);
+        //}
+
+        private static async Task<BuildFile> Read(string targetPath)
+        {
             if (!File.Exists(targetPath))
                 return new BuildFile();
 
