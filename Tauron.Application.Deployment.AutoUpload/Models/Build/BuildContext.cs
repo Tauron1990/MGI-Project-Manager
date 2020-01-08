@@ -29,8 +29,10 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
 
         public async Task<int> TryBuild(RegistratedRepository? repository, string outputRoot)
         {
+            if (repository == null) return -1;
+
             var targetFile = repository?.ProjectName;
-            if (targetFile == null || repository == null) return -1;
+            if (targetFile == null) return -1;
 
             var result = 0;
 
