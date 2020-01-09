@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800" Background="White" d:DataContext="{d:DesignInstance local:CommandViewModel}">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="70"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -22,6 +22,7 @@
             <Button Content="Projekt Entfernen" Margin="20, 10" Command="{Binding RemoveCommand}"/>
             <Button Content="Projekt Erstellen" Margin="20,10" Command="{Binding BuildCommand}"/>
             <Button Content="Version Repository" Margin="20, 10" tau:CommandBinder.Command="OnVersionRepoManager"/>
+            <Button Content="Datei Hochladen" Margin="20, 10" tau:CommandBinder.Command="OnUploadFile"/>
         </StackPanel>
         <ItemsControl Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" ItemsSource="{Binding Settings.RegistratedRepositories}" 
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="True" Margin="5">

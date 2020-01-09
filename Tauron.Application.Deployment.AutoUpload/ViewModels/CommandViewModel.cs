@@ -46,5 +46,11 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels
         [CommandTarget]
         public async Task OnVersionRepoManager() 
             => await OnNextView<VersionRepoSelectViewModel, VersionRepoContext>(new VersionRepoContext());
+
+        [CommandTarget]
+        public async Task OnUploadFile()
+        {
+
+        }
     }
 }

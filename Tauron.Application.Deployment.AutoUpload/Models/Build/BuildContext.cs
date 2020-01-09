@@ -2,10 +2,8 @@
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Catel;
 using MessagePack;
 using Microsoft.DotNet.PlatformAbstractions;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +11,7 @@ using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Pipes;
 using Tauron.Application.Pipes.IO;
+using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.Models.Build
 {
@@ -29,14 +28,12 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
 
         public async Task<int> TryBuild(RegistratedRepository? repository, string outputRoot)
         {
-            if (repository == null) return -1;
-
             var targetFile = repository?.ProjectName;
             if (targetFile == null) return -1;
 
             var result = 0;
 
-            await foreach (var (fileName, relativeOutput) in BuildFile.GetEntrysForRepository(repository))
+            await foreach (var (fileName, relativeOutput) in BuildFile.GetEntrysForRepository(Argument.NotNull(repository, nameof(repository))))
             {
                 if (result != 0) continue;
 
