@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 using Catel;
 using Catel.IoC;
 using Catel.Runtime.Serialization;
@@ -267,6 +268,14 @@ namespace Tauron.Application.Wpf
         public static IServiceLocator Create(Action<ServiceCollection> config)
         {
             var locator = Locator.Value;
+            
+            locator.Collection.Scan(
+                ts =>
+                    ts.FromApplicationDependencies()
+                        .AddClasses(c => c.WithAttribute<ControlAttribute>())
+                        .As<FrameworkElement>().UsingRegistrationStrategy(new ControlRegistrar())
+                        .AddClasses().UsingAttributes());
+
             config(locator.Collection);
 
             IoCFactory.CreateServiceLocatorFunc = () => Locator.Value;

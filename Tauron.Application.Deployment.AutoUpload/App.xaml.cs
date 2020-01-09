@@ -41,15 +41,10 @@ namespace Tauron.Application.Deployment.AutoUpload
                                                                 => new GitHubClient(
                                                                     new ProductHeaderValue("Tauron.Application.Deployment.AutoUpload"),
                                                                     sp.GetRequiredService<DynamicCredStore>()));
-                                                    serviceCollection.AddSingleton(s => Settings.Create());
-                                                    serviceCollection.Scan(
-                                                        ts =>
-                                                            ts.FromApplicationDependencies()
-                                                               .AddClasses(c => c.WithAttribute<ControlAttribute>())
-                                                               .As<FrameworkElement>().UsingRegistrationStrategy(new ControlRegistrar())
-                                                               .AddClasses().UsingAttributes());
 
+                                                    serviceCollection.AddSingleton(s => Settings.Create());
                                                     serviceCollection.AddLogging();
+
                                                     serviceCollection.AddSingleton(Current.Dispatcher);
                                                 });
 
