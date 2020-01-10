@@ -6,7 +6,7 @@
              xmlns:tau="http://schemas.TauronWpf.com"
              xmlns:com="clr-namespace:Tauron.Application.Deployment.AutoUpload.Views.Common"
              xmlns:local="clr-namespace:Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand"
-             mc:Ignorable="d" Background="White" d:DataContext="{d:DesignInstance local:UploadSelectRepoViewModel}"
+             mc:Ignorable="d" Background="White" d:DataContext="{d:DesignInstance local:UploadSelectSoftwareRepoViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
             

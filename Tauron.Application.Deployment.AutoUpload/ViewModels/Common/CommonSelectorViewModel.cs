@@ -21,8 +21,12 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Common
 
         }
 
-        public static ICommonSelectorViewModel Create() 
-            => App.Current.Dispatcher.Invoke(() => new CommonSelectorView(new CommonSelectorViewModel()));
+        public static ICommonSelectorViewModel Create()
+        {
+            if (System.Windows.Application.Current.Dispatcher != null) 
+                return System.Windows.Application.Current.Dispatcher.Invoke(() => new CommonSelectorView(new CommonSelectorViewModel()));
+            throw new InvalidOperationException();
+        }
 
         public event Action<SelectorItemBase?>? ElementSelected;
 
