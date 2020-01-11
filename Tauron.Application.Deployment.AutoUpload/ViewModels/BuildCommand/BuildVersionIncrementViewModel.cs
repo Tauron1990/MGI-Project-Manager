@@ -57,6 +57,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
                 var repo = Context.RegistratedRepository;
                 if( repo != null)
                     _gitManager.CommitRepo(repo);
+                Context.AssemblyVersion = Version.Parse(AssemblyVersion ?? string.Empty);
                 await OnNextView<BuildBuildViewModel>();
             }
             catch (Exception e)

@@ -4,11 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:com="clr-namespace:Tauron.Application.Deployment.AutoUpload.Views.Common"
+             xmlns:conv="clr-namespace:Tauron.Application.Deployment.AutoUpload.Core.Converter"
              xmlns:tau="http://schemas.TauronWpf.com"
              xmlns:local="clr-namespace:Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance local:UploadLastCheckViewModel}"
              d:DesignHeight="450" d:DesignWidth="800" Background="White">
-    <Grid>
-            
-    </Grid>
+    <com:PageTemplate Title="Überprüfung">
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto" MinWidth="150"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" Text="{Binding Repository, Converter={conv:RegistratedRepositoryConverter}}" />
+            <CheckBox Grid.Row="1" Grid.Column="1" Margin="5" IsChecked="{Binding RepoOk}"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" Text="{Binding VersionRepository, Converter={conv:VersionRepositoryConverter}}"/>
+            <CheckBox Grid.Row="2" Grid.Column="1" Margin="5" IsChecked="{Binding VersionOk}"/>
+        </Grid>
+    </com:PageTemplate>
 </tau:UserControl>

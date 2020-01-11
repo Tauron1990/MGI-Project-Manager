@@ -1,5 +1,6 @@
 ﻿using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand;
+using Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManagerCommand;
 
@@ -11,6 +12,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
 
         public VersionRepository? VersionRepository { get; set; }
 
+        public BuildResult? Output { get; set; }
+
         public void Apply(OperationContextBase context)
         {
             switch (context)
@@ -20,6 +23,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
                     break;
                 case VersionRepoContext versionRepoContext:
                     VersionRepository = versionRepoContext.VersionRepository;
+                    break;
+                case BuildOperationContext buildOperationContext:
+                    Output = new BuildResult(buildOperationContext);
                     break;
             }
         }
