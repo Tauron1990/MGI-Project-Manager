@@ -68,7 +68,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
 
             currentTask = currentTask.Next("Sync Repository");
 
-            string path = Path.Combine(Settings.SettingsDic, "SoftwareRepos", repo.FullName);
+            var path = Path.Combine(Settings.SettingsDic, "SoftwareRepos", repo.FullName);
 
             if (_gitManager.Exis(path))
                 _gitManager.SyncRepo(path);

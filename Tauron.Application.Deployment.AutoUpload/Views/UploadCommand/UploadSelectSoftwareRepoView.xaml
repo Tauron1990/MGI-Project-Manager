@@ -8,7 +8,5 @@
              xmlns:local="clr-namespace:Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand"
              mc:Ignorable="d" Background="White" d:DataContext="{d:DesignInstance local:UploadSelectSoftwareRepoViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+    <com:PageTemplate Title="Software Repository" ControlContent="{Binding RepoSelector}"/>
 </tau:UserControl>

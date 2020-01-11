@@ -6,6 +6,8 @@ using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Common;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
+using Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManagerCommand;
+using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
 {
@@ -37,9 +39,23 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
             await base.InitializeAsync();
         }
 
-        private Task SelectedItemAction(SelectorItemBase arg)
+        [CommandTarget]
+        public async Task OnNext()
+            => await RepoSelector.Run();
+
+        [CommandTarget]
+        public bool CanOnNext()
+            => RepoSelector.CanRun();
+
+        private async Task SelectedItemAction(SelectorItemBase arg)
         {
-            
+            if (arg.ItemType == ItemType.New)
+                await OnNextView<VersionNewRepoViewModel, VersionRepoContext>(new VersionRepoContext(), CreateRedirection<UploadLastCheckViewModel>());
+            else
+            {
+                Context.VersionRepository = ((VersionRepo) arg).Repository;
+                await OnNextView<UploadLastCheckViewModel>();
+            }
         }
     }
 }
