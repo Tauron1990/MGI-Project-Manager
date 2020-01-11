@@ -7,7 +7,14 @@
              xmlns:local="clr-namespace:Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand"
              mc:Ignorable="d" Background="White" d:DataContext="{d:DesignInstance local:UploadCreatePackageViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+    <Grid Margin="5">
+           <Grid.RowDefinitions>
+               <RowDefinition Height="70"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+           </Grid.RowDefinitions> 
+        <TextBlock Text="Packen und Hochladen" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30"></TextBlock>
+        <TextBlock Grid.Row="1" Margin="20" TextWrapping="Wrap" Text="{Binding Console}"/>
+        <Button Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="7" Padding="5" Content="Abbrechen" tau:CommandBinder.Command="CancelOp"/>
     </Grid>
 </tau:UserControl>
