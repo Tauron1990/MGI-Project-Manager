@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Catel.Services;
 using Scrutor;
+using Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 using Tauron.Application.Wpf;
 
@@ -16,7 +17,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
 
         public string Console { get; set; } = string.Empty;
 
-        public int CurrentValue { get; set; }
+        private bool IsFailed { get; set; }
 
         public UploadCreatePackageViewModel(IMessageService messageService) 
             => _messageService = messageService;
@@ -37,7 +38,28 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
 
         private async void StartOperation()
         {
-            
+            AddConsole("Überprüfe Build");
+
+            if (Context.Output == null)
+            {
+                await _messageService.ShowErrorAsync("Kein Build Gefunden");
+                await OnReturn();
+                return;
+            }
+
+            await Context.Output.Do(Run, Faild);
+        }
+
+        private async Task Faild(BuildFailed arg)
+        {
+            Console = $"Build Fehlerhaft:{Environment.NewLine}{arg.Console}{Environment.NewLine}Prozess Benende mit: {arg.Result} Code -- Fehlerzahl: {arg.ErrorCount}";
+            IsFailed = true;
+            await _messageService.ShowErrorAsync()
+        }
+
+        private Task Run(string arg1, Version arg2)
+        {
+            throw new NotImplementedException();
         }
 
         private void AddConsole(string value) 
