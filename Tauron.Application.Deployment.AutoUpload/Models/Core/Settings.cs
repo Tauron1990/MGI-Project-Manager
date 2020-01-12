@@ -20,15 +20,14 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
 
             public string? Path { get; set; }
 
-            public VersionRepositoryComponent()
-            {
-                
-            }
+            public long Id { get; set; }
 
-            public VersionRepositoryComponent(string? name, string? path)
+
+            public VersionRepositoryComponent(string? name, string? path, long id)
             {
                 Name = name;
                 Path = path;
+                Id = id;
             }
         }
 
@@ -96,7 +95,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
                     RegistratedRepository.Add(new RegistratedRepositoryComponent(repository.Id, repository.BranchName, repository.ProjectName, repository.RepositoryName, repository.RealPath));
 
                 foreach (var repository in settings.VersionRepositories) 
-                    VersionRepositorys.Add(new VersionRepositoryComponent(repository.Name, repository.RealPath));
+                    VersionRepositorys.Add(new VersionRepositoryComponent(repository.Name, repository.RealPath, repository.Id));
             }
         }
 
@@ -248,6 +247,12 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
                                                                           repositoryComponent.RepositoryName ?? string.Empty,
                                                                           repositoryComponent.RealPath ?? string.Empty));
                 }
+            }
+
+            if (component.VersionRepositorys != null)
+            {
+                foreach (var repositoryComponent in component.VersionRepositorys) 
+                    VersionRepositories.Add(new VersionRepository(repositoryComponent.Name ?? string.Empty, repositoryComponent.Path ?? string.Empty, repositoryComponent.Id));
             }
         }
     }

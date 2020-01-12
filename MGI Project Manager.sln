@@ -50,7 +50,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Pipes", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectBuilder", "ProjectBuilder\ProjectBuilder.csproj", "{1D0566E6-745C-40A8-AD89-D2CF8A0D2E67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.SoftwareRepo", "Tauron.Application.SoftwareRepo\Tauron.Application.SoftwareRepo.csproj", "{D2656B72-659B-4D56-A70C-09662ABA907C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.SoftwareRepo", "Tauron.Application.SoftwareRepo\Tauron.Application.SoftwareRepo.csproj", "{D2656B72-659B-4D56-A70C-09662ABA907C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{5572E43F-E5B8-4350-B45D-797B51759FA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,7 @@ Global
 		{071696D1-B090-4A87-8C4E-2840EEB79C45} = {97DB54DA-B117-4297-BD4F-7C4EB86ED2D4}
 		{1D0566E6-745C-40A8-AD89-D2CF8A0D2E67} = {D77A5F03-F25C-459F-97B0-B5F71A26A5FF}
 		{D2656B72-659B-4D56-A70C-09662ABA907C} = {97DB54DA-B117-4297-BD4F-7C4EB86ED2D4}
+		{5572E43F-E5B8-4350-B45D-797B51759FA4} = {C65A7611-D7FE-4174-B5DE-A966C5BC5A18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}

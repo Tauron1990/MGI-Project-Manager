@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using Catel.Services;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Build;
+using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Git;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 
@@ -55,7 +56,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
             try
             {
-                var targetPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ?? string.Empty, "Output");
+                //var targetPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ?? string.Empty, "Output");
+                var targetPath = Path.Combine(Settings.SettingsDic, "Output");
                 Context.Location = targetPath;
 
                 if (Directory.Exists(targetPath))

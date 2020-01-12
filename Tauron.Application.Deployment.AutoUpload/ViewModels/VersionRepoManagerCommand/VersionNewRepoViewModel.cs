@@ -85,7 +85,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
                                ? await SoftwareRepository.Read(path) 
                                : await SoftwareRepository.Create(path);
 
-            Context.VersionRepository = new VersionRepository(RepoName, path);
+            Context.VersionRepository = new VersionRepository(RepoName, path, repo.Id);
             await softRepo.ChangeName(RepoName.Split("/")[0], Description);
             await _settings.AddVersionRepoAndSave(Context.VersionRepository);
 

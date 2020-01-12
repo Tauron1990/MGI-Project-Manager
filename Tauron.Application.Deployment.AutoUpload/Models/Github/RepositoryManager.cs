@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading.Tasks;
 using Octokit;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Core;
+using FileMode = System.IO.FileMode;
 
 namespace Tauron.Application.Deployment.AutoUpload.Models.Github
 {
@@ -68,13 +70,33 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Github
         {
             var arr = name.Split('/');
 
-            return await ExcuteAut(arr[0], async client => await _client.Repository.Create(new NewRepository(arr[1])));
+            return await ExceuteAut(arr[0], async client => await _client.Repository.Create(new NewRepository(arr[1])));
         }
 
         public async Task<IEnumerable<Branch>> GetBranchs(Repository repository) 
             => await _client.Repository.Branch.GetAll(repository.Id);
 
-        private async Task<TType> ExcuteAut<TType>(string name, Func<GitHubClient, Task<TType>> exec)
+        public async Task<(string, int)> UploadAsset(long repoId, string fileName, string assetName, string name)
+        {
+            return await ExceuteAut(name, async client =>
+                                         {
+                                             var release = await client.Repository.Release.Create(repoId, new NewRelease(assetName) {Body = $"Automated Release of {assetName}"});
+                                             await using var rawData = File.Open(fileName, FileMode.Open);
+                                             var asset = await client.Repository.Release.UploadAsset(release, new ReleaseAssetUpload(assetName, "application/zip", rawData, null));
+                                             
+                                             return (asset.BrowserDownloadUrl, release.Id);
+                                         });
+        }
+
+        public async Task DeleteRelease(long repo, int release, string name)
+        {
+            await ExceuteAut(name, async c =>
+                                   {
+                                       await c.Repository.Release.Delete(repo, release);
+                                       return string.Empty;
+                                   });
+        }
+        private async Task<TType> ExceuteAut<TType>(string name, Func<GitHubClient, Task<TType>> exec)
         {
             var internalStore = new InternalStore(name, _inputService);
             var old = _dynamicCredStore.CredentialStore;

@@ -6,10 +6,13 @@
 
         public string RealPath { get; }
 
-        public VersionRepository(string name, string realPath)
+        public long Id { get; }
+
+        public VersionRepository(string name, string realPath, long id)
         {
             Name = name;
             RealPath = realPath;
+            Id = id;
         }
     }
 }

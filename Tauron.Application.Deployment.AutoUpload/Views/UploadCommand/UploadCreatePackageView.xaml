@@ -15,6 +15,6 @@
            </Grid.RowDefinitions> 
         <TextBlock Text="Packen und Hochladen" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30"></TextBlock>
         <TextBlock Grid.Row="1" Margin="20" TextWrapping="Wrap" Text="{Binding Console}"/>
-        <Button Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="7" Padding="5" Content="Abbrechen" tau:CommandBinder.Command="CancelOp"/>
+        <Button Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="7" Padding="5" Content="{Binding CancelLabel}" tau:CommandBinder.Command="CancelOp"/>
     </Grid>
 </tau:UserControl>
