@@ -56,15 +56,20 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
                 });
         }
 
-        public void CommitRepo(RegistratedRepository repository)
-        {
-            if (!Repository.IsValid(repository.RealPath)) return;
+        public void CommitRepo(RegistratedRepository repository) 
+            => CommitRepo(repository.RealPath, repository.BranchName, repository.RepositoryName);
 
-            using var repo = new Repository(repository.RealPath);
+        public void CommitRepo(VersionRepository versionRepository)
+            => CommitRepo(versionRepository.RealPath, "master", versionRepository.Name); 
+        private void CommitRepo(string repository, string branchName, string name)
+        {
+            if (!Repository.IsValid(repository)) return;
+
+            using var repo = new Repository(repository);
 
             StageChanges(repo);
             CommitChanges(repo);
-            PushChanges(repo, repository.BranchName, repository);
+            PushChanges(repo, branchName, name);
         }
 
         private static void StageChanges(IRepository repo)
@@ -81,14 +86,14 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
                 new Signature(_settings.UserName, _settings.EMailAdress, DateTimeOffset.Now));
         }
 
-        private void PushChanges(IRepository repo, string branch, RegistratedRepository registratedRepository)
+        private void PushChanges(IRepository repo, string branch, string registratedRepository)
         {
             Credentials CredentialsProvider(string url, string usernamefromurl, SupportedCredentialTypes types)
             {
                 switch (types)
                 {
                     case SupportedCredentialTypes.UsernamePassword:
-                        var (userName, password) = _inputService.Request(registratedRepository.RepositoryName.Split('/')[0]);
+                        var (userName, password) = _inputService.Request(registratedRepository.Split('/')[0]);
                         return new SecureUsernamePasswordCredentials { Password = password, Username = userName };
                     case SupportedCredentialTypes.Default:
                         return new DefaultCredentials();

@@ -187,16 +187,52 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
                                             .WaitAndUnwrapException(_token);
                               });
 
-                await op.Next("Update Software Repository...",
+                await op.Next("Aktualisiere Software Repository...",
                               async () =>
                               {
+                                  var url = asset.Item1;
+                                  var vrepo = Context.VersionRepository;
+                                  var srepo = Context.Repository;
+
+                                  if (url == null || vrepo == null || srepo == null)
+                                  {
+                                      IsFailed = true;
+                                      await _messageService.ShowErrorAsync("Kein'e Download Url/Repository Gefunden");
+                                      return null;
+                                  }
+
                                   var repo = await SoftwareRepository.Read(versionRepo.RealPath);
                                   var backup = repo.CreateBackup();
 
+                                  var id = repo.Get(name);
+
+                                  if (id != -1)
+                                    repo.UpdateApplication(id, version, url);
+                                  else
+                                    repo.AddApplication(name, DateTime.Now.Ticks, url, version, srepo.RepositoryName, srepo.BranchName);
+
+                                  await repo.Save();
+                                  _gitManager.CommitRepo(vrepo);
+
                                   return () => repo.Revert(backup);
                               });
-            }
 
+                await op.Next("Aufräumen...", async () =>
+                                              {
+                                                  try
+                                                  {
+                                                      File.Delete(packagePath);
+                                                      Directory.Delete(output, true);
+                                                  }
+                                                  catch (IOException) { }
+
+                                                  await Task.Delay(2000, _token);
+
+                                                  return null;
+                                              });
+
+                await OnFinish("Software Erfolgreich Aktualisiert");
+            }
             catch (Exception e)
             {
                 if (!(e is OperationCanceledException))

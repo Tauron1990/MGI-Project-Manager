@@ -82,17 +82,17 @@ namespace Tauron.Application.SoftwareRepo
                 throw new InvalidOperationException("Falsches backup übergeben");
         }
 
-        public long Contains(string name) 
+        public long Get(string name) 
             => ApplicationList.ApplicationEntries.Find(ae => ae.Name == name)?.Id ?? -1;
 
-        public void AddApplication(string name, long id, string url, Version version)
+        public void AddApplication(string name, long id, string url, Version version, string originalRepository, string brnachName)
         {
-            if(Contains(name) != -1)
+            if(Get(name) != -1)
                 throw new InvalidOperationException("Der Eintrag Existiert schon");
 
             ApplicationList.ApplicationEntries =
                 ApplicationList.ApplicationEntries.Add(
-                    new ApplicationEntry(name, version, id, ImmutableList<DownloadEntry>.Empty.Add(new DownloadEntry(version, url))));
+                    new ApplicationEntry(name, version, id, ImmutableList<DownloadEntry>.Empty.Add(new DownloadEntry(version, url)), originalRepository, brnachName));
         }
 
         public void UpdateApplication(long id, Version version, string url)

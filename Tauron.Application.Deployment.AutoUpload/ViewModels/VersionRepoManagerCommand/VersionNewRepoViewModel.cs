@@ -90,7 +90,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
             await _settings.AddVersionRepoAndSave(Context.VersionRepository);
 
             currentTask = currentTask.Next("Vorgang Abschliesen");
-            _gitManager.SyncRepo(path);
+            _gitManager.CommitRepo(Context.VersionRepository);
 
             currentTask.Finish();
             await OnFinish("Des Repository wurde erfolgreich angelegt");

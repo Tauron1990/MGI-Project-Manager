@@ -14,16 +14,24 @@ namespace Tauron.Application.SoftwareRepo.Data
 
         public ImmutableList<DownloadEntry> Downloads { get; internal set; }
 
-        public ApplicationEntry(string name, Version last, long id, ImmutableList<DownloadEntry> downloads)
+        public string RepositoryName { get; }
+
+        public string BranchName { get; }
+
+        public ApplicationEntry(string name, Version last, long id, ImmutableList<DownloadEntry> downloads, string repositoryName, string branchName)
         {
             Name = name;
             Last = last;
             Id = id;
             Downloads = downloads;
+            RepositoryName = repositoryName;
+            BranchName = branchName;
         }
 
         public ApplicationEntry(ApplicationEntry entry)
         {
+            BranchName = entry.BranchName;
+            RepositoryName = entry.RepositoryName;
             Name = entry.Name;
             Last = entry.Last;
             Id = entry.Id;
