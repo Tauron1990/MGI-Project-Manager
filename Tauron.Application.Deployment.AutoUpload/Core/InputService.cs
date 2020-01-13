@@ -66,5 +66,8 @@
                     _userCredinals[userName] = new UserCredinals(result.Passwort, result.UserName);
                 return result;
             }
+
+            public void DeleteCredinals(string name) 
+                => _userCredinals.TryRemove(name, out _);
         }
     }

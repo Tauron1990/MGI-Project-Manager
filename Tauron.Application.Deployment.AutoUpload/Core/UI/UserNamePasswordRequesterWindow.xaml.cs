@@ -40,5 +40,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.UI
             PasswordBox.Text = string.Empty;
             DialogResult = true;
         }
+
+        private void UserNamePasswordRequesterWindow_OnLoaded(object sender, RoutedEventArgs e) 
+            => NameBox.Text = UserName;
     }
 }

@@ -138,6 +138,12 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
             await Save();
         }
 
+        public async Task AddProjecktsAndSave(IEnumerable<RegistratedRepository> repositorys)
+        {
+            RegistratedRepositories.AddRange(repositorys);
+            await Save();
+        }
+
         public async Task RemoveProjecktAndSave(RegistratedRepository repository)
         {
             RegistratedRepositories.Remove(repository);

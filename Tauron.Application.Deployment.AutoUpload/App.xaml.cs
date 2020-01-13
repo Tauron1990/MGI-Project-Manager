@@ -39,8 +39,7 @@ namespace Tauron.Application.Deployment.AutoUpload
                                                        .AddSingleton(
                                                             sp 
                                                                 => new GitHubClient(
-                                                                    new ProductHeaderValue("Tauron.Application.Deployment.AutoUpload"),
-                                                                    sp.GetRequiredService<DynamicCredStore>()));
+                                                                    new ProductHeaderValue("Tauron.Application.Deployment.AutoUpload")));
 
                                                     serviceCollection.AddSingleton(s => Settings.Create());
                                                     serviceCollection.AddLogging();

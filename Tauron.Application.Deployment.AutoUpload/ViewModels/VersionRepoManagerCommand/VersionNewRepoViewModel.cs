@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Catel.Collections;
+using Catel.Services;
 using Octokit;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
@@ -20,6 +21,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
         private readonly Settings _settings;
         private readonly RepositoryManager _repositoryManager;
         private readonly GitManager _gitManager;
+        private readonly IMessageService _messageService;
 
         public string RepoName { get; set; } = string.Empty;
 
@@ -31,11 +33,12 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
 
         public FastObservableCollection<ProcesItem> Tasks { get; } = new FastObservableCollection<ProcesItem>();
 
-        public VersionNewRepoViewModel(Settings settings, RepositoryManager repositoryManager, GitManager gitManager)
+        public VersionNewRepoViewModel(Settings settings, RepositoryManager repositoryManager, GitManager gitManager, IMessageService messageService)
         {
             _settings = settings;
             _repositoryManager = repositoryManager;
             _gitManager = gitManager;
+            _messageService = messageService;
         }
 
         protected override bool CanCancelExecute() => IsInputActive;
@@ -46,54 +49,62 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
         [CommandTarget]
         public async Task OnNext()
         {
-            IsInputActive = false;
-            IsProcessActive = true;
-
-            var currentTask = new ProcesItem("Repository Erstellen", Tasks);
-            Tasks.Add(currentTask);
-
-            Repository repo;
-
             try
             {
-                repo = await _repositoryManager.GetRepository(RepoName);
+                IsInputActive = false;
+                IsProcessActive = true;
+
+                var currentTask = new ProcesItem("Repository Erstellen", Tasks);
+                Tasks.Add(currentTask);
+
+                Repository repo;
+
+                try
+                {
+                    repo = await _repositoryManager.GetRepository(RepoName);
+                }
+                catch (ApiException e)
+                {
+                    if (e.StatusCode != HttpStatusCode.NotFound)
+                        throw;
+
+                    repo = await _repositoryManager.CreateRepository(RepoName);
+                }
+
+                currentTask = currentTask.Next("Sync Repository");
+
+                var path = Path.Combine(Settings.SettingsDic, "SoftwareRepos", repo.FullName);
+
+                if (_gitManager.Exis(path))
+                    _gitManager.SyncRepo(path);
+                else
+                {
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+                    _gitManager.SyncBranch(repo.CloneUrl, "master", path, _ => true, _ => true);
+                }
+
+                currentTask = currentTask.Next("Repository Vorbereiten");
+
+                var softRepo = SoftwareRepository.IsValid(path) 
+                    ? await SoftwareRepository.Read(path) 
+                    : await SoftwareRepository.Create(path);
+
+                Context.VersionRepository = new VersionRepository(RepoName, path, repo.Id);
+                await softRepo.ChangeName(RepoName.Split("/")[0], Description);
+                await _settings.AddVersionRepoAndSave(Context.VersionRepository);
+
+                currentTask = currentTask.Next("Vorgang Abschliesen");
+                _gitManager.CommitRepo(Context.VersionRepository);
+
+                currentTask.Finish();
+                await OnFinish("Des Repository wurde erfolgreich angelegt");
             }
-            catch (ApiException e)
+            catch (Exception e)
             {
-                if (e.StatusCode != HttpStatusCode.NotFound)
-                    throw;
-
-                repo = await _repositoryManager.CreateRepository(RepoName);
+                await _messageService.ShowErrorAsync(e);
+                await OnReturn();
             }
-
-            currentTask = currentTask.Next("Sync Repository");
-
-            var path = Path.Combine(Settings.SettingsDic, "SoftwareRepos", repo.FullName);
-
-            if (_gitManager.Exis(path))
-                _gitManager.SyncRepo(path);
-            else
-            {
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-                _gitManager.SyncBranch(repo.CloneUrl, "master", path, _ => true, _ => true);
-            }
-
-            currentTask = currentTask.Next("Repository Vorbereiten");
-
-            var softRepo = SoftwareRepository.IsValid(path) 
-                               ? await SoftwareRepository.Read(path) 
-                               : await SoftwareRepository.Create(path);
-
-            Context.VersionRepository = new VersionRepository(RepoName, path, repo.Id);
-            await softRepo.ChangeName(RepoName.Split("/")[0], Description);
-            await _settings.AddVersionRepoAndSave(Context.VersionRepository);
-
-            currentTask = currentTask.Next("Vorgang Abschliesen");
-            _gitManager.CommitRepo(Context.VersionRepository);
-
-            currentTask.Finish();
-            await OnFinish("Des Repository wurde erfolgreich angelegt");
         }
     }
 }

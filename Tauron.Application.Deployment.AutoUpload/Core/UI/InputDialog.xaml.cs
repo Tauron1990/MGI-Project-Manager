@@ -75,6 +75,5 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.UI
         }
 
         #endregion
-
     }
 }
