@@ -14,7 +14,7 @@ namespace Tauron.Application.SoftwareRepo
 
         private readonly string _path;
 
-        public ApplicationList ApplicationList { get; private set; } = new ApplicationList(ImmutableList<ApplicationEntry>.Empty);
+        public ApplicationList ApplicationList { get; private set; } = new ApplicationList(ImmutableList<ApplicationEntry>.Empty, string.Empty, string.Empty);
 
         private SoftwareRepository(string path) 
             => _path = path;

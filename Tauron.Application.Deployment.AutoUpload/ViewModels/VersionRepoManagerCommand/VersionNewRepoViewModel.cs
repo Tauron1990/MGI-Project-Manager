@@ -53,6 +53,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
             {
                 IsInputActive = false;
                 IsProcessActive = true;
+                var isExistend = false;
 
                 var currentTask = new ProcesItem("Repository Erstellen", Tasks);
                 Tasks.Add(currentTask);
@@ -62,6 +63,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
                 try
                 {
                     repo = await _repositoryManager.GetRepository(RepoName);
+                    isExistend = true;
                 }
                 catch (ApiException e)
                 {
@@ -71,18 +73,14 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
                     repo = await _repositoryManager.CreateRepository(RepoName);
                 }
 
-                currentTask = currentTask.Next("Sync Repository");
-
                 var path = Path.Combine(Settings.SettingsDic, "SoftwareRepos", repo.FullName);
 
-                if (_gitManager.Exis(path))
+                currentTask = currentTask.Next("Sync Repository");
+
+                if (isExistend)
                     _gitManager.SyncRepo(path);
                 else
-                {
-                    if (!Directory.Exists(path))
-                        Directory.CreateDirectory(path);
-                    _gitManager.SyncBranch(repo.CloneUrl, "master", path, _ => true, _ => true);
-                }
+                    _gitManager.CreateRepository(path, repo.CloneUrl);
 
                 currentTask = currentTask.Next("Repository Vorbereiten");
 

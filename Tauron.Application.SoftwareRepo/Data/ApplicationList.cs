@@ -7,13 +7,18 @@ namespace Tauron.Application.SoftwareRepo.Data
 {
     public sealed class ApplicationList
     {
-        public string Name { get; internal set; } = string.Empty;
+        public string Name { get; internal set; }
 
-        public string Description { get; internal set; } = string.Empty;
+        public string Description { get; internal set; }
 
         public ImmutableList<ApplicationEntry> ApplicationEntries { get; internal set; }
 
-        public ApplicationList(ImmutableList<ApplicationEntry> applicationEntries) => ApplicationEntries = applicationEntries;
+        public ApplicationList(ImmutableList<ApplicationEntry> applicationEntries, string name, string description)
+        {
+            ApplicationEntries = applicationEntries;
+            Name = name;
+            Description = description;
+        }
 
         internal ApplicationList(ApplicationList backup)
         {

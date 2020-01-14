@@ -27,6 +27,13 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
         public bool Exis(string path) 
             => Directory.Exists(path) && Repository.IsValid(path);
 
+        public void CreateRepository(string repoPath, string url)
+        {
+            Repository.Init(repoPath);
+            using var repo = new Repository(repoPath);
+            repo.Network.Remotes.Add("origin", url);
+        }
+
         public void SyncBranch(string repository, string branch, string path, ProgressHandler progressHandler, TransferProgressHandler transferProgressHandler)
         {
             if (Directory.Exists(path))
@@ -60,7 +67,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
             => CommitRepo(repository.RealPath, repository.BranchName, repository.RepositoryName);
 
         public void CommitRepo(VersionRepository versionRepository)
-            => CommitRepo(versionRepository.RealPath, "master", versionRepository.Name); 
+            => CommitRepo(versionRepository.RealPath, "master", versionRepository.Name);
+
         private void CommitRepo(string repository, string branchName, string name)
         {
             if (!Repository.IsValid(repository)) return;
@@ -75,7 +83,9 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
         private static void StageChanges(IRepository repo)
         {
             var status = repo.RetrieveStatus();
-            var filePaths = status.Modified.Select(mods => mods.FilePath).ToList();
+            var filePaths = status.Modified.Select(mods => mods.FilePath)
+               .Concat(status.Added.Select(e => e.FilePath))
+               .Concat(status.Removed.Select(e => e.FilePath)).ToHashSet();
             Commands.Stage(repo, filePaths);
         }
 

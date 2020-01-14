@@ -8,6 +8,6 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.Converter
     public class VersionRepositoryConverter : ValueConverterFactoryBase
     {
         protected override IValueConverter Create() 
-            => CreateStringConverter<VersionRepository>(vr => vr?.Name ?? string.Empty);
+            => CreateStringConverter<VersionRepository>(vr => $"Repo {vr?.Name ?? string.Empty}");
     }
 }
