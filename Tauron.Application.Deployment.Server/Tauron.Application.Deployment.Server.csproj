@@ -9,4 +9,8 @@
     <PackageReference Include="BlazorStrap" Version="1.1.101" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Tauron.Application.OptionsStore\Tauron.Application.OptionsStore.csproj" />
+  </ItemGroup>
+
 </Project>

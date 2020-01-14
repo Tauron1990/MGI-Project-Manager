@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Bson;
@@ -10,10 +9,9 @@ namespace Tauron.Application.OptionsStore.Data.MongoDb
     public class MongoDbCollection : IOptionDataCollection
     {
         private readonly IMongoCollection<MongoOption> _collection;
-        
-        private int _isInit = 0;
-        private readonly ConcurrentDictionary<string, MongoOption> _cache = new ConcurrentDictionary<string, MongoOption>();
 
+        private int _isInit;
+        private readonly ConcurrentDictionary<string, MongoOption> _cache = new ConcurrentDictionary<string, MongoOption>();
 
         public MongoDbCollection(IMongoCollection<MongoOption> collection)
         {
@@ -39,10 +37,10 @@ namespace Tauron.Application.OptionsStore.Data.MongoDb
         public async Task DeleteOption(string key)
         {
             if (_cache.TryRemove(key, out var mo)) 
-                await _collection.DeleteOneAsync(new ObjectFilterDefinition<MongoOption>(mo));
+                await _collection.DeleteOneAsync(mo => mo.Key == key);
         }
 
-        public Task Update(OptionsPair pair)
+        public async Task Update(OptionsPair pair)
         {
             var newOption = _cache.AddOrUpdate(
                 pair.Key,
@@ -52,6 +50,12 @@ namespace Tauron.Application.OptionsStore.Data.MongoDb
                     option.Value = pair.Value;
                     return option;
                 });
+            
+
+            if (ObjectId.Empty == newOption.Id)
+                await _collection.InsertOneAsync(newOption);
+            else
+                await _collection.FindOneAndUpdateAsync(mo => mo.Id == newOption.Id, new ObjectUpdateDefinition<MongoOption>(newOption));
         }
     }
 }

@@ -8,10 +8,8 @@ namespace Tauron.Application.OptionsStore.Data.MongoDb
         private readonly IMongoDatabase _serverDatabase;
         private readonly ConcurrentDictionary<string, IOptionDataCollection> _optionDataCollections  = new ConcurrentDictionary<string, IOptionDataCollection>();
 
-        public MongoDbDataClient(MongoClient serverClient)
-        {
-            _serverDatabase = serverClient.GetDatabase("OptionsStore");
-        }
+        public MongoDbDataClient(MongoClient client) 
+            => _serverDatabase = client.GetDatabase("OptionsStore");
 
         public IOptionDataCollection GetCollection(string name) 
             => _optionDataCollections.GetOrAdd(name, k => new MongoDbCollection(_serverDatabase.GetCollection<MongoOption>(k)));
