@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Tauron.Application.Deployment.Server.CoreApp;
+using Tauron.Application.Deployment.Server.CoreApp.Services;
 
 namespace Tauron.Application.Deployment.Server
 {
@@ -25,6 +27,8 @@ namespace Tauron.Application.Deployment.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<Setup>();
+            services.AddSingleton(s => s.GetRequiredService<IConfiguration>().Get<CoreConfig>());
             services.AddRazorPages();
             services.AddServerSideBlazor();
         }
