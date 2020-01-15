@@ -22,7 +22,6 @@ namespace Tauron.Application.Deployment.Server
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseKestrel(ko => ko.Listen())
                     webBuilder.UseStartup<Startup>();
                 });
     }
