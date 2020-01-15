@@ -1,16 +1,30 @@
 ﻿@page "/"
 
 <BSContainer IsFluid="true"> 
-    <BSRow>
+    <BSRow Class="h-25">
         <BSCol/>
         <BSCol>
             <h1 class="align-content-center">Deployment Server Status</h1>
         </BSCol>
         <BSCol/>
     </BSRow>
-    <BSRow>
+    <div class="row @((Loading ? "" : "collapse"))">
+        <BSCol/>
         <BSCol>
-            Welcome to your new app.
+            <div class="lds-dual-ring align-content-center"></div>
+            <span class="align-content-center">Infos werden Abgerufen</span>
         </BSCol>
-    </BSRow>
+        <BSCol/>
+    </div>
+
 </BSContainer>
+
+@code
+{
+    private bool Loading { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(5000).ContinueWith(t =>Loading = false );
+    }
+}
