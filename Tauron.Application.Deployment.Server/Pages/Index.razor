@@ -1,4 +1,7 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.WebUtilities
+@using Tauron.Application.Deployment.Server.CoreApp.Services
+@inject AppSetup AppSetup
 
 <BSContainer IsFluid="true"> 
     <BSRow Class="h-25">
@@ -8,23 +11,47 @@
         </BSCol>
         <BSCol/>
     </BSRow>
-    <div class="row @((Loading ? "" : "collapse"))">
+    <div class="row align-content-center @(IsLoading ? "" : "collapse")">
         <BSCol/>
         <BSCol>
             <div class="lds-dual-ring align-content-center"></div>
             <span class="align-content-center">Infos werden Abgerufen</span>
         </BSCol>
         <BSCol/>
+        <BSCol>
+            <span>Setup:</span>
+        </BSCol>
+        <BSCol>
+            <BSButton Color="@SetupColor" OnClick="SetupClick" Value="@SetupText"/>
+        </BSCol>
     </div>
 
 </BSContainer>
 
 @code
 {
-    private bool Loading { get; set; } = true;
+    private bool IsLoading { get; set; } = true;
+
+    private Color SetupColor { get; set; } = Color.Warning;
+
+    private bool SetupFinish => AppSetup.IsFinish;
+
+    private string SetupText { get; set; } = "Laden...";
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(5000).ContinueWith(t =>Loading = false );
+        await Task.Delay(1000);
+        await AppSetup.Init();
+        SetupColor = SetupFinish ? Color.Light : Color.Success;
+        SetupText = SetupFinish ? "Fertig" : "Starten";
+
+        IsLoading = false;
+    }
+
+    private void SetupClick()
+    {
+        if(IsLoading || SetupFinish) return;
+
+
     }
 }

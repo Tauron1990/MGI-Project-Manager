@@ -30,7 +30,7 @@ namespace Tauron.Application.Deployment.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptionsStore();
-            services.AddSingleton<Setup>();
+            services.AddSingleton<AppSetup>();
             services.AddSingleton(s => s.GetRequiredService<IConfiguration>().Get<CoreConfig>());
             services.AddSingleton(s => new MongoClient(new MongoUrl(s.GetRequiredService<CoreConfig>().ConnectionString)));
             services.AddSingleton<DatabaseOptions>();

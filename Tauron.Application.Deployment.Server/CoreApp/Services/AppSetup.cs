@@ -5,14 +5,14 @@ using Tauron.Application.OptionsStore;
 
 namespace Tauron.Application.Deployment.Server.CoreApp.Services
 {
-    public sealed class Setup
+    public sealed class AppSetup
     {
         private readonly DatabaseOptions _optionsStore;
         private int isInit = 1;
 
         public bool IsFinish { get; private set; }
 
-        public Setup(DatabaseOptions optionsStore) 
+        public AppSetup(DatabaseOptions optionsStore) 
             => _optionsStore = optionsStore;
 
         public async Task Init()
