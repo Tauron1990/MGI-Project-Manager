@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using Tauron.Application.OptionsStore;
@@ -8,7 +9,9 @@ namespace Tauron.Application.Deployment.Server.CoreApp.Services
     public sealed class AppSetup
     {
         private readonly DatabaseOptions _optionsStore;
-        private int isInit = 1;
+
+        private int _isInit = 1;
+        private string? _currentId;
 
         public bool IsFinish { get; private set; }
 
@@ -17,8 +20,27 @@ namespace Tauron.Application.Deployment.Server.CoreApp.Services
 
         public async Task Init()
         {
-            if (Interlocked.CompareExchange(ref isInit, 0, 1) == 1) 
+            if (Interlocked.CompareExchange(ref _isInit, 0, 1) == 1) 
                 IsFinish = await _optionsStore.GetIsSetupFinisht();
+        }
+
+        public string GetNewId()
+        {
+            _currentId = Guid.NewGuid().ToString("D");
+            return _currentId;
+        }
+
+        public bool InvalidateId(string id)
+        {
+            if (string.IsNullOrEmpty(_currentId))
+                return false;
+            if (_currentId == id)
+            {
+                _currentId = null;
+                return true;
+            }
+
+            return false;
         }
     }
 }
