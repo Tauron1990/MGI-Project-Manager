@@ -5,3 +5,9 @@ https://github.com/gautema/CQRSlite
 https://www.codeproject.com/Articles/991648/CQRS-A-Cross-Examination-Of-How-It-Works#Asynchronous-Code-(Pseudo-Code)
 
 https://github.com/acdvorak/named-pipe-wrapper/
+
+Blazor:
+https://github.com/mrpmorris/blazor-fluxor/tree/master/samples/01-CounterSample
+https://www.nuget.org/packages/Sotsera.Blazor.Toaster/
+https://github.com/Tewr/BlazorFileReader
+https://www.neptuo.com/blog/2018/04/blazor-boot-screen/
