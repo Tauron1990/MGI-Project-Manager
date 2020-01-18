@@ -1,4 +1,7 @@
 ﻿@page "/setup/step1"
+@using Syncfusion.EJ2.Blazor
+@using Syncfusion.EJ2.Blazor.Buttons
+@using Syncfusion.EJ2.Blazor.Popups
 @using Tauron.Application.Deployment.Server.CoreApp.Services
 @inject AppSetup AppSetup
 @inject NavigationManager NavigationManager;
@@ -13,11 +16,36 @@
     </BSRow>
     <BSRow>
         <BSCol>
-            <span></span>
+            <BSButton OnClick="@Test2">
+                Test
+            </BSButton>
         </BSCol>
     </BSRow>
+    <EjsDialog @ref="dialogObj"  Width="250px" IsModal="true">
+        <DialogTemplates>
+            <Header>Errors</Header>
+            <Content> This is a Dialog with content</Content>
+        </DialogTemplates>
+        <DialogButtons>
+            <DialogButton ButtonModel="@OkButton" OnClick="@Test"/>
+        </DialogButtons>
+    </EjsDialog>
 </BSContainer>
 
 @code {
 
+    private readonly ButtonModel OkButton = new ButtonModel{Content = "Ok", IsPrimary = true};
+    private EjsDialog dialogObj;
+
+    private async Task Test()
+    {
+        await dialogObj.Hide();
+        await Task.Delay(500);
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void Test2()
+    {
+        dialogObj.Show();
+    }
 }

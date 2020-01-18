@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
+using Syncfusion.EJ2.Blazor;
+using Syncfusion.Licensing;
 using Tauron.Application.Deployment.Server.CoreApp;
 using Tauron.Application.Deployment.Server.CoreApp.Services;
 using Tauron.Application.OptionsStore;
@@ -37,11 +39,14 @@ namespace Tauron.Application.Deployment.Server
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddSyncfusionBlazor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            SyncfusionLicenseProvider.RegisterLicense("MTk4MTg2QDMxMzcyZTM0MmUzMG5iUXVzNVdGci9ERVNhOW40WG00ZmZnRnRXMTNrbVY3Y0hxKzBEVE50bms9");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

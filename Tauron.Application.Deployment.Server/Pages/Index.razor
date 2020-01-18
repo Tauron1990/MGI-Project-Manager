@@ -5,7 +5,7 @@
 @inject NavigationManager NavigationManager;
 
 <BSContainer IsFluid="true"> 
-    <BSRow Class="h-25">
+    <BSRow style="height: 200px">
         <BSCol/>
         <BSCol>
             <h1 class="align-content-center">Deployment Server Status</h1>
@@ -19,14 +19,17 @@
             <span class="align-content-center">Infos werden Abgerufen</span>
         </BSCol>
         <BSCol/>
-        <BSCol>
-            <span>Setup:</span>
-        </BSCol>
-        <BSCol>
-            <BSButton Color="@SetupColor" OnClick="@SetupClick" Value="@SetupText"/>
-        </BSCol>
     </div>
-
+    <BSRow Class="justify-content-md-center">
+        <BSCol Class="col-auto align-middle">
+            Setup:
+        </BSCol>
+        <BSCol Class="col-auto">
+            <BSButton @bind-Color="@SetupColor" OnClick="@SetupClick">
+                <span>@SetupText</span>
+            </BSButton>
+        </BSCol>
+    </BSRow>
 </BSContainer>
 
 @code
@@ -45,7 +48,7 @@
         await AppSetup.Init();
         SetupColor = SetupFinish ? Color.Light : Color.Success;
         SetupText = SetupFinish ? "Fertig" : "Starten";
-
+        
         IsLoading = false;
     }
 

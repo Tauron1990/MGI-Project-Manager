@@ -8,7 +8,7 @@ namespace Tauron.Application.Deployment.Server.CoreApp
     public sealed class DatabaseOptions
     {
         private readonly IAppOptions _store;
-        private ConcurrentDictionary<string, IOption> _options;
+        private ConcurrentDictionary<string, IOption> _options = new ConcurrentDictionary<string, IOption>();
 
         public DatabaseOptions(IOptionsStore store) 
             => _store = store.GetAppOptions("DeploymentServer");
