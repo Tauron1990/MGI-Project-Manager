@@ -16,36 +16,39 @@
     </BSRow>
     <BSRow>
         <BSCol>
-            <BSButton OnClick="@Test2">
-                Test
-            </BSButton>
+
         </BSCol>
     </BSRow>
-    <EjsDialog @ref="dialogObj"  Width="250px" IsModal="true">
+    <EjsDialog @ref="ErrorDialog"  Width="250px" IsModal="true">
         <DialogTemplates>
             <Header>Errors</Header>
-            <Content> This is a Dialog with content</Content>
+            <Content>
+                <span>@ErrorText</span>
+            </Content>
         </DialogTemplates>
         <DialogButtons>
-            <DialogButton ButtonModel="@OkButton" OnClick="@Test"/>
+            <DialogButton ButtonModel="@ErrorOkButton" OnClick="@Return"/>
         </DialogButtons>
     </EjsDialog>
 </BSContainer>
 
 @code {
 
-    private readonly ButtonModel OkButton = new ButtonModel{Content = "Ok", IsPrimary = true};
-    private EjsDialog dialogObj;
+    private readonly ButtonModel ErrorOkButton = new ButtonModel{Content = "Ok", IsPrimary = true};
+    private EjsDialog? ErrorDialog;
+    private string ErrorText = "Null";
 
-    private async Task Test()
+    protected override async Task OnInitializedAsync()
     {
-        await dialogObj.Hide();
-        await Task.Delay(500);
-        NavigationManager.NavigateTo("/");
+        if (!AppSetup.InvalidateId(NavigationManager.ReadSetupId()))
+            NavigationManager.NavigateTo("/");
+        
     }
 
-    private void Test2()
+    private async Task Return()
     {
-        dialogObj.Show();
+        await ErrorDialog?.Hide();
+        await Task.Delay(500);
+        NavigationManager.NavigateTo("/");
     }
 }
