@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
+using Raven.Client.Documents;
 using Syncfusion.EJ2.Blazor;
 using Syncfusion.Licensing;
 using Tauron.Application.Deployment.Server.CoreApp;
@@ -31,10 +32,13 @@ namespace Tauron.Application.Deployment.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOptionsStore();
+            services.AddOptionsStore(() => new DocumentStore
+                                          {
+                                              Urls = new[] {"http://127.0.0.1:8080/"},
+                                              Database = "Options_Store"
+                                          }.Initialize());
             services.AddSingleton<AppSetup>();
             services.AddSingleton(s => s.GetRequiredService<IConfiguration>().Get<CoreConfig>());
-            services.AddSingleton(s => new MongoClient(new MongoUrl(s.GetRequiredService<CoreConfig>().ConnectionString)));
             services.AddSingleton<DatabaseOptions>();
 
             services.AddRazorPages();
