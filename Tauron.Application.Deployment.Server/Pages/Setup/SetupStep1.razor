@@ -1,54 +1,29 @@
 ﻿@layout SetupLayout
 @page "/setup/step1"
-@using Syncfusion.EJ2.Blazor.Buttons
-@using Syncfusion.EJ2.Blazor.Popups
 @using Tauron.Application.Deployment.Server.CoreApp.Bridge
+@using Syncfusion.EJ2.Blazor
+@using Syncfusion.EJ2.Blazor.DropDowns
+@using Tauron.Application.Deployment.Server.CoreApp.Server
+
 @inject IServerBridge ServerBridge
-@inject NavigationManager NavigationManager;
 
-<BSContainer IsFluid="true">
-    <BSRow Class="h-25">
-        <BSCol />
-        <BSCol>
-            <h1 class="align-content-center">Setup Assistent</h1>
-        </BSCol>
-        <BSCol />
-    </BSRow>
-    <BSRow>
-        <BSCol>
-
-        </BSCol>
-    </BSRow>
-    <EjsDialog @ref="ErrorDialog"  Width="250px" IsModal="true">
-        <DialogTemplates>
-            <Header>Errors</Header>
-            <Content>
-                <span>@ErrorText</span>
-            </Content>
-        </DialogTemplates>
-        <DialogButtons>
-            <DialogButton ButtonModel="@ErrorOkButton" OnClick="@Return"/>
-        </DialogButtons>
-    </EjsDialog>
-</BSContainer>
+<BSRow>
+    <BSCol />
+    <BSCol>
+        >
+        <p>Legen sie fest wo die Repository Daten in zukunft gespeichert werden sollen.</p>
+    </BSCol>
+    <BSCol />
+</BSRow>
+<BSRow>
+    <div class="col-md-auto">
+        <EjsComboBox TValue="string" Placeholder="Datei Modus"></EjsComboBox>
+    </div>
+</BSRow>
 
 @code {
-
-    private readonly ButtonModel ErrorOkButton = new ButtonModel{Content = "Ok", IsPrimary = true};
-    private EjsDialog? ErrorDialog;
-    private string ErrorText = "Null";
-
-    protected override async Task OnInitializedAsync()
+    public class FileModeType
     {
-        if (!(await ServerBridge.ClientSetup.InvalidateId(NavigationManager.ReadSetupId())))
-            NavigationManager.NavigateTo("/");
-        
-    }
-
-    private async Task Return()
-    {
-        await ErrorDialog?.Hide();
-        await Task.Delay(500);
-        NavigationManager.NavigateTo("/");
+        public ServerFileMode MyProperty { get; set; }
     }
 }

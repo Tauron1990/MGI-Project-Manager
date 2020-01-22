@@ -5,10 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Raven.Client.Documents.Operations.Backups;
 using Syncfusion.EJ2.Blazor;
 using Syncfusion.Licensing;
 using Tauron.Application.Deployment.Server.CoreApp.Bridge;
 using Tauron.Application.Deployment.Server.CoreApp.Bridge.Impl;
+using Tauron.Application.Deployment.Server.CoreApp.Client;
+using Tauron.Application.Deployment.Server.CoreApp.Client.Impl;
 using Tauron.Application.Deployment.Server.CoreApp.Server;
 using Tauron.Application.Deployment.Server.CoreApp.Server.Impl;
 using Tauron.Application.OptionsStore;
@@ -52,6 +55,7 @@ namespace Tauron.Application.Deployment.Server
         private void AddClient(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IServerBridge, ServerBridgeImpl>();
+            serviceCollection.AddSingleton<IErrorDelegator, ErrorDelegator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

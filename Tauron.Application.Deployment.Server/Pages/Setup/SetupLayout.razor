@@ -1,11 +1,14 @@
 ﻿@layout MainLayout
 @inherits LayoutComponentBase
+@implements IDisposable
 
 @using Syncfusion.EJ2.Blazor.Buttons
 @using Syncfusion.EJ2.Blazor.Popups
 @using Tauron.Application.Deployment.Server.CoreApp.Bridge
+@using Tauron.Application.Deployment.Server.CoreApp.Client
 @inject IServerBridge ServerBridge
-@inject NavigationManager NavigationManager;
+@inject NavigationManager NavigationManager
+@inject IErrorDelegator ErrorDelegator
 
 <BSContainer IsFluid="true">
     <BSRow Class="h-25">
@@ -15,9 +18,7 @@
         </BSCol>
         <BSCol />
     </BSRow>
-    <BSRow>
-        @Body
-    </BSRow>
+     @Body
     <EjsDialog @ref="ErrorDialog" Width="250px" IsModal="true">
         <DialogTemplates>
             <Header>Errors</Header>
@@ -34,7 +35,7 @@
 @code {
 
     private readonly ButtonModel ErrorOkButton = new ButtonModel { Content = "Ok", IsPrimary = true };
-    private EjsDialog? ErrorDialog;
+    private EjsDialog ErrorDialog;
     private string ErrorText = "Null";
 
     protected override async Task OnInitializedAsync()
@@ -42,12 +43,25 @@
         if (!(await ServerBridge.ClientSetup.InvalidateId(NavigationManager.ReadSetupId())))
             NavigationManager.NavigateTo("/");
 
+        ErrorDelegator.ErrorRecived += ErrorHandler;
     }
 
     private async Task Return()
     {
-        await ErrorDialog?.Hide();
+        await ErrorDialog!.Hide();
         await Task.Delay(500);
         NavigationManager.NavigateTo("/");
+    }
+
+    private async void ErrorHandler(string message)
+    {
+        ErrorText = message;
+        await ErrorDialog!.Show();
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        ErrorDelegator.ErrorRecived -= ErrorHandler;
     }
 }
