@@ -1,5 +1,53 @@
-﻿<h3>SetupLayout</h3>
+﻿@layout MainLayout
+@inherits LayoutComponentBase
+
+@using Syncfusion.EJ2.Blazor.Buttons
+@using Syncfusion.EJ2.Blazor.Popups
+@using Tauron.Application.Deployment.Server.CoreApp.Bridge
+@inject IServerBridge ServerBridge
+@inject NavigationManager NavigationManager;
+
+<BSContainer IsFluid="true">
+    <BSRow Class="h-25">
+        <BSCol />
+        <BSCol>
+            <h1 class="align-content-center">Setup Assistent</h1>
+        </BSCol>
+        <BSCol />
+    </BSRow>
+    <BSRow>
+        @Body
+    </BSRow>
+    <EjsDialog @ref="ErrorDialog" Width="250px" IsModal="true">
+        <DialogTemplates>
+            <Header>Errors</Header>
+            <Content>
+                <span>@ErrorText</span>
+            </Content>
+        </DialogTemplates>
+        <DialogButtons>
+            <DialogButton ButtonModel="@ErrorOkButton" OnClick="@Return" />
+        </DialogButtons>
+    </EjsDialog>
+</BSContainer>
 
 @code {
 
+    private readonly ButtonModel ErrorOkButton = new ButtonModel { Content = "Ok", IsPrimary = true };
+    private EjsDialog? ErrorDialog;
+    private string ErrorText = "Null";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!(await ServerBridge.ClientSetup.InvalidateId(NavigationManager.ReadSetupId())))
+            NavigationManager.NavigateTo("/");
+
+    }
+
+    private async Task Return()
+    {
+        await ErrorDialog?.Hide();
+        await Task.Delay(500);
+        NavigationManager.NavigateTo("/");
+    }
 }
