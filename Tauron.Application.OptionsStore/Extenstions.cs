@@ -12,10 +12,10 @@ namespace Tauron.Application.OptionsStore
     public static class Extenstions
     {
         [PublicAPI]
-        public static IServiceCollection AddOptionsStore(this IServiceCollection serviceCollection, Func<IDocumentStore> creator)
+        public static IServiceCollection AddOptionsStore(this IServiceCollection serviceCollection, Func<IServiceProvider, IDocumentStore> creator)
         {
             serviceCollection.TryAddSingleton<IOptionsStore, OptionsStoreImpl>();
-            serviceCollection.TryAddSingleton<IDataClient>(_ => new RavenDataClient(creator));
+            serviceCollection.TryAddSingleton<IDataClient>(s => new RavenDataClient(creator, s));
             return serviceCollection;
         }
     }

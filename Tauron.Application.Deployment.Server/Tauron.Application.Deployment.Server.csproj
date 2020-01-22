@@ -16,8 +16,8 @@
     <PackageReference Include="BlazorStrap" Version="1.1.101" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
-    <PackageReference Include="RavenDB.Client" Version="4.2.7" />
-    <PackageReference Include="Syncfusion.EJ2.Blazor" Version="17.4.0.42" />
+    <PackageReference Include="RavenDB.Client" Version="4.2.8" />
+    <PackageReference Include="Syncfusion.EJ2.Blazor" Version="17.4.0.44" />
   </ItemGroup>
 
   <ItemGroup>

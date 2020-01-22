@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MongoDB.Driver;
-using Tauron.Application.OptionsStore;
 
-namespace Tauron.Application.Deployment.Server.CoreApp.Services
+namespace Tauron.Application.Deployment.Server.CoreApp.Server.Impl
 {
-    public sealed class AppSetup
+    public sealed class AppSetup : IAppSetup
     {
         private readonly DatabaseOptions _optionsStore;
 

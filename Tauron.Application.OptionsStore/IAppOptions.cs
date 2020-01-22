@@ -8,8 +8,12 @@ namespace Tauron.Application.OptionsStore
     {
         string Name { get; }
 
-        Task<IOption> GetOption(string name);
+        Task<IOption> GetOptionAsync(string name);
 
-        Task DeleteOption(string name);
+        Task DeleteOptionAsync(string name);
+
+        IOption GetOption(string name);
+
+        void DeleteOption(string name);
     }
 }

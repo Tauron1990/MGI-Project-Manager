@@ -19,14 +19,22 @@ namespace Tauron.Application.OptionsStore.Store
 
         public string Name { get; }
 
-        public async Task<IOption> GetOption(string name)
+        public async Task<IOption> GetOptionAsync(string name)
         {
-            var pair = await _dataCollection.GetOption(name);
+            var pair = await _dataCollection.GetOptionAsync(name);
 
-            return new OptionImpl(pair.Key, pair.Value, _dataCollection.Update);
+            return new OptionImpl(pair.Key, pair.Value, _dataCollection.UpdateAsync, _dataCollection.Update);
         }
 
-        public async Task DeleteOption(string name) 
-            => await _dataCollection.DeleteOption(name);
+        public async Task DeleteOptionAsync(string name) 
+            => await _dataCollection.DeleteOptionAsync(name);
+
+        public IOption GetOption(string name)
+        {
+            var pair = _dataCollection.GetOption(name);
+            return new OptionImpl(pair.Key, pair.Value, _dataCollection.UpdateAsync, _dataCollection.Update);
+        }
+
+        public void DeleteOption(string name) => _dataCollection.DeleteOption(name);
     }
 }

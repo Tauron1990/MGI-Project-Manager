@@ -1,9 +1,8 @@
 ﻿@page "/setup/step1"
-@using Syncfusion.EJ2.Blazor
 @using Syncfusion.EJ2.Blazor.Buttons
 @using Syncfusion.EJ2.Blazor.Popups
-@using Tauron.Application.Deployment.Server.CoreApp.Services
-@inject AppSetup AppSetup
+@using Tauron.Application.Deployment.Server.CoreApp.Bridge
+@inject IServerBridge ServerBridge
 @inject NavigationManager NavigationManager;
 
 <BSContainer IsFluid="true">
@@ -40,7 +39,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (!AppSetup.InvalidateId(NavigationManager.ReadSetupId()))
+        if (!(await ServerBridge.ClientSetup.InvalidateId(NavigationManager.ReadSetupId())))
             NavigationManager.NavigateTo("/");
         
     }

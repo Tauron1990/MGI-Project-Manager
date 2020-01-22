@@ -1,7 +1,7 @@
 ﻿@page "/"
-@using Tauron.Application.Deployment.Server.CoreApp.Services
+@using Tauron.Application.Deployment.Server.CoreApp.Bridge
 @using Tauron.Application.Deployment.Server.Pages.Setup
-@inject AppSetup AppSetup
+@inject IServerBridge ServerBridge
 @inject NavigationManager NavigationManager;
 
 <BSContainer IsFluid="true"> 
@@ -38,25 +38,25 @@
 
     private Color SetupColor { get; set; } = Color.Warning;
 
-    private bool SetupFinish => AppSetup.IsFinish;
+    private bool SetupFinish => ServerBridge.ClientSetup.IsFinish;
 
     private string SetupText { get; set; } = "Laden...";
 
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(1000);
-        await AppSetup.Init();
+        await ServerBridge.ClientSetup.Init();
         SetupColor = SetupFinish ? Color.Light : Color.Success;
         SetupText = SetupFinish ? "Fertig" : "Starten";
         
         IsLoading = false;
     }
 
-    private void SetupClick()
+    private async Task SetupClick()
     {
         if(IsLoading || SetupFinish) return;
 
-        var id = AppSetup.GetNewId();
+        var id = await ServerBridge.ClientSetup.GetNewId();
         NavigationManager.NavigateTo("/setup/step1".MakeSetupUri(id));
     }
 }

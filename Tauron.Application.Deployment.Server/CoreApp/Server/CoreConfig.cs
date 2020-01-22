@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Tauron.Application.Deployment.Server.CoreApp
+﻿namespace Tauron.Application.Deployment.Server.CoreApp.Server
 {
     public class CoreConfig
     {

@@ -10,6 +10,8 @@ namespace Tauron.Application.OptionsStore
 
         string Value { get; }
 
-        Task SetValue(string value);
+        Task SetValueAsync(string value);
+
+        void SetValue(string value);
     }
 }

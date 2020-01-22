@@ -1,21 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MongoDB.Driver;
-using Raven.Client.Documents;
 using Syncfusion.EJ2.Blazor;
 using Syncfusion.Licensing;
-using Tauron.Application.Deployment.Server.CoreApp;
-using Tauron.Application.Deployment.Server.CoreApp.Services;
+using Tauron.Application.Deployment.Server.CoreApp.Bridge;
+using Tauron.Application.Deployment.Server.CoreApp.Bridge.Impl;
+using Tauron.Application.Deployment.Server.CoreApp.Server;
+using Tauron.Application.Deployment.Server.CoreApp.Server.Impl;
 using Tauron.Application.OptionsStore;
 
 namespace Tauron.Application.Deployment.Server
@@ -27,7 +22,7 @@ namespace Tauron.Application.Deployment.Server
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -36,10 +31,7 @@ namespace Tauron.Application.Deployment.Server
             AddServer(services);
             AddClient(services);
 
-            services.AddOptionsStore();
-            services.AddSingleton<AppSetup>();
-            services.AddSingleton(s => s.GetRequiredService<IConfiguration>().Get<CoreConfig>());
-            services.AddSingleton<DatabaseOptions>();
+
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -49,14 +41,21 @@ namespace Tauron.Application.Deployment.Server
         private void AddServer(IServiceCollection serviceCollection)
         {
             serviceCollection.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            serviceCollection.AddSingleton<IDocumentStoreManager, DocumentStoreManager>();
+            serviceCollection.AddOptionsStore(s => s.GetRequiredService<IDocumentStoreManager>().Get("OptionsStore"));
+            serviceCollection.AddSingleton<IAppSetup, AppSetup>();
+            serviceCollection.AddSingleton(s => s.GetRequiredService<IConfiguration>().Get<CoreConfig>());
+            serviceCollection.AddSingleton<DatabaseOptions>();
+            serviceCollection.AddSingleton<IFileSystem, FileSystem>();
         }
 
         private void AddClient(IServiceCollection serviceCollection)
         {
-
+            serviceCollection.AddSingleton<IServerBridge, ServerBridgeImpl>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        [UsedImplicitly]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             SyncfusionLicenseProvider.RegisterLicense("MTk4MTg2QDMxMzcyZTM0MmUzMG5iUXVzNVdGci9ERVNhOW40WG00ZmZnRnRXMTNrbVY3Y0hxKzBEVE50bms9");

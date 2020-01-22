@@ -4,10 +4,16 @@ namespace Tauron.Application.OptionsStore.Data
 {
     public interface IOptionDataCollection
     {
-        Task<OptionsPair> GetOption(string key);
+        Task<OptionsPair> GetOptionAsync(string key);
 
-        Task DeleteOption(string key);
+        Task DeleteOptionAsync(string key);
 
-        Task Update(OptionsPair pair);
+        Task UpdateAsync(OptionsPair pair);
+
+        OptionsPair GetOption(string key);
+
+        void DeleteOption(string key);
+
+        void Update(OptionsPair pair);
     }
 }
