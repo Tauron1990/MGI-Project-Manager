@@ -17,11 +17,19 @@
 </BSRow>
 <BSRow>
     <div class="col-md-auto">
-        <EjsComboBox TValue="FileModeType" Placeholder="Datei Modus"DataSource="@fileModeTypes">
+        <EjsComboBox TValue="FileModeType" Placeholder="Datei Modus" DataSource="@fileModeTypes">
+            <ComboBoxEvents TValue="ServerFileMode" ValueChange="onChange"></ComboBoxEvents>
             <ComboBoxFieldSettings Value="RealMode" Text="DisplayName"></ComboBoxFieldSettings>
         </EjsComboBox>
     </div>
 </BSRow>
+<BSRow>
+
+</BSRow>
+<BSRow>
+
+</BSRow>
+
 
 @code {
     public class FileModeType
@@ -41,7 +49,12 @@
                                                {
                                                    new FileModeType(ServerFileMode.ApplicationData, "Application Data"),
                                                    new FileModeType(ServerFileMode.ContentRoot, "Anwendung Root Verzeichniss")
-                                               }; 
+                                               };
 
+    private ServerFileMode TargetFileMode;
 
+    private void onChange(Syncfusion.EJ2.Blazor.DropDowns.ChangeEventArgs<ServerFileMode> args)
+    {
+
+    }
 }
