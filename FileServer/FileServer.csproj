@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FileServer.Lib\FileServer.Lib.csproj" />
+    <ProjectReference Include="..\Tauron.Application.Shared\Tauron.Application.Shared.csproj" />
+  </ItemGroup>
+
+
+</Project>
