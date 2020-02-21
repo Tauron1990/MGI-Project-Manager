@@ -8,36 +8,66 @@ namespace Tauron.Application.Shared
     {
         internal IServiceCollection ServiceCollection { get; set; }
 
-        public abstract void Load();
+        IEnumerator<ServiceDescriptor> IEnumerable<ServiceDescriptor>.GetEnumerator()
+        {
+            return ServiceCollection.GetEnumerator();
+        }
 
-        IEnumerator<ServiceDescriptor> IEnumerable<ServiceDescriptor>.GetEnumerator() => ServiceCollection.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable) ServiceCollection).GetEnumerator();
+        }
 
-        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable) ServiceCollection).GetEnumerator();
+        void ICollection<ServiceDescriptor>.Add(ServiceDescriptor item)
+        {
+            ServiceCollection.Add(item);
+        }
 
-        void ICollection<ServiceDescriptor>.Add(ServiceDescriptor item) => ServiceCollection.Add(item);
+        void ICollection<ServiceDescriptor>.Clear()
+        {
+            ServiceCollection.Clear();
+        }
 
-        void ICollection<ServiceDescriptor>.Clear() => ServiceCollection.Clear();
+        public bool Contains(ServiceDescriptor item)
+        {
+            return ServiceCollection.Contains(item);
+        }
 
-        public bool Contains(ServiceDescriptor item) => ServiceCollection.Contains(item);
+        void ICollection<ServiceDescriptor>.CopyTo(ServiceDescriptor[] array, int arrayIndex)
+        {
+            ServiceCollection.CopyTo(array, arrayIndex);
+        }
 
-        void ICollection<ServiceDescriptor>.CopyTo(ServiceDescriptor[] array, int arrayIndex) => ServiceCollection.CopyTo(array, arrayIndex);
-
-        bool ICollection<ServiceDescriptor>.Remove(ServiceDescriptor item) => ServiceCollection.Remove(item);
+        bool ICollection<ServiceDescriptor>.Remove(ServiceDescriptor item)
+        {
+            return ServiceCollection.Remove(item);
+        }
 
         int ICollection<ServiceDescriptor>.Count => ServiceCollection.Count;
 
         bool ICollection<ServiceDescriptor>.IsReadOnly => ServiceCollection.IsReadOnly;
 
-        int IList<ServiceDescriptor>.IndexOf(ServiceDescriptor item) => ServiceCollection.IndexOf(item);
+        int IList<ServiceDescriptor>.IndexOf(ServiceDescriptor item)
+        {
+            return ServiceCollection.IndexOf(item);
+        }
 
-        void IList<ServiceDescriptor>.Insert(int index, ServiceDescriptor item) => ServiceCollection.Insert(index, item);
+        void IList<ServiceDescriptor>.Insert(int index, ServiceDescriptor item)
+        {
+            ServiceCollection.Insert(index, item);
+        }
 
-        void IList<ServiceDescriptor>.RemoveAt(int index) => ServiceCollection.RemoveAt(index);
+        void IList<ServiceDescriptor>.RemoveAt(int index)
+        {
+            ServiceCollection.RemoveAt(index);
+        }
 
         ServiceDescriptor IList<ServiceDescriptor>.this[int index]
         {
             get => ServiceCollection[index];
             set => ServiceCollection[index] = value;
         }
+
+        public abstract void Load();
     }
 }

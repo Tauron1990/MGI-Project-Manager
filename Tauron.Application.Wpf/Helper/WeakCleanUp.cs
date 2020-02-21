@@ -9,12 +9,10 @@ namespace Tauron.Application.Wpf.Helper
     [PublicAPI]
     public sealed class WeakDelegate : IInternalWeakReference, IEquatable<WeakDelegate>
     {
-        public bool IsAlive => _reference == null || _reference.IsAlive;
-        
         private readonly MethodInfo _method;
-        
+
         private readonly WeakReference? _reference;
-        
+
         public WeakDelegate([NotNull] Delegate @delegate)
         {
             Argument.NotNull(@delegate, nameof(@delegate));
@@ -29,7 +27,7 @@ namespace Tauron.Application.Wpf.Helper
             _method = Argument.NotNull(methodInfo, nameof(methodInfo));
             _reference = new WeakReference(Argument.NotNull(target, nameof(target)));
         }
-        
+
         public bool Equals(WeakDelegate other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -37,7 +35,9 @@ namespace Tauron.Application.Wpf.Helper
 
             return other._reference?.Target == _reference?.Target && other._method == _method;
         }
-        
+
+        public bool IsAlive => _reference == null || _reference.IsAlive;
+
         public static bool operator ==(WeakDelegate? left, WeakDelegate? right)
         {
             var leftnull = ReferenceEquals(left, null);
@@ -45,7 +45,7 @@ namespace Tauron.Application.Wpf.Helper
 
             return !leftnull ? left!.Equals(right!) : rightNull;
         }
-        
+
         public static bool operator !=(WeakDelegate left, WeakDelegate right)
         {
             var leftnull = ReferenceEquals(left, null);
@@ -54,7 +54,7 @@ namespace Tauron.Application.Wpf.Helper
             if (!leftnull) return !left!.Equals(right!);
             return !rightNull;
         }
-        
+
         public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -62,7 +62,7 @@ namespace Tauron.Application.Wpf.Helper
 
             return obj is WeakDelegate @delegate && Equals(@delegate);
         }
-        
+
         public override int GetHashCode()
         {
             unchecked
@@ -75,35 +75,36 @@ namespace Tauron.Application.Wpf.Helper
 
         public object? Invoke(params object[] parms)
         {
-            
             if (_method.IsStatic) return _method.GetMethodInvoker(() => _method.GetParameterTypes()).Invoke(null, parms);
 
             var target = _reference?.Target;
             return target == null ? null : _method.GetMethodInvoker(() => _method.GetParameterTypes()).Invoke(target, parms);
         }
     }
-    
+
     [PublicAPI]
     public static class WeakCleanUp
     {
         public const string WeakCleanUpExceptionPolicy = "WeakCleanUpExceptionPolicy";
-        
-        public static void RegisterAction(Action action)
-        {
-            lock (Actions)
-                Actions.Add(new WeakDelegate(Argument.NotNull(action, nameof(action))));
-        }
 
         private static readonly List<WeakDelegate> Actions = Initialize();
 
         private static Timer? _timer;
-        
+
+        public static void RegisterAction(Action action)
+        {
+            lock (Actions)
+            {
+                Actions.Add(new WeakDelegate(Argument.NotNull(action, nameof(action))));
+            }
+        }
+
         private static List<WeakDelegate> Initialize()
         {
             _timer = new Timer(InvokeCleanUp, null, TimeSpan.Zero, TimeSpan.FromMinutes(15));
             return new List<WeakDelegate>();
         }
-        
+
         private static void InvokeCleanUp(object? state)
         {
             lock (Actions)
@@ -111,7 +112,6 @@ namespace Tauron.Application.Wpf.Helper
                 var dead = new List<WeakDelegate>();
                 foreach (var weakDelegate in Actions.ToArray())
                     if (weakDelegate.IsAlive)
-                    {
                         try
                         {
                             weakDelegate.Invoke();
@@ -120,7 +120,6 @@ namespace Tauron.Application.Wpf.Helper
                         {
                             // ignored
                         }
-                    }
                     else
                         dead.Add(weakDelegate);
 

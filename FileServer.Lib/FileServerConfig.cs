@@ -2,7 +2,7 @@
 
 namespace FileServer.Lib
 {
-    public sealed class ServerConfig
+    public sealed class FileServerConfig
     {
         public string Name { get; set; }
 

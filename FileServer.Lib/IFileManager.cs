@@ -19,7 +19,7 @@ namespace FileServer.Lib
 
         Task<FileResult> DeleteFile(string name);
 
-        Task<FileResult> FhinishOperation(Guid id);
+        Task<FileResult> FhinishOperation(Guid id, string hash);
 
         Task<bool> IsValid(Guid id);
     }

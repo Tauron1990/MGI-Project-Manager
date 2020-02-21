@@ -2,6 +2,7 @@
 using System.Windows;
 using Catel.MVVM;
 using Tauron.Application.Wpf.Helper;
+using CommandManager = System.Windows.Input.CommandManager;
 
 namespace Tauron.Application.Wpf
 {
@@ -14,22 +15,26 @@ namespace Tauron.Application.Wpf
         {
             _controlLogic = new ControlLogic(this, viewModel);
             DataContextChanged += (sender, args) =>
-                                  {
-                                      if (args.NewValue != viewModel)
-                                          ((FrameworkElement) sender).DataContext = viewModel;
-                                  };
+            {
+                if (args.NewValue != viewModel)
+                    ((FrameworkElement) sender).DataContext = viewModel;
+            };
         }
-
-        protected override void OnUnloaded(EventArgs e) 
-            => _controlLogic.CleanUp();
 
         void IBinderControllable.Register(string key, IControlBindable bindable, DependencyObject affectedPart)
         {
             _controlLogic.Register(key, bindable, affectedPart);
-            System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+            CommandManager.InvalidateRequerySuggested();
         }
 
-        public void CleanUp(string key) 
-            => _controlLogic.CleanUp(key);
+        public void CleanUp(string key)
+        {
+            _controlLogic.CleanUp(key);
+        }
+
+        protected override void OnUnloaded(EventArgs e)
+        {
+            _controlLogic.CleanUp();
+        }
     }
 }

@@ -20,111 +20,218 @@ namespace Tauron.Application.Wpf
     {
         private const string NamePrefix = "CommandBinder.";
 
+        public static readonly DependencyProperty CommandProperty =
+            DependencyProperty.RegisterAttached("Command", typeof(string), typeof(CommandBinder), new UIPropertyMetadata(null, OnCommandChanged));
+
+        public static readonly DependencyProperty CustomPropertyNameProperty =
+            DependencyProperty.RegisterAttached("CustomPropertyName", typeof(string), typeof(CommandBinder), new UIPropertyMetadata("Command", OnCommandStadeChanged));
+
+        public static readonly DependencyProperty TargetCommandProperty =
+            DependencyProperty.RegisterAttached("TargetCommand", typeof(ICommand), typeof(CommandBinder), new UIPropertyMetadata(null, OnCommandStadeChanged));
+
+        public static readonly DependencyProperty UseDirectProperty = DependencyProperty.RegisterAttached(
+            "UseDirect", typeof(bool), typeof(CommandBinder), new UIPropertyMetadata(false, OnCommandStadeChanged));
+
+        private static readonly List<RoutedCommand> Commands = new List<RoutedCommand>();
+
+        private static bool _isIn;
+
         public static bool AutoRegister { get; set; } = true;
-        
+
+        public static RoutedCommand? Find(string name)
+        {
+            var val = Commands.Find(com => com.Name == name);
+            if (val == null && AutoRegister) val = Register(name, name);
+
+            return val;
+        }
+
+        public static string GetCommand(DependencyObject obj)
+        {
+            return (string) Argument.NotNull(obj, nameof(obj)).GetValue(CommandProperty);
+        }
+
+
+        public static string GetCustomPropertyName(DependencyObject obj)
+        {
+            return (string) Argument.NotNull(obj, nameof(obj)).GetValue(CustomPropertyNameProperty);
+        }
+
+        public static ICommand? GetTargetCommand(DependencyObject obj)
+        {
+            return (ICommand) Argument.NotNull(obj, nameof(obj)).GetValue(TargetCommandProperty);
+        }
+
+        public static bool GetUseDirect(DependencyObject obj)
+        {
+            return (bool) Argument.NotNull(obj, nameof(obj)).GetValue(UseDirectProperty);
+        }
+
+        public static void Register(RoutedCommand command)
+        {
+            if (Commands.Any(com => com.Name == command.Name)) return;
+
+            Commands.Add(command);
+        }
+
+        public static RoutedUICommand Register(string text, string name)
+        {
+            var command = new RoutedUICommand(text, name, typeof(CommandBinder));
+            Register(command);
+            return command;
+        }
+
+        public static void SetCommand(DependencyObject obj, string value)
+        {
+            Argument.NotNull(obj, nameof(obj)).SetValue(CommandProperty, value);
+        }
+
+        public static void SetCustomPropertyName(DependencyObject obj, string value)
+        {
+            Argument.NotNull(obj, nameof(obj)).SetValue(CustomPropertyNameProperty, value);
+        }
+
+        public static void SetTargetCommand(DependencyObject obj, ICommand value)
+        {
+            Argument.NotNull(obj, nameof(obj)).SetValue(TargetCommandProperty, value);
+        }
+
+        public static void SetUseDirect(DependencyObject obj, bool value)
+        {
+            Argument.NotNull(obj, nameof(obj)).SetValue(UseDirectProperty, value);
+        }
+
+        private static void OnCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (DesignerProperties.GetIsInDesignMode(d)) return;
+
+            var root = ControlLogic.FindRoot(d);
+            if (root == null)
+            {
+                if (!(d is FrameworkElement element)) return;
+
+                ControlLogic.MakeLazy(element, e.NewValue as string, e.OldValue as string, BindInternal);
+                return;
+            }
+
+            BindInternal(e.OldValue as string, e.NewValue as string, root, d);
+        }
+
+        private static void OnCommandStadeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (_isIn) return;
+
+            var root = ControlLogic.FindRoot(d);
+            if (root == null) return;
+
+            var name = GetCommand(d);
+            BindInternal(name, name, root, d);
+        }
+
+        private static void BindInternal(string? oldValue, string? newValue, IBinderControllable binder, DependencyObject affectedPart)
+        {
+            _isIn = true;
+
+            if (oldValue != null)
+                binder.CleanUp(NamePrefix + oldValue);
+            if (newValue == null) return;
+
+            var name = NamePrefix + newValue;
+            if (newValue != null && newValue.Contains(':'))
+            {
+                var vals = newValue.Split(new[] {':'}, 2);
+                newValue = vals[1];
+
+                var command = Find(vals[0]);
+                if (command != null) SetTargetCommand(affectedPart, command);
+            }
+            else if (GetTargetCommand(affectedPart) == null && newValue != null)
+            {
+                var command = Find(newValue);
+                if (command != null) SetTargetCommand(affectedPart, command);
+            }
+            else
+            {
+                var command = GetTargetCommand(affectedPart);
+                if (command is RoutedCommand routedCommand)
+                    name = NamePrefix + routedCommand.Name;
+                else
+                    name = NamePrefix + command;
+            }
+
+            var newlinker = new CommandLinker {CommandTarget = newValue};
+            binder.Register(name, newlinker, affectedPart);
+            _isIn = false;
+        }
+
         private class CommandLinker : ControlBindableBase
         {
+            private CommandFactory? _factory;
+            private PropertySearcher? _searcher;
+
+            public string? CommandTarget { get; set; }
+
+            protected override void CleanUp()
+            {
+                _factory?.Free(Root);
+            }
+
+            protected override void Bind(object dataContext)
+            {
+                var commandTarget = CommandTarget;
+                if (commandTarget == null)
+                {
+                    Debug.Print("CommandBinder: No Binding: CommandTarget");
+                    return;
+                }
+
+                var customProperty = GetCustomPropertyName(AffectedObject);
+                var useDirect = GetUseDirect(AffectedObject);
+                var targetCommand = GetTargetCommand(AffectedObject);
+                if (targetCommand == null)
+                {
+                    Debug.Print($"CommandBinder: No ICommand: {commandTarget}");
+                    return;
+                }
+
+                if (_factory == null)
+                {
+                    _factory = new CommandFactory(dataContext, commandTarget);
+                }
+                else
+                {
+                    _factory.Name = commandTarget;
+                    _factory.DataContext = dataContext;
+                }
+
+                if (!useDirect)
+                    _factory.Connect(targetCommand, Root, commandTarget);
+
+                if (_searcher == null)
+                {
+                    _searcher = new PropertySearcher(AffectedObject, customProperty, targetCommand);
+                }
+                else
+                {
+                    _searcher.CustomName = customProperty;
+                    _searcher.Command = _factory.LastCommand;
+                }
+
+                _searcher.SetCommand();
+            }
+
             private class CommandFactory
             {
+                private CanExecuteRoutedEventHandler? _canExecute;
+
+                private ExecutedRoutedEventHandler? _execute;
                 private bool _isSync;
 
                 public CommandFactory(object dataContext, string name)
                 {
-                    this.DataContext = Argument.NotNull(dataContext, nameof(dataContext));
+                    DataContext = Argument.NotNull(dataContext, nameof(dataContext));
                     Name = Argument.NotNull(name, nameof(name));
                 }
-
-                private class ParameterMapper
-                {
-                    public ParameterMapper(MethodInfo method, object firstArg)
-                    {
-                        _method = Argument.NotNull(method, nameof(method));
-                        _firstArg = Argument.NotNull(firstArg, nameof(firstArg));
-                        _isParameter = method.GetParameters().Length == 1;
-                        _isAsync = method.ReturnType.IsAssignableFrom(typeof(Task));
-                    }
-
-                    private readonly object _firstArg;
-
-                    private readonly bool _isParameter;
-
-                    private readonly MethodInfo _method;
-
-                    private readonly bool _isAsync;
-
-                    public void CanExecute([NotNull] object sender, [NotNull] CanExecuteRoutedEventArgs e)
-                    {
-                        Argument.NotNull(sender, nameof(sender));
-                        Argument.NotNull(e, nameof(e));
-
-                        var args = _isParameter ? new[] { e.Parameter } : new object[0];
-                        e.CanExecute = _isAsync ? _method.InvokeFast<Task<bool>>(_firstArg, args)?.Result ?? true : _method.InvokeFast<bool>(_firstArg, args);
-                    }
-
-                    public async Task Execute([NotNull] object sender, [NotNull] ExecutedRoutedEventArgs e)
-                    {
-                        Argument.NotNull(sender, nameof(sender));
-                        Argument.NotNull(e, nameof(e));
-
-                        if (_isAsync)
-                            await (_method.InvokeFast<Task>(_firstArg, _isParameter ? new[] { e.Parameter } : new object[0]) ?? Task.CompletedTask);
-                        else
-                            _method.InvokeFast(_firstArg, _isParameter ? new[] { e.Parameter } : new object[0]);
-                    }
-
-                }
-
-                private class TaskFactory
-                {
-                    private static readonly IDispatcherService DispatcherService = DependencyResolverManager.Default.DefaultDependencyResolver.Resolve<IDispatcherService>();
-
-                    public TaskFactory(Func<object, ExecutedRoutedEventArgs, Task> del, bool sync)
-                    {
-                        _del = Argument.NotNull(del, nameof(del));
-                        _sync = sync;
-                    }
-
-                    public async void Handler(object parm1, ExecutedRoutedEventArgs parm2)
-                    {
-                        try
-                        {
-                            if (_sync)
-                                await DispatcherService.InvokeTaskAsync(async () => await _del(parm1, parm2)).ConfigureAwait(false);
-                            else
-                                await _del(parm1, parm2).ConfigureAwait(false);
-                        }
-                        catch (Exception e)
-                        {
-                            LogManager.GetLogger<CommandFactory>().Error(e);
-                        }
-                    }
-
-                    private readonly Func<object, ExecutedRoutedEventArgs, Task> _del;
-                    private readonly bool _sync;
-
-                }
-
-                private class MemberInfoHelper
-                {
-                    public static readonly MethodInfo CanExecuteMethod =
-                        Argument.CheckResult(typeof(MemberInfoHelper).GetMethod("CanExecute", new[] { typeof(object), typeof(CanExecuteRoutedEventArgs) }), "MemberInfoHelper.CanExecute");
-
-                    private readonly MemberInfo _info;
-                    private readonly object _target;
-
-                    public MemberInfoHelper([NotNull] MemberInfo info, [NotNull] object target)
-                    {
-                        _info = info;
-                        _target = target;
-                    }
-
-                    [UsedImplicitly]
-                    public void CanExecute([NotNull] object sender, [NotNull] CanExecuteRoutedEventArgs e) => e.CanExecute = _info.GetInvokeMember<bool>(_target);
-                }
-
-                private CanExecuteRoutedEventHandler? _canExecute;
-
-                private ExecutedRoutedEventHandler? _execute;
 
                 public ICommand? LastCommand { get; private set; }
 
@@ -139,9 +246,9 @@ namespace Tauron.Application.Wpf
                     if (!(rootObject is UIElement uiElement)) return;
 
                     var commandBinding = uiElement.CommandBindings.OfType<CommandBinding>().FirstOrDefault(cb => cb.Command == LastCommand);
-                    if(commandBinding == null) return;
+                    if (commandBinding == null) return;
 
-                    if(_execute != null)
+                    if (_execute != null)
                         commandBinding.Executed -= _execute;
                     if (_canExecute != null)
                         commandBinding.CanExecute -= _canExecute;
@@ -168,10 +275,8 @@ namespace Tauron.Application.Wpf
 
                     Func<object, ExecutedRoutedEventArgs, Task>? del = null;
                     if (pair.Item1 != null)
-                    {
                         del = Delegate.CreateDelegate(typeof(Func<object, ExecutedRoutedEventArgs, Task>), DataContext, pair.Item1, false)
-                                  as Func<object, ExecutedRoutedEventArgs, Task> ?? new ParameterMapper(pair.Item1, DataContext).Execute;
-                    }
+                            as Func<object, ExecutedRoutedEventArgs, Task> ?? new ParameterMapper(pair.Item1, DataContext).Execute;
 
                     CanExecuteRoutedEventHandler? del2 = null;
                     if (pair.Item2 != null)
@@ -195,10 +300,13 @@ namespace Tauron.Application.Wpf
                         _execute = new TaskFactory(del, _isSync).Handler;
                         binding.Executed += _execute;
                     }
-                    else Debug.Print($"CommandBinder: No Compatible method Found: {commandName}");
+                    else
+                    {
+                        Debug.Print($"CommandBinder: No Compatible method Found: {commandName}");
+                    }
 
                     if (del2 == null) return;
-                    
+
                     _canExecute = del2;
                     binding.CanExecute += del2;
                 }
@@ -222,9 +330,9 @@ namespace Tauron.Application.Wpf
                     var methods =
                         targetType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                     var main = (from method in methods
-                                let attr = method.GetCustomAttribute<CommandTargetAttribute>()
-                                where attr != null && attr.ProvideMemberName(method) == Name
-                                select new { Method = method, IsSync = attr.Synchronize }).FirstOrDefault();
+                        let attr = method.GetCustomAttribute<CommandTargetAttribute>()
+                        where attr != null && attr.ProvideMemberName(method) == Name
+                        select new {Method = method, IsSync = attr.Synchronize}).FirstOrDefault();
                     if (main == null)
                     {
                         Debug.Print($"CommandBinder: No Command-Method Found: {Name}");
@@ -260,10 +368,104 @@ namespace Tauron.Application.Wpf
 
                     return Tuple.Create(main.Method, second);
                 }
+
+                private class ParameterMapper
+                {
+                    private readonly object _firstArg;
+
+                    private readonly bool _isAsync;
+
+                    private readonly bool _isParameter;
+
+                    private readonly MethodInfo _method;
+
+                    public ParameterMapper(MethodInfo method, object firstArg)
+                    {
+                        _method = Argument.NotNull(method, nameof(method));
+                        _firstArg = Argument.NotNull(firstArg, nameof(firstArg));
+                        _isParameter = method.GetParameters().Length == 1;
+                        _isAsync = method.ReturnType.IsAssignableFrom(typeof(Task));
+                    }
+
+                    public void CanExecute([NotNull] object sender, [NotNull] CanExecuteRoutedEventArgs e)
+                    {
+                        Argument.NotNull(sender, nameof(sender));
+                        Argument.NotNull(e, nameof(e));
+
+                        var args = _isParameter ? new[] {e.Parameter} : new object[0];
+                        e.CanExecute = _isAsync ? _method.InvokeFast<Task<bool>>(_firstArg, args)?.Result ?? true : _method.InvokeFast<bool>(_firstArg, args);
+                    }
+
+                    public async Task Execute([NotNull] object sender, [NotNull] ExecutedRoutedEventArgs e)
+                    {
+                        Argument.NotNull(sender, nameof(sender));
+                        Argument.NotNull(e, nameof(e));
+
+                        if (_isAsync)
+                            await (_method.InvokeFast<Task>(_firstArg, _isParameter ? new[] {e.Parameter} : new object[0]) ?? Task.CompletedTask);
+                        else
+                            _method.InvokeFast(_firstArg, _isParameter ? new[] {e.Parameter} : new object[0]);
+                    }
+                }
+
+                private class TaskFactory
+                {
+                    private static readonly IDispatcherService DispatcherService = DependencyResolverManager.Default.DefaultDependencyResolver.Resolve<IDispatcherService>();
+
+                    private readonly Func<object, ExecutedRoutedEventArgs, Task> _del;
+                    private readonly bool _sync;
+
+                    public TaskFactory(Func<object, ExecutedRoutedEventArgs, Task> del, bool sync)
+                    {
+                        _del = Argument.NotNull(del, nameof(del));
+                        _sync = sync;
+                    }
+
+                    public async void Handler(object parm1, ExecutedRoutedEventArgs parm2)
+                    {
+                        try
+                        {
+                            if (_sync)
+                                await DispatcherService.InvokeTaskAsync(async () => await _del(parm1, parm2)).ConfigureAwait(false);
+                            else
+                                await _del(parm1, parm2).ConfigureAwait(false);
+                        }
+                        catch (Exception e)
+                        {
+                            LogManager.GetLogger<CommandFactory>().Error(e);
+                        }
+                    }
+                }
+
+                private class MemberInfoHelper
+                {
+                    public static readonly MethodInfo CanExecuteMethod =
+                        Argument.CheckResult(typeof(MemberInfoHelper).GetMethod("CanExecute", new[] {typeof(object), typeof(CanExecuteRoutedEventArgs)}), "MemberInfoHelper.CanExecute");
+
+                    private readonly MemberInfo _info;
+                    private readonly object _target;
+
+                    public MemberInfoHelper([NotNull] MemberInfo info, [NotNull] object target)
+                    {
+                        _info = info;
+                        _target = target;
+                    }
+
+                    [UsedImplicitly]
+                    public void CanExecute([NotNull] object sender, [NotNull] CanExecuteRoutedEventArgs e)
+                    {
+                        e.CanExecute = _info.GetInvokeMember<bool>(_target);
+                    }
+                }
             }
 
             private class PropertySearcher
             {
+                private PropertyFlags _changedFlags;
+                private WeakReference<ICommand>? _command;
+                private string? _customName;
+                private PropertyInfo? _prop;
+
                 public PropertySearcher(DependencyObject affectedObject, string customName, ICommand command)
                 {
                     AffectedObject = Argument.NotNull(affectedObject, nameof(affectedObject));
@@ -275,55 +477,6 @@ namespace Tauron.Application.Wpf
 
                 private DependencyObject AffectedObject { get; }
 
-                public void SetCommand()
-                {
-                    try
-                    {
-                        var commandChanged = _changedFlags.HasFlag(PropertyFlags.Command);
-                        var customNameChanged = _changedFlags.HasFlag(PropertyFlags.CustomName);
-
-                        if (customNameChanged)
-                        {
-                                var tarType = AffectedObject.GetType();
-                                _prop = tarType.GetProperty(CustomName ?? string.Empty);
-                                if (_prop != null
-                                    && (!_prop.CanWrite || !typeof(ICommand).IsAssignableFrom(_prop.PropertyType)))
-                                {
-                                    var typeName = tarType.ToString();
-                                    var propName = _prop == null ? CustomName + "(Not Found)" : _prop.Name;
-
-                                    Debug.Print("CommandBinder: FoundetProperty Incompatible: {0}:{1}", typeName, propName);
-                                    _prop = null;
-                                }
-                                else
-                                {
-                                    commandChanged = true;
-                                }
-                        }
-
-                        if (commandChanged && _prop != null) 
-                            _prop.SetInvokeMember(AffectedObject, Command);
-                    }
-                    finally
-                    {
-                        _changedFlags = PropertyFlags.None;
-                    }
-                }
-
-                [Flags]
-                private enum PropertyFlags
-                {
-                    None = 0,
-                    CustomName = 1,
-                    Command = 2,
-                    All = 3
-                }
-
-                private PropertyFlags _changedFlags;
-                private WeakReference<ICommand>? _command;
-                private string? _customName;
-                private PropertyInfo? _prop;
-
                 public ICommand? Command
                 {
                     private get { return _command?.TypedTarget(); }
@@ -331,7 +484,9 @@ namespace Tauron.Application.Wpf
                     {
                         if (_command != null && _command.TypedTarget() == value) return;
                         if (value == null)
+                        {
                             _command = null;
+                        }
                         else
                         {
                             _command = new WeakReference<ICommand>(value);
@@ -351,173 +506,51 @@ namespace Tauron.Application.Wpf
                         _changedFlags |= PropertyFlags.CustomName;
                     }
                 }
-            }
 
-            public string? CommandTarget { get; set; }
-
-            private CommandFactory? _factory;
-            private PropertySearcher? _searcher;
-
-            protected override void CleanUp() 
-                => _factory?.Free(Root);
-
-            protected override void Bind(object dataContext)
-            {
-                var commandTarget = CommandTarget;
-                if (commandTarget == null)
+                public void SetCommand()
                 {
-                    Debug.Print("CommandBinder: No Binding: CommandTarget");
-                    return;
+                    try
+                    {
+                        var commandChanged = _changedFlags.HasFlag(PropertyFlags.Command);
+                        var customNameChanged = _changedFlags.HasFlag(PropertyFlags.CustomName);
+
+                        if (customNameChanged)
+                        {
+                            var tarType = AffectedObject.GetType();
+                            _prop = tarType.GetProperty(CustomName ?? string.Empty);
+                            if (_prop != null
+                                && (!_prop.CanWrite || !typeof(ICommand).IsAssignableFrom(_prop.PropertyType)))
+                            {
+                                var typeName = tarType.ToString();
+                                var propName = _prop == null ? CustomName + "(Not Found)" : _prop.Name;
+
+                                Debug.Print("CommandBinder: FoundetProperty Incompatible: {0}:{1}", typeName, propName);
+                                _prop = null;
+                            }
+                            else
+                            {
+                                commandChanged = true;
+                            }
+                        }
+
+                        if (commandChanged && _prop != null)
+                            _prop.SetInvokeMember(AffectedObject, Command);
+                    }
+                    finally
+                    {
+                        _changedFlags = PropertyFlags.None;
+                    }
                 }
 
-                var customProperty = GetCustomPropertyName(AffectedObject);
-                var useDirect = GetUseDirect(AffectedObject);
-                var targetCommand = GetTargetCommand(AffectedObject);
-                if (targetCommand == null)
+                [Flags]
+                private enum PropertyFlags
                 {
-                    Debug.Print($"CommandBinder: No ICommand: {commandTarget}");
-                    return;
+                    None = 0,
+                    CustomName = 1,
+                    Command = 2,
+                    All = 3
                 }
-
-                if (_factory == null)
-                    _factory = new CommandFactory(dataContext, commandTarget);
-                else
-                {
-                    _factory.Name = commandTarget;
-                    _factory.DataContext = dataContext;
-                }
-
-                if (!useDirect) 
-                    _factory.Connect(targetCommand, Root, commandTarget);
-
-                if (_searcher == null)
-                    _searcher = new PropertySearcher(AffectedObject, customProperty, targetCommand);
-                else
-                {
-                    _searcher.CustomName = customProperty;
-                    _searcher.Command = _factory.LastCommand;
-                }
-
-                _searcher.SetCommand();
             }
-        }
-
-        public static readonly DependencyProperty CommandProperty = 
-            DependencyProperty.RegisterAttached("Command", typeof(string), typeof(CommandBinder), new UIPropertyMetadata(null, OnCommandChanged));
-
-        public static readonly DependencyProperty CustomPropertyNameProperty =
-            DependencyProperty.RegisterAttached("CustomPropertyName", typeof(string), typeof(CommandBinder), new UIPropertyMetadata("Command", OnCommandStadeChanged));
-
-        public static readonly DependencyProperty TargetCommandProperty =
-            DependencyProperty.RegisterAttached("TargetCommand", typeof(ICommand), typeof(CommandBinder), new UIPropertyMetadata(null, OnCommandStadeChanged));
-
-        public static readonly DependencyProperty UseDirectProperty = DependencyProperty.RegisterAttached(
-            "UseDirect", typeof(bool), typeof(CommandBinder), new UIPropertyMetadata(false, OnCommandStadeChanged));
-
-        private static readonly List<RoutedCommand> Commands = new List<RoutedCommand>();
-
-        private static bool _isIn;
-        
-        public static RoutedCommand? Find(string name)
-        {
-            var val = Commands.Find(com => com.Name == name);
-            if (val == null && AutoRegister) val = Register(name, name);
-
-            return val;
-        }
-        
-        public static string GetCommand(DependencyObject obj) => (string) Argument.NotNull(obj, nameof(obj)).GetValue(CommandProperty);
-
-
-        public static string GetCustomPropertyName(DependencyObject obj) => (string) Argument.NotNull(obj, nameof(obj)).GetValue(CustomPropertyNameProperty);
-
-        public static ICommand? GetTargetCommand(DependencyObject obj) => (ICommand)Argument.NotNull(obj, nameof(obj)).GetValue(TargetCommandProperty);
-
-        public static bool GetUseDirect(DependencyObject obj) => (bool)Argument.NotNull(obj, nameof(obj)).GetValue(UseDirectProperty);
-
-        public static void Register(RoutedCommand command)
-        {
-            if (Commands.Any(com => com.Name == command.Name)) return;
-
-            Commands.Add(command);
-        }
-        
-        public static RoutedUICommand Register(string text, string name)
-        {
-            var command = new RoutedUICommand(text, name, typeof(CommandBinder));
-            Register(command);
-            return command;
-        }
-        
-        public static void SetCommand(DependencyObject obj, string value) => Argument.NotNull(obj, nameof(obj)).SetValue(CommandProperty, value);
-        
-        public static void SetCustomPropertyName(DependencyObject obj, string value) => Argument.NotNull(obj, nameof(obj)).SetValue(CustomPropertyNameProperty, value);
-
-        public static void SetTargetCommand(DependencyObject obj, ICommand value) => Argument.NotNull(obj, nameof(obj)).SetValue(TargetCommandProperty, value);
-
-        public static void SetUseDirect(DependencyObject obj, bool value) => Argument.NotNull(obj, nameof(obj)).SetValue(UseDirectProperty, value);
-
-        private static void OnCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (DesignerProperties.GetIsInDesignMode(d)) return;
-
-            var root = ControlLogic.FindRoot(d);
-            if (root == null)
-            {
-                if (!(d is FrameworkElement element)) return;
-
-                ControlLogic.MakeLazy(element, e.NewValue as string, e.OldValue as string, BindInternal);
-                return;
-            }
-
-            BindInternal(e.OldValue as string, e.NewValue as string, root, d);
-        }
-
-        private static void OnCommandStadeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (_isIn) return;
-
-            var root = ControlLogic.FindRoot(d);
-            if(root == null) return;
-
-            var name = GetCommand(d);
-            BindInternal(name, name, root, d);
-        }
-
-        private static void BindInternal(string? oldValue, string? newValue, IBinderControllable binder, DependencyObject affectedPart)
-        {
-            _isIn = true;
-
-            if (oldValue != null)
-                binder.CleanUp(NamePrefix + oldValue);
-            if(newValue == null) return;
-
-            var name = NamePrefix + newValue;
-            if (newValue != null && newValue.Contains(':'))
-            {
-                var vals = newValue.Split(new[] { ':' }, 2);
-                newValue = vals[1];
-
-                var command = Find(vals[0]);
-                if (command != null) SetTargetCommand(affectedPart, command);
-            }
-            else if (GetTargetCommand(affectedPart) == null && newValue != null)
-            {
-                var command = Find(newValue);
-                if (command != null) SetTargetCommand(affectedPart, command);
-            }
-            else
-            {
-                var command = GetTargetCommand(affectedPart);
-                if (command is RoutedCommand routedCommand)
-                    name = NamePrefix + routedCommand.Name;
-                else
-                    name = NamePrefix + command;
-            }
-
-            var newlinker = new CommandLinker { CommandTarget = newValue };
-            binder.Register(name, newlinker, affectedPart);
-            _isIn = false;
         }
     }
 }

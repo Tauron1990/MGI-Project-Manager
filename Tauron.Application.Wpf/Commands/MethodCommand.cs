@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using JetBrains.Annotations;
 
 namespace Tauron.Application.Wpf.Commands
@@ -12,17 +11,17 @@ namespace Tauron.Application.Wpf.Commands
             EventArgs = Argument.NotNull(eventArgs, nameof(eventArgs));
         }
 
-        [NotNull]
-        public object EventArgs { get; }
+        [NotNull] public object EventArgs { get; }
 
-        [NotNull]
-        public object Sender { get; }
-
+        [NotNull] public object Sender { get; }
     }
 
     /// <summary>The method command.</summary>
     public sealed class MethodCommand : CommandBase
     {
+        private readonly MethodInfo _method;
+        private readonly MethodType _methodType;
+
         public MethodCommand(MethodInfo method, object context)
         {
             _method = Argument.NotNull(method, nameof(method));
@@ -57,8 +56,5 @@ namespace Tauron.Application.Wpf.Commands
             Two,
             EventArgs
         }
-
-        private readonly MethodInfo _method;
-        private readonly MethodType _methodType;
     }
 }

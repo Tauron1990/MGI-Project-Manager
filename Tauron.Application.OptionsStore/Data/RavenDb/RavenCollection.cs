@@ -65,14 +65,14 @@ namespace Tauron.Application.OptionsStore.Data.RavenDb
             if (ent != null)
                 ent.Value = pair.Value;
             else
-                session.Store(new RavenOptionData { Id = pair.Key, Value = pair.Value });
+                session.Store(new RavenOptionData {Id = pair.Key, Value = pair.Value});
 
             session.SaveChanges();
         }
 
         private string GetId(string name)
         {
-            if(name.Contains("-"))
+            if (name.Contains("-"))
                 throw new ArgumentException(" \"- \" in Names are not allowed");
             return $"options/{_prefix}-{name}";
         }

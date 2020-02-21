@@ -8,8 +8,10 @@ namespace Tauron.Application.OptionsStore.Data.RavenDb
     {
         private readonly Lazy<IDocumentStore> _documetStore;
 
-        public RavenDataClient(Func<IServiceProvider, IDocumentStore> documetStore, IServiceProvider serviceProvider) 
-            => _documetStore = new Lazy<IDocumentStore>(() => documetStore(serviceProvider), LazyThreadSafetyMode.ExecutionAndPublication);
+        public RavenDataClient(Func<IServiceProvider, IDocumentStore> documetStore, IServiceProvider serviceProvider)
+        {
+            _documetStore = new Lazy<IDocumentStore>(() => documetStore(serviceProvider), LazyThreadSafetyMode.ExecutionAndPublication);
+        }
 
         public IOptionDataCollection GetCollection(string name)
         {

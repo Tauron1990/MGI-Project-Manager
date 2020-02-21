@@ -4,10 +4,6 @@ namespace Tauron.Application.SoftwareRepo.Data
 {
     public sealed class DownloadEntry
     {
-        public Version Version { get; }
-
-        public string Url { get; }
-
         public DownloadEntry(Version version, string url)
         {
             Version = version;
@@ -19,5 +15,9 @@ namespace Tauron.Application.SoftwareRepo.Data
             Version = entry.Version;
             Url = entry.Url;
         }
+
+        public Version Version { get; }
+
+        public string Url { get; }
     }
 }

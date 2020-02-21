@@ -6,18 +6,6 @@ namespace Tauron.Application.SoftwareRepo.Data
 {
     public sealed class ApplicationEntry
     {
-        public string Name { get; }
-
-        public Version Last { get; internal set; }
-
-        public long Id { get; }
-
-        public ImmutableList<DownloadEntry> Downloads { get; internal set; }
-
-        public string RepositoryName { get; }
-
-        public string BranchName { get; }
-
         public ApplicationEntry(string name, Version last, long id, ImmutableList<DownloadEntry> downloads, string repositoryName, string branchName)
         {
             Name = name;
@@ -38,5 +26,17 @@ namespace Tauron.Application.SoftwareRepo.Data
 
             Downloads = ImmutableList<DownloadEntry>.Empty.AddRange(entry.Downloads.Select(e => new DownloadEntry(e)));
         }
+
+        public string Name { get; }
+
+        public Version Last { get; internal set; }
+
+        public long Id { get; }
+
+        public ImmutableList<DownloadEntry> Downloads { get; internal set; }
+
+        public string RepositoryName { get; }
+
+        public string BranchName { get; }
     }
 }

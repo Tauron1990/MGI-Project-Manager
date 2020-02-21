@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Windows;
 using Catel.MVVM;
+using Catel.Windows;
 using Tauron.Application.Wpf.Helper;
 
 namespace Tauron.Application.Wpf
 {
-    public class Window : Catel.Windows.DataWindow, IBinderControllable
+    public class Window : DataWindow, IBinderControllable
     {
-        private readonly IViewModel _viewModel;
         private readonly ControlLogic _controlLogic;
+        private readonly IViewModel _viewModel;
 
         protected Window(IViewModel viewModel)
             : base(viewModel)
@@ -21,19 +22,25 @@ namespace Tauron.Application.Wpf
 
             _controlLogic = new ControlLogic(this, viewModel);
             DataContextChanged += (sender, args) =>
-                                  {
-                                      if (args.NewValue != _viewModel)
-                                          ((FrameworkElement)sender).DataContext = _viewModel;
-                                  };
+            {
+                if (args.NewValue != _viewModel)
+                    ((FrameworkElement) sender).DataContext = _viewModel;
+            };
+        }
+
+        void IBinderControllable.Register(string key, IControlBindable bindable, DependencyObject affectedPart)
+        {
+            _controlLogic.Register(key, bindable, affectedPart);
+        }
+
+        public void CleanUp(string key)
+        {
+            _controlLogic.CleanUp(key);
         }
 
         protected override void OnUnloaded(EventArgs e)
-            => _controlLogic.CleanUp();
-
-        void IBinderControllable.Register(string key, IControlBindable bindable, DependencyObject affectedPart)
-            => _controlLogic.Register(key, bindable, affectedPart);
-
-        public void CleanUp(string key)
-            => _controlLogic.CleanUp(key);
+        {
+            _controlLogic.CleanUp();
+        }
     }
 }

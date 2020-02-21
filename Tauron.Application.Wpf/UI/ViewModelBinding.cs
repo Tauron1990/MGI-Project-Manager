@@ -14,6 +14,7 @@ namespace Tauron.Application.Wpf.UI
 
         public ViewModelBinding()
             : this(string.Empty)
-        {}
+        {
+        }
     }
 }

@@ -26,6 +26,9 @@ namespace Tauron.Application.Wpf.Converter
 
 
         [NotNull]
-        public object[] ConvertBack([NotNull] object value, [NotNull] Type[] targetTypes, [NotNull] object parameter, [NotNull] CultureInfo culture) => throw new NotSupportedException();
+        public object[] ConvertBack([NotNull] object value, [NotNull] Type[] targetTypes, [NotNull] object parameter, [NotNull] CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
     }
 }

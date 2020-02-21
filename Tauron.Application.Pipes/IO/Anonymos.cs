@@ -7,15 +7,6 @@ namespace Tauron.Application.Pipes.IO
 {
     public static class Anonymos
     {
-        private sealed class AStream : PipeBase
-        {
-            public AStream(PipeStream pipeStream) : base(pipeStream)
-            { }
-
-            protected override Task Connect(PipeStream stream) 
-                => Task.CompletedTask;
-        }
-
         [PublicAPI]
         public static IPipe Create(PipeDirection pipeDirection, out string name)
         {
@@ -26,7 +17,21 @@ namespace Tauron.Application.Pipes.IO
         }
 
         [PublicAPI]
-        public static IPipe Create(PipeDirection pipeDirection, string name) 
-            => new AStream(new AnonymousPipeClientStream(pipeDirection, name));
+        public static IPipe Create(PipeDirection pipeDirection, string name)
+        {
+            return new AStream(new AnonymousPipeClientStream(pipeDirection, name));
+        }
+
+        private sealed class AStream : PipeBase
+        {
+            public AStream(PipeStream pipeStream) : base(pipeStream)
+            {
+            }
+
+            protected override Task Connect(PipeStream stream)
+            {
+                return Task.CompletedTask;
+            }
+        }
     }
 }

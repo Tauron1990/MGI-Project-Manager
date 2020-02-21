@@ -14,7 +14,7 @@ namespace Tauron.Application.Wpf
         {
             var ex = toCheck();
 
-            if(ex == null) return;
+            if (ex == null) return;
             throw ex;
         }
 
@@ -41,11 +41,15 @@ namespace Tauron.Application.Wpf
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static void Check(bool toCheck, Func<Exception> exceptionBuilder) => Check(() => toCheck ? exceptionBuilder() : null);
+        public static void Check(bool toCheck, Func<Exception> exceptionBuilder)
+        {
+            Check(() => toCheck ? exceptionBuilder() : null);
+        }
 
-        [MethodImpl(MethodImplOptions.NoInlining), NotNull]
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        [NotNull]
         public static TValue CheckResult<TValue>(TValue? value, string name)
-        where TValue : class
+            where TValue : class
         {
             Check(() => value == null ? new ArgumentNullException(name) : null);
             return value!;

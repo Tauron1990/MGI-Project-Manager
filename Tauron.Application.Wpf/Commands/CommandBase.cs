@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Windows.Input;
 using JetBrains.Annotations;
 
@@ -13,12 +12,17 @@ namespace Tauron.Application.Wpf.Commands
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        public virtual bool CanExecute([CanBeNull] object parameter) => true;
+        public virtual bool CanExecute([CanBeNull] object parameter)
+        {
+            return true;
+        }
 
         public abstract void Execute([CanBeNull] object parameter);
 
         [UsedImplicitly]
-        public virtual void RaiseCanExecuteChanged() 
-            => CommandManager.InvalidateRequerySuggested();
+        public virtual void RaiseCanExecuteChanged()
+        {
+            CommandManager.InvalidateRequerySuggested();
+        }
     }
 }

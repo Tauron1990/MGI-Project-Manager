@@ -17,6 +17,14 @@ namespace Tauron.Application.Wpf
     [PublicAPI]
     public sealed class FrameworkObject : IInternalWeakReference
     {
+        private readonly ElementReference<FrameworkContentElement>? _fce;
+
+        private readonly ElementReference<FrameworkElement>? _fe;
+
+        private readonly bool _isFce;
+
+        private readonly bool _isFe;
+
         public FrameworkObject(object? obj, bool isWeak = true)
         {
             var fe = obj as FrameworkElement;
@@ -30,81 +38,6 @@ namespace Tauron.Application.Wpf
             if (fe != null) _fe = new ElementReference<FrameworkElement>(fe, isWeak);
             else if (fce != null) _fce = new ElementReference<FrameworkContentElement>(fce, isWeak);
             // ReSharper restore AssignNullToNotNullAttribute
-        }
-
-        bool IInternalWeakReference.IsAlive
-        {
-            get
-            {
-                if (_isFe) return _fe?.IsAlive ?? false;
-
-                return _isFce && (_fce?.IsAlive ?? false);
-            }
-        }
-
-        [DebuggerStepThrough]
-        private class ElementReference<TReference> : IInternalWeakReference
-            where TReference : class
-        {
-            public ElementReference([JetBrains.Annotations.NotNull] TReference reference, bool isWeak)
-            {
-                if (isWeak) _weakRef = new WeakReference<TReference>(Argument.NotNull(reference, nameof(reference)));
-                else _reference = reference;
-            }
-
-            private readonly TReference? _reference;
-
-            private readonly WeakReference<TReference>? _weakRef;
-
-            public TReference? Target => _weakRef != null ? _weakRef.TypedTarget() : _reference;
-
-            public bool IsAlive => _weakRef == null || _weakRef.IsAlive();
-        }
-
-        private readonly ElementReference<FrameworkContentElement>? _fce;
-
-        private readonly ElementReference<FrameworkElement>? _fe;
-
-        private readonly bool _isFce;
-
-        private readonly bool _isFe;
-
-        public event DependencyPropertyChangedEventHandler DataContextChanged
-        {
-            add
-            {
-                if (!IsValid) return;
-
-                if (TryGetFrameworkElement(out var fe)) fe.DataContextChanged += value;
-                else if (TryGetFrameworkContentElement(out var fce)) fce.DataContextChanged += value;
-            }
-
-            remove
-            {
-                if (!IsValid) return;
-
-                if (TryGetFrameworkElement(out var fe)) fe.DataContextChanged -= value;
-                else if (TryGetFrameworkContentElement(out var fce)) fce.DataContextChanged -= value;
-            }
-        }
-
-        public event RoutedEventHandler LoadedEvent
-        {
-            add
-            {
-                if (!IsValid) return;
-
-                if (TryGetFrameworkElement(out var fe)) fe.Loaded += value;
-                else if (TryGetFrameworkContentElement(out var fce)) fce.Loaded += value;
-            }
-
-            remove
-            {
-                if (!IsValid) return;
-
-                if (TryGetFrameworkElement(out var fe)) fe.Loaded -= value;
-                else if (TryGetFrameworkContentElement(out var fce)) fce.Loaded -= value;
-            }
         }
 
         public object? DataContext
@@ -158,14 +91,62 @@ namespace Tauron.Application.Wpf
             }
         }
 
-        public bool TryGetFrameworkContentElement([NotNullWhen(true)]out FrameworkContentElement? contentElement)
+        bool IInternalWeakReference.IsAlive
+        {
+            get
+            {
+                if (_isFe) return _fe?.IsAlive ?? false;
+
+                return _isFce && (_fce?.IsAlive ?? false);
+            }
+        }
+
+        public event DependencyPropertyChangedEventHandler DataContextChanged
+        {
+            add
+            {
+                if (!IsValid) return;
+
+                if (TryGetFrameworkElement(out var fe)) fe.DataContextChanged += value;
+                else if (TryGetFrameworkContentElement(out var fce)) fce.DataContextChanged += value;
+            }
+
+            remove
+            {
+                if (!IsValid) return;
+
+                if (TryGetFrameworkElement(out var fe)) fe.DataContextChanged -= value;
+                else if (TryGetFrameworkContentElement(out var fce)) fce.DataContextChanged -= value;
+            }
+        }
+
+        public event RoutedEventHandler LoadedEvent
+        {
+            add
+            {
+                if (!IsValid) return;
+
+                if (TryGetFrameworkElement(out var fe)) fe.Loaded += value;
+                else if (TryGetFrameworkContentElement(out var fce)) fce.Loaded += value;
+            }
+
+            remove
+            {
+                if (!IsValid) return;
+
+                if (TryGetFrameworkElement(out var fe)) fe.Loaded -= value;
+                else if (TryGetFrameworkContentElement(out var fce)) fce.Loaded -= value;
+            }
+        }
+
+        public bool TryGetFrameworkContentElement([NotNullWhen(true)] out FrameworkContentElement? contentElement)
         {
             contentElement = _isFce ? _fce?.Target : null;
 
             return contentElement != null;
         }
 
-        public bool TryGetFrameworkElement([NotNullWhen(true)]out FrameworkElement? frameworkElement)
+        public bool TryGetFrameworkElement([NotNullWhen(true)] out FrameworkElement? frameworkElement)
         {
             var temp = _isFe ? _fe?.Target : null;
 
@@ -177,6 +158,25 @@ namespace Tauron.Application.Wpf
 
             frameworkElement = temp;
             return true;
+        }
+
+        [DebuggerStepThrough]
+        private class ElementReference<TReference> : IInternalWeakReference
+            where TReference : class
+        {
+            private readonly TReference? _reference;
+
+            private readonly WeakReference<TReference>? _weakRef;
+
+            public ElementReference([JetBrains.Annotations.NotNull] TReference reference, bool isWeak)
+            {
+                if (isWeak) _weakRef = new WeakReference<TReference>(Argument.NotNull(reference, nameof(reference)));
+                else _reference = reference;
+            }
+
+            public TReference? Target => _weakRef != null ? _weakRef.TypedTarget() : _reference;
+
+            public bool IsAlive => _weakRef == null || _weakRef.IsAlive();
         }
     }
 }

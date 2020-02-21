@@ -19,7 +19,9 @@ namespace Tauron.Application.Wpf.Commands
         }
 
         public SimpleCommand(Action<object?> execute)
-            : this(null, execute) { }
+            : this(null, execute)
+        {
+        }
 
         public override bool CanExecute(object? parameter)
         {
@@ -28,7 +30,7 @@ namespace Tauron.Application.Wpf.Commands
 
             return _canExecute == null || _canExecute(parameter);
         }
-        
+
         public override void Execute(object? parameter)
         {
             if (parameter == null)

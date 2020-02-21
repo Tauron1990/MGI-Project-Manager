@@ -35,7 +35,10 @@ namespace Tauron.Application.Wpf.UI
         ///     Object that can provide services for the markup
         ///     extension.
         /// </param>
-        public override object ProvideValue(IServiceProvider provider) => Binding.ProvideValue(provider);
+        public override object ProvideValue(IServiceProvider provider)
+        {
+            return Binding.ProvideValue(provider);
+        }
 
 
         /// <summary>
@@ -238,9 +241,7 @@ namespace Tauron.Application.Wpf.UI
             set => Binding.XPath = value;
         }
 
-        [CanBeNull]
-        [DefaultValue(null)]
-        public Collection<ValidationRule> ValidationRules => Binding.ValidationRules;
+        [CanBeNull] [DefaultValue(null)] public Collection<ValidationRule> ValidationRules => Binding.ValidationRules;
 
         [CanBeNull]
         [DefaultValue(null)]

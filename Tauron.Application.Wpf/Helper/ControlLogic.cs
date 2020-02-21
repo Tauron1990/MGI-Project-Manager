@@ -6,12 +6,80 @@ namespace Tauron.Application.Wpf.Helper
 {
     public sealed class ControlLogic
     {
+        private readonly Dictionary<string, (IDisposable Disposer, IControlBindable Binder)> _binderList = new Dictionary<string, (IDisposable Disposer, IControlBindable Binder)>();
+        private readonly object _dataContext;
+
+        private readonly DependencyObject _target;
+
+        public ControlLogic(DependencyObject target, object dataContext)
+        {
+            _target = target;
+            _dataContext = dataContext;
+        }
+
+        //public void NewDataContext(object? dataContext)
+        //{
+        //    _dataContext = dataContext;
+
+        //    foreach (var (key, (disposer, binder)) in _binderList.ToArray())
+        //    {
+        //        disposer.Dispose();
+        //        if (dataContext != null)
+        //            _binderList[key] = (binder.NewContext(dataContext), binder);
+        //    }
+        //}
+
+        public void CleanUp()
+        {
+            foreach (var pair in _binderList)
+                pair.Value.Disposer.Dispose();
+
+            _binderList.Clear();
+        }
+
+        public void Register(string key, IControlBindable bindable, DependencyObject affectedPart)
+        {
+            if (_dataContext == null)
+                return;
+
+            var disposer = bindable.Bind(_target, affectedPart, _dataContext);
+
+            _binderList[key] = (disposer, bindable);
+        }
+
+        public void CleanUp(string key)
+        {
+            if (_binderList.TryGetValue(key, out var pair))
+                pair.Disposer.Dispose();
+
+            _binderList.Remove(key);
+        }
+
+        public static IBinderControllable? FindRoot(DependencyObject? affected)
+        {
+            do
+            {
+                // ReSharper disable once SuspiciousTypeConversion.Global
+                if (affected is IBinderControllable binder)
+                    return binder;
+                affected = LogicalTreeHelper.GetParent(affected);
+            } while (affected != null);
+
+            return null;
+        }
+
+        public static void MakeLazy(FrameworkElement target, string? newValue, string? oldValue, Action<string?, string?, IBinderControllable, DependencyObject> runner)
+        {
+            var temp = new LazyHelper(target, newValue, oldValue, runner);
+            target.Loaded += temp.ElementOnLoaded;
+        }
+
         private class LazyHelper
         {
-            private readonly FrameworkElement _target;
             private readonly string? _newValue;
             private readonly string? _oldValue;
             private readonly Action<string?, string?, IBinderControllable, DependencyObject> _runner;
+            private readonly FrameworkElement _target;
 
             public LazyHelper(FrameworkElement target, string? newValue, string? oldValue, Action<string?, string?, IBinderControllable, DependencyObject> runner)
             {
@@ -35,74 +103,6 @@ namespace Tauron.Application.Wpf.Helper
                     _target.Loaded -= ElementOnLoaded;
                 }
             }
-        }
-
-        private readonly DependencyObject _target;
-        private readonly object _dataContext;
-
-        private readonly Dictionary<string, (IDisposable Disposer, IControlBindable Binder)> _binderList = new Dictionary<string, (IDisposable Disposer, IControlBindable Binder)>();
-
-        public ControlLogic(DependencyObject target, object dataContext)
-        {
-            _target = target;
-            _dataContext = dataContext;
-        }
-
-        //public void NewDataContext(object? dataContext)
-        //{
-        //    _dataContext = dataContext;
-
-        //    foreach (var (key, (disposer, binder)) in _binderList.ToArray())
-        //    {
-        //        disposer.Dispose();
-        //        if (dataContext != null)
-        //            _binderList[key] = (binder.NewContext(dataContext), binder);
-        //    }
-        //}
-
-        public void CleanUp()
-        {
-            foreach (var pair in _binderList) 
-                pair.Value.Disposer.Dispose();
-
-            _binderList.Clear();
-        }
-
-        public void Register(string key, IControlBindable bindable, DependencyObject affectedPart)
-        {
-            if(_dataContext == null)
-                return;
-
-            var disposer = bindable.Bind(_target, affectedPart, _dataContext);
-
-            _binderList[key] = (disposer, bindable);
-        }
-
-        public void CleanUp(string key)
-        {
-            if(_binderList.TryGetValue(key, out var pair))
-                pair.Disposer.Dispose();
-
-            _binderList.Remove(key);
-        }
-
-        public static IBinderControllable? FindRoot(DependencyObject? affected)
-        {
-            do
-            {
-                // ReSharper disable once SuspiciousTypeConversion.Global
-                if (affected is IBinderControllable binder)
-                    return binder;
-                affected = LogicalTreeHelper.GetParent(affected);
-            } while (affected != null);
-
-            return null;
-        }
-
-        public static void MakeLazy(FrameworkElement target, string? newValue, string? oldValue, Action<string?, string?, IBinderControllable, DependencyObject> runner)
-        {
-            var temp = new LazyHelper(target, newValue, oldValue, runner);
-            target.Loaded += temp.ElementOnLoaded;
         }
     }
 }

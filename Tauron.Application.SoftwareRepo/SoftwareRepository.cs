@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Tauron.Application.SoftwareRepo.Data;
@@ -14,16 +13,18 @@ namespace Tauron.Application.SoftwareRepo
 
         private readonly string _path;
 
-        public ApplicationList ApplicationList { get; private set; } = new ApplicationList(ImmutableList<ApplicationEntry>.Empty, string.Empty, string.Empty);
+        private SoftwareRepository(string path)
+        {
+            _path = path;
+        }
 
-        private SoftwareRepository(string path) 
-            => _path = path;
+        public ApplicationList ApplicationList { get; private set; } = new ApplicationList(ImmutableList<ApplicationEntry>.Empty, string.Empty, string.Empty);
 
         private async Task Init()
         {
             var compledPath = GetFullPath();
 
-            if(!File.Exists(compledPath))
+            if (!File.Exists(compledPath))
                 throw new InvalidOperationException("Apps File not found");
 
             ApplicationList = JsonConvert.DeserializeObject<ApplicationList>(await File.ReadAllTextAsync(compledPath));
@@ -40,7 +41,9 @@ namespace Tauron.Application.SoftwareRepo
         }
 
         private string GetFullPath()
-            => Path.Combine(_path, FileName);
+        {
+            return Path.Combine(_path, FileName);
+        }
 
         public static async Task<SoftwareRepository> Create(string path)
         {
@@ -57,10 +60,14 @@ namespace Tauron.Application.SoftwareRepo
         }
 
         public static bool IsValid(string path)
-            => File.Exists(Path.Combine(path, FileName));
+        {
+            return File.Exists(Path.Combine(path, FileName));
+        }
 
-        public async Task Save() 
-            => await File.WriteAllTextAsync(GetFullPath(), JsonConvert.SerializeObject(ApplicationList));
+        public async Task Save()
+        {
+            await File.WriteAllTextAsync(GetFullPath(), JsonConvert.SerializeObject(ApplicationList));
+        }
 
         public async Task ChangeName(string? name = null, string? description = null)
         {
@@ -72,7 +79,10 @@ namespace Tauron.Application.SoftwareRepo
             await Save();
         }
 
-        public object CreateBackup() => new ApplicationList(ApplicationList);
+        public object CreateBackup()
+        {
+            return new ApplicationList(ApplicationList);
+        }
 
         public void Revert(object backup)
         {
@@ -82,12 +92,14 @@ namespace Tauron.Application.SoftwareRepo
                 throw new InvalidOperationException("Falsches backup übergeben");
         }
 
-        public long Get(string name) 
-            => ApplicationList.ApplicationEntries.Find(ae => ae.Name == name)?.Id ?? -1;
+        public long Get(string name)
+        {
+            return ApplicationList.ApplicationEntries.Find(ae => ae.Name == name)?.Id ?? -1;
+        }
 
         public void AddApplication(string name, long id, string url, Version version, string originalRepository, string brnachName)
         {
-            if(Get(name) != -1)
+            if (Get(name) != -1)
                 throw new InvalidOperationException("Der Eintrag Existiert schon");
 
             ApplicationList.ApplicationEntries =
@@ -98,7 +110,7 @@ namespace Tauron.Application.SoftwareRepo
         public void UpdateApplication(long id, Version version, string url)
         {
             var entry = ApplicationList.ApplicationEntries.Find(ae => ae.Id == id);
-            if(entry == null)
+            if (entry == null)
                 throw new InvalidOperationException("Eintrag nicht gefunden");
 
             entry.Last = version;

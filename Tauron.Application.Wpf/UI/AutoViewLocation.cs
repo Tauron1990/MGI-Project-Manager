@@ -13,17 +13,23 @@ namespace Tauron.Application.Wpf.UI
     {
         private static readonly Dictionary<Type, Type> Views = new Dictionary<Type, Type>();
 
+        private readonly ITypeFactory _provider;
+
+        public AutoViewLocation(ITypeFactory provider)
+        {
+            _provider = provider;
+        }
+
         public static AutoViewLocation Manager => DependencyResolverManager.Default.DefaultDependencyResolver.Resolve<AutoViewLocation>();
 
-        public static void AddPair(Type view, Type model) 
-            => Views[model] = view;
+        public static void AddPair(Type view, Type model)
+        {
+            Views[model] = view;
+        }
 
-        private readonly ITypeFactory _provider;
-        
-        public AutoViewLocation(ITypeFactory provider) 
-            => _provider = provider;
-
-        public object? ResolveView(object viewModel) 
-            => Views.TryGetValue(viewModel.GetType(), out var view) ? _provider.CreateInstanceWithParametersAndAutoCompletion(view, viewModel) : null;
+        public object? ResolveView(object viewModel)
+        {
+            return Views.TryGetValue(viewModel.GetType(), out var view) ? _provider.CreateInstanceWithParametersAndAutoCompletion(view, viewModel) : null;
+        }
     }
 }

@@ -4,7 +4,7 @@
     {
         public string Value { get; }
 
-        public string Key { get;  }
+        public string Key { get; }
 
         public OptionsPair(string value, string key)
         {

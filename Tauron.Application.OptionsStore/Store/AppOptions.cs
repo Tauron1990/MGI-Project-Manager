@@ -14,9 +14,6 @@ namespace Tauron.Application.OptionsStore.Store
             Name = name;
         }
 
-        public void Init() 
-            => _dataCollection = _dataClient.GetCollection(Name);
-
         public string Name { get; }
 
         public async Task<IOption> GetOptionAsync(string name)
@@ -26,8 +23,10 @@ namespace Tauron.Application.OptionsStore.Store
             return new OptionImpl(pair.Key, pair.Value, _dataCollection.UpdateAsync, _dataCollection.Update);
         }
 
-        public async Task DeleteOptionAsync(string name) 
-            => await _dataCollection.DeleteOptionAsync(name);
+        public async Task DeleteOptionAsync(string name)
+        {
+            await _dataCollection.DeleteOptionAsync(name);
+        }
 
         public IOption GetOption(string name)
         {
@@ -35,6 +34,14 @@ namespace Tauron.Application.OptionsStore.Store
             return new OptionImpl(pair.Key, pair.Value, _dataCollection.UpdateAsync, _dataCollection.Update);
         }
 
-        public void DeleteOption(string name) => _dataCollection.DeleteOption(name);
+        public void DeleteOption(string name)
+        {
+            _dataCollection.DeleteOption(name);
+        }
+
+        public void Init()
+        {
+            _dataCollection = _dataClient.GetCollection(Name);
+        }
     }
 }

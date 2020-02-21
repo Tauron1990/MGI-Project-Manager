@@ -9,13 +9,15 @@ namespace Tauron.Application.Wpf.UI
 {
     public sealed class ViewModelConverterExtension : ValueConverterFactoryBase
     {
-
-        protected override IValueConverter Create() => new ViewModelConverter();
+        protected override IValueConverter Create()
+        {
+            return new ViewModelConverter();
+        }
     }
 
     public class ViewModelConverter : IValueConverter
     {
-        public object Convert(object value, [NotNull] Type targetType,  object parameter, [NotNull] CultureInfo culture)
+        public object Convert(object value, [NotNull] Type targetType, object parameter, [NotNull] CultureInfo culture)
         {
             if (!(value is ViewModelBase model)) return value;
 
@@ -24,6 +26,9 @@ namespace Tauron.Application.Wpf.UI
             return manager.ResolveView(model) ?? value;
         }
 
-        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => new FrameworkObject(value).DataContext;
+        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return new FrameworkObject(value).DataContext;
+        }
     }
 }

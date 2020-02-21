@@ -5,29 +5,8 @@ namespace Tauron.Application.Wpf.Helper
 {
     public abstract class ControlBindableBase : IControlBindable
     {
-        private class CleanUpHelper : IDisposable
-        {
-            private bool _isDisposed;
-            private readonly ControlBindableBase _control;
-
-            public CleanUpHelper(ControlBindableBase control) => _control = control;
-
-            public void Dispose()
-            {
-                if(_isDisposed) return;
-
-                _control.CleanUp();
-                _isDisposed = true;
-            }
-        }
-
-        private class Dummy : DependencyObject
-        {
-            
-        }
-
         protected DependencyObject Root { get; private set; } = new Dummy();
-        
+
         protected DependencyObject AffectedObject { get; private set; } = new Dummy();
 
         public IDisposable Bind(DependencyObject root, DependencyObject affectedObject, object dataContext)
@@ -48,5 +27,28 @@ namespace Tauron.Application.Wpf.Helper
         protected abstract void CleanUp();
 
         protected abstract void Bind(object context);
+
+        private class CleanUpHelper : IDisposable
+        {
+            private readonly ControlBindableBase _control;
+            private bool _isDisposed;
+
+            public CleanUpHelper(ControlBindableBase control)
+            {
+                _control = control;
+            }
+
+            public void Dispose()
+            {
+                if (_isDisposed) return;
+
+                _control.CleanUp();
+                _isDisposed = true;
+            }
+        }
+
+        private class Dummy : DependencyObject
+        {
+        }
     }
 }

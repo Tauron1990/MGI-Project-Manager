@@ -10,13 +10,19 @@ namespace Tauron.Application.Wpf.Converter
     [MarkupExtensionReturnType(typeof(IValueConverter))]
     public class StringToIntConverter : ValueConverterFactoryBase
     {
-        protected override IValueConverter Create() => new Converter();
+        protected override IValueConverter Create()
+        {
+            return new Converter();
+        }
 
         private class Converter : StringConverterBase<int>
         {
             protected override bool CanConvertBack => true;
 
-            protected override string Convert(int value) => value.ToString();
+            protected override string Convert(int value)
+            {
+                return value.ToString();
+            }
 
             protected override int ConvertBack(string value)
             {
@@ -40,10 +46,21 @@ namespace Tauron.Application.Wpf.Converter
     [MarkupExtensionReturnType(typeof(IValueConverter))]
     public class BoolToVisibilityConverter : ValueConverterFactoryBase
     {
-        protected override IValueConverter Create() => new Converter(IsHidden, Reverse);
-        
+        public bool IsHidden { get; set; }
+
+        public bool Reverse { get; set; }
+
+        protected override IValueConverter Create()
+        {
+            return new Converter(IsHidden, Reverse);
+        }
+
         private class Converter : ValueConverterBase<bool, Visibility>
         {
+            private readonly bool _isHidden;
+
+            private readonly bool _reverse;
+
             public Converter(bool isHidden, bool reverse)
             {
                 _isHidden = isHidden;
@@ -51,10 +68,6 @@ namespace Tauron.Application.Wpf.Converter
             }
 
             protected override bool CanConvertBack => true;
-
-            private readonly bool _isHidden;
-
-            private readonly bool _reverse;
 
             protected override Visibility Convert(bool value)
             {
@@ -87,8 +100,5 @@ namespace Tauron.Application.Wpf.Converter
                 return result;
             }
         }
-        public bool IsHidden { get; set; }
-
-        public bool Reverse { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace Tauron.Application.Wpf
     {
         private const BindingFlags DefaultBindingFlags =
             BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-        
+
         private static Dictionary<ConstructorInfo, Func<object?[]?, object>> _creatorCache = new Dictionary<ConstructorInfo, Func<object?[]?, object>>();
         private static Dictionary<PropertyInfo, Func<object?, object[], object>> _propertyAccessorCache = new Dictionary<PropertyInfo, Func<object?, object[], object>>();
         private static Dictionary<FieldInfo, Func<object?, object?>> _fieldAccessorCache = new Dictionary<FieldInfo, Func<object?, object?>>();
@@ -30,7 +30,7 @@ namespace Tauron.Application.Wpf
             for (var i = 0; i < paramsInfo.Length; i++)
             {
                 Expression index = Expression.Constant(i);
-                Type paramType = paramsInfo[i].ParameterType;
+                var paramType = paramsInfo[i].ParameterType;
                 Expression paramAccessorExp = Expression.ArrayIndex(param, index);
                 Expression paramCastExp = Expression.Convert(paramAccessorExp, paramType);
                 argsExpressions[i] = paramCastExp;
@@ -38,6 +38,7 @@ namespace Tauron.Application.Wpf
 
             return argsExpressions;
         }
+
         private static Func<object?[]?, object> GetCreator(ConstructorInfo constructor)
         {
             lock (_creatorCache)
@@ -52,8 +53,6 @@ namespace Tauron.Application.Wpf
 
                 if (paramsInfo.Length > 0)
                 {
-
-
                     // Make a NewExpression that calls the constructor with the args we just created.
                     var newExpression = Expression.New(constructor, CreateArgumentExpressions(paramsInfo, param));
 
@@ -61,7 +60,7 @@ namespace Tauron.Application.Wpf
                     var lambda = Expression.Lambda(typeof(Func<object[], object>), newExpression, param);
 
                     // Compile it
-                    var compiled = (Func<object?[]?, object>)lambda.CompileFast();
+                    var compiled = (Func<object?[]?, object>) lambda.CompileFast();
 
                     _creatorCache[constructor] = compiled;
 
@@ -77,7 +76,7 @@ namespace Tauron.Application.Wpf
                     var lambda = Expression.Lambda(typeof(Func<object[], object>), newExpression, param);
 
                     // Compile it
-                    var compiled = (Func<object?[]?, object>)lambda.CompileFast();
+                    var compiled = (Func<object?[]?, object>) lambda.CompileFast();
 
                     _creatorCache[constructor] = compiled;
 
@@ -85,8 +84,8 @@ namespace Tauron.Application.Wpf
                     return compiled;
                 }
             }
-
         }
+
         private static Func<object?, object[], object?> GetPropertyAccessor(PropertyInfo info, Func<IEnumerable<Type>> arguments)
         {
             lock (_propertyAccessorCache)
@@ -99,23 +98,24 @@ namespace Tauron.Application.Wpf
                 var argParam = Expression.Parameter(typeof(object[]));
 
                 Expression acess;
-                var convert = info.GetGetMethod()?.IsStatic == true 
+                var convert = info.GetGetMethod()?.IsStatic == true
                     ? null
                     : Expression.Convert(instParam, Argument.CheckResult(info.DeclaringType, nameof(info.DeclaringType)));
 
-                if(!arg.Any())
+                if (!arg.Any())
                     acess = Expression.Property(convert, info);
                 else
                     acess = Expression.Property(convert, info, CreateArgumentExpressions(info.GetIndexParameters(), argParam));
 
 
                 var delExp = Expression.Convert(acess, typeof(object));
-                var del = Expression.Lambda<Func<object?, object[], object>>(delExp,  instParam, argParam).CompileFast();
+                var del = Expression.Lambda<Func<object?, object[], object>>(delExp, instParam, argParam).CompileFast();
 
                 _propertyAccessorCache[info] = del;
                 return del;
             }
         }
+
         private static Func<object?, object?> GetFieldAccessor(FieldInfo field)
         {
             lock (_fieldAccessorCache)
@@ -136,6 +136,7 @@ namespace Tauron.Application.Wpf
                 return del;
             }
         }
+
         private static Action<object, object?[]?, object?> GetPropertySetter(PropertyInfo info)
         {
             lock (_propertySetterCache)
@@ -151,8 +152,8 @@ namespace Tauron.Application.Wpf
                 var convertInst = Expression.Convert(instParam, Argument.CheckResult(info.DeclaringType, nameof(info.DeclaringType)));
                 var convertValue = Expression.Convert(valueParm, info.PropertyType);
 
-                Expression exp = indexes.Length == 0 
-                    ? Expression.Assign(Expression.Property(convertInst, info), convertValue) 
+                Expression exp = indexes.Length == 0
+                    ? Expression.Assign(Expression.Property(convertInst, info), convertValue)
                     : Expression.Assign(Expression.Property(convertInst, info, CreateArgumentExpressions(info.GetIndexParameters(), argsParam)), convertValue);
 
                 setter = Expression.Lambda<Action<object, object?[]?, object?>>(exp, instParam, argsParam, valueParm).CompileFast();
@@ -162,6 +163,7 @@ namespace Tauron.Application.Wpf
                 return setter;
             }
         }
+
         private static Action<object?, object?> GetFieldSetter(FieldInfo info)
         {
             lock (_fieldSetterCache)
@@ -183,12 +185,16 @@ namespace Tauron.Application.Wpf
         }
 
         public static TType? TypedTarget<TType>(this WeakReference<TType> reference)
-            where TType : class =>
-            reference.TryGetTarget(out var target) ? target : null;
+            where TType : class
+        {
+            return reference.TryGetTarget(out var target) ? target : null;
+        }
 
         public static bool IsAlive<TType>(this WeakReference<TType> reference)
             where TType : class
-            => reference.TryGetTarget(out _);
+        {
+            return reference.TryGetTarget(out _);
+        }
 
         public static Func<object?, object?[]?, object?> GetMethodInvoker(this MethodInfo info, Func<IEnumerable<Type>> arguments)
         {
@@ -203,7 +209,7 @@ namespace Tauron.Application.Wpf
                 var convert = info.IsStatic ? null : Expression.Convert(instParam, Argument.CheckResult(info.DeclaringType, nameof(info.DeclaringType)));
 
                 Expression targetExpression = args.Length == 0
-                    ? Expression.Call(convert, info) 
+                    ? Expression.Call(convert, info)
                     : Expression.Call(convert, info, CreateArgumentExpressions(info.GetParameters(), argsParam));
 
                 if (info.ReturnType == typeof(void))
@@ -218,7 +224,9 @@ namespace Tauron.Application.Wpf
                         labelExpression);
                 }
                 else
+                {
                     targetExpression = Expression.Convert(targetExpression, typeof(object));
+                }
 
                 accessor = Expression.Lambda<Func<object?, object?[]?, object>>(targetExpression, instParam, argsParam).CompileFast();
                 _methodCache[info] = accessor;
@@ -226,6 +234,7 @@ namespace Tauron.Application.Wpf
                 return accessor;
             }
         }
+
         public static Func<object[], object>? GetCreator(Type target, Type[] arguments)
         {
             // Get constructor information?
@@ -233,16 +242,22 @@ namespace Tauron.Application.Wpf
 
             // Is there at least 1?
             return constructor == null ? null : GetCreator(constructor);
-        }     
-        public static object? FastCreateInstance(this Type target, params object[] parm) 
-            => GetCreator(target, parm.Select(o => o.GetType()).ToArray())?.Invoke(parm);
+        }
+
+        public static object? FastCreateInstance(this Type target, params object[] parm)
+        {
+            return GetCreator(target, parm.Select(o => o.GetType()).ToArray())?.Invoke(parm);
+        }
 
         public static T ParseEnum<T>(this string value, bool ignoreCase)
-            where T : struct => Enum.TryParse(value, ignoreCase, out T evalue) ? evalue : default;
+            where T : struct
+        {
+            return Enum.TryParse(value, ignoreCase, out T evalue) ? evalue : default;
+        }
 
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public static IEnumerable<Tuple<MemberInfo, TAttribute>> FindMemberAttributes<TAttribute>(
-             this Type type,
+            this Type type,
             bool nonPublic,
             BindingFlags bindingflags) where TAttribute : Attribute
         {
@@ -251,12 +266,10 @@ namespace Tauron.Application.Wpf
             if (nonPublic) bindingflags |= BindingFlags.NonPublic;
 
             if (!Enum.IsDefined(typeof(BindingFlags), BindingFlags.FlattenHierarchy))
-            {
                 return from mem in type.GetMembers(bindingflags)
                     let attr = CustomAttributeExtensions.GetCustomAttribute<TAttribute>(mem)
                     where attr != null
                     select Tuple.Create(mem, attr);
-            }
 
             return from mem in type.GetHieratichialMembers(bindingflags)
                 let attr = mem.GetCustomAttribute<TAttribute>()
@@ -266,7 +279,7 @@ namespace Tauron.Application.Wpf
 
         public static IEnumerable<MemberInfo> GetHieratichialMembers(this Type type, BindingFlags flags)
         {
-            Type? targetType = type;
+            var targetType = type;
             while (targetType != null)
             {
                 foreach (var mem in targetType.GetMembers(flags)) yield return mem;
@@ -292,7 +305,7 @@ namespace Tauron.Application.Wpf
             return (T[]) member.GetCustomAttributes(typeof(T), true);
         }
 
-        
+
         public static object[] GetAllCustomAttributes(this ICustomAttributeProvider member, Type type)
         {
             if (member == null) throw new ArgumentNullException(nameof(member));
@@ -324,18 +337,19 @@ namespace Tauron.Application.Wpf
             return attributeTypes.SelectMany(attributeType => provider.GetCustomAttributes(attributeType, false));
         }
 
-        [return:MaybeNull]
+        [return: MaybeNull]
         public static TType GetInvokeMember<TType>(this MemberInfo info, object instance, params object[]? parameter)
         {
             if (info == null) throw new ArgumentNullException(nameof(info));
 
-            if(parameter == null)
+            if (parameter == null)
                 parameter = new object[0];
 
             return info switch
             {
-                PropertyInfo property => (GetPropertyAccessor(property, () => property.GetIndexParameters().Select(pi => pi.ParameterType))(instance, parameter) is TType pType 
-                                              ? pType : default),
+                PropertyInfo property => (GetPropertyAccessor(property, () => property.GetIndexParameters().Select(pi => pi.ParameterType))(instance, parameter) is TType pType
+                    ? pType
+                    : default),
                 FieldInfo field => (GetFieldAccessor(field)(instance) is TType type ? type : default),
                 MethodInfo methodInfo => (GetMethodInvoker(methodInfo, methodInfo.GetParameterTypes)(instance, parameter) is TType mType ? mType : default),
                 ConstructorInfo constructorInfo => (GetCreator(constructorInfo)(parameter) is TType cType ? cType : default),
@@ -425,7 +439,7 @@ namespace Tauron.Application.Wpf
             return attributes.Length != 0 && attributes.Any(attribute => attribute.Match(attributeToMatch));
         }
 
-        [return:MaybeNull]
+        [return: MaybeNull]
         public static TType InvokeFast<TType>(this MethodBase method, object? instance, params object?[] args)
         {
             if (method == null) throw new ArgumentNullException(nameof(method));
@@ -504,19 +518,29 @@ namespace Tauron.Application.Wpf
             return Enum.TryParse(value, out eEnum);
         }
 
-        public static void SetFieldFast(this FieldInfo field, object target, object? value) 
-            => GetFieldSetter(Argument.NotNull(field, nameof(field)))(target, value);
+        public static void SetFieldFast(this FieldInfo field, object target, object? value)
+        {
+            GetFieldSetter(Argument.NotNull(field, nameof(field)))(target, value);
+        }
 
-        public static void SetValueFast(this PropertyInfo info, object target, object? value, params object[] index) 
-            => GetPropertySetter(Argument.NotNull(info, nameof(info)))(target, index, value);
+        public static void SetValueFast(this PropertyInfo info, object target, object? value, params object[] index)
+        {
+            GetPropertySetter(Argument.NotNull(info, nameof(info)))(target, index, value);
+        }
 
-        public static object FastCreate(this ConstructorInfo info, params object[] parms) 
-            => GetCreator(Argument.NotNull(info, nameof(info)))(parms);
+        public static object FastCreate(this ConstructorInfo info, params object[] parms)
+        {
+            return GetCreator(Argument.NotNull(info, nameof(info)))(parms);
+        }
 
         public static object? GetValueFast(this PropertyInfo info, object? instance, params object[] index)
-            => GetPropertyAccessor(Argument.NotNull(info, nameof(info)), () => info.GetIndexParameters().Select(pi => pi.ParameterType))(instance, index);
+        {
+            return GetPropertyAccessor(Argument.NotNull(info, nameof(info)), () => info.GetIndexParameters().Select(pi => pi.ParameterType))(instance, index);
+        }
 
         public static object? GetValueFast(this FieldInfo info, object? instance)
-            => GetFieldAccessor(Argument.NotNull(info, nameof(info)))(instance);
+        {
+            return GetFieldAccessor(Argument.NotNull(info, nameof(info)))(instance);
+        }
     }
 }
