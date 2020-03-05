@@ -277,7 +277,7 @@ namespace Tauron.Application.Wpf
                 select Tuple.Create(mem, attr);
         }
 
-        public static IEnumerable<MemberInfo> GetHieratichialMembers(this Type type, BindingFlags flags)
+        public static IEnumerable<MemberInfo> GetHieratichialMembers(this Type? type, BindingFlags flags)
         {
             var targetType = type;
             while (targetType != null)
