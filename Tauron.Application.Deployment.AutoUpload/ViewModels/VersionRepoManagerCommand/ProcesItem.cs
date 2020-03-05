@@ -7,16 +7,16 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
     {
         private readonly IList<ProcesItem> _items;
 
-        public string Name { get; }
-
-        public bool Running { get; set; }
-
         public ProcesItem(string name, IList<ProcesItem> items)
         {
             _items = items;
             Name = name;
             Running = true;
         }
+
+        public string Name { get; }
+
+        public bool Running { get; set; }
 
         public ProcesItem Next(string name)
         {
@@ -28,6 +28,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
         }
 
         public void Finish()
-            => Running = false;
+        {
+            Running = false;
+        }
     }
 }

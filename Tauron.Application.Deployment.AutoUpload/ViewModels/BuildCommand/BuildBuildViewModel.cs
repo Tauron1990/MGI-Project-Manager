@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using Catel.Services;
@@ -18,13 +16,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
     [ServiceDescriptor(typeof(BuildBuildViewModel))]
     public class BuildBuildViewModel : OperationViewModel<BuildOperationContext>
     {
-        private readonly IMessageService _messageService;
         private readonly Dispatcher _dispatcher;
         private readonly GitManager _gitManager;
-
-        public int ErrorCount { get; set; }
-
-        public string Console { get; set; } = string.Empty;
+        private readonly IMessageService _messageService;
 
         public BuildBuildViewModel(IMessageService messageService, Dispatcher dispatcher, GitManager gitManager)
         {
@@ -33,11 +27,14 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
             _gitManager = gitManager;
         }
 
+        public int ErrorCount { get; set; }
+
+        public string Console { get; set; } = string.Empty;
+
         protected override async Task InitializeAsync()
         {
             if (!BuildContext.CanBuild)
             {
-
                 const string website = "https://dotnet.microsoft.com/download";
                 if (await _messageService.ShowAsync("Dot Net Core Framework nicht gefunden. Installieren?", "Fehler", MessageButton.YesNo, MessageImage.Error) == MessageResult.Yes)
                     OpenWebsite(website);
@@ -74,9 +71,13 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
                     await OnNextView<BuildErrorViewModel>();
                 }
                 else if (Context.NoLocatonOpening)
+                {
                     await OnFinish("Erstellen erfolgreich");
+                }
                 else
+                {
                     await OnNextView<BuildOpenLocationViewModel>();
+                }
             }
             catch (Exception e)
             {
@@ -90,9 +91,15 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
             }
         }
 
-        private void BuildContextOnError() => ErrorCount++;
+        private void BuildContextOnError()
+        {
+            ErrorCount++;
+        }
 
-        private void BuildContextOnOutput(string obj) => _dispatcher.Invoke(() => Console = Console + Environment.NewLine + obj, DispatcherPriority.Render);
+        private void BuildContextOnOutput(string obj)
+        {
+            _dispatcher.Invoke(() => Console = Console + Environment.NewLine + obj, DispatcherPriority.Render);
+        }
 
         private static void OpenWebsite(string url)
         {
@@ -106,7 +113,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     url = url.Replace("&", "^&");
-                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {

@@ -14,21 +14,14 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
     [ServiceDescriptor(typeof(UploadSelectRepoViewModel))]
     public class UploadSelectRepoViewModel : OperationViewModel<UploadCommandContext>
     {
-        private class RepoItem : SelectorItemBase
+        private readonly Settings _settings;
+
+        public UploadSelectRepoViewModel(Settings settings)
         {
-            public RegistratedRepository Repository { get; }
-
-            public RepoItem(RegistratedRepository repo) => Repository = repo;
-
-            public override string Name => Path.GetFileName(Repository.ProjectName);
-            public override ItemType ItemType => ItemType.Item;
+            _settings = settings;
         }
 
-        private readonly Settings _settings;
         public ICommonSelectorViewModel RepoSelector { get; } = CommonSelectorViewModel.Create();
-
-        public UploadSelectRepoViewModel(Settings settings) 
-            => _settings = settings;
 
         protected override async Task InitializeAsync()
         {
@@ -38,20 +31,41 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
         }
 
         [CommandTarget]
-        public async Task OnNext() => await RepoSelector.Run();
+        public async Task OnNext()
+        {
+            await RepoSelector.Run();
+        }
 
         [CommandTarget]
-        public bool CanOnNext() => RepoSelector.CanRun(); 
+        public bool CanOnNext()
+        {
+            return RepoSelector.CanRun();
+        }
 
         private async Task SelectedItemAction(SelectorItemBase arg)
         {
             if (arg.ItemType == ItemType.New)
+            {
                 await OnNextView<AddNameSelectorViewModel, AddCommandContext>(new AddCommandContext(), CreateRedirection<UploadSelectSoftwareRepoViewModel>());
+            }
             else
             {
                 Context.Repository = ((RepoItem) arg).Repository;
                 await OnNextView<UploadSelectSoftwareRepoViewModel>();
             }
+        }
+
+        private class RepoItem : SelectorItemBase
+        {
+            public RepoItem(RegistratedRepository repo)
+            {
+                Repository = repo;
+            }
+
+            public RegistratedRepository Repository { get; }
+
+            public override string Name => Path.GetFileName(Repository.ProjectName);
+            public override ItemType ItemType => ItemType.Item;
         }
     }
 }

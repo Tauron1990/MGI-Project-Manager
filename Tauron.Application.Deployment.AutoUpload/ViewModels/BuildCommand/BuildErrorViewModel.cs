@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 using Tauron.Application.Wpf;
@@ -33,7 +32,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         }
 
         [CommandTarget]
-        public async Task OnNext() 
-            => await OnReturn();
+        public async Task OnNext()
+        {
+            await OnReturn();
+        }
     }
 }

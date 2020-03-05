@@ -1,25 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows.Media;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand;
 using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.Views.BuildCommand
 {
     /// <summary>
-    /// Interaktionslogik für BuildErrorView.xaml
+    ///     Interaktionslogik für BuildErrorView.xaml
     /// </summary>
     [Control(typeof(BuildErrorViewModel))]
-    public partial class BuildErrorView 
+    public partial class BuildErrorView
     {
         public BuildErrorView(BuildErrorViewModel model)
             : base(model)

@@ -7,15 +7,6 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
     {
         public const string BuildFile = "Data.build";
 
-        [Key(0)]
-        public string Output { get; }
-
-        [Key(1)]
-        public string PipeHandle { get; }
-
-        [Key(2)]
-        public string ProjectFile { get; }
-
         [SerializationConstructor]
         public BuildInfo(string output, string pipeHandle, string projectFile)
         {
@@ -23,5 +14,11 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
             PipeHandle = pipeHandle;
             ProjectFile = projectFile;
         }
+
+        [Key(0)] public string Output { get; }
+
+        [Key(1)] public string PipeHandle { get; }
+
+        [Key(2)] public string ProjectFile { get; }
     }
 }

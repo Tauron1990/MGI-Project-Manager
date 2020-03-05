@@ -1,9 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Threading;
-using Catel.MVVM;
+using Catel.IO;
 using Catel.Services;
 using LibGit2Sharp;
 using Scrutor;
@@ -11,18 +10,31 @@ using Tauron.Application.Deployment.AutoUpload.Models;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Git;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
-using Path = Catel.IO.Path;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 {
     [ServiceDescriptor(typeof(AddSyncRepositoryViewModel))]
     public class AddSyncRepositoryViewModel : OperationViewModel<AddCommandContext>
     {
-        private readonly IMessageService _messageService;
-        private readonly GitManager _gitManager;
-        private readonly Settings _settings;
         private readonly CommonTasks _commonTasks;
         private readonly Dispatcher _dispatcher;
+        private readonly GitManager _gitManager;
+        private readonly IMessageService _messageService;
+        private readonly Settings _settings;
+
+        private int _currentLine;
+
+        private int _updateCount1 = 15;
+        private int _updateCount2 = 15;
+
+        public AddSyncRepositoryViewModel(IMessageService messageService, GitManager gitManager, Settings settings, CommonTasks commonTasks, Dispatcher dispatcher)
+        {
+            _messageService = messageService;
+            _gitManager = gitManager;
+            _settings = settings;
+            _commonTasks = commonTasks;
+            _dispatcher = dispatcher;
+        }
 
         public string OutputLines { get; set; } = string.Empty;
 
@@ -33,15 +45,6 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
         public double ProgressMaximum { get; set; }
 
         public string ProgressLine { get; set; } = "Starten...";
-
-        public AddSyncRepositoryViewModel(IMessageService messageService, GitManager gitManager, Settings settings, CommonTasks commonTasks, Dispatcher dispatcher)
-        {
-            _messageService = messageService;
-            _gitManager = gitManager;
-            _settings = settings;
-            _commonTasks = commonTasks;
-            _dispatcher = dispatcher;
-        }
 
         protected override Task InitializeAsync()
         {
@@ -65,8 +68,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
                 else
                 {
                     var registrepo = _settings.RegistratedRepositories
-                       .Where(rr => rr.RepositoryName == Context.Repository.FullName)
-                       .FirstOrDefault(rr => rr.BranchName == Context.Branch.Name);
+                        .Where(rr => rr.RepositoryName == Context.Repository.FullName)
+                        .FirstOrDefault(rr => rr.BranchName == Context.Branch.Name);
 
                     if (registrepo != null)
                     {
@@ -92,7 +95,6 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
                         Context.RealPath = path;
                     }
                 }
-
             }
             catch (Exception e)
             {
@@ -106,43 +108,37 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
                 await OnNextView<AddSelectProjectViewModel>();
         }
 
-        private int _updateCount1 = 15;
-        private int _updateCount2 = 15;
-
-        private int _currentLine;
-
         private bool TransferProgressHandler(TransferProgress progress)
         {
             return TryUpdate(ref _updateCount1, () =>
-                                                {
-                                                    Intermediate = false;
+            {
+                Intermediate = false;
 
-                                                    ProgressMaximum = progress.TotalObjects;
-                                                    ProgressValue = progress.ReceivedObjects;
+                ProgressMaximum = progress.TotalObjects;
+                ProgressValue = progress.ReceivedObjects;
 
-                                                    ProgressLine = $"Objects: {progress.ReceivedObjects}/{progress.TotalObjects} -- Bytes: {progress.ReceivedBytes}";
-                                                    return true;
-                                                });
+                ProgressLine = $"Objects: {progress.ReceivedObjects}/{progress.TotalObjects} -- Bytes: {progress.ReceivedBytes}";
+                return true;
+            });
         }
 
         private bool ProgressHandler(string serverprogressoutput)
         {
             return TryUpdate(ref _updateCount2, () =>
-                                                {
+            {
+                if (_currentLine == 10)
+                {
+                    _currentLine = 0;
+                    OutputLines = serverprogressoutput;
+                }
+                else
+                {
+                    OutputLines = $"{OutputLines}{Environment.NewLine}{serverprogressoutput}";
+                }
 
-                                                    if (_currentLine == 10)
-                                                    {
-                                                        _currentLine = 0;
-                                                        OutputLines = serverprogressoutput;
-                                                    }
-                                                    else
-                                                    {
-                                                        OutputLines = $"{OutputLines}{Environment.NewLine}{serverprogressoutput}";
-                                                    }
-
-                                                    _currentLine++;
-                                                    return true;
-                                                });
+                _currentLine++;
+                return true;
+            });
         }
 
         private bool TryUpdate(ref int value, Func<bool> updater)

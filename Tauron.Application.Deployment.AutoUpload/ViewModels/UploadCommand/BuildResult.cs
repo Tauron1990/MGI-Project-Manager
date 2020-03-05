@@ -8,7 +8,10 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
     {
         private readonly BuildOperationContext _context;
 
-        public BuildResult(BuildOperationContext context) => _context = context;
+        public BuildResult(BuildOperationContext context)
+        {
+            _context = context;
+        }
 
         public async Task Do(Func<string, Version, Task> suceed, Func<BuildFailed, Task> failed)
         {

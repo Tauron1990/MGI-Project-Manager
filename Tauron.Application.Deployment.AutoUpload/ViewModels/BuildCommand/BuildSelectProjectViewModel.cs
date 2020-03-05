@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Catel.Collections;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
@@ -16,14 +15,16 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
     {
         private readonly Settings _settings;
 
+        public BuildSelectProjectViewModel(Settings settings)
+        {
+            _settings = settings;
+        }
+
         //public FastObservableCollection<PotentialProjekt> Projekts { get; } = new FastObservableCollection<PotentialProjekt>();
 
         //public PotentialProjekt? Projekt { get; set; }
 
         public ICommonSelectorViewModel ProjectSelector { get; } = CommonSelectorViewModel.Create();
-
-        public BuildSelectProjectViewModel(Settings settings) 
-            => _settings = settings;
 
         protected override Task InitializeAsync()
         {
@@ -33,7 +34,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
                 .Select(pr => new SelectorItem<PotentialProjekt>(pr));
 
             ProjectSelector.Init(itemFac, true, OnNext);
-            
+
             return Task.CompletedTask;
         }
 
@@ -56,14 +57,21 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
             await OnNextView<BuildVersionIncrementViewModel>();
         }
 
-        private async Task NewProjectAction() 
-            => await OnNextView<AddNameSelectorViewModel, AddCommandContext>(new AddCommandContext(), CreateRedirection<BuildVersionIncrementViewModel>());
+        private async Task NewProjectAction()
+        {
+            await OnNextView<AddNameSelectorViewModel, AddCommandContext>(new AddCommandContext(), CreateRedirection<BuildVersionIncrementViewModel>());
+        }
 
         [CommandTarget]
-        public bool CanOnNext() => ProjectSelector.CanRun();
+        public bool CanOnNext()
+        {
+            return ProjectSelector.CanRun();
+        }
 
         [CommandTarget]
-        public async Task OnNext() 
-            => await ProjectSelector.Run();
+        public async Task OnNext()
+        {
+            await ProjectSelector.Run();
+        }
     }
 }

@@ -18,10 +18,6 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.RemoveCommand
     {
         private readonly Settings _settings;
 
-        public FastObservableCollection<RegistratedRepository> Projects { get; } = new FastObservableCollection<RegistratedRepository>();
-
-        public RegistratedRepository? SelectedProject { get; set; }
-
         public RemoveSelectProjectViewModel(Settings settings)
         {
             _settings = settings;
@@ -30,7 +26,11 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.RemoveCommand
             NextCommand = new TaskCommand(OnNextCommandExecute, OnNextCommandCanExecute);
         }
 
-        
+        public FastObservableCollection<RegistratedRepository> Projects { get; } = new FastObservableCollection<RegistratedRepository>();
+
+        public RegistratedRepository? SelectedProject { get; set; }
+
+
         public TaskCommand NextCommand { get; }
 
         private async Task OnNextCommandExecute()
@@ -59,18 +59,17 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.RemoveCommand
         {
             foreach (var subDir in dir.GetDirectories())
                 SetAttributesNormal(subDir);
-            foreach (var file in dir.GetFiles())
-            {
-                file.Attributes = FileAttributes.Normal;
-            }
+            foreach (var file in dir.GetFiles()) file.Attributes = FileAttributes.Normal;
         }
 
-        private bool OnNextCommandCanExecute() 
-            => SelectedProject != null;
+        private bool OnNextCommandCanExecute()
+        {
+            return SelectedProject != null;
+        }
 
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
         {
-            if(SelectedProject == null)
+            if (SelectedProject == null)
                 validationResults.Add(FieldValidationResult.CreateError(nameof(SelectedProject), "Kein Projekt gewählt"));
 
             base.ValidateFields(validationResults);

@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-using System.Xml.Linq;
 using Catel.Data;
-using Catel.MVVM;
 using Catel.Services;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Build;
 using Tauron.Application.Deployment.AutoUpload.Models.Git;
-using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 using Tauron.Application.Wpf;
 
@@ -20,13 +14,19 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
     [ServiceDescriptor(typeof(BuildVersionIncrementViewModel))]
     public class BuildVersionIncrementViewModel : OperationViewModel<BuildOperationContext>
     {
-        private readonly IMessageService _messageService;
         private readonly GitManager _gitManager;
+        private readonly IMessageService _messageService;
         private readonly ProjectFile _projectFile = new ProjectFile();
 
         private Version _internalAssembly = new Version();
 
         private Version _internalFile = new Version();
+
+        public BuildVersionIncrementViewModel(IMessageService messageService, GitManager gitManager)
+        {
+            _messageService = messageService;
+            _gitManager = gitManager;
+        }
 
         public string? FileVersion { get; set; }
 
@@ -36,12 +36,6 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
         public string? OldAssemblyVersion { get; private set; }
 
-        public BuildVersionIncrementViewModel(IMessageService messageService, GitManager gitManager)
-        {
-            _messageService = messageService;
-            _gitManager = gitManager;
-        }
-        
         protected override Task InitializeAsync()
         {
             BeginLoad();
@@ -55,7 +49,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
             {
                 await _projectFile.ApplyVersion(Version.Parse(FileVersion ?? string.Empty), Version.Parse(AssemblyVersion ?? string.Empty));
                 var repo = Context.RegistratedRepository;
-                if( repo != null)
+                if (repo != null)
                     _gitManager.CommitRepo(repo);
                 Context.AssemblyVersion = Version.Parse(AssemblyVersion ?? string.Empty);
                 await OnNextView<BuildBuildViewModel>();
@@ -68,7 +62,10 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         }
 
         [CommandTarget]
-        private bool CanOnNext() => !HasErrors;
+        private bool CanOnNext()
+        {
+            return !HasErrors;
+        }
 
         private async void BeginLoad()
         {
@@ -123,7 +120,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         private static Version Increase(Version current)
         {
             int GraterThenZero(int input)
-                => input < 0 ? 0 : input;
+            {
+                return input < 0 ? 0 : input;
+            }
 
             current = new Version(current.Major, current.Minor + 1, GraterThenZero(current.Build), GraterThenZero(current.Revision));
 
@@ -132,13 +131,11 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
         {
-            if(!Version.TryParse(FileVersion, out _))
+            if (!Version.TryParse(FileVersion, out _))
                 validationResults.Add(FieldValidationResult.CreateError(nameof(FileVersion), "Datei Version ist kein Korrekter Versions String"));
 
             if (!Version.TryParse(AssemblyVersion, out _))
                 validationResults.Add(FieldValidationResult.CreateError(nameof(AssemblyVersion), "Assembly Version ist kein Korrekter Versions String"));
         }
-
-
     }
 }

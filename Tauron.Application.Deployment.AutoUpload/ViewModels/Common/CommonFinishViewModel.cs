@@ -8,9 +8,14 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Common
     [ServiceDescriptor(typeof(CommonFinishViewModel))]
     public class CommonFinishViewModel : OperationViewModel<FinishContext>
     {
+        public CommonFinishViewModel()
+        {
+            ReturnCommand = new TaskCommand(OnReturnCommandExecute);
+        }
+
         public string? Message { get; private set; }
 
-        public CommonFinishViewModel() => ReturnCommand = new TaskCommand(OnReturnCommandExecute);
+        public TaskCommand ReturnCommand { get; }
 
         protected override Task InitializeAsync()
         {
@@ -18,9 +23,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Common
             return base.InitializeAsync();
         }
 
-        public TaskCommand ReturnCommand { get; }
-
-        private async Task OnReturnCommandExecute() 
-            => await OnReturn();
+        private async Task OnReturnCommandExecute()
+        {
+            await OnReturn();
+        }
     }
 }

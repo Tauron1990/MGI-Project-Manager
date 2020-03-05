@@ -27,15 +27,24 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter Name="actualContent" Grid.Row="1" />
-                                    <StackPanel Name="PART_MessageBar" Grid.Row="0" Visibility="{Binding Path=MessageCount, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type catel:InfoBarMessageControl}}, Converter={StaticResource CollectionToCollapsingVisibilityConverter}}" Width="{Binding ElementName=actualContent, Path=ActualWidth}">
+                                <StackPanel Name="PART_MessageBar" Grid.Row="0"
+                                            Visibility="{Binding Path=MessageCount, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type catel:InfoBarMessageControl}}, Converter={StaticResource CollectionToCollapsingVisibilityConverter}}"
+                                            Width="{Binding ElementName=actualContent, Path=ActualWidth}">
                                     <StackPanel Background="{StaticResource InfoBarMessageBackgroundBrush}">
-                                        <TextBlock Padding="4,2,4,2" Text="{Binding Path=InfoMessage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type catel:InfoBarMessageControl}}}" Foreground="Black"/>
-                                        <Line Name="infoBarSeparator" Margin="0" X1="0" X2="1" Stretch="UniformToFill" Stroke="{StaticResource InfoBarMessageSeparatorBrush}" />
+                                        <TextBlock Padding="4,2,4,2"
+                                                   Text="{Binding Path=InfoMessage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type catel:InfoBarMessageControl}}}"
+                                                   Foreground="Black" />
+                                        <Line Name="infoBarSeparator" Margin="0" X1="0" X2="1" Stretch="UniformToFill"
+                                              Stroke="{StaticResource InfoBarMessageSeparatorBrush}" />
                                     </StackPanel>
                                 </StackPanel>
                             </Grid>
-                            <Popup Placement="Bottom" AllowsTransparency="True" PopupAnimation="Fade" IsOpen="{Binding ElementName=PART_MessageBar, Path=IsMouseOver, Mode=OneWay}" PlacementTarget="{Binding ElementName=infoBarSeparator}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
-                                <Grid Background="{StaticResource InfoBarMessageErrorTextBackgroundBrush}" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type catel:InfoBarMessageControl}}}">
+                            <Popup Placement="Bottom" AllowsTransparency="True" PopupAnimation="Fade"
+                                   IsOpen="{Binding ElementName=PART_MessageBar, Path=IsMouseOver, Mode=OneWay}"
+                                   PlacementTarget="{Binding ElementName=infoBarSeparator}"
+                                   Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
+                                <Grid Background="{StaticResource InfoBarMessageErrorTextBackgroundBrush}"
+                                      DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type catel:InfoBarMessageControl}}}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
@@ -44,7 +53,9 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
-                                    <ItemsControl Grid.Row="0" Height="Auto" VerticalAlignment="Top" ItemsSource="{Binding ErrorMessageCollection}" Visibility="{Binding ErrorMessageCollection.Count, Converter={StaticResource CollectionToCollapsingVisibilityConverter}}">
+                                    <ItemsControl Grid.Row="0" Height="Auto" VerticalAlignment="Top"
+                                                  ItemsSource="{Binding ErrorMessageCollection}"
+                                                  Visibility="{Binding ErrorMessageCollection.Count, Converter={StaticResource CollectionToCollapsingVisibilityConverter}}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <Grid>
@@ -52,13 +63,19 @@
                                                         <ColumnDefinition Width="Auto" />
                                                         <ColumnDefinition Width="*" />
                                                     </Grid.ColumnDefinitions>
-                                                    <Image Grid.Column="0" Source="/Catel.MVVM;component/Resources/Images/Error.png" Margin="2,2,4,2" Width="16" Height="16" />
-                                                    <TextBlock Grid.Column="1" TextWrapping="Wrap" Foreground="{StaticResource InfoBarMessageErrorTextColorBrush}" Text="{Binding}" />
+                                                    <Image Grid.Column="0"
+                                                           Source="/Catel.MVVM;component/Resources/Images/Error.png"
+                                                           Margin="2,2,4,2" Width="16" Height="16" />
+                                                    <TextBlock Grid.Column="1" TextWrapping="Wrap"
+                                                               Foreground="{StaticResource InfoBarMessageErrorTextColorBrush}"
+                                                               Text="{Binding}" />
                                                 </Grid>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
-                                    <ItemsControl Grid.Row="1" Height="Auto" VerticalAlignment="Top" ItemsSource="{Binding WarningMessageCollection}" Visibility="{Binding WarningMessageCollection.Count, Converter={StaticResource CollectionToCollapsingVisibilityConverter}}">
+                                    <ItemsControl Grid.Row="1" Height="Auto" VerticalAlignment="Top"
+                                                  ItemsSource="{Binding WarningMessageCollection}"
+                                                  Visibility="{Binding WarningMessageCollection.Count, Converter={StaticResource CollectionToCollapsingVisibilityConverter}}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <Grid>
@@ -66,13 +83,18 @@
                                                         <ColumnDefinition Width="Auto" />
                                                         <ColumnDefinition Width="*" />
                                                     </Grid.ColumnDefinitions>
-                                                    <Image Grid.Column="0" Source="/Catel.MVVM;component/Resources/Images/Warning.png" Margin="2,2,4,2" Width="16" Height="16" />
-                                                    <TextBlock Grid.Column="1" TextWrapping="Wrap" Foreground="{StaticResource InfoBarMessageWarningTextColorBrush}" Text="{Binding}" />
+                                                    <Image Grid.Column="0"
+                                                           Source="/Catel.MVVM;component/Resources/Images/Warning.png"
+                                                           Margin="2,2,4,2" Width="16" Height="16" />
+                                                    <TextBlock Grid.Column="1" TextWrapping="Wrap"
+                                                               Foreground="{StaticResource InfoBarMessageWarningTextColorBrush}"
+                                                               Text="{Binding}" />
                                                 </Grid>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
-                                    <Line Grid.Row="2" Margin="0" X1="0" X2="1" Stretch="UniformToFill" Stroke="{StaticResource InfoBarMessageSeparatorBrush}" />
+                                    <Line Grid.Row="2" Margin="0" X1="0" X2="1" Stretch="UniformToFill"
+                                          Stroke="{StaticResource InfoBarMessageSeparatorBrush}" />
                                 </Grid>
                             </Popup>
                         </Grid>

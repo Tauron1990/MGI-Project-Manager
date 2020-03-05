@@ -9,18 +9,6 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
     {
         private TContext _context;
 
-        protected TContext Context
-        {
-            get
-            {
-                if(_context == null)
-                    throw new InvalidOperationException("No Context is Setted");
-                return _context;
-            }
-        }
-
-        public Command CancelCommand { get; }
-
 #pragma warning disable CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
         protected OperationViewModel()
 #pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
@@ -28,11 +16,28 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
             CancelCommand = new Command(OnCancelCommandExecute, CanCancelExecute);
         }
 
-        protected virtual bool CanCancelExecute() => true;
+        protected TContext Context
+        {
+            get
+            {
+                if (_context == null)
+                    throw new InvalidOperationException("No Context is Setted");
+                return _context;
+            }
+        }
+
+        public Command CancelCommand { get; }
+
+        protected virtual bool CanCancelExecute()
+        {
+            return true;
+        }
 
         protected Task OnNextView<TType>(Redirection? redirection = null)
             where TType : OperationViewModel<TContext>
-            => OnNextView(typeof(TType), Context, redirection);
+        {
+            return OnNextView(typeof(TType), Context, redirection);
+        }
 
         protected virtual void OnCancelCommandExecute()
         {
@@ -49,6 +54,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
 
         protected Redirection CreateRedirection<TView>(RedirectionType redirectionType = RedirectionType.OnFinish)
             where TView : OperationViewModel<TContext>
-            => new Redirection(Context, typeof(TView), redirectionType);
+        {
+            return new Redirection(Context, typeof(TView), redirectionType);
+        }
     }
 }

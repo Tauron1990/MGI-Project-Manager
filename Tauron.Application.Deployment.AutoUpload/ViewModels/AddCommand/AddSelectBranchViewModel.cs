@@ -14,25 +14,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
     [ServiceDescriptor(typeof(AddSelectBranchViewModel))]
     public sealed class AddSelectBranchViewModel : OperationViewModel<AddCommandContext>
     {
-        private class BranchElement : INameable
-        {
-            public Branch Branch { get; }
-            public string Name => Branch.Name;
-
-            public BranchElement(Branch branch)
-            {
-                Branch = branch;
-            }
-        }
-
-        private readonly IMessageService _messageService;
         private readonly RepositoryManager _manager;
 
-        public bool IsReady { get; set; }
-
-        public bool IsLoading { get; set; }
-
-        public ICommonSelectorViewModel BranchSelector { get; set; }
+        private readonly IMessageService _messageService;
 
         //[NoWeaving]
         //public FastObservableCollection<Branch> Branches { get; } = new FastObservableCollection<Branch>();
@@ -48,6 +32,12 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
             BranchSelector = CommonSelectorViewModel.Create();
         }
 
+        public bool IsReady { get; set; }
+
+        public bool IsLoading { get; set; }
+
+        public ICommonSelectorViewModel BranchSelector { get; set; }
+
         private async Task OnNextImpl(SelectorItemBase item)
         {
             if (!(item is SelectorItem<BranchElement> selectedBrnach)) return;
@@ -57,11 +47,16 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
         }
 
         [CommandTarget]
-        private bool CanOnNext() => IsReady && BranchSelector.CanRun();
+        private bool CanOnNext()
+        {
+            return IsReady && BranchSelector.CanRun();
+        }
 
         [CommandTarget]
-        private async Task OnNext() 
-            => await BranchSelector.Run();
+        private async Task OnNext()
+        {
+            await BranchSelector.Run();
+        }
 
         protected override Task InitializeAsync()
         {
@@ -74,7 +69,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
             try
             {
                 BranchSelector.Init((await _manager.GetBranchs(Context.Repository)).Select(e => new SelectorItem<BranchElement>(new BranchElement(e)))
-                , false, OnNextImpl);
+                    , false, OnNextImpl);
             }
             catch (Exception e)
             {
@@ -85,6 +80,17 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
                 IsReady = true;
                 IsLoading = false;
             }
+        }
+
+        private class BranchElement : INameable
+        {
+            public BranchElement(Branch branch)
+            {
+                Branch = branch;
+            }
+
+            public Branch Branch { get; }
+            public string Name => Branch.Name;
         }
     }
 }

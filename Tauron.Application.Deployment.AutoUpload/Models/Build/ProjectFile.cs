@@ -15,7 +15,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
         public async Task Init(string? fileName)
         {
             _fileName = fileName ?? string.Empty;
-           _sourceElement = XElement.Parse(await File.ReadAllTextAsync(fileName));
+            _sourceElement = XElement.Parse(await File.ReadAllTextAsync(fileName));
         }
 
         private XElement? Search(bool file, bool create = false)
@@ -29,13 +29,12 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
                 .Elements("PropertyGroup")
                 .Select(xElement => xElement.Element(file ? fileName : assemblyName))
                 .FirstOrDefault(temp => temp != null);
-            
-            if (!(result == null & create)) return result;
-            
+
+            if (!((result == null) & create)) return result;
+
             var ele = new XElement(file ? fileName : assemblyName);
             _sourceElement.Elements("PropertyGroup").First().Add(ele);
             return ele;
-
         }
 
         public Version GetFileVersion()
@@ -63,7 +62,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
         {
             var target = Search(file, true);
 
-            if(target == null) 
+            if (target == null)
                 throw new InvalidOperationException("No Element Found in Project File");
 
             target.Value = value;

@@ -5,13 +5,13 @@ using Tauron.Application.Wpf;
 namespace Tauron.Application.Deployment.AutoUpload.Views.UploadCommand
 {
     /// <summary>
-    /// Interaktionslogik für UploadSelectRepoView.xaml
+    ///     Interaktionslogik für UploadSelectRepoView.xaml
     /// </summary>
     [Control(typeof(UploadSelectRepoViewModel))]
-    public partial class UploadSelectRepoView 
+    public partial class UploadSelectRepoView
     {
         public UploadSelectRepoView(UploadSelectRepoViewModel model)
-        : base(model)
+            : base(model)
         {
             InitializeComponent();
             Background = Brushes.Transparent;

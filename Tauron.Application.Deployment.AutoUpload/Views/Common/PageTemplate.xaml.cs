@@ -1,12 +1,11 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows.Media;
 
 namespace Tauron.Application.Deployment.AutoUpload.Views.Common
 {
     /// <summary>
-    /// Interaktionslogik für PageTemplate.xaml
+    ///     Interaktionslogik für PageTemplate.xaml
     /// </summary>
     [ContentProperty(nameof(ControlContent))]
     public partial class PageTemplate

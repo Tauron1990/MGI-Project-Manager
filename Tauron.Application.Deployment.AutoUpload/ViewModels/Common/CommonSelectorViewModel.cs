@@ -12,37 +12,22 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Common
     {
         private Func<SelectorItemBase, Task>? _runner;
 
+        private CommonSelectorViewModel()
+        {
+        }
+
         public FastObservableCollection<SelectorItemBase> Items { get; } = new FastObservableCollection<SelectorItemBase>();
 
         public SelectorItemBase? SelectedItem { get; set; }
 
-        private CommonSelectorViewModel()
-        {
-
-        }
-
-        public static ICommonSelectorViewModel Create()
-        {
-            if (System.Windows.Application.Current.Dispatcher != null) 
-                return System.Windows.Application.Current.Dispatcher.Invoke(() => new CommonSelectorView(new CommonSelectorViewModel()));
-            throw new InvalidOperationException();
-        }
-
         public event Action<SelectorItemBase?>? ElementSelected;
-
-        protected override void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if(e.PropertyName == nameof(SelectedItem))
-                ElementSelected?.Invoke(SelectedItem);
-            base.OnModelPropertyChanged(sender, e);
-        }
 
         public void Init(IEnumerable<SelectorItemBase> items, bool addNew, Func<SelectorItemBase, Task> selectedItemAction)
         {
             Items.Clear();
             Items.AddItems(items);
 
-            if(addNew)
+            if (addNew)
                 Items.Add(new NewSelectorItem("<Neu>"));
 
             _runner = selectedItemAction;
@@ -55,7 +40,21 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Common
             await _runner(SelectedItem);
         }
 
-        public bool CanRun() 
+        public bool CanRun()
             => SelectedItem != null;
+
+        public static ICommonSelectorViewModel Create()
+        {
+            if (System.Windows.Application.Current.Dispatcher != null)
+                return System.Windows.Application.Current.Dispatcher.Invoke(() => new CommonSelectorView(new CommonSelectorViewModel()));
+            throw new InvalidOperationException();
+        }
+
+        protected override void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SelectedItem))
+                ElementSelected?.Invoke(SelectedItem);
+            base.OnModelPropertyChanged(sender, e);
+        }
     }
 }

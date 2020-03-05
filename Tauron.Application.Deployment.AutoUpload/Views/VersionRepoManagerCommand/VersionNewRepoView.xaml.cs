@@ -5,7 +5,7 @@ using Tauron.Application.Wpf;
 namespace Tauron.Application.Deployment.AutoUpload.Views.VersionRepoManagerCommand
 {
     /// <summary>
-    /// Interaktionslogik für VersionNewRepoView.xaml
+    ///     Interaktionslogik für VersionNewRepoView.xaml
     /// </summary>
     [Control(typeof(VersionNewRepoViewModel))]
     public partial class VersionNewRepoView

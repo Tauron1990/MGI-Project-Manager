@@ -1,12 +1,11 @@
-﻿using System;
-using System.Security;
+﻿using System.Security;
 using System.Windows;
 using Syncfusion.SfSkinManager;
 
 namespace Tauron.Application.Deployment.AutoUpload.Core.UI
 {
     /// <summary>
-    /// Interaktionslogik für UserNamePasswordRequesterWindow.xaml
+    ///     Interaktionslogik für UserNamePasswordRequesterWindow.xaml
     /// </summary>
     public partial class UserNamePasswordRequesterWindow : Window
     {
@@ -33,7 +32,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.UI
         private void Ok_OnClick(object sender, RoutedEventArgs e)
         {
             Password = new SecureString();
-            foreach (var c in PasswordBox.Text) 
+            foreach (var c in PasswordBox.Text)
                 Password.AppendChar(c);
             UserName = NameBox.Text;
 
@@ -41,7 +40,9 @@ namespace Tauron.Application.Deployment.AutoUpload.Core.UI
             DialogResult = true;
         }
 
-        private void UserNamePasswordRequesterWindow_OnLoaded(object sender, RoutedEventArgs e) 
-            => NameBox.Text = UserName;
+        private void UserNamePasswordRequesterWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            NameBox.Text = UserName;
+        }
     }
 }

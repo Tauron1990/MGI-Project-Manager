@@ -36,7 +36,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
         }
 
         [CommandTarget]
-        public async Task Return() 
-            => await OnReturn();
+        public async Task Return()
+        {
+            await OnReturn();
+        }
     }
 }

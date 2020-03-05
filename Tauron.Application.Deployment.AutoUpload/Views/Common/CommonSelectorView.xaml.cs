@@ -6,7 +6,7 @@ using Tauron.Application.Deployment.AutoUpload.ViewModels.Common;
 namespace Tauron.Application.Deployment.AutoUpload.Views.Common
 {
     /// <summary>
-    /// Interaktionslogik für CommonSelectorView.xaml
+    ///     Interaktionslogik für CommonSelectorView.xaml
     /// </summary>
     public partial class CommonSelectorView : ICommonSelectorViewModel
     {
@@ -26,10 +26,19 @@ namespace Tauron.Application.Deployment.AutoUpload.Views.Common
             remove => _model.ElementSelected -= value;
         }
 
-        public void Init(IEnumerable<SelectorItemBase> items, bool addNew, Func<SelectorItemBase, Task> selectedItemAction) => _model.Init(items, addNew, selectedItemAction);
+        public void Init(IEnumerable<SelectorItemBase> items, bool addNew, Func<SelectorItemBase, Task> selectedItemAction)
+        {
+            _model.Init(items, addNew, selectedItemAction);
+        }
 
-        public Task Run() => _model.Run();
+        public Task Run()
+        {
+            return _model.Run();
+        }
 
-        public bool CanRun() => _model.CanRun();
+        public bool CanRun()
+        {
+            return _model.CanRun();
+        }
     }
 }

@@ -1,6 +1,4 @@
-﻿
-
-using System.IO;
+﻿using System.IO;
 using System.Windows.Data;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Wpf.Converter;

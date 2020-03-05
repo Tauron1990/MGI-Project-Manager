@@ -1,14 +1,14 @@
 ﻿using System.Windows;
 using Catel.Windows;
+using Syncfusion.Licensing;
 using Syncfusion.SfSkinManager;
-using Tauron.Application.Deployment.AutoUpload.Core;
 using Tauron.Application.Deployment.AutoUpload.ViewModels;
 using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     [Control(typeof(MainWindowViewModel))]
     public partial class MainWindow
@@ -16,7 +16,7 @@ namespace Tauron.Application.Deployment.AutoUpload
         public MainWindow(MainWindowViewModel model)
             : base(model, DataWindowMode.Custom)
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(App.SyncfusionKey);
+            SyncfusionLicenseProvider.RegisterLicense(App.SyncfusionKey);
 
             SizeToContent = SizeToContent.Manual;
             ShowInTaskbar = true;

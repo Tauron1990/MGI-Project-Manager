@@ -4,6 +4,15 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Github
 {
     public class RegistratedRepository
     {
+        public RegistratedRepository(long id, string branchName, string projectName, string repositoryName, string realPath)
+        {
+            Id = id;
+            BranchName = branchName;
+            ProjectName = projectName;
+            RepositoryName = repositoryName;
+            RealPath = realPath;
+        }
+
         public long Id { get; }
 
         public string RepositoryName { get; }
@@ -14,15 +23,9 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Github
 
         public string RealPath { get; }
 
-        public RegistratedRepository(long id, string branchName, string projectName, string repositoryName, string realPath)
+        public override string ToString()
         {
-            Id = id;
-            BranchName = branchName;
-            ProjectName = projectName;
-            RepositoryName = repositoryName;
-            RealPath = realPath;
+            return $"{RepositoryName} -- {Path.GetFileName(ProjectName)}";
         }
-
-        public override string ToString() => $"{RepositoryName} -- {Path.GetFileName(ProjectName)}";
     }
 }

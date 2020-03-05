@@ -15,9 +15,16 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
     [ServiceDescriptor(typeof(AddNameSelectorViewModel))]
     public class AddNameSelectorViewModel : OperationViewModel<AddCommandContext>
     {
-        private readonly RepositoryManager _repositoryManager;
         private readonly IMessageService _messageService;
+        private readonly RepositoryManager _repositoryManager;
         private string _selectedRepo = string.Empty;
+
+        public AddNameSelectorViewModel(Settings settings, RepositoryManager repositoryManager, IMessageService messageService)
+        {
+            _repositoryManager = repositoryManager;
+            _messageService = messageService;
+            Settings = settings;
+        }
 
         public Settings Settings { get; }
 
@@ -38,16 +45,12 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 
         public bool IsFetching { get; set; }
 
-        public AddNameSelectorViewModel(Settings settings, RepositoryManager repositoryManager, IMessageService messageService)
-        {
-            _repositoryManager = repositoryManager;
-            _messageService = messageService;
-            Settings = settings;
-        }
-
 
         [CommandTarget]
-        private bool CanOnNext() => !HasErrors;
+        private bool CanOnNext()
+        {
+            return !HasErrors;
+        }
 
         [CommandTarget]
         private async Task OnNext()
@@ -74,9 +77,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
         {
-            if (string.IsNullOrWhiteSpace(RepositoryName)) 
+            if (string.IsNullOrWhiteSpace(RepositoryName))
                 validationResults.Add(FieldValidationResult.CreateError(nameof(RepositoryName), "Repository darf nicht Leer sein"));
-            else if(RepositoryName.Split('/').Length != 2)
+            else if (RepositoryName.Split('/').Length != 2)
                 validationResults.Add(FieldValidationResult.CreateError(nameof(RepositoryName), $"\"{RepositoryName}\" hat das Falsche Format"));
 
             base.ValidateFields(validationResults);

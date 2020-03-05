@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 using Tauron.Application.Wpf;
@@ -20,11 +19,15 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         }
 
         [CommandTarget]
-        public async Task OnNext() 
-            => await OnFinish();
+        public async Task OnNext()
+        {
+            await OnFinish();
+        }
 
         [CommandTarget]
-        public void OnOpen() 
-            => Process.Start("explorer.exe", Location);
+        public void OnOpen()
+        {
+            Process.Start("explorer.exe", Location);
+        }
     }
 }

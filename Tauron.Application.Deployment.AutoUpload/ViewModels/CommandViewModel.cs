@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using System.Windows;
 using Catel.IoC;
 using Catel.MVVM;
 using JetBrains.Annotations;
@@ -16,11 +15,10 @@ using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels
 {
-    [ServiceDescriptor, MeansImplicitUse]
+    [ServiceDescriptor]
+    [MeansImplicitUse]
     public sealed class CommandViewModel : OperationViewModelBase
     {
-        public Settings Settings { get; }
-
         public CommandViewModel(Settings settings)
         {
             Settings = settings;
@@ -29,24 +27,34 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels
             RemoveCommand = new TaskCommand(OnRemoveCommandExecute);
         }
 
-        public TaskCommand AddClieck { get; }
+        public Settings Settings { get; }
 
-        private async Task OnAddClieckExecute() 
-            => await OnNextView<AddNameSelectorViewModel, AddCommandContext>(new AddCommandContext());
+        public TaskCommand AddClieck { get; }
 
         public TaskCommand RemoveCommand { get; }
 
-        private async Task OnRemoveCommandExecute()
-            => await OnNextView<RemoveSelectProjectViewModel, RemoveCommandContext>(new RemoveCommandContext());
-
         public TaskCommand BuildCommand { get; }
 
+        private async Task OnAddClieckExecute()
+        {
+            await OnNextView<AddNameSelectorViewModel, AddCommandContext>(new AddCommandContext());
+        }
+
+        private async Task OnRemoveCommandExecute()
+        {
+            await OnNextView<RemoveSelectProjectViewModel, RemoveCommandContext>(new RemoveCommandContext());
+        }
+
         private async Task OnBuildCommandExecute()
-            => await OnNextView<BuildSelectProjectViewModel, BuildOperationContext>(new BuildOperationContext(DependencyResolver.Resolve<BuildContext>()));
+        {
+            await OnNextView<BuildSelectProjectViewModel, BuildOperationContext>(new BuildOperationContext(DependencyResolver.Resolve<BuildContext>()));
+        }
 
         [CommandTarget]
-        public async Task OnVersionRepoManager() 
-            => await OnNextView<VersionRepoSelectViewModel, VersionRepoContext>(new VersionRepoContext());
+        public async Task OnVersionRepoManager()
+        {
+            await OnNextView<VersionRepoSelectViewModel, VersionRepoContext>(new VersionRepoContext());
+        }
 
         [CommandTarget]
         public async Task OnUploadFile()

@@ -18,10 +18,18 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
     [ServiceDescriptor(typeof(VersionNewRepoViewModel))]
     public class VersionNewRepoViewModel : OperationViewModel<VersionRepoContext>
     {
-        private readonly Settings _settings;
-        private readonly RepositoryManager _repositoryManager;
         private readonly GitManager _gitManager;
         private readonly IMessageService _messageService;
+        private readonly RepositoryManager _repositoryManager;
+        private readonly Settings _settings;
+
+        public VersionNewRepoViewModel(Settings settings, RepositoryManager repositoryManager, GitManager gitManager, IMessageService messageService)
+        {
+            _settings = settings;
+            _repositoryManager = repositoryManager;
+            _gitManager = gitManager;
+            _messageService = messageService;
+        }
 
         public string RepoName { get; set; } = string.Empty;
 
@@ -33,18 +41,16 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
 
         public FastObservableCollection<ProcesItem> Tasks { get; } = new FastObservableCollection<ProcesItem>();
 
-        public VersionNewRepoViewModel(Settings settings, RepositoryManager repositoryManager, GitManager gitManager, IMessageService messageService)
+        protected override bool CanCancelExecute()
         {
-            _settings = settings;
-            _repositoryManager = repositoryManager;
-            _gitManager = gitManager;
-            _messageService = messageService;
+            return IsInputActive;
         }
 
-        protected override bool CanCancelExecute() => IsInputActive;
-
         [CommandTarget]
-        public bool CanOnNext() => IsInputActive && RepoName.Contains('/');
+        public bool CanOnNext()
+        {
+            return IsInputActive && RepoName.Contains('/');
+        }
 
         [CommandTarget]
         public async Task OnNext()
@@ -84,8 +90,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
 
                 currentTask = currentTask.Next("Repository Vorbereiten");
 
-                var softRepo = SoftwareRepository.IsValid(path) 
-                    ? await SoftwareRepository.Read(path) 
+                var softRepo = SoftwareRepository.IsValid(path)
+                    ? await SoftwareRepository.Read(path)
                     : await SoftwareRepository.Create(path);
 
                 Context.VersionRepository = new VersionRepository(RepoName, path, repo.Id);

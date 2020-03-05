@@ -20,11 +20,11 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
     {
         private const string DotNetLocation = @"C:\Program Files\dotnet\dotnet.exe";
 
+        public static bool CanBuild => File.Exists(DotNetLocation);
+
         public event Action<string>? Output;
 
         public event Action? Error;
-
-        public static bool CanBuild => File.Exists(DotNetLocation);
 
         public async Task<int> TryBuild(RegistratedRepository? repository, string outputRoot)
         {
@@ -58,9 +58,11 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
             var info = new BuildInfo(output, pipeName, projectFile ?? string.Empty);
             // ReSharper disable once UseAwaitUsing
             using (var file = File.Open(Path.GetFullPath(BuildInfo.BuildFile, ApplicationEnvironment.ApplicationBasePath), FileMode.Create))
+            {
                 await MessagePackSerializer.SerializeAsync(file, info);
+            }
 
-            using var process = new Process { StartInfo = new ProcessStartInfo(Path.GetFullPath("ProjectBuilder.exe", ApplicationEnvironment.ApplicationBasePath)) };
+            using var process = new Process {StartInfo = new ProcessStartInfo(Path.GetFullPath("ProjectBuilder.exe", ApplicationEnvironment.ApplicationBasePath))};
             process.Start();
             await Task.Delay(1000);
             if (!process.WaitForExit(30000))
@@ -72,7 +74,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
         private Task InfoReciverOnMessageRecivedEvent(MessageRecivedEventArgs<string> arg)
         {
             var msg = arg.Message;
-            if(msg == "error")
+            if (msg == "error")
                 Error?.Invoke();
             else
                 Output?.Invoke(msg);

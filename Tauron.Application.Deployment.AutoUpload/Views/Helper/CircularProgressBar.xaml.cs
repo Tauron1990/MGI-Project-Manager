@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 namespace Tauron.Application.Deployment.AutoUpload.Views.Helper
 {
     /// <summary>
-    /// Interaktionslogik für CircularProgressBar.xaml
+    ///     Interaktionslogik für CircularProgressBar.xaml
     /// </summary>
     [PublicAPI]
     public partial class CircularProgressBar : UserControl
@@ -30,7 +30,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Views.Helper
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CircularProgressBar"/> class.
+        ///     Initializes a new instance of the <see cref="CircularProgressBar" /> class.
         /// </summary>
         public CircularProgressBar()
         {
@@ -46,42 +46,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Views.Helper
 
         #endregion
 
-        #region Public Properties
-
         /// <summary>
-        /// Gets or sets the minimum.
-        /// </summary>
-        /// <value>The minimum.</value>
-        public int Minimum
-        {
-            get => (int)GetValue(MinimumProperty);
-            set => SetValue(MinimumProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the maximum.
-        /// </summary>
-        /// <value>The maximum.</value>
-        public int Maximum
-        {
-            get => (int)GetValue(MaximumProperty);
-            set => SetValue(MaximumProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the value.
-        /// </summary>
-        /// <value>The value.</value>
-        public int Value
-        {
-            get => (int)GetValue(ValueProperty);
-            set => SetValue(ValueProperty, value);
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Sets the position.
+        ///     Sets the position.
         /// </summary>
         /// <param name="ellipse">The ellipse.</param>
         /// <param name="offset">The offset.</param>
@@ -89,12 +55,12 @@ namespace Tauron.Application.Deployment.AutoUpload.Views.Helper
         /// <param name="step">The step to change.</param>
         private static void SetPosition(DependencyObject ellipse, double offset, double posOffSet, double step)
         {
-            ellipse.SetValue(Canvas.LeftProperty, 50 + (Math.Sin(offset + (posOffSet * step)) * 50));
-            ellipse.SetValue(Canvas.TopProperty, 50 + (Math.Cos(offset + (posOffSet * step)) * 50));
+            ellipse.SetValue(Canvas.LeftProperty, 50 + Math.Sin(offset + posOffSet * step) * 50);
+            ellipse.SetValue(Canvas.TopProperty, 50 + Math.Cos(offset + posOffSet * step) * 50);
         }
 
         /// <summary>
-        /// Starts this instance.
+        ///     Starts this instance.
         /// </summary>
         private void Start()
         {
@@ -103,7 +69,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Views.Helper
         }
 
         /// <summary>
-        /// Stops this instance.
+        ///     Stops this instance.
         /// </summary>
         private void Stop()
         {
@@ -112,20 +78,20 @@ namespace Tauron.Application.Deployment.AutoUpload.Views.Helper
         }
 
         /// <summary>
-        /// Handles the animation tick.
+        ///     Handles the animation tick.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         private void OnAnimationTick(object? sender, EventArgs e)
         {
             _spinnerRotate.Angle = (_spinnerRotate.Angle + 36) % 360;
         }
 
         /// <summary>
-        /// Handles the loaded.
+        ///     Handles the loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs" /> instance containing the event data.</param>
         private void OnCanvasLoaded(object sender, RoutedEventArgs e)
         {
             const double offset = Math.PI;
@@ -143,32 +109,65 @@ namespace Tauron.Application.Deployment.AutoUpload.Views.Helper
         }
 
         /// <summary>
-        /// Handles the unloaded.
+        ///     Handles the unloaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs" /> instance containing the event data.</param>
         private void OnCanvasUnloaded(object sender, RoutedEventArgs e)
         {
             Stop();
         }
 
         /// <summary>
-        /// Handles the visible changed.
+        ///     Handles the visible changed.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">
+        ///     The <see cref="System.Windows.DependencyPropertyChangedEventArgs" /> instance containing the event
+        ///     data.
+        /// </param>
         private void OnVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            var isVisible = (bool)e.NewValue;
+            var isVisible = (bool) e.NewValue;
 
             if (isVisible)
-            {
                 Start();
-            }
             else
-            {
                 Stop();
-            }
         }
+
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets or sets the minimum.
+        /// </summary>
+        /// <value>The minimum.</value>
+        public int Minimum
+        {
+            get => (int) GetValue(MinimumProperty);
+            set => SetValue(MinimumProperty, value);
+        }
+
+        /// <summary>
+        ///     Gets or sets the maximum.
+        /// </summary>
+        /// <value>The maximum.</value>
+        public int Maximum
+        {
+            get => (int) GetValue(MaximumProperty);
+            set => SetValue(MaximumProperty, value);
+        }
+
+        /// <summary>
+        ///     Gets or sets the value.
+        /// </summary>
+        /// <value>The value.</value>
+        public int Value
+        {
+            get => (int) GetValue(ValueProperty);
+            set => SetValue(ValueProperty, value);
+        }
+
+        #endregion
     }
 }

@@ -20,58 +20,14 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
     [ServiceDescriptor(typeof(UploadCreatePackageViewModel))]
     public class UploadCreatePackageViewModel : OperationViewModel<UploadCommandContext>, IDisposable
     {
-        private class ProcessItem
-        {
-            private readonly Action<string> _label;
-            private readonly Action _cancel;
-            private readonly Func<bool> _failed;
-            private readonly Action<string> _cancelLabel;
-            private readonly List<Action> _revert = new List<Action>();
-
-            public ProcessItem(Action<string> label, Action cancel, Func<bool> failed, Action<string> cancelLabel)
-            {
-                _label = label;
-                _cancel = cancel;
-                _failed = failed;
-                _cancelLabel = cancelLabel;
-            }
-
-            public void Revert()
-            {
-                _label("Zurücksetzen...");
-
-                foreach (var action in _revert) 
-                    action();
-            }
-
-            public async Task Next(string label, Func<Task<Action?>> action)
-            {
-                _label(label);
-                _cancel();
-
-                var revertaction = await action();
-                if(revertaction == null) return;
-                _revert.Add(revertaction);
-
-                if (_failed())
-                {
-                    _cancelLabel("Zurück");
-                    throw new OperationCanceledException();
-                }
-            }
-        }
+        private readonly CancellationTokenSource _cancel = new CancellationTokenSource();
+        private readonly GitManager _gitManager;
 
         private readonly IMessageService _messageService;
-        private readonly GitManager _gitManager;
+
+        private readonly ProcessItem _operation;
         private readonly RepositoryManager _repositoryManager;
-        private readonly CancellationTokenSource _cancel = new CancellationTokenSource();
         private readonly CancellationToken _token;
-
-        public string Console { get; set; } = String.Empty;
-
-        private bool IsFailed { get; set; }
-
-        public string CancelLabel { get; set; } = "Abbrechen";
 
         public UploadCreatePackageViewModel(IMessageService messageService, GitManager gitManager, RepositoryManager repositoryManager)
         {
@@ -80,6 +36,17 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
             _repositoryManager = repositoryManager;
             _token = _cancel.Token;
             _operation = new ProcessItem(AddConsole, ThrowCanceled, () => IsFailed, s => CancelLabel = s);
+        }
+
+        public string Console { get; set; } = string.Empty;
+
+        private bool IsFailed { get; set; }
+
+        public string CancelLabel { get; set; } = "Abbrechen";
+
+        public void Dispose()
+        {
+            _cancel.Dispose();
         }
 
         [CommandTarget]
@@ -92,16 +59,16 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
         }
 
         [CommandTarget]
-        public bool CanCancelOp() 
-            => !_cancel.IsCancellationRequested;
+        public bool CanCancelOp()
+        {
+            return !_cancel.IsCancellationRequested;
+        }
 
         protected override Task InitializeAsync()
         {
             Task.Run(StartOperation, _token);
             return base.InitializeAsync();
         }
-
-        private readonly ProcessItem _operation;
 
         private async void StartOperation()
         {
@@ -147,89 +114,89 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
             try
             {
                 await op.Next("Zip wird erstellt...",
-                              async () =>
-                              {
-                                  packagePath = Path.Combine(Settings.SettingsDic, "package.zip");
-                                  name = Path.GetFileNameWithoutExtension(Context.Repository?.ProjectName ?? string.Empty);
-                                  if (string.IsNullOrWhiteSpace(name))
-                                  {
-                                      IsFailed = true;
-                                      await _messageService.ShowErrorAsync("Name der Anwendung nicht gefunden");
-                                      return null;
-                                  }
+                    async () =>
+                    {
+                        packagePath = Path.Combine(Settings.SettingsDic, "package.zip");
+                        name = Path.GetFileNameWithoutExtension(Context.Repository?.ProjectName ?? string.Empty);
+                        if (string.IsNullOrWhiteSpace(name))
+                        {
+                            IsFailed = true;
+                            await _messageService.ShowErrorAsync("Name der Anwendung nicht gefunden");
+                            return null;
+                        }
 
-                                  if (File.Exists(packagePath))
-                                      File.Delete(packagePath);
+                        if (File.Exists(packagePath))
+                            File.Delete(packagePath);
 
-                                  ZipFile.CreateFromDirectory(output, packagePath, CompressionLevel.Optimal, false);
-                                  return () =>
-                                         {
-                                             if (File.Exists(packagePath))
-                                                 File.Delete(packagePath);
-                                         };
-                              });
+                        ZipFile.CreateFromDirectory(output, packagePath, CompressionLevel.Optimal, false);
+                        return () =>
+                        {
+                            if (File.Exists(packagePath))
+                                File.Delete(packagePath);
+                        };
+                    });
 
                 await op.Next("Sync Version Repository...",
-                              () =>
-                              {
-                                  _gitManager.SyncRepo(versionRepo.RealPath);
-                                  return Task.FromResult<Action?>(null);
-                              });
+                    () =>
+                    {
+                        _gitManager.SyncRepo(versionRepo.RealPath);
+                        return Task.FromResult<Action?>(null);
+                    });
 
                 await op.Next("Release Hochladen...",
-                              async () =>
-                              {
-
-
-                                  var assetName = $"{name}_{version}.zip";
-                                  asset = await _repositoryManager.UploadAsset(versionRepo.Id, packagePath, assetName, versionUserName);
-                                  return () => _repositoryManager.DeleteRelease(versionRepo.Id, asset.Item2, versionUserName)
-                                            .WaitAndUnwrapException(_token);
-                              });
+                    async () =>
+                    {
+                        var assetName = $"{name}_{version}.zip";
+                        asset = await _repositoryManager.UploadAsset(versionRepo.Id, packagePath, assetName, versionUserName);
+                        return () => _repositoryManager.DeleteRelease(versionRepo.Id, asset.Item2, versionUserName)
+                            .WaitAndUnwrapException(_token);
+                    });
 
                 await op.Next("Aktualisiere Software Repository...",
-                              async () =>
-                              {
-                                  var url = asset.Item1;
-                                  var vrepo = Context.VersionRepository;
-                                  var srepo = Context.Repository;
+                    async () =>
+                    {
+                        var url = asset.Item1;
+                        var vrepo = Context.VersionRepository;
+                        var srepo = Context.Repository;
 
-                                  if (url == null || vrepo == null || srepo == null)
-                                  {
-                                      IsFailed = true;
-                                      await _messageService.ShowErrorAsync("Kein'e Download Url/Repository Gefunden");
-                                      return null;
-                                  }
+                        if (url == null || vrepo == null || srepo == null)
+                        {
+                            IsFailed = true;
+                            await _messageService.ShowErrorAsync("Kein'e Download Url/Repository Gefunden");
+                            return null;
+                        }
 
-                                  var repo = await SoftwareRepository.Read(versionRepo.RealPath);
-                                  var backup = repo.CreateBackup();
+                        var repo = await SoftwareRepository.Read(versionRepo.RealPath);
+                        var backup = repo.CreateBackup();
 
-                                  var id = repo.Get(name);
+                        var id = repo.Get(name);
 
-                                  if (id != -1)
-                                    repo.UpdateApplication(id, version, url);
-                                  else
-                                    repo.AddApplication(name, DateTime.Now.Ticks, url, version, srepo.RepositoryName, srepo.BranchName);
+                        if (id != -1)
+                            repo.UpdateApplication(id, version, url);
+                        else
+                            repo.AddApplication(name, DateTime.Now.Ticks, url, version, srepo.RepositoryName, srepo.BranchName);
 
-                                  await repo.Save();
-                                  _gitManager.CommitRepo(vrepo);
+                        await repo.Save();
+                        _gitManager.CommitRepo(vrepo);
 
-                                  return () => repo.Revert(backup);
-                              });
+                        return () => repo.Revert(backup);
+                    });
 
                 await op.Next("Aufräumen...", async () =>
-                                              {
-                                                  try
-                                                  {
-                                                      File.Delete(packagePath);
-                                                      Directory.Delete(output, true);
-                                                  }
-                                                  catch (IOException) { }
+                {
+                    try
+                    {
+                        File.Delete(packagePath);
+                        Directory.Delete(output, true);
+                    }
+                    catch (IOException)
+                    {
+                    }
 
-                                                  await Task.Delay(2000, _token);
+                    await Task.Delay(2000, _token);
 
-                                                  return null;
-                                              });
+                    return null;
+                });
 
                 await OnFinish("Software Erfolgreich Aktualisiert");
             }
@@ -249,12 +216,55 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
             }
         }
 
-        private void ThrowCanceled() 
-            => _token.ThrowIfCancellationRequested();
+        private void ThrowCanceled()
+        {
+            _token.ThrowIfCancellationRequested();
+        }
 
-        private void AddConsole(string value) 
-            => Console = $"{Console}{Environment.NewLine}{value}";
+        private void AddConsole(string value)
+        {
+            Console = $"{Console}{Environment.NewLine}{value}";
+        }
 
-        public void Dispose() => _cancel.Dispose();
+        private class ProcessItem
+        {
+            private readonly Action _cancel;
+            private readonly Action<string> _cancelLabel;
+            private readonly Func<bool> _failed;
+            private readonly Action<string> _label;
+            private readonly List<Action> _revert = new List<Action>();
+
+            public ProcessItem(Action<string> label, Action cancel, Func<bool> failed, Action<string> cancelLabel)
+            {
+                _label = label;
+                _cancel = cancel;
+                _failed = failed;
+                _cancelLabel = cancelLabel;
+            }
+
+            public void Revert()
+            {
+                _label("Zurücksetzen...");
+
+                foreach (var action in _revert)
+                    action();
+            }
+
+            public async Task Next(string label, Func<Task<Action?>> action)
+            {
+                _label(label);
+                _cancel();
+
+                var revertaction = await action();
+                if (revertaction == null) return;
+                _revert.Add(revertaction);
+
+                if (_failed())
+                {
+                    _cancelLabel("Zurück");
+                    throw new OperationCanceledException();
+                }
+            }
+        }
     }
 }

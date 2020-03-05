@@ -5,7 +5,7 @@ using Tauron.Application.Wpf;
 namespace Tauron.Application.Deployment.AutoUpload.Views.UploadCommand
 {
     /// <summary>
-    /// Interaktionslogik für UploadLastCheckView.xaml
+    ///     Interaktionslogik für UploadLastCheckView.xaml
     /// </summary>
     [Control(typeof(UploadLastCheckViewModel))]
     public partial class UploadLastCheckView

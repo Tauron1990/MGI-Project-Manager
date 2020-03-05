@@ -31,13 +31,15 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
         [CommandTarget]
         public async Task OnNext()
         {
-            if(VersionOk != true || RepoOk != true) return;
+            if (VersionOk != true || RepoOk != true) return;
 
             await OnNextView<BuildBuildViewModel, BuildOperationContext>(new BuildOperationContext(DependencyResolver.Resolve<BuildContext>()), CreateRedirection<UploadCreatePackageViewModel>());
         }
 
         [CommandTarget]
-        public bool CanOnNext() => VersionOk == true && RepoOk == true;
-
+        public bool CanOnNext()
+        {
+            return VersionOk == true && RepoOk == true;
+        }
     }
 }

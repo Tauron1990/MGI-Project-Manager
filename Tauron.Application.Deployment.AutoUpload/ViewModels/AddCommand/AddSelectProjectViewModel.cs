@@ -16,8 +16,14 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
     [ServiceDescriptor(typeof(AddSelectProjectViewModel))]
     public class AddSelectProjectViewModel : OperationViewModel<AddCommandContext>
     {
-        private readonly Settings _settings;
         private readonly IMessageService _messageService;
+        private readonly Settings _settings;
+
+        public AddSelectProjectViewModel(Settings settings, IMessageService messageService)
+        {
+            _settings = settings;
+            _messageService = messageService;
+        }
 
         //[NoWeaving]
         //public FastObservableCollection<ProjectUI> Projects { get; } = new FastObservableCollection<ProjectUI>();
@@ -25,12 +31,6 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
         //public ProjectUI? SelectedProject { get; set; }
 
         public ICommonSelectorViewModel ProjectSelector { get; } = CommonSelectorViewModel.Create();
-
-        public AddSelectProjectViewModel(Settings settings, IMessageService messageService)
-        {
-            _settings = settings;
-            _messageService = messageService;
-        }
 
         protected override async Task InitializeAsync()
         {
@@ -60,16 +60,20 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
         }
 
         [CommandTarget]
-        private bool CanOnNext() 
-            => ProjectSelector.CanRun();
+        private bool CanOnNext()
+        {
+            return ProjectSelector.CanRun();
+        }
 
         [CommandTarget]
-        private async Task OnNext() 
-            => await ProjectSelector.Run();
+        private async Task OnNext()
+        {
+            await ProjectSelector.Run();
+        }
 
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
         {
-            if(ProjectSelector.CanRun())
+            if (ProjectSelector.CanRun())
                 validationResults.Add(FieldValidationResult.CreateError(nameof(ProjectSelector), "Kein Projekt gewählt"));
 
             base.ValidateFields(validationResults);

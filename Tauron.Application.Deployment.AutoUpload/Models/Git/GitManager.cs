@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
 using Scrutor;
@@ -15,17 +13,19 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
     [ServiceDescriptor(typeof(GitManager))]
     public class GitManager
     {
-        private readonly Settings _settings;
         private readonly InputService _inputService;
-        
+        private readonly Settings _settings;
+
         public GitManager(Settings settings, InputService inputService)
         {
             _settings = settings;
             _inputService = inputService;
         }
 
-        public bool Exis(string path) 
-            => Directory.Exists(path) && Repository.IsValid(path);
+        public bool Exis(string path)
+        {
+            return Directory.Exists(path) && Repository.IsValid(path);
+        }
 
         public void CreateRepository(string repoPath, string url)
         {
@@ -63,11 +63,15 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
                 });
         }
 
-        public void CommitRepo(RegistratedRepository repository) 
-            => CommitRepo(repository.RealPath, repository.BranchName, repository.RepositoryName);
+        public void CommitRepo(RegistratedRepository repository)
+        {
+            CommitRepo(repository.RealPath, repository.BranchName, repository.RepositoryName);
+        }
 
         public void CommitRepo(VersionRepository versionRepository)
-            => CommitRepo(versionRepository.RealPath, "master", versionRepository.Name);
+        {
+            CommitRepo(versionRepository.RealPath, "master", versionRepository.Name);
+        }
 
         private void CommitRepo(string repository, string branchName, string name)
         {
@@ -84,14 +88,13 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
         {
             var status = repo.RetrieveStatus();
             var filePaths = status.Modified.Select(mods => mods.FilePath)
-               .Concat(status.Added.Select(e => e.FilePath))
-               .Concat(status.Removed.Select(e => e.FilePath)).ToHashSet();
+                .Concat(status.Added.Select(e => e.FilePath))
+                .Concat(status.Removed.Select(e => e.FilePath)).ToHashSet();
             Commands.Stage(repo, filePaths);
         }
 
         private void CommitChanges(IRepository repo)
         {
-
             repo.Commit("updating files..", new Signature(_settings.UserName, _settings.EMailAdress, DateTimeOffset.Now),
                 new Signature(_settings.UserName, _settings.EMailAdress, DateTimeOffset.Now));
         }
@@ -104,7 +107,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
                 {
                     case SupportedCredentialTypes.UsernamePassword:
                         var (userName, password) = _inputService.Request(registratedRepository.Split('/')[0]);
-                        return new SecureUsernamePasswordCredentials { Password = password, Username = userName };
+                        return new SecureUsernamePasswordCredentials {Password = password, Username = userName};
                     case SupportedCredentialTypes.Default:
                         return new DefaultCredentials();
                     default:
@@ -115,8 +118,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
             using var remote = repo.Network.Remotes["origin"];
             var pushRefSpec = @"refs/heads/" + branch;
 
-            
-            repo.Network.Push(remote, new [] { pushRefSpec }, new PushOptions { CredentialsProvider = CredentialsProvider });
+
+            repo.Network.Push(remote, new[] {pushRefSpec}, new PushOptions {CredentialsProvider = CredentialsProvider});
         }
     }
 }

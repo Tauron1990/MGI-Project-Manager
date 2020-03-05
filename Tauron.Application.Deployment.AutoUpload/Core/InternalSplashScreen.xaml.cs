@@ -3,7 +3,7 @@
 namespace Tauron.Application.Deployment.AutoUpload.Core
 {
     /// <summary>
-    /// Interaktionslogik für InternalSplashScreen.xaml
+    ///     Interaktionslogik für InternalSplashScreen.xaml
     /// </summary>
     public partial class InternalSplashScreen : Window
     {

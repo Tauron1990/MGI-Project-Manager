@@ -1,12 +1,11 @@
 ﻿using System.Windows.Media;
-using Tauron.Application.Deployment.AutoUpload.Core;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand;
 using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.Views.BuildCommand
 {
     /// <summary>
-    /// Interaktionslogik für BuildSelectProjectView.xaml
+    ///     Interaktionslogik für BuildSelectProjectView.xaml
     /// </summary>
     [Control(typeof(BuildSelectProjectViewModel))]
     public partial class BuildSelectProjectView

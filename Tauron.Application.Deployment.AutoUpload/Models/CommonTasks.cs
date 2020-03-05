@@ -24,7 +24,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models
             if (string.IsNullOrWhiteSpace(result)) return false;
             _settings.UserName = result;
 
-           result = await _inputService.Request("E-mail", "Bitte E-mail Angeben");
+            result = await _inputService.Request("E-mail", "Bitte E-mail Angeben");
             if (string.IsNullOrWhiteSpace(result)) return false;
             _settings.EMailAdress = result;
 
