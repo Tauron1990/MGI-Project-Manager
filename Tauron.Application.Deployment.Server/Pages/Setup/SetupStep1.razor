@@ -10,7 +10,6 @@
 <BSRow>
     <BSCol />
     <BSCol>
-        >
         <p>Legen sie fest wo die Repository Daten in zukunft gespeichert werden sollen.</p>
     </BSCol>
     <BSCol />
@@ -53,8 +52,8 @@
 
     private ServerFileMode TargetFileMode;
 
-    private void onChange(Syncfusion.EJ2.Blazor.DropDowns.ChangeEventArgs<ServerFileMode> args)
+    private void onChange(ChangeEventArgs<ServerFileMode> args)
     {
-
+        TargetFileMode = args.Value;
     }
 }
