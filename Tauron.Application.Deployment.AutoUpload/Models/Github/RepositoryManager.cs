@@ -38,10 +38,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Github
             return await ExceuteAut(arr[0], async client => await _client.Repository.Create(new NewRepository(arr[1])));
         }
 
-        public async Task<IEnumerable<Branch>> GetBranchs(Repository repository)
-        {
-            return await _client.Repository.Branch.GetAll(repository.Id);
-        }
+        public async Task<IEnumerable<Branch>> GetBranchs(Repository repository) 
+            => await _client.Repository.Branch.GetAll(repository.Id);
 
         public async Task<(string, int)> UploadAsset(long repoId, string fileName, string assetName, string name)
         {
@@ -74,7 +72,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Github
 
             try
             {
-                _client.Credentials = await credinals.GetCredentials();
+                _client.Credentials = new Credentials(await credinals.GetCredentials());
                 return await exec(_client);
             }
             catch (ApiException e)
@@ -89,7 +87,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Github
             }
         }
 
-        private class InternalStore : ICredentialStore
+        private class InternalStore
         {
             private readonly string _name;
             private readonly InputService _service;
@@ -100,17 +98,11 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Github
                 _service = service;
             }
 
-            public Task<Credentials> GetCredentials()
-            {
-                var (userName, passwort) = _service.Request(_name);
+            public Task<string?> GetCredentials() 
+                => Task.FromResult(SecureStringToString(_service.GetToken(_name)));
 
-                return Task.FromResult(new Credentials(userName, SecureStringToString(passwort)));
-            }
-
-            public void Invalidate()
-            {
-                _service.DeleteCredinals(_name);
-            }
+            public void Invalidate() 
+                => _service.DeleteCredinals(_name);
 
             private string? SecureStringToString(SecureString? value)
             {

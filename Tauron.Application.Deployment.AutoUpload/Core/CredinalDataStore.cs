@@ -2,12 +2,14 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using JetBrains.Annotations;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
 
 namespace Tauron.Application.Deployment.AutoUpload.Core
 {
     [ServiceDescriptor]
+    [UsedImplicitly]
     public sealed class CredinalDataStore
     {
         private readonly string _targetPath;
@@ -18,6 +20,21 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
 
             if (!Directory.Exists(_targetPath))
                 Directory.CreateDirectory(_targetPath);
+        }
+
+        public void Delete(string name)
+        {
+            var fileName = Path.Combine(_targetPath, name + ".acc");
+
+            try
+            {
+                if (!File.Exists(fileName))
+                    return;
+
+                File.Delete(fileName);
+            }
+            catch(SystemException)
+            { }
         }
 
         public string Get(string name)

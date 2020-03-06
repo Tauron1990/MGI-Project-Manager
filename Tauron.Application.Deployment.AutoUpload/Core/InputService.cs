@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Security;
 using System.Threading.Tasks;
 using Catel.Services;
@@ -38,12 +39,40 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
             });
         }
 
-        //public string GetToken(string userName)
-        //{
+        public SecureString? GetToken(string userName)
+        {
+            if(string.IsNullOrWhiteSpace(userName))
+                return null;
 
-        //}
+            var realUserName = userName + "-t";
 
-        public (string? UserName, SecureString? Passwort) Request(string userName)
+            return RequestGeneric(realUserName, () =>
+                                                {
+                                                    var window = new InputDialog
+                                                                 {
+                                                                     AllowCancel = false,
+                                                                     InstructionText = $"Github Token für: {userName}",
+                                                                     MainText = "Github Token"
+                                                                 };
+
+                                                    var pass = window.Result;
+
+                                                    if (string.IsNullOrWhiteSpace(pass)) return default;
+                                                    var spass = new SecureString();
+
+                                                    foreach (var c in pass) spass.AppendChar(c);
+                                                    return (userName, spass);
+                                                }).Passwort;
+        }
+
+        public (string? UserName, SecureString? Passwort) Request(string userName) =>
+            RequestGeneric(userName, () =>
+                                     {
+                                         var window = new UserNamePasswordRequesterWindow {UserName = userName};
+                                         return window.ShowDialog() == true ? (window.UserName, window.Password) : default;
+                                     });
+
+        private (string? UserName, SecureString? Passwort) RequestGeneric(string userName, Func<(string? UserName, SecureString? Passwort)> getUi)
         {
             if (userName == null)
                 userName = string.Empty;
@@ -53,15 +82,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
             (string? UserName, SecureString? Passwort) result = default;
 
             var pass = _dataStore.Get(userName);
-            if (string.IsNullOrWhiteSpace(pass))
-            {
-                _dispatcherService.Invoke(() =>
-                {
-                    var window = new UserNamePasswordRequesterWindow {UserName = userName};
-                    if (window.ShowDialog() == true)
-                        result = (window.UserName, window.Password);
-                });
-            }
+            if (string.IsNullOrWhiteSpace(pass)) 
+                _dispatcherService.Invoke(() => result = getUi());
 
             if (result.Passwort != null && result.UserName != null)
                 _userCredinals[userName] = new UserCredinals(result.Passwort, result.UserName);
@@ -71,6 +93,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
         public void DeleteCredinals(string name)
         {
             _userCredinals.TryRemove(name, out _);
+            _dataStore.Delete(name);
         }
 
         private class UserCredinals
