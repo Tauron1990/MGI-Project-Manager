@@ -81,7 +81,7 @@ namespace Tauron.Application.OptionsStore.Data.RavenDb
         {
             return new SessionOptions
             {
-                Database = DatabaseName,
+                //Database = DatabaseName,
                 NoTracking = !tracking
             };
         }

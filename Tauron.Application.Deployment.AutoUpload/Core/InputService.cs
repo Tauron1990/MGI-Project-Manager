@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading.Tasks;
 using Catel.Services;
@@ -82,8 +83,21 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
             (string? UserName, SecureString? Passwort) result = default;
 
             var pass = _dataStore.Get(userName);
-            if (string.IsNullOrWhiteSpace(pass)) 
+            if (string.IsNullOrWhiteSpace(pass))
+            {
                 _dispatcherService.Invoke(() => result = getUi());
+                var p = SecureStringToString(result.Passwort);
+
+                if(!string.IsNullOrWhiteSpace(p))
+                    _dataStore.Set(result.UserName, p);
+            }
+            else
+            {
+                var password = new SecureString();
+                foreach (var c in pass) 
+                    password.AppendChar(c);
+                result = (userName, password);
+            }
 
             if (result.Passwort != null && result.UserName != null)
                 _userCredinals[userName] = new UserCredinals(result.Passwort, result.UserName);
@@ -94,6 +108,23 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
         {
             _userCredinals.TryRemove(name, out _);
             _dataStore.Delete(name);
+        }
+
+        private static string? SecureStringToString(SecureString? value)
+        {
+            if (value == null)
+                return null;
+
+            var valuePtr = IntPtr.Zero;
+            try
+            {
+                valuePtr = Marshal.SecureStringToGlobalAllocUnicode(value);
+                return Marshal.PtrToStringUni(valuePtr);
+            }
+            finally
+            {
+                Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
+            }
         }
 
         private class UserCredinals

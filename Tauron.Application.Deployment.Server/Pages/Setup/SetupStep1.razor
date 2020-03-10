@@ -15,15 +15,17 @@
     <BSCol />
 </BSRow>
 <BSRow>
-    <div class="col-md-auto">
-        <EjsComboBox TValue="FileModeType" Placeholder="Datei Modus" DataSource="@fileModeTypes">
+    <div class="col-md-2">
+        <EjsComboBox TValue="FileModeType" Placeholder="Datei Modus" DataSource="@fileModeTypes" AllowCustom="false">
             <ComboBoxEvents TValue="ServerFileMode" ValueChange="onChange"></ComboBoxEvents>
             <ComboBoxFieldSettings Value="RealMode" Text="DisplayName"></ComboBoxFieldSettings>
         </EjsComboBox>
     </div>
 </BSRow>
 <BSRow>
-
+    <BSCol MD="1">
+        @FileModeDescription
+    </BSCol>
 </BSRow>
 <BSRow>
 
@@ -46,14 +48,31 @@
 
     private readonly List<FileModeType> fileModeTypes = new List<FileModeType>
                                                {
-                                                   new FileModeType(ServerFileMode.ApplicationData, "Application Data"),
+                                                   new FileModeType(ServerFileMode.ApplicationData, "Verzeichniss AppData"),
                                                    new FileModeType(ServerFileMode.ContentRoot, "Anwendung Root Verzeichniss")
                                                };
+
+    private string FileModeDescription = "Nichts Gewählt";
 
     private ServerFileMode TargetFileMode;
 
     private void onChange(ChangeEventArgs<ServerFileMode> args)
     {
         TargetFileMode = args.Value;
+
+        switch (TargetFileMode)
+        {
+            case ServerFileMode.Unkowen:
+                FileModeDescription = "Nichts Gewählt";
+                break;
+            case ServerFileMode.ApplicationData:
+                break;
+            case ServerFileMode.ContentRoot:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        StateHasChanged();
     }
 }
