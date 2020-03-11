@@ -1,5 +1,5 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Tauron.Application.Deployment.Server.CoreApp.Server;
 using Tauron.Application.Deployment.Server.CoreApp.Server.Impl;
 
 namespace Tauron.Application.Deployment.Server.CoreApp.Bridge.Impl
@@ -8,9 +8,9 @@ namespace Tauron.Application.Deployment.Server.CoreApp.Bridge.Impl
     {
         private sealed class ClientSetupImpl : IClientSetup
         {
-            private readonly AppSetup _appSetup;
+            private readonly IAppSetup _appSetup;
 
-            public ClientSetupImpl(AppSetup appSetup) 
+            public ClientSetupImpl(IAppSetup appSetup) 
                 => _appSetup = appSetup;
 
             public bool IsFinish => _appSetup.IsFinish;
@@ -27,7 +27,7 @@ namespace Tauron.Application.Deployment.Server.CoreApp.Bridge.Impl
 
         public IClientSetup ClientSetup { get; }
 
-        public ServerBridgeImpl(AppSetup appSetup) 
+        public ServerBridgeImpl(IAppSetup appSetup) 
             => ClientSetup = new ClientSetupImpl(appSetup);
     }
 }

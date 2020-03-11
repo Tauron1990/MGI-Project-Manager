@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Concurrent;
 using Raven.Client.Documents;
 
 namespace Tauron.Application.Deployment.Server.CoreApp.Server.Impl
@@ -25,6 +21,6 @@ namespace Tauron.Application.Deployment.Server.CoreApp.Server.Impl
         }
 
         public IDocumentStore Get(string name) 
-            => _documentStores.GetOrAdd(name, s => new DocumentStore {Database = name, Urls = new[] {_coreConfig.ConnectionString}});
+            => _documentStores.GetOrAdd(name, s => new DocumentStore {Database = name, Urls = new[] {_coreConfig.ConnectionString}}.Initialize());
     }
 }

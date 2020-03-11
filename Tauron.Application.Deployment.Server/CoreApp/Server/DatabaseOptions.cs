@@ -73,7 +73,7 @@ namespace Tauron.Application.Deployment.Server.CoreApp.Server
         public async Task<bool> GetIsSetupFinisht()
         {
             var result = await GetValueAsync(IsSetupFinisht);
-            return !string.IsNullOrEmpty(result) && bool.Parse(result);
+            return !string.IsNullOrEmpty(result) && bool.TryParse(result, out var r) && r;
         }
 
         public async Task SetIsSetupFinisht(bool value) 
@@ -81,7 +81,7 @@ namespace Tauron.Application.Deployment.Server.CoreApp.Server
 
         public ServerFileMode ServerFileMode
         {
-            get { return Enum.TryParse<ServerFileMode>(GetValue(nameof(ServerFileMode)), out var serverFileMode) ? serverFileMode : ServerFileMode.Unkowen; }
+            get => Enum.TryParse<ServerFileMode>(GetValue(nameof(ServerFileMode)), out var serverFileMode) ? serverFileMode : ServerFileMode.Unkowen;
             set
             {
                 SetValue(nameof(ServerFileMode), value.ToString());

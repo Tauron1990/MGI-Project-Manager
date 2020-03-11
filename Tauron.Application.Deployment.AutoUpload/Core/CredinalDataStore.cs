@@ -55,8 +55,10 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
             }
         }
 
-        public void Set(string name, string data)
+        public void Set(string? name, string data)
         {
+            if(string.IsNullOrWhiteSpace(name)) return;
+
             var fileName = Path.Combine(_targetPath, name + ".acc");
 
             try
