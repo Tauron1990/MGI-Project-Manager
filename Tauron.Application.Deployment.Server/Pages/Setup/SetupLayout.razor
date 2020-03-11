@@ -46,7 +46,7 @@
         ErrorDelegator.ErrorRecived += ErrorHandler;
     }
 
-    private async Task Return()
+    private async Task Return(object o)
     {
         await ErrorDialog!.Hide();
         await Task.Delay(500);
