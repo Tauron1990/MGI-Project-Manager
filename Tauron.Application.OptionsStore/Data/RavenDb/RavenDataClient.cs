@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Threading;
-using Raven.Client.Documents;
+using Tauron.Application.Data.Raven;
 
 namespace Tauron.Application.OptionsStore.Data.RavenDb
 {
     public sealed class RavenDataClient : IDataClient
     {
-        private readonly Lazy<IDocumentStore> _documetStore;
+        private readonly Lazy<IDatabaseRoot> _documetStore;
 
-        public RavenDataClient(Func<IServiceProvider, IDocumentStore> documetStore, IServiceProvider serviceProvider)
+        public RavenDataClient(Func<IServiceProvider, IDatabaseRoot> documetStore, IServiceProvider serviceProvider)
         {
-            _documetStore = new Lazy<IDocumentStore>(() => documetStore(serviceProvider), LazyThreadSafetyMode.ExecutionAndPublication);
+            _documetStore = new Lazy<IDatabaseRoot>(() => documetStore(serviceProvider), LazyThreadSafetyMode.ExecutionAndPublication);
         }
 
         public IOptionDataCollection GetCollection(string name)

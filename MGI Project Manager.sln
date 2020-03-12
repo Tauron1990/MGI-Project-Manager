@@ -70,6 +70,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileServer", "FileServer\Fi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileServer.Lib", "FileServer.Lib\FileServer.Lib.csproj", "{5F0BE2A4-6374-4C42-97C0-D84D12EF90D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.Data.Raven", "Tauron.Application.Data.Raven\Tauron.Application.Data.Raven.csproj", "{002720E1-146E-4F68-8016-A8BCEEFF49D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -120,6 +122,10 @@ Global
 		{5F0BE2A4-6374-4C42-97C0-D84D12EF90D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F0BE2A4-6374-4C42-97C0-D84D12EF90D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F0BE2A4-6374-4C42-97C0-D84D12EF90D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{002720E1-146E-4F68-8016-A8BCEEFF49D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{002720E1-146E-4F68-8016-A8BCEEFF49D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{002720E1-146E-4F68-8016-A8BCEEFF49D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{002720E1-146E-4F68-8016-A8BCEEFF49D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -146,6 +152,7 @@ Global
 		{1F3B6D37-5FF2-4657-8695-16115F85B53D} = {F2E34D37-28D5-4FDE-85CB-F2323E99B0C6}
 		{BC8334D9-67F2-4128-BE7F-6FCF9C8A7946} = {D1C9005E-AEF0-4550-A0F3-C306DB560508}
 		{5F0BE2A4-6374-4C42-97C0-D84D12EF90D9} = {D1C9005E-AEF0-4550-A0F3-C306DB560508}
+		{002720E1-146E-4F68-8016-A8BCEEFF49D9} = {97DB54DA-B117-4297-BD4F-7C4EB86ED2D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}

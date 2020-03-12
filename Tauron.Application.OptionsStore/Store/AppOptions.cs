@@ -1,17 +1,40 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Tauron.Application.OptionsStore.Data;
 
 namespace Tauron.Application.OptionsStore.Store
 {
     public sealed class AppOptions : IAppOptions
     {
+        private class Dummy : IOptionDataCollection
+        {
+            public Task<OptionsPair> GetOptionAsync(string key) => throw new NotSupportedException();
+
+            public Task DeleteOptionAsync(string key) => throw new NotSupportedException();
+
+            public Task UpdateAsync(OptionsPair pair) => throw new NotSupportedException();
+
+            public OptionsPair GetOption(string key) => throw new NotSupportedException();
+
+            public void DeleteOption(string key)
+            {
+                throw new NotSupportedException();
+            }
+
+            public void Update(OptionsPair pair)
+            {
+                throw new NotSupportedException();
+            }
+        }
+
         private readonly IDataClient _dataClient;
-        private IOptionDataCollection _dataCollection;
+        private IOptionDataCollection _dataCollection = new Dummy();
 
         public AppOptions(IDataClient dataClient, string name)
         {
             _dataClient = dataClient;
             Name = name;
+
         }
 
         public string Name { get; }

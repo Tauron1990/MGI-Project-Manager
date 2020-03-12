@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Raven.Client.Documents.Operations.Backups;
 using Syncfusion.EJ2.Blazor;
 using Syncfusion.Licensing;
+using Tauron.Application.Data.Raven;
 using Tauron.Application.Deployment.Server.CoreApp.Bridge;
 using Tauron.Application.Deployment.Server.CoreApp.Bridge.Impl;
 using Tauron.Application.Deployment.Server.CoreApp.Client;
@@ -44,8 +44,8 @@ namespace Tauron.Application.Deployment.Server
         private void AddServer(IServiceCollection serviceCollection)
         {
             serviceCollection.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            serviceCollection.AddSingleton<IDocumentStoreManager, DocumentStoreManager>();
-            serviceCollection.AddOptionsStore(s => s.GetRequiredService<IDocumentStoreManager>().Get("OptionsStore"));
+            serviceCollection.AddDataRaven(Configuration);
+            serviceCollection.AddOptionsStore(s => s.GetRequiredService<IDatabaseCache>().Get("OptionsStore"));
             serviceCollection.AddSingleton<IAppSetup, AppSetup>();
             serviceCollection.AddSingleton(s => s.GetRequiredService<IConfiguration>().Get<CoreConfig>());
             serviceCollection.AddSingleton<DatabaseOptions>();

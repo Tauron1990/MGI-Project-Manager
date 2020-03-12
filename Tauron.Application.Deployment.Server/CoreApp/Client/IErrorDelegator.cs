@@ -7,5 +7,7 @@ namespace Tauron.Application.Deployment.Server.CoreApp.Client
         public event Action<string>? ErrorRecived;
 
         public void PublishError(Exception error);
+
+        public void PublishError(string msg);
     }
 }
