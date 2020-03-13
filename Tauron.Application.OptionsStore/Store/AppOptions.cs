@@ -66,5 +66,9 @@ namespace Tauron.Application.OptionsStore.Store
         {
             _dataCollection = _dataClient.GetCollection(Name);
         }
+
+        public void Dispose()
+        {
+        }
     }
 }

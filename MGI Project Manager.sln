@@ -76,7 +76,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Deployme
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Deployment.Server", "Tauron.Application.Deployment.Server\Tauron.Application.Deployment.Server.csproj", "{88BD57F2-8474-4ED6-A7D2-A6B6E9E1FB71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.SimpleAuth", "Tauron.Application.SimpleAuth\Tauron.Application.SimpleAuth.csproj", "{0BB350F0-19C3-462A-9F2B-72CE71E27FEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.SimpleAuth", "Tauron.Application.SimpleAuth\Tauron.Application.SimpleAuth.csproj", "{0BB350F0-19C3-462A-9F2B-72CE71E27FEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -169,7 +169,7 @@ Global
 		{D2726BD5-E29E-42B1-95E0-BE9897076BE5} = {5572E43F-E5B8-4350-B45D-797B51759FA4}
 		{EDB8F61E-9020-45F3-89AC-B3BCAB1FE121} = {D2726BD5-E29E-42B1-95E0-BE9897076BE5}
 		{88BD57F2-8474-4ED6-A7D2-A6B6E9E1FB71} = {5572E43F-E5B8-4350-B45D-797B51759FA4}
-		{0BB350F0-19C3-462A-9F2B-72CE71E27FEB} = {5572E43F-E5B8-4350-B45D-797B51759FA4}
+		{0BB350F0-19C3-462A-9F2B-72CE71E27FEB} = {C65A7611-D7FE-4174-B5DE-A966C5BC5A18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}

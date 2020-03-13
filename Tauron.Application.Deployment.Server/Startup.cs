@@ -8,6 +8,7 @@ using Tauron.Application.Data.Raven;
 using Tauron.Application.Deployment.Server.Engine;
 using Tauron.Application.Deployment.Server.Engine.Impl;
 using Tauron.Application.OptionsStore;
+using Tauron.Application.SimpleAuth;
 
 namespace Tauron.Application.Deployment.Server
 {
@@ -23,11 +24,11 @@ namespace Tauron.Application.Deployment.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<BaseSettings>(Configuration.GetSection("BaseSettings"));
+            services.Configure<SimplAuthSettings>(Configuration.GetSection("SimplAuthSettings"));
 
             services.AddMemoryCache();
-            services.AddAuthentication("Basic");
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddAuthentication("Simple").AddSimpleAuth();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0).AddSimpleAuthApi();
 
             services.AddDataRaven(Configuration);
             services.AddOptionsStore(s => s.GetRequiredService<IDatabaseCache>().Get("OptionsStore"));

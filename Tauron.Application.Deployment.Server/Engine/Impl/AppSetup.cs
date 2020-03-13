@@ -16,6 +16,11 @@ namespace Tauron.Application.Deployment.Server.Engine.Impl
         public AppSetup(DatabaseOptions optionsStore) 
             => _optionsStore = optionsStore;
 
+        public Task<bool> TrySetServerPath(ServerFileMode path)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task Init()
         {
             if (Interlocked.CompareExchange(ref _isInit, 0, 1) == 1) 
