@@ -6,8 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GraphQL" Version="2.4.0" />
-    <PackageReference Include="GraphQL.Server.Ui.GraphiQL" Version="3.5.0-alpha0046" />
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tauron.Application.Data.Raven\Tauron.Application.Data.Raven.csproj" />
+    <ProjectReference Include="..\Tauron.Application.OptionsStore\Tauron.Application.OptionsStore.csproj" />
   </ItemGroup>
 
 

@@ -64,9 +64,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{F2E34D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Shared", "Tauron.Application.Shared\Tauron.Application.Shared.csproj", "{1F3B6D37-5FF2-4657-8695-16115F85B53D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileServer", "FileServer\FileServer.csproj", "{BC8334D9-67F2-4128-BE7F-6FCF9C8A7946}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileServer", "FileServer\FileServer.csproj", "{BC8334D9-67F2-4128-BE7F-6FCF9C8A7946}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileServer.Lib", "FileServer.Lib\FileServer.Lib.csproj", "{5F0BE2A4-6374-4C42-97C0-D84D12EF90D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileServer.Lib", "FileServer.Lib\FileServer.Lib.csproj", "{5F0BE2A4-6374-4C42-97C0-D84D12EF90D9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Data.Raven", "Tauron.Application.Data.Raven\Tauron.Application.Data.Raven.csproj", "{002720E1-146E-4F68-8016-A8BCEEFF49D9}"
 EndProject
@@ -74,7 +74,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Alt", "Alt", "{D2726BD5-E29
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Deployment.ServerAlt", "Tauron.Application.Deployment.ServerAlt\Tauron.Application.Deployment.ServerAlt.csproj", "{EDB8F61E-9020-45F3-89AC-B3BCAB1FE121}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.Deployment.Server", "Tauron.Application.Deployment.Server\Tauron.Application.Deployment.Server.csproj", "{88BD57F2-8474-4ED6-A7D2-A6B6E9E1FB71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Deployment.Server", "Tauron.Application.Deployment.Server\Tauron.Application.Deployment.Server.csproj", "{88BD57F2-8474-4ED6-A7D2-A6B6E9E1FB71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.SimpleAuth", "Tauron.Application.SimpleAuth\Tauron.Application.SimpleAuth.csproj", "{0BB350F0-19C3-462A-9F2B-72CE71E27FEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -134,6 +136,10 @@ Global
 		{88BD57F2-8474-4ED6-A7D2-A6B6E9E1FB71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88BD57F2-8474-4ED6-A7D2-A6B6E9E1FB71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88BD57F2-8474-4ED6-A7D2-A6B6E9E1FB71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BB350F0-19C3-462A-9F2B-72CE71E27FEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BB350F0-19C3-462A-9F2B-72CE71E27FEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BB350F0-19C3-462A-9F2B-72CE71E27FEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BB350F0-19C3-462A-9F2B-72CE71E27FEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -163,6 +169,7 @@ Global
 		{D2726BD5-E29E-42B1-95E0-BE9897076BE5} = {5572E43F-E5B8-4350-B45D-797B51759FA4}
 		{EDB8F61E-9020-45F3-89AC-B3BCAB1FE121} = {D2726BD5-E29E-42B1-95E0-BE9897076BE5}
 		{88BD57F2-8474-4ED6-A7D2-A6B6E9E1FB71} = {5572E43F-E5B8-4350-B45D-797B51759FA4}
+		{0BB350F0-19C3-462A-9F2B-72CE71E27FEB} = {5572E43F-E5B8-4350-B45D-797B51759FA4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}

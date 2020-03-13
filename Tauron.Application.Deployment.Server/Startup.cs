@@ -1,15 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using GraphQL.Server.Ui.GraphiQL;
+using Tauron.Application.Data.Raven;
+using Tauron.Application.Deployment.Server.Engine;
+using Tauron.Application.Deployment.Server.Engine.Impl;
+using Tauron.Application.OptionsStore;
 
 namespace Tauron.Application.Deployment.Server
 {
@@ -25,6 +23,19 @@ namespace Tauron.Application.Deployment.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<BaseSettings>(Configuration.GetSection("BaseSettings"));
+
+            services.AddMemoryCache();
+            services.AddAuthentication("Basic");
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            services.AddDataRaven(Configuration);
+            services.AddOptionsStore(s => s.GetRequiredService<IDatabaseCache>().Get("OptionsStore"));
+
+            services.AddSingleton<IAppSetup, AppSetup>();
+            services.AddSingleton<DatabaseOptions>();
+            services.AddSingleton<IFileSystem, FileSystem>();
+
             services.AddControllers();
         }
 
@@ -44,8 +55,6 @@ namespace Tauron.Application.Deployment.Server
             {
                 endpoints.MapControllers();
             });
-
-            app.UseGraphiQLServer(new GraphiQLOptions());
         }
     }
 }
