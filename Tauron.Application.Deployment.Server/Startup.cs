@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Tauron.Application.Data.Raven;
 using Tauron.Application.Deployment.Server.Engine;
 using Tauron.Application.Deployment.Server.Engine.Impl;
+using Tauron.Application.Logging;
 using Tauron.Application.OptionsStore;
 using Tauron.Application.SimpleAuth;
 
@@ -26,6 +27,7 @@ namespace Tauron.Application.Deployment.Server
         {
             services.Configure<SimplAuthSettings>(Configuration.GetSection("SimplAuthSettings"));
 
+            services.AddTauronLogging();
             services.AddMemoryCache();
             services.AddAuthentication("Simple").AddSimpleAuth();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0).AddSimpleAuthApi();

@@ -7,10 +7,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Serilog.Exceptions" Version="5.4.0" />
+    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+    <PackageReference Include="SerilogAnalyzer" Version="0.15.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Tauron.Application.Data.Raven\Tauron.Application.Data.Raven.csproj" />
+    <ProjectReference Include="..\Tauron.Application.Logging\Tauron.Application.Logging.csproj" />
     <ProjectReference Include="..\Tauron.Application.OptionsStore\Tauron.Application.OptionsStore.csproj" />
     <ProjectReference Include="..\Tauron.Application.SimpleAuth\Tauron.Application.SimpleAuth.csproj" />
   </ItemGroup>

@@ -11,9 +11,11 @@
 
   <ItemGroup>
     <PackageReference Include="NSwag.Annotations" Version="13.2.5" />
+    <PackageReference Include="Serilog" Version="2.9.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Tauron.Application.Logging\Tauron.Application.Logging.csproj" />
     <ProjectReference Include="..\Tauron.Application.OptionsStore\Tauron.Application.OptionsStore.csproj" />
   </ItemGroup>
 

@@ -4,8 +4,24 @@ using Tauron.Application.OptionsStore.Data;
 
 namespace Tauron.Application.OptionsStore.Store
 {
-    public class OptionImpl : IOption
+    public sealed class OptionImpl : IOption
     {
+        private sealed class Empty : IOption
+        {
+            public string Key { get; } = string.Empty;
+            public string Value { get; } = string.Empty;
+            public Task SetValueAsync(string value)
+            {
+                return Task.CompletedTask;
+            }
+
+            public void SetValue(string value)
+            {
+            }
+        } 
+
+        public static IOption EmptyOption { get; } = new Empty();
+
         private readonly Func<OptionsPair, Task> _update;
         private readonly Action<OptionsPair> _updateSync;
 
