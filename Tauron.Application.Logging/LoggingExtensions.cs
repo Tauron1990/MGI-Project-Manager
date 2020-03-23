@@ -15,10 +15,12 @@ namespace Tauron.Application.Logging
     [PublicAPI]
     public static class LoggingExtensions
     {
-        public static LoggerConfiguration ConfigDefaultLogging(this LoggerConfiguration loggerConfiguration, string applicationName, Func<DocumentStore>? getStore = null)
+        public static LoggerConfiguration ConfigDefaultLogging(this LoggerConfiguration loggerConfiguration, string applicationName, Func<DocumentStore>? getStore = null, bool noFile = false)
         {
             if (getStore != null)
                 loggerConfiguration.WriteTo.RavenDB(getStore(), expiration: TimeSpan.FromDays(100), errorExpiration: TimeSpan.FromDays(365));
+            if(!noFile)
+                loggerConfiguration.WriteTo.RollingFile(new CompactJsonFormatter(), "Logs\\Log.log", fileSizeLimitBytes: 5_242_880);
 
             return loggerConfiguration
                 .MinimumLevel.Debug()
@@ -27,8 +29,7 @@ namespace Tauron.Application.Logging
                 .Enrich.WithProperty("ApplicationName", applicationName)
                 .Enrich.FromLogContext()
                 .Enrich.WithExceptionDetails()
-                .Enrich.WithEventTypeEnricher()
-                .WriteTo.RollingFile(new CompactJsonFormatter(), "Logs\\Log.log", fileSizeLimitBytes: 5_242_880);
+                .Enrich.WithEventTypeEnricher();
         }
 
         public static LoggerConfiguration WithEventTypeEnricher(this LoggerEnrichmentConfiguration config) 

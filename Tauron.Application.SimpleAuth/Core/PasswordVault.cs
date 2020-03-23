@@ -11,15 +11,15 @@ using Tauron.Application.OptionsStore.Store;
 
 namespace Tauron.Application.SimpleAuth.Core
 {
-    public class PasswordVault : IDisposable
+    public class PasswordVault : IDisposable, IPasswordVault
     {
-        private const string PasswortName = "Vault-Password";
+        public const string PasswortName = "Vault-Password";
 
 
         private readonly ILogger _logger;
         private readonly AsyncReaderWriterLock _lock = new AsyncReaderWriterLock();
         private readonly IDisposable _changeToken;
-        private readonly PasswordHasher<string> _hasher;
+        private readonly PasswordHasher<string> _hasher = new PasswordHasher<string>();
 
         private SimplAuthSettings _settings;
 
@@ -61,12 +61,12 @@ namespace Tauron.Application.SimpleAuth.Core
 
             try
             {
-                var opass = HashPassword(pass);
                 var checkPass = await TryGetPassword();
                 if (string.IsNullOrWhiteSpace(checkPass))
                     checkPass = HashPassword(_settings.BaseAdminPass);
 
-                return opass == checkPass;
+                var result = _hasher.VerifyHashedPassword(PasswortName, checkPass, pass);
+                return result == PasswordVerificationResult.Success || result == PasswordVerificationResult.SuccessRehashNeeded;
             }
             catch (Exception e)
             {
@@ -78,11 +78,14 @@ namespace Tauron.Application.SimpleAuth.Core
 
         public async Task<bool> SetPassword(string pass)
         {
+            if (string.IsNullOrEmpty(pass))
+                return false;
+
             using var opt = LogContext.PushProperty("SimpleAuthConfig", _settings.AppName);
 
             var newPass = HashPassword(pass);
-            var oldPass = await TryGetPassword();
-            if (newPass == oldPass)
+            await TryGetPassword();
+            if (await CheckPassword(pass))
             {
                 _logger.Information("User Try to Set Same Password");
 

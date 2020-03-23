@@ -12,11 +12,11 @@ namespace Tauron.Application.SimpleAuth
     {
         public static void AddSimpleAuth(this AuthenticationBuilder builder, Action<SimpleAuthenticationOptions>? options = null)
         {
+            builder.Services.AddSingleton<IPasswordVault, PasswordVault>();
             builder.Services.TryAddSingleton<IPostConfigureOptions<SimpleAuthenticationOptions>, SimpleAuthenticationPostConfigureOptions>();
             builder.AddScheme<SimpleAuthenticationOptions, SimpleAuthenticationHandler>("Simple", options);
         }
 
-        public static void AddSimpleAuthApi(this IMvcBuilder builder) 
-            => builder.AddApplicationPart(typeof(Extensions).Assembly);
+        public static void AddSimpleAuthApi(this IMvcBuilder builder) => builder.AddApplicationPart(typeof(Extensions).Assembly);
     }
 }
