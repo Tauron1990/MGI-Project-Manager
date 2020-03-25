@@ -1,5 +1,4 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -12,7 +11,9 @@ namespace Tauron.Application.SimpleAuth
     {
         public static void AddSimpleAuth(this AuthenticationBuilder builder, Action<SimpleAuthenticationOptions>? options = null)
         {
-            builder.Services.AddSingleton<IPasswordVault, PasswordVault>();
+            builder.Services.TryAddSingleton<IPasswordVault, PasswordVault>();
+            builder.Services.TryAddSingleton<ITokenManager, TokenManager>();
+
             builder.Services.TryAddSingleton<IPostConfigureOptions<SimpleAuthenticationOptions>, SimpleAuthenticationPostConfigureOptions>();
             builder.AddScheme<SimpleAuthenticationOptions, SimpleAuthenticationHandler>("Simple", options);
         }
