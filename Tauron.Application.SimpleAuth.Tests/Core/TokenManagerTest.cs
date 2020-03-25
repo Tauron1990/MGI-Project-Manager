@@ -8,5 +8,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Core
 
         public TokenManagerTest(ITestOutputHelper testOutputHelper) 
             => _testOutputHelper = testOutputHelper;
+
+        
     }
 }
