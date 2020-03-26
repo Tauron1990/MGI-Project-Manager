@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
 using Tauron.Application.SimpleAuth.Core;
 
 namespace Tauron.Application.SimpleAuth.Api
@@ -19,10 +19,10 @@ namespace Tauron.Application.SimpleAuth.Api
         }
 
         [HttpGet("Token")]
-        [SwaggerResponse()]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         public ActionResult<string> GetToken()
         {
-
+            
         }
     }
 }

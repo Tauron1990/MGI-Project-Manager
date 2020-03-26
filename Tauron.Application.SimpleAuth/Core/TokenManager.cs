@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using Microsoft.AspNetCore.Authentication;
@@ -12,6 +10,17 @@ namespace Tauron.Application.SimpleAuth.Core
 {
     public sealed class TokenManager : ITokenManager, IDisposable
     {
+        private static readonly byte[] Salt = Initialize();
+
+        private static byte[] Initialize()
+        {
+            RandomNumberGenerator gen = new RNGCryptoServiceProvider();
+            var array = new byte[256];
+
+            gen.GetBytes(array);
+            return array;
+        }
+
         private readonly ISystemClock _clock;
         private readonly IDisposable _subscription;
         private SimpleAuthenticationOptions _options;
@@ -25,11 +34,12 @@ namespace Tauron.Application.SimpleAuth.Core
 
         public string GenerateToken()
         {
-            using var mem = new MemoryStream();
+            using var mem = new MemoryStream(350);
             using var writer = new BinaryWriter(mem, Encoding.UTF8);
 
             writer.Write(_clock.UtcNow.UtcDateTime.ToBinary());
             writer.Write(_options.Realm);
+            writer.Write(Salt);
 
             return Convert.ToBase64String(mem.ToArray());
         }
