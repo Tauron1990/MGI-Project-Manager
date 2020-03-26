@@ -17,10 +17,9 @@ namespace Tauron.Application.SimpleAuth.Core
         private readonly ISimpleAuthenticationService _authenticationService;
 
         public SimpleAuthenticationHandler(IOptionsMonitor<SimpleAuthenticationOptions> options, ILoggerFactory logger, UrlEncoder encoder, 
-            ISystemClock clock, ISimpleAuthenticationService authenticationService) 
+            ISystemClock clock) 
             : base(options, logger, encoder, clock)
         {
-            _authenticationService = authenticationService;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()

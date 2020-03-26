@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using TestHelpers.Core;
 
 namespace TestHelpers
 {
+    [PublicAPI]
     public sealed class ServicesConfiguration
     {
         public IServiceCollection ServiceCollection { get; }
@@ -15,6 +18,10 @@ namespace TestHelpers
         {
             ServiceCollection = serviceCollection;
         }
+
+        public MockConfiguration<TInterface> AddMock<TInterface>()
+            where TInterface : class
+            => new MockConfiguration<TInterface>(this);
 
         public ServicesConfiguration AddService<TInterface, TType>(Func<TType> factory, Action<TType>? asser = null) 
             where TType : TInterface 
@@ -30,5 +37,7 @@ namespace TestHelpers
         {
             return AddService<TInterface, TType>(() => new TType(), asser);
         }
+
+        
     }
 }

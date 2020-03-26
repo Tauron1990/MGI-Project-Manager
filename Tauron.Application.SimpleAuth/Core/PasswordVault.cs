@@ -71,9 +71,8 @@ namespace Tauron.Application.SimpleAuth.Core
             catch (Exception e)
             {
                 _logger.Error(e, "Password Failed to Check");
+                throw;
             }
-
-            return false;
         }
 
         public async Task<bool> SetPassword(string pass)

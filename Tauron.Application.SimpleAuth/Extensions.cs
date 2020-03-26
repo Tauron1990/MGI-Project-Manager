@@ -18,6 +18,9 @@ namespace Tauron.Application.SimpleAuth
             builder.AddScheme<SimpleAuthenticationOptions, SimpleAuthenticationHandler>("Simple", options);
         }
 
-        public static void AddSimpleAuthApi(this IMvcBuilder builder) => builder.AddApplicationPart(typeof(Extensions).Assembly);
+        public static void AddSimpleAuthApi(this IMvcBuilder builder)
+        {
+            builder.AddApplicationPart(typeof(Extensions).Assembly);
+        }
     }
 }

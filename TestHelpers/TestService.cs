@@ -6,7 +6,7 @@ namespace TestHelpers
     {
         private readonly ServicesConfiguration _configuration;
         public IServiceProvider ServiceProvider { get; }
-        public TTest Service { get; }
+        private TTest Service { get; }
 
         public TestService(ServicesConfiguration configuration, IServiceProvider serviceProvider, TTest service)
         {

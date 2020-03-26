@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Tauron.Application.SimpleAuth</name>
+    </assembly>
+    <members>
+        <member name="T:Tauron.Application.SimpleAuth.Api.LoginV1Controller">
+            <summery>
+             Gibt ein 24 Stunden gültiges Token für die Authentifizierung zurück.
+            
+             Auserdem kann das Password geändert werden.
+             </summery>
+        </member>
+        <member name="M:Tauron.Application.SimpleAuth.Api.LoginV1Controller.GetToken">
+            <summary>
+            Erzeut ein 24 Stunden gültiges token.
+            </summary>
+            <returns>Das Token zur Authentifizierung</returns>
+            <response code="201">Gibt das Token zurück</response>
+        </member>
+        <member name="M:Tauron.Application.SimpleAuth.Api.LoginV1Controller.Setpassword(Tauron.Application.SimpleAuth.Data.NewPasswordData)">
+             <summary>
+             Versucht ein neues Passwort zu setzen
+             </summary>
+             <param name="newPassword">
+             Das alte und das neue Passwort das Gesetzt werden soll.
+             </param>
+             <returns>
+            Das ergebnis des Vorgangs und ein token sovern erfolgreich.
+             </returns>
+             <response code="200">Das Ergebnis</response>
+        </member>
+        <member name="T:Tauron.Application.SimpleAuth.Data.GetTokenResult">
+            <summary>
+            Enthält bei erfolg das Token das Generiert wurde.
+            </summary>
+        </member>
+        <member name="P:Tauron.Application.SimpleAuth.Data.GetTokenResult.Token">
+            <summary>
+            Das Token zur Authentifizierung
+            </summary>
+        </member>
+        <member name="T:Tauron.Application.SimpleAuth.Data.NewPasswordData">
+            <summary>
+            Enthält alle information um ein neues Password zu setzen
+            </summary>
+        </member>
+        <member name="P:Tauron.Application.SimpleAuth.Data.NewPasswordData.OldPassword">
+            <summary>
+            Das Alte Password
+            </summary>
+        </member>
+        <member name="P:Tauron.Application.SimpleAuth.Data.NewPasswordData.NewPassword">
+            <summary>
+            Das Neue Passwort das gesetzt werden soll
+            </summary>
+        </member>
+        <member name="P:Tauron.Application.SimpleAuth.Data.OperationResultBase`1.Successful">
+            <summary>
+            Gibt an ob das Password erfolgreich gesetz wurde
+            </summary>
+        </member>
+        <member name="P:Tauron.Application.SimpleAuth.Data.OperationResultBase`1.FailMessage">
+            <summary>
+            Nachricht was Schiefgelaufen ist,
+            </summary>
+        </member>
+        <member name="T:Tauron.Application.SimpleAuth.Data.SetPasswordResult">
+            <summary>
+            Ergebnis des Passowort-Setz vorgangas
+            </summary>
+        </member>
+        <member name="P:Tauron.Application.SimpleAuth.Data.SetPasswordResult.Token">
+            <summary>
+            Ein neues token für die Authentifizierung
+            </summary>
+        </member>
+    </members>
+</doc>
