@@ -1,21 +1,19 @@
 ﻿@layout SetupLayout
 @page "/setup/step1"
 @using Tauron.Application.Deployment.Server.CoreApp.Bridge
-@using Syncfusion.EJ2.Blazor
-@using Syncfusion.EJ2.Blazor.DropDowns
-@using Syncfusion.EJ2.Blazor.Buttons
-@using Tauron.Application.Deployment.Server.CoreApp.Server
 @using Tauron.Application.Deployment.Server.CoreApp.Client
+@using Tauron.Application.Deployment.Server.CoreApp.Server
+@using Syncfusion.EJ2.Blazor.DropDowns
 
 @inject IServerBridge ServerBridge
 @inject IErrorDelegator ErrorDelegator
 
 <BSRow style="height: 100px">
-    <BSCol />
+    <BSCol/>
     <BSCol>
         <p>Legen sie fest wo die Repository Daten in zukunft gespeichert werden sollen.</p>
     </BSCol>
-    <BSCol />
+    <BSCol/>
 </BSRow>
 <BSRow style="height: 250px">
     <div class="col-md-2">
@@ -51,7 +49,7 @@
     }
 
     private readonly List<FileModeType> fileModeTypes = new List<FileModeType>
-                                                    {
+                                                        {
                                                             new FileModeType(ServerFileMode.ApplicationData, "Verzeichniss AppData"),
                                                             new FileModeType(ServerFileMode.ContentRoot, "Anwendung Root Verzeichniss")
                                                         };
@@ -89,6 +87,6 @@
 
     private async Task NextPage()
     {
-
     }
+
 }

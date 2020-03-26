@@ -15,10 +15,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
     {
         private readonly Settings _settings;
 
-        public BuildSelectProjectViewModel(Settings settings)
-        {
-            _settings = settings;
-        }
+        public BuildSelectProjectViewModel(Settings settings) => _settings = settings;
 
         //public FastObservableCollection<PotentialProjekt> Projekts { get; } = new FastObservableCollection<PotentialProjekt>();
 
@@ -29,9 +26,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         protected override Task InitializeAsync()
         {
             var itemFac = _settings
-                .RegistratedRepositories
-                .Select(rr => new PotentialProjekt(rr))
-                .Select(pr => new SelectorItem<PotentialProjekt>(pr));
+               .RegistratedRepositories
+               .Select(rr => new PotentialProjekt(rr))
+               .Select(pr => new SelectorItem<PotentialProjekt>(pr));
 
             ProjectSelector.Init(itemFac, true, OnNext);
 
@@ -63,10 +60,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         }
 
         [CommandTarget]
-        public bool CanOnNext()
-        {
-            return ProjectSelector.CanRun();
-        }
+        public bool CanOnNext() => ProjectSelector.CanRun();
 
         [CommandTarget]
         public async Task OnNext()

@@ -33,10 +33,7 @@ namespace Tauron.Application.Wpf
             private readonly Type _targetType;
             private ObjectFactory? _fac;
 
-            public Trampoline(Type targetType)
-            {
-                _targetType = targetType;
-            }
+            public Trampoline(Type targetType) => _targetType = targetType;
 
             public object Create(IServiceProvider provider)
             {

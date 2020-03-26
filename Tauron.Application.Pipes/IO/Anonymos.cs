@@ -17,10 +17,7 @@ namespace Tauron.Application.Pipes.IO
         }
 
         [PublicAPI]
-        public static IPipe Create(PipeDirection pipeDirection, string name)
-        {
-            return new AStream(new AnonymousPipeClientStream(pipeDirection, name));
-        }
+        public static IPipe Create(PipeDirection pipeDirection, string name) => new AStream(new AnonymousPipeClientStream(pipeDirection, name));
 
         private sealed class AStream : PipeBase
         {
@@ -28,10 +25,7 @@ namespace Tauron.Application.Pipes.IO
             {
             }
 
-            protected override Task Connect(PipeStream stream)
-            {
-                return Task.CompletedTask;
-            }
+            protected override Task Connect(PipeStream stream) => Task.CompletedTask;
         }
     }
 }

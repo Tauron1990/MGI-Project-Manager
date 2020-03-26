@@ -26,9 +26,9 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
             const string fileName = "FileVersion";
 
             var result = _sourceElement
-                .Elements("PropertyGroup")
-                .Select(xElement => xElement.Element(file ? fileName : assemblyName))
-                .FirstOrDefault(temp => temp != null);
+               .Elements("PropertyGroup")
+               .Select(xElement => xElement.Element(file ? fileName : assemblyName))
+               .FirstOrDefault(temp => temp != null);
 
             if (!((result == null) & create)) return result;
 

@@ -10,35 +10,17 @@ namespace Tauron.Application.Logging.impl
     {
         private readonly ILogger _logger;
 
-        public SeriLogger(ILogger logger)
-        {
-            _logger = logger.ForContext<TType>();
-        }
+        public SeriLogger(ILogger logger) => _logger = logger.ForContext<TType>();
 
-        public ILogger ForContext(ILogEventEnricher enricher)
-        {
-            return _logger.ForContext(enricher);
-        }
+        public ILogger ForContext(ILogEventEnricher enricher) => _logger.ForContext(enricher);
 
-        public ILogger ForContext(IEnumerable<ILogEventEnricher> enrichers)
-        {
-            return _logger.ForContext(enrichers);
-        }
+        public ILogger ForContext(IEnumerable<ILogEventEnricher> enrichers) => _logger.ForContext(enrichers);
 
-        public ILogger ForContext(string propertyName, object value, bool destructureObjects = false)
-        {
-            return _logger.ForContext(propertyName, value, destructureObjects);
-        }
+        public ILogger ForContext(string propertyName, object value, bool destructureObjects = false) => _logger.ForContext(propertyName, value, destructureObjects);
 
-        public ILogger ForContext<TSource>()
-        {
-            return _logger.ForContext<TSource>();
-        }
+        public ILogger ForContext<TSource>() => _logger.ForContext<TSource>();
 
-        public ILogger ForContext(Type source)
-        {
-            return _logger.ForContext(source);
-        }
+        public ILogger ForContext(Type source) => _logger.ForContext(source);
 
         public void Write(LogEvent logEvent)
         {
@@ -95,10 +77,7 @@ namespace Tauron.Application.Logging.impl
             _logger.Write(level, exception, messageTemplate, propertyValues);
         }
 
-        public bool IsEnabled(LogEventLevel level)
-        {
-            return _logger.IsEnabled(level);
-        }
+        public bool IsEnabled(LogEventLevel level) => _logger.IsEnabled(level);
 
         public void Verbose(string messageTemplate)
         {
@@ -400,14 +379,8 @@ namespace Tauron.Application.Logging.impl
             _logger.Fatal(exception, messageTemplate, propertyValues);
         }
 
-        public bool BindMessageTemplate(string messageTemplate, object[] propertyValues, out MessageTemplate parsedTemplate, out IEnumerable<LogEventProperty> boundProperties)
-        {
-            return _logger.BindMessageTemplate(messageTemplate, propertyValues, out parsedTemplate, out boundProperties);
-        }
+        public bool BindMessageTemplate(string messageTemplate, object[] propertyValues, out MessageTemplate parsedTemplate, out IEnumerable<LogEventProperty> boundProperties) => _logger.BindMessageTemplate(messageTemplate, propertyValues, out parsedTemplate, out boundProperties);
 
-        public bool BindProperty(string propertyName, object value, bool destructureObjects, out LogEventProperty property)
-        {
-            return _logger.BindProperty(propertyName, value, destructureObjects, out property);
-        }
+        public bool BindProperty(string propertyName, object value, bool destructureObjects, out LogEventProperty property) => _logger.BindProperty(propertyName, value, destructureObjects, out property);
     }
 }

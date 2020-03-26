@@ -18,10 +18,7 @@ namespace Tauron.Application.Pipes
         {
         }
 
-        public PipeServer(IPipe pipe)
-        {
-            _pipe = pipe;
-        }
+        public PipeServer(IPipe pipe) => _pipe = pipe;
 
         public void Dispose()
         {
@@ -36,12 +33,12 @@ namespace Tauron.Application.Pipes
         public async Task Connect()
         {
             _pipe.OnError += async error =>
-            {
-                var temp = ReadErrorEvent;
-                if (temp != null)
-                    return await temp(error);
-                return true;
-            };
+                             {
+                                 var temp = ReadErrorEvent;
+                                 if (temp != null)
+                                     return await temp(error);
+                                 return true;
+                             };
 
             await _pipe.Init(MessageRecived);
         }
@@ -69,15 +66,9 @@ namespace Tauron.Application.Pipes
             public bool CanRead => false;
             public bool CanWrite => false;
 
-            public Task Init(Func<byte[], int, Task> readHandler)
-            {
-                return Task.FromException(new NotSupportedException());
-            }
+            public Task Init(Func<byte[], int, Task> readHandler) => Task.FromException(new NotSupportedException());
 
-            public Task Write(byte[] segment)
-            {
-                return Task.FromException(new NotSupportedException());
-            }
+            public Task Write(byte[] segment) => Task.FromException(new NotSupportedException());
         }
     }
 }

@@ -3,10 +3,7 @@
     public sealed class SelectorItem<TType> : SelectorItemBase
         where TType : INameable
     {
-        public SelectorItem(TType target)
-        {
-            Target = target;
-        }
+        public SelectorItem(TType target) => Target = target;
 
         public TType Target { get; }
         public override string Name => Target.Name;

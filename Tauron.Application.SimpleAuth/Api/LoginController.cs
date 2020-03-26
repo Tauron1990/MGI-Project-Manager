@@ -10,18 +10,18 @@ using Tauron.Application.SimpleAuth.Data;
 
 namespace Tauron.Application.SimpleAuth.Api
 {
-    ///<summery>
-    /// Gibt ein 24 Stunden gültiges Token für die Authentifizierung zurück.
-    ///
-    /// Auserdem kann das Password geändert werden.
+    /// <summery>
+    ///     Gibt ein 24 Stunden gültiges Token für die Authentifizierung zurück.
+    ///     Auserdem kann das Password geändert werden.
     /// </summery>
     [Route("api/Login/V1")]
-    [ApiController, Authorize(AuthenticationSchemes = "Simple")]
+    [ApiController]
+    [Authorize(AuthenticationSchemes = "Simple")]
     public class LoginV1Controller : ControllerBase
     {
+        private readonly ISLogger<LoginV1Controller> _logger;
         private readonly IPasswordVault _passwordVault;
         private readonly ITokenManager _tokenManager;
-        private readonly ISLogger<LoginV1Controller> _logger;
 
 
         public LoginV1Controller(IPasswordVault passwordVault, ITokenManager tokenManager, ISLogger<LoginV1Controller> logger)
@@ -32,7 +32,7 @@ namespace Tauron.Application.SimpleAuth.Api
         }
 
         /// <summary>
-        /// Erzeut ein 24 Stunden gültiges token.
+        ///     Erzeut ein 24 Stunden gültiges token.
         /// </summary>
         /// <returns>Das Token zur Authentifizierung</returns>
         /// <response code="201">Gibt das Token zurück</response>
@@ -56,18 +56,18 @@ namespace Tauron.Application.SimpleAuth.Api
         }
 
         /// <summary>
-        /// Versucht ein neues Passwort zu setzen
+        ///     Versucht ein neues Passwort zu setzen
         /// </summary>
         /// <param name="newPassword">
-        /// Das alte und das neue Passwort das Gesetzt werden soll.
+        ///     Das alte und das neue Passwort das Gesetzt werden soll.
         /// </param>
         /// <returns>
-        ///Das ergebnis des Vorgangs und ein token sovern erfolgreich.
+        ///     Das ergebnis des Vorgangs und ein token sovern erfolgreich.
         /// </returns>
         /// <response code="200">Das Ergebnis</response>
         [HttpPost("SetPassword")]
-        [ProducesResponseType(typeof(SetPasswordResult), (int)HttpStatusCode.OK)]
-        public async Task<SetPasswordResult> Setpassword([FromBody]NewPasswordData newPassword)
+        [ProducesResponseType(typeof(SetPasswordResult), (int) HttpStatusCode.OK)]
+        public async Task<SetPasswordResult> Setpassword([FromBody] NewPasswordData newPassword)
         {
             LogContext.PushProperty("Client", HttpContext.Connection.Id);
 

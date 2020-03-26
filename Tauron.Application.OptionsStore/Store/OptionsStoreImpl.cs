@@ -6,10 +6,7 @@ namespace Tauron.Application.OptionsStore.Store
     {
         private readonly IDataClient _dataClient;
 
-        public OptionsStoreImpl(IDataClient dataClient)
-        {
-            _dataClient = dataClient;
-        }
+        public OptionsStoreImpl(IDataClient dataClient) => _dataClient = dataClient;
 
         public IAppOptions GetAppOptions(string applicationName)
         {

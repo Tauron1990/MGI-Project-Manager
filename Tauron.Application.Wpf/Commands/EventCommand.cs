@@ -10,10 +10,7 @@ namespace Tauron.Application.Wpf.Commands
 
         public event Action<object?>? ExecuteEvent;
 
-        public override bool CanExecute(object parameter)
-        {
-            return OnCanExecute(parameter);
-        }
+        public override bool CanExecute(object parameter) => OnCanExecute(parameter);
 
         public override void Execute(object parameter)
         {

@@ -54,15 +54,9 @@ namespace Tauron.Application.Wpf
         public static readonly DependencyProperty MarkWindowProperty =
             DependencyProperty.RegisterAttached("MarkWindow", typeof(string), typeof(ControlHelper), new UIPropertyMetadata(null, MarkWindowChanged));
 
-        public static string GetMarkControl(DependencyObject obj)
-        {
-            return (string) Argument.NotNull(obj, nameof(obj)).GetValue(MarkControlProperty);
-        }
+        public static string GetMarkControl(DependencyObject obj) => (string) Argument.NotNull(obj, nameof(obj)).GetValue(MarkControlProperty);
 
-        public static string GetMarkWindow(DependencyObject obj)
-        {
-            return (string) Argument.NotNull(obj, nameof(obj)).GetValue(MarkWindowProperty);
-        }
+        public static string GetMarkWindow(DependencyObject obj) => (string) Argument.NotNull(obj, nameof(obj)).GetValue(MarkWindowProperty);
 
         public static void SetMarkControl(DependencyObject obj, string value)
         {
@@ -170,7 +164,8 @@ namespace Tauron.Application.Wpf
                 if (priTarget == null) return;
 
                 foreach (var member in MemberInfoAttribute.GetMembers<WindowTargetAttribute>(DataContext.GetType())
-                    .Where(mem => mem.Item1 == realName))
+                   .Where(mem => mem.Item1 == realName))
+                {
                     try
                     {
                         member.Item2.SetInvokeMember(DataContext, priTarget);
@@ -181,6 +176,7 @@ namespace Tauron.Application.Wpf
 
                         throw;
                     }
+                }
             }
         }
     }

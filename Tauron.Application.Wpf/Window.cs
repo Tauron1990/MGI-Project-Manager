@@ -22,10 +22,10 @@ namespace Tauron.Application.Wpf
 
             _controlLogic = new ControlLogic(this, viewModel);
             DataContextChanged += (sender, args) =>
-            {
-                if (args.NewValue != _viewModel)
-                    ((FrameworkElement) sender).DataContext = _viewModel;
-            };
+                                  {
+                                      if (args.NewValue != _viewModel)
+                                          ((FrameworkElement) sender).DataContext = _viewModel;
+                                  };
         }
 
         void IBinderControllable.Register(string key, IControlBindable bindable, DependencyObject affectedPart)

@@ -9,9 +9,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
     {
         private TContext _context;
 
-#pragma warning disable CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
+        #pragma warning disable CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
         protected OperationViewModel()
-#pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
+            #pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
         {
             CancelCommand = new Command(OnCancelCommandExecute, CanCancelExecute);
         }
@@ -28,16 +28,11 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
 
         public Command CancelCommand { get; }
 
-        protected virtual bool CanCancelExecute()
-        {
-            return true;
-        }
+        protected virtual bool CanCancelExecute() => true;
 
         protected Task OnNextView<TType>(Redirection? redirection = null)
-            where TType : OperationViewModel<TContext>
-        {
-            return OnNextView(typeof(TType), Context, redirection);
-        }
+            where TType : OperationViewModel<TContext> =>
+            OnNextView(typeof(TType), Context, redirection);
 
         protected virtual void OnCancelCommandExecute()
         {
@@ -53,9 +48,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
         }
 
         protected Redirection CreateRedirection<TView>(RedirectionType redirectionType = RedirectionType.OnFinish)
-            where TView : OperationViewModel<TContext>
-        {
-            return new Redirection(Context, typeof(TView), redirectionType);
-        }
+            where TView : OperationViewModel<TContext> =>
+            new Redirection(Context, typeof(TView), redirectionType);
     }
 }

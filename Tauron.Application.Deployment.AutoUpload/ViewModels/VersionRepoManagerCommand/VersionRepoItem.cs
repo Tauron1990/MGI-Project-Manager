@@ -5,10 +5,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
 {
     public sealed class VersionRepoItem : SelectorItemBase
     {
-        public VersionRepoItem(VersionRepository versionRepository)
-        {
-            VersionRepository = versionRepository;
-        }
+        public VersionRepoItem(VersionRepository versionRepository) => VersionRepository = versionRepository;
 
         public VersionRepository VersionRepository { get; }
         public override string Name => VersionRepository.Name;

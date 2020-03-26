@@ -10,8 +10,6 @@ namespace Tauron.Application.Deployment.Server.CoreApp.Server.Impl
         private readonly DatabaseOptions _databaseOptions;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public string RepositoryRoot { get; private set; }
-
         public FileSystem(DatabaseOptions databaseOptions, IWebHostEnvironment webHostEnvironment)
         {
             _databaseOptions = databaseOptions;
@@ -20,15 +18,17 @@ namespace Tauron.Application.Deployment.Server.CoreApp.Server.Impl
             UpdatePaths();
         }
 
+        public string RepositoryRoot { get; private set; }
+
         private void DatabaseOptionsOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == nameof(_databaseOptions.ServerFileMode))
+            if (e.PropertyName == nameof(_databaseOptions.ServerFileMode))
                 UpdatePaths();
         }
 
         private void UpdatePaths()
         {
-            string basePath = string.Empty;
+            var basePath = string.Empty;
 
             switch (_databaseOptions.ServerFileMode)
             {
@@ -45,7 +45,7 @@ namespace Tauron.Application.Deployment.Server.CoreApp.Server.Impl
                     throw new ArgumentOutOfRangeException();
             }
 
-            if(basePath ==  "Invalid") 
+            if (basePath == "Invalid")
                 return;
 
             RepositoryRoot = Path.Combine(basePath, "Repositorys");

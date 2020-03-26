@@ -41,16 +41,10 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
 
         public FastObservableCollection<ProcesItem> Tasks { get; } = new FastObservableCollection<ProcesItem>();
 
-        protected override bool CanCancelExecute()
-        {
-            return IsInputActive;
-        }
+        protected override bool CanCancelExecute() => IsInputActive;
 
         [CommandTarget]
-        public bool CanOnNext()
-        {
-            return IsInputActive && RepoName.Contains('/');
-        }
+        public bool CanOnNext() => IsInputActive && RepoName.Contains('/');
 
         [CommandTarget]
         public async Task OnNext()

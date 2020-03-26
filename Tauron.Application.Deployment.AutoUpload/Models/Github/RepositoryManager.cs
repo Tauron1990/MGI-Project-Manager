@@ -38,28 +38,28 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Github
             return await ExceuteAut(arr[0], async client => await _client.Repository.Create(new NewRepository(arr[1])));
         }
 
-        public async Task<IEnumerable<Branch>> GetBranchs(Repository repository) 
+        public async Task<IEnumerable<Branch>> GetBranchs(Repository repository)
             => await _client.Repository.Branch.GetAll(repository.Id);
 
         public async Task<(string, int)> UploadAsset(long repoId, string fileName, string assetName, string name)
         {
             return await ExceuteAut(name, async client =>
-            {
-                var release = await client.Repository.Release.Create(repoId, new NewRelease(assetName) {Body = $"Automated Release of {assetName}"});
-                await using var rawData = File.Open(fileName, FileMode.Open);
-                var asset = await client.Repository.Release.UploadAsset(release, new ReleaseAssetUpload(assetName, "application/zip", rawData, null));
+                                          {
+                                              var release = await client.Repository.Release.Create(repoId, new NewRelease(assetName) {Body = $"Automated Release of {assetName}"});
+                                              await using var rawData = File.Open(fileName, FileMode.Open);
+                                              var asset = await client.Repository.Release.UploadAsset(release, new ReleaseAssetUpload(assetName, "application/zip", rawData, null));
 
-                return (asset.BrowserDownloadUrl, release.Id);
-            });
+                                              return (asset.BrowserDownloadUrl, release.Id);
+                                          });
         }
 
         public async Task DeleteRelease(long repo, int release, string name)
         {
             await ExceuteAut(name, async c =>
-            {
-                await c.Repository.Release.Delete(repo, release);
-                return string.Empty;
-            });
+                                   {
+                                       await c.Repository.Release.Delete(repo, release);
+                                       return string.Empty;
+                                   });
         }
 
         private async Task<TType> ExceuteAut<TType>(string name, Func<GitHubClient, Task<TType>> exec)
@@ -98,10 +98,10 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Github
                 _service = service;
             }
 
-            public Task<string?> GetCredentials() 
+            public Task<string?> GetCredentials()
                 => Task.FromResult(SecureStringToString(_service.GetToken(_name)));
 
-            public void Invalidate() 
+            public void Invalidate()
                 => _service.DeleteCredinals(_name);
 
             private string? SecureStringToString(SecureString? value)

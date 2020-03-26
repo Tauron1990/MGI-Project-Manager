@@ -25,9 +25,9 @@ namespace Tauron.Application.Wpf
             locator.Collection.Scan(
                 ts =>
                     ts.FromApplicationDependencies()
-                        .AddClasses(c => c.WithAttribute<ControlAttribute>())
-                        .As<FrameworkElement>().UsingRegistrationStrategy(new ControlRegistrar())
-                        .AddClasses().UsingAttributes());
+                       .AddClasses(c => c.WithAttribute<ControlAttribute>())
+                       .As<FrameworkElement>().UsingRegistrationStrategy(new ControlRegistrar())
+                       .AddClasses().UsingAttributes());
 
             config(locator.Collection);
 
@@ -61,40 +61,19 @@ namespace Tauron.Application.Wpf
 
             private readonly IServiceProvider _provider;
 
-            public MicrosoftTypeFactory(IServiceProvider provider)
-            {
-                _provider = provider;
-            }
+            public MicrosoftTypeFactory(IServiceProvider provider) => _provider = provider;
 
-            public object CreateInstance(Type typeToConstruct)
-            {
-                return GetObjectFactory(typeToConstruct, Enumerable.Empty<object>())(_provider, new object[0]);
-            }
+            public object CreateInstance(Type typeToConstruct) => GetObjectFactory(typeToConstruct, Enumerable.Empty<object>())(_provider, new object[0]);
 
-            public object CreateInstanceWithTag(Type typeToConstruct, object tag)
-            {
-                return CreateInstance(typeToConstruct);
-            }
+            public object CreateInstanceWithTag(Type typeToConstruct, object tag) => CreateInstance(typeToConstruct);
 
-            public object CreateInstanceWithParameters(Type typeToConstruct, params object[] parameters)
-            {
-                return GetObjectFactory(typeToConstruct, parameters)(_provider, parameters);
-            }
+            public object CreateInstanceWithParameters(Type typeToConstruct, params object[] parameters) => GetObjectFactory(typeToConstruct, parameters)(_provider, parameters);
 
-            public object CreateInstanceWithParametersWithTag(Type typeToConstruct, object tag, params object[] parameters)
-            {
-                return CreateInstanceWithParameters(typeToConstruct, parameters);
-            }
+            public object CreateInstanceWithParametersWithTag(Type typeToConstruct, object tag, params object[] parameters) => CreateInstanceWithParameters(typeToConstruct, parameters);
 
-            public object CreateInstanceWithParametersAndAutoCompletion(Type typeToConstruct, params object[] parameters)
-            {
-                return CreateInstanceWithParameters(typeToConstruct, parameters);
-            }
+            public object CreateInstanceWithParametersAndAutoCompletion(Type typeToConstruct, params object[] parameters) => CreateInstanceWithParameters(typeToConstruct, parameters);
 
-            public object CreateInstanceWithParametersAndAutoCompletionWithTag(Type typeToConstruct, object tag, params object[] parameters)
-            {
-                return CreateInstanceWithParameters(typeToConstruct, parameters);
-            }
+            public object CreateInstanceWithParametersAndAutoCompletionWithTag(Type typeToConstruct, object tag, params object[] parameters) => CreateInstanceWithParameters(typeToConstruct, parameters);
 
             public void ClearCache()
             {
@@ -143,15 +122,9 @@ namespace Tauron.Application.Wpf
                     }
                 }
 
-                public static bool operator ==(Key left, Key right)
-                {
-                    return Equals(left, right);
-                }
+                public static bool operator ==(Key left, Key right) => Equals(left, right);
 
-                public static bool operator !=(Key left, Key right)
-                {
-                    return !Equals(left, right);
-                }
+                public static bool operator !=(Key left, Key right) => !Equals(left, right);
             }
         }
 
@@ -159,10 +132,7 @@ namespace Tauron.Application.Wpf
         {
             private ServiceProvider? _serviceProvider;
 
-            public MicrosoftServiceLocator(ServiceCollection collection)
-            {
-                Collection = collection;
-            }
+            public MicrosoftServiceLocator(ServiceCollection collection) => Collection = collection;
 
             public ServiceCollection Collection { get; }
 
@@ -213,10 +183,7 @@ namespace Tauron.Application.Wpf
                 return Collection.Any(sr => sr.ServiceType == serviceType && sr.Lifetime != ServiceLifetime.Transient);
             }
 
-            public bool IsTypeRegisteredWithOrWithoutTag(Type serviceType)
-            {
-                return IsTypeRegistered(serviceType);
-            }
+            public bool IsTypeRegisteredWithOrWithoutTag(Type serviceType) => IsTypeRegistered(serviceType);
 
             public void RegisterInstance(Type serviceType, object instance, object? tag = null)
             {
@@ -231,11 +198,15 @@ namespace Tauron.Application.Wpf
                 ValidateCollectionChange();
 
                 if (registerIfAlreadyRegistered)
+                {
                     Collection.Add(new ServiceDescriptor(serviceType, serviceImplementationType,
                         registrationType == RegistrationType.Singleton ? ServiceLifetime.Singleton : ServiceLifetime.Transient));
+                }
                 else
+                {
                     Collection.TryAdd(new ServiceDescriptor(serviceType, serviceImplementationType,
                         registrationType == RegistrationType.Singleton ? ServiceLifetime.Singleton : ServiceLifetime.Transient));
+                }
 
                 TypeRegistered?.Invoke(this, new TypeRegisteredEventArgs(serviceType, serviceImplementationType, tag, registrationType));
             }
@@ -257,15 +228,9 @@ namespace Tauron.Application.Wpf
                 TypeRegistered?.Invoke(this, new TypeRegisteredEventArgs(serviceType, null, tag, registrationType));
             }
 
-            public object? ResolveType(Type serviceType, object? tag = null)
-            {
-                return GetService(serviceType);
-            }
+            public object? ResolveType(Type serviceType, object? tag = null) => GetService(serviceType);
 
-            public IEnumerable<object> ResolveTypes(Type serviceType)
-            {
-                return InternalServiceProvider.GetServices(serviceType);
-            }
+            public IEnumerable<object> ResolveTypes(Type serviceType) => InternalServiceProvider.GetServices(serviceType);
 
             public bool AreAllTypesRegistered(params Type[] types)
             {
@@ -282,10 +247,7 @@ namespace Tauron.Application.Wpf
                 return types.Select(s => InternalServiceProvider.GetRequiredService(s)).ToArray();
             }
 
-            public object?[] ResolveMultipleTypes(params Type[] types)
-            {
-                return types.Select(GetService).ToArray();
-            }
+            public object?[] ResolveMultipleTypes(params Type[] types) => types.Select(GetService).ToArray();
 
             public void RemoveType(Type serviceType, object? tag = null)
             {
@@ -294,10 +256,13 @@ namespace Tauron.Application.Wpf
                 if (desc == null) return;
 
                 if (Collection.Remove(desc))
+                {
                     TypeUnregistered?.Invoke(this,
                         new TypeUnregisteredEventArgs(desc.ServiceType, desc.ImplementationType, null,
                             desc.Lifetime == ServiceLifetime.Transient ? RegistrationType.Transient : RegistrationType.Singleton,
                             desc.ImplementationInstance));
+                }
+
                 TypeUnregistered?.Invoke(this, new TypeUnregisteredEventArgs(desc.ServiceType, desc.ImplementationType, tag, desc.Lifetime == ServiceLifetime.Transient ? RegistrationType.Transient : RegistrationType.Singleton));
             }
 
@@ -306,6 +271,7 @@ namespace Tauron.Application.Wpf
                 ValidateCollectionChange();
                 var desc = Collection.FirstOrDefault(sd => sd.ServiceType == serviceType);
                 while (desc != null)
+                {
                     if (Collection.Remove(desc))
                     {
                         TypeUnregistered?.Invoke(this,
@@ -318,9 +284,8 @@ namespace Tauron.Application.Wpf
                         desc = Collection.FirstOrDefault(sd => sd.ServiceType == serviceType);
                     }
                     else
-                    {
                         break;
-                    }
+                }
             }
 
             public bool CanResolveNonAbstractTypesWithoutRegistration

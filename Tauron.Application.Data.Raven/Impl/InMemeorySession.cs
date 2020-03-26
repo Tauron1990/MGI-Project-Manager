@@ -7,7 +7,7 @@ namespace Tauron.Application.Data.Raven.Impl
     {
         private readonly InMemoryStore _store;
 
-        public InMemeorySession(InMemoryStore store, ReaderWriterLockSlim locker) 
+        public InMemeorySession(InMemoryStore store, ReaderWriterLockSlim locker)
             : base(locker) => _store = store;
 
         public override Task<T> LoadAsync<T>(string id) => _store.LoadAsync<T>(id);

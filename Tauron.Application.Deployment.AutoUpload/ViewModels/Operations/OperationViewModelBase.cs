@@ -28,10 +28,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
         }
 
         protected Task OnNextView<TType, TNewContext>(TNewContext newContext, Redirection? redirection = null)
-            where TType : OperationViewModel<TNewContext> where TNewContext : OperationContextBase
-        {
-            return OnNextView(typeof(TType), newContext, redirection);
-        }
+            where TType : OperationViewModel<TNewContext> where TNewContext : OperationContextBase =>
+            OnNextView(typeof(TType), newContext, redirection);
 
         protected async Task OnNextView(Type arg1, OperationContextBase arg2, Redirection? redirection = null)
         {
@@ -61,6 +59,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
         {
             var currentRedirection = _currentContext?.Redirection;
             if (currentRedirection != null)
+            {
                 if (currentRedirection.RedirectionType == RedirectionType.OnFinish)
                 {
                     if (_currentContext != null)
@@ -68,14 +67,12 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
                     NextView?.Invoke(currentRedirection.RedirectionView, currentRedirection.RedirectionContext);
                     return;
                 }
+            }
 
             await OnNextView<CommonFinishViewModel, FinishContext>(new FinishContext(message));
         }
 
-        protected Task OnReturn()
-        {
-            return OnNextView(typeof(CommandViewModel), OperationContextBase.Empty);
-        }
+        protected Task OnReturn() => OnNextView(typeof(CommandViewModel), OperationContextBase.Empty);
 
         public virtual void SetContext(OperationContextBase contextBase)
         {

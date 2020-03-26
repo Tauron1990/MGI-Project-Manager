@@ -37,9 +37,6 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
         }
 
         [CommandTarget]
-        public bool CanOnNext()
-        {
-            return VersionOk == true && RepoOk == true;
-        }
+        public bool CanOnNext() => VersionOk == true && RepoOk == true;
     }
 }

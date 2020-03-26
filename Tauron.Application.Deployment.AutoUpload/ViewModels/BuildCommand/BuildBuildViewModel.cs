@@ -71,13 +71,9 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
                     await OnNextView<BuildErrorViewModel>();
                 }
                 else if (Context.NoLocatonOpening)
-                {
                     await OnFinish("Erstellen erfolgreich");
-                }
                 else
-                {
                     await OnNextView<BuildOpenLocationViewModel>();
-                }
             }
             catch (Exception e)
             {
@@ -116,17 +112,11 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
                     Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
                     Process.Start("xdg-open", url);
-                }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
                     Process.Start("open", url);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
     }

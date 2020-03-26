@@ -8,7 +8,7 @@ namespace Tauron.Application.Deployment.Server.Pages.Setup
     {
         private const string QueryIdName = "SetupID";
 
-        public static string MakeSetupUri(this string uri, string id) 
+        public static string MakeSetupUri(this string uri, string id)
             => QueryHelpers.AddQueryString(uri, QueryIdName, id);
 
         public static string ReadSetupId(this NavigationManager navManager)
@@ -17,5 +17,5 @@ namespace Tauron.Application.Deployment.Server.Pages.Setup
 
             return QueryHelpers.ParseQuery(uri.Query).TryGetValue(QueryIdName, out var param) ? param.FirstOrDefault() ?? "Invalid" : "Invalid";
         }
-}
+    }
 }

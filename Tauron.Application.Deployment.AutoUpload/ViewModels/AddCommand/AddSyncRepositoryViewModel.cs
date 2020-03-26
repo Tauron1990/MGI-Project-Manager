@@ -68,8 +68,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
                 else
                 {
                     var registrepo = _settings.RegistratedRepositories
-                        .Where(rr => rr.RepositoryName == Context.Repository.FullName)
-                        .FirstOrDefault(rr => rr.BranchName == Context.Branch.Name);
+                       .Where(rr => rr.RepositoryName      == Context.Repository.FullName)
+                       .FirstOrDefault(rr => rr.BranchName == Context.Branch.Name);
 
                     if (registrepo != null)
                     {
@@ -111,34 +111,32 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
         private bool TransferProgressHandler(TransferProgress progress)
         {
             return TryUpdate(ref _updateCount1, () =>
-            {
-                Intermediate = false;
+                                                {
+                                                    Intermediate = false;
 
-                ProgressMaximum = progress.TotalObjects;
-                ProgressValue = progress.ReceivedObjects;
+                                                    ProgressMaximum = progress.TotalObjects;
+                                                    ProgressValue = progress.ReceivedObjects;
 
-                ProgressLine = $"Objects: {progress.ReceivedObjects}/{progress.TotalObjects} -- Bytes: {progress.ReceivedBytes}";
-                return true;
-            });
+                                                    ProgressLine = $"Objects: {progress.ReceivedObjects}/{progress.TotalObjects} -- Bytes: {progress.ReceivedBytes}";
+                                                    return true;
+                                                });
         }
 
         private bool ProgressHandler(string serverprogressoutput)
         {
             return TryUpdate(ref _updateCount2, () =>
-            {
-                if (_currentLine == 10)
-                {
-                    _currentLine = 0;
-                    OutputLines = serverprogressoutput;
-                }
-                else
-                {
-                    OutputLines = $"{OutputLines}{Environment.NewLine}{serverprogressoutput}";
-                }
+                                                {
+                                                    if (_currentLine == 10)
+                                                    {
+                                                        _currentLine = 0;
+                                                        OutputLines = serverprogressoutput;
+                                                    }
+                                                    else
+                                                        OutputLines = $"{OutputLines}{Environment.NewLine}{serverprogressoutput}";
 
-                _currentLine++;
-                return true;
-            });
+                                                    _currentLine++;
+                                                    return true;
+                                                });
         }
 
         private bool TryUpdate(ref int value, Func<bool> updater)

@@ -8,9 +8,9 @@ namespace Tauron.Application.Data.Raven.Impl
     public sealed class DatabaseCacheImpl : IDatabaseCache, IDisposable
     {
         private readonly ReaderWriterLockSlim _changeLock = new ReaderWriterLockSlim(0);
-        private readonly IOptionsMonitor<DatabaseOption> _options;
-        private readonly ConcurrentDictionary<string, DatabaseRootImpl> _databases = new ConcurrentDictionary<string, DatabaseRootImpl>();
         private readonly IDisposable _changeToken;
+        private readonly ConcurrentDictionary<string, DatabaseRootImpl> _databases = new ConcurrentDictionary<string, DatabaseRootImpl>();
+        private readonly IOptionsMonitor<DatabaseOption> _options;
 
         public DatabaseCacheImpl(IOptionsMonitor<DatabaseOption> options)
         {
@@ -20,7 +20,7 @@ namespace Tauron.Application.Data.Raven.Impl
                                                  _changeLock.EnterWriteLock();
                                                  try
                                                  {
-                                                     foreach (var impl in _databases.Values) 
+                                                     foreach (var impl in _databases.Values)
                                                          impl.OptionsChanged(option);
                                                  }
                                                  finally
@@ -30,12 +30,12 @@ namespace Tauron.Application.Data.Raven.Impl
                                              });
         }
 
-        public IDatabaseRoot Get(string databaseName) 
+        public IDatabaseRoot Get(string databaseName)
             => _databases.GetOrAdd(databaseName, s => new DatabaseRootImpl(_options.CurrentValue, _changeLock, databaseName).Initislize());
 
         public void Dispose()
         {
-            foreach (var root in _databases.Values) 
+            foreach (var root in _databases.Values)
                 root.Dispose();
 
             _databases.Clear();

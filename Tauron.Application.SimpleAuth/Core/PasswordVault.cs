@@ -7,24 +7,23 @@ using Serilog;
 using Serilog.Context;
 using Tauron.Application.Logging;
 using Tauron.Application.OptionsStore;
-using Tauron.Application.OptionsStore.Store;
 
 namespace Tauron.Application.SimpleAuth.Core
 {
     public class PasswordVault : IDisposable, IPasswordVault
     {
         public const string PasswortName = "Vault-Password";
+        private readonly IDisposable _changeToken;
+        private readonly PasswordHasher<string> _hasher = new PasswordHasher<string>();
+        private readonly AsyncReaderWriterLock _lock = new AsyncReaderWriterLock();
 
 
         private readonly ILogger _logger;
-        private readonly AsyncReaderWriterLock _lock = new AsyncReaderWriterLock();
-        private readonly IDisposable _changeToken;
-        private readonly PasswordHasher<string> _hasher = new PasswordHasher<string>();
-
-        private SimplAuthSettings _settings;
 
         private IAppOptions _appOptions;
         private IOption? _password;
+
+        private SimplAuthSettings _settings;
 
 
         // ReSharper disable once SuggestBaseTypeForParameter
@@ -37,20 +36,19 @@ namespace Tauron.Application.SimpleAuth.Core
             _appOptions = optionsStore.GetAppOptions(NameGetter());
 
             _changeToken = settings.OnChange(parm =>
-            {
-                _logger.Information("Simple Auth Settings Changed: {SimpleAuthConfig}", parm.AppName);
+                                             {
+                                                 _logger.Information("Simple Auth Settings Changed: {SimpleAuthConfig}", parm.AppName);
 
-                _settings = parm;
+                                                 _settings = parm;
 
-                using var l = _lock.WriterLock();
+                                                 using var l = _lock.WriterLock();
 
-                _appOptions = optionsStore.GetAppOptions(NameGetter());
-                _password = null;
-
-            });
+                                                 _appOptions = optionsStore.GetAppOptions(NameGetter());
+                                                 _password = null;
+                                             });
         }
 
-        public void Dispose() 
+        public void Dispose()
             => _changeToken.Dispose();
 
         public async Task<bool> CheckPassword(string pass)
@@ -120,7 +118,7 @@ namespace Tauron.Application.SimpleAuth.Core
             }
         }
 
-        private string HashPassword(string pass) 
+        private string HashPassword(string pass)
             => _hasher.HashPassword(PasswortName, pass);
     }
 }

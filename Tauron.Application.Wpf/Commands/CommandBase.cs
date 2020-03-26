@@ -12,10 +12,7 @@ namespace Tauron.Application.Wpf.Commands
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        public virtual bool CanExecute([CanBeNull] object parameter)
-        {
-            return true;
-        }
+        public virtual bool CanExecute([CanBeNull] object parameter) => true;
 
         public abstract void Execute([CanBeNull] object parameter);
 

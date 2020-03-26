@@ -17,15 +17,9 @@ namespace Tauron.Application.Wpf.Converter
         [NotNull]
         protected abstract IValueConverter Create();
 
-        protected static IValueConverter CreateStringConverter<TType>(Func<TType, string> converter)
-        {
-            return new FuncStringConverter<TType>(converter);
-        }
+        protected static IValueConverter CreateStringConverter<TType>(Func<TType, string> converter) => new FuncStringConverter<TType>(converter);
 
-        protected static IValueConverter CreateCommonConverter<TSource, TDest>(Func<TSource, TDest> converter)
-        {
-            return new FuncCommonConverter<TSource, TDest>(converter);
-        }
+        protected static IValueConverter CreateCommonConverter<TSource, TDest>(Func<TSource, TDest> converter) => new FuncCommonConverter<TSource, TDest>(converter);
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
@@ -38,30 +32,18 @@ namespace Tauron.Application.Wpf.Converter
         {
             private readonly Func<TSource, TDest> _func;
 
-            public FuncCommonConverter(Func<TSource, TDest> func)
-            {
-                _func = func;
-            }
+            public FuncCommonConverter(Func<TSource, TDest> func) => _func = func;
 
-            protected override TDest Convert(TSource value)
-            {
-                return _func(value);
-            }
+            protected override TDest Convert(TSource value) => _func(value);
         }
 
         private class FuncStringConverter<TType> : StringConverterBase<TType>
         {
             private readonly Func<TType, string> _converter;
 
-            public FuncStringConverter(Func<TType, string> converter)
-            {
-                _converter = converter;
-            }
+            public FuncStringConverter(Func<TType, string> converter) => _converter = converter;
 
-            protected override string Convert(TType value)
-            {
-                return _converter(value);
-            }
+            protected override string Convert(TType value) => _converter(value);
         }
 
         protected abstract class StringConverterBase<TSource> : ValueConverterBase<TSource, string>
@@ -89,10 +71,7 @@ namespace Tauron.Application.Wpf.Converter
 
             protected abstract TDest Convert(TSource value);
 
-            protected virtual TSource ConvertBack(TDest value)
-            {
-                return default!;
-            }
+            protected virtual TSource ConvertBack(TDest value) => default!;
         }
     }
 }

@@ -2,14 +2,13 @@
 {
     public class CoreConfig
     {
-        public string ConnectionString { get; set; } = string.Empty;
-
-        public CoreConfig(string connectionString) 
+        public CoreConfig(string connectionString)
             => ConnectionString = connectionString;
 
         public CoreConfig()
         {
-            
         }
+
+        public string ConnectionString { get; set; } = string.Empty;
     }
 }

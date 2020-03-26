@@ -7,10 +7,7 @@ namespace Tauron.Application.Wpf
     [AttributeUsage(AttributeTargets.Class)]
     public class ControlAttribute : Attribute
     {
-        public ControlAttribute(Type modelType)
-        {
-            ModelType = modelType;
-        }
+        public ControlAttribute(Type modelType) => ModelType = modelType;
 
         public Type ModelType { get; }
     }

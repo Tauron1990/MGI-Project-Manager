@@ -28,21 +28,21 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
         public async Task<string> Request(string caption, string description)
         {
             return await _dispatcherService.InvokeAsync(() =>
-            {
-                var diag = new InputDialog
-                {
-                    AllowCancel = true,
-                    InstructionText = description,
-                    MainText = caption
-                };
+                                                        {
+                                                            var diag = new InputDialog
+                                                                       {
+                                                                           AllowCancel = true,
+                                                                           InstructionText = description,
+                                                                           MainText = caption
+                                                                       };
 
-                return diag.ShowDialog() == true ? diag.Result : string.Empty;
-            });
+                                                            return diag.ShowDialog() == true ? diag.Result : string.Empty;
+                                                        });
         }
 
         public SecureString? GetToken(string userName)
         {
-            if(string.IsNullOrWhiteSpace(userName))
+            if (string.IsNullOrWhiteSpace(userName))
                 return null;
 
             var realUserName = userName + "-t";
@@ -88,13 +88,13 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                 _dispatcherService.Invoke(() => result = getUi());
                 var p = SecureStringToString(result.Passwort);
 
-                if(!string.IsNullOrWhiteSpace(p))
+                if (!string.IsNullOrWhiteSpace(p))
                     _dataStore.Set(result.UserName, p);
             }
             else
             {
                 var password = new SecureString();
-                foreach (var c in pass) 
+                foreach (var c in pass)
                     password.AppendChar(c);
                 result = (userName, password);
             }

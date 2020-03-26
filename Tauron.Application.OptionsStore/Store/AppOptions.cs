@@ -6,27 +6,6 @@ namespace Tauron.Application.OptionsStore.Store
 {
     public sealed class AppOptions : IAppOptions
     {
-        private class Dummy : IOptionDataCollection
-        {
-            public Task<OptionsPair> GetOptionAsync(string key) => throw new NotSupportedException();
-
-            public Task DeleteOptionAsync(string key) => throw new NotSupportedException();
-
-            public Task UpdateAsync(OptionsPair pair) => throw new NotSupportedException();
-
-            public OptionsPair GetOption(string key) => throw new NotSupportedException();
-
-            public void DeleteOption(string key)
-            {
-                throw new NotSupportedException();
-            }
-
-            public void Update(OptionsPair pair)
-            {
-                throw new NotSupportedException();
-            }
-        }
-
         private readonly IDataClient _dataClient;
         private IOptionDataCollection _dataCollection = new Dummy();
 
@@ -34,7 +13,6 @@ namespace Tauron.Application.OptionsStore.Store
         {
             _dataClient = dataClient;
             Name = name;
-
         }
 
         public string Name { get; }
@@ -69,6 +47,27 @@ namespace Tauron.Application.OptionsStore.Store
 
         public void Dispose()
         {
+        }
+
+        private class Dummy : IOptionDataCollection
+        {
+            public Task<OptionsPair> GetOptionAsync(string key) => throw new NotSupportedException();
+
+            public Task DeleteOptionAsync(string key) => throw new NotSupportedException();
+
+            public Task UpdateAsync(OptionsPair pair) => throw new NotSupportedException();
+
+            public OptionsPair GetOption(string key) => throw new NotSupportedException();
+
+            public void DeleteOption(string key)
+            {
+                throw new NotSupportedException();
+            }
+
+            public void Update(OptionsPair pair)
+            {
+                throw new NotSupportedException();
+            }
         }
     }
 }

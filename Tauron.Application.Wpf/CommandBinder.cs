@@ -46,26 +46,14 @@ namespace Tauron.Application.Wpf
             return val;
         }
 
-        public static string GetCommand(DependencyObject obj)
-        {
-            return (string) Argument.NotNull(obj, nameof(obj)).GetValue(CommandProperty);
-        }
+        public static string GetCommand(DependencyObject obj) => (string) Argument.NotNull(obj, nameof(obj)).GetValue(CommandProperty);
 
 
-        public static string GetCustomPropertyName(DependencyObject obj)
-        {
-            return (string) Argument.NotNull(obj, nameof(obj)).GetValue(CustomPropertyNameProperty);
-        }
+        public static string GetCustomPropertyName(DependencyObject obj) => (string) Argument.NotNull(obj, nameof(obj)).GetValue(CustomPropertyNameProperty);
 
-        public static ICommand? GetTargetCommand(DependencyObject obj)
-        {
-            return (ICommand) Argument.NotNull(obj, nameof(obj)).GetValue(TargetCommandProperty);
-        }
+        public static ICommand? GetTargetCommand(DependencyObject obj) => (ICommand) Argument.NotNull(obj, nameof(obj)).GetValue(TargetCommandProperty);
 
-        public static bool GetUseDirect(DependencyObject obj)
-        {
-            return (bool) Argument.NotNull(obj, nameof(obj)).GetValue(UseDirectProperty);
-        }
+        public static bool GetUseDirect(DependencyObject obj) => (bool) Argument.NotNull(obj, nameof(obj)).GetValue(UseDirectProperty);
 
         public static void Register(RoutedCommand command)
         {
@@ -330,9 +318,9 @@ namespace Tauron.Application.Wpf
                     var methods =
                         targetType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                     var main = (from method in methods
-                        let attr = method.GetCustomAttribute<CommandTargetAttribute>()
-                        where attr != null && attr.ProvideMemberName(method) == Name
-                        select new {Method = method, IsSync = attr.Synchronize}).FirstOrDefault();
+                                let attr = method.GetCustomAttribute<CommandTargetAttribute>()
+                                where attr != null && attr.ProvideMemberName(method) == Name
+                                select new {Method = method, IsSync = attr.Synchronize}).FirstOrDefault();
                     if (main == null)
                     {
                         Debug.Print($"CommandBinder: No Command-Method Found: {Name}");
@@ -519,7 +507,7 @@ namespace Tauron.Application.Wpf
                             var tarType = AffectedObject.GetType();
                             _prop = tarType.GetProperty(CustomName ?? string.Empty);
                             if (_prop != null
-                                && (!_prop.CanWrite || !typeof(ICommand).IsAssignableFrom(_prop.PropertyType)))
+                             && (!_prop.CanWrite || !typeof(ICommand).IsAssignableFrom(_prop.PropertyType)))
                             {
                                 var typeName = tarType.ToString();
                                 var propName = _prop == null ? CustomName + "(Not Found)" : _prop.Name;

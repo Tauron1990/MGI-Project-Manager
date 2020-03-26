@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using JetBrains.Annotations;
 using Moq;
 
@@ -13,12 +12,9 @@ namespace TestHelpers.Core
 
         private Action<Mock<TInterface>>? _assert;
 
-        public Mock<TInterface> Mock { get; } = new Mock<TInterface>();
+        public MockConfiguration(ServicesConfiguration configuration) => _configuration = configuration;
 
-        public MockConfiguration(ServicesConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+        public Mock<TInterface> Mock { get; } = new Mock<TInterface>();
 
         public MockConfiguration<TInterface> For(Action<Mock<TInterface>> action)
         {
@@ -34,7 +30,7 @@ namespace TestHelpers.Core
 
         public ServicesConfiguration BuildService()
         {
-            _configuration.ServiceEntries.Add(new MockGenericServiceEntry<TInterface>(Mock) { Asseration = _assert});
+            _configuration.ServiceEntries.Add(new MockGenericServiceEntry<TInterface>(Mock) {Asseration = _assert});
             return _configuration;
         }
     }

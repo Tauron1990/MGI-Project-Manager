@@ -8,10 +8,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Common
     [ServiceDescriptor(typeof(CommonFinishViewModel))]
     public class CommonFinishViewModel : OperationViewModel<FinishContext>
     {
-        public CommonFinishViewModel()
-        {
-            ReturnCommand = new TaskCommand(OnReturnCommandExecute);
-        }
+        public CommonFinishViewModel() => ReturnCommand = new TaskCommand(OnReturnCommandExecute);
 
         public string? Message { get; private set; }
 

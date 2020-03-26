@@ -27,9 +27,9 @@ namespace Tauron.Application.Pipes.IO
             await Connect(_pipeStream);
 
             if (CanRead)
-#pragma warning disable 4014
+                #pragma warning disable 4014
                 Task.Run(BeginRead);
-#pragma warning restore 4014
+            #pragma warning restore 4014
         }
 
         public async Task Write(byte[] data)

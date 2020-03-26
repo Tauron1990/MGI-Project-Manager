@@ -30,12 +30,12 @@ namespace Tauron.Application.Wpf
             var fe = obj as FrameworkElement;
             var fce = obj as FrameworkContentElement;
 
-            _isFe = fe != null;
+            _isFe = fe   != null;
             _isFce = fce != null;
             IsValid = _isFce || _isFe;
 
             // ReSharper disable AssignNullToNotNullAttribute
-            if (fe != null) _fe = new ElementReference<FrameworkElement>(fe, isWeak);
+            if (fe       != null) _fe = new ElementReference<FrameworkElement>(fe, isWeak);
             else if (fce != null) _fce = new ElementReference<FrameworkContentElement>(fce, isWeak);
             // ReSharper restore AssignNullToNotNullAttribute
         }

@@ -22,10 +22,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
             _inputService = inputService;
         }
 
-        public bool Exis(string path)
-        {
-            return Directory.Exists(path) && Repository.IsValid(path);
-        }
+        public bool Exis(string path) => Directory.Exists(path) && Repository.IsValid(path);
 
         public void CreateRepository(string repoPath, string url)
         {
@@ -51,15 +48,15 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
                 new PullOptions
                 {
                     FetchOptions = new FetchOptions
-                    {
-                        OnProgress = progressHandler,
-                        OnTransferProgress = transferProgressHandler
-                    },
+                                   {
+                                       OnProgress = progressHandler,
+                                       OnTransferProgress = transferProgressHandler
+                                   },
                     MergeOptions = new MergeOptions
-                    {
-                        CommitOnSuccess = true,
-                        FailOnConflict = true
-                    }
+                                   {
+                                       CommitOnSuccess = true,
+                                       FailOnConflict = true
+                                   }
                 });
         }
 
@@ -88,8 +85,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
         {
             var status = repo.RetrieveStatus();
             var filePaths = status.Modified.Select(mods => mods.FilePath)
-                .Concat(status.Added.Select(e => e.FilePath))
-                .Concat(status.Removed.Select(e => e.FilePath)).ToHashSet();
+               .Concat(status.Added.Select(e => e.FilePath))
+               .Concat(status.Removed.Select(e => e.FilePath)).ToHashSet();
             Commands.Stage(repo, filePaths);
         }
 

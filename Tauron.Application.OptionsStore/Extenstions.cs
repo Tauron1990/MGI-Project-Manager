@@ -2,7 +2,6 @@
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Raven.Client.Documents;
 using Tauron.Application.Data.Raven;
 using Tauron.Application.OptionsStore.Data;
 using Tauron.Application.OptionsStore.Data.RavenDb;

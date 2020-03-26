@@ -6,22 +6,6 @@ namespace Tauron.Application.OptionsStore.Store
 {
     public sealed class OptionImpl : IOption
     {
-        private sealed class Empty : IOption
-        {
-            public string Key { get; } = string.Empty;
-            public string Value { get; } = string.Empty;
-            public Task SetValueAsync(string value)
-            {
-                return Task.CompletedTask;
-            }
-
-            public void SetValue(string value)
-            {
-            }
-        } 
-
-        public static IOption EmptyOption { get; } = new Empty();
-
         private readonly Func<OptionsPair, Task> _update;
         private readonly Action<OptionsPair> _updateSync;
 
@@ -32,6 +16,8 @@ namespace Tauron.Application.OptionsStore.Store
             Key = key;
             Value = value;
         }
+
+        public static IOption EmptyOption { get; } = new Empty();
 
         public string Key { get; }
         public string Value { get; private set; }
@@ -45,6 +31,18 @@ namespace Tauron.Application.OptionsStore.Store
         public void SetValue(string value)
         {
             _updateSync(new OptionsPair(value, Key));
+        }
+
+        private sealed class Empty : IOption
+        {
+            public string Key { get; } = string.Empty;
+            public string Value { get; } = string.Empty;
+
+            public Task SetValueAsync(string value) => Task.CompletedTask;
+
+            public void SetValue(string value)
+            {
+            }
         }
     }
 }

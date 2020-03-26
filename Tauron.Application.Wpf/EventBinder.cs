@@ -23,10 +23,7 @@ namespace Tauron.Application.Wpf
             DependencyProperty.RegisterAttached("Events", typeof(string), typeof(EventBinder), new UIPropertyMetadata(null, OnEventsChanged));
 
         [NotNull]
-        public static string GetEvents(DependencyObject obj)
-        {
-            return (string) Argument.NotNull(obj, nameof(obj)).GetValue(EventsProperty);
-        }
+        public static string GetEvents(DependencyObject obj) => (string) Argument.NotNull(obj, nameof(obj)).GetValue(EventsProperty);
 
         public static void SetEvents(DependencyObject obj, string value)
         {
@@ -100,11 +97,11 @@ namespace Tauron.Application.Wpf
                 var hostType = host.GetType();
                 var dataContextInfos =
                     (from entry in dataContext.GetType().FindMemberAttributes<EventTargetAttribute>(true)
-                        select new CommandMember(
-                            entry.Item2.ProvideMemberName(entry.Item1),
-                            entry.Item1,
-                            entry.Item2.Synchronize,
-                            entry.Item2.Converter)).ToArray();
+                     select new CommandMember(
+                         entry.Item2.ProvideMemberName(entry.Item1),
+                         entry.Item1,
+                         entry.Item2.Synchronize,
+                         entry.Item2.Converter)).ToArray();
 
                 foreach (var pair in events)
                 {
@@ -141,7 +138,7 @@ namespace Tauron.Application.Wpf
             private class InternalEventLinker : IDisposable
             {
                 private static readonly MethodInfo Method = typeof(InternalEventLinker).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic)
-                    .First(m => m.Name == "Handler");
+                   .First(m => m.Name == "Handler");
 
                 private readonly object _dataContext;
 
@@ -245,7 +242,7 @@ namespace Tauron.Application.Wpf
                     try
                     {
                         var localSender = _simpleConverter?.ConvertFrom(sender) ?? sender;
-                        var localEventArgs = _simpleConverter?.ConvertFrom(e) ?? e;
+                        var localEventArgs = _simpleConverter?.ConvertFrom(e)   ?? e;
 
                         var data = new EventData(localSender, localEventArgs);
 
@@ -281,7 +278,7 @@ namespace Tauron.Application.Wpf
                         Context = Argument.NotNull(context, nameof(context));
 
                         _methodType = (MethodType) method.GetParameters().Length;
-                        if (_methodType != MethodType.One) return;
+                        if (_methodType                              != MethodType.One) return;
                         if (_method.GetParameters()[0].ParameterType != typeof(EventData)) _methodType = MethodType.EventArgs;
                     }
 

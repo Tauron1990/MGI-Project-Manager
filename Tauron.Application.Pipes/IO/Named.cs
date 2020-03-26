@@ -7,16 +7,10 @@ namespace Tauron.Application.Pipes.IO
     public static class Named
     {
         [PublicAPI]
-        public static IPipe Client(string name)
-        {
-            return new ClientImpl(name);
-        }
+        public static IPipe Client(string name) => new ClientImpl(name);
 
         [PublicAPI]
-        public static IPipe Server(string name)
-        {
-            return new ServerImpl(name);
-        }
+        public static IPipe Server(string name) => new ServerImpl(name);
 
         private class ClientImpl : PipeBase
         {

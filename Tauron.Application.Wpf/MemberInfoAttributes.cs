@@ -9,10 +9,7 @@ namespace Tauron.Application.Wpf
     [PublicAPI]
     public abstract class MemberInfoAttribute : Attribute
     {
-        protected MemberInfoAttribute(string? memberName)
-        {
-            MemberName = memberName;
-        }
+        protected MemberInfoAttribute(string? memberName) => MemberName = memberName;
 
         public string? MemberName { get; }
 
@@ -22,7 +19,7 @@ namespace Tauron.Application.Wpf
             where TAttribute : MemberInfoAttribute
         {
             return targetType.FindMemberAttributes<TAttribute>(true)
-                .Select(attribute => Tuple.Create(attribute.Item2.ProvideMemberName(attribute.Item1), attribute.Item1));
+               .Select(attribute => Tuple.Create(attribute.Item2.ProvideMemberName(attribute.Item1), attribute.Item1));
         }
 
         public static void InvokeMembers<TAttribute>(object instance, string targetMember, params object[] parameters)
@@ -36,9 +33,6 @@ namespace Tauron.Application.Wpf
                 member.Item2.SetInvokeMember(instance, Argument.NotNull(parameters, nameof(parameters)));
         }
 
-        public virtual string ProvideMemberName(MemberInfo info)
-        {
-            return MemberName ?? Argument.NotNull(info, nameof(info)).Name;
-        }
+        public virtual string ProvideMemberName(MemberInfo info) => MemberName ?? Argument.NotNull(info, nameof(info)).Name;
     }
 }

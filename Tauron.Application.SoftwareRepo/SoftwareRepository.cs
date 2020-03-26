@@ -13,10 +13,7 @@ namespace Tauron.Application.SoftwareRepo
 
         private readonly string _path;
 
-        private SoftwareRepository(string path)
-        {
-            _path = path;
-        }
+        private SoftwareRepository(string path) => _path = path;
 
         public ApplicationList ApplicationList { get; private set; } = new ApplicationList(ImmutableList<ApplicationEntry>.Empty, string.Empty, string.Empty);
 
@@ -40,10 +37,7 @@ namespace Tauron.Application.SoftwareRepo
             await File.WriteAllTextAsync(compledPath, JsonConvert.SerializeObject(ApplicationList));
         }
 
-        private string GetFullPath()
-        {
-            return Path.Combine(_path, FileName);
-        }
+        private string GetFullPath() => Path.Combine(_path, FileName);
 
         public static async Task<SoftwareRepository> Create(string path)
         {
@@ -59,10 +53,7 @@ namespace Tauron.Application.SoftwareRepo
             return temp;
         }
 
-        public static bool IsValid(string path)
-        {
-            return File.Exists(Path.Combine(path, FileName));
-        }
+        public static bool IsValid(string path) => File.Exists(Path.Combine(path, FileName));
 
         public async Task Save()
         {
@@ -79,10 +70,7 @@ namespace Tauron.Application.SoftwareRepo
             await Save();
         }
 
-        public object CreateBackup()
-        {
-            return new ApplicationList(ApplicationList);
-        }
+        public object CreateBackup() => new ApplicationList(ApplicationList);
 
         public void Revert(object backup)
         {

@@ -11,9 +11,11 @@ namespace Tauron.Application.Wpf.Commands
             EventArgs = Argument.NotNull(eventArgs, nameof(eventArgs));
         }
 
-        [NotNull] public object EventArgs { get; }
+        [NotNull]
+        public object EventArgs { get; }
 
-        [NotNull] public object Sender { get; }
+        [NotNull]
+        public object Sender { get; }
     }
 
     /// <summary>The method command.</summary>
@@ -28,7 +30,7 @@ namespace Tauron.Application.Wpf.Commands
             Context = Argument.NotNull(context, nameof(context));
 
             _methodType = (MethodType) method.GetParameters().Length;
-            if (_methodType != MethodType.One) return;
+            if (_methodType                              != MethodType.One) return;
             if (_method.GetParameters()[0].ParameterType != typeof(EventData)) _methodType = MethodType.EventArgs;
         }
 

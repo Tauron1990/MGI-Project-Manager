@@ -15,10 +15,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
     {
         private readonly Settings _settings;
 
-        public UploadSelectSoftwareRepoViewModel(Settings settings)
-        {
-            _settings = settings;
-        }
+        public UploadSelectSoftwareRepoViewModel(Settings settings) => _settings = settings;
 
         public ICommonSelectorViewModel RepoSelector { get; } = CommonSelectorViewModel.Create();
 
@@ -36,17 +33,12 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
         }
 
         [CommandTarget]
-        public bool CanOnNext()
-        {
-            return RepoSelector.CanRun();
-        }
+        public bool CanOnNext() => RepoSelector.CanRun();
 
         private async Task SelectedItemAction(SelectorItemBase arg)
         {
             if (arg.ItemType == ItemType.New)
-            {
                 await OnNextView<VersionNewRepoViewModel, VersionRepoContext>(new VersionRepoContext(), CreateRedirection<UploadLastCheckViewModel>());
-            }
             else
             {
                 Context.VersionRepository = ((VersionRepo) arg).Repository;
@@ -56,10 +48,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
 
         private sealed class VersionRepo : SelectorItemBase
         {
-            public VersionRepo(VersionRepository repository)
-            {
-                Repository = repository;
-            }
+            public VersionRepo(VersionRepository repository) => Repository = repository;
 
             public VersionRepository Repository { get; }
 

@@ -6,7 +6,7 @@ namespace Tauron.Application.OptionsStore.Data.RavenDb
 {
     public class RavenCollection : IOptionDataCollection
     {
-    //    private const string DatabaseName = "OptionStore";
+        //    private const string DatabaseName = "OptionStore";
 
         private readonly string _prefix;
         private readonly Lazy<IDatabaseRoot> _store;
@@ -43,7 +43,7 @@ namespace Tauron.Application.OptionsStore.Data.RavenDb
             await session.SaveChangesAsync();
         }
 
-        public OptionsPair GetOption(string key) 
+        public OptionsPair GetOption(string key)
             => Task.Run(async () => await GetOptionAsync(key)).Result;
 
         public void DeleteOption(string key)

@@ -49,9 +49,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels
                 ChangeView(operationView);
             }
             else
-            {
                 ModelOnCancelOperation();
-            }
         }
 
         private void ModelOnCancelOperation()

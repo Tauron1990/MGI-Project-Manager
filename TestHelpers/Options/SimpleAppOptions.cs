@@ -11,8 +11,6 @@ namespace TestHelpers.Options
         private readonly bool _isReadOnly;
         private readonly Dictionary<string, IOption> _options;
 
-        public string Name { get; }
-
         public SimpleAppOptions(string name, bool isReadOnly = false, params (string key, IOption option)[] options)
         {
             _isReadOnly = isReadOnly;
@@ -23,6 +21,8 @@ namespace TestHelpers.Options
             foreach (var (key, option) in options)
                 _options[key] = option;
         }
+
+        public string Name { get; }
 
         public Task<IOption> GetOptionAsync(string name)
         {
@@ -62,7 +62,7 @@ namespace TestHelpers.Options
             _options.Remove(name);
         }
 
-        private void AssertIsReadOnly() 
+        private void AssertIsReadOnly()
             => Assert.False(_isReadOnly, "Not Option can be Added");
     }
 }

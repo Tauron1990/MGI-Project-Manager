@@ -62,10 +62,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.RemoveCommand
             foreach (var file in dir.GetFiles()) file.Attributes = FileAttributes.Normal;
         }
 
-        private bool OnNextCommandCanExecute()
-        {
-            return SelectedProject != null;
-        }
+        private bool OnNextCommandCanExecute() => SelectedProject != null;
 
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
         {

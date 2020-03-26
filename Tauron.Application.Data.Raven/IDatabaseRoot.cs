@@ -1,5 +1,4 @@
-﻿
-namespace Tauron.Application.Data.Raven
+﻿namespace Tauron.Application.Data.Raven
 {
     public interface IDatabaseRoot
     {

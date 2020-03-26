@@ -48,10 +48,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
         }
 
         [CommandTarget]
-        public bool CanOnNext()
-        {
-            return RepoSelector.CanRun();
-        }
+        public bool CanOnNext() => RepoSelector.CanRun();
 
         [CommandTarget]
         public async Task OnNext()

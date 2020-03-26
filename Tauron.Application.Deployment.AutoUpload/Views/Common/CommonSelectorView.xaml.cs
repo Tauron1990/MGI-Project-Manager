@@ -31,14 +31,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Views.Common
             _model.Init(items, addNew, selectedItemAction);
         }
 
-        public Task Run()
-        {
-            return _model.Run();
-        }
+        public Task Run() => _model.Run();
 
-        public bool CanRun()
-        {
-            return _model.CanRun();
-        }
+        public bool CanRun() => _model.CanRun();
     }
 }

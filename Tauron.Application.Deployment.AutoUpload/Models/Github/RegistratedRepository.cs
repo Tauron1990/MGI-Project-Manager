@@ -23,9 +23,6 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Github
 
         public string RealPath { get; }
 
-        public override string ToString()
-        {
-            return $"{RepositoryName} -- {Path.GetFileName(ProjectName)}";
-        }
+        public override string ToString() => $"{RepositoryName} -- {Path.GetFileName(ProjectName)}";
     }
 }

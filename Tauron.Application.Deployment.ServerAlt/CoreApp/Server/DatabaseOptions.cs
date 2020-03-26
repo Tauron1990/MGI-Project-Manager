@@ -10,17 +10,30 @@ namespace Tauron.Application.Deployment.Server.CoreApp.Server
 {
     public sealed class DatabaseOptions : INotifyPropertyChanged
     {
-        private readonly IAppOptions _store;
+        private const string IsSetupFinisht = nameof(IsSetupFinisht);
         private readonly ConcurrentDictionary<string, IOption> _options = new ConcurrentDictionary<string, IOption>();
+        private readonly IAppOptions _store;
 
-        public DatabaseOptions(IOptionsStore store) 
+        public DatabaseOptions(IOptionsStore store)
             => _store = store.GetAppOptions("DeploymentServer");
+
+        public ServerFileMode ServerFileMode
+        {
+            get => Enum.TryParse<ServerFileMode>(GetValue(nameof(ServerFileMode)), out var serverFileMode) ? serverFileMode : ServerFileMode.Unkowen;
+            set
+            {
+                SetValue(nameof(ServerFileMode), value.ToString());
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private async Task<string> GetValueAsync(string name)
         {
             if (_options.TryGetValue(name, out var opt))
                 return opt.Value;
-            
+
             opt = await _store.GetOptionAsync(name);
 
             _options[name] = opt;
@@ -67,32 +80,17 @@ namespace Tauron.Application.Deployment.Server.CoreApp.Server
             opt.SetValue(value);
         }
 
-
-        private const string IsSetupFinisht = nameof(IsSetupFinisht);
-
         public async Task<bool> GetIsSetupFinisht()
         {
             var result = await GetValueAsync(IsSetupFinisht);
             return !string.IsNullOrEmpty(result) && bool.TryParse(result, out var r) && r;
         }
 
-        public async Task SetIsSetupFinisht(bool value) 
+        public async Task SetIsSetupFinisht(bool value)
             => await SetValueAsync(IsSetupFinisht, value.ToString());
 
-        public ServerFileMode ServerFileMode
-        {
-            get => Enum.TryParse<ServerFileMode>(GetValue(nameof(ServerFileMode)), out var serverFileMode) ? serverFileMode : ServerFileMode.Unkowen;
-            set
-            {
-                SetValue(nameof(ServerFileMode), value.ToString());
-                OnPropertyChanged();
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
         [NotifyPropertyChangedInvocator]
-        private void OnPropertyChanged([CallerMemberName] string? propertyName = null) 
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

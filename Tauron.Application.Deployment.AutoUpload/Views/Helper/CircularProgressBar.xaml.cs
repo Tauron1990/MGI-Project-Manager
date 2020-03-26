@@ -39,9 +39,9 @@ namespace Tauron.Application.Deployment.AutoUpload.Views.Helper
             IsVisibleChanged += OnVisibleChanged;
 
             _animationTimer = new DispatcherTimer(DispatcherPriority.ContextIdle, Dispatcher ?? throw new InvalidOperationException())
-            {
-                Interval = new TimeSpan(0, 0, 0, 0, 75)
-            };
+                              {
+                                  Interval = new TimeSpan(0, 0, 0, 0, 75)
+                              };
         }
 
         #endregion
@@ -56,7 +56,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Views.Helper
         private static void SetPosition(DependencyObject ellipse, double offset, double posOffSet, double step)
         {
             ellipse.SetValue(Canvas.LeftProperty, 50 + Math.Sin(offset + posOffSet * step) * 50);
-            ellipse.SetValue(Canvas.TopProperty, 50 + Math.Cos(offset + posOffSet * step) * 50);
+            ellipse.SetValue(Canvas.TopProperty, 50  + Math.Cos(offset + posOffSet * step) * 50);
         }
 
         /// <summary>

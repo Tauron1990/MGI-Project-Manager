@@ -1,24 +1,23 @@
 ﻿@layout MainLayout
 @inherits LayoutComponentBase
-@implements IDisposable
-
-@using Syncfusion.EJ2.Blazor.Buttons
-@using Syncfusion.EJ2.Blazor.Popups
 @using Tauron.Application.Deployment.Server.CoreApp.Bridge
 @using Tauron.Application.Deployment.Server.CoreApp.Client
+@using Syncfusion.EJ2.Blazor.Buttons
+@using Syncfusion.EJ2.Blazor.Popups
+@implements IDisposable
 @inject IServerBridge ServerBridge
 @inject NavigationManager NavigationManager
 @inject IErrorDelegator ErrorDelegator
 
 <BSContainer>
     <BSRow Class="h-25" style="height: 200px">
-        <BSCol />
+        <BSCol/>
         <BSCol>
             <h1 class="align-content-center">Setup Assistent</h1>
         </BSCol>
-        <BSCol />
+        <BSCol/>
     </BSRow>
-     @Body
+    @Body
     <EjsDialog @ref="ErrorDialog" Width="250px" IsModal="true" Visible="false">
         <DialogTemplates>
             <Header>Errors</Header>
@@ -27,20 +26,20 @@
             </Content>
         </DialogTemplates>
         <DialogButtons>
-            <DialogButton ButtonModel="@ErrorOkButton" OnClick="@Return" />
+            <DialogButton ButtonModel="@ErrorOkButton" OnClick="@Return"/>
         </DialogButtons>
     </EjsDialog>
 </BSContainer>
 
 @code {
 
-    private readonly ButtonModel ErrorOkButton = new ButtonModel { Content = "Ok", IsPrimary = true };
+    private readonly ButtonModel ErrorOkButton = new ButtonModel {Content = "Ok", IsPrimary = true};
     private EjsDialog ErrorDialog;
     private string ErrorText = "Null";
 
     protected override async Task OnInitializedAsync()
     {
-        if (!(await ServerBridge.ClientSetup.InvalidateId(NavigationManager.ReadSetupId())))
+        if (!await ServerBridge.ClientSetup.InvalidateId(NavigationManager.ReadSetupId()))
             NavigationManager.NavigateTo("/");
 
         ErrorDelegator.ErrorRecived += ErrorHandler;
@@ -64,4 +63,5 @@
     {
         ErrorDelegator.ErrorRecived -= ErrorHandler;
     }
+
 }

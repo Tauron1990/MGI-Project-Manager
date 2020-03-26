@@ -8,7 +8,7 @@ namespace TestHelpers
 {
     public static class HelperCreateDefault
     {
-        public static TestService<TInterface> Create<TInterface, TTest>(ITestOutputHelper helper, Func<TTest>? factory = null, Action<ServicesConfiguration>? configuration = null)
+        public static TestService<TInterface> Create<TInterface, TTest>(ITestOutputHelper helper, Func<TTest>? factory = null, Action<ServicesConfiguration>? config = null)
             where TTest : class, TInterface where TInterface : class
         {
             var collection = new ServiceCollection();
@@ -20,20 +20,20 @@ namespace TestHelpers
             else
                 collection.AddSingleton<TInterface, TTest>();
 
-            Log.Logger = new LoggerConfiguration().ConfigDefaultLogging("Test", noFile:true).WriteTo.TestOutput(helper).CreateLogger();
+            Log.Logger = new LoggerConfiguration().ConfigDefaultLogging("Test", noFile: true).WriteTo.TestOutput(helper).CreateLogger();
             collection.AddSingleton(Log.Logger);
             collection.AddTauronLogging();
 
-            var config = new ServicesConfiguration(collection);
-            configuration?.Invoke(config);
-            foreach (var entry in config.ServiceEntries) 
+            var configuration = new ServicesConfiguration(collection);
+            config?.Invoke(configuration);
+            foreach (var entry in configuration.ServiceEntries)
                 entry.Register(collection);
 
             var provider = collection.BuildServiceProvider();
-            return new TestService<TInterface>(config, provider, (TTest)provider.GetRequiredService<TInterface>());
+            return new TestService<TInterface>(configuration, provider, (TTest) provider.GetRequiredService<TInterface>());
         }
 
-        public static TestService<TInterface> Create<TInterface>(ITestOutputHelper helper, Func<TInterface>? factory = null, Action<ServicesConfiguration>? configuration = null)
+        public static TestService<TInterface> Create<TInterface>(ITestOutputHelper helper, Func<TInterface>? factory = null, Action<ServicesConfiguration>? config = null)
             where TInterface : class
         {
             var collection = new ServiceCollection();
@@ -49,13 +49,13 @@ namespace TestHelpers
             collection.AddSingleton(Log.Logger);
             collection.AddTauronLogging();
 
-            var config = new ServicesConfiguration(collection);
-            configuration?.Invoke(config);
-            foreach (var entry in config.ServiceEntries)
+            var configuration = new ServicesConfiguration(collection);
+            config?.Invoke(configuration);
+            foreach (var entry in configuration.ServiceEntries)
                 entry.Register(collection);
 
             var provider = collection.BuildServiceProvider();
-            return new TestService<TInterface>(config, provider, provider.GetRequiredService<TInterface>());
+            return new TestService<TInterface>(configuration, provider, provider.GetRequiredService<TInterface>());
         }
     }
 }

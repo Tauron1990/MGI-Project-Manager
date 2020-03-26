@@ -62,10 +62,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         }
 
         [CommandTarget]
-        private bool CanOnNext()
-        {
-            return !HasErrors;
-        }
+        private bool CanOnNext() => !HasErrors;
 
         private async void BeginLoad()
         {
@@ -119,10 +116,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
         private static Version Increase(Version current)
         {
-            int GraterThenZero(int input)
-            {
-                return input < 0 ? 0 : input;
-            }
+            int GraterThenZero(int input) => input < 0 ? 0 : input;
 
             current = new Version(current.Major, current.Minor + 1, GraterThenZero(current.Build), GraterThenZero(current.Revision));
 

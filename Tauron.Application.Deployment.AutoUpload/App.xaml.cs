@@ -33,18 +33,18 @@ namespace Tauron.Application.Deployment.AutoUpload
             screen.Show();
 
             ServiceLocator = IOCReplacer.Create(serviceCollection =>
-            {
-                serviceCollection
-                    .AddSingleton(
-                        sp
-                            => new GitHubClient(
-                                new ProductHeaderValue("Tauron.Application.Deployment.AutoUpload")));
+                                                {
+                                                    serviceCollection
+                                                       .AddSingleton(
+                                                            sp
+                                                                => new GitHubClient(
+                                                                    new ProductHeaderValue("Tauron.Application.Deployment.AutoUpload")));
 
-                serviceCollection.AddSingleton(s => Settings.Create());
-                serviceCollection.AddLogging();
+                                                    serviceCollection.AddSingleton(s => Settings.Create());
+                                                    serviceCollection.AddLogging();
 
-                serviceCollection.AddSingleton(Current.Dispatcher);
-            });
+                                                    serviceCollection.AddSingleton(Current.Dispatcher);
+                                                });
 
 
             CommandBinder.Register(new RoutedUICommand("Weiter", "NextCommand", typeof(App), new InputGestureCollection {new KeyGesture(Key.Enter, ModifierKeys.Control)}));

@@ -6,10 +6,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 {
     public sealed class PotentialProjekt : INameable
     {
-        public PotentialProjekt(RegistratedRepository repository)
-        {
-            Repository = repository;
-        }
+        public PotentialProjekt(RegistratedRepository repository) => Repository = repository;
 
         public RegistratedRepository Repository { get; }
 

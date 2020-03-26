@@ -11,16 +11,34 @@ namespace Tauron.Application.Data.Raven.Impl
 
         private readonly ReaderWriterLockSlim _changeLock;
         private readonly string _databaseName;
-
-        private DatabaseOption? _option;
         private IDocumentStore? _documentStore;
         private InMemoryStore? _inMemoryStore;
+
+        private DatabaseOption? _option;
 
         public DatabaseRootImpl(DatabaseOption option, ReaderWriterLockSlim changeLock, string databaseName)
         {
             _option = option;
             _changeLock = changeLock;
             _databaseName = databaseName;
+        }
+
+        public IDatabaseSession OpenSession(bool noTracking = true)
+        {
+            SessionBase? session = null;
+
+            if (_documentStore != null)
+                session = new RavenSession(_documentStore, noTracking, _changeLock);
+            if (_inMemoryStore != null)
+                session = new InMemeorySession(_inMemoryStore, _changeLock);
+
+            session?.Enter();
+
+            return session ?? throw new InvalidOperationException("Database is not Initialized");
+        }
+
+        public void Dispose()
+        {
         }
 
         public void OptionsChanged(DatabaseOption options)
@@ -35,29 +53,12 @@ namespace Tauron.Application.Data.Raven.Impl
             _documentStore?.Dispose();
             _documentStore = null;
 
-            if(_option?.Debug == true)
+            if (_option?.Debug == true)
                 _inMemoryStore = new InMemoryStore();
             else
-                _documentStore = new DocumentStore{ Conventions = DocumentConventions, Urls = _option?.Urls, Database = _databaseName}.Initialize();
+                _documentStore = new DocumentStore {Conventions = DocumentConventions, Urls = _option?.Urls, Database = _databaseName}.Initialize();
 
             return this;
-        }
-        public IDatabaseSession OpenSession(bool noTracking = true)
-        {
-            SessionBase? session = null;
-
-            if (_documentStore != null) 
-                session = new RavenSession(_documentStore, noTracking, _changeLock);
-            if(_inMemoryStore != null)
-                session = new InMemeorySession(_inMemoryStore, _changeLock);
-
-            session?.Enter();
-
-            return session ?? throw new InvalidOperationException("Database is not Initialized");
-        }
-
-        public void Dispose()
-        {
         }
     }
 }

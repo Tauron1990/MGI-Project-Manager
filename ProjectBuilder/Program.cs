@@ -3,12 +3,10 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using MessagePack;
 using Serilog;
-using Serilog.Sinks.File;
 using Tauron.Application.Pipes;
 using Tauron.Application.Pipes.IO;
 
@@ -19,6 +17,14 @@ namespace ProjectBuilder
     {
         public const string BuildFile = "Data.build";
 
+        [SerializationConstructor]
+        public BuildInfo(string output, string pipeHandle, string projectFile)
+        {
+            Output = output;
+            PipeHandle = pipeHandle;
+            ProjectFile = projectFile;
+        }
+
         [Key(0)]
         public string Output { get; }
 
@@ -27,21 +33,13 @@ namespace ProjectBuilder
 
         [Key(2)]
         public string ProjectFile { get; }
-
-        [SerializationConstructor]
-        public BuildInfo(string output, string pipeHandle, string projectFile)
-        {
-            Output = output;
-            PipeHandle = pipeHandle;
-            ProjectFile = projectFile;
-        }
     }
 
-    static class Program
+    internal static class Program
     {
         private static PipeServer<string> _uploadapp = PipeServer<string>.Empty;
 
-        static async Task<int> Main()
+        private static async Task<int> Main()
         {
             Log.Logger = new LoggerConfiguration().WriteTo.File("log.log", fileSizeLimitBytes: 10000).CreateLogger();
 
@@ -59,7 +57,7 @@ namespace ProjectBuilder
 
                 Log.Information("Open Build File:");
                 await using var file = File.OpenRead(path);
-                var info = await  MessagePackSerializer.DeserializeAsync<BuildInfo>(file);
+                var info = await MessagePackSerializer.DeserializeAsync<BuildInfo>(file);
                 Log.Information($"{Path.GetFileName(info.ProjectFile)}--{Path.GetDirectoryName(info.Output)}--{info.PipeHandle}");
 
                 Log.Information("Create Pipe");
@@ -74,11 +72,11 @@ namespace ProjectBuilder
 
                 Log.Information("Create Process Infomation");
                 var arguments = new StringBuilder()
-                    .Append(" publish ")
-                    .Append($"\"{projectName}\"")
-                    .Append($" -o \"{output}\"")
-                    .Append(" -c Release")
-                    .Append(" -v d");
+                   .Append(" publish ")
+                   .Append($"\"{projectName}\"")
+                   .Append($" -o \"{output}\"")
+                   .Append(" -c Release")
+                   .Append(" -v d");
 
                 using var process = new Process();
 
@@ -88,10 +86,10 @@ namespace ProjectBuilder
 
 
                 process.StartInfo = new ProcessStartInfo(@"C:\Program Files\dotnet\dotnet.exe", arguments.ToString())
-                {
-                    RedirectStandardError = true,
-                    RedirectStandardOutput = true
-                };
+                                    {
+                                        RedirectStandardError = true,
+                                        RedirectStandardOutput = true
+                                    };
 
                 Log.Information("Start Process");
                 process.Start();
@@ -119,14 +117,14 @@ namespace ProjectBuilder
 
         private static async void ProcessOnOutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            if(_uploadapp.CanWrite)
+            if (_uploadapp.CanWrite)
                 await _uploadapp.SendMessage(e.Data);
             Console.WriteLine(e.Data);
         }
 
         private static async void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            if(_uploadapp.CanWrite)
+            if (_uploadapp.CanWrite)
                 await _uploadapp.SendMessage("error");
         }
     }

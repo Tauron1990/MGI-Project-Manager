@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace TestHelpers
 {
-    public sealed class TestService<TTest> : IDisposable
+    public sealed class TestService<TTest>
     {
         private readonly ServicesConfiguration _configuration;
-        public IServiceProvider ServiceProvider { get; }
-        private TTest Service { get; }
 
         public TestService(ServicesConfiguration configuration, IServiceProvider serviceProvider, TTest service)
         {
@@ -15,13 +14,25 @@ namespace TestHelpers
             Service = service;
         }
 
-        public void Assert()
+        public IServiceProvider ServiceProvider { get; }
+        private TTest Service { get; }
+
+        public void Test(Action<TTest> run)
         {
-            foreach (var entry in _configuration.ServiceEntries) 
-                entry.Assert();
+            run(Service);
+            Assert();
         }
 
-        public void Dispose() 
-            => Assert();
+        public async Task Test(Func<TTest, Task> run)
+        {
+            await run(Service);
+            Assert();
+        }
+
+        private void Assert()
+        {
+            foreach (var entry in _configuration.ServiceEntries)
+                entry.Assert();
+        }
     }
 }

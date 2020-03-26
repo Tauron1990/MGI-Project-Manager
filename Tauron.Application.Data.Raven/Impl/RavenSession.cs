@@ -10,13 +10,11 @@ namespace Tauron.Application.Data.Raven.Impl
         private readonly IAsyncDocumentSession _session;
 
         public RavenSession(IDocumentStore store, bool noTracking, ReaderWriterLockSlim locker)
-            : base(locker)
-        {
+            : base(locker) =>
             _session = store.OpenAsyncSession(new SessionOptions
                                               {
                                                   NoTracking = noTracking
                                               });
-        }
 
         public override void Dispose()
         {

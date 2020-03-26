@@ -21,7 +21,7 @@ namespace Tauron.Application.Data.Raven.Impl
             return Task.FromResult<T>(default!);
         }
 
-        public Task SaveChangesAsync() 
+        public Task SaveChangesAsync()
             => Task.CompletedTask;
 
         public void Delete(string id)
@@ -29,7 +29,7 @@ namespace Tauron.Application.Data.Raven.Impl
 
         public Task StoreAsync<T>(T data)
         {
-            if(data == null) return Task.CompletedTask;
+            if (data == null) return Task.CompletedTask;
 
             _store[FindId(data)] = data;
 
@@ -46,7 +46,7 @@ namespace Tauron.Application.Data.Raven.Impl
                 return gen(o);
 
             var mem = key.GetProperties().FirstOrDefault(p => p.Name.ToUpper() == "ID");
-            if(mem == null)
+            if (mem == null)
                 throw new InvalidOperationException("No Id Found");
 
             var parm = Expression.Parameter(typeof(object));

@@ -47,10 +47,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 
 
         [CommandTarget]
-        private bool CanOnNext()
-        {
-            return !HasErrors;
-        }
+        private bool CanOnNext() => !HasErrors;
 
         [CommandTarget]
         private async Task OnNext()

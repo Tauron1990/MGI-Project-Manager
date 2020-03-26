@@ -79,21 +79,21 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
         public static Settings Create()
         {
             var components = SettingFiles
-                .Select(s => Path.Combine(SettingsDic, s))
-                .Where(File.Exists)
-                .Select(s =>
-                {
-                    try
-                    {
-                        return JsonConvert.DeserializeObject<SettingsComponent>(File.ReadAllText(s));
-                    }
-                    catch
-                    {
-                        return null;
-                    }
-                })
-                .Where(c => c != null)
-                .ToArray();
+               .Select(s => Path.Combine(SettingsDic, s))
+               .Where(File.Exists)
+               .Select(s =>
+                       {
+                           try
+                           {
+                               return JsonConvert.DeserializeObject<SettingsComponent>(File.ReadAllText(s));
+                           }
+                           catch
+                           {
+                               return null;
+                           }
+                       })
+               .Where(c => c != null)
+               .ToArray();
 
             SettingsComponent? target = null;
 
@@ -147,7 +147,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
         {
             _version = component.Version;
             if (component.EMailAdress != null) EMailAdress = component.EMailAdress;
-            if (component.UserName != null) UserName = component.UserName;
+            if (component.UserName    != null) UserName = component.UserName;
             UserWhen = component.UserWhen;
 
             RegistratedRepositories.Clear();
@@ -157,16 +157,22 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
                 KnowenRepositorys.AddRange(component.KnowenRepositorys);
 
             if (component.RegistratedRepository != null)
+            {
                 foreach (var repositoryComponent in component.RegistratedRepository)
+                {
                     RegistratedRepositories.Add(new RegistratedRepository(repositoryComponent.Id,
-                        repositoryComponent.BranchName ?? string.Empty,
-                        repositoryComponent.ProjectName ?? string.Empty,
+                        repositoryComponent.BranchName     ?? string.Empty,
+                        repositoryComponent.ProjectName    ?? string.Empty,
                         repositoryComponent.RepositoryName ?? string.Empty,
-                        repositoryComponent.RealPath ?? string.Empty));
+                        repositoryComponent.RealPath       ?? string.Empty));
+                }
+            }
 
             if (component.VersionRepositorys != null)
+            {
                 foreach (var repositoryComponent in component.VersionRepositorys)
                     VersionRepositories.Add(new VersionRepository(repositoryComponent.Name ?? string.Empty, repositoryComponent.Path ?? string.Empty, repositoryComponent.Id));
+            }
         }
 
         public class VersionRepositoryComponent

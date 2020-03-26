@@ -12,15 +12,6 @@ namespace Tauron.Application.SimpleAuth.Core
     {
         private static readonly byte[] Salt = Initialize();
 
-        private static byte[] Initialize()
-        {
-            RandomNumberGenerator gen = new RNGCryptoServiceProvider();
-            var array = new byte[256];
-
-            gen.GetBytes(array);
-            return array;
-        }
-
         private readonly ISystemClock _clock;
         private readonly IDisposable _subscription;
         private SimpleAuthenticationOptions _options;
@@ -31,6 +22,9 @@ namespace Tauron.Application.SimpleAuth.Core
             _options = options.CurrentValue;
             _subscription = options.OnChange(o => Interlocked.Exchange(ref _options, o));
         }
+
+        public void Dispose()
+            => _subscription.Dispose();
 
         public string GenerateToken()
         {
@@ -55,7 +49,7 @@ namespace Tauron.Application.SimpleAuth.Core
                 var when = DateTime.FromBinary(reader.ReadInt64()) + _options.TokenTimeout;
                 var realm = reader.ReadString();
                 var actualDate = _clock.UtcNow;
-                return when > actualDate  && _options.Realm == realm;
+                return when > actualDate && _options.Realm == realm;
             }
             catch
             {
@@ -63,7 +57,13 @@ namespace Tauron.Application.SimpleAuth.Core
             }
         }
 
-        public void Dispose() 
-            => _subscription.Dispose();
+        private static byte[] Initialize()
+        {
+            RandomNumberGenerator gen = new RNGCryptoServiceProvider();
+            var array = new byte[256];
+
+            gen.GetBytes(array);
+            return array;
+        }
     }
 }

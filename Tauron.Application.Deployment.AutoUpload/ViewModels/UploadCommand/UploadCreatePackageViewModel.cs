@@ -59,10 +59,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
         }
 
         [CommandTarget]
-        public bool CanCancelOp()
-        {
-            return !_cancel.IsCancellationRequested;
-        }
+        public bool CanCancelOp() => !_cancel.IsCancellationRequested;
 
         protected override Task InitializeAsync()
         {
@@ -130,10 +127,10 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
 
                         ZipFile.CreateFromDirectory(output, packagePath, CompressionLevel.Optimal, false);
                         return () =>
-                        {
-                            if (File.Exists(packagePath))
-                                File.Delete(packagePath);
-                        };
+                               {
+                                   if (File.Exists(packagePath))
+                                       File.Delete(packagePath);
+                               };
                     });
 
                 await op.Next("Sync Version Repository...",
@@ -149,7 +146,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
                         var assetName = $"{name}_{version}.zip";
                         asset = await _repositoryManager.UploadAsset(versionRepo.Id, packagePath, assetName, versionUserName);
                         return () => _repositoryManager.DeleteRelease(versionRepo.Id, asset.Item2, versionUserName)
-                            .WaitAndUnwrapException(_token);
+                                  .WaitAndUnwrapException(_token);
                     });
 
                 await op.Next("Aktualisiere Software Repository...",
@@ -183,20 +180,20 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
                     });
 
                 await op.Next("Aufräumen...", async () =>
-                {
-                    try
-                    {
-                        File.Delete(packagePath);
-                        Directory.Delete(output, true);
-                    }
-                    catch (IOException)
-                    {
-                    }
+                                              {
+                                                  try
+                                                  {
+                                                      File.Delete(packagePath);
+                                                      Directory.Delete(output, true);
+                                                  }
+                                                  catch (IOException)
+                                                  {
+                                                  }
 
-                    await Task.Delay(2000, _token);
+                                                  await Task.Delay(2000, _token);
 
-                    return null;
-                });
+                                                  return null;
+                                              });
 
                 await OnFinish("Software Erfolgreich Aktualisiert");
             }

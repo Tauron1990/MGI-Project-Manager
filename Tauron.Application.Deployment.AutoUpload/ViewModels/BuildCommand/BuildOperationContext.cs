@@ -24,10 +24,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
     public class BuildOperationContext : OperationContextBase, IContextApply
     {
-        public BuildOperationContext(BuildContext buildContext)
-        {
-            BuildContext = buildContext;
-        }
+        public BuildOperationContext(BuildContext buildContext) => BuildContext = buildContext;
 
         public BuildContext BuildContext { get; }
 

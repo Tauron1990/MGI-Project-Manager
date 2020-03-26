@@ -8,15 +8,15 @@ namespace TestHelpers.Options
     {
         private readonly bool _isReadonly;
 
-        public string Key { get; }
-        public string Value { get; private set; }
-
         public SimpleOption(string key, string value, bool isReadonly)
         {
             _isReadonly = isReadonly;
             Key = key;
             Value = value;
         }
+
+        public string Key { get; }
+        public string Value { get; private set; }
 
         public Task SetValueAsync(string value)
         {
@@ -34,7 +34,7 @@ namespace TestHelpers.Options
             Value = value;
         }
 
-        private void AssertReadonly() 
+        private void AssertReadonly()
             => Assert.False(_isReadonly, "Option is Set to Readonly");
     }
 }

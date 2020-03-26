@@ -15,10 +15,7 @@ namespace Tauron.Application.Wpf.UI
 
         private readonly ITypeFactory _provider;
 
-        public AutoViewLocation(ITypeFactory provider)
-        {
-            _provider = provider;
-        }
+        public AutoViewLocation(ITypeFactory provider) => _provider = provider;
 
         public static AutoViewLocation Manager => DependencyResolverManager.Default.DefaultDependencyResolver.Resolve<AutoViewLocation>();
 
@@ -27,9 +24,6 @@ namespace Tauron.Application.Wpf.UI
             Views[model] = view;
         }
 
-        public object? ResolveView(object viewModel)
-        {
-            return Views.TryGetValue(viewModel.GetType(), out var view) ? _provider.CreateInstanceWithParametersAndAutoCompletion(view, viewModel) : null;
-        }
+        public object? ResolveView(object viewModel) => Views.TryGetValue(viewModel.GetType(), out var view) ? _provider.CreateInstanceWithParametersAndAutoCompletion(view, viewModel) : null;
     }
 }

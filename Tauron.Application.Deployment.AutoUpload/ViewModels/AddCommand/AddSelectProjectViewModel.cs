@@ -35,8 +35,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
         protected override async Task InitializeAsync()
         {
             var projects = Directory.EnumerateFiles(Context.RealPath, "*.csproj", new EnumerationOptions {IgnoreInaccessible = true, RecurseSubdirectories = true})
-                .Where(f => _settings.RegistratedRepositories.All(rr => rr.ProjectName != f))
-                .Select(s => new ProjectUI(s));
+               .Where(f => _settings.RegistratedRepositories.All(rr => rr.ProjectName != f))
+               .Select(s => new ProjectUI(s));
 
             ProjectSelector.Init(projects.Select(ui => new SelectorItem<ProjectUI>(ui)), false, OnNext);
             await base.InitializeAsync();
@@ -60,10 +60,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
         }
 
         [CommandTarget]
-        private bool CanOnNext()
-        {
-            return ProjectSelector.CanRun();
-        }
+        private bool CanOnNext() => ProjectSelector.CanRun();
 
         [CommandTarget]
         private async Task OnNext()

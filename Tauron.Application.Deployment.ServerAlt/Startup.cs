@@ -20,10 +20,7 @@ namespace Tauron.Application.Deployment.Server
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         private IConfiguration Configuration { get; }
 
@@ -33,7 +30,6 @@ namespace Tauron.Application.Deployment.Server
         {
             AddServer(services);
             AddClient(services);
-
 
 
             services.AddRazorPages();
@@ -65,9 +61,7 @@ namespace Tauron.Application.Deployment.Server
             SyncfusionLicenseProvider.RegisterLicense("MTk4MTg2QDMxMzcyZTM0MmUzMG5iUXVzNVdGci9ERVNhOW40WG00ZmZnRnRXMTNrbVY3Y0hxKzBEVE50bms9");
 
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
             else
             {
                 app.UseExceptionHandler("/Error");
@@ -84,11 +78,11 @@ namespace Tauron.Application.Deployment.Server
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-                endpoints.MapBlazorHub();
-                endpoints.MapFallbackToPage("/_Host");
-            });
+                             {
+                                 endpoints.MapDefaultControllerRoute();
+                                 endpoints.MapBlazorHub();
+                                 endpoints.MapFallbackToPage("/_Host");
+                             });
         }
 
         private void UseServer(IApplicationBuilder app)
@@ -98,7 +92,6 @@ namespace Tauron.Application.Deployment.Server
 
         private void UseClient(IApplicationBuilder app)
         {
-
         }
     }
 }
