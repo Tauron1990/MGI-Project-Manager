@@ -34,7 +34,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Core
             var hasher = new PasswordHasher<string>();
             var targetPassword = new SimpleOption(PasswordVault.PasswortName, pass != "fail" ? hasher.HashPassword(PasswordVault.PasswortName, pass) : string.Empty, false);
 
-            var services = HelperCreateDefault.Create<IPasswordVault, PasswordVault>(
+            var services = ServiceTest.Create<IPasswordVault, PasswordVault>(
                 _output,
                 config: sc =>
                         {
@@ -69,7 +69,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Core
                 testType == InternalTestType.SamePassword ? new PasswordHasher<string>().HashPassword(PasswordVault.PasswortName, pass) : string.Empty,
                 false);
 
-            var services = HelperCreateDefault.Create<IPasswordVault, PasswordVault>(
+            var services = ServiceTest.Create<IPasswordVault, PasswordVault>(
                 _output,
                 config: sc =>
                         {
@@ -111,7 +111,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Core
         [Fact]
         public async Task CheckDefaultPassword()
         {
-            var services = HelperCreateDefault.Create<IPasswordVault, PasswordVault>(
+            var services = ServiceTest.Create<IPasswordVault, PasswordVault>(
                 _output,
                 config: sc =>
                         {

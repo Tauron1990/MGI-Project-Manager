@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents;
 using Serilog;
 using Serilog.Configuration;
+using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Formatting.Compact;
 using Tauron.Application.Logging.impl;
@@ -18,16 +19,16 @@ namespace Tauron.Application.Logging
             if (getStore != null)
                 loggerConfiguration.WriteTo.RavenDB(getStore(), expiration: TimeSpan.FromDays(100), errorExpiration: TimeSpan.FromDays(365));
             if (!noFile)
-                loggerConfiguration.WriteTo.RollingFile(new CompactJsonFormatter(), "Logs\\Log.log", fileSizeLimitBytes: 5_242_880);
+                loggerConfiguration.WriteTo.RollingFile(new CompactJsonFormatter(), "Logs\\Log.log", fileSizeLimitBytes: 5_242_880, retainedFileCountLimit:5);
 
             return loggerConfiguration
-               .MinimumLevel.Debug()
-                //.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                //.MinimumLevel.Override("System", LogEventLevel.Warning)
-               .Enrich.WithProperty("ApplicationName", applicationName)
-               .Enrich.FromLogContext()
-               .Enrich.WithExceptionDetails()
-               .Enrich.WithEventTypeEnricher();
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .MinimumLevel.Override("System", LogEventLevel.Warning)
+                .Enrich.WithProperty("ApplicationName", applicationName)
+                .Enrich.FromLogContext()
+                .Enrich.WithExceptionDetails()
+                .Enrich.WithEventTypeEnricher();
         }
 
         public static LoggerConfiguration WithEventTypeEnricher(this LoggerEnrichmentConfiguration config)

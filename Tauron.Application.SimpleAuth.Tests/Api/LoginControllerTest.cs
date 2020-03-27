@@ -34,16 +34,16 @@ namespace Tauron.Application.SimpleAuth.Tests.Api
         public void TokenGenerationExceptionTest()
         {
             var con =
-                HelperCreateDefault
+                ServiceTest
                    .Create<LoginV1Controller>(_helper,
                         config: sc =>
                                 {
-                                    sc.AddMock<IPasswordVault>().BuildService()
+                                    sc.AddMock<IPasswordVault>().AddService()
                                        .AddMock<ITokenManager>()
-                                       .For(m
+                                       .With(m
                                                 => m.Setup(tm => tm.GenerateToken()).Throws<InvalidOperationException>())
-                                       .WithAssert(m => m.Verify(tm => tm.GenerateToken(), Times.Exactly(1)))
-                                       .BuildService();
+                                       .Assert(m => m.Verify(tm => tm.GenerateToken(), Times.Exactly(1)))
+                                       .AddService();
                                 });
 
             con.Test(c =>
@@ -63,16 +63,16 @@ namespace Tauron.Application.SimpleAuth.Tests.Api
             const string testToken = nameof(testToken);
 
             var con =
-                HelperCreateDefault
+                ServiceTest
                    .Create<LoginV1Controller>(_helper,
                         config: sc =>
                                 {
-                                    sc.AddMock<IPasswordVault>().BuildService()
+                                    sc.AddMock<IPasswordVault>().AddService()
                                        .AddMock<ITokenManager>()
-                                       .For(m
+                                       .With(m
                                                 => m.Setup(tm => tm.GenerateToken()).Returns(testToken))
-                                       .WithAssert(m => m.Verify(tm => tm.GenerateToken(), Times.Exactly(1)))
-                                       .BuildService();
+                                       .Assert(m => m.Verify(tm => tm.GenerateToken(), Times.Exactly(1)))
+                                       .AddService();
                                 });
 
             con.Test(c =>
@@ -105,45 +105,45 @@ namespace Tauron.Application.SimpleAuth.Tests.Api
             const string exceptionMessage = "Test Fehler";
 
             var can =
-                HelperCreateDefault
+                ServiceTest
                    .Create<LoginV1Controller>(_helper,
                         config: sc =>
                                 {
-                                    sc.AddMock<ITokenManager>().For(m => m.Setup(tm => tm.GenerateToken()).Returns("TestToken")).BuildService();
+                                    sc.AddMock<ITokenManager>().With(m => m.Setup(tm => tm.GenerateToken()).Returns("TestToken")).AddService();
 
                                     sc.Switch<PasswordTest>()
                                        .Case(PasswordTest.Fail,
                                             c =>
                                             {
                                                 c.AddMock<IPasswordVault>()
-                                                   .For(m => m.Setup(pv => pv.CheckPassword(It.IsIn(pass))).ReturnsAsync(true))
-                                                   .For(m => m.Setup(pv => pv.SetPassword(It.IsIn(pass))).ReturnsAsync(false))
-                                                   .BuildService();
+                                                   .With(m => m.Setup(pv => pv.CheckPassword(It.IsIn(pass))).ReturnsAsync(true))
+                                                   .With(m => m.Setup(pv => pv.SetPassword(It.IsIn(pass))).ReturnsAsync(false))
+                                                   .AddService();
                                             })
                                        .Case(PasswordTest.Exception,
                                             c =>
                                             {
                                                 c.AddMock<IPasswordVault>()
-                                                   .For(m => m.Setup(pv => pv.CheckPassword(It.IsAny<string>())).ThrowsAsync(new Exception(exceptionMessage)))
-                                                   .BuildService();
+                                                   .With(m => m.Setup(pv => pv.CheckPassword(It.IsAny<string>())).ThrowsAsync(new Exception(exceptionMessage)))
+                                                   .AddService();
                                             })
                                        .Case(PasswordTest.Wrong,
                                             c =>
                                             {
                                                 c.AddMock<IPasswordVault>()
-                                                   .For(m => m.Setup(pv => pv.CheckPassword(It.IsAny<string>())).ReturnsAsync(false))
-                                                   .BuildService();
+                                                   .With(m => m.Setup(pv => pv.CheckPassword(It.IsAny<string>())).ReturnsAsync(false))
+                                                   .AddService();
                                             })
-                                       .Generic(c =>
+                                       .Default(c =>
                                                 {
                                                     c.AddMock<IPasswordVault>()
-                                                       .For(m => m
+                                                       .With(m => m
                                                                .Setup(pv => pv.CheckPassword(It.IsAny<string>()))
                                                                .ReturnsAsync(true))
-                                                       .For(m => m
+                                                       .With(m => m
                                                                .Setup(pv => pv.SetPassword(It.IsIn(pass)))
                                                                .ReturnsAsync(true))
-                                                       .BuildService();
+                                                       .AddService();
                                                 })
                                        .Apply(testType);
                                 });

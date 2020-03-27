@@ -16,19 +16,19 @@ namespace TestHelpers.Core
 
         public Mock<TInterface> Mock { get; } = new Mock<TInterface>();
 
-        public MockConfiguration<TInterface> For(Action<Mock<TInterface>> action)
+        public MockConfiguration<TInterface> With(Action<Mock<TInterface>> action)
         {
             action(Mock);
             return this;
         }
 
-        public MockConfiguration<TInterface> WithAssert(Action<Mock<TInterface>> assert)
+        public MockConfiguration<TInterface> Assert(Action<Mock<TInterface>> assert)
         {
             _assert = assert;
             return this;
         }
 
-        public ServicesConfiguration BuildService()
+        public ServicesConfiguration AddService()
         {
             _configuration.ServiceEntries.Add(new MockGenericServiceEntry<TInterface>(Mock) {Asseration = _assert});
             return _configuration;

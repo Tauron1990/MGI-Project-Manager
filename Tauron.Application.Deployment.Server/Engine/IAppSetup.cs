@@ -9,7 +9,5 @@ namespace Tauron.Application.Deployment.Server.Engine
         Task<bool> TrySetServerPath(ServerFileMode path);
 
         Task Init();
-        string GetNewId();
-        bool InvalidateId(string id);
     }
 }

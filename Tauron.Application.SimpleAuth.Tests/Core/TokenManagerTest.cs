@@ -35,7 +35,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Core
             var options = new SimpleAuthenticationOptions();
             var clock = new MockSystemClock();
 
-            var service = HelperCreateDefault.Create<ITokenManager, TokenManager>(_testOutputHelper,
+            var service = ServiceTest.Create<ITokenManager, TokenManager>(_testOutputHelper,
                 config: sc =>
                         {
                             sc.ServiceCollection.Configure<SimpleAuthenticationOptions>(ao =>

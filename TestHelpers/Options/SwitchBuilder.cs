@@ -20,7 +20,7 @@ namespace TestHelpers.Options
             return this;
         }
 
-        public SwitchBuilder<TEnum> Generic(Action<ServicesConfiguration> config)
+        public SwitchBuilder<TEnum> Default(Action<ServicesConfiguration> config)
         {
             _generic = config;
             return this;

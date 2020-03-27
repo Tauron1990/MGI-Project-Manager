@@ -6,7 +6,7 @@ using Xunit.Abstractions;
 
 namespace TestHelpers
 {
-    public static class HelperCreateDefault
+    public static class ServiceTest
     {
         public static TestService<TInterface> Create<TInterface, TTest>(ITestOutputHelper helper, Func<TTest>? factory = null, Action<ServicesConfiguration>? config = null)
             where TTest : class, TInterface where TInterface : class

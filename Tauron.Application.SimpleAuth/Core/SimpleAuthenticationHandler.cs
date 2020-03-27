@@ -15,12 +15,17 @@ namespace Tauron.Application.SimpleAuth.Core
     {
         private const string AuthorizationHeaderName = "Authorization";
         private const string SimpleSchemeName = "Simple";
-        private readonly ISimpleAuthenticationService _authenticationService;
+
+        private readonly IPasswordVault _passwordVault;
+        private readonly ITokenManager _tokenManager;
+
 
         public SimpleAuthenticationHandler(IOptionsMonitor<SimpleAuthenticationOptions> options, ILoggerFactory logger, UrlEncoder encoder,
-            ISystemClock clock)
+            ISystemClock clock, IPasswordVault passwordVault, ITokenManager tokenManager)
             : base(options, logger, encoder, clock)
         {
+            _passwordVault = passwordVault;
+            _tokenManager = tokenManager;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -46,14 +51,26 @@ namespace Tauron.Application.SimpleAuth.Core
             var headerValueBytes = Convert.FromBase64String(headerValue.Parameter);
             var userAndPassword = Encoding.UTF8.GetString(headerValueBytes);
             var parts = userAndPassword.Split(':');
-            if (parts.Length != 2) return AuthenticateResult.Fail("Invalid Basic authentication header");
-            var user = parts[0];
+            if (parts.Length != 2) return AuthenticateResult.Fail("Falscher Basic authentication header");
+            var type = parts[0];
             var password = parts[1];
+            var isValid = false;
 
-            var isValidUser = await _authenticationService.IsValidUserAsync(user, password);
+            switch (type)
+            {
+                case "token":
+                    isValid = _tokenManager.ValidateToken(password);
+                    break;
+                case "pass":
+                    isValid = await _passwordVault.CheckPassword(password);
+                    break;
+                default:
+                    return AuthenticateResult.Fail("Inkompatibler Modus");
+            }
 
-            if (!isValidUser) return AuthenticateResult.Fail("Invalid username or password");
-            var claims = new[] {new Claim(ClaimTypes.Name, user)};
+            if (!isValid) return AuthenticateResult.Fail("Falsches Passwort oder Token");
+
+            var claims = new[] {new Claim(ClaimTypes.Name, "Administrator")};
             var identity = new ClaimsIdentity(claims, Scheme.Name);
             var principal = new ClaimsPrincipal(identity);
             var ticket = new AuthenticationTicket(principal, Scheme.Name);

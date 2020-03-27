@@ -80,11 +80,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.SimpleAu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Logging", "Tauron.Application.Logging\Tauron.Application.Logging.csproj", "{A1E12120-ED6B-4515-B794-9E8605C766F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.SimpleAuth.Tests", "Tauron.Application.SimpleAuth.Tests\Tauron.Application.SimpleAuth.Tests.csproj", "{2401FE7C-EB84-455A-8D2C-23F49805DF6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.SimpleAuth.Tests", "Tauron.Application.SimpleAuth.Tests\Tauron.Application.SimpleAuth.Tests.csproj", "{2401FE7C-EB84-455A-8D2C-23F49805DF6A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestHelper", "TestHelper", "{56A672B7-6BBA-4D21-B30E-02C02313BC01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHelpers", "TestHelpers\TestHelpers.csproj", "{33233AFA-768C-43A1-93F5-8E0BC6DA7AA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestHelpers", "TestHelpers\TestHelpers.csproj", "{33233AFA-768C-43A1-93F5-8E0BC6DA7AA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.Deployment.Server.Tests", "Tauron.Application.Deployment.Server.Tests\Tauron.Application.Deployment.Server.Tests.csproj", "{69213567-6731-482E-B087-92D8714F082D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -160,6 +162,10 @@ Global
 		{33233AFA-768C-43A1-93F5-8E0BC6DA7AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33233AFA-768C-43A1-93F5-8E0BC6DA7AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33233AFA-768C-43A1-93F5-8E0BC6DA7AA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69213567-6731-482E-B087-92D8714F082D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69213567-6731-482E-B087-92D8714F082D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69213567-6731-482E-B087-92D8714F082D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69213567-6731-482E-B087-92D8714F082D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -194,6 +200,7 @@ Global
 		{2401FE7C-EB84-455A-8D2C-23F49805DF6A} = {C65A7611-D7FE-4174-B5DE-A966C5BC5A18}
 		{56A672B7-6BBA-4D21-B30E-02C02313BC01} = {CC88EC76-1DB4-41C8-9F2C-8C5C1AEED0BC}
 		{33233AFA-768C-43A1-93F5-8E0BC6DA7AA1} = {56A672B7-6BBA-4D21-B30E-02C02313BC01}
+		{69213567-6731-482E-B087-92D8714F082D} = {5572E43F-E5B8-4350-B45D-797B51759FA4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}

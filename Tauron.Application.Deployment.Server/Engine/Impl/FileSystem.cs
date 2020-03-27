@@ -28,22 +28,13 @@ namespace Tauron.Application.Deployment.Server.Engine.Impl
 
         private void UpdatePaths()
         {
-            var basePath = string.Empty;
-
-            switch (_databaseOptions.ServerFileMode)
+            var basePath = _databaseOptions.ServerFileMode switch
             {
-                case ServerFileMode.Unkowen:
-                    basePath = "Invalid";
-                    break;
-                case ServerFileMode.ApplicationData:
-                    basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tauron");
-                    break;
-                case ServerFileMode.ContentRoot:
-                    basePath = Path.Combine(_webHostEnvironment.ContentRootPath, "AppData");
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                ServerFileMode.Unkowen => "Invalid",
+                ServerFileMode.ApplicationData => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tauron"),
+                ServerFileMode.ContentRoot => Path.Combine(_webHostEnvironment.ContentRootPath, "AppData"),
+                _ => throw new ArgumentOutOfRangeException()
+            };
 
             if (basePath == "Invalid")
                 return;
