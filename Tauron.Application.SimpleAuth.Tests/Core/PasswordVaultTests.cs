@@ -34,7 +34,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Core
             var hasher = new PasswordHasher<string>();
             var targetPassword = new SimpleOption(PasswordVault.PasswortName, pass != "fail" ? hasher.HashPassword(PasswordVault.PasswortName, pass) : string.Empty, false);
 
-            var services = ServiceTest.Create<IPasswordVault, PasswordVault>(
+            var test = ServiceTest.Create<IPasswordVault, PasswordVault>(
                 _output,
                 config: sc =>
                         {
@@ -47,7 +47,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Core
                             sc.AddService<IOptionsStore, SimpleOptionStore>(() => SimpleOptionStore.CreateSimple(targetPassword));
                         });
 
-            await services.Test(async pv =>
+            await test.Run(async pv =>
                                 {
                                     var result = await pv.CheckPassword(pass);
 
@@ -69,7 +69,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Core
                 testType == InternalTestType.SamePassword ? new PasswordHasher<string>().HashPassword(PasswordVault.PasswortName, pass) : string.Empty,
                 false);
 
-            var services = ServiceTest.Create<IPasswordVault, PasswordVault>(
+            var test = ServiceTest.Create<IPasswordVault, PasswordVault>(
                 _output,
                 config: sc =>
                         {
@@ -87,7 +87,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Core
                                 });
                         });
 
-            await services.Test(async pv =>
+            await test.Run(async pv =>
                                 {
                                     var result = await pv.SetPassword(pass);
 
@@ -111,7 +111,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Core
         [Fact]
         public async Task CheckDefaultPassword()
         {
-            var services = ServiceTest.Create<IPasswordVault, PasswordVault>(
+            var test = ServiceTest.Create<IPasswordVault, PasswordVault>(
                 _output,
                 config: sc =>
                         {
@@ -124,7 +124,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Core
                             sc.AddService<IOptionsStore, SimpleOptionStore>(SimpleOptionStore.CreateSimple);
                         });
 
-            await services.Test(async pv =>
+            await test.Run(async pv =>
                                 {
                                     var result = await pv.CheckPassword("admin");
 

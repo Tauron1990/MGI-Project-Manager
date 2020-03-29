@@ -20,7 +20,7 @@ namespace TestHelpers
             else
                 collection.AddSingleton<TInterface, TTest>();
 
-            Log.Logger = new LoggerConfiguration().ConfigDefaultLogging("Test", noFile: true).WriteTo.TestOutput(helper).CreateLogger();
+            Log.Logger = new LoggerConfiguration().ConfigDefaultLogging("Run", noFile: true).WriteTo.TestOutput(helper).CreateLogger();
             collection.AddSingleton(Log.Logger);
             collection.AddTauronLogging();
 
@@ -45,7 +45,7 @@ namespace TestHelpers
             else
                 collection.AddSingleton<TInterface, TInterface>();
 
-            Log.Logger = new LoggerConfiguration().ConfigDefaultLogging("Test", noFile: true).WriteTo.TestOutput(helper).CreateLogger();
+            Log.Logger = new LoggerConfiguration().ConfigDefaultLogging("Run", noFile: true).WriteTo.TestOutput(helper).CreateLogger();
             collection.AddSingleton(Log.Logger);
             collection.AddTauronLogging();
 

@@ -16,17 +16,7 @@ namespace Tauron.Application.Deployment.Server.Engine
 
         public DatabaseOptions(IOptionsStore store)
             => _store = store.GetAppOptions("DeploymentServer");
-
-        public ServerFileMode ServerFileMode
-        {
-            get => Enum.TryParse<ServerFileMode>(GetValue(nameof(ServerFileMode)), out var serverFileMode) ? serverFileMode : ServerFileMode.Unkowen;
-            set
-            {
-                SetValue(nameof(ServerFileMode), value.ToString());
-                OnPropertyChanged();
-            }
-        }
-
+        
         public event PropertyChangedEventHandler PropertyChanged;
 
         private async Task<string> GetValueAsync(string name)
@@ -79,15 +69,6 @@ namespace Tauron.Application.Deployment.Server.Engine
             _options[name] = opt;
             opt.SetValue(value);
         }
-
-        public async Task<bool> GetIsSetupFinisht()
-        {
-            var result = await GetValueAsync(IsSetupFinisht);
-            return !string.IsNullOrEmpty(result) && bool.TryParse(result, out var r) && r;
-        }
-
-        public async Task SetIsSetupFinisht(bool value)
-            => await SetValueAsync(IsSetupFinisht, value.ToString());
 
         [NotifyPropertyChangedInvocator]
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)

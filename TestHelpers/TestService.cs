@@ -17,13 +17,13 @@ namespace TestHelpers
         public IServiceProvider ServiceProvider { get; }
         private TTest Service { get; }
 
-        public void Test(Action<TTest> run)
+        public void Run(Action<TTest> run)
         {
             run(Service);
             Assert();
         }
 
-        public async Task Test(Func<TTest, Task> run)
+        public async Task Run(Func<TTest, Task> run)
         {
             await run(Service);
             Assert();

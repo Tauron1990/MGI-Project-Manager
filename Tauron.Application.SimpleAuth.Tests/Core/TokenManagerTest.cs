@@ -35,7 +35,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Core
             var options = new SimpleAuthenticationOptions();
             var clock = new MockSystemClock();
 
-            var service = ServiceTest.Create<ITokenManager, TokenManager>(_testOutputHelper,
+            var test = ServiceTest.Create<ITokenManager, TokenManager>(_testOutputHelper,
                 config: sc =>
                         {
                             sc.ServiceCollection.Configure<SimpleAuthenticationOptions>(ao =>
@@ -47,7 +47,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Core
                             sc.AddService<ISystemClock, MockSystemClock>(() => clock);
                         });
 
-            service.Test(tm =>
+            test.Run(tm =>
                          {
                              switch (type)
                              {

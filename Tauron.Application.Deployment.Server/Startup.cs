@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +30,7 @@ namespace Tauron.Application.Deployment.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<SimplAuthSettings>(Configuration.GetSection("SimplAuthSettings"));
+            services.Configure<LocalSettings>(Configuration);
 
             services.AddHttpContextAccessor();
 
@@ -47,9 +49,8 @@ namespace Tauron.Application.Deployment.Server
             services.AddDataRaven(Configuration);
             services.AddOptionsStore(s => s.GetRequiredService<IDatabaseCache>().Get("OptionsStore"));
 
-            services.AddSingleton<IAppSetup, AppSetup>();
             services.AddSingleton<DatabaseOptions>();
-            services.AddSingleton<IFileSystem, FileSystem>();
+            services.AddTransient<IFileSystem, FileSystem>();
 
             services.AddControllers();
             services.AddSwaggerGen(o =>

@@ -1,34 +1,39 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
+using System.Threading;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace Tauron.Application.Deployment.Server.Engine.Impl
 {
-    public sealed class FileSystem : IFileSystem
+    public sealed class FileSystem : IFileSystem, IDisposable
     {
-        private readonly DatabaseOptions _databaseOptions;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IDisposable _subscription;
+        private LocalSettings _settings;
+        private string _repositoryRoot;
 
-        public FileSystem(DatabaseOptions databaseOptions, IWebHostEnvironment webHostEnvironment)
+        public FileSystem(IOptionsMonitor<LocalSettings> localOptions, IWebHostEnvironment webHostEnvironment)
         {
-            _databaseOptions = databaseOptions;
             _webHostEnvironment = webHostEnvironment;
-            databaseOptions.PropertyChanged += DatabaseOptionsOnPropertyChanged;
+            _settings = localOptions.CurrentValue;
+            _subscription = localOptions.OnChange(ls =>
+                                                  {
+                                                      _settings = ls;
+                                                      UpdatePaths();
+                                                  });
             UpdatePaths();
         }
 
-        public string RepositoryRoot { get; private set; }
-
-        private void DatabaseOptionsOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        public string RepositoryRoot
         {
-            if (e.PropertyName == nameof(_databaseOptions.ServerFileMode))
-                UpdatePaths();
+            get => _repositoryRoot;
+            private set => _repositoryRoot = value;
         }
 
         private void UpdatePaths()
         {
-            var basePath = _databaseOptions.ServerFileMode switch
+            var basePath = _settings.ServerFileMode switch
             {
                 ServerFileMode.Unkowen => "Invalid",
                 ServerFileMode.ApplicationData => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tauron"),
@@ -39,7 +44,11 @@ namespace Tauron.Application.Deployment.Server.Engine.Impl
             if (basePath == "Invalid")
                 return;
 
-            RepositoryRoot = Path.Combine(basePath, "Repositorys");
+
+            Interlocked.Exchange(ref _repositoryRoot, Path.Combine(basePath, "Repositorys"));
         }
+
+        public void Dispose() 
+            => _subscription.Dispose();
     }
 }

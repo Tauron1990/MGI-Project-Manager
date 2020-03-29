@@ -33,7 +33,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Api
         [Fact]
         public void TokenGenerationExceptionTest()
         {
-            var con =
+            var test =
                 ServiceTest
                    .Create<LoginV1Controller>(_helper,
                         config: sc =>
@@ -46,7 +46,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Api
                                        .AddService();
                                 });
 
-            con.Test(c =>
+            test.Run(c =>
                      {
                          Init(c);
 
@@ -62,7 +62,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Api
         {
             const string testToken = nameof(testToken);
 
-            var con =
+            var test =
                 ServiceTest
                    .Create<LoginV1Controller>(_helper,
                         config: sc =>
@@ -75,7 +75,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Api
                                        .AddService();
                                 });
 
-            con.Test(c =>
+            test.Run(c =>
                      {
                          Init(c);
 
@@ -104,7 +104,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Api
         {
             const string exceptionMessage = "Test Fehler";
 
-            var can =
+            var test =
                 ServiceTest
                    .Create<LoginV1Controller>(_helper,
                         config: sc =>
@@ -148,7 +148,7 @@ namespace Tauron.Application.SimpleAuth.Tests.Api
                                        .Apply(testType);
                                 });
 
-            await can.Test(async service =>
+            await test.Run(async service =>
                            {
                                Init(service);
 
