@@ -15,7 +15,7 @@ namespace TestHelpers
 
         internal List<ServiceEntry> ServiceEntries { get; } = new List<ServiceEntry>();
 
-        public MockConfiguration<TInterface> AddMock<TInterface>()
+        public MockConfiguration<TInterface> CreateMock<TInterface>()
             where TInterface : class
             => new MockConfiguration<TInterface>(this);
 

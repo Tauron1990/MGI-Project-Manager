@@ -29,10 +29,10 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine
                                    .Case(ServerFileMode.ContentRoot,
                                         c =>
                                         {
-                                            c.AddMock<IWebHostEnvironment>().With(m => m.SetupGet(p => p.ContentRootPath).Returns(root))
-                                               .AddService();
+                                            c.CreateMock<IWebHostEnvironment>().With(m => m.SetupGet(p => p.ContentRootPath).Returns(root))
+                                               .RegisterMock();
                                         })
-                                   .Case(ServerFileMode.ApplicationData, c => c.AddMock<IWebHostEnvironment>())
+                                   .Case(ServerFileMode.ApplicationData, c => c.CreateMock<IWebHostEnvironment>())
                                    .Apply(mode);
 
                                 sc.ServiceCollection.Configure<LocalSettings>(l => l.ServerFileMode = mode);

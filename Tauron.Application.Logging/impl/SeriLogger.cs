@@ -6,6 +6,7 @@ using Serilog.Events;
 
 namespace Tauron.Application.Logging.impl
 {
+    #pragma warning disable Serilog004 // Constant MessageTemplate verifier
     public sealed class SeriLogger<TType> : ISLogger<TType>
     {
         private readonly ILogger _logger;
@@ -384,3 +385,4 @@ namespace Tauron.Application.Logging.impl
         public bool BindProperty(string propertyName, object value, bool destructureObjects, out LogEventProperty property) => _logger.BindProperty(propertyName, value, destructureObjects, out property);
     }
 }
+#pragma warning restore Serilog004 // Constant MessageTemplate verifier

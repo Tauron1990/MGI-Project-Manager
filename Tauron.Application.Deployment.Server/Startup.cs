@@ -13,6 +13,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Tauron.Application.Data.Raven;
 using Tauron.Application.Deployment.Server.Engine;
 using Tauron.Application.Deployment.Server.Engine.Impl;
+using Tauron.Application.Deployment.Server.Engine.Provider;
 using Tauron.Application.Logging;
 using Tauron.Application.OptionsStore;
 using Tauron.Application.SimpleAuth;
@@ -49,6 +50,8 @@ namespace Tauron.Application.Deployment.Server
             services.AddDataRaven(Configuration);
             services.AddOptionsStore(s => s.GetRequiredService<IDatabaseCache>().Get("OptionsStore"));
 
+            services.AddScoped<IRepoManager, RepositoryManager>();
+            services.AddHostedService<SyncService>();
             services.AddSingleton<DatabaseOptions>();
             services.AddTransient<IFileSystem, FileSystem>();
 
@@ -62,6 +65,7 @@ namespace Tauron.Application.Deployment.Server
                                                                               });
 
                                        o.IncludeXmlComments(Path.Combine(AppDomain.CurrentDomain.BaseDirectory ?? string.Empty, "Tauron.Application.SimpleAuth.xml"));
+                                       o.IncludeXmlComments(Path.Combine(AppDomain.CurrentDomain.BaseDirectory ?? string.Empty, "Tauron.Application.Deployment.Server.xml"));
                                        o.AddFluentValidationRules();
                                    });
         }
@@ -74,7 +78,7 @@ namespace Tauron.Application.Deployment.Server
 
             app.UseRouting();
             app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             app.UseSwagger().UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/TauronDeploymentServer/swagger.json", "Tauron Deployment Server"); });

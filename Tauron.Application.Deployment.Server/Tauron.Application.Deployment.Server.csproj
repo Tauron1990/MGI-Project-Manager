@@ -7,6 +7,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1591</NoWarn>
+    <DocumentationFile>Tauron.Application.Deployment.Server.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +27,7 @@
     <ProjectReference Include="..\Tauron.Application.Logging\Tauron.Application.Logging.csproj" />
     <ProjectReference Include="..\Tauron.Application.OptionsStore\Tauron.Application.OptionsStore.csproj" />
     <ProjectReference Include="..\Tauron.Application.SimpleAuth\Tauron.Application.SimpleAuth.csproj" />
+    <ProjectReference Include="..\Tauron.Application.SoftwareRepo\Tauron.Application.SoftwareRepo.csproj" />
   </ItemGroup>
 
   <ItemGroup>

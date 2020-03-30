@@ -14,7 +14,7 @@ namespace TestHelpers.Core
 
         public MockConfiguration(ServicesConfiguration configuration) => _configuration = configuration;
 
-        public Mock<TInterface> Mock { get; } = new Mock<TInterface>();
+        private Mock<TInterface> Mock { get; } = new Mock<TInterface>();
 
         public MockConfiguration<TInterface> With(Action<Mock<TInterface>> action)
         {
@@ -28,7 +28,7 @@ namespace TestHelpers.Core
             return this;
         }
 
-        public ServicesConfiguration AddService()
+        public ServicesConfiguration RegisterMock()
         {
             _configuration.ServiceEntries.Add(new MockGenericServiceEntry<TInterface>(Mock) {Asseration = _assert});
             return _configuration;
