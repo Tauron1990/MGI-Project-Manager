@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Neleus.DependencyInjection.Extensions\Neleus.DependencyInjection.Extensions.csproj" />
     <ProjectReference Include="..\Tauron.Application.Data.Raven\Tauron.Application.Data.Raven.csproj" />
     <ProjectReference Include="..\Tauron.Application.Logging\Tauron.Application.Logging.csproj" />
     <ProjectReference Include="..\Tauron.Application.OptionsStore\Tauron.Application.OptionsStore.csproj" />

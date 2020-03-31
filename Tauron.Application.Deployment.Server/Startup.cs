@@ -9,8 +9,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Neleus.DependencyInjection.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
 using Tauron.Application.Data.Raven;
+using Tauron.Application.Deployment.Server.Data;
 using Tauron.Application.Deployment.Server.Engine;
 using Tauron.Application.Deployment.Server.Engine.Impl;
 using Tauron.Application.Deployment.Server.Engine.Provider;
@@ -50,6 +52,8 @@ namespace Tauron.Application.Deployment.Server
             services.AddDataRaven(Configuration);
             services.AddOptionsStore(s => s.GetRequiredService<IDatabaseCache>().Get("OptionsStore"));
 
+            services.AddByName<IRepoProvider, RepositoryProvider>()
+               .Build();
             services.AddScoped<IRepoManager, RepositoryManager>();
             services.AddHostedService<SyncService>();
             services.AddSingleton<DatabaseOptions>();
