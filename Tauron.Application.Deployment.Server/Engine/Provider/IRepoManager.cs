@@ -8,7 +8,7 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
     {
         RepositoryProvider[] Providers { get; }
 
-        Task Register(string name, string provider, string source);
+        Task<(string? msg, bool)> Register(string name, string provider, string source);
 
         Task<SoftwareRepository?> Get(string name);
 
