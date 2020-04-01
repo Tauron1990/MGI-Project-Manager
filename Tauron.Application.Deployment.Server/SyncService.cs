@@ -12,7 +12,7 @@ namespace Tauron.Application.Deployment.Server
         private readonly Timer _timer;
         private CancellationTokenRegistration _cancellationTokenRegistration;
 
-        public SyncService(IRepoManager manager, ISLogger<SyncService> logger)
+        public SyncService(IRepositoryManager manager, ISLogger<SyncService> logger)
         {
             _timer = new Timer((state =>
             {

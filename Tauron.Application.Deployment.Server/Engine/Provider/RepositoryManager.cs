@@ -14,7 +14,7 @@ using Tauron.Application.SoftwareRepo;
 
 namespace Tauron.Application.Deployment.Server.Engine.Provider
 {
-    public class RepositoryManager : IRepoManager, IDisposable
+    public class RepositoryManager : IRepositoryManager, IDisposable
     {
         private readonly IDisposable _subscription;
 

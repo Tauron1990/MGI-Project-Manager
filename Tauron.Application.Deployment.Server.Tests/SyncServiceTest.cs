@@ -14,7 +14,7 @@ namespace Tauron.Application.Deployment.Server.Tests
     {
         private readonly ITestOutputHelper _output;
 
-        public SyncServiceTest(ITestOutputHelper output) 
+        public SyncServiceTest(ITestOutputHelper output)
             => _output = output;
 
         [Fact]
@@ -22,10 +22,10 @@ namespace Tauron.Application.Deployment.Server.Tests
         {
             var test = ServiceTest.Create<SyncService>(_output, config: sc =>
             {
-                sc.CreateMock<IRepoManager>()
-                    .With(m => m.Setup(p => p.SyncAll()).Throws<InvalidOperationException>())
-                    .Assert(m => m.Verify(p => p.SyncAll(), Times.Exactly(1)))
-                    .RegisterMock();
+                sc.CreateMock<IRepositoryManager>()
+                   .With(m => m.Setup(p => p.SyncAll()).Throws<InvalidOperationException>())
+                   .Assert(m => m.Verify(p => p.SyncAll(), Times.Exactly(1)))
+                   .RegisterMock();
             });
 
             await test.Run(async ss =>

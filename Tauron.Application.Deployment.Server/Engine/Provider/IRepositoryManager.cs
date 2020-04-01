@@ -4,7 +4,7 @@ using Tauron.Application.SoftwareRepo;
 
 namespace Tauron.Application.Deployment.Server.Engine.Provider
 {
-    public interface IRepoManager
+    public interface IRepositoryManager
     {
         RepositoryProvider[] Providers { get; }
 

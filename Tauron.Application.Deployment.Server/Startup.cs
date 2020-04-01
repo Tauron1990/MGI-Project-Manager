@@ -54,7 +54,7 @@ namespace Tauron.Application.Deployment.Server
 
             services.AddByName<IRepoProvider, RepositoryProvider>()
                .Build();
-            services.AddScoped<IRepoManager, RepositoryManager>();
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
             services.AddHostedService<SyncService>();
             services.AddSingleton<DatabaseOptions>();
             services.AddTransient<IFileSystem, FileSystem>();

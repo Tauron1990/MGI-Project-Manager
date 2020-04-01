@@ -24,41 +24,41 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine
             var test = ServiceTest
                .Create<IFileSystem, FileSystem>(_helper,
                     config: sc =>
-                            {
-                                sc.Switch<ServerFileMode>()
-                                   .Case(ServerFileMode.ContentRoot,
-                                        c =>
-                                        {
-                                            c.CreateMock<IWebHostEnvironment>().With(m => m.SetupGet(p => p.ContentRootPath).Returns(root))
-                                               .RegisterMock();
-                                        })
-                                   .Case(ServerFileMode.ApplicationData, c => c.CreateMock<IWebHostEnvironment>())
-                                   .Apply(mode);
+                    {
+                        sc.Switch<ServerFileMode>()
+                           .Case(ServerFileMode.ContentRoot,
+                                c =>
+                                {
+                                    c.CreateMock<IWebHostEnvironment>().With(m => m.SetupGet(p => p.ContentRootPath).Returns(root))
+                                       .RegisterMock();
+                                })
+                           .Case(ServerFileMode.ApplicationData, c => c.CreateMock<IWebHostEnvironment>())
+                           .Apply(mode);
 
-                                sc.ServiceCollection.Configure<LocalSettings>(l => l.ServerFileMode = mode);
-                            });
+                        sc.ServiceCollection.Configure<LocalSettings>(l => l.ServerFileMode = mode);
+                    });
 
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
             test.Run(service =>
-                     {
-                         Assert.False(string.IsNullOrEmpty(service.RepositoryRoot), "Repository Root is Empty");
+            {
+                Assert.False(string.IsNullOrEmpty(service.RepositoryRoot), "Repository Root is Empty");
 
-                         switch (mode)
-                         {
-                             case ServerFileMode.ApplicationData:
-                                Assert.StartsWith(appData, service.RepositoryRoot, StringComparison.Ordinal);
-                                 break;
-                             case ServerFileMode.ContentRoot:
-                                 Assert.StartsWith(root, service.RepositoryRoot, StringComparison.Ordinal);
-                                 break;
-                             case ServerFileMode.Unkowen:
-                                 Assert.False(false, "Wrong Mode");
-                                 break;
-                             default:
-                                 throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
-                         }
-                     });
+                switch (mode)
+                {
+                    case ServerFileMode.ApplicationData:
+                        Assert.StartsWith(appData, service.RepositoryRoot, StringComparison.Ordinal);
+                        break;
+                    case ServerFileMode.ContentRoot:
+                        Assert.StartsWith(root, service.RepositoryRoot, StringComparison.Ordinal);
+                        break;
+                    case ServerFileMode.Unkowen:
+                        Assert.False(false, "Wrong Mode");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+                }
+            });
         }
     }
 }

@@ -19,6 +19,12 @@ namespace TestHelpers
             where TInterface : class
             => new MockConfiguration<TInterface>(this);
 
+        public ServicesConfiguration Configure(Action<IServiceCollection> configure)
+        {
+            configure(ServiceCollection);
+            return this;
+        }
+
         public ServicesConfiguration AddService<TInterface, TType>(Func<TType> factory, Action<TType>? asser = null)
             where TType : TInterface
             where TInterface : class
@@ -32,6 +38,19 @@ namespace TestHelpers
             where TInterface : class
         {
             return AddService<TInterface, TType>(() => new TType(), asser);
+        }
+
+        public ServicesConfiguration AddService<TType>(Func<TType> factory, Action<TType>? asser = null)
+            where TType : class
+        {
+            ServiceEntries.Add(new SingleGenericServiceEntry<TType>(factory()) { Asseration = asser });
+            return this;
+        }
+
+        public ServicesConfiguration AddService<TType>(Action<TType>? asser = null)
+            where TType : class, new()
+        {
+            return AddService(() => new TType(), asser);
         }
     }
 }

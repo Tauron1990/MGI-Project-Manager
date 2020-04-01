@@ -21,6 +21,23 @@ namespace TestHelpers.Core
             => Asseration?.Invoke(Service);
     }
 
+    public sealed class SingleGenericServiceEntry<TType> : ServiceEntry
+        where TType : class
+    {
+        public SingleGenericServiceEntry(TType service)
+            => Service = service;
+
+        public TType Service { get; }
+
+        public Action<TType>? Asseration { get; set; }
+
+        public override void Register(IServiceCollection collection)
+            => collection.AddSingleton(Service);
+
+        public override void Assert()
+            => Asseration?.Invoke(Service);
+    }
+
     public sealed class MockGenericServiceEntry<TInterface> : ServiceEntry
         where TInterface : class
     {

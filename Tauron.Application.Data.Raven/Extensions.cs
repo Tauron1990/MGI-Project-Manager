@@ -16,5 +16,12 @@ namespace Tauron.Application.Data.Raven
 
             return serviceCollection;
         }
+
+        public static IServiceCollection AddDataRaven(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.TryAddSingleton<IDatabaseCache, DatabaseCacheImpl>();
+
+            return serviceCollection;
+        }
     }
 }
