@@ -22,16 +22,18 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
         private readonly IServiceByNameFactoryMeta<IRepoProvider, RepositoryProvider> _factory;
         private readonly ISLogger<RepositoryManager> _logger;
         private readonly IFileSystem _fileSystem;
+        private readonly IPushMessager _messager;
         private IDatabaseRoot _database;
 
         public RepositoryProvider[] Providers { get; }
 
         public RepositoryManager(IServiceByNameFactoryMeta<IRepoProvider, RepositoryProvider> factory, ISLogger<RepositoryManager> logger, IDatabaseCache database, 
-            IOptionsMonitor<LocalSettings> settings, IFileSystem fileSystem)
+            IOptionsMonitor<LocalSettings> settings, IFileSystem fileSystem, IPushMessager messager)
         {
             _factory = factory;
             _logger = logger;
             _fileSystem = fileSystem;
+            _messager = messager;
 
             Providers = factory.GetMetadata().ToArray();
             _database = database.Get(settings.CurrentValue.DatabaseName);
@@ -70,6 +72,19 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
             return (null, true);
         }
 
+        public async Task Delete(string name)
+        {
+            using var session = _database.OpenSession(false);
+            var data = await session.Query<RegistratedReporitoryEntity>().FirstOrDefaultAsync(rr => rr.Name == name);
+            if( data == null) return;
+
+            var provider = _factory.GetByName(data.Provider);
+            session.Delete(data.Id ?? throw new InvalidOperationException("No Id for Repository Found"));
+            await provider.Delete(data);
+
+            await session.SaveChangesAsync();
+        }
+
         public Task<RegistratedReporitory[]> GetAllRepositorys()
         {
             using var session = _database.OpenSession();
@@ -98,7 +113,7 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
         {
             using var session = _database.OpenSession();
 
-            foreach (var reporitory in session.Query<RegistratedReporitoryEntity>()) 
+            foreach (var reporitory in session.Query<RegistratedReporitoryEntity>().Where(rr => rr.SyncCompled)) 
                 await SyncRepoAsync(reporitory);
         }
 
@@ -112,17 +127,29 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
                          try
                          {
                              await SyncRepoAsync(reporitoryEntity);
+
+                             using var session = _database.OpenSession(false);
+                             
+                             var name = reporitoryEntity.Name;
+                             reporitoryEntity = await session.Query<RegistratedReporitoryEntity>().FirstAsync(e => e.Name == name);
+                             reporitoryEntity.SyncCompled = true;
+
+                             await session.SaveChangesAsync();
                          }
                          catch (Exception e)
                          {
                              _logger.Error(e, "Error while Background Syncronize Repository: {Name}", reporitoryEntity.Name);
+                             await Delete(reporitoryEntity.Name);
+
+                             await _messager.SyncError(reporitoryEntity.Name, e.Message);
                          }
                      });
         }
 
-        private Task SyncRepoAsync(RegistratedReporitoryEntity reporitoryEntity)
+        private async Task SyncRepoAsync(RegistratedReporitoryEntity reporitoryEntity)
         {
-
+            var provider = _factory.GetByName(reporitoryEntity.Provider);
+            await provider.Sync(reporitoryEntity);
         }
     }
 }

@@ -5,8 +5,9 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
 {
     public interface IRepoProvider
     {
-        Task Init(RegistratedReporitoryEntity reporitoryEntity);
+        Task Delete(RegistratedReporitoryEntity reporitory); 
+        Task Init(RegistratedReporitoryEntity reporitory);
 
-        Task Sync(RegistratedReporitoryEntity reporitoryEntity);
+        Task Sync(RegistratedReporitoryEntity reporitory);
     }
 }
