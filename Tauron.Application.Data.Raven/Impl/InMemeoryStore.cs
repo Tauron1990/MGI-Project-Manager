@@ -21,6 +21,9 @@ namespace Tauron.Application.Data.Raven.Impl
             return Task.FromResult<T>(default!);
         }
 
+        public IQueryable<T> Query<T>()
+            => _store.Values.OfType<T>().AsQueryable();
+
         public Task SaveChangesAsync()
             => Task.CompletedTask;
 

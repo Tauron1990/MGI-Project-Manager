@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
@@ -25,6 +26,7 @@ namespace Tauron.Application.Data.Raven.Impl
         public override Task<T> LoadAsync<T>(string id) => _session.LoadAsync<T>(id);
 
         public override Task SaveChangesAsync() => _session.SaveChangesAsync();
+        public override IQueryable<T> Query<T>() => _session.Query<T>();
 
         public override void Delete(string id) => _session.Delete(id);
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Tauron.Application.Data.Raven
@@ -8,6 +9,8 @@ namespace Tauron.Application.Data.Raven
         Task<T> LoadAsync<T>(string id);
 
         Task SaveChangesAsync();
+
+        IQueryable<T> Query<T>();
 
         void Delete(string id);
 

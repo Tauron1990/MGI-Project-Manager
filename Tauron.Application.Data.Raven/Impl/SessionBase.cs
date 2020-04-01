@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Tauron.Application.Data.Raven.Impl
@@ -15,6 +16,7 @@ namespace Tauron.Application.Data.Raven.Impl
 
         public abstract Task<T> LoadAsync<T>(string id);
         public abstract Task SaveChangesAsync();
+        public abstract IQueryable<T> Query<T>();
         public abstract void Delete(string id);
         public abstract Task StoreAsync<T>(T data);
 

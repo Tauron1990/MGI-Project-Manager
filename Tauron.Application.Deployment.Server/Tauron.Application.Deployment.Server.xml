@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Tauron.Application.Deployment.Server</name>
+    </assembly>
+    <members>
+        <member name="T:Tauron.Application.Deployment.Server.Data.RepositoryProvider">
+            <summary>
+            Eine Mögliche Quelle für einen Provider
+            </summary>
+        </member>
+        <member name="P:Tauron.Application.Deployment.Server.Data.RepositoryProvider.Id">
+            <summary>
+            Die id mit der der Server den provider identifizeirt.
+            </summary>
+        </member>
+        <member name="P:Tauron.Application.Deployment.Server.Data.RepositoryProvider.Name">
+            <summary>
+            Der Name des providers
+            </summary>
+        </member>
+        <member name="P:Tauron.Application.Deployment.Server.Data.RepositoryProvider.Description">
+            <summary>
+            Die Beschreibung der prviders
+            </summary>
+        </member>
+    </members>
+</doc>
