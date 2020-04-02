@@ -1,11 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Neleus.DependencyInjection.Extensions;
 using Tauron.Application.Data.Raven;
 using Tauron.Application.Deployment.Server.Data;
 using Tauron.Application.Deployment.Server.Engine;
+using Tauron.Application.Deployment.Server.Engine.Data;
 using Tauron.Application.Deployment.Server.Engine.Provider;
 using TestHelpers;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
@@ -17,13 +21,15 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
         public RepositoryManagerTests(ITestOutputHelper helper) 
             => _helper = helper;
 
-        private TestService<IRepositoryManager> CreateTestBase()
+        private TestService<IRepositoryManager> CreateTestBase(Func<Mock<IRepoProvider>, Action<Mock<IRepoProvider>>?>? repoAssert = null)
         {
             return ServiceTest.Create<IRepositoryManager, RepositoryManager>(_helper, config: sc =>
             {
                 var mock = new Mock<IRepoProvider>();
+                
+                var assert
 
-                sc.AddService(() => mock.Object);
+                sc.AddService(() => mock.Object, s => repoAssert?.Invoke(mock));
                 sc.Configure(col =>
                 {
                     col.AddOptions<DatabaseOption>().Configure(d => d.Debug = true);
@@ -42,6 +48,21 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
 
                 sc.CreateMock<IFileSystem>().RegisterMock();
                 sc.CreateMock<IPushMessager>().RegisterMock();
+            });
+        }
+
+        [Fact]
+        public async Task RegisterValidTest()
+        {
+            var test = CreateTestBase(repoAssert: m =>
+            {
+                m.Setup(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>())).Returns(Task.CompletedTask);
+
+                return mm =>
+                {
+                    mm.Verify(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>()), Times.Exactly(1));
+                    mm.Verify(rp => rp.Sync(It.IsAny<RegistratedReporitoryEntity>()), Times.Exactly(1));
+                };
             });
         }
     }
