@@ -1,0 +1,46 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Tauron.Application.SimpleAuth.Api.Proto";
+
+import "google/rpc/status.proto";
+
+package Tauron.Application.SimpleAuth;
+
+service LoginService {
+	//Erzeut ein 24 Stunden gültiges token.
+	rpc GetToken (GetTokenData) returns (GetTokenResult);
+	//Versucht ein neues Passwort zu setzen
+	rpc Setpassword (NewPasswordData) returns(SetPasswordResult);
+}
+
+message GetTokenData{
+
+}
+
+//Enthält bei erfolg das Token das Generiert wurde.
+message GetTokenResult{
+	oneof Result{
+			//Das Token zur Authentifizierung
+			string Token = 1;
+			google.rpc.Status Status = 24;
+		}
+	
+}
+
+//Enthält alle information um ein neues Password zu setzen
+message NewPasswordData{
+	//Das Alte Password
+	string OldPassword = 1;
+	//Das Neue Passwort das gesetzt werden soll
+	string NewPassword = 2;
+}
+
+//Ergebnis des Passowort-Setz vorgangas
+message SetPasswordResult{
+	oneof Result{
+		//Das Token zur Authentifizierung
+		string Token = 1;
+		google.rpc.Status Status = 24;
+	}
+	
+}

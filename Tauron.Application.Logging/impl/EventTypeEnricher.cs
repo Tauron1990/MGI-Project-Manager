@@ -14,7 +14,7 @@ namespace Tauron.Application.Logging.impl
             var bytes = Encoding.UTF8.GetBytes(logEvent.MessageTemplate.Text);
             var hash = murmur.ComputeHash(bytes);
             var numericHash = BitConverter.ToUInt32(hash, 0);
-            var eventType = propertyFactory.CreateProperty("EventType", numericHash);
+            var eventType = propertyFactory.CreateProperty("EventType", numericHash.ToString("x8"));
             logEvent.AddPropertyIfAbsent(eventType);
         }
     }
