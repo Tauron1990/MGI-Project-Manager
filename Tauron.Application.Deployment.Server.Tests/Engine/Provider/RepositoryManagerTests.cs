@@ -33,7 +33,11 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
                 sc.Configure(col =>
                 {
                     col.AddOptions<DatabaseOption>().Configure(d => d.Debug = true);
-                    col.AddOptions<LocalSettings>().Configure(ls => ls.DatabaseName = "Database-Name");
+                    col.AddOptions<LocalSettings>().Configure(ls =>
+                    {
+                        ls.DatabaseName = "Database-Name";
+                        ls.ServerFileMode = ServerFileMode.ContentRoot;
+                    });
                     col.AddDataRaven();
                     col.AddByName<IRepoProvider, RepositoryProvider>()
                        .Add<IRepoProvider>("Test", new RepositoryProvider
@@ -72,6 +76,29 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
 
                 Assert.Null(msg);
                 Assert.True(ok);
+            });
+        }
+
+        [Fact]
+        public async Task RegisterProviderErrorTest()
+        {
+            var test = CreateTestBase(m =>
+            {
+                m.Setup(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>())).Returns(Task.CompletedTask);
+                m.Setup(rp => rp.Sync(It.IsAny<RegistratedReporitoryEntity>())).Throws<InvalidOperationException>();
+
+                return mm =>
+                {
+                    mm.Verify(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>()), Times.Exactly(1));
+                };
+            });
+
+            await test.Run(async s =>
+            {
+                var (msg, ok) = await s.Register("Test", "Test", "Test", "Test");
+
+                Assert.NotNull(msg);
+                Assert.False(ok);
             });
         }
     }

@@ -61,6 +61,9 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
                            TargetPath = Path.Combine(_fileSystem.RepositoryRoot, name)
                        };
 
+            if(Directory.Exists(data.TargetPath))
+                Directory.Delete(data.TargetPath);
+
             await _factory.GetByName(provider).Init(data);
 
             await session.StoreAsync(data);
