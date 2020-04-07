@@ -14,3 +14,4 @@ https://www.neptuo.com/blog/2018/04/blazor-boot-screen/
 
 https://github.com/jacqueskang/IpcServiceFramework
 https://blog.datalust.co/smart-logging-middleware-for-asp-net-core/
+https://www.codeproject.com/Articles/375166/Functional-programming-in-Csharp
