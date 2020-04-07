@@ -11,16 +11,18 @@ namespace Tauron.Application.Data.Raven.Impl
 
         private readonly ReaderWriterLockSlim _changeLock;
         private readonly string _databaseName;
+        private readonly MemoryConfig _memoryConfig;
         private IDocumentStore? _documentStore;
         private InMemoryStore? _inMemoryStore;
 
         private DatabaseOption? _option;
 
-        public DatabaseRootImpl(DatabaseOption option, ReaderWriterLockSlim changeLock, string databaseName)
+        public DatabaseRootImpl(DatabaseOption option, ReaderWriterLockSlim changeLock, string databaseName, MemoryConfig memoryConfig)
         {
             _option = option;
             _changeLock = changeLock;
             _databaseName = databaseName;
+            _memoryConfig = memoryConfig;
         }
 
         public IDatabaseSession OpenSession(bool noTracking = true)
@@ -53,8 +55,12 @@ namespace Tauron.Application.Data.Raven.Impl
             _documentStore?.Dispose();
             _documentStore = null;
 
-            if (_option?.Debug == true)
-                _inMemoryStore = new InMemoryStore();
+            if (_option?.InMemory == true)
+            {
+                _inMemoryStore = _memoryConfig.MemoryStores.TryGetValue(_databaseName, out var memoryStore) 
+                    ? memoryStore 
+                    : new InMemoryStore();
+            }
             else
                 _documentStore = new DocumentStore {Conventions = DocumentConventions, Urls = _option?.Urls, Database = _databaseName}.Initialize();
 

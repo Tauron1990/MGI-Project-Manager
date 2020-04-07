@@ -6,6 +6,6 @@ namespace Tauron.Application.Data.Raven
     {
         public string[] Urls { get; set; } = Array.Empty<string>();
 
-        public bool Debug { get; set; } = false;
+        public bool InMemory { get; set; } = false;
     }
 }

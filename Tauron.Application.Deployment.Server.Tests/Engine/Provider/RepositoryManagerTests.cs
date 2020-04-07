@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Neleus.DependencyInjection.Extensions;
 using Tauron.Application.Data.Raven;
+using Tauron.Application.Data.Raven.Impl;
 using Tauron.Application.Deployment.Server.Data;
 using Tauron.Application.Deployment.Server.Engine;
 using Tauron.Application.Deployment.Server.Engine.Data;
@@ -21,24 +22,26 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
         public RepositoryManagerTests(ITestOutputHelper helper) 
             => _helper = helper;
 
-        private TestService<IRepositoryManager> CreateTestBase(Func<Mock<IRepoProvider>, Action<Mock<IRepoProvider>>?>? providerConfig = null)
+        private TestService<IRepositoryManager> CreateTestBase(Func<Mock<IRepoProvider>, Action<Mock<IRepoProvider>>?>? providerConfig = null, Action<InMemoryStore> database = null)
         {
             return ServiceTest.Create<IRepositoryManager, RepositoryManager>(_helper, config: sc =>
             {
                 var mock = new Mock<IRepoProvider>();
+                var store = new InMemoryStore();
 
+                database?.Invoke(store);
                 var assert = providerConfig?.Invoke(mock);
 
                 sc.AddService(() => mock.Object, s => assert?.Invoke(mock));
                 sc.Configure(col =>
                 {
-                    col.AddOptions<DatabaseOption>().Configure(d => d.Debug = true);
+                    col.AddOptions<DatabaseOption>().Configure(d => d.InMemory = true);
                     col.AddOptions<LocalSettings>().Configure(ls =>
                     {
                         ls.DatabaseName = "Database-Name";
                         ls.ServerFileMode = ServerFileMode.ContentRoot;
                     });
-                    col.AddDataRaven();
+                    col.AddDataRaven().AddMemoryStore("Database-Name", store);
                     col.AddByName<IRepoProvider, RepositoryProvider>()
                        .Add<IRepoProvider>("Test", new RepositoryProvider
                                                    {
@@ -65,8 +68,8 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
 
                 return mm =>
                 {
-                    mm.Verify(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>()), Times.Exactly(1));
-                    mm.Verify(rp => rp.Sync(It.IsAny<RegistratedReporitoryEntity>()), Times.Exactly(1));
+                    mm.Verify(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>()), Times.Once);
+                    mm.Verify(rp => rp.Sync(It.IsAny<RegistratedReporitoryEntity>()), Times.Once);
                 };
             });
 
@@ -80,7 +83,7 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
         }
 
         [Fact]
-        public async Task RegisterProviderErrorTest()
+        public async Task RegisterErrorTest()
         {
             var test = CreateTestBase(m =>
             {
@@ -89,7 +92,8 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
 
                 return mm =>
                 {
-                    mm.Verify(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>()), Times.Exactly(1));
+                    mm.Verify(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>()), Times.Once);
+                    mm.Verify(rp => rp.Sync(It.IsAny<RegistratedReporitoryEntity>()), Times.Never);
                 };
             });
 
@@ -100,6 +104,42 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
                 Assert.NotNull(msg);
                 Assert.False(ok);
             });
+        }
+
+        public enum DeleteTestType
+        {
+            NoData,
+            Data
+        }
+
+        [Theory]
+        [InlineData(DeleteTestType.Data)]
+        [InlineData(DeleteTestType.NoData)]
+        public async Task DeleteRepositoryTest(DeleteTestType testType)
+        {
+            var test = CreateTestBase(providerConfig: m =>
+            {
+                return ma =>
+                {
+                    switch (testType)
+                    {
+                        case DeleteTestType.NoData:
+                            m.Verify(rp => rp.Delete(It.IsAny<RegistratedReporitoryEntity>()), Times.Never);
+                            break;
+                        case DeleteTestType.Data:
+                            m.Verify(rp => rp.Delete(It.IsAny<RegistratedReporitoryEntity>()), Times.Once);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(testType), testType, null);
+                    }
+                };
+            }, store =>
+            {
+                if(testType == DeleteTestType.Data)
+                    store.StoreAsync()
+            });
+
+
         }
     }
 }

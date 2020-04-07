@@ -9,19 +9,25 @@ namespace Tauron.Application.Data.Raven
     [PublicAPI]
     public static class Extensions
     {
-        public static IServiceCollection AddDataRaven(this IServiceCollection serviceCollection, IConfiguration configuration)
+        public static DataRavenConfiguration AddDataRaven(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
             serviceCollection.Configure<DatabaseOption>(configuration.GetSection("DatabaseOptions"))
                .TryAddSingleton<IDatabaseCache, DatabaseCacheImpl>();
 
-            return serviceCollection;
+            var config = new DataRavenConfiguration();
+            serviceCollection.Configure<MemoryConfig>(c => c.MemoryStores = config.MemoryStores);
+
+            return config;
         }
 
-        public static IServiceCollection AddDataRaven(this IServiceCollection serviceCollection)
+        public static DataRavenConfiguration AddDataRaven(this IServiceCollection serviceCollection)
         {
             serviceCollection.TryAddSingleton<IDatabaseCache, DatabaseCacheImpl>();
 
-            return serviceCollection;
+            var config = new DataRavenConfiguration();
+            serviceCollection.Configure<MemoryConfig>(c => c.MemoryStores = config.MemoryStores);
+
+            return config;
         }
     }
 }

@@ -11,10 +11,12 @@ namespace Tauron.Application.Data.Raven.Impl
         private readonly IDisposable _changeToken;
         private readonly ConcurrentDictionary<string, DatabaseRootImpl> _databases = new ConcurrentDictionary<string, DatabaseRootImpl>();
         private readonly IOptionsMonitor<DatabaseOption> _options;
+        private readonly IOptions<MemoryConfig> _memoryConfig;
 
-        public DatabaseCacheImpl(IOptionsMonitor<DatabaseOption> options)
+        public DatabaseCacheImpl(IOptionsMonitor<DatabaseOption> options, IOptions<MemoryConfig> memoryConfig)
         {
             _options = options;
+            _memoryConfig = memoryConfig;
             _changeToken = _options.OnChange((option, s) =>
                                              {
                                                  _changeLock.EnterWriteLock();
@@ -31,7 +33,7 @@ namespace Tauron.Application.Data.Raven.Impl
         }
 
         public IDatabaseRoot Get(string databaseName)
-            => _databases.GetOrAdd(databaseName, s => new DatabaseRootImpl(_options.CurrentValue, _changeLock, databaseName).Initislize());
+            => _databases.GetOrAdd(databaseName, s => new DatabaseRootImpl(_options.CurrentValue, _changeLock, databaseName, _memoryConfig.Value).Initislize());
 
         public void Dispose()
         {
