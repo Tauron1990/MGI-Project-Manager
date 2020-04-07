@@ -29,6 +29,103 @@
             </returns>
             <response code="200">Das Ergebnis</response>
         </member>
+        <member name="T:Tauron.Application.SimpleAuth.Api.Proto.LoginReflection">
+            <summary>Holder for reflection information generated from Protos/Login.proto</summary>
+        </member>
+        <member name="P:Tauron.Application.SimpleAuth.Api.Proto.LoginReflection.Descriptor">
+            <summary>File descriptor for Protos/Login.proto</summary>
+        </member>
+        <member name="T:Tauron.Application.SimpleAuth.Api.Proto.GetTokenResult">
+             <summary>
+            Enthält bei erfolg das Token das Generiert wurde.
+             </summary>
+        </member>
+        <member name="F:Tauron.Application.SimpleAuth.Api.Proto.GetTokenResult.TokenFieldNumber">
+            <summary>Field number for the "Token" field.</summary>
+        </member>
+        <member name="P:Tauron.Application.SimpleAuth.Api.Proto.GetTokenResult.Token">
+             <summary>
+            Das Token zur Authentifizierung
+             </summary>
+        </member>
+        <member name="F:Tauron.Application.SimpleAuth.Api.Proto.GetTokenResult.StatusFieldNumber">
+            <summary>Field number for the "Status" field.</summary>
+        </member>
+        <member name="T:Tauron.Application.SimpleAuth.Api.Proto.GetTokenResult.ResultOneofCase">
+            <summary>Enum of possible cases for the "Result" oneof.</summary>
+        </member>
+        <member name="T:Tauron.Application.SimpleAuth.Api.Proto.NewPasswordData">
+             <summary>
+            Enthält alle information um ein neues Password zu setzen
+             </summary>
+        </member>
+        <member name="F:Tauron.Application.SimpleAuth.Api.Proto.NewPasswordData.OldPasswordFieldNumber">
+            <summary>Field number for the "OldPassword" field.</summary>
+        </member>
+        <member name="P:Tauron.Application.SimpleAuth.Api.Proto.NewPasswordData.OldPassword">
+             <summary>
+            Das Alte Password
+             </summary>
+        </member>
+        <member name="F:Tauron.Application.SimpleAuth.Api.Proto.NewPasswordData.NewPasswordFieldNumber">
+            <summary>Field number for the "NewPassword" field.</summary>
+        </member>
+        <member name="P:Tauron.Application.SimpleAuth.Api.Proto.NewPasswordData.NewPassword">
+             <summary>
+            Das Neue Passwort das gesetzt werden soll
+             </summary>
+        </member>
+        <member name="T:Tauron.Application.SimpleAuth.Api.Proto.SetPasswordResult">
+             <summary>
+            Ergebnis des Passowort-Setz vorgangas
+             </summary>
+        </member>
+        <member name="F:Tauron.Application.SimpleAuth.Api.Proto.SetPasswordResult.TokenFieldNumber">
+            <summary>Field number for the "Token" field.</summary>
+        </member>
+        <member name="P:Tauron.Application.SimpleAuth.Api.Proto.SetPasswordResult.Token">
+             <summary>
+            Das Token zur Authentifizierung
+             </summary>
+        </member>
+        <member name="F:Tauron.Application.SimpleAuth.Api.Proto.SetPasswordResult.StatusFieldNumber">
+            <summary>Field number for the "Status" field.</summary>
+        </member>
+        <member name="T:Tauron.Application.SimpleAuth.Api.Proto.SetPasswordResult.ResultOneofCase">
+            <summary>Enum of possible cases for the "Result" oneof.</summary>
+        </member>
+        <member name="P:Tauron.Application.SimpleAuth.Api.Proto.LoginService.Descriptor">
+            <summary>Service descriptor</summary>
+        </member>
+        <member name="T:Tauron.Application.SimpleAuth.Api.Proto.LoginService.LoginServiceBase">
+            <summary>Base class for server-side implementations of LoginService</summary>
+        </member>
+        <member name="M:Tauron.Application.SimpleAuth.Api.Proto.LoginService.LoginServiceBase.GetToken(Tauron.Application.SimpleAuth.Api.Proto.GetTokenData,Grpc.Core.ServerCallContext)">
+             <summary>
+            Erzeut ein 24 Stunden gültiges token.
+             </summary>
+             <param name="request">The request received from the client.</param>
+             <param name="context">The context of the server-side call handler being invoked.</param>
+             <returns>The response to send back to the client (wrapped by a task).</returns>
+        </member>
+        <member name="M:Tauron.Application.SimpleAuth.Api.Proto.LoginService.LoginServiceBase.Setpassword(Tauron.Application.SimpleAuth.Api.Proto.NewPasswordData,Grpc.Core.ServerCallContext)">
+             <summary>
+            Versucht ein neues Passwort zu setzen
+             </summary>
+             <param name="request">The request received from the client.</param>
+             <param name="context">The context of the server-side call handler being invoked.</param>
+             <returns>The response to send back to the client (wrapped by a task).</returns>
+        </member>
+        <member name="M:Tauron.Application.SimpleAuth.Api.Proto.LoginService.BindService(Tauron.Application.SimpleAuth.Api.Proto.LoginService.LoginServiceBase)">
+            <summary>Creates service definition that can be registered with a server</summary>
+            <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+        </member>
+        <member name="M:Tauron.Application.SimpleAuth.Api.Proto.LoginService.BindService(Grpc.Core.ServiceBinderBase,Tauron.Application.SimpleAuth.Api.Proto.LoginService.LoginServiceBase)">
+            <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
+            Note: this method is part of an experimental API that can change or be removed without any prior notice.</summary>
+            <param name="serviceBinder">Service methods will be bound by calling <c>AddMethod</c> on this object.</param>
+            <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+        </member>
         <member name="T:Tauron.Application.SimpleAuth.Data.GetTokenResult">
             <summary>
                 Enthält bei erfolg das Token das Generiert wurde.
@@ -72,6 +169,254 @@
         <member name="P:Tauron.Application.SimpleAuth.Data.SetPasswordResult.Token">
             <summary>
                 Ein neues token für die Authentifizierung
+            </summary>
+        </member>
+        <member name="T:Google.Rpc.CodeReflection">
+            <summary>Holder for reflection information generated from google/rpc/code.proto</summary>
+        </member>
+        <member name="P:Google.Rpc.CodeReflection.Descriptor">
+            <summary>File descriptor for google/rpc/code.proto</summary>
+        </member>
+        <member name="T:Google.Rpc.Code">
+             <summary>
+             The canonical error codes for gRPC APIs.
+            
+             Sometimes multiple error codes may apply.  Services should return
+             the most specific error code that applies.  For example, prefer
+             `OUT_OF_RANGE` over `FAILED_PRECONDITION` if both codes apply.
+             Similarly prefer `NOT_FOUND` or `ALREADY_EXISTS` over `FAILED_PRECONDITION`.
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.Ok">
+             <summary>
+             Not an error; returned on success
+            
+             HTTP Mapping: 200 OK
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.Cancelled">
+             <summary>
+             The operation was cancelled, typically by the caller.
+            
+             HTTP Mapping: 499 Client Closed Request
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.Unknown">
+             <summary>
+             Unknown error.  For example, this error may be returned when
+             a `Status` value received from another address space belongs to
+             an error space that is not known in this address space.  Also
+             errors raised by APIs that do not return enough error information
+             may be converted to this error.
+            
+             HTTP Mapping: 500 Internal Server Error
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.InvalidArgument">
+             <summary>
+             The client specified an invalid argument.  Note that this differs
+             from `FAILED_PRECONDITION`.  `INVALID_ARGUMENT` indicates arguments
+             that are problematic regardless of the state of the system
+             (e.g., a malformed file name).
+            
+             HTTP Mapping: 400 Bad Request
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.DeadlineExceeded">
+             <summary>
+             The deadline expired before the operation could complete. For operations
+             that change the state of the system, this error may be returned
+             even if the operation has completed successfully.  For example, a
+             successful response from a server could have been delayed long
+             enough for the deadline to expire.
+            
+             HTTP Mapping: 504 Gateway Timeout
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.NotFound">
+             <summary>
+             Some requested entity (e.g., file or directory) was not found.
+            
+             Note to server developers: if a request is denied for an entire class
+             of users, such as gradual feature rollout or undocumented whitelist,
+             `NOT_FOUND` may be used. If a request is denied for some users within
+             a class of users, such as user-based access control, `PERMISSION_DENIED`
+             must be used.
+            
+             HTTP Mapping: 404 Not Found
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.AlreadyExists">
+             <summary>
+             The entity that a client attempted to create (e.g., file or directory)
+             already exists.
+            
+             HTTP Mapping: 409 Conflict
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.PermissionDenied">
+             <summary>
+             The caller does not have permission to execute the specified
+             operation. `PERMISSION_DENIED` must not be used for rejections
+             caused by exhausting some resource (use `RESOURCE_EXHAUSTED`
+             instead for those errors). `PERMISSION_DENIED` must not be
+             used if the caller can not be identified (use `UNAUTHENTICATED`
+             instead for those errors). This error code does not imply the
+             request is valid or the requested entity exists or satisfies
+             other pre-conditions.
+            
+             HTTP Mapping: 403 Forbidden
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.Unauthenticated">
+             <summary>
+             The request does not have valid authentication credentials for the
+             operation.
+            
+             HTTP Mapping: 401 Unauthorized
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.ResourceExhausted">
+             <summary>
+             Some resource has been exhausted, perhaps a per-user quota, or
+             perhaps the entire file system is out of space.
+            
+             HTTP Mapping: 429 Too Many Requests
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.FailedPrecondition">
+             <summary>
+             The operation was rejected because the system is not in a state
+             required for the operation's execution.  For example, the directory
+             to be deleted is non-empty, an rmdir operation is applied to
+             a non-directory, etc.
+            
+             Service implementors can use the following guidelines to decide
+             between `FAILED_PRECONDITION`, `ABORTED`, and `UNAVAILABLE`:
+              (a) Use `UNAVAILABLE` if the client can retry just the failing call.
+              (b) Use `ABORTED` if the client should retry at a higher level
+                  (e.g., when a client-specified test-and-set fails, indicating the
+                  client should restart a read-modify-write sequence).
+              (c) Use `FAILED_PRECONDITION` if the client should not retry until
+                  the system state has been explicitly fixed.  E.g., if an "rmdir"
+                  fails because the directory is non-empty, `FAILED_PRECONDITION`
+                  should be returned since the client should not retry unless
+                  the files are deleted from the directory.
+            
+             HTTP Mapping: 400 Bad Request
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.Aborted">
+             <summary>
+             The operation was aborted, typically due to a concurrency issue such as
+             a sequencer check failure or transaction abort.
+            
+             See the guidelines above for deciding between `FAILED_PRECONDITION`,
+             `ABORTED`, and `UNAVAILABLE`.
+            
+             HTTP Mapping: 409 Conflict
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.OutOfRange">
+             <summary>
+             The operation was attempted past the valid range.  E.g., seeking or
+             reading past end-of-file.
+            
+             Unlike `INVALID_ARGUMENT`, this error indicates a problem that may
+             be fixed if the system state changes. For example, a 32-bit file
+             system will generate `INVALID_ARGUMENT` if asked to read at an
+             offset that is not in the range [0,2^32-1], but it will generate
+             `OUT_OF_RANGE` if asked to read from an offset past the current
+             file size.
+            
+             There is a fair bit of overlap between `FAILED_PRECONDITION` and
+             `OUT_OF_RANGE`.  We recommend using `OUT_OF_RANGE` (the more specific
+             error) when it applies so that callers who are iterating through
+             a space can easily look for an `OUT_OF_RANGE` error to detect when
+             they are done.
+            
+             HTTP Mapping: 400 Bad Request
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.Unimplemented">
+             <summary>
+             The operation is not implemented or is not supported/enabled in this
+             service.
+            
+             HTTP Mapping: 501 Not Implemented
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.Internal">
+             <summary>
+             Internal errors.  This means that some invariants expected by the
+             underlying system have been broken.  This error code is reserved
+             for serious errors.
+            
+             HTTP Mapping: 500 Internal Server Error
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.Unavailable">
+             <summary>
+             The service is currently unavailable.  This is most likely a
+             transient condition, which can be corrected by retrying with
+             a backoff. Note that it is not always safe to retry
+             non-idempotent operations.
+            
+             See the guidelines above for deciding between `FAILED_PRECONDITION`,
+             `ABORTED`, and `UNAVAILABLE`.
+            
+             HTTP Mapping: 503 Service Unavailable
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Code.DataLoss">
+             <summary>
+             Unrecoverable data loss or corruption.
+            
+             HTTP Mapping: 500 Internal Server Error
+             </summary>
+        </member>
+        <member name="T:Google.Rpc.StatusReflection">
+            <summary>Holder for reflection information generated from google/rpc/status.proto</summary>
+        </member>
+        <member name="P:Google.Rpc.StatusReflection.Descriptor">
+            <summary>File descriptor for google/rpc/status.proto</summary>
+        </member>
+        <member name="T:Google.Rpc.Status">
+             <summary>
+             The `Status` type defines a logical error model that is suitable for
+             different programming environments, including REST APIs and RPC APIs. It is
+             used by [gRPC](https://github.com/grpc). Each `Status` message contains
+             three pieces of data: error code, error message, and error details.
+            
+             You can find out more about this error model and how to work with it in the
+             [API Design Guide](https://cloud.google.com/apis/design/errors).
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.Status.CodeFieldNumber">
+            <summary>Field number for the "code" field.</summary>
+        </member>
+        <member name="P:Google.Rpc.Status.Code">
+            <summary>
+            The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+            </summary>
+        </member>
+        <member name="F:Google.Rpc.Status.MessageFieldNumber">
+            <summary>Field number for the "message" field.</summary>
+        </member>
+        <member name="P:Google.Rpc.Status.Message">
+            <summary>
+            A developer-facing error message, which should be in English. Any
+            user-facing error message should be localized and sent in the
+            [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+            </summary>
+        </member>
+        <member name="F:Google.Rpc.Status.DetailsFieldNumber">
+            <summary>Field number for the "details" field.</summary>
+        </member>
+        <member name="P:Google.Rpc.Status.Details">
+            <summary>
+            A list of messages that carry the error details.  There is a common set of
+            message types for APIs to use.
             </summary>
         </member>
     </members>

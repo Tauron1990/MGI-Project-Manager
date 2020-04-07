@@ -21,19 +21,23 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
         public RepositoryManagerTests(ITestOutputHelper helper) 
             => _helper = helper;
 
-        private TestService<IRepositoryManager> CreateTestBase(Func<Mock<IRepoProvider>, Action<Mock<IRepoProvider>>?>? repoAssert = null)
+        private TestService<IRepositoryManager> CreateTestBase(Func<Mock<IRepoProvider>, Action<Mock<IRepoProvider>>?>? providerConfig = null)
         {
             return ServiceTest.Create<IRepositoryManager, RepositoryManager>(_helper, config: sc =>
             {
                 var mock = new Mock<IRepoProvider>();
-                
-                var assert
 
-                sc.AddService(() => mock.Object, s => repoAssert?.Invoke(mock));
+                var assert = providerConfig?.Invoke(mock);
+
+                sc.AddService(() => mock.Object, s => assert?.Invoke(mock));
                 sc.Configure(col =>
                 {
                     col.AddOptions<DatabaseOption>().Configure(d => d.Debug = true);
-                    col.AddOptions<LocalSettings>().Configure(ls => ls.DatabaseName = "Database-Name");
+                    col.AddOptions<LocalSettings>().Configure(ls =>
+                    {
+                        ls.DatabaseName = "Database-Name";
+                        ls.ServerFileMode = ServerFileMode.ContentRoot;
+                    });
                     col.AddDataRaven();
                     col.AddByName<IRepoProvider, RepositoryProvider>()
                        .Add<IRepoProvider>("Test", new RepositoryProvider
@@ -54,15 +58,47 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
         [Fact]
         public async Task RegisterValidTest()
         {
-            var test = CreateTestBase(repoAssert: m =>
+            var test = CreateTestBase(m =>
             {
                 m.Setup(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>())).Returns(Task.CompletedTask);
+                m.Setup(rp => rp.Sync(It.IsAny<RegistratedReporitoryEntity>())).Returns(Task.CompletedTask);
 
                 return mm =>
                 {
                     mm.Verify(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>()), Times.Exactly(1));
                     mm.Verify(rp => rp.Sync(It.IsAny<RegistratedReporitoryEntity>()), Times.Exactly(1));
                 };
+            });
+
+            await test.Run(async s =>
+            {
+                var (msg, ok) = await s.Register("Test", "Test", "Test", "Test");
+
+                Assert.Null(msg);
+                Assert.True(ok);
+            });
+        }
+
+        [Fact]
+        public async Task RegisterProviderErrorTest()
+        {
+            var test = CreateTestBase(m =>
+            {
+                m.Setup(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>())).Returns(Task.CompletedTask);
+                m.Setup(rp => rp.Sync(It.IsAny<RegistratedReporitoryEntity>())).Throws<InvalidOperationException>();
+
+                return mm =>
+                {
+                    mm.Verify(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>()), Times.Exactly(1));
+                };
+            });
+
+            await test.Run(async s =>
+            {
+                var (msg, ok) = await s.Register("Test", "Test", "Test", "Test");
+
+                Assert.NotNull(msg);
+                Assert.False(ok);
             });
         }
     }

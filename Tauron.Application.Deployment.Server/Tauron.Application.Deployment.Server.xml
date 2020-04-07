@@ -4,6 +4,26 @@
         <name>Tauron.Application.Deployment.Server</name>
     </assembly>
     <members>
+        <member name="T:Tauron.Application.Deployment.Server.Data.RegistratedReporitory">
+            <summary>
+            Ein Registriertes Software Repository
+            </summary>
+        </member>
+        <member name="P:Tauron.Application.Deployment.Server.Data.RegistratedReporitory.Name">
+            <summary>
+            Der Name des Repositorys
+            </summary>
+        </member>
+        <member name="P:Tauron.Application.Deployment.Server.Data.RegistratedReporitory.Comment">
+            <summary>
+            Eine Beschreibung des Repositorys
+            </summary>
+        </member>
+        <member name="P:Tauron.Application.Deployment.Server.Data.RegistratedReporitory.Provider">
+            <summary>
+            Der Provider des Repositorys
+            </summary>
+        </member>
         <member name="T:Tauron.Application.Deployment.Server.Data.RepositoryProvider">
             <summary>
             Eine Mögliche Quelle für einen Provider

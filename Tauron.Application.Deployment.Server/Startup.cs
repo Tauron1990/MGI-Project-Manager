@@ -82,8 +82,12 @@ namespace Tauron.Application.Deployment.Server
 
             app.UseRouting();
             app.UseAuthorization();
-            
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.AddSimpleAuthApi();
+            });
 
             app.UseSwagger().UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/TauronDeploymentServer/swagger.json", "Tauron Deployment Server"); });
         }

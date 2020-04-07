@@ -1,0 +1,5 @@
+﻿dotnet tool install -g dotnet-grpc
+cmd
+dotnet-grpc add-url -o google\rpc\status.proto -s Both https://raw.githubusercontent.com/googleapis/googleapis/master/google/rpc/status.proto
+dotnet-grpc add-url -o google\rpc\code.proto -s Both https://raw.githubusercontent.com/googleapis/googleapis/master/google/rpc/code.proto
+dotnet-grpc add-url -o google\rpc\empty.proto -s Both https://raw.githubusercontent.com/protocolbuffers/protobuf/master/src/google/protobuf/empty.proto
