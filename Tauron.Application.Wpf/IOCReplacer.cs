@@ -6,8 +6,12 @@ using System.Reflection;
 using System.Windows;
 using Catel;
 using Catel.IoC;
+using Catel.MVVM;
+using Catel.MVVM.Auditing;
+using Catel.MVVM.Views;
 using Catel.Runtime.Serialization;
 using Catel.Runtime.Serialization.Json;
+using Catel.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -49,13 +53,34 @@ namespace Tauron.Application.Wpf
                 serviceLocator.RegisterInstance(typeof(ITypeFactory), typeFactory);
             }
 
+            locator.InternalServiceProvider = config.BuildServiceProvider();
             new CoreModule().Initialize(serviceLocator);
-            new MVVMModule().Initialize(serviceLocator);
+
+            //MVVMModule InCompatible
+            //new MVVMModule().Initialize(serviceLocator);
+            config.TryAddSingleton<IDataContextSubscriptionService, DataContextSubscriptionService>();
+            config.TryAddSingleton<ICommandManager, CommandManager>();
+            config.TryAddSingleton<IViewLoadManager, ViewLoadManager>();
+            config.TryAddSingleton<IViewModelWrapperService, ViewModelWrapperService>();
+            config.TryAddSingleton<IViewManager, ViewManager>();
+            config.TryAddSingleton<IViewModelManager, ViewModelManager>();
+            config.TryAddSingleton<IAutoCompletionService, AutoCompletionService>();
+            config.TryAddSingleton<IWrapControlService, WrapControlService>();
+            ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
+
             locator.Collection.AddSingleton<ISerializer, JsonSerializer>();
         }
 
-        internal static void SetServiceProvider(IServiceProvider provider) 
-            => Locator.Value.InternalServiceProvider = provider;
+        internal static void SetServiceProvider(IServiceProvider provider)
+        {
+            Locator.Value.InternalServiceProvider = provider;
+            Locator.Value.IsCreated = true;
+
+            ITypeFactory typeFactory = provider.GetRequiredService<ITypeFactory>();
+            AuditingManager.RegisterAuditor(typeFactory.CreateInstance<InvalidateCommandManagerOnViewModelInitializationAuditor>());
+            AuditingManager.RegisterAuditor(typeFactory.CreateInstance<SubscribeKeyboardEventsOnViewModelCreationAuditor>());
+            DesignTimeHelper.InitializeDesignTime();
+        }
 
         private class MicrosoftTypeFactory : ITypeFactory
         {
@@ -133,6 +158,8 @@ namespace Tauron.Application.Wpf
         private class MicrosoftServiceLocator : IServiceLocator
         {
             public IServiceCollection Collection { get; set; } = new ServiceCollection();
+
+            public bool IsCreated { get; set; }
 
             public IServiceProvider InternalServiceProvider { get; set; } = new ServiceCollection().BuildServiceProvider();
 
@@ -304,7 +331,7 @@ namespace Tauron.Application.Wpf
 
             private void ValidateCollectionChange()
             {
-                if (InternalServiceProvider == null) return;
+                if (!IsCreated) return;
 
                 throw new InvalidOperationException("Service Provider wurde schon erstellt");
             }

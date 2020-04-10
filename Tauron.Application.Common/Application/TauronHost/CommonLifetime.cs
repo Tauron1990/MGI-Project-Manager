@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Neleus.DependencyInjection.Extensions;
 
-namespace Tauron.Application.Host
+namespace Tauron.Application.TauronHost
 {
     public sealed class CommonLifetime : IHostLifetime
     {

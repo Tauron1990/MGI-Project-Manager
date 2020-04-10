@@ -12,7 +12,7 @@ namespace Tauron.Application.Wpf
         private readonly IViewModel _viewModel;
 
         protected Window(IViewModel viewModel)
-            : base(viewModel)
+            : base(viewModel, DataWindowMode.Custom)
         {
             _viewModel = viewModel;
             SizeToContent = SizeToContent.Manual;

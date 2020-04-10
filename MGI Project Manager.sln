@@ -108,6 +108,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JKang.IpcServiceFramework.I
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ui", "Ui", "{342886BB-C371-4E8F-B683-814E114E2B26}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.TooUI", "Tauron.Application.TooUI\Tauron.Application.TooUI.csproj", "{67FC18CF-0CFD-4FA3-BA73-87A073D004AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -214,6 +216,10 @@ Global
 		{412FB3BA-3FA7-427B-B6FA-F83011E2B6EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{412FB3BA-3FA7-427B-B6FA-F83011E2B6EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{412FB3BA-3FA7-427B-B6FA-F83011E2B6EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67FC18CF-0CFD-4FA3-BA73-87A073D004AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67FC18CF-0CFD-4FA3-BA73-87A073D004AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67FC18CF-0CFD-4FA3-BA73-87A073D004AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67FC18CF-0CFD-4FA3-BA73-87A073D004AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -259,6 +265,7 @@ Global
 		{FE7821A0-FD93-4DD2-A661-0166811E10E3} = {F24620B1-6429-4B71-A0E1-F0069779B839}
 		{412FB3BA-3FA7-427B-B6FA-F83011E2B6EA} = {F24620B1-6429-4B71-A0E1-F0069779B839}
 		{342886BB-C371-4E8F-B683-814E114E2B26} = {724A5231-8F02-4AFE-AE82-5AFA4444820A}
+		{67FC18CF-0CFD-4FA3-BA73-87A073D004AD} = {342886BB-C371-4E8F-B683-814E114E2B26}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}

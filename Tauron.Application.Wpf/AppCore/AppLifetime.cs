@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Tauron.Application.Host;
+using Tauron.Application.TauronHost;
 
 namespace Tauron.Application.Wpf.AppCore
 {
@@ -24,7 +24,13 @@ namespace Tauron.Application.Wpf.AppCore
 
         public Task WaitForStartAsync(CancellationToken cancellationToken)
         {
-            Task.Run(() =>
+            void ShutdownApp()
+            {
+                _internalApplication?.Dispatcher.Invoke(_internalApplication.Shutdown);
+                _applicationLifetime.StopApplication();
+            }
+
+            void Runner()
             {
                 using var scope = _factory.CreateScope();
                 IOCReplacer.SetServiceProvider(scope.ServiceProvider);
@@ -41,21 +47,32 @@ namespace Tauron.Application.Wpf.AppCore
 
                     var mainWindow = scope.ServiceProvider.GetRequiredService<IMainWindow>();
                     mainWindow.Window.Show();
-                    mainWindow.Shutdown += (o, eventArgs) => _applicationLifetime.StopApplication();
+                    mainWindow.Shutdown += (o, eventArgs) 
+                        => ShutdownApp();
+
+                    scope.ServiceProvider.GetRequiredService<IWpfLifetime>().ShutdownEvent += (o, eventArgs) 
+                        => ShutdownApp();
 
                     splash?.Hide();
                     // ReSharper restore AccessToDisposedClosure
                 };
 
                 _shutdownWaiter.SetResult(_internalApplication.Run());
-            }, cancellationToken);
+            }
+
+            Thread uiThread = new Thread(Runner)
+                              {
+                                  Name = "UI Thread",
+                                  IsBackground = true
+                              };
+            uiThread.SetApartmentState(ApartmentState.STA);
+            uiThread.Start();
 
             return Task.CompletedTask;
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            _internalApplication?.Shutdown();
             var result = await _shutdownWaiter.Task;
             Environment.ExitCode = result;
         }

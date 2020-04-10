@@ -16,4 +16,10 @@
     <ProjectReference Include="..\Neleus.DependencyInjection.Extensions\Neleus.DependencyInjection.Extensions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\TauronHost\">
+      <FolderName>TauronHost</FolderName>
+    </Folder>
+  </ItemGroup>
+
 </Project>

@@ -2,6 +2,6 @@
 {
     public interface IWindowProvider
     {
-        Window Window { get; }
+        System.Windows.Window Window { get; }
     }
 }

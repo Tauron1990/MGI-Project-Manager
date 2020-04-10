@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <StartupObject>Tauron.Application.TooUI.CoreProgram</StartupObject>
+    <ApplicationIcon>Working_Tools.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Working_Tools.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tauron.Application.Wpf\Tauron.Application.Wpf.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Working_Tools.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\">
+      <FolderName>Views</FolderName>
+    </Folder>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Catel.Fody" Version="4.3.0" />
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="18.1.0.43" />
+    <PackageReference Include="Syncfusion.Shared.WPF" Version="18.1.0.43" />
+    <PackageReference Include="Syncfusion.Themes.Blend.WPF" Version="18.1.0.43" />
+  </ItemGroup>
+
+</Project>

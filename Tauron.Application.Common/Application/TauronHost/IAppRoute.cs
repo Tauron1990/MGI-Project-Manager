@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Tauron.Application.Host
+namespace Tauron.Application.TauronHost
 {
     public interface IAppRoute
     {
