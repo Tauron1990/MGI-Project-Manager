@@ -13,14 +13,15 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Tauron.Application.Wpf
 {
-    public static class IOCReplacer
+    internal static class IOCReplacer
     {
-        private static readonly Lazy<MicrosoftServiceLocator> Locator = new Lazy<MicrosoftServiceLocator>(() => new MicrosoftServiceLocator(new ServiceCollection()));
+        private static readonly Lazy<MicrosoftServiceLocator> Locator = new Lazy<MicrosoftServiceLocator>(() => new MicrosoftServiceLocator());
         private static readonly Lazy<MicrosoftTypeFactory> TypeFactory = new Lazy<MicrosoftTypeFactory>(() => new MicrosoftTypeFactory(Locator.Value));
 
-        public static IServiceLocator Create(Action<ServiceCollection> config)
+        internal static void Create(IServiceCollection config)
         {
             var locator = Locator.Value;
+            locator.Collection = config;
 
             locator.Collection.Scan(
                 ts =>
@@ -29,7 +30,7 @@ namespace Tauron.Application.Wpf
                        .As<FrameworkElement>().UsingRegistrationStrategy(new ControlRegistrar())
                        .AddClasses().UsingAttributes());
 
-            config(locator.Collection);
+            locator.Collection.AddTauronCommon();
 
             IoCFactory.CreateServiceLocatorFunc = () => Locator.Value;
             IoCFactory.CreateTypeFactoryFunc = _ => TypeFactory.Value;
@@ -51,9 +52,10 @@ namespace Tauron.Application.Wpf
             new CoreModule().Initialize(serviceLocator);
             new MVVMModule().Initialize(serviceLocator);
             locator.Collection.AddSingleton<ISerializer, JsonSerializer>();
-
-            return locator;
         }
+
+        internal static void SetServiceProvider(IServiceProvider provider) 
+            => Locator.Value.InternalServiceProvider = provider;
 
         private class MicrosoftTypeFactory : ITypeFactory
         {
@@ -130,14 +132,9 @@ namespace Tauron.Application.Wpf
 
         private class MicrosoftServiceLocator : IServiceLocator
         {
-            private ServiceProvider? _serviceProvider;
+            public IServiceCollection Collection { get; set; } = new ServiceCollection();
 
-            public MicrosoftServiceLocator(ServiceCollection collection) => Collection = collection;
-
-            public ServiceCollection Collection { get; }
-
-            private IServiceProvider InternalServiceProvider
-                => _serviceProvider ??= Collection.BuildServiceProvider();
+            public IServiceProvider InternalServiceProvider { get; set; } = new ServiceCollection().BuildServiceProvider();
 
             public object? GetService(Type serviceType)
             {
@@ -150,11 +147,6 @@ namespace Tauron.Application.Wpf
                 result = eventArgs.ImplementingInstance;
 
                 return result;
-            }
-
-            public void Dispose()
-            {
-                _serviceProvider?.Dispose();
             }
 
             public RegistrationInfo? GetRegistrationInfo(Type serviceType, object? tag = null)
@@ -312,9 +304,13 @@ namespace Tauron.Application.Wpf
 
             private void ValidateCollectionChange()
             {
-                if (_serviceProvider == null) return;
+                if (InternalServiceProvider == null) return;
 
                 throw new InvalidOperationException("Service Provider wurde schon erstellt");
+            }
+
+            public void Dispose()
+            {
             }
         }
     }
