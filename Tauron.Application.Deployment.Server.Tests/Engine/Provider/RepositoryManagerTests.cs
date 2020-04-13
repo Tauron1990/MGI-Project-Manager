@@ -136,7 +136,7 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
             }, store =>
             {
                 if(testType == DeleteTestType.Data)
-                    store.StoreAsync()
+                    store.StoreAsync(new )
             });
 
 

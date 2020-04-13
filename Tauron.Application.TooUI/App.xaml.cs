@@ -1,4 +1,4 @@
-﻿namespace Tauron.Application.TooUI
+﻿namespace Tauron.Application.ToolUI
 {
     /// <summary>
     /// Interaction logic for App.xaml

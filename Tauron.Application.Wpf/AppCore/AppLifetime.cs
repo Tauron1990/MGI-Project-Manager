@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Catel.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Tauron.Application.TauronHost;
 
 namespace Tauron.Application.Wpf.AppCore
@@ -33,6 +35,8 @@ namespace Tauron.Application.Wpf.AppCore
             void Runner()
             {
                 using var scope = _factory.CreateScope();
+
+                LogManager.AddListener(new CatelListner(scope.ServiceProvider.GetRequiredService<ILogger<CatelListner>>()));
                 IOCReplacer.SetServiceProvider(scope.ServiceProvider);
 
                 _internalApplication = scope.ServiceProvider.GetService<IAppFactory>()?.Create() ?? new System.Windows.Application();

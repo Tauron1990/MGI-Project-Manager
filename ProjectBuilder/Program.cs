@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Pipes;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using JKang.IpcServiceFramework;
 using MessagePack;
 using Serilog;
-using Tauron.Application.Pipes;
-using Tauron.Application.Pipes.IO;
+using Tauron.Application.Deployment.AutoUpload.Models.Build;
 
 namespace ProjectBuilder
 {
@@ -37,7 +36,7 @@ namespace ProjectBuilder
 
     internal static class Program
     {
-        private static PipeServer<string> _uploadapp = PipeServer<string>.Empty;
+        private static IpcServiceClient<IBuildServer> _uploadapp;
 
         private static async Task<int> Main()
         {
@@ -47,7 +46,7 @@ namespace ProjectBuilder
 
             try
             {
-                var path = Path.GetFullPath(BuildInfo.BuildFile, Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location));
+                var path = Path.GetFullPath(BuildInfo.BuildFile, Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ?? string.Empty);
                 Log.Information($"Check BuildInfo: {path}");
                 if (!File.Exists(path))
                 {
@@ -61,11 +60,8 @@ namespace ProjectBuilder
                 Log.Information($"{Path.GetFileName(info.ProjectFile)}--{Path.GetDirectoryName(info.Output)}--{info.PipeHandle}");
 
                 Log.Information("Create Pipe");
-                if (!string.IsNullOrWhiteSpace(info.PipeHandle) && info.PipeHandle != "none")
-                {
-                    _uploadapp = new PipeServer<string>(Anonymos.Create(PipeDirection.Out, info.PipeHandle));
-                    await _uploadapp.Connect();
-                }
+                if (!string.IsNullOrWhiteSpace(info.PipeHandle) && info.PipeHandle != "none") 
+                    _uploadapp = new IpcServiceClientBuilder<IBuildServer>().UseNamedPipe(info.PipeHandle).Build();
 
                 var projectName = info.ProjectFile;
                 var output = info.Output;
@@ -87,6 +83,7 @@ namespace ProjectBuilder
 
                 process.StartInfo = new ProcessStartInfo(@"C:\Program Files\dotnet\dotnet.exe", arguments.ToString())
                                     {
+                                        UseShellExecute = false,
                                         RedirectStandardError = true,
                                         RedirectStandardOutput = true
                                     };
@@ -117,15 +114,11 @@ namespace ProjectBuilder
 
         private static async void ProcessOnOutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            if (_uploadapp.CanWrite)
-                await _uploadapp.SendMessage(e.Data);
+            await _uploadapp.InvokeAsync(bs => bs.String(e.Data));
             Console.WriteLine(e.Data);
         }
 
-        private static async void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            if (_uploadapp.CanWrite)
-                await _uploadapp.SendMessage("error");
-        }
+        private static async void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e) 
+            => await _uploadapp.InvokeAsync(bs => bs.String("error"));
     }
 }

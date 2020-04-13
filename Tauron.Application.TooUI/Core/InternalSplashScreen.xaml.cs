@@ -10,7 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Tauron.Application.TooUI.Core
+namespace Tauron.Application.ToolUI.Core
 {
     /// <summary>
     /// Interaktionslogik für InternalSplashScreen.xaml

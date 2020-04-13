@@ -49,14 +49,12 @@ namespace JKang.IpcServiceFramework
             var request = GetRequest(exp, new MyInterceptor<TResult>());
             var response = await GetResponseAsync(request, cancellationToken).ConfigureAwait(false);
 
-            if (response.Succeed)
-            {
-                if (_converter.TryConvert(response.Data, typeof(TResult), out var @return))
-                    return (TResult) @return;
-                throw new InvalidOperationException($"Unable to convert returned value to '{typeof(TResult).Name}'.");
-            }
+            if (!response.Succeed) throw new InvalidOperationException(response.Failure);
+            if (_converter.TryConvert(response.Data, typeof(TResult), out var @return))
+                return (TResult) @return;
+            
+            throw new InvalidOperationException($"Unable to convert returned value to '{typeof(TResult).Name}'.");
 
-            throw new InvalidOperationException(response.Failure);
         }
 
         public async Task InvokeAsync(Expression<Func<TInterface, Task>> exp,

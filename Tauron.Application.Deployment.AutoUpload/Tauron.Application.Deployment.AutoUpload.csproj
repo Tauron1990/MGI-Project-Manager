@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
@@ -9,7 +9,7 @@
     <AssemblyVersion>0.0.1.0</AssemblyVersion>
     <FileVersion>0.0.1.0</FileVersion>
     <WarningsAsErrors>CS8600;CS8602;CS8603;CS8618</WarningsAsErrors>
-    <ApplicationIcon>Upload.ico</ApplicationIcon>
+    <ApplicationIcon></ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,10 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Upload.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Anotar.Serilog.Fody" Version="5.1.0" />
     <PackageReference Include="Catel.Analyzers" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -50,13 +47,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IPC\JKang.IpcServiceFramework.Server\JKang.IpcServiceFramework.Server.csproj" />
+    <ProjectReference Include="..\Tauron.Application.Logging\Tauron.Application.Logging.csproj" />
     <ProjectReference Include="..\Tauron.Application.Pipes\Tauron.Application.Pipes.csproj" />
     <ProjectReference Include="..\Tauron.Application.SoftwareRepo\Tauron.Application.SoftwareRepo.csproj" />
+    <ProjectReference Include="..\Tauron.Application.ToolUI.Shared\Tauron.Application.ToolUI.Shared.csproj" />
     <ProjectReference Include="..\Tauron.Application.Wpf\Tauron.Application.Wpf.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Upload.ico" />
   </ItemGroup>
 
 </Project>

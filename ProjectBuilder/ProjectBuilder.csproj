@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IPC\JKang.IpcServiceFramework.Client\JKang.IpcServiceFramework.Client.csproj" />
     <ProjectReference Include="..\Tauron.Application.Pipes\Tauron.Application.Pipes.csproj" />
   </ItemGroup>
 

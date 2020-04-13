@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Anotar.Serilog;
 using Catel.MVVM;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Common;
 
@@ -33,6 +34,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Operations
 
         protected async Task OnNextView(Type arg1, OperationContextBase arg2, Redirection? redirection = null)
         {
+            LogTo.Information("Next View: {View}", arg1);
             await CloseAsync();
 
             var currentRedirection = arg2.Redirection;

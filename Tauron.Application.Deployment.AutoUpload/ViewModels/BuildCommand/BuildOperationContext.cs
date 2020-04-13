@@ -40,12 +40,11 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 
         public void Apply(OperationContextBase context)
         {
-            switch (context)
+            RegistratedRepository = context switch
             {
-                case AddCommandContext add:
-                    RegistratedRepository = add.RegistratedRepository;
-                    break;
-            }
+                AddCommandContext add => add.RegistratedRepository,
+                _ => RegistratedRepository
+            };
         }
     }
 }

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Anotar.Serilog;
 using Catel.Collections;
-using Catel.Data;
 using Catel.Threading;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
@@ -78,6 +78,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
 
         public static Settings Create()
         {
+            LogTo.Information("Read Settings File");
             var components = SettingFiles
                .Select(s => Path.Combine(SettingsDic, s))
                .Where(File.Exists)
@@ -97,10 +98,10 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
 
             SettingsComponent? target = null;
 
+            LogTo.Information("Find Last Setting Version");
             foreach (var settingsComponent in components)
             {
-                if (target == null)
-                    target = settingsComponent;
+                target ??= settingsComponent;
 
                 if (target?.Version < settingsComponent?.Version)
                     target = settingsComponent;
@@ -108,6 +109,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
 
             var settings = new Settings();
 
+            LogTo.Information("Read Settings");
             if (target != null)
                 settings.ReadFromComponent(target);
 
@@ -116,6 +118,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
 
         public async Task Save()
         {
+            LogTo.Information("Saving Settings");
             using (await _asyncLock.LockAsync())
             {
                 _version++;
@@ -129,15 +132,17 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
 
                     try
                     {
+                        LogTo.Information("Saving Settings File: {Name}", settingFile);
+
                         if (File.Exists(filePath))
                             File.Delete(filePath);
 
                         var json = JsonConvert.SerializeObject(new SettingsComponent(this), Formatting.Indented);
                         await File.WriteAllTextAsync(filePath, json);
                     }
-                    catch
+                    catch(Exception e)
                     {
-                        // ignored
+                        LogTo.Warning(e, "Error while Saving Settings");
                     }
                 }
             }

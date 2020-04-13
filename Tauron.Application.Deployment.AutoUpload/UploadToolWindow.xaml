@@ -1,0 +1,11 @@
+﻿<tau:UserControl x:Class="Tauron.Application.Deployment.AutoUpload.UploadToolWindow"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:local="clr-namespace:Tauron.Application.Deployment.AutoUpload.ViewModels"
+                  xmlns:tau="http://schemas.TauronWpf.com"
+                  xmlns:ui="clr-namespace:Tauron.Application.Wpf.UI;assembly=Tauron.Application.Wpf"
+                  mc:Ignorable="d" d:DataContext="{d:DesignInstance local:UploadToolWindowViewModel}">
+    <ContentControl Content="{ui:ViewModelBinding CurrentView}" />
+</tau:UserControl>

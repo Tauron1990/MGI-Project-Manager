@@ -2,10 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using Anotar.Serilog;
 using Catel.IO;
 using Catel.Services;
 using LibGit2Sharp;
 using Scrutor;
+using Serilog.Context;
 using Tauron.Application.Deployment.AutoUpload.Models;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Git;
@@ -54,58 +56,67 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 
         private async void StartLoad()
         {
-            await Task.Delay(TimeSpan.FromSeconds(3));
-
-            var failed = false;
-
-            try
+            using(LogContext.PushProperty("Repository", Context.RegistratedRepository?.ToString()))
             {
-                if (string.IsNullOrWhiteSpace(_settings.UserName) && !await _commonTasks.RequestUserInfo())
-                {
-                    await _messageService.ShowInformationAsync("User information nicht Verfügbar", "Fehler");
-                    failed = true;
-                }
-                else
-                {
-                    var registrepo = _settings.RegistratedRepositories
-                       .Where(rr => rr.RepositoryName      == Context.Repository.FullName)
-                       .FirstOrDefault(rr => rr.BranchName == Context.Branch.Name);
+                await Task.Delay(TimeSpan.FromSeconds(3));
 
-                    if (registrepo != null)
+                var failed = false;
+
+                try
+                {
+                    LogTo.Information("Try Get User Information");
+                    if (string.IsNullOrWhiteSpace(_settings.UserName) && !await _commonTasks.RequestUserInfo())
                     {
-                        Context.RealPath = registrepo.RealPath;
-                        var result = _gitManager.SyncRepo(registrepo.RealPath, ProgressHandler, TransferProgressHandler);
-                        if (result.Status == MergeStatus.Conflicts)
-                        {
-                            await _messageService.ShowWarningAsync("Repository Pull Fehlgeschlagen", "Fehler");
-                            failed = true;
-                        }
+                        LogTo.Warning("No User informatione Provided");
+                        await _messageService.ShowInformationAsync("User information nicht Verfügbar", "Fehler");
+                        failed = true;
                     }
                     else
                     {
-                        var path = Path.Combine(Settings.SettingsDic, "Repos", Context.Repository.Name, Context.Branch.Name);
+                        var registrepo = _settings.RegistratedRepositories
+                           .Where(rr => rr.RepositoryName      == Context.Repository.FullName)
+                           .FirstOrDefault(rr => rr.BranchName == Context.Branch.Name);
 
-                        _gitManager.SyncBranch(Context.Repository.CloneUrl, Context.Branch.Name, path, ProgressHandler, TransferProgressHandler);
-                        if (string.IsNullOrWhiteSpace(path))
+                        if (registrepo != null)
                         {
-                            await _messageService.ShowWarningAsync("Das Klonen des Repository ist Fehlgeschlagen", "Fehler");
-                            failed = true;
+                            LogTo.Information("Pulling Changes from Repository");
+                            Context.RealPath = registrepo.RealPath;
+                            var result = _gitManager.SyncRepo(registrepo.RealPath, ProgressHandler, TransferProgressHandler);
+                            if (result.Status == MergeStatus.Conflicts)
+                            {
+                                LogTo.Warning("Sync Failed: {Status}--{Commit}", result.Status, result.Commit.Sha);
+                                await _messageService.ShowWarningAsync("Repository Pull Fehlgeschlagen", "Fehler");
+                                failed = true;
+                            }
                         }
+                        else
+                        {
+                            LogTo.Information("Clonig Repository");
+                            var path = Path.Combine(Settings.SettingsDic, "Repos", Context.Repository.Name, Context.Branch.Name);
 
-                        Context.RealPath = path;
+                            _gitManager.SyncBranch(Context.Repository.CloneUrl, Context.Branch.Name, path, ProgressHandler, TransferProgressHandler);
+                            if (string.IsNullOrWhiteSpace(path))
+                            {
+                                await _messageService.ShowWarningAsync("Das Klonen des Repository ist Fehlgeschlagen", "Fehler");
+                                failed = true;
+                            }
+
+                            Context.RealPath = path;
+                        }
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                await _messageService.ShowErrorAsync(e);
-                failed = true;
-            }
+                catch (Exception e)
+                {
+                    LogTo.Error(e, "Error on Sync Repository");
+                    await _messageService.ShowErrorAsync(e);
+                    failed = true;
+                }
 
-            if (failed)
-                OnCancelCommandExecute();
-            else
-                await OnNextView<AddSelectProjectViewModel>();
+                if (failed)
+                    OnCancelCommandExecute();
+                else
+                    await OnNextView<AddSelectProjectViewModel>();
+            }
         }
 
         private bool TransferProgressHandler(TransferProgress progress)

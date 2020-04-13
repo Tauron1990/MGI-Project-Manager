@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using Murmur;
 using Serilog.Core;
@@ -6,6 +7,7 @@ using Serilog.Events;
 
 namespace Tauron.Application.Logging.impl
 {
+    [DebuggerStepThrough]
     public sealed class EventTypeEnricher : ILogEventEnricher
     {
         public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)

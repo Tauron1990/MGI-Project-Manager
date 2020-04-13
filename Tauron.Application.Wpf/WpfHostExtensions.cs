@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using Tauron.Application.Wpf;
 using Tauron.Application.Wpf.AppCore;
 
@@ -20,6 +21,7 @@ namespace Microsoft.Extensions.Hosting
                 sc.Configure<HostOptions>(o => o.ShutdownTimeout = TimeSpan.FromMinutes(1));
 
                 IOCReplacer.Create(sc);
+
                 var wpf = new WpfConfiguration(sc);
                 config?.Invoke(wpf);
                 wpf.Build();

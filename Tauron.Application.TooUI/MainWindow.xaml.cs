@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ using Syncfusion.Licensing;
 using Syncfusion.SfSkinManager;
 using Tauron.Application.Wpf.AppCore;
 
-namespace Tauron.Application.TooUI
+namespace Tauron.Application.ToolUI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -26,7 +27,8 @@ namespace Tauron.Application.TooUI
         public MainWindow(MainWindowViewModel model) 
             : base(model)
         {
-            InitializeComponent();
+            model.PropertyChanged += ModelOnPropertyChanged; 
+
             Closed += (sender, args) => Shutdown?.Invoke(this, EventArgs.Empty);
 
             SyncfusionLicenseProvider.RegisterLicense(App.SyncfusionKey);
@@ -38,6 +40,27 @@ namespace Tauron.Application.TooUI
 
             SfSkinManager.SetVisualStyle(this, VisualStyles.Blend);
             InitializeComponent();
+            
+        }
+
+        private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (e.PropertyName != nameof(MainWindowViewModel.MainContent)) return;
+
+                var model = (MainWindowViewModel) sender;
+                var content = model.MainContent;
+                if (content == null) return;
+
+                Title = content.Title;
+                MinWidth = content.Width;
+                MinHeight = content.Height;
+                WindowState = content.WindowState;
+                SizeToContent = content.SizeToContent;
+
+                UpdateLayout();
+            });
         }
 
         public Window Window => this;
