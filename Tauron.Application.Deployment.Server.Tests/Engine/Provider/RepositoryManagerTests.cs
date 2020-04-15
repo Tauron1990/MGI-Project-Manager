@@ -117,6 +117,8 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
         [InlineData(DeleteTestType.NoData)]
         public async Task DeleteRepositoryTest(DeleteTestType testType)
         {
+            string name = "TestRepo";
+
             var test = CreateTestBase(providerConfig: m =>
             {
                 return ma =>
@@ -135,8 +137,16 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
                 };
             }, store =>
             {
-                if(testType == DeleteTestType.Data)
-                    store.StoreAsync()
+                if (testType == DeleteTestType.Data)
+                    store.StoreAsync(new RegistratedReporitoryEntity
+                    {
+                        Id = name,
+                        Name = "Name",
+                        Provider = "Test",
+                        Source = "Test",
+                        SyncCompled = true,
+                        TargetPath = "Test"
+                    });
             });
 
 
