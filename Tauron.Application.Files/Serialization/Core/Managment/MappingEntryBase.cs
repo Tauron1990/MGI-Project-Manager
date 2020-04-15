@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using JetBrains.Annotations;
 
 namespace Tauron.Application.Files.Serialization.Core.Managment
 {
     public abstract class MappingEntryBase<TContext> : MappingEntry<TContext>
         where TContext : IOrginalContextProvider
     {
-        private readonly Func<object, object>   _accessor;
-        private readonly Action<object, object> _setter;
+        private readonly Func<object, object>? _accessor;
+        private readonly Action<object, object>? _setter;
 
-        protected MappingEntryBase([CanBeNull] string membername, [CanBeNull] Type targetType)
+        protected MappingEntryBase(string? membername, Type? targetType)
         {
             if (targetType == null || membername == null) return;
 
             var mem = targetType.GetMember(membername, MemberTypes.Field | MemberTypes.Property, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                                .FirstOrDefault();
+                .FirstOrDefault();
 
             if (mem == null) return;
 
@@ -28,7 +27,7 @@ namespace Tauron.Application.Files.Serialization.Core.Managment
                 MemberType = prop.PropertyType;
 
                 if (prop.CanRead) _accessor = prop.GetValue;
-                if (prop.CanWrite) _setter  = prop.SetValue;
+                if (prop.CanWrite) _setter = prop.SetValue;
                 return;
             }
 
@@ -36,22 +35,25 @@ namespace Tauron.Application.Files.Serialization.Core.Managment
             if (fld == null) return;
 
             MemberType = fld.FieldType;
-            _accessor  = fld.GetValue;
-            _setter    = fld.SetValue;
+            _accessor = fld.GetValue;
+            _setter = fld.SetValue;
         }
 
-        [CanBeNull]
-        protected MemberInfo TargetMember { get; }
+        protected MemberInfo? TargetMember { get; }
 
-        [CanBeNull]
-        protected Type MemberType { get; }
+        protected Type? MemberType { get; }
 
-        protected void SetValue([NotNull] object target, [CanBeNull] object value) => _setter(Argument.NotNull(target, nameof(target)), value);
+        protected void SetValue(object target, object? value)
+        {
+            _setter?.Invoke(Argument.NotNull(target, nameof(target)), value);
+        }
 
-        [NotNull]
-        protected object GetValue([NotNull] object target) => _accessor(Argument.NotNull(target, nameof(target)));
+        protected object? GetValue(object target)
+        {
+            return _accessor?.Invoke(Argument.NotNull(target, nameof(target)));
+        }
 
-        public override Exception VerifyError()
+        public override Exception? VerifyError()
         {
             if (_accessor == null || _setter == null)
                 return new SerializerElementNullException("Member");
@@ -73,7 +75,7 @@ namespace Tauron.Application.Files.Serialization.Core.Managment
             }
         }
 
-        protected abstract void Deserialize([NotNull] object target, [NotNull] TContext context);
-        protected abstract void Serialize([NotNull]   object target, [NotNull] TContext context);
+        protected abstract void Deserialize(object target, TContext context);
+        protected abstract void Serialize(object target, TContext context);
     }
 }

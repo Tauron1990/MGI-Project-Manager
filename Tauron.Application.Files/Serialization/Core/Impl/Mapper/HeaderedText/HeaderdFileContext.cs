@@ -1,35 +1,35 @@
-﻿using JetBrains.Annotations;
+﻿using System;
 using Tauron.Application.Files.HeaderedText;
 
 namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.HeaderedText
 {
     internal class HeaderdFileContext : ContextImplBase
     {
-        private readonly FileDescription _description;
-        private readonly HeaderedFile    _file;
+        private readonly HeaderedFile _file;
 
-        public HeaderdFileContext([NotNull] SerializationContext original, [NotNull] FileDescription description) : base(original)
+        public HeaderdFileContext(SerializationContext original, FileDescription description) : base(original)
         {
             Argument.NotNull(original, nameof(original));
             Argument.NotNull(description, nameof(description));
 
-            _description = description;
-
-            _file = new HeaderedFile(_description);
-            if (original.SerializerMode == SerializerMode.Deserialize)
-                _file.Read(TextReader);
-
-            if (original.SerializerMode == SerializerMode.Serialize)
-                _file.CreateWriter();
+            _file = new HeaderedFile(description);
+            switch (original.SerializerMode)
+            {
+                case SerializerMode.Deserialize:
+                    _file.Read(TextReader);
+                    break;
+                case SerializerMode.Serialize:
+                    _file.CreateWriter();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(original.SerializerMode));
+            }
         }
 
-        [NotNull]
         public string Content => _file.Content ?? string.Empty;
 
-        [NotNull]
         public HeaderedFileWriter CurrentWriter => Argument.CheckResult(_file.CurrentWriter, "No Writer Found");
 
-        [NotNull]
         public FileContext Context => _file.Context;
 
         protected override void Dispose(bool disposing)
@@ -42,8 +42,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.HeaderedText
 
             var writer = _file.CurrentWriter;
 
-// ReSharper disable once PossibleNullReferenceException
-            writer.Save(TextWriter);
+            writer?.Save(TextWriter);
 
             base.Dispose(disposing);
         }

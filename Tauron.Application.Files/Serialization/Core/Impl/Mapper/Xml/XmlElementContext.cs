@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Xml;
 using System.Xml.Linq;
-using JetBrains.Annotations;
 
 namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
 {
     internal class XmlElementContext : ContextImplBase
     {
-        private XContainer _currentElement;
+        private XContainer? _currentElement;
 
-        public XmlElementContext([NotNull] SerializationContext original, [CanBeNull] XDeclaration declaration,
-            [CanBeNull] XNamespace xNamespace, [NotNull] string rootName) : base(original)
+        public XmlElementContext(SerializationContext original, XDeclaration? declaration,
+            XNamespace? xNamespace, string rootName) : base(original)
         {
-            XDocument doc = null;
-            XElement ele = null;
+            XDocument? doc = null;
+            XElement? ele = null;
 
             switch (Argument.NotNull(original, nameof(original)).SerializerMode)
             {
@@ -37,10 +36,9 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
                     throw new ArgumentOutOfRangeException(nameof(original));
             }
 
-            XElement = (ele ?? doc.Root) ?? throw new InvalidOperationException();
+            XElement = (ele ?? doc?.Root) ?? throw new InvalidOperationException("XElement is Null");
         }
 
-        [NotNull]
         public XElement XElement { get; set; }
 
         protected override void Dispose(bool disposing)
@@ -49,7 +47,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
 
             using (var writer = XmlWriter.Create(TextWriter, new XmlWriterSettings {Indent = true, NamespaceHandling = NamespaceHandling.OmitDuplicates}))
             {
-                _currentElement.WriteTo(writer);
+                _currentElement?.WriteTo(writer);
                 _currentElement = null;
             }
 

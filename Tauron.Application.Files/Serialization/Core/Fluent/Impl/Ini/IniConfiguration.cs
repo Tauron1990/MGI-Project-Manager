@@ -8,14 +8,14 @@ namespace Tauron.Application.Files.Serialization.Core.Fluent.Impl
 {
     internal class IniConfiguration : SerializerRootConfigurationBase, IIniSerializerConfiguration
     {
-        private readonly ObjectBuilder            _builder;
+        private readonly ObjectBuilder _builder;
         private readonly SimpleMapper<IniContext> _mapper = new SimpleMapper<IniContext>();
-        private readonly Type                     _targetType;
+        private readonly Type _targetType;
 
         public IniConfiguration([NotNull] Type targetType)
         {
             _targetType = targetType;
-            _builder    = new ObjectBuilder(targetType);
+            _builder = new ObjectBuilder(targetType);
         }
 
         public IConstructorConfiguration<IIniSerializerConfiguration> ConfigConstructor()
@@ -32,7 +32,7 @@ namespace Tauron.Application.Files.Serialization.Core.Fluent.Impl
         {
             return
                 new SerializerToMemberConfiguration<IIniSerializerConfiguration, IniContext>(memberName, this, _mapper,
-                                                                                             typeof(TToSerial));
+                    typeof(TToSerial));
         }
 
         public override ISerializer ApplyInternal()

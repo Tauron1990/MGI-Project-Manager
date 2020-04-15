@@ -11,6 +11,40 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper
     [PublicAPI]
     public abstract class ContextImplBase : IOrginalContextProvider, IDisposable
     {
+        protected ContextImplBase([NotNull] SerializationContext original)
+        {
+            Original = Argument.NotNull(original, nameof(original));
+        }
+
+        [NotNull]
+        protected TextWriter TextWriter => Original.ContextMode == ContextMode.Binary
+            ? new ConsistentTextWriter(Original.BinaryWriter)
+            : Original.TextWriter;
+
+        [NotNull]
+        protected TextReader TextReader => Original.ContextMode == ContextMode.Text
+            ? Original.TextReader
+            : new ConsistentTextReader(Original.BinaryReader);
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        public SerializationContext Original { get; private set; }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                Original.Dispose();
+        }
+
+        ~ContextImplBase()
+        {
+            Dispose(false);
+        }
+
         private class ConsistentTextWriter : TextWriter
         {
             private readonly List<string> _lines;
@@ -55,9 +89,9 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper
 
             private int _currentLine;
             private int _currentLinePosition;
-            private string _currentLineString;
+            private string _currentLineString = string.Empty;
 
-            public ConsistentTextReader([NotNull] BinaryReader reader)
+            public ConsistentTextReader(BinaryReader reader)
             {
                 _reader = Argument.NotNull(reader, nameof(reader));
                 _lines = reader.ReadInt32();
@@ -78,7 +112,10 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper
                 return true;
             }
 
-            private bool CheckPosition() => _currentLinePosition < _currentLineString.Length || MoveToNextLine();
+            private bool CheckPosition()
+            {
+                return _currentLinePosition < _currentLineString.Length || MoveToNextLine();
+            }
 
             public override string ReadLine()
             {
@@ -121,33 +158,5 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper
                 return value;
             }
         }
-
-        protected ContextImplBase([NotNull] SerializationContext original) => Original = Argument.NotNull(original, nameof(original));
-
-        [NotNull]
-        protected TextWriter TextWriter => Original.ContextMode == ContextMode.Binary
-            ? new ConsistentTextWriter(Original.BinaryWriter)
-            : Original.TextWriter;
-
-        [NotNull]
-        protected TextReader TextReader => Original.ContextMode == ContextMode.Text
-            ? Original.TextReader
-            : new ConsistentTextReader(Original.BinaryReader);
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        public SerializationContext Original { get; private set; }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-                Original.Dispose();
-        }
-
-        ~ContextImplBase() => Dispose(false);
     }
 }

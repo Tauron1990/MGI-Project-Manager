@@ -12,12 +12,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="MessagePack" Version="2.1.115" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\IPC\JKang.IpcServiceFramework.Client\JKang.IpcServiceFramework.Client.csproj" />
-    <ProjectReference Include="..\Tauron.Application.Pipes\Tauron.Application.Pipes.csproj" />
   </ItemGroup>
 
 </Project>

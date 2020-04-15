@@ -51,9 +51,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
-    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="18.1.0.43" />
-    <PackageReference Include="Syncfusion.Shared.WPF" Version="18.1.0.43" />
-    <PackageReference Include="Syncfusion.Themes.Blend.WPF" Version="18.1.0.43" />
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="18.1.0.44" />
+    <PackageReference Include="Syncfusion.Shared.WPF" Version="18.1.0.44" />
+    <PackageReference Include="Syncfusion.Themes.Blend.WPF" Version="18.1.0.44" />
   </ItemGroup>
 
 </Project>

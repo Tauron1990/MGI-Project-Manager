@@ -13,7 +13,10 @@ namespace Tauron.Application.Files.Ini.Parser
 
         private readonly TextReader _reader;
 
-        public IniParser([NotNull] TextReader reader) => _reader = Argument.NotNull(reader, nameof(reader));
+        public IniParser([NotNull] TextReader reader)
+        {
+            _reader = Argument.NotNull(reader, nameof(reader));
+        }
 
         [NotNull]
         public IniFile Parse()
@@ -49,12 +52,10 @@ namespace Tauron.Application.Files.Ini.Parser
                 var entries = new Dictionary<string, IniEntry>(entry.Value.Count);
 
                 foreach (var keyEntry in entry.Value)
-                {
                     if (keyEntry.Value.Count < 1)
                         entries[keyEntry.Key] = new ListIniEntry(keyEntry.Key, new List<string>(keyEntry.Value));
                     else
                         entries[keyEntry.Key] = new SingleIniEntry(keyEntry.Key, keyEntry.Value.ElementAt(0));
-                }
 
                 sections[entry.Key] = new IniSection(entries, entry.Key);
             }

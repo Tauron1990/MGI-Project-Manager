@@ -10,39 +10,11 @@ namespace Tauron.Application.Files.Serialization.Core
     [PublicAPI]
     public sealed class SerializationContext : IDisposable
     {
-        private class GenericSource : IStreamSource
-        {
-            private byte[] _bytes;
-            private SerializationContext _original;
-
-            public GenericSource([NotNull] byte[] bytes, [NotNull] SerializationContext original)
-            {
-                _bytes = Argument.NotNull(bytes, nameof(bytes));
-                _original = Argument.NotNull(original, nameof(original));
-            }
-
-            public void Dispose()
-            {
-                _bytes = null;
-                _original = null;
-            }
-
-            public Stream OpenStream(FileAccess access) => new MemoryStream(_bytes);
-
-            public IStreamSource OpenSideLocation(string relativePath) => _original.StreamSource.OpenSideLocation(relativePath);
-        }
-
-        private class BackgroundStream
-        {
-            [CanBeNull]
-            public Stream Stream { get; set; }
-        }
-
         private BackgroundStream _backgroundStream;
 
-        private Dictionary<string, SerializationContext> _childContexts;
+        private Dictionary<string, SerializationContext> _childContexts = new Dictionary<string, SerializationContext>();
 
-        public SerializationContext(ContextMode contextMode, [NotNull] IStreamSource streamSource, SerializerMode serializerMode)
+        public SerializationContext(ContextMode contextMode, IStreamSource streamSource, SerializerMode serializerMode)
         {
             ContextMode = contextMode;
             StreamSource = Argument.NotNull(streamSource, nameof(streamSource));
@@ -50,7 +22,7 @@ namespace Tauron.Application.Files.Serialization.Core
             _backgroundStream = new BackgroundStream();
         }
 
-        private SerializationContext(ContextMode contextMode, [NotNull] IStreamSource streamSource, SerializerMode serializerMode, [NotNull] BackgroundStream parentStream)
+        private SerializationContext(ContextMode contextMode, IStreamSource streamSource, SerializerMode serializerMode, BackgroundStream parentStream)
         {
             ContextMode = contextMode;
             StreamSource = Argument.NotNull(streamSource, nameof(streamSource));
@@ -62,7 +34,6 @@ namespace Tauron.Application.Files.Serialization.Core
 
         public ContextMode ContextMode { get; private set; }
 
-        [NotNull]
         public IStreamSource StreamSource { get; private set; }
 
         public SerializerMode SerializerMode { get; private set; }
@@ -74,8 +45,7 @@ namespace Tauron.Application.Files.Serialization.Core
         }
 
         [SuppressMessage("Microsoft.Reliability", "CA2000:Objekte verwerfen, bevor Bereich verloren geht", Justification = "No Disposing Needed")]
-        [CanBeNull]
-        public SerializationContext GetSubContext([CanBeNull] string relativeFile, ContextMode contextMode)
+        public SerializationContext? GetSubContext([CanBeNull] string relativeFile, ContextMode contextMode)
         {
             if (relativeFile == null) return this;
 
@@ -83,6 +53,7 @@ namespace Tauron.Application.Files.Serialization.Core
 
             var streamSource = StreamSource.OpenSideLocation(relativeFile);
             if (streamSource == null) return null;
+            if (_backgroundStream == null) return null;
 
             context = new SerializationContext(contextMode, streamSource, SerializerMode, _backgroundStream);
             _childContexts[relativeFile] = context;
@@ -91,16 +62,17 @@ namespace Tauron.Application.Files.Serialization.Core
         }
 
         [SuppressMessage("Microsoft.Reliability", "CA2000:Objekte verwerfen, bevor Bereich verloren geht", Justification = "No Disposing Needed")]
-        [NotNull]
-        public SerializationContext CreateSnapshot([NotNull] string value) 
-            => new SerializationContext(ContextMode, new GenericSource(Encoding.UTF8.GetBytes(value), this), SerializerMode) {IsSnapShot = true};
+        public SerializationContext CreateSnapshot(string value)
+        {
+            return new SerializationContext(ContextMode, new GenericSource(Encoding.UTF8.GetBytes(value), this), SerializerMode) {IsSnapShot = true};
+        }
 
         [SuppressMessage("Microsoft.Reliability", "CA2000:Objekte verwerfen, bevor Bereich verloren geht", Justification = "No disposing Needed")]
-        [NotNull]
-        public SerializationContext CreateSnapshot([NotNull] byte[] value) 
-            => new SerializationContext(ContextMode, new GenericSource(Argument.NotNull(value, nameof(value)), this), SerializerMode) {IsSnapShot = true};
+        public SerializationContext CreateSnapshot(byte[] value)
+        {
+            return new SerializationContext(ContextMode, new GenericSource(Argument.NotNull(value, nameof(value)), this), SerializerMode) {IsSnapShot = true};
+        }
 
-        [NotNull]
         private Stream EnsurceBackgroundStream()
         {
             if (IsSnapShot) return StreamSource.OpenStream(FileAccess.ReadWrite);
@@ -111,13 +83,20 @@ namespace Tauron.Application.Files.Serialization.Core
                        : FileAccess.Write));
         }
 
-        [NotNull]
-        public static string ConvertByteToString([NotNull] byte[] value) => Base91.Encode(Argument.NotNull(value, nameof(value)));
+        public static string ConvertByteToString(byte[] value)
+        {
+            return Base91.Encode(Argument.NotNull(value, nameof(value)));
+        }
 
-        [NotNull]
-        public static byte[] ConvertStringToBytes([NotNull] string value) => Base91.Decode(Argument.NotNull(value, nameof(value)));
+        public static byte[] ConvertStringToBytes(string value)
+        {
+            return Base91.Decode(Argument.NotNull(value, nameof(value)));
+        }
 
-        ~SerializationContext() => DisposeImpl(false);
+        ~SerializationContext()
+        {
+            DisposeImpl(false);
+        }
 
         private void DisposeImpl(bool disposing)
         {
@@ -130,8 +109,6 @@ namespace Tauron.Application.Files.Serialization.Core
             }
 
             _backgroundStream?.Stream?.Dispose();
-
-            _backgroundStream = null;
 
             if (_binaryWriter != null)
             {
@@ -156,31 +133,60 @@ namespace Tauron.Application.Files.Serialization.Core
             _textWriter = null;
         }
 
+        private class GenericSource : IStreamSource
+        {
+            private readonly byte[] _bytes;
+            private readonly SerializationContext _original;
+
+            public GenericSource(byte[] bytes, SerializationContext original)
+            {
+                _bytes = Argument.NotNull(bytes, nameof(bytes));
+                _original = Argument.NotNull(original, nameof(original));
+            }
+
+            public void Dispose()
+            {
+            }
+
+            public Stream OpenStream(FileAccess access)
+            {
+                return new MemoryStream(_bytes);
+            }
+
+            public IStreamSource OpenSideLocation(string relativePath)
+            {
+                return _original.StreamSource.OpenSideLocation(relativePath);
+            }
+        }
+
+        private class BackgroundStream
+        {
+            public Stream? Stream { get; set; }
+        }
+
         #region Binary
 
-        private BinaryReader _binaryReader;
+        private BinaryReader? _binaryReader;
 
-        [NotNull]
         public BinaryReader BinaryReader
         {
             get
             {
                 if (ContextMode != ContextMode.Binary && SerializerMode != SerializerMode.Deserialize && !IsSnapShot) throw new InvalidOperationException("No Binary Deserialisation");
 
-                return _binaryReader ?? (_binaryReader = new BinaryReader(EnsurceBackgroundStream()));
+                return _binaryReader ??= new BinaryReader(EnsurceBackgroundStream());
             }
         }
 
-        private BinaryWriter _binaryWriter;
+        private BinaryWriter? _binaryWriter;
 
-        [NotNull]
         public BinaryWriter BinaryWriter
         {
             get
             {
                 if (ContextMode != ContextMode.Binary && SerializerMode != SerializerMode.Serialize && !IsSnapShot) throw new InvalidOperationException("No Binary Serialisation");
 
-                return _binaryWriter ?? (_binaryWriter = new BinaryWriter(EnsurceBackgroundStream()));
+                return _binaryWriter ??= new BinaryWriter(EnsurceBackgroundStream());
             }
         }
 
@@ -192,36 +198,36 @@ namespace Tauron.Application.Files.Serialization.Core
             BinaryWriter.Write(value);
         }
 
-        [NotNull]
-        public byte[] Readbytes() => BinaryReader.ReadBytes(BinaryReader.ReadInt32());
+        public byte[] Readbytes()
+        {
+            return BinaryReader.ReadBytes(BinaryReader.ReadInt32());
+        }
 
         #endregion
 
         #region Text
 
-        private TextReader _textReader;
+        private TextReader? _textReader;
 
-        [NotNull]
         public TextReader TextReader
         {
             get
             {
                 if (ContextMode != ContextMode.Binary && SerializerMode != SerializerMode.Deserialize) throw new InvalidOperationException("No Binary Deserialisation");
 
-                return _textReader ?? (_textReader = new StreamReader(EnsurceBackgroundStream()));
+                return _textReader ??= new StreamReader(EnsurceBackgroundStream());
             }
         }
 
-        private TextWriter _textWriter;
+        private TextWriter? _textWriter;
 
-        [NotNull]
         public TextWriter TextWriter
         {
             get
             {
                 if (ContextMode != ContextMode.Binary && SerializerMode != SerializerMode.Serialize) throw new InvalidOperationException("No Binary Serialisation");
 
-                return _textWriter ?? (_textWriter = new StreamWriter(EnsurceBackgroundStream()));
+                return _textWriter ??= new StreamWriter(EnsurceBackgroundStream());
             }
         }
 

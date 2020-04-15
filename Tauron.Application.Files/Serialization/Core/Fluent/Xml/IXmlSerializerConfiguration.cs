@@ -1,19 +1,13 @@
-﻿using JetBrains.Annotations;
-
-namespace Tauron.Application.Files.Serialization.Core.Fluent
+﻿namespace Tauron.Application.Files.Serialization.Core.Fluent
 {
     public interface IXmlSerializerConfiguration : ISerializerRootConfiguration, IConstructorConfig<IXmlSerializerConfiguration>
     {
-        [NotNull]
-        IXmlAttributConfiguration WithAttribut([NotNull] string name);
+        IXmlAttributConfiguration WithAttribut(string name);
 
-        [NotNull]
-        IXmlElementConfiguration WithElement([NotNull] string name);
+        IXmlElementConfiguration WithElement(string name);
 
-        [NotNull]
-        IXmlListElementConfiguration WithElements([NotNull] string name);
+        IXmlListElementConfiguration WithElements(string name);
 
-        [NotNull]
-        IXmlSerializerConfiguration WithSubSerializer<TTarget>([NotNull] ISerializer serializer, [NotNull] string member);
+        IXmlSerializerConfiguration WithSubSerializer<TTarget>(ISerializer serializer, string member);
     }
 }

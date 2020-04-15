@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using JetBrains.Annotations;
 using Tauron.Application.Files.Serialization.Core.Managment;
 
 namespace Tauron.Application.Files.Serialization.Core.Impl
@@ -8,11 +7,19 @@ namespace Tauron.Application.Files.Serialization.Core.Impl
     {
         private readonly TypeConverter _converter;
 
-        public TypeConverterConverter([NotNull] TypeConverter converter) => _converter = Argument.NotNull(converter, nameof(converter));
+        public TypeConverterConverter(TypeConverter converter)
+        {
+            _converter = Argument.NotNull(converter, nameof(converter));
+        }
 
-        public override object ConvertBack([NotNull] string target) => _converter.ConvertFromString(target);
+        public override object ConvertBack(string target)
+        {
+            return _converter.ConvertFromString(target);
+        }
 
-        [NotNull]
-        public override string Convert(object source) => _converter.ConvertToString(Argument.NotNull(source, nameof(source))) ?? string.Empty;
+        public override string Convert(object? source)
+        {
+            return _converter.ConvertToString(Argument.NotNull(source, nameof(source))) ?? string.Empty;
+        }
     }
 }

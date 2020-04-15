@@ -1,20 +1,19 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Tauron.Application.Files.Serialization.Core.Managment;
 
 namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.HeaderedText
 {
     internal class HeaderedFileListKeyMapper : MappingEntryBase<HeaderdFileContext>
     {
-        private readonly SimpleConverter<string> _converter;
-        private readonly string                  _keyName;
+        private readonly SimpleConverter<string>? _converter;
+        private readonly string? _keyName;
 
-        private readonly ListBuilder _listBuilder;
+        private readonly ListBuilder? _listBuilder;
 
-        public HeaderedFileListKeyMapper([CanBeNull] string membername, [NotNull] Type targetType, [CanBeNull] string keyName, [CanBeNull] SimpleConverter<string> converter)
+        public HeaderedFileListKeyMapper(string? membername, Type targetType, string? keyName, SimpleConverter<string>? converter)
             : base(membername, targetType)
         {
-            _keyName   = keyName;
+            _keyName = keyName;
             _converter = converter;
 
             if (TargetMember == null) return;
@@ -30,18 +29,17 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.HeaderedText
         {
             Argument.NotNull(context, nameof(context));
 
-            _listBuilder.Begin(null, false);
+            if (string.IsNullOrEmpty(_keyName)) return;
+
+            _listBuilder?.Begin(null, false);
 
             try
             {
-                foreach (var contextEnry in context.Context[_keyName])
-                {
-                    _listBuilder.Add(_converter.ConvertBack(contextEnry.Content));
-                }
+                foreach (var contextEnry in context.Context[_keyName]) _listBuilder?.Add(_converter?.ConvertBack(contextEnry.Content));
             }
             finally
             {
-                SetValue(target, _listBuilder.End());
+                SetValue(target, _listBuilder?.End());
             }
         }
 
@@ -49,20 +47,23 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.HeaderedText
         {
             Argument.NotNull(context, nameof(context));
 
-            _listBuilder.Begin(GetValue(target), true);
+            if (string.IsNullOrEmpty(_keyName)) return;
+            _listBuilder?.Begin(GetValue(target), true);
 
             try
             {
                 var writer = context.CurrentWriter;
 
-                foreach (var obj in _listBuilder.Objects)
+                foreach (var obj in _listBuilder?.Objects ?? Array.Empty<object>())
                 {
-                    writer.Add(_keyName, _converter.Convert(obj));
+                    var cobj = _converter?.Convert(obj);
+                    if (cobj == null) continue;
+                    writer.Add(_keyName, cobj);
                 }
             }
             finally
             {
-                _listBuilder.End();
+                _listBuilder?.End();
             }
         }
     }

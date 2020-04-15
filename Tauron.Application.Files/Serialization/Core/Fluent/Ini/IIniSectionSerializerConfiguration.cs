@@ -2,12 +2,11 @@
 
 namespace Tauron.Application.Files.Serialization.Core.Fluent
 {
+    [PublicAPI]
     public interface IIniSectionSerializerConfiguration
     {
-        [NotNull]
         IIniKeySerializerConfiguration WithSingleKey();
 
-        [NotNull]
         IIniKeySerializerConfiguration WithListKey();
     }
 }

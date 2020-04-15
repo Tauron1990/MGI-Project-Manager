@@ -11,13 +11,13 @@ namespace Tauron.Application.Files.Serialization.Core.Impl
     internal class XmlSerializerConfiguration : SerializerRootConfigurationBase, IXmlSerializerConfiguration
     {
         private readonly ObjectBuilder _builder;
-        private readonly XDeclaration _declaration;
+        private readonly XDeclaration? _declaration;
         private readonly SimpleMapper<XmlElementContext> _mapper = new SimpleMapper<XmlElementContext>();
         private readonly string _rootName;
         private readonly Type _targetType;
-        private readonly XNamespace _xNamespace;
+        private readonly XNamespace? _xNamespace;
 
-        public XmlSerializerConfiguration([NotNull] string rootName, [CanBeNull] XDeclaration declaration, [CanBeNull] XNamespace xNamespace, [NotNull] Type targetType)
+        public XmlSerializerConfiguration(string rootName, XDeclaration? declaration, XNamespace? xNamespace, [NotNull] Type targetType)
         {
             _rootName = Argument.NotNull(rootName, nameof(rootName));
             _declaration = declaration;
@@ -26,7 +26,10 @@ namespace Tauron.Application.Files.Serialization.Core.Impl
             _builder = new ObjectBuilder(_targetType);
         }
 
-        public IConstructorConfiguration<IXmlSerializerConfiguration> ConfigConstructor() => new ConstructorConfiguration<IXmlSerializerConfiguration>(_builder, this);
+        public IConstructorConfiguration<IXmlSerializerConfiguration> ConfigConstructor()
+        {
+            return new ConstructorConfiguration<IXmlSerializerConfiguration>(_builder, this);
+        }
 
         public IXmlAttributConfiguration WithAttribut(string name)
         {

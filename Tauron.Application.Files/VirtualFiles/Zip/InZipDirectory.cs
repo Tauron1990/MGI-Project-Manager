@@ -13,7 +13,7 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
         private InternalZipDirectory _dic;
         private ZipFile _file;
 
-        public InZipDirectory([CanBeNull] IDirectory parentDirectory, [NotNull] string originalPath, [NotNull] InternalZipDirectory dic, [CanBeNull] ZipFile file, [NotNull] string name)
+        public InZipDirectory(IDirectory? parentDirectory, string originalPath, InternalZipDirectory dic, ZipFile? file, string name)
             : base(() => parentDirectory, originalPath, name)
         {
             _dic = Argument.NotNull(dic, nameof(dic));
@@ -24,12 +24,15 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
 
         public override bool Exist => _dic.ZipEntry != null || _dic.Files.Count + _dic.Directorys.Count > 0;
 
-        public override IEnumerable<IDirectory> Directories => _dic.Directorys.Select(internalZipDirectory 
+        public override IEnumerable<IDirectory> Directories => _dic.Directorys.Select(internalZipDirectory
             => new InZipDirectory(this, OriginalPath.CombinePath(internalZipDirectory.Name), internalZipDirectory, _file, internalZipDirectory.Name));
 
         public override IEnumerable<IFile> Files => _dic.Files.Select(ent => new InZipFile(this, OriginalPath.CombinePath(InternalZipDirectory.GetFileName(ent)), _file, _dic, ent));
 
-        protected override void DeleteImpl() => DeleteDic(_dic, _file);
+        protected override void DeleteImpl()
+        {
+            DeleteDic(_dic, _file);
+        }
 
         private static void DeleteDic([NotNull] InternalZipDirectory dic, [NotNull] ZipFile file)
         {
@@ -46,7 +49,10 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
                 DeleteDic(internalZipDirectory, file);
         }
 
-        protected override InternalZipDirectory GetInfo(string path) => _dic;
+        protected override InternalZipDirectory GetInfo(string path)
+        {
+            return _dic;
+        }
 
         public override IFile GetFile(string name)
         {
@@ -76,7 +82,10 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
             throw new InvalidOperationException();
         }
 
-        public override IDirectory MoveTo(string location) => throw new NotSupportedException();
+        public override IDirectory MoveTo(string location)
+        {
+            throw new NotSupportedException();
+        }
 
         protected void ResetDirectory([NotNull] ZipFile file, [NotNull] InternalZipDirectory directory)
         {

@@ -94,7 +94,7 @@ namespace Tauron.Application.Files.Serialization.Core
             if (n > 7 || b > 90) output += EncodeTable[b / 91];
             return output;
         }
-        
+
         [NotNull]
         public static byte[] Decode([NotNull] string input)
         {
@@ -107,7 +107,6 @@ namespace Tauron.Application.Files.Serialization.Core
             var d = 0;
 
             foreach (var c in input.Select(t => DecodeTable[(byte) t]).Where(c => c != -1))
-            {
                 if (v < 0)
                 {
                     v = c;
@@ -126,7 +125,6 @@ namespace Tauron.Application.Files.Serialization.Core
 
                     v = -1;
                 }
-            }
 
             if (v + 1 != 0) output[d++] = (byte) ((b | (v << n)) & 255);
 

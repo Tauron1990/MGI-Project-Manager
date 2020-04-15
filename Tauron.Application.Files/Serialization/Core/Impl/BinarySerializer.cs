@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using JetBrains.Annotations;
 
 namespace Tauron.Application.Files.Serialization.Core.Impl
 {
@@ -9,9 +8,12 @@ namespace Tauron.Application.Files.Serialization.Core.Impl
     {
         private readonly BinaryFormatter _formatter;
 
-        public BinarySerializer([NotNull] BinaryFormatter formatter) => _formatter = formatter;
+        public BinarySerializer(BinaryFormatter formatter)
+        {
+            _formatter = formatter;
+        }
 
-        public AggregateException Errors => _formatter == null ? new AggregateException(new SerializerElementNullException("Formatter")) : null;
+        public AggregateException? Errors => _formatter == null ? new AggregateException(new SerializerElementNullException("Formatter")) : null;
 
         public void Serialize(IStreamSource target, object graph)
         {
@@ -19,17 +21,22 @@ namespace Tauron.Application.Files.Serialization.Core.Impl
             Argument.NotNull(graph, nameof(graph));
 
             using (var stream = target.OpenStream(FileAccess.ReadWrite))
+            {
                 _formatter.Serialize(stream, graph);
+            }
         }
 
         public object Deserialize(IStreamSource target)
         {
             Argument.NotNull(target, nameof(target));
 
-            using (var stream = target.OpenStream(FileAccess.ReadWrite))
-                return _formatter.Deserialize(stream);
+            using var stream = target.OpenStream(FileAccess.ReadWrite);
+            return _formatter.Deserialize(stream);
         }
 
-        public void Deserialize(IStreamSource targetStream, object target) => throw new NotSupportedException();
+        public void Deserialize(IStreamSource targetStream, object target)
+        {
+            throw new NotSupportedException();
+        }
     }
 }

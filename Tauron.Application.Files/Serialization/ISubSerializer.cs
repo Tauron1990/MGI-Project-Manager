@@ -1,13 +1,11 @@
-﻿using JetBrains.Annotations;
-using Tauron.Application.Files.Serialization.Core;
+﻿using Tauron.Application.Files.Serialization.Core;
 
 namespace Tauron.Application.Files.Serialization
 {
     public interface ISubSerializer : ISerializer
     {
-        void Serialize([NotNull] SerializationContext target, [NotNull] object graph);
+        void Serialize(SerializationContext target, object graph);
 
-        [NotNull]
-        object Deserialize([NotNull] SerializationContext target);
+        object Deserialize(SerializationContext target);
     }
 }

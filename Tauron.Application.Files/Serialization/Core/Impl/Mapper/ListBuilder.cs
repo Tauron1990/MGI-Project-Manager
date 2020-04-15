@@ -2,20 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 
 namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper
 {
     internal class ListBuilder : IEnumerable
     {
         private readonly bool _isArray;
-        private readonly Type _listType;
-        private Type _elemenType;
-        private IEnumerable _enumerable;
+        private readonly Type? _listType;
+        private Type? _elemenType;
+        private IEnumerable? _enumerable;
 
-        private IList _list;
+        private IList? _list;
 
-        public ListBuilder([CanBeNull] Type listType)
+        public ListBuilder(Type? listType)
         {
             if (listType == null) return;
 
@@ -24,11 +23,9 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper
             _listType = _isArray ? typeof(ArrayList) : listType;
         }
 
-        [NotNull]
         public object[] Objects => _enumerable.Cast<object>().ToArray();
 
-        [CanBeNull]
-        public Type ElemenType
+        public Type? ElemenType
         {
             get
             {
@@ -40,18 +37,22 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper
             }
         }
 
-        public IEnumerator GetEnumerator() => _list.GetEnumerator();
-
-        [CanBeNull]
-        private Type GetElementType()
+        public IEnumerator GetEnumerator()
         {
-            Type elementType;
+            return _list?.GetEnumerator() ?? Array.Empty<object>().GetEnumerator();
+        }
+
+        private Type? GetElementType()
+        {
+            Type? elementType;
 
             if (_isArray)
-                elementType = _listType.GetElementType();
+            {
+                elementType = _listType?.GetElementType();
+            }
             else
             {
-                if (!_listType.IsGenericType) return null;
+                if (_listType == null || !_listType.IsGenericType) return null;
 
                 elementType = _listType.GenericTypeArguments[0];
 
@@ -63,19 +64,12 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper
             return elementType;
         }
 
-        public void Begin([CanBeNull] object enumerable, bool readingMode)
+        public void Begin(object? enumerable, bool readingMode)
         {
             if (readingMode)
             {
-                try
-                {
-                    _enumerable = (IEnumerable) enumerable;
-                    return;
-                }
-                catch (InvalidCastException e)
-                {
-                    throw new InvalidOperationException("Invalid Cast", e);
-                }
+                _enumerable = enumerable as IEnumerable;
+                return;
             }
 
             _list = Activator.CreateInstance(_listType) as IList;
@@ -84,21 +78,23 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper
                 throw new InvalidOperationException("No IList Implemented");
         }
 
-        public void Add([CanBeNull] object value) => _list.Add(value);
+        public void Add(object? value)
+        {
+            _list?.Add(value);
+        }
 
-        [CanBeNull]
-        public object End()
+        public object? End()
         {
             try
             {
                 if (_enumerable != null) return null;
 
-                object value;
+                object? value;
 
                 if (_isArray)
                 {
-                    var arr = Array.CreateInstance(Argument.CheckResult(_listType.GetElementType(), "Initialization Error"), _list.Count);
-                    _list.CopyTo(arr, 0);
+                    var arr = Array.CreateInstance(Argument.CheckResult(_listType?.GetElementType(), "Initialization Error"), _list?.Count ?? 0);
+                    _list?.CopyTo(arr, 0);
                     value = arr;
                 }
                 else
@@ -115,8 +111,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper
             }
         }
 
-        [CanBeNull]
-        public Exception VerifyError()
+        public Exception? VerifyError()
         {
             if (_listType == null) return new SerializerElementNullException("Unkowen List Type");
 

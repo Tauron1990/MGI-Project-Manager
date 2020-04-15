@@ -9,12 +9,12 @@ namespace Tauron.Application.Files.Serialization.Core.Impl
     internal class UniversalListConverter : SimpleConverter<IEnumerable<string>>
     {
         private readonly SimpleConverter<string> _baseConverter;
-        private readonly ListBuilder             _listBuilder;
+        private readonly ListBuilder _listBuilder;
 
         public UniversalListConverter([NotNull] SimpleConverter<string> baseConverter, [NotNull] ListBuilder listBuilder)
         {
             _baseConverter = Argument.NotNull(baseConverter, nameof(baseConverter));
-            _listBuilder   = Argument.NotNull(listBuilder, nameof(listBuilder));
+            _listBuilder = Argument.NotNull(listBuilder, nameof(listBuilder));
         }
 
         public override object ConvertBack([NotNull] IEnumerable<string> target)
@@ -23,11 +23,10 @@ namespace Tauron.Application.Files.Serialization.Core.Impl
 
             foreach (var content in target) _listBuilder.Add(_baseConverter.ConvertBack(content));
 
-            return _listBuilder.End();
+            return Argument.CheckResult(_listBuilder.End(), "List Builder Result");
         }
 
-        [NotNull]
-        public override IEnumerable<string> Convert(object source)
+        public override IEnumerable<string> Convert(object? source)
         {
             _listBuilder.Begin(source, true);
 

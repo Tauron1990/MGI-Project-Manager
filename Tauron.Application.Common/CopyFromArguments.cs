@@ -63,12 +63,12 @@ namespace Tauron
         /// <summary>
         /// Gets or sets the callback for progress-report. Default is null.
         /// </summary>
-        public ProgressChange ProgressChangeCallback { get; set; }
+        public ProgressChange? ProgressChangeCallback { get; set; }
 
         /// <summary>
         /// Gets or sets the event for aborting the operation. Default is null.
         /// </summary>
-        public WaitHandle StopEvent { get; set; }
+        public WaitHandle? StopEvent { get; set; }
 
         /// <summary>
         /// Gets or sets the time interval between to progress change callbacks. Default is 200 ms.

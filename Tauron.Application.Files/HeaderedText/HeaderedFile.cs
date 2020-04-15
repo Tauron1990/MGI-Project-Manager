@@ -7,16 +7,16 @@ namespace Tauron.Application.Files.HeaderedText
     [PublicAPI]
     public sealed class HeaderedFile
     {
-        public HeaderedFile([NotNull] FileDescription description) => Context = new FileContext(description);
+        public HeaderedFile([NotNull] FileDescription description)
+        {
+            Context = new FileContext(description);
+        }
 
-        [CanBeNull]
-        internal HeaderedFileWriter CurrentWriter { get; set; }
+        internal HeaderedFileWriter? CurrentWriter { get; set; }
 
-        [NotNull]
-        public FileContext Context { get; private set; }
+        [NotNull] public FileContext Context { get; private set; }
 
-        [CanBeNull]
-        public string Content { get; internal set; }
+        [CanBeNull] public string Content { get; internal set; }
 
         public void Read([NotNull] TextReader reader)
         {
@@ -35,10 +35,10 @@ namespace Tauron.Application.Files.HeaderedText
                 }
 
                 var textLineTemp = textLine.Trim();
-                var temp         = textLineTemp.Split(new[] {' '}, 2);
+                var temp = textLineTemp.Split(new[] {' '}, 2);
                 if (Context.IsKeyword(temp[0]))
                 {
-                    var key     = temp[0];
+                    var key = temp[0];
                     var content = string.Empty;
 
                     if (temp.Length < 1) content = temp[1];
@@ -54,6 +54,9 @@ namespace Tauron.Application.Files.HeaderedText
         }
 
         [NotNull]
-        public HeaderedFileWriter CreateWriter() => CurrentWriter ?? new HeaderedFileWriter(this);
+        public HeaderedFileWriter CreateWriter()
+        {
+            return CurrentWriter ?? new HeaderedFileWriter(this);
+        }
     }
 }

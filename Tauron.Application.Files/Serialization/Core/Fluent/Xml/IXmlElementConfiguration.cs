@@ -3,21 +3,17 @@ using JetBrains.Annotations;
 
 namespace Tauron.Application.Files.Serialization.Core.Fluent
 {
+    [PublicAPI]
     public interface IXmlElementConfiguration : IXmlRootConfiguration<IXmlElementConfiguration>
     {
-        [NotNull]
-        IXmlSerializerConfiguration WithSerializer([NotNull] XmlSerializer serializer);
+        IXmlSerializerConfiguration WithSerializer(XmlSerializer serializer);
 
-        [NotNull]
-        IXmlSerializerConfiguration WithSubSerializer<TTarget>([NotNull] ISerializer serializer);
+        IXmlSerializerConfiguration WithSubSerializer<TTarget>(ISerializer serializer);
 
-        [NotNull]
-        IXmlElementConfiguration Element([NotNull] string name);
+        IXmlElementConfiguration Element(string name);
 
-        [NotNull]
-        IXmlAttributConfiguration Attribute([NotNull] string name);
+        IXmlAttributConfiguration Attribute(string name);
 
-        [NotNull]
-        IXmlListElementConfiguration WithElements([NotNull] string name);
+        IXmlListElementConfiguration WithElements(string name);
     }
 }

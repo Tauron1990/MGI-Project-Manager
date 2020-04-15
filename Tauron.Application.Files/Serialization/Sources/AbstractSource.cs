@@ -22,6 +22,9 @@ namespace Tauron.Application.Files.Serialization.Sources
         {
         }
 
-        ~AbstractSource() => Dispose(false);
+        ~AbstractSource()
+        {
+            Dispose(false);
+        }
     }
 }

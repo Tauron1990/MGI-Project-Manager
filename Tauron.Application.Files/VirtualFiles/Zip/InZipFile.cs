@@ -8,33 +8,12 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
 {
     public sealed class InZipFile : FileBase<ZipEntry>
     {
-        private class ZipWriteHelper : MemoryStream
-        {
-            private readonly string _entry;
-            private readonly ZipFile _file;
-            private readonly Action<ZipEntry> _updateAction;
-
-            public ZipWriteHelper([NotNull] string entry, [NotNull] ZipFile file, [NotNull] byte[] buffer, [NotNull] Action<ZipEntry> updateAction)
-                : base(buffer)
-            {
-                _entry = entry;
-                _file = file;
-                _updateAction = updateAction;
-            }
-
-            protected override void Dispose(bool disposing)
-            {
-                _updateAction(_file.UpdateEntry(_entry, GetBuffer()));
-                base.Dispose(disposing);
-            }
-        }
-
         private readonly InternalZipDirectory _directory;
-        private readonly ZipEntry _entry;
+        private readonly ZipEntry? _entry;
 
         private readonly ZipFile _file;
 
-        public InZipFile([NotNull] IDirectory parentDirectory, [NotNull] string originalPath, [NotNull] ZipFile file, [NotNull] InternalZipDirectory directory, [CanBeNull] ZipEntry entry)
+        public InZipFile(IDirectory parentDirectory, string originalPath, ZipFile file, InternalZipDirectory directory, ZipEntry? entry)
             : base(() => parentDirectory, originalPath, Path.GetFileName(entry?.FileName ?? string.Empty))
         {
             _file = file;
@@ -53,9 +32,12 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
             set => throw new NotSupportedException();
         }
 
-        public override IFile MoveTo(string location) => throw new NotSupportedException();
-
         public override long Size => InfoObject.UncompressedSize;
+
+        public override IFile MoveTo(string location)
+        {
+            throw new NotSupportedException();
+        }
 
         protected override void DeleteImpl()
         {
@@ -63,7 +45,10 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
             Reset(OriginalPath, ParentDirectory);
         }
 
-        protected override ZipEntry GetInfo(string path) => _entry;
+        protected override ZipEntry? GetInfo(string path)
+        {
+            return _entry;
+        }
 
         protected override Stream CreateStream(FileAccess access, InternalFileMode mode)
         {
@@ -89,6 +74,27 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
         {
             _directory.Files.RemoveAt(_directory.Files.FindIndex(ent => ent.FileName == zipEntry.FileName));
             Reset(OriginalPath, ParentDirectory);
+        }
+
+        private class ZipWriteHelper : MemoryStream
+        {
+            private readonly string _entry;
+            private readonly ZipFile _file;
+            private readonly Action<ZipEntry> _updateAction;
+
+            public ZipWriteHelper(string entry, ZipFile file, byte[] buffer, Action<ZipEntry> updateAction)
+                : base(buffer)
+            {
+                _entry = entry;
+                _file = file;
+                _updateAction = updateAction;
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                _updateAction(_file.UpdateEntry(_entry, GetBuffer()));
+                base.Dispose(disposing);
+            }
         }
     }
 }

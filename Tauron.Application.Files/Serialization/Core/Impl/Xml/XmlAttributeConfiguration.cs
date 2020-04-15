@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Xml.Linq;
-using JetBrains.Annotations;
 using Tauron.Application.Files.Serialization.Core.Fluent;
 using Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml;
 using Tauron.Application.Files.Serialization.Core.Managment;
@@ -14,12 +13,12 @@ namespace Tauron.Application.Files.Serialization.Core.Impl
         private readonly XmlElementTarget _rootTarget;
         private readonly XmlElementTarget _target;
         private readonly Type _targetType;
-        private SimpleConverter<string> _converter;
+        private SimpleConverter<string>? _converter;
 
-        private string _member;
+        private string? _member;
 
-        public XmlAttributeConfiguration([NotNull] IXmlSerializerConfiguration config, [NotNull] XmlElementTarget rootTarget, [NotNull] XmlElementTarget target,
-            [NotNull] SimpleMapper<XmlElementContext> mapper, [NotNull] Type targetType)
+        public XmlAttributeConfiguration(IXmlSerializerConfiguration config, XmlElementTarget rootTarget, XmlElementTarget target,
+            SimpleMapper<XmlElementContext> mapper, Type targetType)
         {
             _config = Argument.NotNull(config, nameof(config));
             _rootTarget = Argument.NotNull(rootTarget, nameof(rootTarget));

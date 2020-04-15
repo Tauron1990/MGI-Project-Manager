@@ -9,16 +9,16 @@ namespace Tauron.Application.Files.Serialization.Core.Fluent.Impl
 {
     internal class HeaderedFileSerializerConfiguration : SerializerRootConfigurationBase, IHeaderedFileSerializerConfiguration
     {
-        private readonly ObjectBuilder                    _builder;
+        private readonly ObjectBuilder _builder;
         private readonly SimpleMapper<HeaderdFileContext> _mapper = new SimpleMapper<HeaderdFileContext>();
-        private readonly Type                             _targetType;
+        private readonly Type _targetType;
 
-        private FileDescription _description = new FileDescription();
+        private readonly FileDescription _description = new FileDescription();
 
         public HeaderedFileSerializerConfiguration([NotNull] Type targetType)
         {
             _targetType = targetType;
-            _builder    = new ObjectBuilder(targetType);
+            _builder = new ObjectBuilder(targetType);
         }
 
         public IConstructorConfiguration<IHeaderedFileSerializerConfiguration> ConfigConstructor()

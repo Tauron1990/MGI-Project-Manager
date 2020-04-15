@@ -9,17 +9,16 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
 {
     internal class XmlElementSerializer
     {
-        private readonly SimpleConverter<string> _converter;
-        private readonly XmlElementTarget        _target;
+        private readonly SimpleConverter<string>? _converter;
+        private readonly XmlElementTarget? _target;
 
-        public XmlElementSerializer([CanBeNull] XmlElementTarget target, [CanBeNull] SimpleConverter<string> converter)
+        public XmlElementSerializer(XmlElementTarget? target, SimpleConverter<string>? converter)
         {
-            _target    = target;
+            _target = target;
             _converter = converter;
         }
 
-        [CanBeNull]
-        public static IEnumerable<XElement> GetElements([NotNull] XElement ele, bool toWrite, [CanBeNull] XmlElementTarget target, int count)
+        public static IEnumerable<XElement>? GetElements([NotNull] XElement ele, bool toWrite, XmlElementTarget? target, int count)
         {
             var currentElement = Argument.NotNull(ele, nameof(ele));
             if (target == null) return new[] {currentElement};
@@ -45,7 +44,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
                     }
 
                     currentElement = temp;
-                    target         = target.SubElement;
+                    target = target.SubElement;
                     continue;
                 }
 
@@ -70,8 +69,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
             }
         }
 
-        [CanBeNull]
-        public static XObject GetElement([NotNull] XElement ele, bool toWrite, [CanBeNull] XmlElementTarget target)
+        public static XObject? GetElement([NotNull] XElement ele, bool toWrite, XmlElementTarget? target)
         {
             var currentElement = ele;
 
@@ -114,12 +112,11 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
             }
         }
 
-        [NotNull]
-        public object Deserialize([NotNull] XElement file)
+        public object? Deserialize([NotNull] XElement file)
         {
             Argument.NotNull(file, nameof(file));
 
-            object obj = null;
+            object? obj = null;
             ProgressElement(SerializerMode.Deserialize, GetElement(file, false, _target), ref obj);
             return obj;
         }
@@ -133,22 +130,22 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
             ProgressElement(SerializerMode.Serialize, GetElement(file, true, _target), ref obj);
         }
 
-        private void ProgressString(SerializerMode mode, [NotNull] ref string str, [CanBeNull] ref object obj)
+        private void ProgressString(SerializerMode mode, ref string str, ref object? obj)
         {
             switch (mode)
             {
                 case SerializerMode.Deserialize:
-                    obj = _converter.ConvertBack(str);
+                    obj = _converter?.ConvertBack(str);
                     break;
                 case SerializerMode.Serialize:
-                    str = _converter.Convert(obj);
+                    str = _converter?.Convert(obj) ?? string.Empty;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(mode));
             }
         }
 
-        private void ProgressElement(SerializerMode mode, [CanBeNull] XObject xobj, [NotNull] ref object obj)
+        private void ProgressElement(SerializerMode mode, XObject? xobj, ref object? obj)
         {
             if (xobj == null) return;
 
@@ -174,8 +171,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
             else ((XElement) xobj).Value = str;
         }
 
-        [CanBeNull]
-        public Exception VerifException()
+        public Exception? VerifException()
         {
             if (_converter == null) return new ArgumentNullException(nameof(_converter), @"Converter");
 

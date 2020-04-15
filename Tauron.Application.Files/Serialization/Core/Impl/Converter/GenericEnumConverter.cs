@@ -8,16 +8,21 @@ namespace Tauron.Application.Files.Serialization.Core.Impl
     {
         private readonly Type _enumType;
 
-        public GenericEnumConverter([NotNull] Type enumType)
+        public GenericEnumConverter(Type enumType)
         {
             if (enumType.BaseType != typeof(Enum)) throw new SerializerElementException("The Type is no Enum");
 
             _enumType = enumType;
         }
 
-        public override object ConvertBack([NotNull] string target) => Enum.Parse(_enumType, target);
+        public override object ConvertBack([NotNull] string target)
+        {
+            return Enum.Parse(_enumType, target);
+        }
 
-        [NotNull]
-        public override string Convert(object source) => source == null ? string.Empty : source.ToString();
+        public override string Convert(object? source)
+        {
+            return source == null ? string.Empty : source.ToString();
+        }
     }
 }

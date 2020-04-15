@@ -7,14 +7,12 @@ namespace Tauron.Application.Files.Serialization
     [PublicAPI]
     public interface ISerializer
     {
-        [CanBeNull]
-        AggregateException Errors { get; }
+        AggregateException? Errors { get; }
 
-        void Serialize([NotNull] IStreamSource target, [NotNull] object graph);
+        void Serialize(IStreamSource target, object graph);
 
-        [NotNull]
-        object Deserialize([NotNull] IStreamSource target);
+        object Deserialize(IStreamSource target);
 
-        void Deserialize([NotNull] IStreamSource targetStream, [NotNull] object target);
+        void Deserialize(IStreamSource targetStream, object target);
     }
 }

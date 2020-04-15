@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 
 namespace Tauron.Application.Files.VirtualFiles.Core
 {
-    public abstract class DirectoryBase<TInfo> : FileSystemNodeBase<TInfo>, IDirectory
+    public abstract class DirectoryBase<TInfo> : FileSystemNodeBase<TInfo>, IDirectory where TInfo : class
     {
-        protected DirectoryBase([CanBeNull] Func<IDirectory> parentDirectory, [NotNull] string originalPath, [NotNull] string name)
-            : base(parentDirectory, true, originalPath, name) { }
+        protected DirectoryBase(Func<IDirectory?> parentDirectory, string originalPath, string name)
+            : base(parentDirectory, originalPath, name)
+        {
+        }
 
         public abstract IEnumerable<IDirectory> Directories { get; }
         public abstract IEnumerable<IFile> Files { get; }

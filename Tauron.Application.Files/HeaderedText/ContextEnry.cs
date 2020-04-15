@@ -7,11 +7,11 @@ namespace Tauron.Application.Files.HeaderedText
     {
         internal ContextEnry(string key, string content)
         {
-            Key     = Argument.NotNull(key, nameof(key));
+            Key = Argument.NotNull(key, nameof(key));
             Content = content;
         }
 
-        public string Key     { get; }
+        public string Key { get; }
         public string Content { get; }
     }
 }

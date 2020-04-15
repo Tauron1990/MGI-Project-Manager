@@ -1,5 +1,4 @@
 ﻿using System.Xml.Linq;
-using JetBrains.Annotations;
 using Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml;
 using Tauron.Application.Files.Serialization.Core.Managment;
 
@@ -7,12 +6,12 @@ namespace Tauron.Application.Files.Serialization.Core.Impl
 {
     internal sealed class InternalXmlSerializer : SerializerBase<XmlElementContext>
     {
-        private readonly XDeclaration _declaration;
+        private readonly XDeclaration? _declaration;
         private readonly string _rootName;
-        private readonly XNamespace _xNamespace;
+        private readonly XNamespace? _xNamespace;
 
-        public InternalXmlSerializer([NotNull] ObjectBuilder builder, [NotNull] SimpleMapper<XmlElementContext> mapper, [NotNull] string rootName, 
-            [CanBeNull] XDeclaration declaration, [CanBeNull] XNamespace xNamespace)
+        public InternalXmlSerializer(ObjectBuilder builder, SimpleMapper<XmlElementContext> mapper, string rootName,
+            XDeclaration? declaration, XNamespace? xNamespace)
             : base(builder, mapper, ContextMode.Text)
         {
             _rootName = Argument.NotNull(rootName, nameof(rootName));
@@ -20,8 +19,10 @@ namespace Tauron.Application.Files.Serialization.Core.Impl
             _xNamespace = xNamespace;
         }
 
-        public override XmlElementContext BuildContext(SerializationContext context) 
-            => new XmlElementContext(Argument.NotNull(context, nameof(context)), _declaration, _xNamespace, _rootName);
+        public override XmlElementContext BuildContext(SerializationContext context)
+        {
+            return new XmlElementContext(Argument.NotNull(context, nameof(context)), _declaration, _xNamespace, _rootName);
+        }
 
         public override void CleanUp(XmlElementContext context)
         {

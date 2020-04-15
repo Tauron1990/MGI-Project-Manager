@@ -7,14 +7,16 @@ namespace Tauron.Application.Files.VirtualFiles.LocalFileSystem
 {
     public class LocalFile : FileBase<FileInfo>
     {
-        public LocalFile([NotNull] string fullPath, [NotNull] IDirectory path)
+        public LocalFile(string fullPath, IDirectory path)
             : base(() => path, fullPath, fullPath.GetFileName())
         {
         }
 
         private LocalFile(string fullPath)
-            : base(() => new LocalDirectory(fullPath.GetDirectoryName()), fullPath, fullPath.GetFileName()) { }
-        
+            : base(() => new LocalDirectory(fullPath.GetDirectoryName()), fullPath, fullPath.GetFileName())
+        {
+        }
+
         public override DateTime LastModified => InfoObject.LastWriteTime;
 
         public override bool Exist => InfoObject.Exists;
@@ -30,6 +32,8 @@ namespace Tauron.Application.Files.VirtualFiles.LocalFileSystem
             }
         }
 
+        public override long Size => InfoObject.Length;
+
         public override IFile MoveTo(string location)
         {
             if (InfoObject.FullName == location) return this;
@@ -39,14 +43,24 @@ namespace Tauron.Application.Files.VirtualFiles.LocalFileSystem
             return new LocalFile(location);
         }
 
-        public override long Size => InfoObject.Length;
+        protected override void DeleteImpl()
+        {
+            InfoObject.Delete();
+        }
 
-        protected override void DeleteImpl() => InfoObject.Delete();
+        protected override FileInfo GetInfo(string path)
+        {
+            return new FileInfo(path);
+        }
 
-        protected override FileInfo GetInfo(string path) => new FileInfo(path);
+        protected override Stream CreateStream(FileAccess access, InternalFileMode mode)
+        {
+            return new FileStream(OriginalPath, (FileMode) mode, access, access == FileAccess.Read ? FileShare.Read : FileShare.None);
+        }
 
-        protected override Stream CreateStream(FileAccess access, InternalFileMode mode) => new FileStream(OriginalPath, (FileMode) mode, access, access == FileAccess.Read ? FileShare.Read : FileShare.None);
-
-        private void MoveFile([NotNull] FileInfo old, [NotNull] string newLoc) => old.MoveTo(newLoc);
+        private void MoveFile([NotNull] FileInfo old, [NotNull] string newLoc)
+        {
+            old.MoveTo(newLoc);
+        }
     }
 }

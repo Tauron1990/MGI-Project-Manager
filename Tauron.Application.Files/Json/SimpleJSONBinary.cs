@@ -20,7 +20,9 @@ namespace Tauron.Application.Files.Json
             aFileName.CreateDirectoryIfNotExis();
 
             using (var fileStream = File.OpenWrite(aFileName))
+            {
                 SaveToBinaryStream(fileStream);
+            }
         }
 
         public string SaveToBinaryBase64()
@@ -41,18 +43,15 @@ namespace Tauron.Application.Files.Json
                 case JsonNodeType.Array:
                 {
                     var count = aReader.ReadInt32();
-                    var tmp   = new JsonArray();
-                    for (var i = 0; i < count; i++)
-                    {
-                        tmp.Add(DeserializeBinary(aReader));
-                    }
+                    var tmp = new JsonArray();
+                    for (var i = 0; i < count; i++) tmp.Add(DeserializeBinary(aReader));
 
                     return tmp;
                 }
                 case JsonNodeType.Object:
                 {
                     var count = aReader.ReadInt32();
-                    var tmp   = new JsonObject();
+                    var tmp = new JsonObject();
                     for (var i = 0; i < count; i++)
                     {
                         var key = aReader.ReadString();
@@ -87,19 +86,23 @@ namespace Tauron.Application.Files.Json
 
         public static JsonNode LoadFromBinaryStream(Stream aData)
         {
-            using (var binaryReader = new BinaryReader(aData)) 
+            using (var binaryReader = new BinaryReader(aData))
+            {
                 return DeserializeBinary(binaryReader);
+            }
         }
 
         public static JsonNode LoadFromBinaryFile(string aFileName)
         {
-            using (var fileStream = File.OpenRead(aFileName)) 
+            using (var fileStream = File.OpenRead(aFileName))
+            {
                 return LoadFromBinaryStream(fileStream);
+            }
         }
 
         public static JsonNode LoadFromBinaryBase64(string aBase64)
         {
-            var tmp    = Convert.FromBase64String(aBase64);
+            var tmp = Convert.FromBase64String(aBase64);
             var stream = new MemoryStream(tmp) {Position = 0};
             return LoadFromBinaryStream(stream);
         }

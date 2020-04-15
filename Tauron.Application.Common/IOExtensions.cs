@@ -228,7 +228,7 @@ namespace Tauron
             }
         }
 
-        public static bool ExisFile(this string file)
+        public static bool ExisFile(this string? file)
             => !string.IsNullOrWhiteSpace(file) && File.Exists(file);
 
         public static DateTime GetDirectoryCreationTime(this string path) 

@@ -8,25 +8,25 @@ namespace Tauron.Application.Files.Serialization.Core.Fluent.Impl
 {
     internal class IniKeyConfiguration : IIniKeySerializerConfiguration
     {
-        private readonly IIniSerializerConfiguration          _configuration;
-        private readonly bool                                 _isSingle;
-        private readonly SimpleMapper<IniContext>             _mapper;
-        private readonly string                               _section;
-        private readonly Type                                 _targetType;
-        private          SimpleConverter<string>              _converter;
-        private          string                               _key;
-        private          SimpleConverter<IEnumerable<string>> _listConverter;
+        private readonly IIniSerializerConfiguration _configuration;
+        private readonly bool _isSingle;
+        private readonly SimpleMapper<IniContext> _mapper;
+        private readonly string _section;
+        private readonly Type _targetType;
+        private SimpleConverter<string> _converter;
+        private string _key;
+        private SimpleConverter<IEnumerable<string>> _listConverter;
 
         private string _member;
 
-        public IniKeyConfiguration([NotNull] string                   section, [NotNull] IIniSerializerConfiguration configuration,
-                                   [NotNull] SimpleMapper<IniContext> mapper,  bool                                  isSingle, [NotNull] Type targetType)
+        public IniKeyConfiguration([NotNull] string section, [NotNull] IIniSerializerConfiguration configuration,
+            [NotNull] SimpleMapper<IniContext> mapper, bool isSingle, [NotNull] Type targetType)
         {
-            _section       = section;
+            _section = section;
             _configuration = configuration;
-            _mapper        = mapper;
-            _isSingle      = isSingle;
-            _targetType    = targetType;
+            _mapper = mapper;
+            _isSingle = isSingle;
+            _targetType = targetType;
         }
 
 

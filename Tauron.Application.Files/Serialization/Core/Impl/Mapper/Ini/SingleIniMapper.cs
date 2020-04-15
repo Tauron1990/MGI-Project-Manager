@@ -34,18 +34,17 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Ini
             context.File.SetData(_section, _key, _converter.Convert(value));
         }
 
-        public override Exception VerifyError()
+        public override Exception? VerifyError()
         {
             var e = base.VerifyError();
 
             if (_converter == null)
                 e = new ArgumentNullException(nameof(_converter), @"Converter");
 
-            return e ?? _converter.VerifyError();
+            return e ?? _converter?.VerifyError();
         }
 
-        [NotNull]
-        public static string GetKeyForIni([CanBeNull] MemberInfo member, [CanBeNull] string key)
+        public static string GetKeyForIni(MemberInfo? member, string? key)
         {
             if (key == null)
                 return member == null ? string.Empty : member.Name;
@@ -53,8 +52,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Ini
             return key;
         }
 
-        [NotNull]
-        public static string GetSectionForIni([CanBeNull] Type target, [CanBeNull] string section)
+        public static string GetSectionForIni(Type? target, string? section)
         {
             if (section == null)
                 return target == null ? string.Empty : target.Name;

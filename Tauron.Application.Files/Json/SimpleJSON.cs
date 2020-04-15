@@ -29,8 +29,7 @@ namespace Tauron.Application.Files.Json
 
     public abstract partial class JsonNode
     {
-        [ThreadStatic]
-        private static StringBuilder _escapeBuilder;
+        [ThreadStatic] private static StringBuilder _escapeBuilder;
 
         internal static StringBuilder EscapeBuilder => _escapeBuilder ?? (_escapeBuilder = new StringBuilder());
 
@@ -41,7 +40,6 @@ namespace Tauron.Application.Files.Json
             if (sb.Capacity < aText.Length + aText.Length / 10)
                 sb.Capacity = aText.Length + aText.Length / 10;
             foreach (var c in aText)
-            {
                 switch (c)
                 {
                     case '\\':
@@ -78,7 +76,6 @@ namespace Tauron.Application.Files.Json
 
                         break;
                 }
-            }
 
             var result = sb.ToString();
             sb.Length = 0;
@@ -90,7 +87,8 @@ namespace Tauron.Application.Files.Json
             if (quoted)
                 return token;
             var tmp = token.ToLower();
-            switch (tmp) {
+            switch (tmp)
+            {
                 case "false":
                 case "true":
                     return tmp == "true";
@@ -157,10 +155,8 @@ namespace Tauron.Application.Files.Json
 
                         stack.Pop();
                         if (token.Length > 0 || tokenIsQuoted)
-                        {
                             if (ctx != null)
                                 ctx.Add(tokenName, ParseElement(token.ToString(), tokenIsQuoted));
-                        }
 
                         tokenIsQuoted = false;
                         tokenName = "";
@@ -194,10 +190,8 @@ namespace Tauron.Application.Files.Json
                         }
 
                         if (token.Length > 0 || tokenIsQuoted)
-                        {
                             if (ctx != null)
                                 ctx.Add(tokenName, ParseElement(token.ToString(), tokenIsQuoted));
-                        }
 
                         tokenName = "";
                         token.Length = 0;
@@ -331,17 +325,30 @@ namespace Tauron.Application.Files.Json
         {
             private Enumerator _enumerator;
 
-            public ValueEnumerator(List<JsonNode>.Enumerator aArrayEnum) : this(new Enumerator(aArrayEnum)) { }
+            public ValueEnumerator(List<JsonNode>.Enumerator aArrayEnum) : this(new Enumerator(aArrayEnum))
+            {
+            }
 
-            public ValueEnumerator(Dictionary<string, JsonNode>.Enumerator aDictEnum) : this(new Enumerator(aDictEnum)) { }
+            public ValueEnumerator(Dictionary<string, JsonNode>.Enumerator aDictEnum) : this(new Enumerator(aDictEnum))
+            {
+            }
 
-            public ValueEnumerator(Enumerator aEnumerator) => _enumerator = aEnumerator;
+            public ValueEnumerator(Enumerator aEnumerator)
+            {
+                _enumerator = aEnumerator;
+            }
 
             public JsonNode Current => _enumerator.Current.Value;
 
-            public bool MoveNext() => _enumerator.MoveNext();
+            public bool MoveNext()
+            {
+                return _enumerator.MoveNext();
+            }
 
-            public ValueEnumerator GetEnumerator() => this;
+            public ValueEnumerator GetEnumerator()
+            {
+                return this;
+            }
         }
 
         [PublicAPI]
@@ -349,17 +356,30 @@ namespace Tauron.Application.Files.Json
         {
             private Enumerator _enumerator;
 
-            public KeyEnumerator(List<JsonNode>.Enumerator aArrayEnum) : this(new Enumerator(aArrayEnum)) { }
+            public KeyEnumerator(List<JsonNode>.Enumerator aArrayEnum) : this(new Enumerator(aArrayEnum))
+            {
+            }
 
-            public KeyEnumerator(Dictionary<string, JsonNode>.Enumerator aDictEnum) : this(new Enumerator(aDictEnum)) { }
+            public KeyEnumerator(Dictionary<string, JsonNode>.Enumerator aDictEnum) : this(new Enumerator(aDictEnum))
+            {
+            }
 
-            public KeyEnumerator(Enumerator aEnumerator) => _enumerator = aEnumerator;
+            public KeyEnumerator(Enumerator aEnumerator)
+            {
+                _enumerator = aEnumerator;
+            }
 
             public JsonNode Current => _enumerator.Current.Key;
 
-            public bool MoveNext() => _enumerator.MoveNext();
+            public bool MoveNext()
+            {
+                return _enumerator.MoveNext();
+            }
 
-            public KeyEnumerator GetEnumerator() => this;
+            public KeyEnumerator GetEnumerator()
+            {
+                return this;
+            }
         }
 
         [PublicAPI]
@@ -375,14 +395,23 @@ namespace Tauron.Application.Files.Json
                     _enumerator = _node.GetEnumerator();
             }
 
-            public IEnumerator<KeyValuePair<string, JsonNode>> GetEnumerator() => new LinqEnumerator(_node);
+            public IEnumerator<KeyValuePair<string, JsonNode>> GetEnumerator()
+            {
+                return new LinqEnumerator(_node);
+            }
 
-            IEnumerator IEnumerable.GetEnumerator() => new LinqEnumerator(_node);
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return new LinqEnumerator(_node);
+            }
 
             public KeyValuePair<string, JsonNode> Current => _enumerator.Current;
             object IEnumerator.Current => _enumerator.Current;
 
-            public bool MoveNext() => _enumerator.MoveNext();
+            public bool MoveNext()
+            {
+                return _enumerator.MoveNext();
+            }
 
             public void Dispose()
             {
@@ -423,18 +452,29 @@ namespace Tauron.Application.Files.Json
 
         public abstract bool Inline { get; set; }
 
-        public virtual void Add(string aKey, JsonNode aItem) { }
+        public virtual void Add(string aKey, JsonNode aItem)
+        {
+        }
 
         public virtual void Add(JsonNode aItem)
         {
             Add("", aItem);
         }
 
-        public virtual JsonNode Remove(string aKey) => null;
+        public virtual JsonNode Remove(string aKey)
+        {
+            return null;
+        }
 
-        public virtual JsonNode Remove(int aIndex) => null;
+        public virtual JsonNode Remove(int aIndex)
+        {
+            return null;
+        }
 
-        public virtual JsonNode Remove(JsonNode aNode) => aNode;
+        public virtual JsonNode Remove(JsonNode aNode)
+        {
+            return aNode;
+        }
 
         public virtual IEnumerable<JsonNode> Children
         {
@@ -511,21 +551,45 @@ namespace Tauron.Application.Files.Json
 
         #region operators
 
-        public static implicit operator JsonNode(string s) => new JsonString(s);
+        public static implicit operator JsonNode(string s)
+        {
+            return new JsonString(s);
+        }
 
-        public static implicit operator string(JsonNode d) => d == null ? null : d.Value;
+        public static implicit operator string(JsonNode d)
+        {
+            return d == null ? null : d.Value;
+        }
 
-        public static implicit operator JsonNode(double n) => new JsonNumber(n);
+        public static implicit operator JsonNode(double n)
+        {
+            return new JsonNumber(n);
+        }
 
-        public static implicit operator double(JsonNode d) => d == null ? 0 : d.AsDouble;
+        public static implicit operator double(JsonNode d)
+        {
+            return d == null ? 0 : d.AsDouble;
+        }
 
-        public static implicit operator JsonNode(float n) => new JsonNumber(n);
+        public static implicit operator JsonNode(float n)
+        {
+            return new JsonNumber(n);
+        }
 
-        public static implicit operator float(JsonNode d) => d == null ? 0 : d.AsFloat;
+        public static implicit operator float(JsonNode d)
+        {
+            return d == null ? 0 : d.AsFloat;
+        }
 
-        public static implicit operator JsonNode(int n) => new JsonNumber(n);
+        public static implicit operator JsonNode(int n)
+        {
+            return new JsonNumber(n);
+        }
 
-        public static implicit operator int(JsonNode d) => d == null ? 0 : d.AsInt;
+        public static implicit operator int(JsonNode d)
+        {
+            return d == null ? 0 : d.AsInt;
+        }
 
         public static implicit operator JsonNode(long n)
         {
@@ -534,13 +598,25 @@ namespace Tauron.Application.Files.Json
             return new JsonNumber(n);
         }
 
-        public static implicit operator long(JsonNode d) => d == null ? 0L : d.AsLong;
+        public static implicit operator long(JsonNode d)
+        {
+            return d == null ? 0L : d.AsLong;
+        }
 
-        public static implicit operator JsonNode(bool b) => new JsonBool(b);
+        public static implicit operator JsonNode(bool b)
+        {
+            return new JsonBool(b);
+        }
 
-        public static implicit operator bool(JsonNode d) => d != null && d.AsBool;
+        public static implicit operator bool(JsonNode d)
+        {
+            return d != null && d.AsBool;
+        }
 
-        public static implicit operator JsonNode(KeyValuePair<string, JsonNode> aKeyValue) => aKeyValue.Value;
+        public static implicit operator JsonNode(KeyValuePair<string, JsonNode> aKeyValue)
+        {
+            return aKeyValue.Value;
+        }
 
         public static bool operator ==(JsonNode a, object b)
         {
@@ -553,12 +629,21 @@ namespace Tauron.Application.Files.Json
             return !aIsNull && a.Equals(b);
         }
 
-        public static bool operator !=(JsonNode a, object b) => !(a == b);
+        public static bool operator !=(JsonNode a, object b)
+        {
+            return !(a == b);
+        }
 
-        public override bool Equals(object obj) => ReferenceEquals(this, obj);
+        public override bool Equals(object obj)
+        {
+            return ReferenceEquals(this, obj);
+        }
 
         // ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode
-        public override int GetHashCode() => base.GetHashCode();
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
 
         #endregion operators
     }
@@ -567,7 +652,7 @@ namespace Tauron.Application.Files.Json
     public partial class JsonArray : JsonNode
     {
         private bool _inline;
-        private List<JsonNode> _list = new List<JsonNode>();
+        private readonly List<JsonNode> _list = new List<JsonNode>();
 
         public override bool Inline
         {
@@ -625,7 +710,10 @@ namespace Tauron.Application.Files.Json
             }
         }
 
-        public override Enumerator GetEnumerator() => new Enumerator(_list.GetEnumerator());
+        public override Enumerator GetEnumerator()
+        {
+            return new Enumerator(_list.GetEnumerator());
+        }
 
         public override void Add(string aKey, JsonNode aItem)
         {
@@ -677,8 +765,8 @@ namespace Tauron.Application.Files.Json
 
     public partial class JsonObject : JsonNode
     {
+        private readonly Dictionary<string, JsonNode> _dict = new Dictionary<string, JsonNode>();
         private bool _inline;
-        private Dictionary<string, JsonNode> _dict = new Dictionary<string, JsonNode>();
 
         public override bool Inline
         {
@@ -740,7 +828,10 @@ namespace Tauron.Application.Files.Json
             }
         }
 
-        public override Enumerator GetEnumerator() => new Enumerator(_dict.GetEnumerator());
+        public override Enumerator GetEnumerator()
+        {
+            return new Enumerator(_dict.GetEnumerator());
+        }
 
         public override void Add(string aKey, JsonNode aItem)
         {
@@ -755,7 +846,9 @@ namespace Tauron.Application.Files.Json
                     _dict.Add(aKey, aItem);
             }
             else
+            {
                 _dict.Add(Guid.NewGuid().ToString(), aItem);
+            }
         }
 
         public override JsonNode Remove(string aKey)
@@ -824,7 +917,10 @@ namespace Tauron.Application.Files.Json
     {
         private string _data;
 
-        public JsonString(string aData) => _data = aData;
+        public JsonString(string aData)
+        {
+            _data = aData;
+        }
 
         public override JsonNodeType Tag => JsonNodeType.String;
 
@@ -855,9 +951,15 @@ namespace Tauron.Application.Files.Json
             set => _data = value;
         }
 
-        public override Enumerator GetEnumerator() => new Enumerator();
+        public override Enumerator GetEnumerator()
+        {
+            return new Enumerator();
+        }
 
-        internal override void WriteToStringBuilder(StringBuilder aSb, int aIndent, int aIndentInc, JsonTextMode aMode) => aSb.Append('\"').Append(Escape(_data)).Append('\"');
+        internal override void WriteToStringBuilder(StringBuilder aSb, int aIndent, int aIndentInc, JsonTextMode aMode)
+        {
+            aSb.Append('\"').Append(Escape(_data)).Append('\"');
+        }
 
         public override bool Equals(object obj)
         {
@@ -872,7 +974,10 @@ namespace Tauron.Application.Files.Json
         }
 
         // ReSharper disable once NonReadonlyMemberInGetHashCode
-        public override int GetHashCode() => _data.GetHashCode();
+        public override int GetHashCode()
+        {
+            return _data.GetHashCode();
+        }
     }
     // End of JSONString
 
@@ -880,9 +985,15 @@ namespace Tauron.Application.Files.Json
     {
         private double _data;
 
-        public JsonNumber(double aData) => _data = aData;
+        public JsonNumber(double aData)
+        {
+            _data = aData;
+        }
 
-        public JsonNumber(string aData) => Value = aData;
+        public JsonNumber(string aData)
+        {
+            Value = aData;
+        }
 
         public override JsonNodeType Tag => JsonNodeType.Number;
 
@@ -928,16 +1039,25 @@ namespace Tauron.Application.Files.Json
             set => _data = value;
         }
 
-        public override Enumerator GetEnumerator() => new Enumerator();
+        public override Enumerator GetEnumerator()
+        {
+            return new Enumerator();
+        }
 
-        internal override void WriteToStringBuilder(StringBuilder aSb, int aIndent, int aIndentInc, JsonTextMode aMode) => aSb.Append(Value);
+        internal override void WriteToStringBuilder(StringBuilder aSb, int aIndent, int aIndentInc, JsonTextMode aMode)
+        {
+            aSb.Append(Value);
+        }
 
-        private static bool IsNumeric(object value) => value is int || value is uint
-                                                                    || value is float || value is double
-                                                                    || value is decimal
-                                                                    || value is long || value is ulong
-                                                                    || value is short || value is ushort
-                                                                    || value is sbyte || value is byte;
+        private static bool IsNumeric(object value)
+        {
+            return value is int || value is uint
+                                || value is float || value is double
+                                || value is decimal
+                                || value is long || value is ulong
+                                || value is short || value is ushort
+                                || value is sbyte || value is byte;
+        }
 
         public override bool Equals(object obj)
         {
@@ -954,7 +1074,10 @@ namespace Tauron.Application.Files.Json
         }
 
         // ReSharper disable once NonReadonlyMemberInGetHashCode
-        public override int GetHashCode() => _data.GetHashCode();
+        public override int GetHashCode()
+        {
+            return _data.GetHashCode();
+        }
     }
     // End of JSONNumber
 
@@ -962,9 +1085,15 @@ namespace Tauron.Application.Files.Json
     {
         private bool _data;
 
-        public JsonBool(bool aData) => _data = aData;
+        public JsonBool(bool aData)
+        {
+            _data = aData;
+        }
 
-        public JsonBool(string aData) => Value = aData;
+        public JsonBool(string aData)
+        {
+            Value = aData;
+        }
 
         public override JsonNodeType Tag => JsonNodeType.Boolean;
 
@@ -1004,13 +1133,20 @@ namespace Tauron.Application.Files.Json
             set => _data = value;
         }
 
-        public override Enumerator GetEnumerator() => new Enumerator();
+        public override Enumerator GetEnumerator()
+        {
+            return new Enumerator();
+        }
 
-        internal override void WriteToStringBuilder(StringBuilder aSb, int aIndent, int aIndentInc, JsonTextMode aMode) => aSb.Append(_data ? "true" : "false");
+        internal override void WriteToStringBuilder(StringBuilder aSb, int aIndent, int aIndentInc, JsonTextMode aMode)
+        {
+            aSb.Append(_data ? "true" : "false");
+        }
 
         public override bool Equals(object obj)
         {
-            switch (obj) {
+            switch (obj)
+            {
                 case null:
                     return false;
                 case bool b:
@@ -1021,16 +1157,21 @@ namespace Tauron.Application.Files.Json
         }
 
         // ReSharper disable once NonReadonlyMemberInGetHashCode
-        public override int GetHashCode() => _data.GetHashCode();
+        public override int GetHashCode()
+        {
+            return _data.GetHashCode();
+        }
     }
     // End of JSONBool
 
     public partial class JsonNull : JsonNode
     {
-        private static JsonNull _staticInstance = new JsonNull();
+        private static readonly JsonNull _staticInstance = new JsonNull();
         public static bool ReuseSameInstance = true;
 
-        private JsonNull() { }
+        private JsonNull()
+        {
+        }
 
         public override JsonNodeType Tag => JsonNodeType.NullValue;
 
@@ -1066,9 +1207,15 @@ namespace Tauron.Application.Files.Json
             set { }
         }
 
-        public static JsonNull CreateOrGet() => ReuseSameInstance ? _staticInstance : new JsonNull();
+        public static JsonNull CreateOrGet()
+        {
+            return ReuseSameInstance ? _staticInstance : new JsonNull();
+        }
 
-        public override Enumerator GetEnumerator() => new Enumerator();
+        public override Enumerator GetEnumerator()
+        {
+            return new Enumerator();
+        }
 
         public override bool Equals(object obj)
         {
@@ -1077,7 +1224,10 @@ namespace Tauron.Application.Files.Json
             return obj is JsonNull;
         }
 
-        public override int GetHashCode() => 0;
+        public override int GetHashCode()
+        {
+            return 0;
+        }
 
         internal override void WriteToStringBuilder(StringBuilder aSb, int aIndent, int aIndentInc, JsonTextMode aMode)
         {
@@ -1088,7 +1238,7 @@ namespace Tauron.Application.Files.Json
 
     internal partial class JsonLazyCreator : JsonNode
     {
-        private string _key;
+        private readonly string _key;
         private JsonNode _node;
 
         public JsonLazyCreator(JsonNode aNode)
@@ -1186,7 +1336,16 @@ namespace Tauron.Application.Files.Json
 
         public override JsonObject AsObject => Set(new JsonObject());
 
-        public override Enumerator GetEnumerator() => new Enumerator();
+        public override bool Inline
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override Enumerator GetEnumerator()
+        {
+            return new Enumerator();
+        }
 
         private T Set<T>(T aVal) where T : JsonNode
         {
@@ -1198,12 +1357,9 @@ namespace Tauron.Application.Files.Json
             return aVal;
         }
 
-        public override void Add(JsonNode aItem) => Set(new JsonArray()).Add(aItem);
-
-        public override bool Inline
+        public override void Add(JsonNode aItem)
         {
-            get => throw new NotSupportedException();
-            set => throw new NotSupportedException();
+            Set(new JsonArray()).Add(aItem);
         }
 
         public override void Add(string aKey, JsonNode aItem)
@@ -1211,13 +1367,25 @@ namespace Tauron.Application.Files.Json
             Set(new JsonObject()).Add(aKey, aItem);
         }
 
-        public static bool operator ==(JsonLazyCreator a, object b) => b == null || ReferenceEquals(a, b);
+        public static bool operator ==(JsonLazyCreator a, object b)
+        {
+            return b == null || ReferenceEquals(a, b);
+        }
 
-        public static bool operator !=(JsonLazyCreator a, object b) => !(a == b);
+        public static bool operator !=(JsonLazyCreator a, object b)
+        {
+            return !(a == b);
+        }
 
-        public override bool Equals(object obj) => obj == null || ReferenceEquals(this, obj);
+        public override bool Equals(object obj)
+        {
+            return obj == null || ReferenceEquals(this, obj);
+        }
 
-        public override int GetHashCode() => 0;
+        public override int GetHashCode()
+        {
+            return 0;
+        }
 
         internal override void WriteToStringBuilder(StringBuilder aSb, int aIndent, int aIndentInc, JsonTextMode aMode)
         {
@@ -1229,6 +1397,9 @@ namespace Tauron.Application.Files.Json
     [PublicAPI]
     public static class Json
     {
-        public static JsonNode Parse(string aJson) => JsonNode.Parse(aJson);
+        public static JsonNode Parse(string aJson)
+        {
+            return JsonNode.Parse(aJson);
+        }
     }
 }

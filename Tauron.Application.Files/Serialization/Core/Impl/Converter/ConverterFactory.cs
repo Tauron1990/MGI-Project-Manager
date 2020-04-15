@@ -11,26 +11,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl
 {
     internal static class ConverterFactory
     {
-        private class InvalidConverter : SimpleConverter<string>
-        {
-            public override object ConvertBack(string target) => throw new NotSupportedException();
-
-            public override string Convert(object source) => throw new NotSupportedException();
-
-            public override Exception VerifyError() => new ArgumentException("Member or Target Type Was null");
-        }
-
-        private class InvalidEnumConverter : SimpleConverter<IEnumerable<string>>
-        {
-            public override object ConvertBack(IEnumerable<string> target) => throw new NotSupportedException();
-
-            public override IEnumerable<string> Convert(object source) => throw new NotSupportedException();
-
-            public override Exception VerifyError() => new ArgumentException("Member or Target Type Was null");
-        }
-
-        [NotNull]
-        public static SimpleConverter<string> CreateConverter([CanBeNull] MemberInfo member, [CanBeNull] Type targetType)
+        public static SimpleConverter<string> CreateConverter(MemberInfo? member, Type? targetType)
         {
             if (member == null || targetType == null) return new InvalidConverter();
 
@@ -40,7 +21,6 @@ namespace Tauron.Application.Files.Serialization.Core.Impl
             return new TypeConverterConverter(GetConverter(member, targetType));
         }
 
-        [NotNull]
         public static SimpleConverter<IEnumerable<string>> CreateListConverter([CanBeNull] MemberInfo member, [CanBeNull] Type targeType)
         {
             if (member == null || targeType == null) return new InvalidEnumConverter();
@@ -52,7 +32,6 @@ namespace Tauron.Application.Files.Serialization.Core.Impl
             return new UniversalListConverter(converter, builder);
         }
 
-        [NotNull]
         private static TypeConverter GetConverter([NotNull] MemberInfo info, [NotNull] Type memberType)
         {
             var targetType = memberType;
@@ -67,16 +46,51 @@ namespace Tauron.Application.Files.Serialization.Core.Impl
             return converter ?? TypeDescriptor.GetConverter(targetType);
         }
 
-        [CanBeNull]
-        private static Type GetTypeFromName([NotNull] string typeName, [CanBeNull] Type memberType)
+        private static Type? GetTypeFromName([NotNull] string typeName, [CanBeNull] Type memberType)
         {
             if (string.IsNullOrEmpty(typeName)) return null;
             var num = typeName.IndexOf(',');
-            Type type = null;
+            Type? type = null;
             if (num == -1 && memberType != null) type = memberType.Assembly.GetType(typeName);
             if (type == null) type = Type.GetType(typeName);
             if (type == null && num != -1) type = Type.GetType(typeName.Substring(0, num));
             return type;
+        }
+
+        private class InvalidConverter : SimpleConverter<string>
+        {
+            public override object ConvertBack(string target)
+            {
+                throw new NotSupportedException();
+            }
+
+            public override string Convert(object? source)
+            {
+                throw new NotSupportedException();
+            }
+
+            public override Exception VerifyError()
+            {
+                return new ArgumentException("Member or Target Type Was null");
+            }
+        }
+
+        private class InvalidEnumConverter : SimpleConverter<IEnumerable<string>>
+        {
+            public override object ConvertBack(IEnumerable<string> target)
+            {
+                throw new NotSupportedException();
+            }
+
+            public override IEnumerable<string> Convert(object? source)
+            {
+                throw new NotSupportedException();
+            }
+
+            public override Exception VerifyError()
+            {
+                return new ArgumentException("Member or Target Type Was null");
+            }
         }
     }
 }

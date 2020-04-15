@@ -8,23 +8,23 @@ namespace Tauron.Application.Files.Serialization.Core.Managment
     public abstract class SerializerBase<TContext> : ISubSerializer
         where TContext : class, IOrginalContextProvider
     {
-        private readonly ObjectBuilder          _builder;
-        private readonly ContextMode            _contextMode;
+        private readonly ObjectBuilder _builder;
+        private readonly ContextMode _contextMode;
         private readonly SimpleMapper<TContext> _mapper;
 
-        protected SerializerBase([NotNull] ObjectBuilder builder, [NotNull] SimpleMapper<TContext> mapper, ContextMode contextMode)
+        protected SerializerBase(ObjectBuilder builder, SimpleMapper<TContext> mapper, ContextMode contextMode)
         {
-            _builder     = Argument.NotNull(builder, nameof(builder));
-            _mapper      = Argument.NotNull(mapper, nameof(mapper));
+            _builder = Argument.NotNull(builder, nameof(builder));
+            _mapper = Argument.NotNull(mapper, nameof(mapper));
             _contextMode = contextMode;
         }
 
-        public virtual AggregateException Errors
+        public virtual AggregateException? Errors
         {
             get
             {
                 var errors = new List<Exception>();
-                var e      = _builder.Verfiy();
+                var e = _builder.Verfiy();
 
                 if (e != null) errors.Add(e);
 
@@ -38,7 +38,10 @@ namespace Tauron.Application.Files.Serialization.Core.Managment
             }
         }
 
-        public virtual void Serialize(IStreamSource target, object graph) => Progress(graph, target, SerializerMode.Serialize);
+        public virtual void Serialize(IStreamSource target, object graph)
+        {
+            Progress(graph, target, SerializerMode.Serialize);
+        }
 
         public virtual object Deserialize(IStreamSource target)
         {
@@ -48,7 +51,10 @@ namespace Tauron.Application.Files.Serialization.Core.Managment
             return garph;
         }
 
-        public virtual void Deserialize(IStreamSource targetStream, object target) => Progress(target, targetStream, SerializerMode.Deserialize);
+        public virtual void Deserialize(IStreamSource targetStream, object target)
+        {
+            Progress(target, targetStream, SerializerMode.Deserialize);
+        }
 
         void ISubSerializer.Serialize(SerializationContext target, object graph)
         {
@@ -60,7 +66,7 @@ namespace Tauron.Application.Files.Serialization.Core.Managment
 
         object ISubSerializer.Deserialize(SerializationContext target)
         {
-            var obj     = BuildObject();
+            var obj = BuildObject();
             var context = BuildContext(target);
 
             foreach (var mappingEntry in _mapper.Entries)
@@ -69,16 +75,18 @@ namespace Tauron.Application.Files.Serialization.Core.Managment
             return obj;
         }
 
-        [NotNull]
-        protected object BuildObject() => Argument.CheckResult(_builder?.BuilderFunc?.Invoke(_builder.CustomObject), "Object Build Was null");
+        protected object BuildObject()
+        {
+            return Argument.CheckResult(_builder?.BuilderFunc?.Invoke(_builder.CustomObject), "Object Build Was null");
+        }
 
-        private void Progress([NotNull] object graph, [NotNull] IStreamSource target, SerializerMode mode)
+        private void Progress(object graph, IStreamSource target, SerializerMode mode)
         {
             var context = BuildContext(new SerializationContext(_contextMode, target, mode));
             Progress(graph, context, mode);
         }
 
-        public void Progress([NotNull] object graph, [NotNull] TContext context, SerializerMode mode)
+        public void Progress(object graph, TContext context, SerializerMode mode)
         {
             foreach (var mappingEntry in _mapper.Entries)
                 mappingEntry.Progress(graph, context, mode);
@@ -86,9 +94,8 @@ namespace Tauron.Application.Files.Serialization.Core.Managment
             CleanUp(context);
         }
 
-        [NotNull]
-        public abstract TContext BuildContext([NotNull] SerializationContext context);
+        public abstract TContext BuildContext(SerializationContext context);
 
-        public abstract void CleanUp([NotNull] TContext context);
+        public abstract void CleanUp(TContext context);
     }
 }

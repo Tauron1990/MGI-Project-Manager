@@ -15,23 +15,23 @@ namespace Tauron.Application.Files.Serialization.Core.Fluent.Impl
     internal class HeaderedFileKeyCofiguration : IHeaderedFileKeywordConfiguration
     {
         private readonly IHeaderedFileSerializerConfiguration _config;
-        private readonly string                               _keyName;
-        private readonly SimpleMapper<HeaderdFileContext>     _mapper;
-        private readonly MappingType                          _mappingType;
-        private readonly Type                                 _type;
-        private          SimpleConverter<string>              _converter;
+        private readonly string _keyName;
+        private readonly SimpleMapper<HeaderdFileContext> _mapper;
+        private readonly MappingType _mappingType;
+        private readonly Type _type;
+        private SimpleConverter<string> _converter;
 
         private string _member;
 
         public HeaderedFileKeyCofiguration([NotNull] IHeaderedFileSerializerConfiguration config,
-                                           [NotNull] SimpleMapper<HeaderdFileContext>     mapper,      [NotNull] string keyName,
-                                           MappingType                                    mappingType, [NotNull] Type   type)
+            [NotNull] SimpleMapper<HeaderdFileContext> mapper, [NotNull] string keyName,
+            MappingType mappingType, [NotNull] Type type)
         {
-            _config      = config;
-            _mapper      = mapper;
-            _keyName     = keyName;
+            _config = config;
+            _mapper = mapper;
+            _keyName = keyName;
             _mappingType = mappingType;
-            _type        = type;
+            _type = type;
         }
 
         public IHeaderedFileSerializerConfiguration Apply()

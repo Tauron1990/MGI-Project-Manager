@@ -8,7 +8,10 @@ namespace Tauron.Application.Files.Ini
     public sealed class SingleIniEntry : IniEntry
     {
         internal SingleIniEntry(string key, string value)
-            : base(key) => Value = value;
+            : base(key)
+        {
+            Value = value;
+        }
 
         public string Value { get; set; }
     }

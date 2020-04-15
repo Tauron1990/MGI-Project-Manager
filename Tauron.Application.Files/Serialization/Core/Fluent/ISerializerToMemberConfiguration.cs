@@ -8,13 +8,10 @@ namespace Tauron.Application.Files.Serialization.Core.Fluent
     public interface ISerializerToMemberConfiguration<out TConfigInterface>
         where TConfigInterface : class
     {
-        [NotNull]
-        ISerializerToMemberConfiguration<TConfigInterface> WithSourceSelector([NotNull] Func<object, SerializerMode, Stream> open, [CanBeNull] Func<string, IStreamSource> openRelative);
+        ISerializerToMemberConfiguration<TConfigInterface> WithSourceSelector(Func<object, SerializerMode, Stream> open, Func<string?, IStreamSource>? openRelative);
 
-        [NotNull]
-        ISerializerToMemberConfiguration<TConfigInterface> WithSerializer([NotNull] ISerializer serializer);
+        ISerializerToMemberConfiguration<TConfigInterface> WithSerializer(ISerializer serializer);
 
-        [NotNull]
         TConfigInterface Apply();
     }
 }

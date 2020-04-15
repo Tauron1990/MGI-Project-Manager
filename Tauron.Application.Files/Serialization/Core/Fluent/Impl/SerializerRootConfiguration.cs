@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Tauron.Application.Files.Serialization.Core.Fluent.Impl
+﻿namespace Tauron.Application.Files.Serialization.Core.Fluent.Impl
 {
     internal abstract class SerializerRootConfigurationBase : ISerializerRootConfiguration
     {
@@ -9,10 +7,9 @@ namespace Tauron.Application.Files.Serialization.Core.Fluent.Impl
             return new TypedSerializer<TType>(ApplyInternal());
         }
 
-        [NotNull]
         public abstract ISerializer ApplyInternal();
 
-        protected void VerifyErrors([NotNull] ISerializer serializer)
+        protected void VerifyErrors(ISerializer serializer)
         {
             var aggregateException = serializer.Errors;
             if (aggregateException != null) throw aggregateException;

@@ -7,12 +7,12 @@ namespace Tauron.Application.Files.Ini.Parser
     [PublicAPI]
     public class IniWriter
     {
-        private readonly IniFile    _file;
+        private readonly IniFile _file;
         private readonly TextWriter _writer;
 
         public IniWriter(IniFile file, TextWriter writer)
         {
-            _file   = file;
+            _file = file;
             _writer = writer;
         }
 
@@ -24,9 +24,10 @@ namespace Tauron.Application.Files.Ini.Parser
                 {
                     _writer.WriteLine(string.Format(CultureInfo.InvariantCulture, "[{0}]", section.Name));
                     foreach (var iniEntry in section.Entries)
-                    {
                         if (iniEntry is SingleIniEntry entry)
+                        {
                             _writer.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0}={1}", entry.Key, entry.Value));
+                        }
                         else
                         {
                             var entry2 = (ListIniEntry) iniEntry;
@@ -34,7 +35,6 @@ namespace Tauron.Application.Files.Ini.Parser
                             foreach (var value in entry2.Values)
                                 _writer.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0}={1}", name, value));
                         }
-                    }
                 }
             }
             finally

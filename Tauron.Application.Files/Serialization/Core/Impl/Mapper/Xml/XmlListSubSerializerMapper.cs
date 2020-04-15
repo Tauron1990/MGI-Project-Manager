@@ -10,12 +10,12 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
     internal class XmlListSubSerializerMapper : MappingEntryBase<XmlElementContext>
     {
         private readonly ListBuilder _listBuilder;
-        private readonly XmlElementTarget _rootTarget;
-        private readonly ISubSerializer _serializer;
-        private readonly XmlElementTarget _target;
+        private readonly XmlElementTarget? _rootTarget;
+        private readonly ISubSerializer? _serializer;
+        private readonly XmlElementTarget? _target;
 
-        public XmlListSubSerializerMapper([CanBeNull] string membername, [NotNull] Type targetType, [CanBeNull] XmlElementTarget target, [CanBeNull] XmlElementTarget rootTarget, 
-            [CanBeNull] ISubSerializer serializer)
+        public XmlListSubSerializerMapper(string? membername, Type targetType, XmlElementTarget? target, XmlElementTarget? rootTarget,
+            ISubSerializer? serializer)
             : base(membername, targetType)
         {
             _target = target;
@@ -29,7 +29,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
             _listBuilder.Begin(null, false);
 
             foreach (var xElement in GetElements(false, context.XElement, -1) ?? Enumerable.Empty<XElement>())
-                _listBuilder.Add(_serializer.Deserialize(context.Original.CreateSnapshot(xElement.ToString())));
+                _listBuilder.Add(_serializer?.Deserialize(context.Original.CreateSnapshot(xElement.ToString())));
 
             SetValue(target, _listBuilder.End());
         }
@@ -45,7 +45,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
             {
                 var snapshot = context.Original.CreateSnapshot(new byte[0]);
 
-                _serializer.Serialize(snapshot, obj[i]);
+                _serializer?.Serialize(snapshot, obj[i]);
 
                 var targetEle = eles?[i];
                 var stringVal = snapshot.TextReader.ReadToEnd();
@@ -57,8 +57,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
             _listBuilder.End();
         }
 
-        [CanBeNull]
-        private IEnumerable<XElement> GetElements(bool forWrite, [NotNull] XElement context, int count)
+        private IEnumerable<XElement>? GetElements(bool forWrite, [NotNull] XElement context, int count)
         {
             var realRoot = XmlElementSerializer.GetElement(context, forWrite, _rootTarget) as XElement;
 
@@ -69,7 +68,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
                 : XmlElementSerializer.GetElements(realRoot, forWrite, _target, count);
         }
 
-        public override Exception VerifyError()
+        public override Exception? VerifyError()
         {
             var e = base.VerifyError() ?? _listBuilder.VerifyError();
 

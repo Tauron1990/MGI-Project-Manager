@@ -5,31 +5,31 @@ namespace Tauron.Application.Files.VirtualFiles.Core
 {
     [PublicAPI]
     public abstract class FileSystemNodeBase<TInfo> : IFileSystemNode
+        where TInfo : class
     {
-        private Lazy<TInfo> _infoObject;
-        private Func<IDirectory> _parentDirectory;
-        private IDirectory _parentDirectoryInstance;
+        private Lazy<TInfo?> _infoObject;
+        private Func<IDirectory?>? _parentDirectory;
+        private IDirectory? _parentDirectoryInstance;
 
-        protected FileSystemNodeBase([CanBeNull] Func<IDirectory> parentDirectory, bool isDirectory, [NotNull] string originalPath, [NotNull] string name)
+        protected FileSystemNodeBase(Func<IDirectory?> parentDirectory, string originalPath, string name)
         {
             _parentDirectory = parentDirectory;
             OriginalPath = Argument.NotNull(originalPath, nameof(originalPath));
             Name = Argument.NotNull(name, nameof(name));
-            _infoObject = new Lazy<TInfo>(() => GetInfo(OriginalPath));
+            _infoObject = new Lazy<TInfo?>(() => GetInfo(OriginalPath));
         }
 
-        protected TInfo InfoObject => _infoObject.Value;
+        protected TInfo? InfoObject => _infoObject.Value;
         public abstract DateTime LastModified { get; }
 
-        public IDirectory ParentDirectory
+        public IDirectory? ParentDirectory
         {
             get
             {
-                if (_parentDirectoryInstance == null)
-                {
-                    _parentDirectoryInstance = _parentDirectory?.Invoke();
-                    _parentDirectory = null;
-                }
+                if (_parentDirectoryInstance != null) return _parentDirectoryInstance;
+
+                _parentDirectoryInstance = _parentDirectory?.Invoke();
+                _parentDirectory = null;
 
                 return _parentDirectoryInstance;
             }
@@ -51,14 +51,13 @@ namespace Tauron.Application.Files.VirtualFiles.Core
 
         protected abstract void DeleteImpl();
 
-        [CanBeNull]
-        protected abstract TInfo GetInfo([NotNull] string path);
+        protected abstract TInfo? GetInfo([NotNull] string path);
 
-        protected virtual void Reset(string path, IDirectory parent)
+        protected virtual void Reset(string path, IDirectory? parent)
         {
             _parentDirectory = () => parent;
             OriginalPath = Argument.NotNull(path, nameof(path));
-            _infoObject = new Lazy<TInfo>(() => GetInfo(OriginalPath));
+            _infoObject = new Lazy<TInfo?>(() => GetInfo(OriginalPath));
         }
     }
 }

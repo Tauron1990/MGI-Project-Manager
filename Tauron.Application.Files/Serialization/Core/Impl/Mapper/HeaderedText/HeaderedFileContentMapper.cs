@@ -1,5 +1,4 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Tauron.Application.Files.Serialization.Core.Managment;
 
 namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.HeaderedText
@@ -8,7 +7,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.HeaderedText
     {
         private readonly SimpleConverter<string> _converter;
 
-        public HeaderedFileContentMapper([CanBeNull] string membername, [NotNull] Type targetType, [NotNull] SimpleConverter<string> converter)
+        public HeaderedFileContentMapper(string? membername, Type targetType, SimpleConverter<string> converter)
             : base(membername, targetType)
         {
             _converter = converter;

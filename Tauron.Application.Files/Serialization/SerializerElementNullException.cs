@@ -8,12 +8,20 @@ namespace Tauron.Application.Files.Serialization
     [PublicAPI]
     public class SerializerElementNullException : Exception
     {
-        public SerializerElementNullException() { }
+        public SerializerElementNullException()
+        {
+        }
 
-        public SerializerElementNullException([NotNull] string message) : base(message) { }
+        public SerializerElementNullException(string message) : base(message)
+        {
+        }
 
-        public SerializerElementNullException([NotNull] string message, [NotNull] Exception inner) : base(message, inner) { }
+        public SerializerElementNullException(string message, Exception inner) : base(message, inner)
+        {
+        }
 
-        protected SerializerElementNullException([NotNull] SerializationInfo info, StreamingContext context) : base(info, context) { }
+        protected SerializerElementNullException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
     }
 }

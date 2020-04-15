@@ -8,11 +8,11 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
 {
     internal sealed class XmlSerializerMapper : MappingEntryBase<XmlElementContext>
     {
-        private readonly XmlSerializer _serializer;
-        private readonly XmlElementTarget _xmlElementTarget;
+        private readonly XmlSerializer? _serializer;
+        private readonly XmlElementTarget? _xmlElementTarget;
 
-        public XmlSerializerMapper([CanBeNull] string membername, [NotNull] Type targetType,
-            [CanBeNull] XmlSerializer serializer, [CanBeNull] XmlElementTarget xmlElementTarget)
+        public XmlSerializerMapper(string? membername, [NotNull] Type targetType,
+            XmlSerializer? serializer, XmlElementTarget? xmlElementTarget)
             : base(membername, targetType)
         {
             _serializer = serializer;
@@ -24,7 +24,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
             var obj = XmlElementSerializer.GetElement(context.XElement, false, _xmlElementTarget);
             if (!(obj is XElement ele))
                 return;
-            SetValue(target, _serializer.Deserialize(ele.CreateReader(ReaderOptions.OmitDuplicateNamespaces)));
+            SetValue(target, _serializer?.Deserialize(ele.CreateReader(ReaderOptions.OmitDuplicateNamespaces)));
         }
 
         protected override void Serialize(object target, XmlElementContext context)
@@ -32,10 +32,10 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Xml
             var obj = XmlElementSerializer.GetElement(context.XElement, true, _xmlElementTarget);
             if (!(obj is XElement))
                 throw new InvalidOperationException("Attributes not Supported");
-            _serializer.Serialize(context.XElement.CreateWriter(), GetValue(target));
+            _serializer?.Serialize(context.XElement.CreateWriter(), GetValue(target));
         }
 
-        public override Exception VerifyError()
+        public override Exception? VerifyError()
         {
             var e = base.VerifyError();
 

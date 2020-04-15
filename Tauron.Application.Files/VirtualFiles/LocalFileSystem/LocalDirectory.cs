@@ -2,23 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using JetBrains.Annotations;
 using Tauron.Application.Files.VirtualFiles.Core;
 
 namespace Tauron.Application.Files.VirtualFiles.LocalFileSystem
 {
     public class LocalDirectory : DirectoryBase<DirectoryInfo>
     {
-        public LocalDirectory([NotNull] string fullPath, [CanBeNull] Func<IDirectory> parentDirectory)
-            : base(parentDirectory, fullPath,  fullPath.GetFileName()) { }
-
-        public LocalDirectory(string fullPath) 
-            : base(() => GetParentDirectory(fullPath), fullPath, fullPath.GetFileName()) { }
-
-        private static IDirectory GetParentDirectory(string fullpath)
+        public LocalDirectory(string fullPath, Func<IDirectory?> parentDirectory)
+            : base(parentDirectory, fullPath, fullPath.GetFileName())
         {
-            string name = Path.GetDirectoryName(fullpath);
-            return string.IsNullOrEmpty(name) ? null : new LocalDirectory(fullpath);
+        }
+
+        public LocalDirectory(string fullPath)
+            : base(() => GetParentDirectory(fullPath), fullPath, fullPath.GetFileName())
+        {
         }
 
         public override DateTime LastModified => InfoObject.LastWriteTime;
@@ -29,11 +26,26 @@ namespace Tauron.Application.Files.VirtualFiles.LocalFileSystem
 
         public override IEnumerable<IFile> Files => Directory.EnumerateFiles(OriginalPath).Select(str => new LocalFile(str, this));
 
-        protected override void DeleteImpl() => InfoObject.Delete(true);
+        private static IDirectory? GetParentDirectory(string fullpath)
+        {
+            string name = Path.GetDirectoryName(fullpath);
+            return string.IsNullOrEmpty(name) ? null : new LocalDirectory(fullpath);
+        }
 
-        protected override DirectoryInfo GetInfo(string path) => new DirectoryInfo(path);
+        protected override void DeleteImpl()
+        {
+            InfoObject.Delete(true);
+        }
 
-        public override IFile GetFile(string name) => new LocalFile(OriginalPath.CombinePath(name), this);
+        protected override DirectoryInfo GetInfo(string path)
+        {
+            return new DirectoryInfo(path);
+        }
+
+        public override IFile GetFile(string name)
+        {
+            return new LocalFile(OriginalPath.CombinePath(name), this);
+        }
 
         public override IDirectory MoveTo(string location)
         {

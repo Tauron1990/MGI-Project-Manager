@@ -5,11 +5,12 @@ using JetBrains.Annotations;
 
 namespace Tauron.Application.Files.VirtualFiles.Zip
 {
+    [PublicAPI]
     public class InZipFileSystem : InZipDirectory, IVirtualFileSystem
     {
-        private ZipFile _file;
+        private ZipFile? _file;
 
-        public InZipFileSystem([CanBeNull] ZipFile file)
+        public InZipFileSystem(ZipFile? file)
             : base(null, "", InternalZipDirectory.ReadZipDirectory(file), file, string.Empty)
         {
             _file = file;
@@ -17,7 +18,9 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
         }
 
         public InZipFileSystem()
-            : this(null) { }
+            : this(null)
+        {
+        }
 
         public void Dispose()
         {
@@ -26,12 +29,12 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
             _file?.Dispose();
         }
 
-        public bool IsRealTime       => false;
+        public bool IsRealTime => false;
         public bool SaveAfterDispose { get; set; }
 
-        public override DateTime LastModified => _file.Name.ExisFile() ? File.GetLastWriteTime(_file.Name) : base.LastModified;
+        public override DateTime LastModified => _file?.Name.ExisFile() == true ? File.GetLastWriteTime(_file.Name) : base.LastModified;
 
-        public string Source => _file.Name;
+        public string Source => _file?.Name ?? string.Empty;
 
         public void Reload(string source)
         {
@@ -50,7 +53,7 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
 
         protected override void DeleteImpl()
         {
-            if (string.IsNullOrWhiteSpace(_file.Name)) return;
+            if (string.IsNullOrWhiteSpace(_file?.Name)) return;
 
             _file.Dispose();
             File.Delete(_file.Name);

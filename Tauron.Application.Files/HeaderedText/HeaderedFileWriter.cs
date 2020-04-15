@@ -30,8 +30,7 @@ namespace Tauron.Application.Files.HeaderedText
             set => _file.Content = value;
         }
 
-        [NotNull]
-        public IEnumerable<ContextEnry> Enries => _context;
+        [NotNull] public IEnumerable<ContextEnry> Enries => _context;
 
         public IEnumerable<ContextEnry> this[string key] => _context[key];
 
@@ -43,9 +42,15 @@ namespace Tauron.Application.Files.HeaderedText
             _context.Add(new ContextEnry(key, value));
         }
 
-        public bool Remove([NotNull] ContextEnry entry) => _context.ContextEnries.Remove(Argument.NotNull(entry, nameof(entry)));
+        public bool Remove([NotNull] ContextEnry entry)
+        {
+            return _context.ContextEnries.Remove(Argument.NotNull(entry, nameof(entry)));
+        }
 
-        public int RemoveAll([NotNull] string key) => _context.ContextEnries.RemoveAll(ent => ent.Key == key);
+        public int RemoveAll([NotNull] string key)
+        {
+            return _context.ContextEnries.RemoveAll(ent => ent.Key == key);
+        }
 
         public void Save([NotNull] TextWriter writer)
         {

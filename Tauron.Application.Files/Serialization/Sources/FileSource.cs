@@ -9,11 +9,19 @@ namespace Tauron.Application.Files.Serialization.Sources
     {
         private readonly string _file;
 
-        public FileSource([NotNull] string file) => _file = Argument.NotNull(file, nameof(file));
+        public FileSource(string file)
+        {
+            _file = Argument.NotNull(file, nameof(file));
+        }
 
-        public override Stream OpenStream(FileAccess access) => new FileStream(_file, access.HasFlag(FileAccess.Read) ? FileMode.Open : FileMode.Create, access, FileShare.None);
+        public override Stream OpenStream(FileAccess access)
+        {
+            return new FileStream(_file, access.HasFlag(FileAccess.Read) ? FileMode.Open : FileMode.Create, access, FileShare.None);
+        }
 
-        public override IStreamSource OpenSideLocation(string relativePath) 
-            => new FileSource(_file.GetDirectoryName().CombinePath(Argument.NotNull(relativePath, nameof(relativePath))));
+        public override IStreamSource OpenSideLocation(string relativePath)
+        {
+            return new FileSource(_file.GetDirectoryName().CombinePath(Argument.NotNull(relativePath, nameof(relativePath))));
+        }
     }
 }
