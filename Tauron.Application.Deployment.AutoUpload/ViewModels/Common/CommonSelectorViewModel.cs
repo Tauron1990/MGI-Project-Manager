@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using Catel.Collections;
 using Catel.MVVM;
+using Catel.Windows.Threading;
 using Tauron.Application.Deployment.AutoUpload.Views.Common;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Common
@@ -43,12 +44,8 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.Common
         public bool CanRun()
             => SelectedItem != null;
 
-        public static ICommonSelectorViewModel Create()
-        {
-            if (System.Windows.Application.Current.Dispatcher != null)
-                return System.Windows.Application.Current.Dispatcher.Invoke(() => new CommonSelectorView(new CommonSelectorViewModel()));
-            throw new InvalidOperationException();
-        }
+        public static ICommonSelectorViewModel Create() 
+            => DispatcherHelper.CurrentDispatcher.Invoke(() => new CommonSelectorView(new CommonSelectorViewModel()));
 
         protected override void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {

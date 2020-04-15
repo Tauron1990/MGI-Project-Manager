@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <StartupObject>Tauron.Application.ToolUI.CoreProgram</StartupObject>
+    <ApplicationIcon>Working_Tools.ico</ApplicationIcon>
+    <AssemblyName>ToolUI</AssemblyName>
+    <RootNamespace>Tauron.Application.ToolUI</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+    <None Remove="Upload.png" />
+    <None Remove="Working_Tools.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tauron.Application.Deployment.AutoUpload\Tauron.Application.Deployment.AutoUpload.csproj" />
+    <ProjectReference Include="..\Tauron.Application.Logging\Tauron.Application.Logging.csproj" />
+    <ProjectReference Include="..\Tauron.Application.SoftwareRepo\Tauron.Application.SoftwareRepo.csproj" />
+    <ProjectReference Include="..\Tauron.Application.ToolUI.Shared\Tauron.Application.ToolUI.Shared.csproj" />
+    <ProjectReference Include="..\Tauron.Application.Wpf\Tauron.Application.Wpf.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="ViewModels\Upload.png" />
+    <Resource Include="Working_Tools.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\">
+      <FolderName>Views</FolderName>
+    </Folder>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Catel.Fody" Version="4.3.0" />
+    <PackageReference Include="Fody" Version="6.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="18.1.0.43" />
+    <PackageReference Include="Syncfusion.Shared.WPF" Version="18.1.0.43" />
+    <PackageReference Include="Syncfusion.Themes.Blend.WPF" Version="18.1.0.43" />
+  </ItemGroup>
+
+</Project>

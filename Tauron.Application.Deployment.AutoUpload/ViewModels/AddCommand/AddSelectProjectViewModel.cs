@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Anotar.Serilog;
 using Catel.Data;
 using Catel.Services;
 using Scrutor;
+using Serilog.Context;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Common;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
@@ -34,12 +36,17 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 
         protected override async Task InitializeAsync()
         {
-            var projects = Directory.EnumerateFiles(Context.RealPath, "*.csproj", new EnumerationOptions {IgnoreInaccessible = true, RecurseSubdirectories = true})
-               .Where(f => _settings.RegistratedRepositories.All(rr => rr.ProjectName != f))
-               .Select(s => new ProjectUI(s));
+            using (LogContext.PushProperty("Repository", Context.RegistratedRepository))
+            {
+                LogTo.Information("Searching Projects in Repositorys");
 
-            ProjectSelector.Init(projects.Select(ui => new SelectorItem<ProjectUI>(ui)), false, OnNext);
-            await base.InitializeAsync();
+                var projects = Directory.EnumerateFiles(Context.RealPath, "*.csproj", new EnumerationOptions {IgnoreInaccessible = true, RecurseSubdirectories = true})
+                   .Where(f => _settings.RegistratedRepositories.All(rr => rr.ProjectName != f))
+                   .Select(s => new ProjectUI(s));
+
+                ProjectSelector.Init(projects.Select(ui => new SelectorItem<ProjectUI>(ui)), false, OnNext);
+                await base.InitializeAsync();
+            }
         }
 
         private async Task OnNext(SelectorItemBase selectorItemBase)

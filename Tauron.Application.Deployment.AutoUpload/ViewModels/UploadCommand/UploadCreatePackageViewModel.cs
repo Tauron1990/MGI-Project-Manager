@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using Catel.Services;
 using Catel.Threading;
 using Scrutor;
+using Serilog.Context;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Git;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
+using Tauron.Application.Logging;
 using Tauron.Application.SoftwareRepo;
 using Tauron.Application.Wpf;
 
@@ -27,13 +29,18 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
 
         private readonly ProcessItem _operation;
         private readonly RepositoryManager _repositoryManager;
+        private readonly IRepoFactory _repoFactory;
+        private readonly ISLogger<UploadCreatePackageViewModel> _logger;
         private readonly CancellationToken _token;
 
-        public UploadCreatePackageViewModel(IMessageService messageService, GitManager gitManager, RepositoryManager repositoryManager)
+        public UploadCreatePackageViewModel(IMessageService messageService, GitManager gitManager, RepositoryManager repositoryManager, IRepoFactory repoFactory, 
+            ISLogger<UploadCreatePackageViewModel> logger)
         {
             _messageService = messageService;
             _gitManager = gitManager;
             _repositoryManager = repositoryManager;
+            _repoFactory = repoFactory;
+            _logger = logger;
             _token = _cancel.Token;
             _operation = new ProcessItem(AddConsole, ThrowCanceled, () => IsFailed, s => CancelLabel = s);
         }
@@ -69,10 +76,12 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
 
         private async void StartOperation()
         {
+            _logger.Information("Checking Build for Packaging");
             AddConsole("Überprüfe Build...");
 
             if (Context.Output == null)
             {
+                _logger.Information("No Build Found");
                 await _messageService.ShowErrorAsync("Kein Build Gefunden");
                 await OnReturn();
                 return;
@@ -83,6 +92,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
 
         private async Task Faild(BuildFailed arg)
         {
+            _logger.Information("Build Failed {ErrorCode}", arg.Result);
             Console = $"Build Fehlerhaft:{Environment.NewLine}{arg.Console}{Environment.NewLine}Prozess Benende mit: {arg.Result} Code -- Fehlerzahl: {arg.ErrorCount}";
             IsFailed = true;
             CancelLabel = "Zurück";
@@ -91,124 +101,145 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
 
         private async Task Run(string output, Version version)
         {
-            var op = _operation;
-
-            var versionRepo = Context.VersionRepository;
-            if (versionRepo == null)
+            using (LogContext.PushProperty("Repository", Context.VersionRepository?.Name))
             {
-                AddConsole("Kein Versions Repository gefunden");
-                IsFailed = true;
-                CancelLabel = "Zurück";
-                return;
-            }
+                var op = _operation;
 
-            var versionUserName = Context.VersionRepository?.Name.Split("/")[0] ?? string.Empty;
-            var packagePath = string.Empty;
-            var name = string.Empty;
-            // ReSharper disable once RedundantAssignment
-            var asset = default((string, int));
+                var versionRepo = Context.VersionRepository;
+                if (versionRepo == null)
+                {
+                    _logger.Information("No Repository Found");
+                    AddConsole("Kein Versions Repository gefunden");
+                    IsFailed = true;
+                    CancelLabel = "Zurück";
+                    return;
+                }
 
-            try
-            {
-                await op.Next("Zip wird erstellt...",
-                    async () =>
-                    {
-                        packagePath = Path.Combine(Settings.SettingsDic, "package.zip");
-                        name = Path.GetFileNameWithoutExtension(Context.Repository?.ProjectName ?? string.Empty);
-                        if (string.IsNullOrWhiteSpace(name))
-                        {
-                            IsFailed = true;
-                            await _messageService.ShowErrorAsync("Name der Anwendung nicht gefunden");
-                            return null;
-                        }
-
-                        if (File.Exists(packagePath))
-                            File.Delete(packagePath);
-
-                        ZipFile.CreateFromDirectory(output, packagePath, CompressionLevel.Optimal, false);
-                        return () =>
-                               {
-                                   if (File.Exists(packagePath))
-                                       File.Delete(packagePath);
-                               };
-                    });
-
-                await op.Next("Sync Version Repository...",
-                    () =>
-                    {
-                        _gitManager.SyncRepo(versionRepo.RealPath);
-                        return Task.FromResult<Action?>(null);
-                    });
-
-                await op.Next("Release Hochladen...",
-                    async () =>
-                    {
-                        var assetName = $"{name}_{version}.zip";
-                        asset = await _repositoryManager.UploadAsset(versionRepo.Id, packagePath, assetName, versionUserName);
-                        return () => _repositoryManager.DeleteRelease(versionRepo.Id, asset.Item2, versionUserName)
-                                  .WaitAndUnwrapException(_token);
-                    });
-
-                await op.Next("Aktualisiere Software Repository...",
-                    async () =>
-                    {
-                        var url = asset.Item1;
-                        var vrepo = Context.VersionRepository;
-                        var srepo = Context.Repository;
-
-                        if (url == null || vrepo == null || srepo == null)
-                        {
-                            IsFailed = true;
-                            await _messageService.ShowErrorAsync("Kein'e Download Url/Repository Gefunden");
-                            return null;
-                        }
-
-                        var repo = await SoftwareRepository.Read(versionRepo.RealPath);
-                        var backup = repo.CreateBackup();
-
-                        var id = repo.Get(name);
-
-                        if (id != -1)
-                            repo.UpdateApplication(id, version, url);
-                        else
-                            repo.AddApplication(name, DateTime.Now.Ticks, url, version, srepo.RepositoryName, srepo.BranchName);
-
-                        await repo.Save();
-                        _gitManager.CommitRepo(vrepo);
-
-                        return () => repo.Revert(backup);
-                    });
-
-                await op.Next("Aufräumen...", async () =>
-                                              {
-                                                  try
-                                                  {
-                                                      File.Delete(packagePath);
-                                                      Directory.Delete(output, true);
-                                                  }
-                                                  catch (IOException)
-                                                  {
-                                                  }
-
-                                                  await Task.Delay(2000, _token);
-
-                                                  return null;
-                                              });
-
-                await OnFinish("Software Erfolgreich Aktualisiert");
-            }
-            catch (Exception e)
-            {
-                if (!(e is OperationCanceledException))
-                    await _messageService.ShowErrorAsync(e);
+                var versionUserName = Context.VersionRepository?.Name.Split("/")[0] ?? string.Empty;
+                var packagePath = string.Empty;
+                var name = string.Empty;
+                // ReSharper disable once RedundantAssignment
+                var asset = default((string, int));
 
                 try
                 {
-                    _operation.Revert();
+                    await op.Next("Zip wird erstellt...",
+                        async () =>
+                        {
+                            _logger.Information("Creating Package Zip File");
+                            packagePath = Path.Combine(Settings.SettingsDic, "package.zip");
+                            name = Path.GetFileNameWithoutExtension(Context.Repository?.ProjectName ?? string.Empty);
+                            if (string.IsNullOrWhiteSpace(name))
+                            {
+                                _logger.Warning("Application not Found: {App}", name);
+                                IsFailed = true;
+                                await _messageService.ShowErrorAsync("Name der Anwendung nicht gefunden");
+                                return null;
+                            }
+
+                            if (File.Exists(packagePath))
+                                File.Delete(packagePath);
+
+                            _logger.Information("Compressing Zip File");
+                            ZipFile.CreateFromDirectory(output, packagePath, CompressionLevel.Optimal, false);
+                            return () =>
+                            {
+                                if (File.Exists(packagePath))
+                                    File.Delete(packagePath);
+                            };
+                        });
+
+                    await op.Next("Sync Version Repository...",
+                        () =>
+                        {
+                            _logger.Information("Syncronize Software Repository");
+                            _gitManager.SyncRepo(versionRepo.RealPath);
+                            return Task.FromResult<Action?>(null);
+                        });
+
+                    await op.Next("Release Hochladen...",
+                        async () =>
+                        {
+                            var assetName = $"{name}_{version}.zip";
+                            _logger.Information("Upload Application Package File: {AssetName}", assetName);
+                            asset = await _repositoryManager.UploadAsset(versionRepo.Id, packagePath, assetName, versionUserName);
+                            return () => _repositoryManager.DeleteRelease(versionRepo.Id, asset.Item2, versionUserName)
+                               .WaitAndUnwrapException(_token);
+                        });
+
+                    await op.Next("Aktualisiere Software Repository...",
+                        async () =>
+                        {
+                            _logger.Information("Update Software Repository");
+                            var url = asset.Item1;
+                            var vrepo = Context.VersionRepository;
+                            var srepo = Context.Repository;
+
+                            if (url == null || vrepo == null || srepo == null)
+                            {
+                                _logger.Warning("No download url found for {Name}", name);
+                                IsFailed = true;
+                                await _messageService.ShowErrorAsync("Kein'e Download Url/Repository Gefunden");
+                                return null;
+                            }
+
+                            var repo = await _repoFactory.Read(versionRepo.RealPath);
+                            var backup = repo.CreateBackup();
+
+                            var id = repo.Get(name);
+
+                            if (id != -1)
+                            {
+                                _logger.Information("Update Application: {Name}", name);
+                                repo.UpdateApplication(id, version, url);
+                            }
+                            else
+                            {
+                                _logger.Information("Add Application: {Name}", name);
+                                repo.AddApplication(name, DateTime.Now.Ticks, url, version, srepo.RepositoryName, srepo.BranchName);
+                            }
+
+                            _logger.Information("Save Repository");
+                            await repo.Save();
+                            _gitManager.CommitRepo(vrepo);
+
+                            return () => repo.Revert(backup);
+                        });
+
+                    await op.Next("Aufräumen...", async () =>
+                    {
+                        try
+                        {
+                            _logger.Information("Clean Up Build Files");
+                            File.Delete(packagePath);
+                            Directory.Delete(output, true);
+                        }
+                        catch (IOException e)
+                        {
+                            _logger.Warning(e, "Error on Clean Up");
+                        }
+
+                        await Task.Delay(2000, _token);
+
+                        return null;
+                    });
+
+                    await OnFinish("Software Erfolgreich Aktualisiert");
                 }
-                catch (Exception exception)
+                catch (Exception e)
                 {
-                    await _messageService.ShowErrorAsync(exception);
+                    _logger.Error(e, "Error on Build Application Package");
+                    if (!(e is OperationCanceledException))
+                        await _messageService.ShowErrorAsync(e);
+
+                    try
+                    {
+                        _operation.Revert();
+                    }
+                    catch (Exception exception)
+                    {
+                        await _messageService.ShowErrorAsync(exception);
+                    }
                 }
             }
         }

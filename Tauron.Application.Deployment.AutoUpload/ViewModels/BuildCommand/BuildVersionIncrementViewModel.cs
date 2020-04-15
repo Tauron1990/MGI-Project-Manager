@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Anotar.Serilog;
 using Catel.Data;
 using Catel.Services;
 using Scrutor;
@@ -47,8 +48,10 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         {
             try
             {
+                LogTo.Information("Applying New Version");
                 await _projectFile.ApplyVersion(Version.Parse(FileVersion ?? string.Empty), Version.Parse(AssemblyVersion ?? string.Empty));
                 var repo = Context.RegistratedRepository;
+                LogTo.Information("Commiting Repository");
                 if (repo != null)
                     _gitManager.CommitRepo(repo);
                 Context.AssemblyVersion = Version.Parse(AssemblyVersion ?? string.Empty);

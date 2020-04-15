@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Anotar.Serilog;
 using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
 using Scrutor;
@@ -26,6 +27,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
 
         public void CreateRepository(string repoPath, string url)
         {
+            LogTo.Information("Create Git Repository: {Path}--{Url}", repoPath, url);
+
             Repository.Init(repoPath);
             using var repo = new Repository(repoPath);
             repo.Network.Remotes.Add("origin", url);
@@ -37,11 +40,14 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
                 Directory.Delete(path, true);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
+
+            LogTo.Information("Cloning Git Repository: {Repository}--{Branch}--{Path}", repository, branch, path);
             Repository.Clone(repository, path, new CloneOptions {BranchName = branch, OnProgress = progressHandler, OnTransferProgress = transferProgressHandler});
         }
 
         public MergeResult SyncRepo(string path, ProgressHandler? progressHandler = null, TransferProgressHandler? transferProgressHandler = null)
         {
+            LogTo.Information("Pull Git Repository: {Path}", path);
             using var repo = new Repository(path);
             return Commands.Pull(repo,
                 new Signature(_settings.UserName, _settings.EMailAdress, _settings.UserWhen),
@@ -73,6 +79,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
         private void CommitRepo(string repository, string branchName, string name)
         {
             if (!Repository.IsValid(repository)) return;
+            LogTo.Information("Begin Commit Git Repository: {Repository}--{Branch}", repository, branchName);
 
             using var repo = new Repository(repository);
 
@@ -83,6 +90,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
 
         private static void StageChanges(IRepository repo)
         {
+            LogTo.Information("Stage Chnages");
             var status = repo.RetrieveStatus();
             var filePaths = status.Modified.Select(mods => mods.FilePath)
                .Concat(status.Added.Select(e => e.FilePath))
@@ -92,12 +100,15 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
 
         private void CommitChanges(IRepository repo)
         {
+            LogTo.Information("Commit");
             repo.Commit("updating files..", new Signature(_settings.UserName, _settings.EMailAdress, DateTimeOffset.Now),
                 new Signature(_settings.UserName, _settings.EMailAdress, DateTimeOffset.Now));
         }
 
         private void PushChanges(IRepository repo, string branch, string registratedRepository)
         {
+            LogTo.Information("Push Commit to Server");
+
             Credentials CredentialsProvider(string url, string usernamefromurl, SupportedCredentialTypes types)
             {
                 switch (types)

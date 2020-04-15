@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Catel.Services;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Common;
@@ -12,14 +11,10 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
     [ServiceDescriptor(typeof(VersionRepoSelectViewModel))]
     public class VersionRepoSelectViewModel : OperationViewModel<VersionRepoContext>
     {
-        private readonly IMessageService _messageService;
         private readonly Settings _settings;
 
-        public VersionRepoSelectViewModel(Settings settings, IMessageService messageService)
-        {
-            _settings = settings;
-            _messageService = messageService;
-        }
+        public VersionRepoSelectViewModel(Settings settings) 
+            => _settings = settings;
 
         public ICommonSelectorViewModel RepoSelector { get; set; } = CommonSelectorViewModel.Create();
 

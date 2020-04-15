@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Anotar.Serilog;
 
 namespace Tauron.Application.Deployment.AutoUpload.Models.Build
 {
@@ -14,6 +15,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
 
         public async Task Init(string? fileName)
         {
+            LogTo.Information("Parse Project File {Project}", Path.GetFileName(fileName));
+
             _fileName = fileName ?? string.Empty;
             _sourceElement = XElement.Parse(await File.ReadAllTextAsync(fileName));
         }
@@ -21,6 +24,8 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
         private XElement? Search(bool file, bool create = false)
         {
             if (_sourceElement == null) return null;
+
+            LogTo.Information("Search Version Xml Elements");
 
             const string assemblyName = "AssemblyVersion";
             const string fileName = "FileVersion";
@@ -51,9 +56,11 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Build
 
         public async Task ApplyVersion(Version fileVersion, Version asmVersion)
         {
+            LogTo.Information("Apply Version to Element");
             SetOrAdd(true, fileVersion.ToString());
             SetOrAdd(false, asmVersion.ToString());
 
+            LogTo.Information("Save Projet File");
             await using var stream = File.Open(_fileName, FileMode.Create);
             await _sourceElement.SaveAsync(stream, SaveOptions.None, CancellationToken.None);
         }

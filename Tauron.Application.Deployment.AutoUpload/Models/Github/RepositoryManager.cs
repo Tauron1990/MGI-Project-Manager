@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading.Tasks;
+using Anotar.Serilog;
 using Octokit;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Core;
@@ -45,8 +46,10 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Github
         {
             return await ExceuteAut(name, async client =>
                                           {
+                                              LogTo.Information("Create Release: {Name}", assetName);
                                               var release = await client.Repository.Release.Create(repoId, new NewRelease(assetName) {Body = $"Automated Release of {assetName}"});
                                               await using var rawData = File.Open(fileName, FileMode.Open);
+                                              LogTo.Information("Upload Asset: {Name}", assetName);
                                               var asset = await client.Repository.Release.UploadAsset(release, new ReleaseAssetUpload(assetName, "application/zip", rawData, null));
 
                                               return (asset.BrowserDownloadUrl, release.Id);
@@ -57,6 +60,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Github
         {
             await ExceuteAut(name, async c =>
                                    {
+                                       LogTo.Information("Delete Release: {Repo}--{Release}", repo, release);
                                        await c.Repository.Release.Delete(repo, release);
                                        return string.Empty;
                                    });
@@ -64,6 +68,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Github
 
         private async Task<TType> ExceuteAut<TType>(string name, Func<GitHubClient, Task<TType>> exec)
         {
+            LogTo.Information("Get Credinals for: {Name}", name);
             if (!_gitHubCredinals.TryGetValue(name, out var credinals))
             {
                 credinals = new InternalStore(name, _inputService);
@@ -72,7 +77,9 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Github
 
             try
             {
+
                 _client.Credentials = new Credentials(await credinals.GetCredentials());
+                LogTo.Information("Execute Request");
                 return await exec(_client);
             }
             catch (ApiException e)

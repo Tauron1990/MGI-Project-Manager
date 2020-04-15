@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Anotar.Serilog;
 using Catel.Services;
 using Octokit;
 using Scrutor;
+using Serilog.Context;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Common;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
@@ -63,19 +65,24 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 
         private async void BeginLoad()
         {
-            try
+            using (LogContext.PushProperty("Repository", Context.RegistratedRepository?.ToString()))
             {
-                BranchSelector.Init((await _manager.GetBranchs(Context.Repository)).Select(e => new SelectorItem<BranchElement>(new BranchElement(e)))
-                  , false, OnNextImpl);
-            }
-            catch (Exception e)
-            {
-                await _messageService.ShowErrorAsync(e);
-            }
-            finally
-            {
-                IsReady = true;
-                IsLoading = false;
+                try
+                {
+                    LogTo.Information("Begin Loading Branches");
+                    BranchSelector.Init((await _manager.GetBranchs(Context.Repository)).Select(e => new SelectorItem<BranchElement>(new BranchElement(e)))
+                      , false, OnNextImpl);
+                }
+                catch (Exception e)
+                {
+                    LogTo.Error(e, "Error on loding Branches");
+                    await _messageService.ShowErrorAsync(e);
+                }
+                finally
+                {
+                    IsReady = true;
+                    IsLoading = false;
+                }
             }
         }
 

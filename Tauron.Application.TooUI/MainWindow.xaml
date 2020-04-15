@@ -1,0 +1,28 @@
+﻿<tau:Window x:Class="Tauron.Application.ToolUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Tauron.Application.ToolUI"
+        xmlns:ui="clr-namespace:Tauron.Application.Wpf.UI;assembly=Tauron.Application.Wpf"
+        xmlns:tau="http://schemas.TauronWpf.com" d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
+        mc:Ignorable="d" Icon="Working_Tools.png" WindowStartupLocation="CenterScreen" MinWidth="300">
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+    </Window.Resources>
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="App">
+                <MenuItem Header="Tool Schliesen" tau:CommandBinder.Command="CloseTool"/>
+                <Separator/>
+                <MenuItem Header="Beenden" tau:CommandBinder.Command="CloseApp"/>
+            </MenuItem>
+            <MenuItem Header="Ansicht">
+                <MenuItem Header="Upload Tool" tau:CommandBinder.Command="StartUpload"/>
+            </MenuItem>
+        </Menu>
+        <ContentControl Content="{ui:ViewModelBinding MainContent}"/>
+    </DockPanel>
+</tau:Window>

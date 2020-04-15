@@ -16,11 +16,7 @@ namespace Tauron.Application.Wpf
 
             var trampoline = new Trampoline(descriptor.ImplementationType);
 
-            services.Add(
-                new ServiceDescriptor(
-                    descriptor.ImplementationType,
-                    serviceProvider => DispatcherInvoke(serviceProvider, trampoline.Create),
-                    ServiceLifetime.Transient));
+            services.Add(ServiceDescriptor.Transient(descriptor.ImplementationType, serviceProvider => DispatcherInvoke(serviceProvider, trampoline.Create)));
         }
 
         private static object DispatcherInvoke(IServiceProvider dipatcher, Func<IServiceProvider, object> invoker)

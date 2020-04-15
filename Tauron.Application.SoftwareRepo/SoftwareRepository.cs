@@ -9,15 +9,15 @@ namespace Tauron.Application.SoftwareRepo
 {
     public class SoftwareRepository
     {
-        private const string FileName = "Apps.json";
+        internal const string FileName = "Apps.json";
 
         private readonly string _path;
 
-        private SoftwareRepository(string path) => _path = path;
+        internal SoftwareRepository(string path) => _path = path;
 
         public ApplicationList ApplicationList { get; private set; } = new ApplicationList(ImmutableList<ApplicationEntry>.Empty, string.Empty, string.Empty);
 
-        private async Task Init()
+        internal async Task Init()
         {
             var compledPath = GetFullPath();
 
@@ -27,7 +27,7 @@ namespace Tauron.Application.SoftwareRepo
             ApplicationList = JsonConvert.DeserializeObject<ApplicationList>(await File.ReadAllTextAsync(compledPath));
         }
 
-        private async Task InitNew()
+        internal async Task InitNew()
         {
             var compledPath = GetFullPath();
 
@@ -39,21 +39,6 @@ namespace Tauron.Application.SoftwareRepo
 
         private string GetFullPath() => Path.Combine(_path, FileName);
 
-        public static async Task<SoftwareRepository> Create(string path)
-        {
-            var temp = new SoftwareRepository(path);
-            await temp.InitNew();
-            return temp;
-        }
-
-        public static async Task<SoftwareRepository> Read(string path)
-        {
-            var temp = new SoftwareRepository(path);
-            await temp.Init();
-            return temp;
-        }
-
-        public static bool IsValid(string path) => File.Exists(Path.Combine(path, FileName));
 
         public async Task Save()
         {

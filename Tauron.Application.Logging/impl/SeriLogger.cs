@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 
 namespace Tauron.Application.Logging.impl
 {
-    #pragma warning disable Serilog004 // Constant MessageTemplate verifier
+    [DebuggerStepThrough]
+#pragma warning disable Serilog004 // Constant MessageTemplate verifier
     public sealed class SeriLogger<TType> : ISLogger<TType>
     {
         private readonly ILogger _logger;

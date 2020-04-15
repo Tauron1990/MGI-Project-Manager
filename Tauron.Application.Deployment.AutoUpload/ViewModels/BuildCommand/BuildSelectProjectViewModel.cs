@@ -63,9 +63,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
         public bool CanOnNext() => ProjectSelector.CanRun();
 
         [CommandTarget]
-        public async Task OnNext()
-        {
-            await ProjectSelector.Run();
-        }
+        public async Task OnNext() 
+            => await ProjectSelector.Run();
     }
 }
