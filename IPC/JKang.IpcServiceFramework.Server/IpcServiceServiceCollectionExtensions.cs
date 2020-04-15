@@ -9,9 +9,9 @@ namespace JKang.IpcServiceFramework
     public static class IpcServiceServiceCollectionExtensions
     {
         [Obsolete("Use services.AddIpc(builder => { ... }) instead.")]
-        public static IIpcServiceBuilder AddIpc(this IServiceCollection services)
+        public static IIpcServiceBuilder? AddIpc(this IServiceCollection services)
         {
-            IIpcServiceBuilder builder = null;
+            IIpcServiceBuilder? builder = null;
             services.AddIpc(x => builder = x);
             return builder;
         }

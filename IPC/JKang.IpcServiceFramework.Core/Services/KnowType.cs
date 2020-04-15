@@ -9,9 +9,10 @@ namespace JKang.IpcServiceFramework.Services
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
 
-            if (type.IsClass && !type.IsAbstract) Type = type;
+            if (type.IsClass && !type.IsAbstract) 
+                Type = type;
         }
 
-        public Type Type { get; }
+        public Type? Type { get; }
     }
 }

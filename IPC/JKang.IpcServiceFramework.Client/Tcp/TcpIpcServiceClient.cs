@@ -14,9 +14,9 @@ namespace JKang.IpcServiceFramework.Tcp
     {
         private readonly IPAddress _serverIp;
         private readonly int _serverPort;
-        private readonly string _sslServerIdentity;
-        private readonly RemoteCertificateValidationCallback _sslValidationCallback;
-        private readonly Func<Stream, Stream> _streamTranslator;
+        private readonly string? _sslServerIdentity;
+        private readonly RemoteCertificateValidationCallback? _sslValidationCallback;
+        private readonly Func<Stream, Stream>? _streamTranslator;
 
         public TcpIpcServiceClient(IIpcMessageSerializer serializer, IValueConverter converter, IPAddress serverIp, int serverPort)
             : base(serializer, converter)
@@ -30,7 +30,7 @@ namespace JKang.IpcServiceFramework.Tcp
             : this(serializer, converter, serverIp, serverPort) =>
             _streamTranslator = streamTranslator;
 
-        public TcpIpcServiceClient(IIpcMessageSerializer serializer, IValueConverter converter, IPAddress serverIp, int serverPort, string sslServerIdentity, RemoteCertificateValidationCallback sslCertificateValidationCallback)
+        public TcpIpcServiceClient(IIpcMessageSerializer serializer, IValueConverter converter, IPAddress serverIp, int serverPort, string sslServerIdentity, RemoteCertificateValidationCallback? sslCertificateValidationCallback = null)
             : this(serializer, converter, serverIp, serverPort)
         {
             _sslValidationCallback = sslCertificateValidationCallback;
@@ -38,13 +38,8 @@ namespace JKang.IpcServiceFramework.Tcp
             SSL = true;
         }
 
-        public TcpIpcServiceClient(IIpcMessageSerializer serializer, IValueConverter converter, IPAddress serverIp, int serverPort, string sslServerIdentity)
-            : this(serializer, converter, serverIp, serverPort, sslServerIdentity, (RemoteCertificateValidationCallback) null)
-        {
-        }
-
         public TcpIpcServiceClient(IIpcMessageSerializer serializer, IValueConverter converter, IPAddress serverIp, int serverPort, string sslServerIdentity, Func<Stream, Stream> streamTranslator)
-            : this(serializer, converter, serverIp, serverPort, sslServerIdentity, (RemoteCertificateValidationCallback) null) =>
+            : this(serializer, converter, serverIp, serverPort, sslServerIdentity) =>
             _streamTranslator = streamTranslator;
 
         public TcpIpcServiceClient(IIpcMessageSerializer serializer, IValueConverter converter, IPAddress serverIp, int serverPort, string sslServerIdentity, RemoteCertificateValidationCallback sslCertificateValidationCallback, Func<Stream, Stream> streamTranslator)

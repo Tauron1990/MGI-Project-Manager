@@ -9,30 +9,24 @@ namespace Tauron.Application.Files.Json
     {
         public abstract void SerializeBinary(BinaryWriter aWriter);
 
-        public void SaveToBinaryStream(Stream aData)
-        {
-            SerializeBinary(new BinaryWriter(aData));
-        }
+        public void SaveToBinaryStream(Stream aData) 
+            => SerializeBinary(new BinaryWriter(aData));
 
 
         public void SaveToBinaryFile(string aFileName)
         {
             aFileName.CreateDirectoryIfNotExis();
 
-            using (var fileStream = File.OpenWrite(aFileName))
-            {
-                SaveToBinaryStream(fileStream);
-            }
+            using var fileStream = File.OpenWrite(aFileName);
+            SaveToBinaryStream(fileStream);
         }
 
         public string SaveToBinaryBase64()
         {
-            using (var stream = new MemoryStream())
-            {
-                SaveToBinaryStream(stream);
-                stream.Position = 0;
-                return Convert.ToBase64String(stream.ToArray());
-            }
+            using var stream = new MemoryStream();
+            SaveToBinaryStream(stream);
+            stream.Position = 0;
+            return Convert.ToBase64String(stream.ToArray());
         }
 
         public static JsonNode DeserializeBinary(BinaryReader aReader)
@@ -86,18 +80,14 @@ namespace Tauron.Application.Files.Json
 
         public static JsonNode LoadFromBinaryStream(Stream aData)
         {
-            using (var binaryReader = new BinaryReader(aData))
-            {
-                return DeserializeBinary(binaryReader);
-            }
+            using var binaryReader = new BinaryReader(aData);
+            return DeserializeBinary(binaryReader);
         }
 
         public static JsonNode LoadFromBinaryFile(string aFileName)
         {
-            using (var fileStream = File.OpenRead(aFileName))
-            {
-                return LoadFromBinaryStream(fileStream);
-            }
+            using var fileStream = File.OpenRead(aFileName);
+            return LoadFromBinaryStream(fileStream);
         }
 
         public static JsonNode LoadFromBinaryBase64(string aBase64)

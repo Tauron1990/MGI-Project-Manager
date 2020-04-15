@@ -40,36 +40,32 @@ namespace JKang.IpcServiceFramework
 
         protected async Task ProcessAsync(Stream server, ILogger logger, CancellationToken cancellationToken)
         {
-            using (var writer = new IpcWriter(server, _serializer, true))
+            using var writer = new IpcWriter(server, _serializer, true);
+            using var reader = new IpcReader(server, _serializer, true);
+            try
             {
-                using (var reader = new IpcReader(server, _serializer, true))
-                {
-                    try
-                    {
-                        if (cancellationToken.IsCancellationRequested) return;
+                if (cancellationToken.IsCancellationRequested) return;
 
-                        logger?.LogDebug($"[thread {Thread.CurrentThread.ManagedThreadId}] client connected, reading request...");
-                        var request = await reader.ReadIpcRequestAsync(cancellationToken).ConfigureAwait(false);
+                logger?.LogDebug($"[thread {Thread.CurrentThread.ManagedThreadId}] client connected, reading request...");
+                var request = await reader.ReadIpcRequestAsync(cancellationToken).ConfigureAwait(false);
 
-                        cancellationToken.ThrowIfCancellationRequested();
+                cancellationToken.ThrowIfCancellationRequested();
 
-                        logger?.LogDebug($"[thread {Thread.CurrentThread.ManagedThreadId}] request received, invoking '{request.MethodName}'...");
-                        IpcResponse response;
-                        using (var scope = ServiceProvider.CreateScope()) response = await GetReponse(request, scope).ConfigureAwait(false);
+                logger?.LogDebug($"[thread {Thread.CurrentThread.ManagedThreadId}] request received, invoking '{request.MethodName}'...");
+                IpcResponse response;
+                using (var scope = ServiceProvider.CreateScope()) response = await GetReponse(request, scope).ConfigureAwait(false);
 
-                        cancellationToken.ThrowIfCancellationRequested();
+                cancellationToken.ThrowIfCancellationRequested();
 
-                        logger?.LogDebug($"[thread {Thread.CurrentThread.ManagedThreadId}] sending response...");
-                        await writer.WriteAsync(response, cancellationToken).ConfigureAwait(false);
+                logger?.LogDebug($"[thread {Thread.CurrentThread.ManagedThreadId}] sending response...");
+                await writer.WriteAsync(response, cancellationToken).ConfigureAwait(false);
 
-                        logger?.LogDebug($"[thread {Thread.CurrentThread.ManagedThreadId}] done.");
-                    }
-                    catch (Exception ex)
-                    {
-                        logger?.LogError(ex, ex.Message);
-                        await writer.WriteAsync(IpcResponse.Fail($"Internal server error: {ex.Message}"), cancellationToken).ConfigureAwait(false);
-                    }
-                }
+                logger?.LogDebug($"[thread {Thread.CurrentThread.ManagedThreadId}] done.");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex, ex.Message);
+                await writer.WriteAsync(IpcResponse.Fail($"Internal server error: {ex.Message}"), cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -112,7 +108,7 @@ namespace JKang.IpcServiceFramework
                 await task.ConfigureAwait(false);
 
                 var resultProperty = task.GetType().GetProperty("Result");
-                return IpcResponse.Success(resultProperty?.GetValue(task));
+                return IpcResponse.Success(resultProperty.GetValue(task));
 
             }
             catch (Exception ex)
@@ -127,11 +123,11 @@ namespace JKang.IpcServiceFramework
         /// <param name="request">The service call request</param>
         /// <param name="service">The service</param>
         /// <returns>The disambiguated service method</returns>
-        public static MethodInfo GetUnambiguousMethod(IpcRequest request, object service)
+        public static MethodInfo? GetUnambiguousMethod(IpcRequest request, object service)
         {
             if (request == null || service == null) return null;
 
-            MethodInfo method = null; // disambiguate - can't just call as before with generics - MethodInfo method = service.GetType().GetMethod(request.MethodName);
+            MethodInfo? method = null; // disambiguate - can't just call as before with generics - MethodInfo method = service.GetType().GetMethod(request.MethodName);
 
             // Thanks https://github.com/luhis for these changes
             var types = service.GetType().GetInterfaces();

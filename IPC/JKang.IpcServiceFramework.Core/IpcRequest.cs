@@ -5,9 +5,15 @@ namespace JKang.IpcServiceFramework
     public class IpcRequest
     {
         private Type[] _genericArguments = new Type[0];
+        private object[]? _parameters;
 
-        public string MethodName { get; set; }
-        public object[] Parameters { get; set; }
+        public string? MethodName { get; set; }
+
+        public object[] Parameters
+        {
+            get => _parameters ?? Array.Empty<object>();
+            set => _parameters = value;
+        }
 
         /// <summary>
         ///     Gets or sets the types of parameter of the IPC method to call

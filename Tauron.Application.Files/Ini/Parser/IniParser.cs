@@ -13,21 +13,18 @@ namespace Tauron.Application.Files.Ini.Parser
 
         private readonly TextReader _reader;
 
-        public IniParser([NotNull] TextReader reader)
-        {
-            _reader = Argument.NotNull(reader, nameof(reader));
-        }
+        public IniParser(TextReader reader) 
+            => _reader = Argument.NotNull(reader, nameof(reader));
 
-        [NotNull]
         public IniFile Parse()
         {
             var entrys = new Dictionary<string, GroupDictionary<string, string>>();
             var currentSection = new GroupDictionary<string, string>();
-            string currentSectionName = null;
+            string? currentSectionName = null;
 
             foreach (var line in _reader.EnumerateTextLines())
             {
-                if (line[0] == '[' && line[line.Length - 1] == ']')
+                if (line[0] == '[' && line[^1] == ']')
                 {
                     if (currentSectionName != null) entrys[currentSectionName] = currentSection;
 
@@ -47,17 +44,19 @@ namespace Tauron.Application.Files.Ini.Parser
 
             var sections = new Dictionary<string, IniSection>(entrys.Count);
 
-            foreach (var entry in entrys)
+            foreach (var (key, value) in entrys)
             {
-                var entries = new Dictionary<string, IniEntry>(entry.Value.Count);
+                var entries = new Dictionary<string, IniEntry>(value.Count);
 
-                foreach (var keyEntry in entry.Value)
-                    if (keyEntry.Value.Count < 1)
-                        entries[keyEntry.Key] = new ListIniEntry(keyEntry.Key, new List<string>(keyEntry.Value));
+                foreach (var (entryKey, collection) in value)
+                {
+                    if (collection.Count < 1)
+                        entries[entryKey] = new ListIniEntry(entryKey, new List<string>(collection));
                     else
-                        entries[keyEntry.Key] = new SingleIniEntry(keyEntry.Key, keyEntry.Value.ElementAt(0));
+                        entries[entryKey] = new SingleIniEntry(entryKey, collection.ElementAt(0));
+                }
 
-                sections[entry.Key] = new IniSection(entries, entry.Key);
+                sections[key] = new IniSection(entries, key);
             }
 
             return new IniFile(sections);

@@ -8,7 +8,7 @@ namespace JKang.IpcServiceFramework
     public class IpcServiceClientBuilder<TInterface>
         where TInterface : class
     {
-        private Func<IIpcMessageSerializer, IValueConverter, IpcServiceClient<TInterface>> _factory;
+        private Func<IIpcMessageSerializer, IValueConverter, IpcServiceClient<TInterface>>? _factory;
         private IIpcMessageSerializer _serializer = new DefaultIpcMessageSerializer();
         private IValueConverter _valueConverter = new DefaultValueConverter();
 

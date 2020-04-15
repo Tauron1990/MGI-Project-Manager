@@ -16,7 +16,7 @@ namespace JKang.IpcServiceFramework
             builder.AddTcpEndpoint<TContract>(name, ipEndpoint, concurrencyOptions: null);
 
         public static IpcServiceHostBuilder AddTcpEndpoint<TContract>(this IpcServiceHostBuilder builder,
-            string name, IPAddress ipEndpoint, TcpConcurrencyOptions concurrencyOptions)
+            string name, IPAddress ipEndpoint, TcpConcurrencyOptions? concurrencyOptions)
             where TContract : class =>
             builder.AddEndpoint(new TcpIpcServiceEndpoint<TContract>(name, builder.ServiceProvider, ipEndpoint, concurrencyOptions));
 
@@ -26,7 +26,7 @@ namespace JKang.IpcServiceFramework
             builder.AddTcpEndpoint<TContract>(name, ipEndpoint, port, concurrencyOptions: null);
 
         public static IpcServiceHostBuilder AddTcpEndpoint<TContract>(this IpcServiceHostBuilder builder,
-            string name, IPAddress ipEndpoint, int port, TcpConcurrencyOptions concurrencyOptions)
+            string name, IPAddress ipEndpoint, int port, TcpConcurrencyOptions? concurrencyOptions)
             where TContract : class =>
             builder.AddEndpoint(new TcpIpcServiceEndpoint<TContract>(name, builder.ServiceProvider, ipEndpoint, port, concurrencyOptions));
 
@@ -36,7 +36,7 @@ namespace JKang.IpcServiceFramework
             builder.AddTcpEndpoint<TContract>(name, ipEndpoint, streamTranslator, null);
 
         public static IpcServiceHostBuilder AddTcpEndpoint<TContract>(this IpcServiceHostBuilder builder,
-            string name, IPAddress ipEndpoint, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions concurrencyOptions)
+            string name, IPAddress ipEndpoint, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions? concurrencyOptions)
             where TContract : class =>
             builder.AddEndpoint(new TcpIpcServiceEndpoint<TContract>(name, builder.ServiceProvider, ipEndpoint, streamTranslator, concurrencyOptions));
 
@@ -46,7 +46,7 @@ namespace JKang.IpcServiceFramework
             builder.AddTcpEndpoint<TContract>(name, ipEndpoint, sslCertificate, concurrencyOptions: null);
 
         public static IpcServiceHostBuilder AddTcpEndpoint<TContract>(this IpcServiceHostBuilder builder,
-            string name, IPAddress ipEndpoint, X509Certificate sslCertificate, TcpConcurrencyOptions concurrencyOptions)
+            string name, IPAddress ipEndpoint, X509Certificate sslCertificate, TcpConcurrencyOptions? concurrencyOptions)
             where TContract : class =>
             builder.AddEndpoint(new TcpIpcServiceEndpoint<TContract>(name, builder.ServiceProvider, ipEndpoint, sslCertificate, concurrencyOptions));
 
@@ -56,7 +56,7 @@ namespace JKang.IpcServiceFramework
             builder.AddTcpEndpoint<TContract>(name, ipEndpoint, sslCertificate, streamTranslator, null);
 
         public static IpcServiceHostBuilder AddTcpEndpoint<TContract>(this IpcServiceHostBuilder builder,
-            string name, IPAddress ipEndpoint, X509Certificate sslCertificate, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions concurrencyOptions)
+            string name, IPAddress ipEndpoint, X509Certificate sslCertificate, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions? concurrencyOptions)
             where TContract : class =>
             builder.AddEndpoint(new TcpIpcServiceEndpoint<TContract>(name, builder.ServiceProvider, ipEndpoint, sslCertificate, streamTranslator, concurrencyOptions));
 
@@ -66,7 +66,7 @@ namespace JKang.IpcServiceFramework
             builder.AddTcpEndpoint<TContract>(name, ipEndpoint, port, sslCertificate, concurrencyOptions: null);
 
         public static IpcServiceHostBuilder AddTcpEndpoint<TContract>(this IpcServiceHostBuilder builder,
-            string name, IPAddress ipEndpoint, int port, X509Certificate sslCertificate, TcpConcurrencyOptions concurrencyOptions)
+            string name, IPAddress ipEndpoint, int port, X509Certificate sslCertificate, TcpConcurrencyOptions? concurrencyOptions)
             where TContract : class =>
             builder.AddEndpoint(new TcpIpcServiceEndpoint<TContract>(name, builder.ServiceProvider, ipEndpoint, port, sslCertificate, concurrencyOptions));
 
@@ -76,7 +76,7 @@ namespace JKang.IpcServiceFramework
             builder.AddTcpEndpoint<TContract>(name, ipEndpoint, port, streamTranslator, null);
 
         public static IpcServiceHostBuilder AddTcpEndpoint<TContract>(this IpcServiceHostBuilder builder,
-            string name, IPAddress ipEndpoint, int port, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions concurrencyOptions)
+            string name, IPAddress ipEndpoint, int port, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions? concurrencyOptions)
             where TContract : class =>
             builder.AddEndpoint(new TcpIpcServiceEndpoint<TContract>(name, builder.ServiceProvider, ipEndpoint, port, streamTranslator, concurrencyOptions));
 
@@ -86,7 +86,7 @@ namespace JKang.IpcServiceFramework
             builder.AddTcpEndpoint<TContract>(name, ipEndpoint, port, sslCertificate, streamTranslator, null);
 
         public static IpcServiceHostBuilder AddTcpEndpoint<TContract>(this IpcServiceHostBuilder builder,
-            string name, IPAddress ipEndpoint, int port, X509Certificate sslCertificate, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions concurrencyOptions)
+            string name, IPAddress ipEndpoint, int port, X509Certificate sslCertificate, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions? concurrencyOptions)
             where TContract : class =>
             builder.AddEndpoint(new TcpIpcServiceEndpoint<TContract>(name, builder.ServiceProvider, ipEndpoint, port, sslCertificate, streamTranslator, concurrencyOptions));
     }

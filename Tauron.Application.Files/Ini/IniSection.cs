@@ -25,7 +25,7 @@ namespace Tauron.Application.Files.Ini
 
         public string Name { get; private set; }
 
-        public SingleIniEntry GetSingleEntry(string name)
+        public SingleIniEntry? GetSingleEntry(string name)
         {
             if (_entries.TryGetValue(name, out var entry))
                 return entry as SingleIniEntry;
@@ -39,7 +39,7 @@ namespace Tauron.Application.Files.Ini
             return entry;
         }
 
-        public ListIniEntry GetListEntry(string name)
+        public ListIniEntry? GetListEntry(string name)
         {
             if (!_entries.TryGetValue(name, out var value)) return null;
 

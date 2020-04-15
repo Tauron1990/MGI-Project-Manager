@@ -15,7 +15,7 @@ namespace Tauron.Application.Files.HeaderedText
 
         private bool _isWriten;
 
-        internal HeaderedFileWriter([NotNull] HeaderedFile file)
+        internal HeaderedFileWriter(HeaderedFile file)
         {
             _file = file;
             _file.CurrentWriter = this;
@@ -23,36 +23,31 @@ namespace Tauron.Application.Files.HeaderedText
             _description = _context.Description;
         }
 
-        [CanBeNull]
-        public string Content
+        public string? Content
         {
             get => _file.Content;
             set => _file.Content = value;
         }
 
-        [NotNull] public IEnumerable<ContextEnry> Enries => _context;
+        [NotNull] public IEnumerable<ContextEntry> Enries => _context;
 
-        public IEnumerable<ContextEnry> this[string key] => _context[key];
+        public IEnumerable<ContextEntry> this[string key] => _context[key];
 
         public void Add(string key, string value)
         {
             if (!_description.Contains(key))
                 throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The key {0} is Invalid", key));
 
-            _context.Add(new ContextEnry(key, value));
+            _context.Add(new ContextEntry(key, value));
         }
 
-        public bool Remove([NotNull] ContextEnry entry)
-        {
-            return _context.ContextEnries.Remove(Argument.NotNull(entry, nameof(entry)));
-        }
+        public bool Remove(ContextEntry entry) 
+            => _context.ContextEnries.Remove(Argument.NotNull(entry, nameof(entry)));
 
-        public int RemoveAll([NotNull] string key)
-        {
-            return _context.ContextEnries.RemoveAll(ent => ent.Key == key);
-        }
+        public int RemoveAll(string key) 
+            => _context.ContextEnries.RemoveAll(ent => ent.Key == key);
 
-        public void Save([NotNull] TextWriter writer)
+        public void Save(TextWriter writer)
         {
             Argument.NotNull(writer, nameof(writer));
             if (_isWriten) throw new InvalidOperationException("The Content is Writen");

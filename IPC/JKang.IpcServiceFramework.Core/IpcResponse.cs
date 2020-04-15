@@ -5,7 +5,7 @@ namespace JKang.IpcServiceFramework
     public class IpcResponse
     {
         [JsonConstructor]
-        private IpcResponse(bool succeed, object data, string failure)
+        private IpcResponse(bool succeed, object? data, string? failure)
         {
             Succeed = succeed;
             Data = data;
@@ -13,8 +13,8 @@ namespace JKang.IpcServiceFramework
         }
 
         public bool Succeed { get; }
-        public object Data { get; }
-        public string Failure { get; }
+        public object? Data { get; }
+        public string? Failure { get; }
 
         public static IpcResponse Fail(string failure) => new IpcResponse(false, null, failure);
 

@@ -17,10 +17,10 @@ namespace JKang.IpcServiceFramework.Tcp
         private readonly TcpListener _listener;
         private readonly ILogger<TcpIpcServiceEndpoint<TContract>> _logger;
         private readonly int _maximumConcurrentCalls;
-        private readonly X509Certificate _serverCertificate;
-        private readonly Func<Stream, Stream> _streamTranslator;
+        private readonly X509Certificate? _serverCertificate;
+        private readonly Func<Stream, Stream>? _streamTranslator;
 
-        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, int port, TcpConcurrencyOptions concurrencyOptions)
+        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, int port, TcpConcurrencyOptions? concurrencyOptions)
             : base(name, serviceProvider)
         {
             if (concurrencyOptions == null)
@@ -38,38 +38,38 @@ namespace JKang.IpcServiceFramework.Tcp
             Port = port;
         }
 
-        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, TcpConcurrencyOptions concurrencyOptions)
+        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, TcpConcurrencyOptions? concurrencyOptions)
             : this(name, serviceProvider, ipEndpoint, 0, concurrencyOptions)
         {
         }
 
-        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions concurrencyOptions)
+        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions? concurrencyOptions)
             : this(name, serviceProvider, ipEndpoint, 0, concurrencyOptions) =>
             _streamTranslator = streamTranslator;
 
-        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, X509Certificate sslCertificate, TcpConcurrencyOptions concurrencyOptions)
+        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, X509Certificate sslCertificate, TcpConcurrencyOptions? concurrencyOptions)
             : this(name, serviceProvider, ipEndpoint, 0, concurrencyOptions)
         {
             _serverCertificate = sslCertificate;
             SSL = true;
         }
 
-        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, X509Certificate sslCertificate, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions concurrencyOptions)
+        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, X509Certificate sslCertificate, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions? concurrencyOptions)
             : this(name, serviceProvider, ipEndpoint, sslCertificate, concurrencyOptions) =>
             _streamTranslator = streamTranslator;
 
-        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, int port, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions concurrencyOptions)
+        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, int port, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions? concurrencyOptions)
             : this(name, serviceProvider, ipEndpoint, port, concurrencyOptions) =>
             _streamTranslator = streamTranslator;
 
-        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, int port, X509Certificate sslCertificate, TcpConcurrencyOptions concurrencyOptions)
+        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, int port, X509Certificate sslCertificate, TcpConcurrencyOptions? concurrencyOptions)
             : this(name, serviceProvider, ipEndpoint, port, concurrencyOptions)
         {
             _serverCertificate = sslCertificate;
             SSL = true;
         }
 
-        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, int port, X509Certificate sslCertificate, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions concurrencyOptions)
+        public TcpIpcServiceEndpoint(string name, IServiceProvider serviceProvider, IPAddress ipEndpoint, int port, X509Certificate sslCertificate, Func<Stream, Stream> streamTranslator, TcpConcurrencyOptions? concurrencyOptions)
             : this(name, serviceProvider, ipEndpoint, port, sslCertificate, concurrencyOptions) =>
             _streamTranslator = streamTranslator;
 
@@ -90,7 +90,7 @@ namespace JKang.IpcServiceFramework.Tcp
             {
                 try
                 {
-                    SemaphoreSlim throttle = null;
+                    SemaphoreSlim? throttle = null;
 
                     if (_maximumConcurrentCalls > 1)
                         throttle = new SemaphoreSlim(_maximumConcurrentCalls);

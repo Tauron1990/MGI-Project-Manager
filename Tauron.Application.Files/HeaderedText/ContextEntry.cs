@@ -3,9 +3,9 @@
 namespace Tauron.Application.Files.HeaderedText
 {
     [PublicAPI]
-    public sealed class ContextEnry
+    public sealed class ContextEntry
     {
-        internal ContextEnry(string key, string content)
+        internal ContextEntry(string key, string content)
         {
             Key = Argument.NotNull(key, nameof(key));
             Content = content;

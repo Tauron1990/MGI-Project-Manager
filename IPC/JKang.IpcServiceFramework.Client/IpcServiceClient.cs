@@ -50,7 +50,9 @@ namespace JKang.IpcServiceFramework
             var response = await GetResponseAsync(request, cancellationToken).ConfigureAwait(false);
 
             if (!response.Succeed) throw new InvalidOperationException(response.Failure);
-            if (_converter.TryConvert(response.Data, typeof(TResult), out var @return))
+
+            var data = response.Data;
+            if (data != null && _converter.TryConvert(data, typeof(TResult), out var @return))
                 return (TResult) @return;
             
             throw new InvalidOperationException($"Unable to convert returned value to '{typeof(TResult).Name}'.");
@@ -73,10 +75,11 @@ namespace JKang.IpcServiceFramework
         {
             var request = GetRequest(exp, new MyInterceptor<Task<TResult>>());
             var response = await GetResponseAsync(request, cancellationToken).ConfigureAwait(false);
+            var data = response.Data;
 
-            if (response.Succeed)
+            if (response.Succeed && data != null)
             {
-                if (_converter.TryConvert(response.Data, typeof(TResult), out var @return))
+                if (_converter.TryConvert(data, typeof(TResult), out var @return))
                     return (TResult) @return;
                 throw new InvalidOperationException($"Unable to convert returned value to '{typeof(TResult).Name}'.");
             }
@@ -113,25 +116,25 @@ namespace JKang.IpcServiceFramework
 
         private async Task<IpcResponse> GetResponseAsync(IpcRequest request, CancellationToken cancellationToken)
         {
-            using (var client = await ConnectToServerAsync(cancellationToken).ConfigureAwait(false))
-            {
-                using (var writer = new IpcWriter(client, _serializer, true))
-                {
-                    using (var reader = new IpcReader(client, _serializer, true))
-                    {
-                        // send request
-                        await writer.WriteAsync(request, cancellationToken).ConfigureAwait(false);
+            await using var client = await ConnectToServerAsync(cancellationToken).ConfigureAwait(false);
+            using var writer = new IpcWriter(client, _serializer, true);
+            using var reader = new IpcReader(client, _serializer, true);
+            // send request
+            await writer.WriteAsync(request, cancellationToken).ConfigureAwait(false);
 
-                        // receive response
-                        return await reader.ReadIpcResponseAsync(cancellationToken).ConfigureAwait(false);
-                    }
-                }
-            }
+            // receive response
+            return await reader.ReadIpcResponseAsync(cancellationToken).ConfigureAwait(false);
         }
 
         private class MyInterceptor : IInterceptor
         {
-            public IInvocation LastInvocation { get; private set; }
+            private IInvocation? _lastInvocation;
+
+            public IInvocation LastInvocation
+            {
+                get => _lastInvocation ?? throw new InvalidOperationException("Las Invocation was not det");
+                private set => _lastInvocation = value;
+            }
 
             public virtual void Intercept(IInvocation invocation)
             {
