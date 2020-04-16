@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using JetBrains.Annotations;
 using Tauron.Application.Files.VirtualFiles.Core;
 
 namespace Tauron.Application.Files.VirtualFiles.LocalFileSystem
@@ -17,25 +16,31 @@ namespace Tauron.Application.Files.VirtualFiles.LocalFileSystem
         {
         }
 
-        public override DateTime LastModified => InfoObject.LastWriteTime;
+        public override DateTime LastModified => InfoObject?.LastWriteTime ?? DateTime.MinValue;
 
-        public override bool Exist => InfoObject.Exists;
+        public override bool Exist => InfoObject?.Exists ?? false;
 
         public override string Extension
         {
-            get => InfoObject.Extension;
+            get => InfoObject?.Extension ?? string.Empty;
             set
             {
-                if (InfoObject.Extension == value) return;
+                if (InfoObject?.Extension == value) return;
 
-                MoveFile(InfoObject, Path.ChangeExtension(OriginalPath, value));
+                string newPath = Path.ChangeExtension(OriginalPath, value);
+                MoveFile(InfoObject, newPath);
+                Name = Path.ChangeExtension(OriginalPath, Name);
+
+                Reset(newPath, ParentDirectory);
             }
         }
 
-        public override long Size => InfoObject.Length;
+        public override long Size => InfoObject?.Length ?? 0;
 
         public override IFile MoveTo(string location)
         {
+            if (InfoObject == null) return this;
+
             if (InfoObject.FullName == location) return this;
 
             MoveFile(InfoObject, location);
@@ -43,24 +48,16 @@ namespace Tauron.Application.Files.VirtualFiles.LocalFileSystem
             return new LocalFile(location);
         }
 
-        protected override void DeleteImpl()
-        {
-            InfoObject.Delete();
-        }
+        protected override void DeleteImpl() 
+            => InfoObject?.Delete();
 
-        protected override FileInfo GetInfo(string path)
-        {
-            return new FileInfo(path);
-        }
+        protected override FileInfo GetInfo(string path) 
+            => new FileInfo(path);
 
-        protected override Stream CreateStream(FileAccess access, InternalFileMode mode)
-        {
-            return new FileStream(OriginalPath, (FileMode) mode, access, access == FileAccess.Read ? FileShare.Read : FileShare.None);
-        }
+        protected override Stream CreateStream(FileAccess access, InternalFileMode mode) 
+            => new FileStream(OriginalPath, (FileMode) mode, access, access == FileAccess.Read ? FileShare.Read : FileShare.None);
 
-        private void MoveFile([NotNull] FileInfo old, [NotNull] string newLoc)
-        {
-            old.MoveTo(newLoc);
-        }
+        private void MoveFile(FileInfo? old, string newLoc) 
+            => old?.MoveTo(newLoc);
     }
 }

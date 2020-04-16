@@ -41,7 +41,7 @@ namespace Tauron.Application.Files.VirtualFiles.Core
                 DeleteImpl();
         }
 
-        public string Name { get; }
+        public string Name { get; protected set; }
 
         public bool IsDirectory { get; private set; }
 

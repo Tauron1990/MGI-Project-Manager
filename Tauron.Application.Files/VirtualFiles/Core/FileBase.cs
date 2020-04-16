@@ -12,20 +12,14 @@ namespace Tauron.Application.Files.VirtualFiles.Core
 
         public abstract string Extension { get; set; }
 
-        public virtual Stream Open(FileAccess access)
-        {
-            return CreateStream(access, InternalFileMode.Open);
-        }
+        public virtual Stream Open(FileAccess access) 
+            => CreateStream(access, InternalFileMode.Open);
 
-        public virtual Stream Create()
-        {
-            return CreateStream(FileAccess.Write, InternalFileMode.Create);
-        }
+        public virtual Stream Create() 
+            => CreateStream(FileAccess.Write, InternalFileMode.Create);
 
-        public virtual Stream CreateNew()
-        {
-            return CreateStream(FileAccess.Write, InternalFileMode.CreateNew);
-        }
+        public virtual Stream CreateNew() 
+            => CreateStream(FileAccess.Write, InternalFileMode.CreateNew);
 
         public abstract IFile MoveTo(string location);
 

@@ -22,22 +22,20 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
         }
 
 
-        public override DateTime LastModified => InfoObject.LastModified;
+        public override DateTime LastModified => InfoObject?.LastModified ?? DateTime.MinValue;
 
         public override bool Exist => InfoObject == null;
 
         public override string Extension
         {
-            get => InfoObject.FileName.GetExtension();
+            get => InfoObject?.FileName.GetExtension() ?? string.Empty;
             set => throw new NotSupportedException();
         }
 
-        public override long Size => InfoObject.UncompressedSize;
+        public override long Size => InfoObject?.UncompressedSize ?? 0;
 
-        public override IFile MoveTo(string location)
-        {
-            throw new NotSupportedException();
-        }
+        public override IFile MoveTo(string location) 
+            => throw new NotSupportedException();
 
         protected override void DeleteImpl()
         {
@@ -45,13 +43,14 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
             Reset(OriginalPath, ParentDirectory);
         }
 
-        protected override ZipEntry? GetInfo(string path)
-        {
-            return _entry;
-        }
+        protected override ZipEntry? GetInfo(string path) 
+            => _entry;
 
         protected override Stream CreateStream(FileAccess access, InternalFileMode mode)
         {
+            if(InfoObject == null)
+                throw  new InvalidOperationException("No ZipEntry Found");
+
             switch (access)
             {
                 case FileAccess.Read:

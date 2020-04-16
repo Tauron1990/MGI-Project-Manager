@@ -10,6 +10,7 @@ namespace Tauron.Application.Files.VirtualFiles.Core
         {
         }
 
+        public abstract IDirectory GetDirectory(string name);
         public abstract IEnumerable<IDirectory> Directories { get; }
         public abstract IEnumerable<IFile> Files { get; }
         public abstract IFile GetFile(string name);
