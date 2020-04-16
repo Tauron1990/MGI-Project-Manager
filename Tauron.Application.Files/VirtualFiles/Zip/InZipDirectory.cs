@@ -24,6 +24,9 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
 
         public override bool Exist => _dic.ZipEntry != null || _dic.Files.Count + _dic.Directorys.Count > 0;
 
+        public override IDirectory GetDirectory(string name) 
+            => throw new NotSupportedException();
+
         public override IEnumerable<IDirectory> Directories => _dic.Directorys.Select(internalZipDirectory
             => new InZipDirectory(this, OriginalPath.CombinePath(internalZipDirectory.Name), internalZipDirectory, _file, internalZipDirectory.Name));
 
@@ -49,10 +52,8 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
                 DeleteDic(internalZipDirectory, file);
         }
 
-        protected override InternalZipDirectory GetInfo(string path)
-        {
-            return _dic;
-        }
+        protected override InternalZipDirectory GetInfo(string path) 
+            => _dic;
 
         public override IFile GetFile(string name)
         {

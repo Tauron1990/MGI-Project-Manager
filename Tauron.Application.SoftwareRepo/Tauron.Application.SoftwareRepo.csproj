@@ -12,4 +12,8 @@
     <PackageReference Include="System.Collections.Immutable" Version="1.7.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Tauron.Application.Files\Tauron.Application.Files.csproj" />
+  </ItemGroup>
+
 </Project>

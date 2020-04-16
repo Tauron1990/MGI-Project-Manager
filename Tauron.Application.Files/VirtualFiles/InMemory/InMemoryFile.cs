@@ -8,33 +8,45 @@ namespace Tauron.Application.Files.VirtualFiles.InMemory
     public sealed class InMemoryFile : FileBase<DataFile>
     {
         private readonly InMemoryDirectory _parentDirectory;
-        private readonly DataFile _file;
 
         public InMemoryFile(InMemoryDirectory parentDirectory, string originalPath, string name) 
             : base(() => parentDirectory, originalPath, name)
         {
             _parentDirectory = parentDirectory;
-            _file = parentDirectory.GetOrAddFile(name);
         }
 
-        public override DateTime LastModified => _file.LastModifed;
-        public override bool Exist => true;
+        public override DateTime LastModified => InfoObject?.LastModifed ?? DateTime.MinValue;
+        public override bool Exist => _parentDirectory.ExistFile(Name);
         protected override void DeleteImpl() 
-            => _parentDirectory.Remove(_file);
+            => _parentDirectory.Remove(InfoObject);
 
         protected override DataFile? GetInfo(string path) 
-            => _file;
+            => _parentDirectory.GetOrAddFile(Name);
 
         public override string Extension
         {
-            get => Path.GetExtension(_file.Name);
-            set => _file.Name = Path.ChangeExtension(_file.Name, value);
+            get => Path.GetExtension(InfoObject?.Name);
+            set
+            {
+                var data = InfoObject;
+                if(data == null) return;
+                data.Name = Path.ChangeExtension(data.Name, value);
+
+                Name = data.Name;
+            }
         }
+
         public override IFile MoveTo(string location) 
             => throw new NotSupportedException();
 
-        public override long Size => _file.Data?.Length ?? 0;
-        protected override Stream CreateStream(FileAccess access, InternalFileMode mode) 
-            => new InMemoryStream(_file);
+        public override long Size => InfoObject?.Data?.Length ?? 0;
+        protected override Stream CreateStream(FileAccess access, InternalFileMode mode)
+        {
+            var data = InfoObject;
+            if(data == null) 
+                throw new InvalidOperationException("");
+
+            return new InMemoryStream();
+        }
     }
 }

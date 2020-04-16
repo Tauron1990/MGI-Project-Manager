@@ -18,9 +18,18 @@ namespace Tauron.Application.Files.VirtualFiles.LocalFileSystem
         {
         }
 
-        public override DateTime LastModified => InfoObject.LastWriteTime;
+        public override DateTime LastModified => InfoObject?.LastWriteTime ?? DateTime.MinValue;
 
-        public override bool Exist => InfoObject.Exists;
+        public override bool Exist => InfoObject?.Exists ?? false;
+
+        public override IDirectory GetDirectory(string name)
+        {
+            var dic = new LocalDirectory(Path.Combine(OriginalPath, name), () => this);
+            if(!dic.Exist)
+                dic.InfoObject?.Create();
+
+            return dic;
+        }
 
         public override IEnumerable<IDirectory> Directories => Directory.EnumerateDirectories(OriginalPath).Select(str => new LocalDirectory(str, () => this));
 
@@ -32,20 +41,14 @@ namespace Tauron.Application.Files.VirtualFiles.LocalFileSystem
             return string.IsNullOrEmpty(name) ? null : new LocalDirectory(fullpath);
         }
 
-        protected override void DeleteImpl()
-        {
-            InfoObject.Delete(true);
-        }
+        protected override void DeleteImpl() 
+            => InfoObject?.Delete(true);
 
-        protected override DirectoryInfo GetInfo(string path)
-        {
-            return new DirectoryInfo(path);
-        }
+        protected override DirectoryInfo GetInfo(string path) 
+            => new DirectoryInfo(path);
 
-        public override IFile GetFile(string name)
-        {
-            return new LocalFile(OriginalPath.CombinePath(name), this);
-        }
+        public override IFile GetFile(string name) 
+            => new LocalFile(OriginalPath.CombinePath(name), this);
 
         public override IDirectory MoveTo(string location)
         {

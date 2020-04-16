@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Tauron.Application.Files.VirtualFiles;
 using Tauron.Application.SoftwareRepo.Data;
 
 namespace Tauron.Application.SoftwareRepo
@@ -11,15 +12,16 @@ namespace Tauron.Application.SoftwareRepo
     {
         internal const string FileName = "Apps.json";
 
-        private readonly string _path;
+        private readonly IDirectory _path;
 
-        internal SoftwareRepository(string path) => _path = path;
+        internal SoftwareRepository(IDirectory path) 
+            => _path = path;
 
         public ApplicationList ApplicationList { get; private set; } = new ApplicationList(ImmutableList<ApplicationEntry>.Empty, string.Empty, string.Empty);
 
         internal async Task Init()
         {
-            var compledPath = GetFullPath();
+            var compledPath = GetFile();
 
             if (!File.Exists(compledPath))
                 throw new InvalidOperationException("Apps File not found");
@@ -29,7 +31,7 @@ namespace Tauron.Application.SoftwareRepo
 
         internal async Task InitNew()
         {
-            var compledPath = GetFullPath();
+            var compledPath = GetFile();
 
             if (!File.Exists(compledPath))
                 File.Delete(compledPath);
@@ -37,12 +39,12 @@ namespace Tauron.Application.SoftwareRepo
             await File.WriteAllTextAsync(compledPath, JsonConvert.SerializeObject(ApplicationList));
         }
 
-        private string GetFullPath() => Path.Combine(_path, FileName);
+        private IFile GetFile() => _path.GetFile(FileName);
 
 
         public async Task Save()
         {
-            await File.WriteAllTextAsync(GetFullPath(), JsonConvert.SerializeObject(ApplicationList));
+            await File.WriteAllTextAsync(GetFile(), JsonConvert.SerializeObject(ApplicationList));
         }
 
         public async Task ChangeName(string? name = null, string? description = null)
