@@ -35,6 +35,7 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
                 sc.AddService(() => mock.Object, s => assert?.Invoke(mock));
                 sc.Configure(col =>
                 {
+                    col.AddSoftwareRepo();
                     col.AddOptions<DatabaseOption>().Configure(d => d.InMemory = true);
                     col.AddOptions<LocalSettings>().Configure(ls =>
                     {

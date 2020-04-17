@@ -58,6 +58,7 @@ namespace Tauron.Application.Deployment.Server
             services.AddHostedService<SyncService>();
             services.AddSingleton<DatabaseOptions>();
             services.AddTransient<IFileSystem, FileSystem>();
+            services.AddSoftwareRepo();
 
             services.AddControllers();
             services.AddSwaggerGen(o =>

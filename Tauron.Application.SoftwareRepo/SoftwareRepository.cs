@@ -45,7 +45,9 @@ namespace Tauron.Application.SoftwareRepo
 
         public async Task Save()
         {
-            await File.WriteAllTextAsync(GetFile(), JsonConvert.SerializeObject(ApplicationList));
+
+            await using var writer = new StreamWriter(GetFile().CreateNew());
+            await writer.WriteAsync(JsonConvert.SerializeObject(ApplicationList));
         }
 
         public async Task ChangeName(string? name = null, string? description = null)

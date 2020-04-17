@@ -46,7 +46,7 @@ namespace Tauron.Application.Files.VirtualFiles.InMemory
             if(data == null) 
                 throw new InvalidOperationException("");
 
-            return new InMemoryStream();
+            return new InMemoryStream(data);
         }
     }
 }

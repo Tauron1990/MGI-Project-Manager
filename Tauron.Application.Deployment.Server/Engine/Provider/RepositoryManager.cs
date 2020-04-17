@@ -23,17 +23,19 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
         private readonly ISLogger<RepositoryManager> _logger;
         private readonly IFileSystem _fileSystem;
         private readonly IPushMessager _messager;
+        private readonly IRepoFactory _repoFactory;
         private IDatabaseRoot _database;
 
         public RepositoryProvider[] Providers { get; }
 
         public RepositoryManager(IServiceByNameFactoryMeta<IRepoProvider, RepositoryProvider> factory, ISLogger<RepositoryManager> logger, IDatabaseCache database, 
-            IOptionsMonitor<LocalSettings> settings, IFileSystem fileSystem, IPushMessager messager)
+            IOptionsMonitor<LocalSettings> settings, IFileSystem fileSystem, IPushMessager messager, IRepoFactory repoFactory)
         {
             _factory = factory;
             _logger = logger;
             _fileSystem = fileSystem;
             _messager = messager;
+            _repoFactory = repoFactory;
 
             Providers = factory.GetMetadata().ToArray();
             _database = database.Get(settings.CurrentValue.DatabaseName);
@@ -109,7 +111,7 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
             if (!result.SyncCompled)
                 return (null, "Repository nicht Syncronisiert.");
 
-            return (await SoftwareRepository.Read(result.TargetPath), string.Empty);
+            return (await _repoFactory.Read(result.TargetPath), string.Empty);
         }
 
         public async Task SyncAll()
