@@ -10,8 +10,8 @@ namespace Tauron.Application.Files.VirtualFiles
 
         IEnumerable<IFile> Files { get; }
 
-        IFile GetFile([NotNull] string name);
+        IFile GetFile(string name);
 
-        IDirectory MoveTo([NotNull] string location);
+        IDirectory MoveTo(string location);
     }
 }

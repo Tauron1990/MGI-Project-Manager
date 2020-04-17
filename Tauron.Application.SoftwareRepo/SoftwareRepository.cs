@@ -21,22 +21,23 @@ namespace Tauron.Application.SoftwareRepo
 
         internal async Task Init()
         {
-            var compledPath = GetFile();
+            var file = GetFile();
 
-            if (!File.Exists(compledPath))
+            if (!file.Exist)
                 throw new InvalidOperationException("Apps File not found");
 
-            ApplicationList = JsonConvert.DeserializeObject<ApplicationList>(await File.ReadAllTextAsync(compledPath));
+            using var reader = new StreamReader(file.Open(FileAccess.Read));
+            ApplicationList = JsonConvert.DeserializeObject<ApplicationList>(await reader.ReadToEndAsync());
         }
 
         internal async Task InitNew()
         {
-            var compledPath = GetFile();
+            var file = GetFile();
 
-            if (!File.Exists(compledPath))
-                File.Delete(compledPath);
-
-            await File.WriteAllTextAsync(compledPath, JsonConvert.SerializeObject(ApplicationList));
+            if (!file.Exist)
+                file.Delete();
+            await using var writer = new StreamWriter(file.CreateNew());
+            await writer.WriteAsync(JsonConvert.SerializeObject(ApplicationList));
         }
 
         private IFile GetFile() => _path.GetFile(FileName);

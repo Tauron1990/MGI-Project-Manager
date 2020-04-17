@@ -59,7 +59,8 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
                 case FileAccess.ReadWrite:
                     using (var stream = new MemoryStream())
                     {
-                        if (!Exist) return new ZipWriteHelper(OriginalPath, _file, new byte[0], ZipEntryUpdated);
+                        if (!Exist || mode == InternalFileMode.Create || mode == InternalFileMode.CreateNew) 
+                            return new ZipWriteHelper(OriginalPath, _file, new byte[0], ZipEntryUpdated);
 
                         InfoObject.Extract(stream);
                         return new ZipWriteHelper(InfoObject.FileName, _file, stream.GetBuffer(), ZipEntryUpdated);
@@ -69,9 +70,12 @@ namespace Tauron.Application.Files.VirtualFiles.Zip
             }
         }
 
-        private void ZipEntryUpdated([NotNull] ZipEntry zipEntry)
+        private void ZipEntryUpdated(ZipEntry zipEntry)
         {
-            _directory.Files.RemoveAt(_directory.Files.FindIndex(ent => ent.FileName == zipEntry.FileName));
+            var index = _directory.Files.FindIndex(ent => ent.FileName == zipEntry.FileName);
+            if(index != -1)
+                _directory.Files.RemoveAt(index);
+            _directory.Files.Add(zipEntry);
             Reset(OriginalPath, ParentDirectory);
         }
 
