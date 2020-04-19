@@ -16,15 +16,13 @@ namespace Tauron.Application.Files.Serialization.Sources
 
         public abstract Stream OpenStream(FileAccess access);
 
-        public abstract IStreamSource OpenSideLocation(string relativePath);
+        public abstract IStreamSource OpenSideLocation(string? relativePath);
 
         protected virtual void Dispose(bool disposing)
         {
         }
 
-        ~AbstractSource()
-        {
-            Dispose(false);
-        }
+        ~AbstractSource() 
+            => Dispose(false);
     }
 }

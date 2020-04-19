@@ -24,8 +24,10 @@ namespace Tauron.Application.Wpf.Helper
 
         public TType? this[int index]
         {
-            #pragma warning disable CS8613 // Die NULL-Zulässigkeit von Verweistypen im Rückgabetyp entspricht nicht dem implizit implementierten Member.
+#pragma warning disable CS8613 // Die NULL-Zulässigkeit von Verweistypen im Rückgabetyp entspricht nicht dem implizit implementierten Member.
+#pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
             get => _internalCollection[index]?.TypedTarget();
+#pragma warning restore CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
             set => _internalCollection[index] = value == null ? null : new WeakReference<TType>(value);
             #pragma warning restore CS8613 // Die NULL-Zulässigkeit von Verweistypen im Rückgabetyp entspricht nicht dem implizit implementierten Member.
         }
@@ -132,7 +134,7 @@ namespace Tauron.Application.Wpf.Helper
         }
     }
 
-    [DebuggerNonUserCode]
+    [DebuggerNonUserCode, PublicAPI]
     public class WeakReferenceCollection<TType> : Collection<TType>
         where TType : IInternalWeakReference
     {

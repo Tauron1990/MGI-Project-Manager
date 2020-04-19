@@ -1,0 +1,31 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Tauron.Application.Deployment.Server.Services";
+
+package Tauron.Application.Deployment.Server.Services;
+
+message GetRepositoryProviders{}
+
+message RepositoryProvider {
+	string Id = 1;
+	string Name = 2;
+	string Description = 3;
+}
+message RegistratedReporitorys {}
+
+message RegistratedReporitory {
+	string Name = 1;
+	string Comment = 2;
+	RepositoryProvider Provider = 3;
+}
+
+message RegisterRepositoryData {
+	string Name = 1;
+	string Provider = 2;
+	string Source = 3;
+	string Comment = 4;
+}
+
+message DeleteRepository {
+	string name = 1;
+}

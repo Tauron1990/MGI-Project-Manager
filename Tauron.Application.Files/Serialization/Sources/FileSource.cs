@@ -19,7 +19,7 @@ namespace Tauron.Application.Files.Serialization.Sources
             return new FileStream(_file, access.HasFlag(FileAccess.Read) ? FileMode.Open : FileMode.Create, access, FileShare.None);
         }
 
-        public override IStreamSource OpenSideLocation(string relativePath)
+        public override IStreamSource OpenSideLocation(string? relativePath)
         {
             return new FileSource(_file.GetDirectoryName().CombinePath(Argument.NotNull(relativePath, nameof(relativePath))));
         }

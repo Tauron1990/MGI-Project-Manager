@@ -34,7 +34,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Git
             repo.Network.Remotes.Add("origin", url);
         }
 
-        public void SyncBranch(string repository, string branch, string path, ProgressHandler progressHandler, TransferProgressHandler transferProgressHandler)
+        public void CloneBranch(string repository, string branch, string path, ProgressHandler progressHandler, TransferProgressHandler transferProgressHandler)
         {
             if (Directory.Exists(path))
                 Directory.Delete(path, true);

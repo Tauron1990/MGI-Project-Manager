@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -43,6 +44,7 @@ namespace JKang.IpcServiceFramework
             throw new InvalidOperationException(response.Failure);
         }
 
+        [return:MaybeNull]
         public async Task<TResult> InvokeAsync<TResult>(Expression<Func<TInterface, TResult>> exp,
             CancellationToken cancellationToken = default)
         {
@@ -53,7 +55,7 @@ namespace JKang.IpcServiceFramework
 
             var data = response.Data;
             if (data != null && _converter.TryConvert(data, typeof(TResult), out var @return))
-                return (TResult) @return;
+                return  (@return is TResult value ? value : default)!;
             
             throw new InvalidOperationException($"Unable to convert returned value to '{typeof(TResult).Name}'.");
 
@@ -70,6 +72,7 @@ namespace JKang.IpcServiceFramework
             throw new InvalidOperationException(response.Failure);
         }
 
+        [return:MaybeNull]
         public async Task<TResult> InvokeAsync<TResult>(Expression<Func<TInterface, Task<TResult>>> exp,
             CancellationToken cancellationToken = default)
         {
@@ -80,7 +83,7 @@ namespace JKang.IpcServiceFramework
             if (response.Succeed && data != null)
             {
                 if (_converter.TryConvert(data, typeof(TResult), out var @return))
-                    return (TResult) @return;
+                    return (@return is TResult value ? value : default)!;
                 throw new InvalidOperationException($"Unable to convert returned value to '{typeof(TResult).Name}'.");
             }
 

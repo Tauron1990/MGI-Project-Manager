@@ -4,42 +4,42 @@
         <name>Tauron.Application.Deployment.Server</name>
     </assembly>
     <members>
-        <member name="T:Tauron.Application.Deployment.Server.Data.RegistratedReporitory">
+        <member name="T:Tauron.Application.Deployment.Server.Engine.Data.RegistratedReporitory">
             <summary>
             Ein Registriertes Software Repository
             </summary>
         </member>
-        <member name="P:Tauron.Application.Deployment.Server.Data.RegistratedReporitory.Name">
+        <member name="P:Tauron.Application.Deployment.Server.Engine.Data.RegistratedReporitory.Name">
             <summary>
             Der Name des Repositorys
             </summary>
         </member>
-        <member name="P:Tauron.Application.Deployment.Server.Data.RegistratedReporitory.Comment">
+        <member name="P:Tauron.Application.Deployment.Server.Engine.Data.RegistratedReporitory.Comment">
             <summary>
             Eine Beschreibung des Repositorys
             </summary>
         </member>
-        <member name="P:Tauron.Application.Deployment.Server.Data.RegistratedReporitory.Provider">
+        <member name="P:Tauron.Application.Deployment.Server.Engine.Data.RegistratedReporitory.Provider">
             <summary>
             Der Provider des Repositorys
             </summary>
         </member>
-        <member name="T:Tauron.Application.Deployment.Server.Data.RepositoryProvider">
+        <member name="T:Tauron.Application.Deployment.Server.Engine.Data.RepositoryProvider">
             <summary>
             Eine Mögliche Quelle für einen Provider
             </summary>
         </member>
-        <member name="P:Tauron.Application.Deployment.Server.Data.RepositoryProvider.Id">
+        <member name="P:Tauron.Application.Deployment.Server.Engine.Data.RepositoryProvider.Id">
             <summary>
             Die id mit der der Server den provider identifizeirt.
             </summary>
         </member>
-        <member name="P:Tauron.Application.Deployment.Server.Data.RepositoryProvider.Name">
+        <member name="P:Tauron.Application.Deployment.Server.Engine.Data.RepositoryProvider.Name">
             <summary>
             Der Name des providers
             </summary>
         </member>
-        <member name="P:Tauron.Application.Deployment.Server.Data.RepositoryProvider.Description">
+        <member name="P:Tauron.Application.Deployment.Server.Engine.Data.RepositoryProvider.Description">
             <summary>
             Die Beschreibung der prviders
             </summary>

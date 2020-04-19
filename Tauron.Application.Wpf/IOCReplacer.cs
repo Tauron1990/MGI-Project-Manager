@@ -125,7 +125,7 @@ namespace Tauron.Application.Wpf
                     Arguments = arguments;
                 }
 
-                public bool Equals(Key other)
+                public bool Equals(Key? other)
                 {
                     if (ReferenceEquals(null, other)) return false;
                     if (ReferenceEquals(this, other)) return true;

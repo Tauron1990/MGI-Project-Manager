@@ -1,0 +1,49 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Tauron.Application.Deployment.Server.Services";
+
+import "Protos/GenericResult.proto";
+
+package Tauron.Application.Deployment.Server.Services;
+
+message DownloadEntry{
+	string Version = 1;
+	string Url = 2;
+}
+
+message ApplicationEntry{
+	string Name = 1;
+	string Last = 2;
+	int64 Id = 3;
+	repeated DownloadEntry Downloads = 4;
+	string RepositoryName = 5;
+	string BranchName = 6;
+}
+
+message ApplicationsRequest{
+	string Name = 1;
+	bool All = 2;
+}
+
+message CheckRequest{
+	string Name = 1;
+	string Version = 2;
+}
+
+message CheckResponse{
+	bool Error = 1;
+	string Message = 2;
+	bool Update = 3;
+	DownloadEntry Entry = 4;
+}
+
+message ApplicationRequest{
+	string Name = 1;
+}
+
+message ApplicationResponse{
+	oneof Application{
+		ApplicationEntry Entry = 1;
+		GenericResult Error = 2;
+	}
+}

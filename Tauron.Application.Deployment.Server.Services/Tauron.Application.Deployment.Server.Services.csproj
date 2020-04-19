@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Protos\DownloadService.proto" />
+    <None Remove="Protos\GenericResult.proto" />
+    <None Remove="Protos\PushNotify.proto" />
+    <None Remove="Protos\RepositoryMessages.proto" />
+    <None Remove="Protos\Serivces.proto" />
+    <None Remove="Protos\SoftwareService.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.11.4" />
+    <PackageReference Include="FluentValidation" Version="8.6.2" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.28.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.28.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Serilog" Version="2.9.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tauron.Application.Logging\Tauron.Application.Logging.csproj" />
+    <ProjectReference Include="..\Tauron.Application.OptionsStore\Tauron.Application.OptionsStore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="Protos\DownloadService.proto" GrpcServices="Both" />
+    <Protobuf Include="Protos\PushNotify.proto" GrpcServices="Both" />
+    <Protobuf Include="Protos\SoftwareService.proto" GrpcServices="Both" />
+    <Protobuf Include="Protos\RepositoryMessages.proto" GrpcServices="Both" />
+    <Protobuf Include="Protos\GenericResult.proto" GrpcServices="Both" />
+    <Protobuf Include="Protos\Serivces.proto" GrpcServices="Both" />
+  </ItemGroup>
+</Project>

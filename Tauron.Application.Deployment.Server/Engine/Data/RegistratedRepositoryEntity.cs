@@ -1,6 +1,6 @@
 ﻿namespace Tauron.Application.Deployment.Server.Engine.Data
 {
-    public sealed class RegistratedReporitoryEntity
+    public sealed class RegistratedRepositoryEntity
     {
         public string? Id { get; set; }
 

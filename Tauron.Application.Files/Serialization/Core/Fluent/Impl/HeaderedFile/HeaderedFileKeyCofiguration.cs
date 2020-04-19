@@ -1,5 +1,4 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Tauron.Application.Files.Serialization.Core.Impl.Mapper.HeaderedText;
 using Tauron.Application.Files.Serialization.Core.Managment;
 
@@ -19,13 +18,13 @@ namespace Tauron.Application.Files.Serialization.Core.Fluent.Impl
         private readonly SimpleMapper<HeaderdFileContext> _mapper;
         private readonly MappingType _mappingType;
         private readonly Type _type;
-        private SimpleConverter<string> _converter;
+        private SimpleConverter<string>? _converter;
 
-        private string _member;
+        private string? _member;
 
-        public HeaderedFileKeyCofiguration([NotNull] IHeaderedFileSerializerConfiguration config,
-            [NotNull] SimpleMapper<HeaderdFileContext> mapper, [NotNull] string keyName,
-            MappingType mappingType, [NotNull] Type type)
+        public HeaderedFileKeyCofiguration(IHeaderedFileSerializerConfiguration config,
+            SimpleMapper<HeaderdFileContext> mapper, string keyName,
+            MappingType mappingType, Type type)
         {
             _config = config;
             _mapper = mapper;
@@ -36,27 +35,17 @@ namespace Tauron.Application.Files.Serialization.Core.Fluent.Impl
 
         public IHeaderedFileSerializerConfiguration Apply()
         {
-            if (_member == null) _member = _keyName;
+            _member ??= _keyName;
 
-            MappingEntry<HeaderdFileContext> map;
-
-            switch (_mappingType)
+            MappingEntry<HeaderdFileContext>? map = _mappingType switch
             {
-                case MappingType.Content:
-                    map = new HeaderedFileContentMapper(_member, _type, _converter);
-                    break;
-                case MappingType.SingleKey:
-                    map = new HeaderedFileKeyMapper(_member, _type, _converter, _keyName);
-                    break;
-                case MappingType.MultiKey:
-                    map = new HeaderedFileListKeyMapper(_member, _type, _keyName, _converter);
-                    break;
-                default:
-                    map = null;
-                    break;
-            }
+                MappingType.Content => new HeaderedFileContentMapper(_member, _type, _converter),
+                MappingType.SingleKey => new HeaderedFileKeyMapper(_member, _type, _converter, _keyName),
+                MappingType.MultiKey => new HeaderedFileListKeyMapper(_member, _type, _keyName, _converter),
+                _ => null
+            };
 
-            if (map == null)
+            if (map != null)
                 _mapper.Entries.Add(map);
 
             return _config;

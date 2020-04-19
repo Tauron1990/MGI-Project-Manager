@@ -1,0 +1,34 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Tauron.Application.Deployment.Server.Services";
+
+import "Protos/GenericResult.proto";
+import "Protos/RepositoryMessages.proto";
+import "Protos/SoftwareService.proto";
+import "Protos/DownloadService.proto";
+import "Protos/PushNotify.proto";
+
+package Tauron.Application.Deployment.Server.Services;
+
+service RepositoryService {
+	rpc GetProviders (GetRepositoryProviders) returns (stream RepositoryProvider);
+	rpc GetRepositorys (RegistratedReporitorys) returns (stream RegistratedReporitory);
+	rpc RegisterRepository(RegisterRepositoryData) returns(GenericResult);
+	rpc Delete(DeleteRepository) returns(GenericResult);
+}
+
+service SoftwareService {
+	rpc GetApplications(ApplicationsRequest) returns(stream ApplicationEntry);
+	rpc GetApplication(ApplicationRequest) returns(ApplicationResponse);
+	rpc CheckUpdate(CheckRequest) returns(CheckResponse);
+
+}
+
+service DownloadService{
+	rpc Download(DownloadEntry) returns(stream ByteMessage);
+}
+
+service ErrorPushSubscription{
+	rpc SubscribeSyncError(Registration) returns(stream SyncError);
+	rpc UnSubscribeSyncError(Registration) returns(Registration);
+}

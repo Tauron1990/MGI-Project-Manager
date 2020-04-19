@@ -5,7 +5,6 @@ using Moq;
 using Neleus.DependencyInjection.Extensions;
 using Tauron.Application.Data.Raven;
 using Tauron.Application.Data.Raven.Impl;
-using Tauron.Application.Deployment.Server.Data;
 using Tauron.Application.Deployment.Server.Engine;
 using Tauron.Application.Deployment.Server.Engine.Data;
 using Tauron.Application.Deployment.Server.Engine.Provider;
@@ -64,13 +63,13 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
         {
             var test = CreateTestBase(m =>
             {
-                m.Setup(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>())).Returns(Task.CompletedTask);
-                m.Setup(rp => rp.Sync(It.IsAny<RegistratedReporitoryEntity>())).Returns(Task.CompletedTask);
+                m.Setup(rp => rp.Init(It.IsAny<RegistratedRepositoryEntity>())).Returns(Task.CompletedTask);
+                m.Setup(rp => rp.Sync(It.IsAny<RegistratedRepositoryEntity>())).Returns(Task.CompletedTask);
 
                 return mm =>
                 {
-                    mm.Verify(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>()), Times.Once);
-                    mm.Verify(rp => rp.Sync(It.IsAny<RegistratedReporitoryEntity>()), Times.Once);
+                    mm.Verify(rp => rp.Init(It.IsAny<RegistratedRepositoryEntity>()), Times.Once);
+                    mm.Verify(rp => rp.Sync(It.IsAny<RegistratedRepositoryEntity>()), Times.Once);
                 };
             });
 
@@ -88,13 +87,13 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
         {
             var test = CreateTestBase(m =>
             {
-                m.Setup(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>())).Returns(Task.CompletedTask);
-                m.Setup(rp => rp.Sync(It.IsAny<RegistratedReporitoryEntity>())).Throws<InvalidOperationException>();
+                m.Setup(rp => rp.Init(It.IsAny<RegistratedRepositoryEntity>())).Returns(Task.CompletedTask);
+                m.Setup(rp => rp.Sync(It.IsAny<RegistratedRepositoryEntity>())).Throws<InvalidOperationException>();
 
                 return mm =>
                 {
-                    mm.Verify(rp => rp.Init(It.IsAny<RegistratedReporitoryEntity>()), Times.Once);
-                    mm.Verify(rp => rp.Sync(It.IsAny<RegistratedReporitoryEntity>()), Times.Never);
+                    mm.Verify(rp => rp.Init(It.IsAny<RegistratedRepositoryEntity>()), Times.Once);
+                    mm.Verify(rp => rp.Sync(It.IsAny<RegistratedRepositoryEntity>()), Times.Never);
                 };
             });
 
@@ -127,10 +126,10 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
                     switch (testType)
                     {
                         case DeleteTestType.NoData:
-                            m.Verify(rp => rp.Delete(It.IsAny<RegistratedReporitoryEntity>()), Times.Never);
+                            m.Verify(rp => rp.Delete(It.IsAny<RegistratedRepositoryEntity>()), Times.Never);
                             break;
                         case DeleteTestType.Data:
-                            m.Verify(rp => rp.Delete(It.IsAny<RegistratedReporitoryEntity>()), Times.Once);
+                            m.Verify(rp => rp.Delete(It.IsAny<RegistratedRepositoryEntity>()), Times.Once);
                             break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(testType), testType, null);
@@ -139,7 +138,7 @@ namespace Tauron.Application.Deployment.Server.Tests.Engine.Provider
             }, store =>
             {
                 if (testType == DeleteTestType.Data)
-                    store.StoreAsync(new RegistratedReporitoryEntity
+                    store.StoreAsync(new RegistratedRepositoryEntity
                     {
                         Id = name,
                         Name = "Name",

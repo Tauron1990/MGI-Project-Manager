@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Reflection;
-using JetBrains.Annotations;
 using Tauron.Application.Files.Serialization.Core.Managment;
 
 namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Ini
 {
     internal sealed class SingleIniMapper : MappingEntryBase<IniContext>
     {
-        private readonly SimpleConverter<string> _converter;
+        private readonly SimpleConverter<string>? _converter;
         private readonly string _key;
         private readonly string _section;
 
-        public SingleIniMapper([CanBeNull] string membername, [NotNull] Type targetType, [CanBeNull] SimpleConverter<string> converter, [NotNull] string section, [NotNull] string key)
+        public SingleIniMapper(string? membername, Type targetType, SimpleConverter<string>? converter, string section, string? key)
             : base(membername, targetType)
         {
             _converter = converter;
@@ -24,14 +23,14 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper.Ini
 
         protected override void Deserialize(object target, IniContext context)
         {
-            var value = _converter.ConvertBack(context.File[_section].GetData(_key).Value);
+            var value = _converter?.ConvertBack(context.File[_section]?.GetData(_key).Value ?? string.Empty);
             SetValue(target, value);
         }
 
         protected override void Serialize(object target, IniContext context)
         {
             var value = GetValue(target);
-            context.File.SetData(_section, _key, _converter.Convert(value));
+            context.File.SetData(_section, _key, _converter?.Convert(value) ?? string.Empty);
         }
 
         public override Exception? VerifyError()

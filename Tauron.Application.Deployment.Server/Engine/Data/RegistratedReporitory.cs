@@ -1,6 +1,4 @@
-﻿using Tauron.Application.Deployment.Server.Engine.Data;
-
-namespace Tauron.Application.Deployment.Server.Data
+﻿namespace Tauron.Application.Deployment.Server.Engine.Data
 {
     /// <summary>
     /// Ein Registriertes Software Repository
@@ -25,10 +23,10 @@ namespace Tauron.Application.Deployment.Server.Data
             
         }
 
-        public RegistratedReporitory(RegistratedReporitoryEntity reporitory, RepositoryProvider provider)
+        public RegistratedReporitory(RegistratedRepositoryEntity repository, RepositoryProvider provider)
         {
-            Name = reporitory.Name;
-            Comment = reporitory.Comment;
+            Name = repository.Name;
+            Comment = repository.Comment;
             Provider = provider;
         }
     }

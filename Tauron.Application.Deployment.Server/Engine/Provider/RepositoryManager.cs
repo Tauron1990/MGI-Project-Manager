@@ -3,11 +3,12 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Anotar.Serilog;
 using Microsoft.Extensions.Options;
 using Neleus.DependencyInjection.Extensions;
 using Raven.Client.Documents;
+using Serilog.Context;
 using Tauron.Application.Data.Raven;
-using Tauron.Application.Deployment.Server.Data;
 using Tauron.Application.Deployment.Server.Engine.Data;
 using Tauron.Application.Logging;
 using Tauron.Application.SoftwareRepo;
@@ -16,6 +17,8 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
 {
     public class RepositoryManager : IRepositoryManager, IDisposable
     {
+        private const string RepoContextProperty = "TargetRepository";
+
         private readonly IDisposable _subscription;
 
 
@@ -45,49 +48,65 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
 
         public async Task<(string? msg, bool ok)> Register(string name, string provider, string source, string comment)
         {
-            using var session = _database.OpenSession(false);
+            using (LogContext.PushProperty(RepoContextProperty, name))
+            {
+                using var session = _database.OpenSession(false);
 
-            if (await session.Query<RegistratedReporitoryEntity>().AnyAsync(rr => rr.Name == name))
-                return ("Repository Existiert schon.", false);
-            if (Providers.FirstOrDefault(p => p.Id == provider) == null)
-                return ("Provider nicht gefunden.", false);
+                if (await session.Query<RegistratedRepositoryEntity>().AnyAsync(rr => rr.Name == name))
+                    return ("Repository Existiert schon.", false);
+                if (Providers.FirstOrDefault(p => p.Id == provider) == null)
+                    return ("Provider nicht gefunden.", false);
 
-            _logger.Information("Creating Software Repository Registration: {Name}", name);
+                _logger.Information("Creating Software Repository Registration: {Name}", name);
 
-            var data = new RegistratedReporitoryEntity
-                       {
-                           Name = name,
-                           Provider = provider,
-                           Source = source,
-                           Comment = comment,
-                           TargetPath = Path.Combine(_fileSystem.RepositoryRoot, name)
-                       };
+                var data = new RegistratedRepositoryEntity
+                           {
+                               Name = name,
+                               Provider = provider,
+                               Source = source,
+                               Comment = comment,
+                               TargetPath = Path.Combine(_fileSystem.RepositoryRoot, name)
+                           };
 
-            if(Directory.Exists(data.TargetPath))
-                Directory.Delete(data.TargetPath);
+                if (Directory.Exists(data.TargetPath))
+                    Directory.Delete(data.TargetPath);
 
-            await _factory.GetByName(provider).Init(data);
+                await _factory.GetByName(provider).Init(data);
 
-            await session.StoreAsync(data);
-            await session.SaveChangesAsync();
+                await session.StoreAsync(data);
+                await session.SaveChangesAsync();
 
-            // ReSharper disable once MethodHasAsyncOverload
-            SyncRepo(data);
+                // ReSharper disable once MethodHasAsyncOverload
+                SyncRepo(data);
 
-            return (null, true);
+                return (null, true);
+            }
         }
 
-        public async Task Delete(string name)
+        public async Task<(string? msg, bool ok)> Delete(string name)
         {
-            using var session = _database.OpenSession(false);
-            var data = await session.Query<RegistratedReporitoryEntity>().FirstOrDefaultAsync(rr => rr.Name == name);
-            if( data == null) return;
+            using (LogContext.PushProperty(RepoContextProperty, name))
+            {
+                try
+                {
+                    using var session = _database.OpenSession(false);
+                    var data = await session.Query<RegistratedRepositoryEntity>().FirstOrDefaultAsync(rr => rr.Name == name);
+                    if (data == null) return ("Kein Repository Gefunden", false);
 
-            var provider = _factory.GetByName(data.Provider);
-            session.Delete(data.Id ?? throw new InvalidOperationException("No Id for Repository Found"));
-            await provider.Delete(data);
+                    var provider = _factory.GetByName(data.Provider);
+                    session.Delete(data.Id ?? throw new InvalidOperationException("No Id for Repository Found"));
+                    await provider.Delete(data);
 
-            await session.SaveChangesAsync();
+                    await session.SaveChangesAsync();
+
+                    return (null, true);
+                }
+                catch (Exception e)
+                {
+                    LogTo.Error(e, "Error on Delete Repository");
+                    return ($"Error: {e.Message}", false);
+                }
+            }
         }
 
         public Task<RegistratedReporitory[]> GetAllRepositorys()
@@ -95,66 +114,88 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
             using var session = _database.OpenSession();
 
             return Task.FromResult(
-                session.Query<RegistratedReporitoryEntity>()
+                session.Query<RegistratedRepositoryEntity>()
                    .Select(rr => new RegistratedReporitory(rr, Providers.First(p => p.Id == rr.Provider)))
                    .ToArray());
+
         }
 
         public async Task<(SoftwareRepository? repo, string msg)> Get(string name)
         {
-            using var session = _database.OpenSession();
+            using (LogContext.PushProperty(RepoContextProperty, name))
+            {
+                using var session = _database.OpenSession();
 
-            var result = await session.Query<RegistratedReporitoryEntity>().FirstOrDefaultAsync(rr => rr.Name == name);
+                var result = await session.Query<RegistratedRepositoryEntity>().FirstOrDefaultAsync(rr => rr.Name == name);
 
-            if (result == null)
-                return (null, "Repository nicht gefunden.");
-            if (!result.SyncCompled)
-                return (null, "Repository nicht Syncronisiert.");
+                if (result == null)
+                    return (null, "Repository nicht gefunden.");
+                if (!result.SyncCompled)
+                    return (null, "Repository nicht Syncronisiert.");
 
-            return (await _repoFactory.Read(result.TargetPath), string.Empty);
+                return (await _repoFactory.Read(result.TargetPath), string.Empty);
+            }
         }
 
         public async Task SyncAll()
         {
-            using var session = _database.OpenSession();
+            using (LogContext.PushProperty("Procedure", "SyncAll"))
+            {
+                using var session = _database.OpenSession();
 
-            foreach (var reporitory in session.Query<RegistratedReporitoryEntity>().Where(rr => rr.SyncCompled)) 
-                await SyncRepoAsync(reporitory);
+                foreach (var reporitory in session.Query<RegistratedRepositoryEntity>().Where(rr => rr.SyncCompled))
+                {
+                    try
+                    {
+                        await SyncRepoAsync(reporitory);
+                    }
+                    catch (Exception e)
+                    {
+                        LogTo.Error(e, "Error On Sync Repository");
+                    }
+                }
+            }
         }
 
         public void Dispose() 
             => _subscription.Dispose();
 
-        private void SyncRepo(RegistratedReporitoryEntity reporitoryEntity)
+        private void SyncRepo(RegistratedRepositoryEntity repositoryEntity)
         {
             Task.Run(async () =>
                      {
-                         try
+                         using (LogContext.PushProperty(RepoContextProperty, repositoryEntity.Name))
                          {
-                             await SyncRepoAsync(reporitoryEntity);
+                             try
+                             {
+                                 await SyncRepoAsync(repositoryEntity);
 
-                             using var session = _database.OpenSession(false);
+                                 using var session = _database.OpenSession(false);
                              
-                             var name = reporitoryEntity.Name;
-                             reporitoryEntity = await session.Query<RegistratedReporitoryEntity>().FirstAsync(e => e.Name == name);
-                             reporitoryEntity.SyncCompled = true;
+                                 var name = repositoryEntity.Name;
+                                 repositoryEntity = await session.Query<RegistratedRepositoryEntity>().FirstAsync(e => e.Name == name);
+                                 repositoryEntity.SyncCompled = true;
 
-                             await session.SaveChangesAsync();
-                         }
-                         catch (Exception e)
-                         {
-                             _logger.Error(e, "Error while Background Syncronize Repository: {Name}", reporitoryEntity.Name);
-                             await Delete(reporitoryEntity.Name);
+                                 await session.SaveChangesAsync();
+                             }
+                             catch (Exception e)
+                             {
+                                 _logger.Error(e, "Error while Background Syncronize Repository: {Name}", repositoryEntity.Name);
+                                 await Delete(repositoryEntity.Name);
 
-                             await _messager.SyncError(reporitoryEntity.Name, e.Message);
+                                 await _messager.SyncError(repositoryEntity.Name, e.Message);
+                             }
                          }
                      });
         }
 
-        private async Task SyncRepoAsync(RegistratedReporitoryEntity reporitoryEntity)
+        private async Task SyncRepoAsync(RegistratedRepositoryEntity repositoryEntity)
         {
-            var provider = _factory.GetByName(reporitoryEntity.Provider);
-            await provider.Sync(reporitoryEntity);
+            using (LogContext.PushProperty(RepoContextProperty, repositoryEntity.Name))
+            {
+                var provider = _factory.GetByName(repositoryEntity.Provider);
+                await provider.Sync(repositoryEntity);
+            }
         }
     }
 }

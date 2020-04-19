@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Tauron.Application.Files.Serialization.Core.Impl.Mapper.Ini;
 using Tauron.Application.Files.Serialization.Core.Managment;
 
@@ -13,14 +12,14 @@ namespace Tauron.Application.Files.Serialization.Core.Fluent.Impl
         private readonly SimpleMapper<IniContext> _mapper;
         private readonly string _section;
         private readonly Type _targetType;
-        private SimpleConverter<string> _converter;
-        private string _key;
-        private SimpleConverter<IEnumerable<string>> _listConverter;
+        private SimpleConverter<string>? _converter;
+        private string? _key;
+        private SimpleConverter<IEnumerable<string>>? _listConverter;
 
-        private string _member;
+        private string? _member;
 
-        public IniKeyConfiguration([NotNull] string section, [NotNull] IIniSerializerConfiguration configuration,
-            [NotNull] SimpleMapper<IniContext> mapper, bool isSingle, [NotNull] Type targetType)
+        public IniKeyConfiguration(string section, IIniSerializerConfiguration configuration,
+            SimpleMapper<IniContext> mapper, bool isSingle, Type targetType)
         {
             _section = section;
             _configuration = configuration;
@@ -36,7 +35,7 @@ namespace Tauron.Application.Files.Serialization.Core.Fluent.Impl
             return this;
         }
 
-        public IIniKeySerializerConfiguration WithKey(string name)
+        public IIniKeySerializerConfiguration WithKey(string? name)
         {
             _key = name;
             return this;
@@ -48,7 +47,7 @@ namespace Tauron.Application.Files.Serialization.Core.Fluent.Impl
             return this;
         }
 
-        public IIniKeySerializerConfiguration WithConverter(SimpleConverter<IEnumerable<string>> converter)
+        public IIniKeySerializerConfiguration WithConverter(SimpleConverter<IEnumerable<string>>? converter)
         {
             _listConverter = converter;
             return this;

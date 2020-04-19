@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using JetBrains.Annotations;
+using Tauron.Application.Files.Serialization.Sources;
 
 namespace Tauron.Application.Files.Serialization.Core
 {
@@ -148,15 +149,11 @@ namespace Tauron.Application.Files.Serialization.Core
             {
             }
 
-            public Stream OpenStream(FileAccess access)
-            {
-                return new MemoryStream(_bytes);
-            }
+            public Stream OpenStream(FileAccess access) 
+                => new MemoryStream(_bytes);
 
-            public IStreamSource OpenSideLocation(string relativePath)
-            {
-                return _original.StreamSource.OpenSideLocation(relativePath);
-            }
+            public IStreamSource OpenSideLocation(string? relativePath) 
+                => _original.StreamSource.OpenSideLocation(relativePath) ?? EmptySource.Instance;
         }
 
         private class BackgroundStream

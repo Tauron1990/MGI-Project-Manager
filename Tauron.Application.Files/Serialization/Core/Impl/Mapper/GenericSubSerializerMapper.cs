@@ -18,7 +18,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper
 
         protected override void Deserialize(object target, TContext context)
         {
-            SetValue(Argument.NotNull(target, nameof(target)), _serializer.Deserialize(GetRealContext(Argument.NotNull(context, nameof(context)), SerializerMode.Deserialize)));
+            SetValue(Argument.NotNull(target, nameof(target)), _serializer?.Deserialize(GetRealContext(Argument.NotNull(context, nameof(context)), SerializerMode.Deserialize)));
         }
 
         protected override void Serialize(object target, TContext context)

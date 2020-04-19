@@ -84,7 +84,7 @@ namespace JKang.IpcServiceFramework
             var genericArguments = method.GetGenericArguments();
             if (genericArguments.Length != request.GenericArguments.Length) return IpcResponse.Fail("Generic arguments mismatch.");
 
-            var args = new object[paramInfos.Length];
+            var args = new object?[paramInfos.Length];
             for (var i = 0; i < args.Length; i++)
             {
                 var origValue = request.Parameters[i];

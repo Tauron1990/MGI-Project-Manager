@@ -23,7 +23,9 @@ namespace Tauron
         public static TType NotNull<TType>([NotNull]TType toCheck, string parameterName)
         {
             Check(() => toCheck == null ? new ArgumentNullException(parameterName) : null);
+#pragma warning disable CS8777 // Parameter must have a non-null value when exiting.
             return toCheck!;
+#pragma warning restore CS8777 // Parameter must have a non-null value when exiting.
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -51,7 +53,9 @@ namespace Tauron
         public static TValue CheckResult<TValue>([NotNull]TValue value, string name)
         {
             Check(() => value == null ? new ArgumentNullException(name) : null);
+#pragma warning disable CS8777 // Parameter must have a non-null value when exiting.
             return value!;
+#pragma warning restore CS8777 // Parameter must have a non-null value when exiting.
         }
     }
 }

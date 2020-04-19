@@ -28,7 +28,7 @@ namespace Tauron.Application.Wpf.Helper
             _reference = new WeakReference(Argument.NotNull(target, nameof(target)));
         }
 
-        public bool Equals(WeakDelegate other)
+        public bool Equals(WeakDelegate? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

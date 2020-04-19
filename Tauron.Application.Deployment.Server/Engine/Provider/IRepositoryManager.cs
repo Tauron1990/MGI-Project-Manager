@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Tauron.Application.Deployment.Server.Data;
+using Tauron.Application.Deployment.Server.Engine.Data;
 using Tauron.Application.SoftwareRepo;
 
 namespace Tauron.Application.Deployment.Server.Engine.Provider
@@ -10,7 +10,7 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
 
         Task<(string? msg, bool ok)> Register(string name, string provider, string source, string comment);
 
-        Task Delete(string name);
+        Task<(string? msg, bool ok)> Delete(string name);
 
         Task<RegistratedReporitory[]> GetAllRepositorys();
 

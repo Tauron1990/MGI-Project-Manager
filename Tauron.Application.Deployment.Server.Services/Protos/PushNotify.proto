@@ -1,0 +1,14 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Tauron.Application.Deployment.Server.Services";
+
+package Tauron.Application.Deployment.Server.Services;
+
+message Registration{
+	string Name = 1;
+}
+
+message SyncError{
+	string RepoName = 1;
+	string Message = 2;
+}

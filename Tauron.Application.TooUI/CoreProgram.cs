@@ -9,7 +9,8 @@ namespace Tauron.Application.ToolUI
     {
         public static async Task Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration().ConfigDefaultLogging("ToolUI").CreateLogger();
+            using var logger = new LoggerConfiguration().ConfigDefaultLogging("ToolUI").CreateLogger();
+            Log.Logger = logger;
 
             var host = Host.CreateDefaultBuilder(args)
                .UseWpf<MainWindow>(configuration => configuration.WithAppFactory(() => new App()))

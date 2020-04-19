@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -8,7 +7,7 @@ namespace JKang.IpcServiceFramework.Services
 {
     public class DefaultValueConverter : IValueConverter
     {
-        public bool TryConvert(object origValue, Type destType, [NotNullWhen(true)]out object? destValue)
+        public bool TryConvert(object origValue, Type destType, out object? destValue)
         {
             if (origValue == null)
             {

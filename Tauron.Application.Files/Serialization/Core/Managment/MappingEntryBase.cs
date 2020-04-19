@@ -7,8 +7,8 @@ namespace Tauron.Application.Files.Serialization.Core.Managment
     public abstract class MappingEntryBase<TContext> : MappingEntry<TContext>
         where TContext : IOrginalContextProvider
     {
-        private readonly Func<object, object>? _accessor;
-        private readonly Action<object, object>? _setter;
+        private readonly Func<object?, object>? _accessor;
+        private readonly Action<object, object?>? _setter;
 
         protected MappingEntryBase(string? membername, Type? targetType)
         {
@@ -43,15 +43,11 @@ namespace Tauron.Application.Files.Serialization.Core.Managment
 
         protected Type? MemberType { get; }
 
-        protected void SetValue(object target, object? value)
-        {
-            _setter?.Invoke(Argument.NotNull(target, nameof(target)), value);
-        }
+        protected void SetValue(object target, object? value) 
+            => _setter?.Invoke(Argument.NotNull(target, nameof(target)), value);
 
-        protected object? GetValue(object target)
-        {
-            return _accessor?.Invoke(Argument.NotNull(target, nameof(target)));
-        }
+        protected object? GetValue(object target) 
+            => _accessor?.Invoke(Argument.NotNull(target, nameof(target)));
 
         public override Exception? VerifyError()
         {

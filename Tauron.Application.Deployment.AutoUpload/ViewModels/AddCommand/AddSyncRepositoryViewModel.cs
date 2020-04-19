@@ -94,7 +94,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
                             LogTo.Information("Clonig Repository");
                             var path = Path.Combine(Settings.SettingsDic, "Repos", Context.Repository.Name, Context.Branch.Name);
 
-                            _gitManager.SyncBranch(Context.Repository.CloneUrl, Context.Branch.Name, path, ProgressHandler, TransferProgressHandler);
+                            _gitManager.CloneBranch(Context.Repository.CloneUrl, Context.Branch.Name, path, ProgressHandler, TransferProgressHandler);
                             if (string.IsNullOrWhiteSpace(path))
                             {
                                 await _messageService.ShowWarningAsync("Das Klonen des Repository ist Fehlgeschlagen", "Fehler");

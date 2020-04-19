@@ -42,7 +42,7 @@ namespace Tauron.Application.Files.Serialization.Core.Impl.Mapper
             }
         }
 
-        public override Exception VerifyError()
+        public override Exception? VerifyError()
         {
             var e = base.VerifyError();
 

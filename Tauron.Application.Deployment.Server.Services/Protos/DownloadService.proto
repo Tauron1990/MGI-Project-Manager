@@ -1,0 +1,10 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Tauron.Application.Deployment.Server.Services";
+
+package Tauron.Application.Deployment.Server.Services;
+
+message ByteMessage{
+	bytes Data = 1;
+	uint32 CRC = 2;
+}
