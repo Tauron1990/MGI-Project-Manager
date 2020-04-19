@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tauron.Application.Deployment.Server.Engine.Provider;
 using Tauron.Application.Logging;
@@ -10,10 +11,14 @@ namespace Tauron.Application.Deployment.Server
     public sealed class SyncService : BackgroundService
     {
         private readonly Timer _timer;
+        private readonly IServiceScope _scope;
         private CancellationTokenRegistration _cancellationTokenRegistration;
 
-        public SyncService(IRepositoryManager manager, ISLogger<SyncService> logger)
+        public SyncService(IServiceScopeFactory serviceScopeFactory, ISLogger<SyncService> logger)
         {
+            _scope = serviceScopeFactory.CreateScope();
+            var manager = _scope.ServiceProvider.GetRequiredService<IRepositoryManager>();
+
             _timer = new Timer((state =>
             {
                 try
@@ -45,6 +50,7 @@ namespace Tauron.Application.Deployment.Server
             _cancellationTokenRegistration.Dispose();
             _timer.Dispose();
             base.Dispose();
+            _scope.Dispose();
         }
     }
 }
