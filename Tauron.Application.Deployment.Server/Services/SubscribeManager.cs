@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using Anotar.Serilog;
-using Grpc.Core;
 using Tauron.Application.Deployment.Server.Engine;
 
 namespace Tauron.Application.Deployment.Server.Services
@@ -12,15 +11,9 @@ namespace Tauron.Application.Deployment.Server.Services
     {
         private sealed class InternalRegistration
         {
-            public CancellationTokenSource Token { get; }
+            public BufferBlock<SyncError> Writer { get; }
 
-            public IAsyncStreamWriter<SyncError> Writer { get; }
-
-            public InternalRegistration(CancellationTokenSource token, IAsyncStreamWriter<SyncError> writer)
-            {
-                Token = token;
-                Writer = writer;
-            }
+            public InternalRegistration() => Writer = new BufferBlock<SyncError>();
         }
 
         private readonly ConcurrentDictionary<string, InternalRegistration> _registrations = new ConcurrentDictionary<string, InternalRegistration>();
@@ -38,7 +31,7 @@ namespace Tauron.Application.Deployment.Server.Services
             {
                 try
                 {
-                    await internalRegistration.Writer.WriteAsync(arg);
+                    await internalRegistration.Writer.SendAsync(arg);
                 }
                 catch (Exception e)
                 {
@@ -48,15 +41,25 @@ namespace Tauron.Application.Deployment.Server.Services
             }
         }
 
-        public bool Add(IAsyncStreamWriter<SyncError> writer, CancellationTokenSource token, string name) 
-            => _registrations.TryAdd(name, new InternalRegistration(token, writer));
+        public (bool OK, BufferBlock<SyncError> Block) Add(string name)
+        {
+            var registration = new InternalRegistration();
+            return (_registrations.TryAdd(name, registration), registration.Writer);
+        }
 
         public void Remove(string name)
         {
             if (_registrations.TryRemove(name, out var reg)) 
-                reg.Token.Cancel();
+                reg.Writer.Complete();
         }
-        public void Dispose() 
-            => _messager.OnError -= MessagerOnOnError;
+        public void Dispose()
+        {
+            _messager.OnError -= MessagerOnOnError;
+
+            foreach (var internalRegistration in _registrations.Values) 
+                internalRegistration.Writer.Complete();
+
+            _registrations.Clear();
+        }
     }
 }

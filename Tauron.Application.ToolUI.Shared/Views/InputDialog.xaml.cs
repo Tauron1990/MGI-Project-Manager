@@ -1,17 +1,17 @@
 ﻿using System.Windows;
-using Syncfusion.SfSkinManager;
+using Tauron.Application.ToolUI.Core;
 
-namespace Tauron.Application.Deployment.AutoUpload.Core.UI
+namespace Tauron.Application.ToolUI.Views
 {
     /// <summary>
     ///     Interaktionslogik für InputDialog.xaml
     /// </summary>
     public partial class InputDialog : Window
     {
-        public InputDialog()
+        public InputDialog(ISkinManager manager)
         {
             InitializeComponent();
-            SfSkinManager.SetVisualStyle(this, VisualStyles.Blend);
+            manager.Apply(this);
 
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
             Owner = System.Windows.Application.Current.MainWindow;

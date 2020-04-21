@@ -76,10 +76,7 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
                 await session.StoreAsync(data);
                 await session.SaveChangesAsync();
 
-                // ReSharper disable once MethodHasAsyncOverload
-                SyncRepo(data);
-
-                return (null, true);
+                return (null, await SyncRepo(data));
             }
         }
 
@@ -147,11 +144,12 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
                 {
                     try
                     {
-                        await SyncRepoAsync(reporitory);
+                        await SyncRepoImpl(reporitory);
                     }
                     catch (Exception e)
                     {
                         LogTo.Error(e, "Error On Sync Repository");
+                        await _messager.SyncError(reporitory.Name, e.Message);
                     }
                 }
             }
@@ -160,36 +158,36 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
         public void Dispose() 
             => _subscription.Dispose();
 
-        private void SyncRepo(RegistratedRepositoryEntity repositoryEntity)
+        private async Task<bool> SyncRepo(RegistratedRepositoryEntity repositoryEntity)
         {
-            Task.Run(async () =>
-                     {
-                         using (LogContext.PushProperty(RepoContextProperty, repositoryEntity.Name))
-                         {
-                             try
-                             {
-                                 await SyncRepoAsync(repositoryEntity);
+            using (LogContext.PushProperty(RepoContextProperty, repositoryEntity.Name))
+            {
+                try
+                {
+                    await SyncRepoImpl(repositoryEntity);
 
-                                 using var session = _database.OpenSession(false);
-                             
-                                 var name = repositoryEntity.Name;
-                                 repositoryEntity = await session.Query<RegistratedRepositoryEntity>().FirstAsync(e => e.Name == name);
-                                 repositoryEntity.SyncCompled = true;
+                    using var session = _database.OpenSession(false);
 
-                                 await session.SaveChangesAsync();
-                             }
-                             catch (Exception e)
-                             {
-                                 _logger.Error(e, "Error while Background Syncronize Repository: {Name}", repositoryEntity.Name);
-                                 await Delete(repositoryEntity.Name);
+                    var name = repositoryEntity.Name;
+                    repositoryEntity = await session.Query<RegistratedRepositoryEntity>().FirstAsync(e => e.Name == name);
+                    repositoryEntity.SyncCompled = true;
 
-                                 await _messager.SyncError(repositoryEntity.Name, e.Message);
-                             }
-                         }
-                     });
+                    await session.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e, "Error while Background Syncronize Repository: {Name}", repositoryEntity.Name);
+                    await Delete(repositoryEntity.Name);
+
+                    await _messager.SyncError(repositoryEntity.Name, e.Message);
+                    return false;
+                }
+
+            }
         }
 
-        private async Task SyncRepoAsync(RegistratedRepositoryEntity repositoryEntity)
+        private async Task SyncRepoImpl(RegistratedRepositoryEntity repositoryEntity)
         {
             using (LogContext.PushProperty(RepoContextProperty, repositoryEntity.Name))
             {

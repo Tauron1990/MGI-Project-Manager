@@ -13,6 +13,7 @@ using Tauron.Application.Deployment.AutoUpload.Models.Github;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 using Tauron.Application.Logging;
 using Tauron.Application.SoftwareRepo;
+using Tauron.Application.ToolUI.Core;
 using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManagerCommand
@@ -24,11 +25,12 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
         private readonly IMessageService _messageService;
         private readonly ISLogger<VersionNewRepoViewModel> _logger;
         private readonly IRepoFactory _repoFactory;
+        private readonly AppInfo _appInfo;
         private readonly RepositoryManager _repositoryManager;
         private readonly Settings _settings;
 
         public VersionNewRepoViewModel(Settings settings, RepositoryManager repositoryManager, GitManager gitManager, IMessageService messageService, ISLogger<VersionNewRepoViewModel> logger,
-            IRepoFactory repoFactory)
+            IRepoFactory repoFactory, AppInfo appInfo)
         {
             _settings = settings;
             _repositoryManager = repositoryManager;
@@ -36,6 +38,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
             _messageService = messageService;
             _logger = logger;
             _repoFactory = repoFactory;
+            _appInfo = appInfo;
         }
 
         public string RepoName { get; set; } = string.Empty;
@@ -92,7 +95,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.VersionRepoManager
                         repo = await _repositoryManager.CreateRepository(RepoName);
                     }
 
-                    var path = Path.Combine(Settings.SettingsDic, "SoftwareRepos", repo.FullName);
+                    var path = Path.Combine(_appInfo.SettingsDic, "SoftwareRepos", repo.FullName);
 
                     currentTask = currentTask.Next("Sync Repository");
 

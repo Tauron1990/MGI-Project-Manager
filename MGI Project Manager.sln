@@ -114,7 +114,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{5BDB902B-63E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Deployment.Server.Services", "Tauron.Application.Deployment.Server.Services\Tauron.Application.Deployment.Server.Services.csproj", "{659966D4-D7A0-4F1F-B4D0-90F7D2D28172}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.Deployment.ServerUI", "Tauron.Application.Deployment.ServerUI\Tauron.Application.Deployment.ServerUI.csproj", "{695176F8-B2D2-44FC-8703-6E10C4BCAA86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Deployment.ServerUI", "Tauron.Application.Deployment.ServerUI\Tauron.Application.Deployment.ServerUI.csproj", "{695176F8-B2D2-44FC-8703-6E10C4BCAA86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.ToolUi.SimpleAuth", "Tauron.Application.ToolUi.SimpleAuth\Tauron.Application.ToolUi.SimpleAuth.csproj", "{095CE4C7-C58C-4CC6-A99E-8D949473C218}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -238,6 +240,10 @@ Global
 		{695176F8-B2D2-44FC-8703-6E10C4BCAA86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{695176F8-B2D2-44FC-8703-6E10C4BCAA86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{695176F8-B2D2-44FC-8703-6E10C4BCAA86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{095CE4C7-C58C-4CC6-A99E-8D949473C218}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{095CE4C7-C58C-4CC6-A99E-8D949473C218}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{095CE4C7-C58C-4CC6-A99E-8D949473C218}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{095CE4C7-C58C-4CC6-A99E-8D949473C218}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -287,6 +293,7 @@ Global
 		{5BDB902B-63E0-42E3-8A75-91857C083E9E} = {97DB54DA-B117-4297-BD4F-7C4EB86ED2D4}
 		{659966D4-D7A0-4F1F-B4D0-90F7D2D28172} = {5572E43F-E5B8-4350-B45D-797B51759FA4}
 		{695176F8-B2D2-44FC-8703-6E10C4BCAA86} = {5572E43F-E5B8-4350-B45D-797B51759FA4}
+		{095CE4C7-C58C-4CC6-A99E-8D949473C218} = {342886BB-C371-4E8F-B683-814E114E2B26}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}

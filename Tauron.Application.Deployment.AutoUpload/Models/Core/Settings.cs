@@ -9,22 +9,21 @@ using Catel.Threading;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
+using Tauron.Application.ToolUI.Core;
 
 namespace Tauron.Application.Deployment.AutoUpload.Models.Core
 {
     public sealed class Settings : ObservableObject
     {
+        private readonly AppInfo _info;
         private static readonly string[] SettingFiles = {"conig.1.json", "conig.2.json", "conig.3.json"};
-
-        public static readonly string SettingsDic = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Tauron", "Tauron.Application.Deployment.AutoUpload");
 
         private readonly AsyncLock _asyncLock = new AsyncLock();
 
         private int _version;
 
-        private Settings()
-        {
-        }
+        private Settings(AppInfo info) 
+            => _info = info;
 
         public IList<string> KnowenRepositorys { get; } = new FastObservableCollection<string>();
 
@@ -76,11 +75,11 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
             await Save();
         }
 
-        public static Settings Create()
+        public static Settings Create(AppInfo info)
         {
             LogTo.Information("Read Settings File");
             var components = SettingFiles
-               .Select(s => Path.Combine(SettingsDic, s))
+               .Select(s => Path.Combine(info.SettingsDic, s))
                .Where(File.Exists)
                .Select(s =>
                        {
@@ -107,7 +106,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
                     target = settingsComponent;
             }
 
-            var settings = new Settings();
+            var settings = new Settings(info);
 
             LogTo.Information("Read Settings");
             if (target != null)
@@ -125,10 +124,10 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Core
 
                 foreach (var settingFile in SettingFiles)
                 {
-                    if (!Directory.Exists(SettingsDic))
-                        Directory.CreateDirectory(SettingsDic);
+                    if (!Directory.Exists(_info.SettingsDic))
+                        Directory.CreateDirectory(_info.SettingsDic);
 
-                    var filePath = Path.Combine(SettingsDic, settingFile);
+                    var filePath = Path.Combine(_info.SettingsDic, settingFile);
 
                     try
                     {

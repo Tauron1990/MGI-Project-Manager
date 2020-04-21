@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Syncfusion.Licensing;
 using Syncfusion.SfSkinManager;
+using Tauron.Application.ToolUI.Core;
 using Tauron.Application.Wpf.AppCore;
 
 namespace Tauron.Application.ToolUI
@@ -24,7 +25,7 @@ namespace Tauron.Application.ToolUI
     /// </summary>
     public partial class MainWindow : IMainWindow
     {
-        public MainWindow(MainWindowViewModel model) 
+        public MainWindow(MainWindowViewModel model, ISkinManager manager) 
             : base(model)
         {
             model.PropertyChanged += ModelOnPropertyChanged; 
@@ -38,7 +39,7 @@ namespace Tauron.Application.ToolUI
             ResizeMode = ResizeMode.CanResize;
             WindowStartupLocation = WindowStartupLocation.Manual;
 
-            SfSkinManager.SetVisualStyle(this, VisualStyles.Blend);
+            manager.Apply(this);
             InitializeComponent();
             
         }

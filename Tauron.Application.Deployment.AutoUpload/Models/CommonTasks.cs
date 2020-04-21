@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
+using Tauron.Application.ToolUI.Login;
 
 namespace Tauron.Application.Deployment.AutoUpload.Models
 {

@@ -15,4 +15,10 @@
     <ProjectReference Include="..\Tauron.Application.Wpf\Tauron.Application.Wpf.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\">
+      <FolderName>Views</FolderName>
+    </Folder>
+  </ItemGroup>
+
 </Project>

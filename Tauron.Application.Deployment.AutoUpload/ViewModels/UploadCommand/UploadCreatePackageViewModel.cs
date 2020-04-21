@@ -15,6 +15,7 @@ using Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
 using Tauron.Application.Logging;
 using Tauron.Application.SoftwareRepo;
+using Tauron.Application.ToolUI.Core;
 using Tauron.Application.Wpf;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
@@ -31,16 +32,18 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
         private readonly RepositoryManager _repositoryManager;
         private readonly IRepoFactory _repoFactory;
         private readonly ISLogger<UploadCreatePackageViewModel> _logger;
+        private readonly AppInfo _appInfo;
         private readonly CancellationToken _token;
 
         public UploadCreatePackageViewModel(IMessageService messageService, GitManager gitManager, RepositoryManager repositoryManager, IRepoFactory repoFactory, 
-            ISLogger<UploadCreatePackageViewModel> logger)
+            ISLogger<UploadCreatePackageViewModel> logger, AppInfo appInfo)
         {
             _messageService = messageService;
             _gitManager = gitManager;
             _repositoryManager = repositoryManager;
             _repoFactory = repoFactory;
             _logger = logger;
+            _appInfo = appInfo;
             _token = _cancel.Token;
             _operation = new ProcessItem(AddConsole, ThrowCanceled, () => IsFailed, s => CancelLabel = s);
         }
@@ -127,7 +130,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.UploadCommand
                         async () =>
                         {
                             _logger.Information("Creating Package Zip File");
-                            packagePath = Path.Combine(Settings.SettingsDic, "package.zip");
+                            packagePath = Path.Combine(_appInfo.SettingsDic, "package.zip");
                             name = Path.GetFileNameWithoutExtension(Context.Repository?.ProjectName ?? string.Empty);
                             if (string.IsNullOrWhiteSpace(name))
                             {

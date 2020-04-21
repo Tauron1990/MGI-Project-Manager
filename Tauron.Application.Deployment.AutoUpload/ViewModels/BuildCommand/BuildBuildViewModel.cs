@@ -9,9 +9,9 @@ using Catel.Services;
 using Scrutor;
 using Serilog.Context;
 using Tauron.Application.Deployment.AutoUpload.Models.Build;
-using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Git;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
+using Tauron.Application.ToolUI.Core;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
 {
@@ -20,13 +20,15 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
     {
         private readonly Dispatcher _dispatcher;
         private readonly GitManager _gitManager;
+        private readonly AppInfo _appInfo;
         private readonly IMessageService _messageService;
 
-        public BuildBuildViewModel(IMessageService messageService, Dispatcher dispatcher, GitManager gitManager)
+        public BuildBuildViewModel(IMessageService messageService, Dispatcher dispatcher, GitManager gitManager, AppInfo appInfo)
         {
             _messageService = messageService;
             _dispatcher = dispatcher;
             _gitManager = gitManager;
+            _appInfo = appInfo;
         }
 
         public int ErrorCount { get; set; }
@@ -59,7 +61,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.BuildCommand
                 try
                 {
                     //var targetPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ?? string.Empty, "Output");
-                    var targetPath = Path.Combine(Settings.SettingsDic, "Output");
+                    var targetPath = Path.Combine(_appInfo.SettingsDic, "Output");
                     Context.Location = targetPath;
 
                     if (Directory.Exists(targetPath))

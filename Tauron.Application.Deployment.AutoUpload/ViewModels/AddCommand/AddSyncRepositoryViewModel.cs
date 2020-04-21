@@ -12,6 +12,7 @@ using Tauron.Application.Deployment.AutoUpload.Models;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Git;
 using Tauron.Application.Deployment.AutoUpload.ViewModels.Operations;
+using Tauron.Application.ToolUI.Core;
 
 namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
 {
@@ -20,6 +21,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
     {
         private readonly CommonTasks _commonTasks;
         private readonly Dispatcher _dispatcher;
+        private readonly AppInfo _appInfo;
         private readonly GitManager _gitManager;
         private readonly IMessageService _messageService;
         private readonly Settings _settings;
@@ -29,13 +31,14 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
         private int _updateCount1 = 15;
         private int _updateCount2 = 15;
 
-        public AddSyncRepositoryViewModel(IMessageService messageService, GitManager gitManager, Settings settings, CommonTasks commonTasks, Dispatcher dispatcher)
+        public AddSyncRepositoryViewModel(IMessageService messageService, GitManager gitManager, Settings settings, CommonTasks commonTasks, Dispatcher dispatcher, AppInfo appInfo)
         {
             _messageService = messageService;
             _gitManager = gitManager;
             _settings = settings;
             _commonTasks = commonTasks;
             _dispatcher = dispatcher;
+            _appInfo = appInfo;
         }
 
         public string OutputLines { get; set; } = string.Empty;
@@ -92,7 +95,7 @@ namespace Tauron.Application.Deployment.AutoUpload.ViewModels.AddCommand
                         else
                         {
                             LogTo.Information("Clonig Repository");
-                            var path = Path.Combine(Settings.SettingsDic, "Repos", Context.Repository.Name, Context.Branch.Name);
+                            var path = Path.Combine(_appInfo.SettingsDic, "Repos", Context.Repository.Name, Context.Branch.Name);
 
                             _gitManager.CloneBranch(Context.Repository.CloneUrl, Context.Branch.Name, path, ProgressHandler, TransferProgressHandler);
                             if (string.IsNullOrWhiteSpace(path))

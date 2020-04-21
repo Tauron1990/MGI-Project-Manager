@@ -4,9 +4,9 @@ using System.Security.Cryptography;
 using System.Text;
 using JetBrains.Annotations;
 using Scrutor;
-using Tauron.Application.Deployment.AutoUpload.Models.Core;
+using Tauron.Application.ToolUI.Core;
 
-namespace Tauron.Application.Deployment.AutoUpload.Core
+namespace Tauron.Application.ToolUI.Login
 {
     [ServiceDescriptor]
     [UsedImplicitly]
@@ -14,9 +14,9 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
     {
         private readonly string _targetPath;
 
-        public CredinalDataStore()
+        public CredinalDataStore(AppInfo info)
         {
-            _targetPath = Path.Combine(Settings.SettingsDic, "Account");
+            _targetPath = Path.Combine(info.SettingsDic, "Account");
 
             if (!Directory.Exists(_targetPath))
                 Directory.CreateDirectory(_targetPath);

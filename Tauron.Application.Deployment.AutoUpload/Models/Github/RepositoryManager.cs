@@ -8,6 +8,7 @@ using Anotar.Serilog;
 using Octokit;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.Core;
+using Tauron.Application.ToolUI.Login;
 using FileMode = System.IO.FileMode;
 
 namespace Tauron.Application.Deployment.AutoUpload.Models.Github
@@ -106,7 +107,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Models.Github
             }
 
             public Task<string?> GetCredentials()
-                => Task.FromResult(SecureStringToString(_service.GetToken(_name)));
+                => Task.FromResult(SecureStringToString(_service.GetGitHubToken(_name)));
 
             public void Invalidate()
                 => _service.DeleteCredinals(_name);

@@ -22,7 +22,7 @@ namespace Tauron.Application.ToolUI
             services.AddSingleton<MainWindowViewModel>();
             services.AddScoped<IToolSwitcher, ToolSwitcher>();
             services.AddTransient(s => Log.Logger);
-            services.AddSingleton(s => Settings.Create());
+            services.AddSingleton(s => Settings.Create(s.GetRequiredService<AppInfo>()));
 
             services.AddTauronLogging();
             services.AddSoftwareRepo();

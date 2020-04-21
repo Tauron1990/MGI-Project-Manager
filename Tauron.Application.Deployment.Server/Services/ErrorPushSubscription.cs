@@ -1,5 +1,7 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using Grpc.Core;
 using Tauron.Application.Deployment.Server.Services.Validatoren;
 
@@ -15,14 +17,13 @@ namespace Tauron.Application.Deployment.Server.Services
         public override async Task SubscribeSyncError(Registration request, IServerStreamWriter<SyncError> responseStream, ServerCallContext context)
         {
             await RegistrationValidation.ForAsync(request);
-
-            using var token = new CancellationTokenSource();
-
-            if (!_manager.Add(responseStream, token, request.Name))
+            
+            var (ok, block) = _manager.Add(request.Name);
+            if (!ok)
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "Registrien Existiert schon"));
 
-            while (!token.IsCancellationRequested) 
-                await Task.Delay(1000, token.Token);
+            while (await block.OutputAvailableAsync()) 
+                await responseStream.WriteAsync(await block.ReceiveAsync());
         }
 
         public override async Task<Registration> UnSubscribeSyncError(Registration request, ServerCallContext context)

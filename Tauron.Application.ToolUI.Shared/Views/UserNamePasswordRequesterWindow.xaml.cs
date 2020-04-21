@@ -1,19 +1,19 @@
 ﻿using System.Security;
 using System.Windows;
-using Syncfusion.SfSkinManager;
+using Tauron.Application.ToolUI.Core;
 
-namespace Tauron.Application.Deployment.AutoUpload.Core.UI
+namespace Tauron.Application.ToolUI.Views
 {
     /// <summary>
     ///     Interaktionslogik für UserNamePasswordRequesterWindow.xaml
     /// </summary>
     public partial class UserNamePasswordRequesterWindow : Window
     {
-        public UserNamePasswordRequesterWindow()
+        public UserNamePasswordRequesterWindow(ISkinManager skinManager)
         {
             InitializeComponent();
 
-            SfSkinManager.SetVisualStyle(this, VisualStyles.Blend);
+            skinManager.Apply(this);
 
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
             Owner = System.Windows.Application.Current.MainWindow;

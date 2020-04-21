@@ -6,30 +6,33 @@ using System.Threading.Tasks;
 using Catel.Services;
 using JetBrains.Annotations;
 using Scrutor;
-using Tauron.Application.Deployment.AutoUpload.Core.UI;
+using Tauron.Application.ToolUI.Core;
+using Tauron.Application.ToolUI.Views;
 
-namespace Tauron.Application.Deployment.AutoUpload.Core
+namespace Tauron.Application.ToolUI.Login
 {
     [ServiceDescriptor]
     [UsedImplicitly]
-    public class InputService
+    public class InputService 
     {
         private readonly CredinalDataStore _dataStore;
+        private readonly ISkinManager _skinManager;
 
         private readonly IDispatcherService _dispatcherService;
         private readonly ConcurrentDictionary<string, UserCredinals> _userCredinals = new ConcurrentDictionary<string, UserCredinals>();
 
-        public InputService(IDispatcherService dispatcherService, CredinalDataStore dataStore)
+        public InputService(IDispatcherService dispatcherService, CredinalDataStore dataStore, ISkinManager skinManager)
         {
             _dispatcherService = dispatcherService;
             _dataStore = dataStore;
+            _skinManager = skinManager;
         }
 
         public async Task<string> Request(string caption, string description)
         {
             return await _dispatcherService.InvokeAsync(() =>
                                                         {
-                                                            var diag = new InputDialog
+                                                            var diag = new InputDialog(_skinManager)
                                                                        {
                                                                            AllowCancel = true,
                                                                            InstructionText = description,
@@ -40,7 +43,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
                                                         });
         }
 
-        public SecureString? GetToken(string userName)
+        public SecureString? GetGitHubToken(string userName)
         {
             if (string.IsNullOrWhiteSpace(userName))
                 return null;
@@ -49,7 +52,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
 
             return RequestGeneric(realUserName, () =>
                                                 {
-                                                    var window = new InputDialog
+                                                    var window = new InputDialog(_skinManager)
                                                                  {
                                                                      AllowCancel = false,
                                                                      InstructionText = $"Github Token für: {userName}",
@@ -69,7 +72,7 @@ namespace Tauron.Application.Deployment.AutoUpload.Core
         public (string? UserName, SecureString? Passwort) Request(string userName) =>
             RequestGeneric(userName, () =>
                                      {
-                                         var window = new UserNamePasswordRequesterWindow {UserName = userName};
+                                         var window = new UserNamePasswordRequesterWindow(_skinManager) {UserName = userName};
                                          return window.ShowDialog() == true ? (window.UserName, window.Password) : default;
                                      });
 

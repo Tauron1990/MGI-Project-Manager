@@ -5,9 +5,9 @@ using Anotar.Serilog;
 using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
 using Scrutor;
-using Tauron.Application.Deployment.AutoUpload.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Deployment.AutoUpload.Models.Github;
+using Tauron.Application.ToolUI.Login;
 
 namespace Tauron.Application.Deployment.AutoUpload.Models.Git
 {
