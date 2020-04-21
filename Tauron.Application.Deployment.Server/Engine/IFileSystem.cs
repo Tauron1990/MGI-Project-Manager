@@ -1,7 +1,9 @@
-﻿namespace Tauron.Application.Deployment.Server.Engine
+﻿using Tauron.Application.Files.VirtualFiles;
+
+namespace Tauron.Application.Deployment.Server.Engine
 {
     public interface IFileSystem
     {
-        string RepositoryRoot { get; }
+        IDirectory RepositoryRoot { get; }
     }
 }

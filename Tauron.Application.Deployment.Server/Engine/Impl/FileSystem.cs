@@ -3,6 +3,10 @@ using System.IO;
 using System.Threading;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
+using Tauron.Application.Files.VirtualFiles;
+using Tauron.Application.Files.VirtualFiles.InMemory;
+using Tauron.Application.Files.VirtualFiles.InMemory.Data;
+using Tauron.Application.Files.VirtualFiles.LocalFileSystem;
 
 namespace Tauron.Application.Deployment.Server.Engine.Impl
 {
@@ -11,7 +15,7 @@ namespace Tauron.Application.Deployment.Server.Engine.Impl
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IDisposable _subscription;
         private LocalSettings _settings;
-        private string _repositoryRoot;
+        private IDirectory _repositoryRoot;
 
         public FileSystem(IOptionsMonitor<LocalSettings> localOptions, IWebHostEnvironment webHostEnvironment)
         {
@@ -25,7 +29,7 @@ namespace Tauron.Application.Deployment.Server.Engine.Impl
             UpdatePaths();
         }
 
-        public string RepositoryRoot
+        public IDirectory RepositoryRoot
         {
             get => _repositoryRoot;
             private set => _repositoryRoot = value;
@@ -36,16 +40,20 @@ namespace Tauron.Application.Deployment.Server.Engine.Impl
             var basePath = _settings.ServerFileMode switch
             {
                 ServerFileMode.Unkowen => "Invalid",
-                ServerFileMode.ApplicationData => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tauron"),
-                ServerFileMode.ContentRoot => Path.Combine(_webHostEnvironment.ContentRootPath, "AppData"),
+                ServerFileMode.ApplicationData => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tauron", "Repositorys"),
+                ServerFileMode.ContentRoot => Path.Combine(_webHostEnvironment.ContentRootPath, "AppData", "Repositorys"),
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-            if (basePath == "Invalid")
-                return;
-
-
-            Interlocked.Exchange(ref _repositoryRoot, Path.Combine(basePath, "Repositorys"));
+            switch (basePath)
+            {
+                case "Invalid":
+                    Interlocked.Exchange(ref _repositoryRoot, new InMemoryFileSystem(basePath, basePath, new DataDirectory(basePath)));
+                    break;
+                default:
+                    Interlocked.Exchange(ref _repositoryRoot, new LocalFileSystem(basePath));
+                    break;
+            }
         }
 
         public void Dispose() 

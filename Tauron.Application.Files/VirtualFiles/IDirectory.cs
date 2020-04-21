@@ -12,6 +12,8 @@ namespace Tauron.Application.Files.VirtualFiles
 
         IFile GetFile(string name);
 
+        IDirectory GetDirectory(string name);
+
         IDirectory MoveTo(string location);
     }
 }

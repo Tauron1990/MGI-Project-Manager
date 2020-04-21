@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -65,13 +64,14 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
                                Provider = provider,
                                Source = source,
                                Comment = comment,
-                               TargetPath = Path.Combine(_fileSystem.RepositoryRoot, name)
+                               TargetPath = name
                            };
 
-                if (Directory.Exists(data.TargetPath))
-                    Directory.Delete(data.TargetPath);
+                var dic = _fileSystem.RepositoryRoot.GetDirectory(data.TargetPath);
+                if (dic.Exist)
+                    dic.Delete();
 
-                await _factory.GetByName(provider).Init(data);
+                await _factory.GetByName(provider).Init(data, dic);
 
                 await session.StoreAsync(data);
                 await session.SaveChangesAsync();
@@ -95,7 +95,7 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
 
                     var provider = _factory.GetByName(data.Provider);
                     session.Delete(data.Id ?? throw new InvalidOperationException("No Id for Repository Found"));
-                    await provider.Delete(data);
+                    await provider.Delete(data, _fileSystem.RepositoryRoot.GetDirectory(data.TargetPath));
 
                     await session.SaveChangesAsync();
 
@@ -133,7 +133,7 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
                 if (!result.SyncCompled)
                     return (null, "Repository nicht Syncronisiert.");
 
-                return (await _repoFactory.Read(result.TargetPath), string.Empty);
+                return (await _repoFactory.Read(_fileSystem.RepositoryRoot.GetDirectory(result.TargetPath)), string.Empty);
             }
         }
 
@@ -194,7 +194,7 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
             using (LogContext.PushProperty(RepoContextProperty, repositoryEntity.Name))
             {
                 var provider = _factory.GetByName(repositoryEntity.Provider);
-                await provider.Sync(repositoryEntity);
+                await provider.Sync(repositoryEntity, _fileSystem.RepositoryRoot.GetDirectory(repositoryEntity.TargetPath));
             }
         }
     }
