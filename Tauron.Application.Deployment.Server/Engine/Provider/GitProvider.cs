@@ -32,7 +32,7 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
                 if (directory is LocalDirectory)
                 {
                     LogTo.Information("Clone Repository {RepoPath} -- {Url}", repository.TargetPath, repository.Source);
-                    Repository.Clone(repository.Source, repository.TargetPath);
+                    Repository.Clone(repository.Source, directory.OriginalPath);
                 }
                 else
                 {
@@ -54,7 +54,7 @@ namespace Tauron.Application.Deployment.Server.Engine.Provider
                         return;
                     }
 
-                    using var repo = new Repository(repository.TargetPath);
+                    using var repo = new Repository(directory.OriginalPath);
                     Commands.Pull(repo, _settings.CurrentValue.Signature.Create(), new PullOptions
                                                                                    {
                                                                                        MergeOptions = new MergeOptions

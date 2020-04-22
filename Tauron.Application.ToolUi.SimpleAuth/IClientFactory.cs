@@ -6,6 +6,6 @@ namespace Tauron.Application.ToolUi.SimpleAuth
     public interface IClientFactory<out TClient>
         where TClient : ClientBase
     {
-        Task<TClient> Create(string host);
+        TClient Create(string host);
     }
 }

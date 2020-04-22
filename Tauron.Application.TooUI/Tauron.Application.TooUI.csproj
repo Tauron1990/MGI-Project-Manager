@@ -30,6 +30,7 @@
     <ProjectReference Include="..\Tauron.Application.Logging\Tauron.Application.Logging.csproj" />
     <ProjectReference Include="..\Tauron.Application.SoftwareRepo\Tauron.Application.SoftwareRepo.csproj" />
     <ProjectReference Include="..\Tauron.Application.ToolUI.Shared\Tauron.Application.ToolUI.Shared.csproj" />
+    <ProjectReference Include="..\Tauron.Application.ToolUi.SimpleAuth\Tauron.Application.ToolUi.SimpleAuth.csproj" />
     <ProjectReference Include="..\Tauron.Application.Wpf\Tauron.Application.Wpf.csproj" />
   </ItemGroup>
 

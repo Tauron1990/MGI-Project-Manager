@@ -5,6 +5,6 @@ namespace Tauron.Application.ToolUi.SimpleAuth
     public interface IClientFabricator<out TClient>
         where TClient : ClientBase
     {
-        TClient Construct(CallInvoker invoker);
+        TClient Construct(ChannelBase invoker);
     }
 }

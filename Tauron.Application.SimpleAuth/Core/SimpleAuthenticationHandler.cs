@@ -54,7 +54,7 @@ namespace Tauron.Application.SimpleAuth.Core
             if (parts.Length != 2) return AuthenticateResult.Fail("Falscher Basic authentication header");
             var type = parts[0];
             var password = parts[1];
-            var isValid = false;
+            bool isValid;
 
             switch (type)
             {

@@ -3,40 +3,30 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Client\Login.proto" />
-    <None Remove="google\rpc\code.proto" />
-    <None Remove="google\rpc\status.proto" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Tauron.Application.ToolUI.Shared\Tauron.Application.ToolUI.Shared.csproj" />
+    <ProjectReference Include="..\Tauron.Application.ToolUi.SimpleAuth.Client\Tauron.Application.ToolUi.SimpleAuth.Client.csproj" />
     <ProjectReference Include="..\Tauron.Application.Wpf\Tauron.Application.Wpf.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Anotar.Serilog.Fody" Version="5.1.0" />
+    <PackageReference Include="Catel.Fody" Version="4.3.0" />
+    <PackageReference Include="Fody" Version="6.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Google.Protobuf" Version="3.11.4" />
     <PackageReference Include="Grpc" Version="2.28.1" />
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.28.0" />
     <PackageReference Include="Grpc.Tools" Version="2.28.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="Client\Login.proto" GrpcServices="Client" />
-    <Protobuf Include="google\rpc\code.proto">
-      <SourceUrl>https://raw.githubusercontent.com/googleapis/googleapis/master/google/rpc/code.proto</SourceUrl>
-    </Protobuf>
-    <Protobuf Include="google\rpc\status.proto">
-      <SourceUrl>https://raw.githubusercontent.com/googleapis/googleapis/master/google/rpc/status.proto</SourceUrl>
-    </Protobuf>
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
   </ItemGroup>
 
 </Project>
