@@ -7,12 +7,13 @@ import "Protos/RepositoryMessages.proto";
 import "Protos/SoftwareService.proto";
 import "Protos/DownloadService.proto";
 import "Protos/PushNotify.proto";
+import "google/protobuf/empty.proto";
 
 package Tauron.Application.Deployment.Server.Services;
 
 service RepositoryService {
 	rpc GetProviders (GetRepositoryProviders) returns (stream RepositoryProvider);
-	rpc GetRepositorys (RegistratedReporitorys) returns (stream RegistratedReporitory);
+	rpc GetRepositorys (google.protobuf.Empty) returns (stream RegistratedReporitory);
 	rpc RegisterRepository(RegisterRepositoryData) returns(GenericResult);
 	rpc Delete(DeleteRepository) returns(GenericResult);
 }

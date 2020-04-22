@@ -5,7 +5,7 @@ using Scrutor;
 
 namespace Tauron.Application.ToolUi.SimpleAuth.Client
 {
-    [ServiceDescriptor(typeof(IClientFactory<>), ServiceLifetime.Scoped)]
+    [ServiceDescriptor(typeof(IClientFactory<>), ServiceLifetime.Transient)]
     [UsedImplicitly]
     public sealed class ClientFactory<TClient> : IClientFactory<TClient>
         where TClient : ClientBase
