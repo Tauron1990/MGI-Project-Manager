@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Tauron.Application.Logging;
+using Tauron.Application.Wpf.SerilogViewer;
 
 namespace Tauron.Application.ToolUI
 {
@@ -9,7 +10,10 @@ namespace Tauron.Application.ToolUI
     {
         public static async Task Main(string[] args)
         {
-            using var logger = new LoggerConfiguration().ConfigDefaultLogging("ToolUI").CreateLogger();
+            using var logger = new LoggerConfiguration()
+                .ConfigDefaultLogging("ToolUI")
+                .WriteTo.Sink<SeriLogViewerSink>()
+                .CreateLogger();
             Log.Logger = logger;
 
             var host = Host.CreateDefaultBuilder(args)

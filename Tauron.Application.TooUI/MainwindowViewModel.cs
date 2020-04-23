@@ -2,11 +2,13 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
+using Catel.IoC;
 using Catel.MVVM;
 using Microsoft.Extensions.DependencyInjection;
 using Tauron.Application.Deployment.AutoUpload.ViewModels;
 using Tauron.Application.Logging;
 using Tauron.Application.ToolUI.ViewModels;
+using Tauron.Application.ToolUI.Views;
 using Tauron.Application.Wpf;
 
 namespace Tauron.Application.ToolUI
@@ -56,6 +58,12 @@ namespace Tauron.Application.ToolUI
         {
             _logger.Information("Application Shutdown");
             _lifetime.Shutdown();
+        }
+
+        [CommandTarget(Synchronize = true)]
+        public void ShowLogs()
+        {
+            DependencyResolver.Resolve<LogEntryWindow>().Show();
         }
 
         internal void SwitchModel<TType>()

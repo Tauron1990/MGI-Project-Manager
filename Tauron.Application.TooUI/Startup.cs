@@ -6,6 +6,7 @@ using Serilog;
 using Tauron.Application.Deployment.AutoUpload.Models.Core;
 using Tauron.Application.Logging;
 using Tauron.Application.ToolUI.Core;
+using Tauron.Application.ToolUI.Views;
 using Tauron.Application.Wpf.AppCore;
 
 namespace Tauron.Application.ToolUI
@@ -23,6 +24,8 @@ namespace Tauron.Application.ToolUI
             services.AddScoped<IToolSwitcher, ToolSwitcher>();
             services.AddTransient(s => Log.Logger);
             services.AddSingleton(s => Settings.Create(s.GetRequiredService<AppInfo>()));
+
+            services.AddTransient(p => ActivatorUtilities.CreateInstance<LogEntryWindow>(p));
 
             services.AddTauronLogging();
             services.AddSoftwareRepo();

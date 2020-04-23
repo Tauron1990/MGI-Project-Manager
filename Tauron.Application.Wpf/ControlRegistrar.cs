@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Threading;
+using Catel.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
 using Tauron.Application.Wpf.UI;
@@ -21,7 +22,8 @@ namespace Tauron.Application.Wpf
 
         private static object DispatcherInvoke(IServiceProvider dipatcher, Func<IServiceProvider, object> invoker)
         {
-            return dipatcher.GetRequiredService<Dispatcher>().Invoke(() => invoker(dipatcher));
+            var dis = System.Windows.Application.Current.Dispatcher;
+            return dis.Invoke(() => invoker(dipatcher));
         }
 
         private class Trampoline

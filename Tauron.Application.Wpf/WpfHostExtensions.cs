@@ -17,10 +17,10 @@ namespace Microsoft.Extensions.Hosting
         {
             hostBuilder.ConfigureServices(sc =>
             {
+                IocReplacer.Create(sc);
+
                 sc.TryAddTransient<IMainWindow, TMainWindow>();
                 sc.Configure<HostOptions>(o => o.ShutdownTimeout = TimeSpan.FromMinutes(1));
-
-                IOCReplacer.Create(sc);
 
                 var wpf = new WpfConfiguration(sc);
                 config?.Invoke(wpf);

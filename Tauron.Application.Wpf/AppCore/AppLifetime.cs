@@ -37,7 +37,7 @@ namespace Tauron.Application.Wpf.AppCore
                 using var scope = _factory.CreateScope();
 
                 LogManager.AddListener(new CatelListner(scope.ServiceProvider.GetRequiredService<ILogger<CatelListner>>()));
-                IOCReplacer.SetServiceProvider(scope.ServiceProvider);
+                IocReplacer.SetServiceProvider(scope.ServiceProvider);
 
                 _internalApplication = scope.ServiceProvider.GetService<IAppFactory>()?.Create() ?? new System.Windows.Application();
 

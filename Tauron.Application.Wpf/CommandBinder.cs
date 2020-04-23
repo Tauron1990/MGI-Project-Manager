@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Catel.IoC;
 using Catel.Logging;
 using Catel.Services;
@@ -398,7 +399,7 @@ namespace Tauron.Application.Wpf
 
                 private class TaskFactory
                 {
-                    private static readonly IDispatcherService DispatcherService = DependencyResolverManager.Default.DefaultDependencyResolver.Resolve<IDispatcherService>();
+                    private static readonly Dispatcher DispatcherService = System.Windows.Application.Current.Dispatcher;
 
                     private readonly Func<object, ExecutedRoutedEventArgs, Task> _del;
                     private readonly bool _sync;
@@ -414,7 +415,7 @@ namespace Tauron.Application.Wpf
                         try
                         {
                             if (_sync)
-                                await DispatcherService.InvokeTaskAsync(async () => await _del(parm1, parm2)).ConfigureAwait(false);
+                                await DispatcherService.InvokeAsync(async () => await _del(parm1, parm2));
                             else
                                 await _del(parm1, parm2).ConfigureAwait(false);
                         }

@@ -8,10 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Asset\floppy.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Serilog" Version="2.9.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Tauron.Application.Wpf.SerilogViewer\Tauron.Application.Wpf.SerilogViewer.csproj" />
     <ProjectReference Include="..\Tauron.Application.Wpf\Tauron.Application.Wpf.csproj" />
   </ItemGroup>
 
@@ -19,6 +24,10 @@
     <Folder Include="Views\">
       <FolderName>Views</FolderName>
     </Folder>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Asset\floppy.png" />
   </ItemGroup>
 
 </Project>

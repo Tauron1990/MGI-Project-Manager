@@ -21,6 +21,8 @@
             </MenuItem>
             <MenuItem Header="Ansicht">
                 <MenuItem Header="Upload Tool" tau:CommandBinder.Command="StartUpload"/>
+                <Separator/>
+                <MenuItem Header="Logs" tau:CommandBinder.Command="ShowLogs"/>
             </MenuItem>
         </Menu>
         <ContentControl Content="{ui:ViewModelBinding MainContent}"/>

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Anotar.Serilog;
 using Catel.MVVM;
 using JetBrains.Annotations;
 using Scrutor;
+using Serilog.Context;
 using Tauron.Application.SimpleAuth.Api.Proto;
 using Tauron.Application.ToolUi.SimpleAuth.Client;
 using Tauron.Application.Wpf;
@@ -45,33 +47,58 @@ namespace Tauron.Application.ToolUi.SimpleAuth
         [CommandTarget]
         public async Task SetPassword()
         {
-            IsRunning = true;
-            try
+            using (LogContext.PushProperty("Host", TargetHost))
             {
-                if (!Uri.TryCreate(TargetHost, UriKind.Absolute, out _))
+                IsRunning = true;
+                try
                 {
-                    Error = "Falsches Uri Format";
-                    return;
+                    LogTo.Information("Set new Passwort");
+
+                    if (!Uri.TryCreate(TargetHost, UriKind.Absolute, out _))
+                    {
+                        LogTo.Warning("Wrong Host Uri Format");
+                        Error = "Falsches Uri Format";
+                        return;
+                    }
+
+                    LogTo.Information("Sending SetPassword Request");
+
+                    var client = _loginService.Create(TargetHost);
+                    var result = await client.SetpasswordAsync(new NewPasswordData
+                    {
+                        NewPassword = NewPassword,
+                        OldPassword = OldPassword
+                    });
+                    
+                    switch (result.ResultCase)
+                    {
+                        case SetPasswordResult.ResultOneofCase.None:
+                            Error = "Unbekannter Fehler";
+                            LogTo.Warning("Unkown Error on Set Password");
+                            break;
+                        case SetPasswordResult.ResultOneofCase.Token:
+                            _manager.SetToken(TargetHost, result.Token);
+                            Error = "Erfolgreich";
+                            LogTo.Information("Set Password Compled");
+                            break;
+                        case SetPasswordResult.ResultOneofCase.Status:
+                            Error = result.Status.ToString();
+                            LogTo.Warning("{Error} on set Password", result.Status.ToString());
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
                 }
-
-                var client = _loginService.Create(TargetHost);
-
-                var result = await client.SetpasswordAsync(new NewPasswordData
-                                                           {
-                                                               NewPassword = NewPassword,
-                                                               OldPassword = OldPassword
-                                                           });
-                
-
-            }
-            catch (Exception e)
-            {
-                IsRunning = false;
-                Error = e.Message;
-            }
-            finally
-            {
-                Clear();
+                catch (Exception e)
+                {
+                    IsRunning = false;
+                    Error = e.Message;
+                }
+                finally
+                {
+                    Clear();
+                }
             }
         }
 
