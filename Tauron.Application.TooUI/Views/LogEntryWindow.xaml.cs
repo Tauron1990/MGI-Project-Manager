@@ -10,8 +10,8 @@ namespace Tauron.Application.ToolUI.Views
     {
         public LogEntryWindow(LogEntryView view, ISkinManager manager)
         {
-            InitializeComponent();
             Content = view;
+            InitializeComponent();
             manager.Apply(this);
         }
     }

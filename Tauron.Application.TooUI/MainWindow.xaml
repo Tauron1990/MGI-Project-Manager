@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Tauron.Application.ToolUI"
         xmlns:ui="clr-namespace:Tauron.Application.Wpf.UI;assembly=Tauron.Application.Wpf"
         xmlns:tau="http://schemas.TauronWpf.com" d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
-        mc:Ignorable="d" Icon="Working_Tools.png" WindowStartupLocation="CenterScreen" MinWidth="300">
+        mc:Ignorable="d" Icon="Working_Tools.png" WindowStartupLocation="CenterScreen" MinWidth="500">
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="Foreground" Value="White" />

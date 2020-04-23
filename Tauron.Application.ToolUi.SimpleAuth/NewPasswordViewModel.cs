@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Anotar.Serilog;
+using Catel.Data;
 using Catel.MVVM;
 using JetBrains.Annotations;
 using Scrutor;
@@ -109,6 +110,21 @@ namespace Tauron.Application.ToolUi.SimpleAuth
             NewPasswordRepead = string.Empty;
 
             IsRunning = false;
+        }
+
+        protected override void OnValidatingFields(IValidationContext validationContext)
+        {
+            if(string.IsNullOrWhiteSpace(OldPassword))
+                validationContext.Add(FieldValidationResult.CreateError(nameof(OldPassword), "Ein Altes Passwort muss Angegeben werden"));
+            if (string.IsNullOrWhiteSpace(NewPassword))
+                validationContext.Add(FieldValidationResult.CreateError(nameof(NewPassword), "Ein Neues Passwort muss Angegeben werden"));
+            if (string.IsNullOrWhiteSpace(NewPasswordRepead))
+                validationContext.Add(FieldValidationResult.CreateError(nameof(NewPasswordRepead), "Ein Neues Passwort muss Angegeben werden"));
+
+            if(NewPasswordRepead != NewPassword)
+                validationContext.Add(FieldValidationResult.CreateError(nameof(NewPasswordRepead), "Die Passwörter stimmen nicht überein"));
+
+            base.OnValidatingFields(validationContext);
         }
     }
 }

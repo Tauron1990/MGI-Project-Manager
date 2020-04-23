@@ -1,20 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Syncfusion.Licensing;
-using Syncfusion.SfSkinManager;
 using Tauron.Application.ToolUI.Core;
 using Tauron.Application.Wpf.AppCore;
 
@@ -37,7 +24,7 @@ namespace Tauron.Application.ToolUI
             SizeToContent = SizeToContent.Manual;
             ShowInTaskbar = true;
             ResizeMode = ResizeMode.CanResize;
-            WindowStartupLocation = WindowStartupLocation.Manual;
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             manager.Apply(this);
             InitializeComponent();

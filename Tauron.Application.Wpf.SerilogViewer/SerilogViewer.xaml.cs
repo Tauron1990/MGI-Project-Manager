@@ -23,27 +23,27 @@ namespace Tauron.Application.Wpf.SerilogViewer
 
         [Description("Weite der Zeit Spalte in Pixel"), Category("Data")]
         [TypeConverter(typeof(LengthConverter))]
-        public double TimeWidth { get; set; } = 120;
+        public double TimeWidth { get; set; } = 180;
 
         [Description("Weite der Logger Spalte in Pixel oder auto wen nicht angegeben"), Category("Data")]
         [TypeConverter(typeof(LengthConverter))]
-        public double LoggerNameWidth { get; set; } = 50;
+        public double LoggerNameWidth { get; set; } = 270;
 
         [Description("Weite der Level Spalte in Pixel"), Category("Data")]
         [TypeConverter(typeof(LengthConverter))]
-        public double LevelWidth { get; set; } = 50;
+        public double LevelWidth { get; set; } = 80;
 
         [Description("Weite der Nachricht Spalte In Pixel"), Category("Data")]
         [TypeConverter(typeof(LengthConverter))]
-        public double MessageWidth { get; set; } = 200;
+        public double MessageWidth { get; set; } = 500;
 
         [Description("Weite der Exception Spalte In Pixel"), Category("Data")]
         [TypeConverter(typeof(LengthConverter))]
-        public double ExceptionWidth { get; set; } = 75;
+        public double ExceptionWidth { get; set; } = 175;
 
         [Description("Die maximale anzahl an Zeilen. Der Älteste eintrag wird gelöscht. Auf 0 Setzen für Unbegrenzte Einträge."), Category("Data")]
         [TypeConverter(typeof(Int32Converter))]
-        public int MaxRowCount { get; set; } = 200;
+        public int MaxRowCount { get; set; } = 1000;
 
         [Description("Automatisch zum letzten eintrag in der Ansicht Scrollen. Standart wert ist An."), Category("Data")]
         [TypeConverter(typeof(BooleanConverter))]
@@ -77,10 +77,8 @@ namespace Tauron.Application.Wpf.SerilogViewer
                 ItemAdded(this, (SerilogEvent)log);
             }));
         }
-        public void Clear()
-        {
-            LogEntries.Clear();
-        }
+        public void Clear() 
+            => LogEntries.Clear();
 
         public void ScrollToFirst()
         {
@@ -95,10 +93,8 @@ namespace Tauron.Application.Wpf.SerilogViewer
             ScrollToItem(LogView.SelectedItem);
         }
 
-        private void ScrollToItem(object item)
-        {
-            LogView.ScrollIntoView(item);
-        }
+        private void ScrollToItem(object item) 
+            => LogView.ScrollIntoView(item);
 
         private void SerilogViewer_OnLoaded(object sender, RoutedEventArgs e)
         {

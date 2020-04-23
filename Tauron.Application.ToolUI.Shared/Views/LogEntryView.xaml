@@ -9,9 +9,20 @@
              mc:Ignorable="d" d:DataContext="{d:DesignInstance local:LogContextBase}"
              d:DesignHeight="450" d:DesignWidth="800" Background="White">
     <DockPanel LastChildFill="True">
-            <ToolBar DockPanel.Dock="Top" Margin="5">
-                <Button/>
-            </ToolBar>
+        <ToolBar DockPanel.Dock="Top" Margin="5">
+            <Button tau:CommandBinder.Command="SaveLog" Margin="2">
+                <Image Source="../Asset/floppy.png" MaxHeight="20"/>
+            </Button>
+            <Button Click="ScrollUp" Margin="2">
+                <Image Source="../Asset/arrow-up.png" Height="20"/>
+            </Button>
+            <Button Click="ScrollDown" Margin="2">
+                <Image Source="../Asset/arrow-down.png" Height="20"/>
+            </Button>
+            <Button Click="Clear" Margin="2">
+                <Image Source="../Asset/edit-clear.png" Height="20"/>
+            </Button>
+        </ToolBar>
         <lView:SerilogViewer Name="SerilogViewer" DockPanel.Dock="Bottom" Margin="5"/>
     </DockPanel>
 </tau:UserControl>

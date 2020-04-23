@@ -8,10 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Asset\arrow-down.png" />
+    <None Remove="Asset\arrow-up.png" />
+    <None Remove="Asset\edit-clear.png" />
     <None Remove="Asset\floppy.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Ookii.Dialogs.Wpf.NETCore" Version="2.1.0" />
     <PackageReference Include="Serilog" Version="2.9.0" />
   </ItemGroup>
 
@@ -27,6 +31,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Asset\arrow-down.png" />
+    <Resource Include="Asset\arrow-up.png" />
+    <Resource Include="Asset\edit-clear.png" />
     <Resource Include="Asset\floppy.png" />
   </ItemGroup>
 
