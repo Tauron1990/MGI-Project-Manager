@@ -15,25 +15,25 @@ using Catel.Runtime.Serialization.Json;
 using Catel.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using IObjectAdapter = Catel.Runtime.Serialization.IObjectAdapter;
+using Scrutor;
 
 namespace Tauron.Application.Wpf
 {
     internal static class IocReplacer
     {
-        private static MicrosoftServiceLocator? Locator;
+        private static MicrosoftServiceLocator? _locator;
         private static MicrosoftTypeFactory? _typeFactory;
 
         internal static void Create(IServiceCollection config)
         {
-            Locator = new MicrosoftServiceLocator();
-            _typeFactory = new MicrosoftTypeFactory(Locator);
+            _locator = new MicrosoftServiceLocator();
+            _typeFactory = new MicrosoftTypeFactory(_locator);
 
-            IoCFactory.CreateServiceLocatorFunc = () => Locator;
+            IoCFactory.CreateServiceLocatorFunc = () => _locator;
             IoCFactory.CreateTypeFactoryFunc = _ => _typeFactory;
-            IoCFactory.CreateDependencyResolverFunc = _ => new CatelDependencyResolver(Locator);
+            IoCFactory.CreateDependencyResolverFunc = _ => new CatelDependencyResolver(_locator);
 
-            var locator = Locator;
+            var locator = _locator;
             locator.Collection = config;
 
             locator.Collection.Scan(
@@ -71,10 +71,10 @@ namespace Tauron.Application.Wpf
 
         internal static void SetServiceProvider(IServiceProvider provider)
         {
-            if (Locator != null)
+            if (_locator != null)
             {
-                Locator.InternalServiceProvider = provider;
-                Locator.IsCreated = true;
+                _locator.InternalServiceProvider = provider;
+                _locator.IsCreated = true;
             }
             else
                 throw new InvalidOperationException();
@@ -157,9 +157,95 @@ namespace Tauron.Application.Wpf
 
         private class MicrosoftServiceLocator : IServiceLocator
         {
-            private 
+            private sealed class ServiceInfo
+            {
+                private readonly int _hash;
 
-            private readonly Dictionary<Type, RegistrationInfo> _registrationInfos = new Dictionary<Type, RegistrationInfo>();
+                public Type Type { get; }
+
+                private object? Tag { get; }
+
+                public ServiceInfo(Type type, object? tag)
+                {
+                    Type = type;
+                    Tag = tag;
+
+
+                    _hash = HashHelper.CombineHash(Type.GetHashCode(), Tag?.GetHashCode() ?? 0);
+                }
+
+                public override int GetHashCode() => _hash;
+
+                public override bool Equals(object? obj)
+                {
+                    if (!(obj is ServiceInfo serviceInfo))
+                        return false;
+                    if (serviceInfo._hash != _hash)
+                        return false;
+                    return serviceInfo.Type == Type && Equals(serviceInfo.Tag, Tag);
+                }
+            }
+
+            private class InternalRegistrationInfo : IDisposable
+            {
+                public ServiceLocatorRegistration LocatorRegistration { get; }
+
+                private readonly bool _hasFactory;
+
+                private object? _instance;
+
+                private ObjectFactory? _factory;
+
+                public InternalRegistrationInfo(bool hasFactory, ServiceLocatorRegistration locatorRegistration)
+                {
+                    _hasFactory = hasFactory;
+                    LocatorRegistration = locatorRegistration;
+                }
+
+                public object Create(IServiceProvider provider)
+                {
+                    switch (LocatorRegistration.RegistrationType)
+                    {
+                        case RegistrationType.Singleton:
+                            if (_instance != null)
+                                return _instance;
+                            if (_hasFactory)
+                            {
+                                _instance = LocatorRegistration.CreateServiceFunc(LocatorRegistration);
+                                if (!(_instance is Type type)) return _instance;
+
+                                _instance = ActivatorUtilities.CreateInstance(provider, type);
+                                return _instance;
+                            }
+                            _instance = ActivatorUtilities.CreateInstance(provider, LocatorRegistration.ImplementingType);
+                            return _instance;
+                        case RegistrationType.Transient:
+                            var targetType = LocatorRegistration.ImplementingType;
+
+                            if (_hasFactory)
+                            {
+                                var temp = LocatorRegistration.CreateServiceFunc(LocatorRegistration);
+                                if (temp is Type type)
+                                    targetType = type;
+                                else
+                                    return temp;
+                            }
+                            _factory ??= ActivatorUtilities.CreateFactory(targetType, Type.EmptyTypes);
+                            return _factory(provider, Array.Empty<object>());
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+
+                public void Dispose()
+                {
+                    if(_instance is IDisposable disposable)
+                        disposable.Dispose();
+                }
+            }
+            
+            private readonly object _locker = new object();
+            private readonly Dictionary<ServiceInfo, InternalRegistrationInfo> _registrationInfos = new Dictionary<ServiceInfo, InternalRegistrationInfo>();
 
             public IServiceCollection Collection { get; set; } = new ServiceCollection();
 
@@ -167,184 +253,276 @@ namespace Tauron.Application.Wpf
 
             public IServiceProvider InternalServiceProvider { get; set; } = new ServiceCollection().BuildServiceProvider();
 
-            public object? GetService(Type serviceType)
+            private object? GetService(Type serviceType, object? tag)
             {
-                object? result;
-
-                try
+                lock (_locker)
                 {
-                    result = InternalServiceProvider.GetService(serviceType);
+                    object? result;
 
-
-                    if (result == null && _registrationInfos.TryGetValue(serviceType, out var reg))
+                    try
                     {
-                        
+                        result = InternalServiceProvider.GetService(serviceType);
+
+
+                        if (result == null && _registrationInfos.TryGetValue(new ServiceInfo(serviceType, tag), out var reg))
+                            return reg.Create(InternalServiceProvider);
                     }
+                    catch (TypeNotRegisteredException)
+                    {
+                        result = null;
+                    }
+
+                    if (result != null) return result;
+
+                    var eventArgs = new MissingTypeEventArgs(serviceType);
+                    MissingType?.Invoke(this, eventArgs);
+                    result = eventArgs.ImplementingInstance;
+
+                    return result;
                 }
-                catch (TypeNotRegisteredException)
-                {
-                    result = null;
-                }
-
-                if (result != null) return result;
-
-                var eventArgs = new MissingTypeEventArgs(serviceType);
-                MissingType?.Invoke(this, eventArgs);
-                result = eventArgs.ImplementingInstance;
-
-                return result;
             }
 
             public RegistrationInfo? GetRegistrationInfo(Type serviceType, object? tag = null)
             {
-                var type = Collection.FirstOrDefault(s => s.ServiceType == serviceType);
+                lock (_locker)
+                {
+                    var type = Collection.FirstOrDefault(s => s.ServiceType == serviceType);
 
-                if (type == null) return null;
-
-                return Activator.CreateInstance(typeof(RegistrationInfo), BindingFlags.NonPublic, null,
-                    new object?[]
+                    if (type != null)
                     {
-                        type.ServiceType,
-                        type.ImplementationType,
-                        type.Lifetime == ServiceLifetime.Transient ? RegistrationType.Transient : RegistrationType.Singleton,
-                        type.ImplementationInstance != null
-                    }) as RegistrationInfo;
+                        return Activator.CreateInstance(typeof(RegistrationInfo), BindingFlags.NonPublic, null,
+                            new object?[]
+                            {
+                                type.ServiceType,
+                                type.ImplementationType,
+                                type.Lifetime == ServiceLifetime.Transient ? RegistrationType.Transient : RegistrationType.Singleton,
+                                type.ImplementationInstance != null
+                            }) as RegistrationInfo;
+                    }
+
+                    var key = new ServiceInfo(serviceType, tag);
+                    if (_registrationInfos.TryGetValue(key, out var reg))
+                    {
+                        return Activator.CreateInstance(typeof(RegistrationInfo), BindingFlags.NonPublic, null,
+                            new object?[]
+                            {
+                                reg.LocatorRegistration.DeclaringType,
+                                reg.LocatorRegistration.ImplementingType,
+                                reg.LocatorRegistration.RegistrationType,
+                                false
+                            }) as RegistrationInfo;
+                    }
+
+                    return null;
+                }
             }
 
             public bool IsTypeRegistered(Type serviceType, object? tag = null)
             {
-                return Collection.Any(sr => sr.ServiceType == serviceType);
+                lock (_locker)
+                {
+                    return Collection.Any(sr => sr.ServiceType == serviceType) || 
+                        _registrationInfos.ContainsKey(new ServiceInfo(serviceType, tag));
+                }
             }
 
             public bool IsTypeRegisteredAsSingleton(Type serviceType, object? tag = null)
             {
-                return Collection.Any(sr => sr.ServiceType == serviceType && sr.Lifetime != ServiceLifetime.Transient) ||
-                    _catelLocator.IsTypeRegisteredAsSingleton(serviceType, tag);
+                lock (_locker)
+                {
+                    return Collection.Any(sr => sr.ServiceType == serviceType && sr.Lifetime != ServiceLifetime.Transient) ||
+                        (_registrationInfos.TryGetValue(new ServiceInfo(serviceType, tag), out var reg) && reg.LocatorRegistration.RegistrationType == RegistrationType.Singleton);
+                }
             }
 
-            public bool IsTypeRegisteredWithOrWithoutTag(Type serviceType) => IsTypeRegistered(serviceType) || _catelLocator.IsTypeRegisteredWithOrWithoutTag(serviceType);
+            public bool IsTypeRegisteredWithOrWithoutTag(Type serviceType)
+            {
+                lock (_locker)
+                {
+                    return _registrationInfos != null && (IsTypeRegistered(serviceType) ||
+                        _registrationInfos.Any(si => si.Key.Type == serviceType));
+                }
+            }
 
             public void RegisterInstance(Type serviceType, object instance, object? tag = null)
             {
-                if(IsCreated)
-                    _catelLocator.RegisterInstance(serviceType, instance, tag);
-                else
+                lock (_locker)
                 {
-                    Collection.Add(new ServiceDescriptor(serviceType, instance));
-                    TypeRegistered?.Invoke(this, new TypeRegisteredEventArgs(serviceType, instance.GetType(), null, RegistrationType.Singleton));
+                    if(IsCreated)
+                    {
+                        _registrationInfos[new ServiceInfo(serviceType, tag)] = new InternalRegistrationInfo(true,
+                            new ServiceLocatorRegistration(serviceType, serviceType, tag, RegistrationType.Singleton, r => instance));
+                    }
+                    else
+                    {
+                        Collection.Add(new ServiceDescriptor(serviceType, instance));
+                        TypeRegistered?.Invoke(this, new TypeRegisteredEventArgs(serviceType, instance.GetType(), null, RegistrationType.Singleton));
+                    }
                 }
             }
 
             public void RegisterType(Type serviceType, Type serviceImplementationType, object? tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
             {
-                if(IsCreated)
-                    _catelLocator.RegisterType(serviceType, serviceImplementationType, tag, registrationType, registerIfAlreadyRegistered);
-                else
+                lock (_locker)
                 {
-                    if (registerIfAlreadyRegistered)
+                    if (IsCreated)
                     {
-                        Collection.Add(new ServiceDescriptor(serviceType, serviceImplementationType,
-                            registrationType == RegistrationType.Singleton ? ServiceLifetime.Singleton : ServiceLifetime.Transient));
+                        if(IsTypeRegistered(serviceType, tag) && !registerIfAlreadyRegistered)
+                            return;
+
+                        _registrationInfos[new ServiceInfo(serviceType, tag)] = new InternalRegistrationInfo(false, 
+                            new ServiceLocatorRegistration(serviceType, serviceImplementationType, tag, registrationType, d => null));
                     }
                     else
                     {
-                        Collection.TryAdd(new ServiceDescriptor(serviceType, serviceImplementationType,
-                            registrationType == RegistrationType.Singleton ? ServiceLifetime.Singleton : ServiceLifetime.Transient));
-                    }
+                        if (registerIfAlreadyRegistered)
+                        {
+                            Collection.Add(new ServiceDescriptor(serviceType, serviceImplementationType,
+                                registrationType == RegistrationType.Singleton ? ServiceLifetime.Singleton : ServiceLifetime.Transient));
+                        }
+                        else
+                        {
+                            Collection.TryAdd(new ServiceDescriptor(serviceType, serviceImplementationType,
+                                registrationType == RegistrationType.Singleton ? ServiceLifetime.Singleton : ServiceLifetime.Transient));
+                        }
 
-                    TypeRegistered?.Invoke(this, new TypeRegisteredEventArgs(serviceType, serviceImplementationType, tag, registrationType));
+                        TypeRegistered?.Invoke(this, new TypeRegisteredEventArgs(serviceType, serviceImplementationType, tag, registrationType));
+                    }
                 }
             }
 
             public void RegisterType(Type serviceType, Func<ServiceLocatorRegistration, object> createServiceFunc, object? tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
             {
-                if(IsCreated)
-                    _catelLocator.RegisterType(serviceType, createServiceFunc, tag, registrationType, registerIfAlreadyRegistered);
-                else
+                lock (_locker)
                 {
-
-                    var descriptor = new ServiceDescriptor(
-                        serviceType,
-                        p => createServiceFunc(new ServiceLocatorRegistration(serviceType, serviceType, tag ?? p, registrationType, createServiceFunc)),
-                        registrationType == RegistrationType.Transient ? ServiceLifetime.Transient : ServiceLifetime.Singleton);
-
-                    if (registerIfAlreadyRegistered)
-                        Collection.Add(descriptor);
+                    if (IsCreated)
+                    {
+                        if (IsTypeRegistered(serviceType, tag) && !registerIfAlreadyRegistered)
+                            return;
+                    
+                        _registrationInfos[new ServiceInfo(serviceType, tag)] = new InternalRegistrationInfo(true, 
+                            new ServiceLocatorRegistration(serviceType, serviceType, tag, registrationType, createServiceFunc));
+                    }
                     else
-                        Collection.TryAdd(descriptor);
+                    {
 
-                    TypeRegistered?.Invoke(this, new TypeRegisteredEventArgs(serviceType, null, tag, registrationType));
+                        var descriptor = new ServiceDescriptor(
+                            serviceType,
+                            p => createServiceFunc(new ServiceLocatorRegistration(serviceType, serviceType, tag ?? p, registrationType, createServiceFunc)),
+                            registrationType == RegistrationType.Transient ? ServiceLifetime.Transient : ServiceLifetime.Singleton);
+
+                        if (registerIfAlreadyRegistered)
+                            Collection.Add(descriptor);
+                        else
+                            Collection.TryAdd(descriptor);
+
+                        TypeRegistered?.Invoke(this, new TypeRegisteredEventArgs(serviceType, null, tag, registrationType));
+                    }
                 }
             }
 
-            public object? ResolveType(Type serviceType, object? tag = null) => GetService(serviceType);
+            public object? ResolveType(Type serviceType, object? tag = null) => GetService(serviceType, tag);
 
-            public IEnumerable<object> ResolveTypes(Type serviceType) 
-                => InternalServiceProvider.GetServices(serviceType).Concat(_catelLocator.ResolveTypes(serviceType));
+            public IEnumerable<object> ResolveTypes(Type serviceType)
+            {
+                lock (_locker)
+                {
+                    return InternalServiceProvider.GetServices(serviceType).Concat(_registrationInfos.Values
+                       .Where(r => r.LocatorRegistration.DeclaringType == serviceType)
+                       .Select(r => r.Create(InternalServiceProvider)));
+                }
+            }
 
             public bool AreAllTypesRegistered(params Type[] types) 
                 => AreMultipleTypesRegistered(types);
 
-            public bool AreMultipleTypesRegistered(params Type[] types) =>
-                types.All(t => Collection.Any(s => s.ServiceType == t)) ||
-                _catelLocator.AreMultipleTypesRegistered(types);
-
-            public object[] ResolveAllTypes(params Type[] types) 
-                => types.Select(s => InternalServiceProvider.GetService(s) ?? _catelLocator.GetRequiredService(s)).ToArray();
-
-            public object?[] ResolveMultipleTypes(params Type[] types) => types.Select(GetService).ToArray();
-
-            public void RemoveType(Type serviceType, object? tag = null)
+            public bool AreMultipleTypesRegistered(params Type[] types)
             {
-                if (IsCreated)
-                    _catelLocator.RemoveType(serviceType, tag);
-                else
+                lock (_locker)
                 {
-                    var desc = Collection.FirstOrDefault(sd => sd.ServiceType == serviceType);
-                    if (desc == null) return;
-
-                    if (Collection.Remove(desc))
-                    {
-                        TypeUnregistered?.Invoke(this,
-                            new TypeUnregisteredEventArgs(desc.ServiceType, desc.ImplementationType, null,
-                                desc.Lifetime == ServiceLifetime.Transient ? RegistrationType.Transient : RegistrationType.Singleton,
-                                desc.ImplementationInstance));
-                    }
-
-                    TypeUnregistered?.Invoke(this, new TypeUnregisteredEventArgs(desc.ServiceType, desc.ImplementationType, tag, desc.Lifetime == ServiceLifetime.Transient ? RegistrationType.Transient : RegistrationType.Singleton));
+                    return types.All(t => Collection.Any(s => s.ServiceType == t) || _registrationInfos.Keys.Any(r => r.Type == t));
                 }
             }
 
-            public void RemoveAllTypes(Type serviceType)
+            public object[] ResolveAllTypes(params Type[] types)
             {
-                if(IsCreated)
-                    _catelLocator.RemoveAllTypes(serviceType);
-                else
+                lock (_locker)
                 {
-                    var desc = Collection.FirstOrDefault(sd => sd.ServiceType == serviceType);
-                    while (desc != null)
+                    IEnumerable<object> Create(Type t)
                     {
+                        yield return InternalServiceProvider.GetService(t);
+
+                        foreach (var reg in _registrationInfos.Where(reg => reg.Key.Type == t))
+                            yield return reg.Value.Create(InternalServiceProvider);
+                    }
+
+                    return types.SelectMany(Create).Where(o => o != null).ToArray();
+                }
+            }
+
+            public object?[] ResolveMultipleTypes(params Type[] types) 
+                => types.Select(t => GetService(t)).ToArray();
+
+            public void RemoveType(Type serviceType, object? tag = null)
+            {
+                lock (_locker)
+                {
+                    if (IsCreated)
+                        _registrationInfos.Remove(new ServiceInfo(serviceType, tag));
+                    else
+                    {
+                        var desc = Collection.FirstOrDefault(sd => sd.ServiceType == serviceType);
+                        if (desc == null) return;
+
                         if (Collection.Remove(desc))
                         {
                             TypeUnregistered?.Invoke(this,
                                 new TypeUnregisteredEventArgs(desc.ServiceType, desc.ImplementationType, null,
                                     desc.Lifetime == ServiceLifetime.Transient ? RegistrationType.Transient : RegistrationType.Singleton,
                                     desc.ImplementationInstance));
-
-                            TypeUnregistered?.Invoke(this, new TypeUnregisteredEventArgs(desc.ServiceType, desc.ImplementationType, null, desc.Lifetime == ServiceLifetime.Transient ? RegistrationType.Transient : RegistrationType.Singleton));
-
-                            desc = Collection.FirstOrDefault(sd => sd.ServiceType == serviceType);
                         }
-                        else
-                            break;
+
+                        TypeUnregistered?.Invoke(this, new TypeUnregisteredEventArgs(desc.ServiceType, desc.ImplementationType, tag, desc.Lifetime == ServiceLifetime.Transient ? RegistrationType.Transient : RegistrationType.Singleton));
+                    }
+                }
+            }
+
+            public void RemoveAllTypes(Type serviceType)
+            {
+                lock (_locker)
+                {
+                    if (IsCreated)
+                    {
+                        foreach (var b in _registrationInfos.Keys.Where(k => k.Type == serviceType)) 
+                            _registrationInfos.Remove(b);
+                    }
+                    else
+                    {
+                        var desc = Collection.FirstOrDefault(sd => sd.ServiceType == serviceType);
+                        while (desc != null)
+                        {
+                            if (Collection.Remove(desc))
+                            {
+                                TypeUnregistered?.Invoke(this,
+                                    new TypeUnregisteredEventArgs(desc.ServiceType, desc.ImplementationType, null,
+                                        desc.Lifetime == ServiceLifetime.Transient ? RegistrationType.Transient : RegistrationType.Singleton,
+                                        desc.ImplementationInstance));
+
+                                TypeUnregistered?.Invoke(this, new TypeUnregisteredEventArgs(desc.ServiceType, desc.ImplementationType, null, desc.Lifetime == ServiceLifetime.Transient ? RegistrationType.Transient : RegistrationType.Singleton));
+
+                                desc = Collection.FirstOrDefault(sd => sd.ServiceType == serviceType);
+                            }
+                            else
+                                break;
+                        }
                     }
                 }
             }
 
             public bool CanResolveNonAbstractTypesWithoutRegistration
             {
-                get => _catelLocator.CanResolveNonAbstractTypesWithoutRegistration;
-                set => _catelLocator.CanResolveNonAbstractTypesWithoutRegistration = value;
+                get => false;
+                set{}
             }
 
             public bool AutoRegisterTypesViaAttributes { get; set; } = true;
@@ -359,8 +537,18 @@ namespace Tauron.Application.Wpf
 
             public event EventHandler<TypeInstantiatedEventArgs>? TypeInstantiated;
 
-            public void Dispose() 
-                => _catelLocator.Dispose();
+            public void Dispose()
+            {
+                lock (_locker)
+                {
+                    foreach (var internalRegistrationInfo in _registrationInfos) 
+                        internalRegistrationInfo.Value.Dispose();
+
+                    _registrationInfos.Clear();
+                }
+            }
+
+            public object GetService(Type serviceType) => GetService(serviceType, null) ?? throw new MissingTypeRegistrationException(serviceType);
         }
     }
 }
