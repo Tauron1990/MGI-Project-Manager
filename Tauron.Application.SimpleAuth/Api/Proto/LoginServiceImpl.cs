@@ -8,7 +8,6 @@ using Tauron.Application.SimpleAuth.Core;
 
 namespace Tauron.Application.SimpleAuth.Api.Proto
 {
-    [Authorize(AuthenticationSchemes = "Simple")]
     public sealed class LoginServiceImpl : LoginService.LoginServiceBase
     {
         static LoginServiceImpl()
@@ -28,6 +27,7 @@ namespace Tauron.Application.SimpleAuth.Api.Proto
             _logger = logger;
         }
 
+        [Authorize(AuthenticationSchemes = "Simple")]
         public override Task<GetTokenResult> GetToken(GetTokenData request, ServerCallContext context)
         {
             using (LogContext.PushProperty("Client", context.Peer))

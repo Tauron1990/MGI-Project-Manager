@@ -27,8 +27,7 @@ namespace Tauron.Application.ToolUi.SimpleAuth.Client
 
         private readonly InputService _inputService;
         private readonly ConcurrentDictionary<string, GrpcChannel> _channels = new ConcurrentDictionary<string, GrpcChannel>();
-
-        private TokenInfo? _tokenInfo;
+        private readonly ConcurrentDictionary<string, TokenInfo> _tokens = new ConcurrentDictionary<string, TokenInfo>();
 
         public ChannelManager(InputService inputService) 
             => _inputService = inputService;
@@ -47,19 +46,24 @@ namespace Tauron.Application.ToolUi.SimpleAuth.Client
             });
         }
 
+
+
         private async Task AuthClient(AuthInterceptorContext context, Metadata metadata, string host)
         {
-            AuthenticationHeaderValue TokenHeader(TokenInfo tokenInfo)
+            if(context.MethodName == nameof(LoginService.LoginServiceClient.Setpassword))
+                return;
+
+            AuthenticationHeaderValue TokenHeader(TokenInfo token)
             {
-                var parm = $"token:{tokenInfo.Token}";
+                var parm = $"token:{token.Token}";
                 return ConvertToHeader(parm);
             }
 
             AuthenticationHeaderValue? header;
 
-            if (_tokenInfo != null && _tokenInfo.Creation > DateTime.Now)
+            if (_tokens.TryGetValue(host, out var tokenInfo) && tokenInfo.Creation > DateTime.Now)
             {
-                header = TokenHeader(_tokenInfo);
+                header = TokenHeader(tokenInfo);
             }
             else if(context.MethodName == "GetToken")
             {
@@ -72,8 +76,10 @@ namespace Tauron.Application.ToolUi.SimpleAuth.Client
                 var token = await client.GetTokenAsync(new GetTokenData());
                 if (token.ResultCase == GetTokenResult.ResultOneofCase.Token)
                 {
-                    _tokenInfo = new TokenInfo(token.Token);
-                    header = TokenHeader(_tokenInfo);
+                    tokenInfo = new TokenInfo(token.Token);
+                    header = TokenHeader(tokenInfo);
+
+                    _tokens[host] = tokenInfo;
                 }
                 else
                     throw new RpcException(new Status((StatusCode)token.Status.Code, token.Status.Message));
