@@ -21,6 +21,7 @@
             </MenuItem>
             <MenuItem Header="Ansicht">
                 <MenuItem Header="Upload Tool" tau:CommandBinder.Command="StartUpload"/>
+                <MenuItem Header="Deployment Server Tool" tau:CommandBinder.Command="StartDeployment"/>
                 <Separator/>
                 <MenuItem Header="Logs" tau:CommandBinder.Command="ShowLogs"/>
             </MenuItem>

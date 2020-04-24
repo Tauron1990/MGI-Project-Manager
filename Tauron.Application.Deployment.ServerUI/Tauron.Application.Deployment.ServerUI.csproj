@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Tauron.Application.ToolUI.Shared\Tauron.Application.ToolUI.Shared.csproj" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="18.1.0.45" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tauron.Application.Deployment.Server.Services\Tauron.Application.Deployment.Server.Services.csproj" />
+    <ProjectReference Include="..\Tauron.Application.ToolUi.SimpleAuth\Tauron.Application.ToolUi.SimpleAuth.csproj" />
     <ProjectReference Include="..\Tauron.Application.Wpf\Tauron.Application.Wpf.csproj" />
   </ItemGroup>
 

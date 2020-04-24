@@ -14,6 +14,7 @@
   <ItemGroup>
     <None Remove="appsettings.json" />
     <None Remove="Upload.png" />
+    <None Remove="ViewModels\dedicated-server.png" />
     <None Remove="Working_Tools.png" />
   </ItemGroup>
 
@@ -27,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tauron.Application.Deployment.AutoUpload\Tauron.Application.Deployment.AutoUpload.csproj" />
+    <ProjectReference Include="..\Tauron.Application.Deployment.ServerUI\Tauron.Application.Deployment.ServerUI.csproj" />
     <ProjectReference Include="..\Tauron.Application.Logging\Tauron.Application.Logging.csproj" />
     <ProjectReference Include="..\Tauron.Application.SoftwareRepo\Tauron.Application.SoftwareRepo.csproj" />
     <ProjectReference Include="..\Tauron.Application.ToolUI.Shared\Tauron.Application.ToolUI.Shared.csproj" />
@@ -36,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="ViewModels\dedicated-server.png" />
     <Resource Include="ViewModels\Upload.png" />
     <Resource Include="Working_Tools.png" />
   </ItemGroup>

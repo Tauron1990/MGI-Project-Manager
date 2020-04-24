@@ -6,5 +6,7 @@ namespace Tauron.Application.ToolUI.Core
     {
         void SwitchModel<TType>()
             where TType : IToolWindow;
+
+        void Return();
     }
 }

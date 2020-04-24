@@ -33,6 +33,7 @@ namespace Tauron.Application.ToolUI
 
         public override void Configure(System.Windows.Application app, IHostEnvironment env)
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MjQ2MzgyQDMxMzgyZTMxMmUzMEJKKzQyVENNWnVhSmlkU3JDVXJ1c2RXMFdGczBUSTBYUmJEL1MxWnFDRFk9");
         }
     }
 }

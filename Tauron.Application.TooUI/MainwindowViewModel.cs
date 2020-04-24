@@ -5,7 +5,9 @@ using Catel.IoC;
 using Catel.MVVM;
 using Microsoft.Extensions.DependencyInjection;
 using Tauron.Application.Deployment.AutoUpload.ViewModels;
+using Tauron.Application.Deployment.ServerUI.ViewModels;
 using Tauron.Application.Logging;
+using Tauron.Application.ToolUI.Core;
 using Tauron.Application.ToolUI.ViewModels;
 using Tauron.Application.ToolUI.Views;
 using Tauron.Application.Wpf;
@@ -46,6 +48,13 @@ namespace Tauron.Application.ToolUI
         }
 
         [CommandTarget]
+        public void StartDeployment()
+        {
+            _logger.Information("Open Deployment Tool");
+            SwitchModel<DeploymentUiViewModel>();
+        }
+
+        [CommandTarget]
         public void CloseTool()
         {
             _logger.Information("Colsing Current Tool");
@@ -68,11 +77,12 @@ namespace Tauron.Application.ToolUI
         internal void SwitchModel<TType>()
             where TType : IToolWindow
         {
-            Task.Run(() =>
+            Task.Run(async () =>
             {
                 _logger.Information("Switch Model {ModelType}", typeof(TType));
 
-                MainContent?.CloseViewModelAsync(false);
+                if(MainContent != null)
+                    await MainContent?.CloseViewModelAsync(false)!;
                 _currentScope?.Dispose();
 
                 _currentScope = _serviceProvider.CreateScope();
@@ -90,7 +100,10 @@ namespace Tauron.Application.ToolUI
                 else
                     _logger.Warning("No LogContext for Tool Provided {ModelType}", typeof(TType));
 
-                MainContent = _currentScope.ServiceProvider.GetRequiredService<TType>();
+                var model = _currentScope.ServiceProvider.GetRequiredService<TType>();
+                if (model is ScopeProvider provider)
+                    provider.Scope = _currentScope;
+                MainContent = model;
             });
         }
     }

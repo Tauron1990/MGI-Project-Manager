@@ -5,12 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Tauron.Application.Deployment.ServerUI.ViewModels"
              xmlns:tau="http://schemas.TauronWpf.com"
-             mc:Ignorable="d" Background="White"
+             xmlns:ui="clr-namespace:Tauron.Application.Wpf.UI;assembly=Tauron.Application.Wpf"
+             xmlns:sync="http://schemas.syncfusion.com/wpf"
+             mc:Ignorable="d" Background="White" d:DataContext="{d:DesignInstance local:DeploymentUiViewModel}"
              d:DesignHeight="720" d:DesignWidth="1280">
-    <DockPanel LastChildFill="True">
-        <StackPanel DockPanel.Dock="Left">
-
-        </StackPanel>
-        <ContentControl/>
-    </DockPanel>
+    <tau:UserControl.Resources>
+        <Style TargetType="sync:TabItemExt">
+            <Setter Property="HeaderMargin" Value="5"/>
+        </Style>
+    </tau:UserControl.Resources>
+    <sync:TabControlExt TabStripPlacement="Left" CloseMode="Hide" CloseButtonType="Common" tau:EventBinder.Events="OnCloseButtonClick:CloseTool">
+        <sync:TabItemExt Header="Sync Fehler">
+            
+        </sync:TabItemExt>
+    </sync:TabControlExt>
 </tau:UserControl>

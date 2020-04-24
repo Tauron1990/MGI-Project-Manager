@@ -17,10 +17,29 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Button Margin="20" tau:CommandBinder.Command="OpenUpload">
+        <Grid.Resources>
+            <Style TargetType="Button">
+                <Setter Property="Margin" Value="20"/>
+            </Style>
+            <Style TargetType="Image">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="MaxHeight" Value="80"/>
+            </Style>
+            <Style TargetType="TextBlock">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+            </Style>
+        </Grid.Resources>
+        <Button tau:CommandBinder.Command="OpenUpload">
             <StackPanel>
-                <Image Source="/ToolUI;Component/ViewModels/Upload.png" Margin="5" MaxHeight="80"/>
-                <TextBlock Text="Hochladen" Margin="5"/>
+                <Image Source="/ToolUI;Component/ViewModels/Upload.png"/>
+                <TextBlock Text="Hochladen"/>
+            </StackPanel>
+        </Button>
+        <Button Grid.Row="0" Grid.Column="1" tau:CommandBinder.Command="OpenDeployment">
+            <StackPanel>
+                <Image Source="/ToolUI;Component/ViewModels/dedicated-server.png"/>
+                <TextBlock Text="Deployment"/>
             </StackPanel>
         </Button>
     </Grid>

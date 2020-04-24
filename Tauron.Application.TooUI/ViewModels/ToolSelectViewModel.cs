@@ -2,6 +2,7 @@
 using Catel.MVVM;
 using Scrutor;
 using Tauron.Application.Deployment.AutoUpload.ViewModels;
+using Tauron.Application.Deployment.ServerUI.ViewModels;
 using Tauron.Application.Logging;
 using Tauron.Application.ToolUI.Core;
 using Tauron.Application.Wpf;
@@ -33,6 +34,13 @@ namespace Tauron.Application.ToolUI.ViewModels
         {
             _logger.Information("Open Upload Tool");
             _toolSwitcher.SwitchModel<UploadToolWindowViewModel>();
+        }
+
+        [CommandTarget]
+        public void OpenDeployment()
+        {
+            _logger.Information("Open Deployment Tool");
+            _toolSwitcher.SwitchModel<DeploymentUiViewModel>();
         }
     }
 }

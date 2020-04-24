@@ -12,5 +12,8 @@ namespace Tauron.Application.ToolUI.Core
 
         public void SwitchModel<TType>() where TType : IToolWindow 
             => _model.SwitchModel<TType>();
+
+        public void Return() 
+            => _model.SwitchModel<ToolSelectViewModel>();
     }
 }

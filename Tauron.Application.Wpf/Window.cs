@@ -33,14 +33,10 @@ namespace Tauron.Application.Wpf
             _controlLogic.Register(key, bindable, affectedPart);
         }
 
-        public void CleanUp(string key)
-        {
-            _controlLogic.CleanUp(key);
-        }
+        public void CleanUp(string key) 
+            => _controlLogic.CleanUp(key);
 
-        protected override void OnUnloaded(EventArgs e)
-        {
-            _controlLogic.CleanUp();
-        }
+        protected override void OnUnloaded(EventArgs e) 
+            => _controlLogic.CleanUp();
     }
 }
