@@ -114,15 +114,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{5BDB902B-63E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Deployment.Server.Services", "Tauron.Application.Deployment.Server.Services\Tauron.Application.Deployment.Server.Services.csproj", "{659966D4-D7A0-4F1F-B4D0-90F7D2D28172}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Deployment.ServerUI", "Tauron.Application.Deployment.ServerUI\Tauron.Application.Deployment.ServerUI.csproj", "{695176F8-B2D2-44FC-8703-6E10C4BCAA86}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.ToolUi.SimpleAuth", "Tauron.Application.ToolUi.SimpleAuth\Tauron.Application.ToolUi.SimpleAuth.csproj", "{095CE4C7-C58C-4CC6-A99E-8D949473C218}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.ToolUi.SimpleAuth.Client", "Tauron.Application.ToolUi.SimpleAuth.Client\Tauron.Application.ToolUi.SimpleAuth.Client.csproj", "{E499B78C-ECC8-4110-839F-4C481D6E9AF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.Wpf.SerilogViewer", "Tauron.Application.Wpf.SerilogViewer\Tauron.Application.Wpf.SerilogViewer.csproj", "{0768B0FD-74FB-4407-887C-3EABAF335406}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tauron.Application.Wpf.SerilogViewer", "Tauron.Application.Wpf.SerilogViewer\Tauron.Application.Wpf.SerilogViewer.csproj", "{0768B0FD-74FB-4407-887C-3EABAF335406}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wpf", "Wpf", "{9B62EAB8-B3B6-4E45-B69A-83300D8FE486}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauron.Application.Deployment.ServerUI", "Tauron.Application.Deployment.ServerUI\Tauron.Application.Deployment.ServerUI.csproj", "{28DB68C2-92DA-459B-9414-82D9C676FEAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -242,10 +242,6 @@ Global
 		{659966D4-D7A0-4F1F-B4D0-90F7D2D28172}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{659966D4-D7A0-4F1F-B4D0-90F7D2D28172}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{659966D4-D7A0-4F1F-B4D0-90F7D2D28172}.Release|Any CPU.Build.0 = Release|Any CPU
-		{695176F8-B2D2-44FC-8703-6E10C4BCAA86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{695176F8-B2D2-44FC-8703-6E10C4BCAA86}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{695176F8-B2D2-44FC-8703-6E10C4BCAA86}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{695176F8-B2D2-44FC-8703-6E10C4BCAA86}.Release|Any CPU.Build.0 = Release|Any CPU
 		{095CE4C7-C58C-4CC6-A99E-8D949473C218}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{095CE4C7-C58C-4CC6-A99E-8D949473C218}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{095CE4C7-C58C-4CC6-A99E-8D949473C218}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -258,6 +254,10 @@ Global
 		{0768B0FD-74FB-4407-887C-3EABAF335406}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0768B0FD-74FB-4407-887C-3EABAF335406}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0768B0FD-74FB-4407-887C-3EABAF335406}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28DB68C2-92DA-459B-9414-82D9C676FEAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28DB68C2-92DA-459B-9414-82D9C676FEAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28DB68C2-92DA-459B-9414-82D9C676FEAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28DB68C2-92DA-459B-9414-82D9C676FEAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -306,11 +306,11 @@ Global
 		{EEF4CE45-0BBA-4494-AFD7-8C0A0038D947} = {ADCAC0BC-125C-466C-A531-9B7EC2000C23}
 		{5BDB902B-63E0-42E3-8A75-91857C083E9E} = {97DB54DA-B117-4297-BD4F-7C4EB86ED2D4}
 		{659966D4-D7A0-4F1F-B4D0-90F7D2D28172} = {5572E43F-E5B8-4350-B45D-797B51759FA4}
-		{695176F8-B2D2-44FC-8703-6E10C4BCAA86} = {5572E43F-E5B8-4350-B45D-797B51759FA4}
 		{095CE4C7-C58C-4CC6-A99E-8D949473C218} = {342886BB-C371-4E8F-B683-814E114E2B26}
 		{E499B78C-ECC8-4110-839F-4C481D6E9AF4} = {342886BB-C371-4E8F-B683-814E114E2B26}
 		{0768B0FD-74FB-4407-887C-3EABAF335406} = {9B62EAB8-B3B6-4E45-B69A-83300D8FE486}
 		{9B62EAB8-B3B6-4E45-B69A-83300D8FE486} = {97DB54DA-B117-4297-BD4F-7C4EB86ED2D4}
+		{28DB68C2-92DA-459B-9414-82D9C676FEAE} = {5572E43F-E5B8-4350-B45D-797B51759FA4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5BDA517-FC7D-481B-ADEA-F5C7E24C67C6}
