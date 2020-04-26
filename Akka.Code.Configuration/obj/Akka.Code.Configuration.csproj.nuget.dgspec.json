@@ -1,0 +1,77 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\user\\Source\\Repos\\MGI-Project-Manager\\Akka.Code.Configuration\\Akka.Code.Configuration.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\user\\Source\\Repos\\MGI-Project-Manager\\Akka.Code.Configuration\\Akka.Code.Configuration.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\user\\Source\\Repos\\MGI-Project-Manager\\Akka.Code.Configuration\\Akka.Code.Configuration.csproj",
+        "projectName": "Akka.Configuration.Code",
+        "projectPath": "C:\\Users\\user\\Source\\Repos\\MGI-Project-Manager\\Akka.Code.Configuration\\Akka.Code.Configuration.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Source\\Repos\\MGI-Project-Manager\\Akka.Code.Configuration\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://packages.xenko.com/nuget": {},
+          "https://www.myget.org/F/waveengine-nightly/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "dependencies": {
+            "Akka.Remote": {
+              "target": "Package",
+              "version": "[1.4.4, )"
+            },
+            "JetBrains.Annotations": {
+              "target": "Package",
+              "version": "[2020.1.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300-preview-015115\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

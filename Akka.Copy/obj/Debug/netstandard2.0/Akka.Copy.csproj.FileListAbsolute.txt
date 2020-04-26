@@ -1,0 +1,10 @@
+C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Copy\bin\Debug\netstandard2.0\akka.Copy.config.hocon
+C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Copy\bin\Debug\netstandard2.0\Akka.Copy.deps.json
+C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Copy\bin\Debug\netstandard2.0\Akka.Copy.dll
+C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Copy\bin\Debug\netstandard2.0\Akka.Copy.pdb
+C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Copy\obj\Debug\netstandard2.0\Akka.Copy.AssemblyInfoInputs.cache
+C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Copy\obj\Debug\netstandard2.0\Akka.Copy.AssemblyInfo.cs
+C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Copy\obj\Debug\netstandard2.0\Akka.Copy.csproj.CoreCompileInputs.cache
+C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Copy\obj\Debug\netstandard2.0\Akka.Copy.dll
+C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Copy\obj\Debug\netstandard2.0\Akka.Copy.pdb
+C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Copy\obj\Debug\netstandard2.0\Akka.Copy.csprojAssemblyReference.cache

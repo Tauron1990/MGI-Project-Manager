@@ -1,0 +1,5 @@
+﻿test-mailbox {
+    mailbox-capacity = 100
+    mailbox-push-timeout-time = 10s
+    mailbox-type = "Akka.Dispatch.BoundedMailbox, Akka"
+}

@@ -1,0 +1,5 @@
+C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Code.Configuration\bin\Debug\netstandard2.0\Akka.Code.Configuration.deps.json
+C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Code.Configuration\bin\Debug\netstandard2.0\Akka.Code.Configuration.dll
+C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Code.Configuration\obj\Debug\netstandard2.0\Akka.Code.Configuration.csprojAssemblyReference.cache
+C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Code.Configuration\obj\Debug\netstandard2.0\Akka.Code.Configuration.AssemblyInfoInputs.cache
+C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Code.Configuration\obj\Debug\netstandard2.0\Akka.Code.Configuration.AssemblyInfo.cs

@@ -1,0 +1,93 @@
+﻿<Window x:Class="Akka.Copy.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:terminal="clr-namespace:Simple.Wpf.Terminal;assembly=Simple.Wpf.Terminal"
+        xmlns:helper="clr-namespace:Akka.Copy.App.Helper"
+        xmlns:app="clr-namespace:Akka.Copy.App" Icon="edit-copy.png"
+        mc:Ignorable="d" Background="#F3F3F3" ResizeMode="NoResize"
+        Title="Kopier Helfer" Height="700" Width="900" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <helper:Divide100Converter x:Key="Divide100Converter"/>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="FontSize" Value="17"/>
+            </Style>
+            <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="FontSize" Value="17"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.DataContext>
+        <app:MainWindowViewModel/>
+    </Window.DataContext>
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressValue="{Binding Tracker.Percent, Converter={StaticResource Divide100Converter}}" ProgressState="Normal"/>
+    </Window.TaskbarItemInfo>
+    <TabControl SelectedIndex="{Binding TabIndex}">
+        <TabItem Header="Einstellungen">
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Quelle:"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Settings.Base}" IsEnabled="{Binding Tracker.IsNotLocked}"/>
+                <Button Grid.Row="0" Grid.Column="3" Margin="10" Content="Suchen" Click="SearchBase" IsEnabled="{Binding Tracker.IsNotLocked}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Ordner:"/>
+                <TextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" TextWrapping="NoWrap" AcceptsReturn="True" AcceptsTab="True" AllowDrop="True" 
+                         Drop="UIElement_OnDrop" PreviewDragOver="UIElement_OnPreviewDragOver" Text="{Binding Settings.EntrysText}" IsEnabled="{Binding Tracker.IsNotLocked}"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Ziel:"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Settings.Target}" IsEnabled="{Binding Tracker.IsNotLocked}"/>
+                <Button Grid.Row="3" Grid.Column="3" Margin="10" Content="Suchen" Click="SearchTarget" IsEnabled="{Binding Tracker.IsNotLocked}"/>
+                <Button Grid.Row="4" Grid.Column="3" Margin="5" Content="Starten" Click="StartProgress" IsEnabled="{Binding Tracker.IsNotLocked}"/>
+                <Button Grid.Row="4" Grid.Column="2" Margin="5" Content="Letzte Laden" Click="LoadLast" IsEnabled="{Binding Tracker.IsNotLocked}"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Prozess">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ProgressBar Margin="10" Grid.ColumnSpan="6" Value="{Binding Tracker.Percent}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Datei 1:"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Tracker.File1}"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Datei 2:"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Tracker.File2}"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Datei 3:"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Tracker.File3}"/>
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Datei 4:"/>
+                <TextBlock Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Tracker.File4}"/>
+                <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Tracker.ProgressStade}" VerticalAlignment="Center"/>
+                <terminal:Terminal Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Margin="10" IsReadOnly="True" VerticalScrollBarVisibility="Visible" ItemsSource="{Binding Tracker.Log}"/>
+                <Button Grid.Row="8" Content="Stop" Margin="10" Grid.Column="2" Click="Stop" IsEnabled="{Binding Tracker.IsLocked}"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Window>
