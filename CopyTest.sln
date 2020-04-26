@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30014.187
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopyTest", "CopyTest\CopyTest.csproj", "{A2DACB93-B883-429A-97CE-0D29FCC16E20}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopyTest2", "CopyTest2\CopyTest2.csproj", "{36AC147F-FB83-48BA-BDE4-29EBFBD91AD7}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{17C5E321-22C5-42AB-BD68-43EAC2011DB8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AkkaTest", "AkkaTest\AkkaTest.csproj", "{62AA5AAF-9FF7-4E1F-B4F3-61688CFB9B04}"
@@ -15,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Akka.Copy", "Akka.Copy\Akka
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Akka.Copy.App", "Akka.Copy.App\Akka.Copy.App.csproj", "{6E3C3AF7-4410-4488-AC7F-F344601098DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akka.Copy.Server", "Akka.Copy.Server\Akka.Copy.Server.csproj", "{0C105717-5AE8-4D7F-9738-706DA0576C28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Akka.Copy.Server", "Akka.Copy.Server\Akka.Copy.Server.csproj", "{0C105717-5AE8-4D7F-9738-706DA0576C28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akka.Code.Configuration", "Akka.Code.Configuration\Akka.Code.Configuration.csproj", "{09A8E7C6-972C-4DF9-BE21-8EBB61C3E271}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Akka.Code.Configuration", "Akka.Code.Configuration\Akka.Code.Configuration.csproj", "{09A8E7C6-972C-4DF9-BE21-8EBB61C3E271}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A2DACB93-B883-429A-97CE-0D29FCC16E20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A2DACB93-B883-429A-97CE-0D29FCC16E20}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A2DACB93-B883-429A-97CE-0D29FCC16E20}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A2DACB93-B883-429A-97CE-0D29FCC16E20}.Release|Any CPU.Build.0 = Release|Any CPU
-		{36AC147F-FB83-48BA-BDE4-29EBFBD91AD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{36AC147F-FB83-48BA-BDE4-29EBFBD91AD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{36AC147F-FB83-48BA-BDE4-29EBFBD91AD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{36AC147F-FB83-48BA-BDE4-29EBFBD91AD7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{62AA5AAF-9FF7-4E1F-B4F3-61688CFB9B04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{62AA5AAF-9FF7-4E1F-B4F3-61688CFB9B04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62AA5AAF-9FF7-4E1F-B4F3-61688CFB9B04}.Release|Any CPU.ActiveCfg = Release|Any CPU
