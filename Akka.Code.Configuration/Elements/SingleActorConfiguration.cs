@@ -10,5 +10,11 @@ namespace Akka.Code.Configuration.Elements
             get => Get<AkkaType>("dispatcher");
             set => Set(value, "dispatcher");
         }
+
+        public RouterConfigBase? Router
+        {
+            get => TryGetMergeElement<RouterConfigBase>();
+            set => ReplaceMerge(value);
+        }
     }
 }

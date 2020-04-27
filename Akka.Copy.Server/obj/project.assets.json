@@ -8,25 +8,25 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "C:\\Users\\user\\.nuget\\packages\\": {},
+    "C:\\Users\\PC\\.nuget\\packages\\": {},
     "C:\\Microsoft\\Xamarin\\NuGet\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\user\\Source\\Repos\\MGI-Project-Manager\\Akka.Copy.Server\\Akka.Copy.Server.csproj",
+      "projectUniqueName": "C:\\Users\\PC\\Desktop\\test\\MGI\\Akka.Copy.Server\\Akka.Copy.Server.csproj",
       "projectName": "Akka.Copy.Server",
-      "projectPath": "C:\\Users\\user\\Source\\Repos\\MGI-Project-Manager\\Akka.Copy.Server\\Akka.Copy.Server.csproj",
-      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\user\\Source\\Repos\\MGI-Project-Manager\\Akka.Copy.Server\\obj\\",
+      "projectPath": "C:\\Users\\PC\\Desktop\\test\\MGI\\Akka.Copy.Server\\Akka.Copy.Server.csproj",
+      "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\PC\\Desktop\\test\\MGI\\Akka.Copy.Server\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
@@ -36,8 +36,7 @@
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {},
-        "https://packages.xenko.com/nuget": {},
-        "https://www.myget.org/F/waveengine-nightly/api/v3/index.json": {}
+        "https://nuget.syncfusion.com/nuget_wpf/nuget/getsyncfusionpackages/wpf": {}
       },
       "frameworks": {
         "netcoreapp3.1": {

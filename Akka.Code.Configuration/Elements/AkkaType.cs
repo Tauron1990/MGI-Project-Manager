@@ -15,5 +15,10 @@ namespace Akka.Code.Configuration.Elements
 
         public static implicit operator AkkaType(Type source)
             => new AkkaType(source.AssemblyQualifiedName);
+
+        public override string ToString()
+        {
+            return Type;
+        }
     }
 }

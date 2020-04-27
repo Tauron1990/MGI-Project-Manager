@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace Akka.Code.Configuration.Serialization
 {
     [PublicAPI]
-    public sealed class Serializer
+    public sealed class ConfigSerializer
     {
         public AkkaRootConfiguration Read(string file)
         {
@@ -30,7 +30,14 @@ namespace Akka.Code.Configuration.Serialization
             using var stream = File.Open(file, FileMode.Create);
             Write(stream, config);
         }
-        public void Write(Stream stream, AkkaRootConfiguration config);
-        public void Write(BinaryWriter writer, AkkaRootConfiguration config);
+
+        public void Write(Stream stream, AkkaRootConfiguration config)
+        {
+            using var writer = new BinaryWriter(stream);
+            Write(writer, config);
+        }
+
+        public void Write(BinaryWriter writer, AkkaRootConfiguration config) 
+            => ((IBinarySerializable)config).Write(writer);
     }
 }

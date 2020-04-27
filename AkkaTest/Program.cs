@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using Akka.Actor;
 using Akka.Code.Configuration;
 using Akka.Code.Configuration.Elements;
+using Akka.Code.Configuration.Serialization;
 
 namespace AkkaTest
 {
@@ -18,12 +20,18 @@ namespace AkkaTest
     {
         static void Main(string[] args)
         {
-            //https://github.com/petabridge/akka-bootcamp/tree/master/src/Unit-2/lesson1
+            //https://github.com/petabridge/akka-bootcamp/blob/master/src/Unit-3/lesson5/README.md
             //var config = ConfigurationFactory.ParseString(File.ReadAllText("akka.config.hocon"));
             var configRoot = new AkkaRootConfiguration();
             var mailbox = new BoundedMailbox(100, TimeSpan.FromSeconds(5));
             configRoot.Add("test-mailbox", mailbox);
 
+            var stream = new MemoryStream();
+            var ser = new ConfigSerializer();
+
+            ser.Write(stream, configRoot);
+            stream = new MemoryStream(stream.ToArray());
+            configRoot = ser.Read(stream);
 
             var config = configRoot.CreateConfig();
 

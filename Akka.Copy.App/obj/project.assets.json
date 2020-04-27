@@ -671,25 +671,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\user\\.nuget\\packages\\": {},
+    "C:\\Users\\PC\\.nuget\\packages\\": {},
     "C:\\Microsoft\\Xamarin\\NuGet\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\user\\Source\\Repos\\MGI-Project-Manager\\Akka.Copy.App\\Akka.Copy.App.csproj",
+      "projectUniqueName": "C:\\Users\\PC\\Desktop\\test\\MGI\\Akka.Copy.App\\Akka.Copy.App.csproj",
       "projectName": "Akka.Copy.App",
-      "projectPath": "C:\\Users\\user\\Source\\Repos\\MGI-Project-Manager\\Akka.Copy.App\\Akka.Copy.App.csproj",
-      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\user\\Source\\Repos\\MGI-Project-Manager\\Akka.Copy.App\\obj\\",
+      "projectPath": "C:\\Users\\PC\\Desktop\\test\\MGI\\Akka.Copy.App\\Akka.Copy.App.csproj",
+      "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\PC\\Desktop\\test\\MGI\\Akka.Copy.App\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
@@ -699,14 +699,13 @@
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {},
-        "https://packages.xenko.com/nuget": {},
-        "https://www.myget.org/F/waveengine-nightly/api/v3/index.json": {}
+        "https://nuget.syncfusion.com/nuget_wpf/nuget/getsyncfusionpackages/wpf": {}
       },
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "C:\\Users\\user\\Source\\Repos\\MGI-Project-Manager\\Akka.Copy\\Akka.Copy.csproj": {
-              "projectPath": "C:\\Users\\user\\Source\\Repos\\MGI-Project-Manager\\Akka.Copy\\Akka.Copy.csproj"
+            "C:\\Users\\PC\\Desktop\\test\\MGI\\Akka.Copy\\Akka.Copy.csproj": {
+              "projectPath": "C:\\Users\\PC\\Desktop\\test\\MGI\\Akka.Copy\\Akka.Copy.csproj"
             }
           }
         }
