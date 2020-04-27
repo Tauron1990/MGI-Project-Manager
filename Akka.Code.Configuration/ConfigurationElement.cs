@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Akka.Code.Configuration.Converter;
 using Akka.Code.Configuration.Elements;
+using Akka.Code.Configuration.Serialization;
 using JetBrains.Annotations;
 
 namespace Akka.Code.Configuration
 {
     [PublicAPI]
-    public abstract class ConfigurationElement
+    public abstract class ConfigurationElement : IBinarySerializable
     {
         private sealed class DataValue
         {
@@ -31,6 +33,8 @@ namespace Akka.Code.Configuration
         private Dictionary<string, ConfigurationElement> _toAdd = new Dictionary<string, ConfigurationElement>();
         private List<ConfigurationElement> _toMerge = new List<ConfigurationElement>();
         private Lazy<Dictionary<string, DataValue>> _data = new Lazy<Dictionary<string, DataValue>>();
+
+        protected IEnumerable<KeyValuePair<string, ConfigurationElement>> ToAddElements => _toAdd.Where(e => true);
 
         protected TType Set<TType>(TType value, string name)
         {
@@ -112,6 +116,16 @@ namespace Akka.Code.Configuration
             }
 
             return target;
+        }
+
+        void IBinarySerializable.Write(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IBinarySerializable.Read(BinaryReader reader)
+        {
+            throw new NotImplementedException();
         }
     }
 }

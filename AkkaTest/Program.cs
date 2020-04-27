@@ -18,6 +18,7 @@ namespace AkkaTest
     {
         static void Main(string[] args)
         {
+            //https://github.com/petabridge/akka-bootcamp/tree/master/src/Unit-2/lesson1
             //var config = ConfigurationFactory.ParseString(File.ReadAllText("akka.config.hocon"));
             var configRoot = new AkkaRootConfiguration();
             var mailbox = new BoundedMailbox(100, TimeSpan.FromSeconds(5));

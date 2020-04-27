@@ -6,3 +6,12 @@ C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Code.Configura
 C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Code.Configuration\obj\Debug\netstandard2.1\Akka.Code.Configuration.csproj.CoreCompileInputs.cache
 C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Code.Configuration\obj\Debug\netstandard2.1\Akka.Configuration.Code.dll
 C:\Users\user\Documents\Visual Studio 2017\Projects\CopyTest\Akka.Code.Configuration\obj\Debug\netstandard2.1\Akka.Configuration.Code.pdb
+C:\Users\user\Source\Repos\MGI-Project-Manager\Akka.Code.Configuration\bin\Debug\netstandard2.1\Akka.Configuration.Code.deps.json
+C:\Users\user\Source\Repos\MGI-Project-Manager\Akka.Code.Configuration\bin\Debug\netstandard2.1\Akka.Configuration.Code.dll
+C:\Users\user\Source\Repos\MGI-Project-Manager\Akka.Code.Configuration\bin\Debug\netstandard2.1\Akka.Configuration.Code.pdb
+C:\Users\user\Source\Repos\MGI-Project-Manager\Akka.Code.Configuration\obj\Debug\netstandard2.1\Akka.Code.Configuration.csprojAssemblyReference.cache
+C:\Users\user\Source\Repos\MGI-Project-Manager\Akka.Code.Configuration\obj\Debug\netstandard2.1\Akka.Code.Configuration.AssemblyInfoInputs.cache
+C:\Users\user\Source\Repos\MGI-Project-Manager\Akka.Code.Configuration\obj\Debug\netstandard2.1\Akka.Code.Configuration.AssemblyInfo.cs
+C:\Users\user\Source\Repos\MGI-Project-Manager\Akka.Code.Configuration\obj\Debug\netstandard2.1\Akka.Code.Configuration.csproj.CoreCompileInputs.cache
+C:\Users\user\Source\Repos\MGI-Project-Manager\Akka.Code.Configuration\obj\Debug\netstandard2.1\Akka.Configuration.Code.dll
+C:\Users\user\Source\Repos\MGI-Project-Manager\Akka.Code.Configuration\obj\Debug\netstandard2.1\Akka.Configuration.Code.pdb

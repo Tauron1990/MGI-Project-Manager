@@ -7,6 +7,8 @@ namespace Akka.Code.Configuration.Elements
     {
         public DebugConfiguration Debug => GetAddElement<DebugConfiguration>("debug");
 
+        public DeploymentConfiguration Deployment => GetAddElement<DeploymentConfiguration>("deployment");
+
         public AkkaType? Provider
         {
             get => Get<AkkaType>("provider");
